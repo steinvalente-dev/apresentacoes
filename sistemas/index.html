@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#EDE6DA">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>sistemas_michel stein</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light;
+    --bg:#EDE6DA; --ink:#211D1A; --muted:#211D1A99; --soft:#211D1Acc;
+    --line:#211D1A22; --olive:#6B6A4B; --terra:#B85C38;
+    --mono:'DM Mono',ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;font-weight:400;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(var(--line) .5px,transparent .5px);
+    background-size:24px 24px;
+    min-height:100vh;display:flex;flex-direction:column;
+  }
+  ::selection{background:var(--ink);color:var(--bg)}
+  .mark{font-family:var(--mono);font-weight:500;font-style:italic;
+    text-transform:lowercase;letter-spacing:-.04em;line-height:1}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  .tr{color:var(--terra);animation:blink 1.1s step-end infinite}
+
+  nav{display:flex;justify-content:space-between;align-items:center;
+    padding:22px clamp(20px,6vw,72px)}
+  nav a.brand{font-size:19px;color:var(--ink);text-decoration:none}
+  nav .back{color:var(--soft);text-decoration:none;font-size:11px;
+    letter-spacing:.18em;text-transform:uppercase;font-weight:500;transition:color .3s}
+  nav .back:hover{color:var(--terra)}
+
+  main{flex:1;padding:clamp(40px,9vh,90px) clamp(20px,6vw,72px) 0;
+    max-width:1180px;width:100%}
+  .eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:26px}
+  h1.tit{font-size:clamp(38px,7vw,74px);margin-bottom:26px}
+  .lede{max-width:58ch;color:var(--soft);font-size:15px}
+  .lede b{font-weight:500;color:var(--ink)}
+
+  .rule{display:flex;align-items:center;gap:14px;margin:clamp(44px,7vh,72px) 0 8px}
+  .rule span{font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--olive);white-space:nowrap}
+  .rule::after{content:"";flex:1;height:.5px;background:var(--line)}
+
+  .items{list-style:none}
+  .item{border-bottom:.5px solid var(--line)}
+  .item button,.item a{width:100%;display:grid;
+    grid-template-columns:56px 1fr auto;gap:clamp(14px,3vw,36px);
+    align-items:baseline;padding:26px 4px;text-align:left;
+    background:none;border:0;font:inherit;color:inherit;cursor:pointer;
+    text-decoration:none;transition:background .25s,padding-left .25s}
+  .item button:hover,.item a:hover{background:#211D1A08;padding-left:14px}
+  .item button:focus-visible,.item a:focus-visible{outline:2px solid var(--terra);outline-offset:-2px}
+  .glyph{font-family:var(--mono);font-size:15px;color:var(--terra);font-style:italic}
+  .name{display:block;font-family:var(--mono);font-style:italic;font-weight:500;
+    text-transform:lowercase;letter-spacing:-.03em;font-size:clamp(19px,2.5vw,25px);line-height:1.15}
+  .meta{display:block;font-size:12.5px;color:var(--muted);margin-top:9px}
+  .meta em{font-style:normal;color:var(--olive)}
+  .go{font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);white-space:nowrap;transition:color .25s}
+  .item button:hover .go,.item a:hover .go{color:var(--terra)}
+  .item.trancado .name{color:var(--muted)}
+  .item.trancado .glyph{color:var(--olive)}
+
+  footer{margin-top:clamp(50px,9vh,100px);padding:26px clamp(20px,6vw,72px);
+    border-top:.5px solid var(--line);display:flex;justify-content:space-between;
+    align-items:center;gap:16px;flex-wrap:wrap;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+  footer a{color:var(--muted);text-decoration:none}
+  footer a:hover{color:var(--terra)}
+
+  /* ── leitor ───────────────────────────────────────────── */
+  #leitor{position:fixed;inset:0;background:var(--bg);z-index:60;
+    display:none;flex-direction:column;
+    background-image:radial-gradient(var(--line) .5px,transparent .5px);
+    background-size:24px 24px}
+  #leitor.on{display:flex}
+  .lbar{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:16px clamp(18px,5vw,54px);border-bottom:.5px solid var(--line);
+    background:#EDE6DAee;backdrop-filter:blur(6px)}
+  .lbar .qual{font-family:var(--mono);font-style:italic;font-weight:500;
+    text-transform:lowercase;letter-spacing:-.03em;font-size:17px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lbar .acoes{display:flex;align-items:center;gap:18px;flex-shrink:0}
+  .lbar a,.lbar button{font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);background:none;border:0;
+    cursor:pointer;text-decoration:none;transition:color .25s;padding:4px}
+  .lbar a:hover,.lbar button:hover{color:var(--terra)}
+  .lbar .fechar{color:var(--ink)}
+  .folha{flex:1;overflow-y:auto;padding:clamp(28px,6vh,64px) clamp(18px,5vw,54px) 90px}
+  .doc{max-width:74ch;margin:0 auto;font-size:15px;line-height:1.72;color:var(--soft)}
+  .doc h1,.doc h2,.doc h3{font-family:var(--mono);font-style:italic;font-weight:500;
+    text-transform:lowercase;letter-spacing:-.03em;color:var(--ink);line-height:1.2}
+  .doc h1{font-size:clamp(28px,4vw,42px);margin:0 0 26px}
+  .doc h2{font-size:clamp(21px,2.6vw,28px);margin:52px 0 16px;
+    padding-top:20px;border-top:.5px solid var(--line)}
+  .doc h3{font-size:17px;margin:32px 0 12px;font-style:normal;font-weight:400;
+    text-transform:uppercase;letter-spacing:.14em;color:var(--olive)}
+  .doc p{margin:0 0 16px}
+  .doc strong{font-weight:600;color:var(--ink)}
+  .doc em{font-style:italic}
+  .doc del{color:var(--muted)}
+  .doc a{color:var(--olive);text-decoration:underline;text-underline-offset:3px}
+  .doc a:hover{color:var(--terra)}
+  .doc ul,.doc ol{margin:0 0 18px;padding-left:22px}
+  .doc li{margin-bottom:7px}
+  .doc ul{list-style:none;padding-left:0}
+  .doc ul>li{position:relative;padding-left:22px}
+  .doc ul>li::before{content:"—";position:absolute;left:0;color:var(--terra);
+    font-family:var(--mono)}
+  .doc blockquote{border-left:2px solid var(--terra);padding:2px 0 2px 18px;
+    margin:0 0 18px;color:var(--muted)}
+  .doc hr{border:0;border-top:.5px solid var(--line);margin:34px 0}
+  .doc code{font-family:var(--mono);font-size:.88em;background:#211D1A0d;
+    padding:1px 5px;border-radius:2px;color:var(--ink)}
+  .doc pre{background:#211D1A0d;border:.5px solid var(--line);
+    padding:16px 18px;overflow-x:auto;margin:0 0 20px}
+  .doc pre code{background:none;padding:0;font-size:12.5px;line-height:1.6;display:block}
+  .doc table{width:100%;border-collapse:collapse;margin:0 0 22px;font-size:13.5px}
+  .doc th{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--olive);text-align:left;font-weight:400;
+    padding:0 12px 9px 0;border-bottom:1px solid var(--line)}
+  .doc td{padding:11px 12px 11px 0;border-bottom:.5px solid var(--line);
+    vertical-align:top}
+  .doc td:last-child,.doc th:last-child{padding-right:0}
+  .aviso{padding:60px 0;color:var(--muted);font-size:14px}
+  .aviso b{color:var(--ink)}
+
+  @media (max-width:640px){
+    .item button,.item a{grid-template-columns:30px 1fr;row-gap:8px;padding:22px 2px}
+    .go{grid-column:2;justify-self:start}
+    .lbar .qual{font-size:14px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="brand mark" href="https://michel-stein.netlify.app/">michel stein<span class="tr">_</span></a>
+  <a class="back" href="../">&larr; apresentações</a>
+</nav>
+
+<main>
+  <p class="eyebrow">documentos de trabalho</p>
+  <h1 class="tit mark">sistemas<span class="tr">_</span></h1>
+  <p class="lede">O registro de como cada coisa é feita: o sistema de pranchas, o fundo animado,
+    o arquivamento e a publicação. <b>Cada documento é o arquivo vivo</b> — atualizado no lugar,
+    sem revisão nova, com o histórico guardado pelo Git.</p>
+
+  <div class="rule"><span>aberto</span></div>
+  <ul class="items" id="lista-aberta"></ul>
+
+  <div class="rule"><span>restrito · repositório privado</span></div>
+  <ul class="items" id="lista-restrita"></ul>
+  <p class="aviso" id="nota-restrita"></p>
+</main>
+
+<footer>
+  <span class="mark" style="font-size:13px;text-transform:none">michel stein<span class="tr">_</span>arquiteto</span>
+  <a href="https://github.com/steinvalente-dev/apresentacoes/tree/main/sistemas">ver no github</a>
+</footer>
+
+<div id="leitor" role="dialog" aria-modal="true" aria-labelledby="qual">
+  <div class="lbar">
+    <span class="qual mark" id="qual"></span>
+    <span class="acoes">
+      <a id="bruto" href="#" target="_blank" rel="noopener">markdown</a>
+      <button class="fechar" id="fechar">fechar ✕</button>
+    </span>
+  </div>
+  <div class="folha"><div class="doc" id="doc"></div></div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   ACERVO DE SISTEMAS
+
+   Para listar um documento novo, acrescente UM objeto.
+     nome     título curto, minúsculas
+     desc     o que o documento resolve
+     arq      nome do .md nesta mesma pasta (só para os abertos)
+     trancado true = mora no repositório privado; vira link para o GitHub
+     href     endereço no GitHub, para os trancados
+   ───────────────────────────────────────────────────────────── */
+const docs = [
+  {
+    nome: "publicar apresentações",
+    desc: "Como uma peça entra no ar, o índice, os limites e o que não vem para cá",
+    arq: "PUBLICAR-APRESENTACOES.md"
+  },
+  {
+    nome: "prancha · sistema",
+    desc: "Os quinze gabaritos, escala tipográfica, regras de marca e lista de validação",
+    trancado: true
+  },
+  {
+    nome: "prancha · capa",
+    desc: "A capa padrão de toda apresentação, com o carrossel morph",
+    trancado: true
+  },
+  {
+    nome: "fundo morph pontilhado",
+    desc: "O shader da abertura: preset, transições, cursor e desempenho medido",
+    trancado: true
+  },
+  {
+    nome: "arquivamento de entregas",
+    desc: "Onde cada arquivo vai parar no Drive, a árvore de pastas e as armadilhas",
+    trancado: true
+  },
+  {
+    nome: "site de portfólio",
+    desc: "Estado técnico do site, vitrine, otimização de imagem e área de cliente",
+    trancado: true
+  }
+];
+
+/* ── markdown mínimo ─────────────────────────────────────── */
+function esc(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function inline(s){
+  return s
+    .replace(/`([^`]+)`/g, function(m,c){ return '<code>'+c+'</code>'; })
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/~~([^~]+)~~/g, '<del>$1</del>')
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>')
+    .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,
+             '<a href="$2" target="_blank" rel="noopener">$1</a>');
+}
+function md(txt){
+  const linhas = esc(txt.replace(/\r/g,'')).split('\n');
+  let out = '', i = 0, buf = [];
+  function solta(){
+    if(buf.length){ out += '<p>' + inline(buf.join(' ')) + '</p>'; buf = []; }
+  }
+  while(i < linhas.length){
+    const l = linhas[i];
+
+    if(/^```/.test(l)){
+      solta(); i++;
+      let cod = [];
+      while(i < linhas.length && !/^```/.test(linhas[i])){ cod.push(linhas[i]); i++; }
+      i++;
+      out += '<pre><code>' + cod.join('\n') + '</code></pre>';
+      continue;
+    }
+    if(/^\s*$/.test(l)){ solta(); i++; continue; }
+    if(/^(-{3,}|_{3,}|\*{3,})\s*$/.test(l)){ solta(); out += '<hr>'; i++; continue; }
+    if(/^#{1,6}\s/.test(l)){
+      solta();
+      const n = l.match(/^#+/)[0].length;
+      const nivel = n > 3 ? 3 : n;
+      out += '<h'+nivel+'>' + inline(l.replace(/^#+\s*/,'')) + '</h'+nivel+'>';
+      i++; continue;
+    }
+    if(/^\s*&gt;\s?/.test(l)){
+      solta();
+      let q = [];
+      while(i < linhas.length && /^\s*&gt;\s?/.test(linhas[i])){
+        q.push(linhas[i].replace(/^\s*&gt;\s?/,'')); i++;
+      }
+      out += '<blockquote>' + inline(q.join(' ')) + '</blockquote>';
+      continue;
+    }
+    if(/^\|/.test(l) && i+1 < linhas.length && /^\|[\s:|-]+\|?\s*$/.test(linhas[i+1])){
+      solta();
+      const cel = function(r){
+        return r.replace(/^\||\|$/g,'').split('|').map(function(c){ return inline(c.trim()); });
+      };
+      const cab = cel(l); i += 2;
+      let corpo = '';
+      while(i < linhas.length && /^\|/.test(linhas[i])){
+        corpo += '<tr>' + cel(linhas[i]).map(function(c){ return '<td>'+c+'</td>'; }).join('') + '</tr>';
+        i++;
+      }
+      out += '<table><thead><tr>' + cab.map(function(c){ return '<th>'+c+'</th>'; }).join('')
+           + '</tr></thead><tbody>' + corpo + '</tbody></table>';
+      continue;
+    }
+    if(/^\s*(\d+)[.)]\s+/.test(l)){
+      solta();
+      let li = '';
+      while(i < linhas.length && /^\s*(\d+)[.)]\s+/.test(linhas[i])){
+        let t = linhas[i].replace(/^\s*\d+[.)]\s+/,''); i++;
+        while(i < linhas.length && /^\s{2,}\S/.test(linhas[i]) && !/^\s*(\d+)[.)]\s/.test(linhas[i])){
+          t += ' ' + linhas[i].trim(); i++;
+        }
+        li += '<li>' + inline(t) + '</li>';
+      }
+      out += '<ol>' + li + '</ol>';
+      continue;
+    }
+    if(/^\s*[-*+]\s+/.test(l)){
+      solta();
+      let li = '';
+      while(i < linhas.length && /^\s*[-*+]\s+/.test(linhas[i])){
+        let t = linhas[i].replace(/^\s*[-*+]\s+/,''); i++;
+        while(i < linhas.length && /^\s{2,}\S/.test(linhas[i]) && !/^\s*[-*+]\s/.test(linhas[i])){
+          t += ' ' + linhas[i].trim(); i++;
+        }
+        li += '<li>' + inline(t) + '</li>';
+      }
+      out += '<ul>' + li + '</ul>';
+      continue;
+    }
+    buf.push(l.trim()); i++;
+  }
+  solta();
+  return out;
+}
+
+/* ── lista ───────────────────────────────────────────────── */
+(function(){
+  const abertos = docs.filter(function(d){ return !d.trancado; });
+  const presos  = docs.filter(function(d){ return d.trancado; });
+
+  document.getElementById('lista-aberta').innerHTML = abertos.map(function(d){
+    return '<li class="item"><button data-arq="' + d.arq + '" data-nome="' + d.nome + '">'
+      + '<span class="glyph">md</span>'
+      + '<span><span class="name">' + d.nome + '</span>'
+      + '<span class="meta">' + d.desc + '</span></span>'
+      + '<span class="go">ler</span></button></li>';
+  }).join('');
+
+  document.getElementById('lista-restrita').innerHTML = presos.map(function(d){
+    const alvo = d.href || '#';
+    return '<li class="item trancado">'
+      + (d.href ? '<a href="' + alvo + '" target="_blank" rel="noopener">' : '<a>')
+      + '<span class="glyph">••</span>'
+      + '<span><span class="name">' + d.nome + '</span>'
+      + '<span class="meta">' + d.desc + '</span></span>'
+      + '<span class="go">' + (d.href ? 'abrir no github' : 'a migrar') + '</span></a></li>';
+  }).join('');
+
+  document.getElementById('nota-restrita').innerHTML =
+    'Estes trazem nome de cliente, endereço de obra e caminhos internos, então não '
+    + 'ficam num repositório público. Vão para um repositório <b>privado</b>, visível '
+    + 'só para quem estiver com a conta logada. Enquanto a migração não acontece, a '
+    + 'fonte deles continua sendo o Google Drive.';
+})();
+
+/* ── leitor ──────────────────────────────────────────────── */
+(function(){
+  const leitor = document.getElementById('leitor');
+  const doc    = document.getElementById('doc');
+  const qual   = document.getElementById('qual');
+  const bruto  = document.getElementById('bruto');
+  let voltarPara = null;
+
+  function abrir(arq, nome, btn){
+    voltarPara = btn || null;
+    qual.textContent = nome;
+    bruto.href = 'https://github.com/steinvalente-dev/apresentacoes/blob/main/sistemas/' + arq;
+    doc.innerHTML = '<p class="aviso">carregando…</p>';
+    leitor.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('fechar').focus();
+    fetch(arq, {cache:'no-cache'})
+      .then(function(r){
+        if(!r.ok) throw new Error(r.status);
+        return r.text();
+      })
+      .then(function(t){ doc.innerHTML = md(t); doc.parentElement.scrollTop = 0; })
+      .catch(function(){
+        doc.innerHTML = '<p class="aviso"><b>Não deu para abrir o arquivo.</b> '
+          + 'Ele pode ter sido renomeado ou ainda não estar publicado. '
+          + 'O botão <em>markdown</em>, ali em cima, leva ao original no GitHub.</p>';
+      });
+  }
+  function fechar(){
+    leitor.classList.remove('on');
+    document.body.style.overflow = '';
+    if(voltarPara) voltarPara.focus();
+  }
+
+  document.getElementById('lista-aberta').addEventListener('click', function(e){
+    const b = e.target.closest('button[data-arq]');
+    if(b) abrir(b.dataset.arq, b.dataset.nome, b);
+  });
+  document.getElementById('fechar').addEventListener('click', fechar);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && leitor.classList.contains('on')) fechar();
+  });
+})();
+</script>
+
+</body>
+</html>
