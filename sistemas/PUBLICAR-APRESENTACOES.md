@@ -20,26 +20,42 @@ Não passa pelo Netlify e **não consome crédito nenhum**. O site pessoal
 
 1. Escrever o HTML em `<slug>/apresentacao.html`. Slug em minúsculas, sem
    acento, com hífen: `casa-ittb`, `toquio-centro`.
-2. Acrescentar UM objeto ao array `acervo` do `index.html`:
+2. Acrescentar UM objeto em `pecas` do projeto certo, no array `projetos`
+   do `index.html`. Projeto que ainda não existe ganha um objeto novo:
 
 ```js
 {
   nome: "casa ITTB",
-  desc: "Estudo preliminar · 29 pranchas",
-  data: "19.08.2026",
-  href: "casa-ittb/apresentacao.html"
+  pecas: [
+    { nome: "estudo preliminar", sub: "29 pranchas", data: "19.08.2026",
+      href: "casa-ittb/apresentacao.html" }
+  ]
 }
 ```
 
-3. **Não escrever número.** O `01`, `02`, `03` sai da ordem do array.
-   Mais recente em cima. `oculto: true` esconde a linha sem apagar o registro.
+3. **Não escrever número.** O `01`, `02` sai da ordem das peças **dentro do
+   projeto**. Mais recente em cima. `oculto: true` esconde sem apagar.
 4. Publicar pela API de conteúdos do GitHub (`PUT /repos/.../contents/<caminho>`,
    com `sha` quando o arquivo já existe). O Pages reconstrói em ~1 minuto.
 5. Conferir por HTTP antes de devolver o link: código 200 e tamanho igual ao
    do arquivo de origem.
 
-Versão nova de uma peça já publicada **substitui** o arquivo. Não cria linha
-nova — só a data muda. O histórico fica no Git.
+## Revisão: substituir ou acrescentar
+
+**Não substituir por conta própria. Perguntar sempre.** Regra revista em
+22/08/2026: uma revisão nova pode virar linha nova ao lado da anterior, quando
+o Michel quiser preservar aquela etapa como registro do que foi apresentado.
+
+Duas saídas, e a escolha é dele:
+
+- **Substituir** — sobrescreve o arquivo no mesmo caminho. Só a data muda no
+  índice; a versão anterior fica no histórico do Git.
+- **Acrescentar** — a peça nova entra como item novo em `pecas` do mesmo
+  projeto, com caminho próprio (`<slug>/<etapa>.html`), e a anterior continua
+  visível. A numeração 01, 02 é por projeto e sai da ordem do array.
+
+Na dúvida, **acrescentar**: sobrescrever some da tela, acrescentar não.
+`oculto: true` tira do índice sem apagar o registro.
 
 ## Devolver ao Michel
 
@@ -65,6 +81,10 @@ https://steinvalente-dev.github.io/apresentacoes/<slug>/apresentacao.html
   `.webp` ao lado — o HTML cai para ~200 KB e as imagens passam a ser
   reaproveitadas entre revisões.
 - **Nome de arquivo e pasta em minúsculas, sem espaço e sem acento.**
+- **O índice tem duas abas.** `arquivo` lista as peças por projeto; `sistema`
+  lista os documentos de método. A aba `sistema` troca o fundo da página para
+  terracota — é exceção deliberada à regra de marca, pedida em 22/08 para que a
+  troca de contexto seja inconfundível.
 
 ## Antes de montar a apresentação
 
@@ -75,6 +95,10 @@ a engine abaixo dele não se toca.
 
 ## Histórico
 
+- **22/08/2026, noite** — índice refeito: fundo oliva, abas arquivo/sistema
+  com fundo terracota no sistema, e o arquivo passa a ser **agrupado por
+  projeto**, com copiar link e abrir em cada peça. A área do cliente do site
+  Netlify foi removida.
 - **22/08/2026** — repositório criado, Pages ligado, índice no ar.
   Publicadas `casa-ittb` (29 pranchas, R2 de 19/08) e `toquio-centro`
   (21 pranchas). A `casa-ittb` foi removida do repositório do site, onde
