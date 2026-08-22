@@ -54,6 +54,10 @@
   .rule::after{content:"";flex:1;height:.5px;background:var(--line)}
 
   .items{list-style:none}
+  .rule.sub{margin:26px 0 2px}
+  .rule.sub span{font-family:var(--mono);font-style:italic;font-weight:500;
+    text-transform:lowercase;letter-spacing:-.02em;font-size:14px;color:var(--olive)}
+  .rule.sub::after{background:#211D1A14}
   .item{border-bottom:.5px solid var(--line)}
   .item button,.item a{width:100%;display:grid;
     grid-template-columns:56px 1fr auto;gap:clamp(14px,3vw,36px);
@@ -198,46 +202,36 @@
      href     endereço no GitHub, para os trancados
    ───────────────────────────────────────────────────────────── */
 const docs = [
-  {
-    nome: "publicar apresentações",
-    desc: "Como uma peça entra no ar, o índice, os limites e o que não vem para cá",
-    arq: "PUBLICAR-APRESENTACOES.md"
-  },
-  {
-    nome: "prancha · sistema",
+  { grupo: "prancha", nome: "prancha · sistema",
     desc: "Os quinze gabaritos, escala tipográfica, regras de marca e lista de validação",
-    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/PRANCHA-SISTEMA.md"
-  },
-  {
-    nome: "prancha · capa",
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/prancha/PRANCHA-SISTEMA.md" },
+  { grupo: "prancha", nome: "prancha · capa",
     desc: "A capa padrão de toda apresentação, com o carrossel morph",
-    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/PRANCHA-CAPA.md"
-  },
-  {
-    nome: "fundo morph pontilhado",
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/prancha/PRANCHA-CAPA.md" },
+  { grupo: "prancha", nome: "fundo morph pontilhado",
     desc: "O shader da abertura: preset, transições, cursor e desempenho medido",
-    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/FUNDO-MORPH-PONTILHADO.md"
-  },
-  {
-    nome: "arquivamento de entregas",
-    desc: "Onde cada arquivo vai parar no Drive, a árvore de pastas e as armadilhas",
-    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/ARQUIVAMENTO-ENTREGAS.md"
-  },
-  {
-    nome: "site de portfólio",
-    desc: "Estado técnico do site, vitrine, otimização de imagem e área de cliente",
-    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/SITE-PORTFOLIO-ESTADO.md"
-  },
-  {
-    nome: "vitrine · acervo",
-    desc: "As 1.020 imagens da esteira, o pipeline de conversão e os comandos",
-    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/VITRINE-ACERVO.md"
-  },
-  {
-    nome: "prancha · ponteiro",
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/prancha/FUNDO-MORPH-PONTILHADO.md" },
+  { grupo: "prancha", nome: "módulos",
+    desc: "As peças de montar — capa, engine, laboratório. Sem revisão: o arquivo é o vigente",
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/prancha/modulos/LEIA-ME.md" },
+  { grupo: "prancha", nome: "prancha · ponteiro",
     desc: "O registro antigo, com o histórico de onde cada coisa morava",
-    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/PRANCHA-APRESENTACOES.md"
-  }
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/prancha/PRANCHA-APRESENTACOES.md" },
+
+  { grupo: "site", nome: "site de portfólio",
+    desc: "Estado técnico, vitrine, otimização de imagem e área de cliente",
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/site/SITE-PORTFOLIO-ESTADO.md" },
+  { grupo: "site", nome: "vitrine · acervo",
+    desc: "As 1.020 imagens da esteira, o pipeline de conversão e os comandos",
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/site/VITRINE-ACERVO.md" },
+
+  { grupo: "operação", nome: "arquivamento de entregas",
+    desc: "Onde cada arquivo vai parar no Drive, a árvore de pastas e as armadilhas",
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/operacao/ARQUIVAMENTO-ENTREGAS.md" },
+
+  { grupo: "publicação", nome: "publicar apresentações",
+    desc: "Como uma peça entra no ar, o índice, os limites e o que não vem para cá",
+    arq: "PUBLICAR-APRESENTACOES.md" }
 ];
 
 /* ── markdown mínimo ─────────────────────────────────────── */
@@ -340,29 +334,43 @@ function md(txt){
   const abertos = docs.filter(function(d){ return !d.trancado; });
   const presos  = docs.filter(function(d){ return d.trancado; });
 
-  document.getElementById('lista-aberta').innerHTML = abertos.map(function(d){
+  function linha(d){
+    if(d.trancado){
+      return '<li class="item trancado"><a href="' + d.href + '" target="_blank" rel="noopener">'
+        + '<span class="glyph">••</span>'
+        + '<span><span class="name">' + d.nome + '</span>'
+        + '<span class="meta">' + d.desc + '</span></span>'
+        + '<span class="go">abrir no github</span></a></li>';
+    }
     return '<li class="item"><button data-arq="' + d.arq + '" data-nome="' + d.nome + '">'
       + '<span class="glyph">md</span>'
       + '<span><span class="name">' + d.nome + '</span>'
       + '<span class="meta">' + d.desc + '</span></span>'
       + '<span class="go">ler</span></button></li>';
-  }).join('');
+  }
+  function porGrupo(lista){
+    const ordem = [], mapa = {};
+    lista.forEach(function(d){
+      const g = d.grupo || "outros";
+      if(!mapa[g]){ mapa[g] = []; ordem.push(g); }
+      mapa[g].push(d);
+    });
+    return ordem.map(function(g){
+      return '<div class="rule sub"><span>' + g + '</span></div>'
+        + '<ul class="items">' + mapa[g].map(linha).join('') + '</ul>';
+    }).join('');
+  }
 
-  document.getElementById('lista-restrita').innerHTML = presos.map(function(d){
-    const alvo = d.href || '#';
-    return '<li class="item trancado">'
-      + (d.href ? '<a href="' + alvo + '" target="_blank" rel="noopener">' : '<a>')
-      + '<span class="glyph">••</span>'
-      + '<span><span class="name">' + d.nome + '</span>'
-      + '<span class="meta">' + d.desc + '</span></span>'
-      + '<span class="go">' + (d.href ? 'abrir no github' : 'a migrar') + '</span></a></li>';
-  }).join('');
+  document.getElementById('lista-aberta').outerHTML =
+    '<div id="lista-aberta">' + porGrupo(abertos) + '</div>';
+  document.getElementById('lista-restrita').outerHTML =
+    '<div id="lista-restrita">' + porGrupo(presos) + '</div>';
 
   document.getElementById('nota-restrita').innerHTML =
     'Trazem nome de cliente, endereço de obra e caminhos internos, então moram no '
-    + 'repositório privado <b>michel-stein-sistemas</b>. Abrem no GitHub, com a conta '
-    + 'logada. Migrados em 22/08/2026 — a partir dessa data a versão viva é a de lá, '
-    + 'e a cópia no Drive é referência morta.';
+    + 'repositório privado <b>michel-stein-sistemas</b>, organizado em pastas. Abrem no '
+    + 'GitHub, com a conta logada. Desde 22/08/2026 a versão viva é a de lá — '
+    + 'as cópias do Drive foram para <b>00-OBSOLETOS</b>.';
 })();
 
 /* ── leitor ──────────────────────────────────────────────── */
