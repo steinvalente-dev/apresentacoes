@@ -206,27 +206,37 @@ const docs = [
   {
     nome: "prancha · sistema",
     desc: "Os quinze gabaritos, escala tipográfica, regras de marca e lista de validação",
-    trancado: true
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/PRANCHA-SISTEMA.md"
   },
   {
     nome: "prancha · capa",
     desc: "A capa padrão de toda apresentação, com o carrossel morph",
-    trancado: true
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/PRANCHA-CAPA.md"
   },
   {
     nome: "fundo morph pontilhado",
     desc: "O shader da abertura: preset, transições, cursor e desempenho medido",
-    trancado: true
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/FUNDO-MORPH-PONTILHADO.md"
   },
   {
     nome: "arquivamento de entregas",
     desc: "Onde cada arquivo vai parar no Drive, a árvore de pastas e as armadilhas",
-    trancado: true
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/ARQUIVAMENTO-ENTREGAS.md"
   },
   {
     nome: "site de portfólio",
     desc: "Estado técnico do site, vitrine, otimização de imagem e área de cliente",
-    trancado: true
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/SITE-PORTFOLIO-ESTADO.md"
+  },
+  {
+    nome: "vitrine · acervo",
+    desc: "As 1.020 imagens da esteira, o pipeline de conversão e os comandos",
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/VITRINE-ACERVO.md"
+  },
+  {
+    nome: "prancha · ponteiro",
+    desc: "O registro antigo, com o histórico de onde cada coisa morava",
+    trancado: true, href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/PRANCHA-APRESENTACOES.md"
   }
 ];
 
@@ -349,10 +359,10 @@ function md(txt){
   }).join('');
 
   document.getElementById('nota-restrita').innerHTML =
-    'Estes trazem nome de cliente, endereço de obra e caminhos internos, então não '
-    + 'ficam num repositório público. Vão para um repositório <b>privado</b>, visível '
-    + 'só para quem estiver com a conta logada. Enquanto a migração não acontece, a '
-    + 'fonte deles continua sendo o Google Drive.';
+    'Trazem nome de cliente, endereço de obra e caminhos internos, então moram no '
+    + 'repositório privado <b>michel-stein-sistemas</b>. Abrem no GitHub, com a conta '
+    + 'logada. Migrados em 22/08/2026 — a partir dessa data a versão viva é a de lá, '
+    + 'e a cópia no Drive é referência morta.';
 })();
 
 /* ── leitor ──────────────────────────────────────────────── */
