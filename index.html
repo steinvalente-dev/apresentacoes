@@ -15,6 +15,9 @@
     --olive:#6B6A4B; --cream:#EDE6DA; --ink:#211D1A; --terra:#B85C38;
     --soft:#EDE6DAcc; --muted:#EDE6DA8c; --line:#EDE6DA2e; --hair:#EDE6DA1a;
     --mono:'DM Mono',ui-monospace,monospace;
+    --card:#211D1Aa6;              /* tinta translúcida, garante a leitura */
+    --card-forte:#211D1Ac4;
+    --card-linha:#EDE6DA24;
     --fundo:var(--olive);          /* troca com a aba */
     --acento:var(--terra);         /* o traço da marca */
   }
@@ -25,10 +28,10 @@
   *{margin:0;padding:0;box-sizing:border-box}
   #msfundo{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
   #msveu{position:fixed;inset:0;z-index:1;pointer-events:none;
-    background:var(--fundo);opacity:.62;transition:background-color .55s}
+    background:var(--fundo);opacity:.18;transition:background-color .55s}
   #msveu::after{content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg,var(--fundo) 0%,transparent 22%,transparent 72%,var(--fundo) 100%);
-    opacity:.55;transition:background .55s}
+    background:linear-gradient(180deg,var(--fundo) 0%,transparent 16%,transparent 84%,var(--fundo) 100%);
+    opacity:.30;transition:background .55s}
   body>nav,body>main,body>footer{position:relative;z-index:2}
   body{
     background:var(--fundo);color:var(--cream);
@@ -84,13 +87,15 @@
   .projetos{list-style:none;display:flex;flex-direction:column;gap:4px}
   .projetos button{width:100%;display:flex;align-items:baseline;
     justify-content:space-between;gap:16px;text-align:left;background:none;
-    border:1px solid transparent;
-    border-radius:999px;padding:10px 20px;cursor:pointer;color:var(--soft);
+    border:1px solid transparent;background:var(--card);
+    -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+    border-radius:999px;padding:11px 21px;cursor:pointer;color:var(--soft);
     font-family:var(--mono);font-style:italic;font-weight:500;text-transform:lowercase;
     letter-spacing:-.02em;font-size:clamp(17px,2vw,21px);line-height:1.25;
     transition:color .25s,border-color .25s,background .25s}
-  .projetos button:hover{color:var(--cream);background:#EDE6DA0f}
-  .projetos button[aria-current="true"]{border-color:var(--cream);color:var(--cream)}
+  .projetos button:hover{color:var(--cream);background:var(--card-forte)}
+  .projetos button[aria-current="true"]{border-color:var(--cream);color:var(--cream);
+    background:var(--card-forte)}
   .projetos button:focus-visible{outline:2px solid var(--cream);outline-offset:2px}
   .projetos .qt{font-family:'Inter',sans-serif;font-style:normal;font-weight:400;
     font-size:11px;letter-spacing:.06em;color:var(--muted);
@@ -99,10 +104,11 @@
   .pecas{border-left:1px solid var(--line);padding-left:clamp(20px,4vw,44px);
     min-height:220px}
   .peca{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(14px,2.4vw,28px);
-    align-items:center;border:1px solid var(--hair);border-radius:4px;
+    align-items:center;border:1px solid var(--card-linha);border-radius:6px;
+    background:var(--card);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
     padding:clamp(16px,2.2vw,22px) clamp(16px,2.4vw,26px);margin-bottom:12px;
     transition:border-color .25s,background .25s}
-  .peca:hover{border-color:var(--line);background:#EDE6DA0a}
+  .peca:hover{border-color:var(--line);background:var(--card-forte)}
   .peca .n{font-family:var(--mono);font-style:italic;font-weight:500;
     font-size:clamp(24px,3.4vw,34px);color:var(--cream);line-height:1;
     letter-spacing:-.04em;min-width:2.2ch}
@@ -124,26 +130,32 @@
   .acoes .abrir:hover svg{transform:translateX(3px)}
   .acoes .copiado{background:var(--cream);color:var(--fundo);border-color:var(--cream)}
 
-  .vazio{border:1px dashed var(--line);border-radius:4px;padding:34px 26px;
+  .vazio{border:1px dashed var(--line);border-radius:6px;padding:34px 26px;
+    background:var(--card);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
     color:var(--muted);font-size:13.5px;max-width:52ch}
   .vazio b{color:var(--soft);font-weight:500}
 
   /* ── sistema ──────────────────────────────────────────── */
   .grupo{font-family:var(--mono);font-style:italic;font-weight:500;
     text-transform:lowercase;letter-spacing:-.02em;font-size:clamp(17px,2vw,21px);
-    color:var(--cream);display:flex;align-items:center;gap:18px;margin:52px 0 4px}
+    color:var(--cream);display:flex;align-items:center;gap:18px;margin:44px 0 12px}
   .grupo:first-child{margin-top:0}
   .grupo::after{content:"";flex:1;height:3px;background:var(--cream);border-radius:2px}
-  .docs{list-style:none}
-  .doc-item{border-bottom:1px solid var(--hair)}
-  .doc-linha{display:grid;grid-template-columns:34px 1fr auto;
-    gap:clamp(12px,2.4vw,26px);align-items:center;padding:18px 4px}
+  .docs{list-style:none;border:1px solid var(--card-linha);border-radius:6px;
+    overflow:hidden;background:var(--card);
+    -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px)}
+  .doc-item{border-bottom:1px solid var(--card-linha);transition:background .25s}
+  .doc-item:last-child{border-bottom:0}
+  .doc-item:hover{background:var(--card-forte)}
+  .doc-linha{display:grid;grid-template-columns:32px 1fr auto;
+    gap:clamp(12px,2.4vw,24px);align-items:center;
+    padding:14px clamp(14px,2vw,22px)}
   .doc-linha>.corpo{min-width:0}
   .doc-acoes a:focus-visible,.doc-acoes button:focus-visible{outline:2px solid var(--cream);outline-offset:3px}
   .doc-item .g{font-family:var(--mono);font-style:italic;font-size:13px;color:var(--muted)}
   .doc-item .nm{font-family:var(--mono);font-style:italic;font-weight:500;
     text-transform:lowercase;letter-spacing:-.03em;font-size:clamp(16px,1.9vw,19px);display:block}
-  .doc-item .ds{font-size:12px;color:var(--muted);margin-top:5px;display:block}
+  .doc-item .ds{font-size:12px;color:var(--muted);margin-top:3px;display:block}
   .doc-acoes{display:flex;align-items:center;gap:10px;flex-shrink:0}
   .doc-acoes .go,.doc-acoes .ver{font-family:var(--mono);font-size:10px;
     letter-spacing:.16em;text-transform:uppercase;color:var(--cream);
@@ -265,7 +277,7 @@
 
 <footer>
   <span class="mark" style="font-size:13px;text-transform:none">michel stein<span class="tr">_</span>arquiteto</span>
-  <a href="https://github.com/steinvalente-dev/apresentacoes">repositório</a>
+  <a href="https://github.com/steinvalente-dev/apresentacoes" target="_blank" rel="noopener">repositório</a>
 </footer>
 
 <div id="leitor" role="dialog" aria-modal="true" aria-labelledby="qual">
@@ -298,7 +310,7 @@ const projetos = [
   {
     nome: "tóquio · centro",
     pecas: [
-      { nome: "estudo de posicionamento", sub: "28 pranchas", data: "22.08.2026",
+      { nome: "estudo de posicionamento", sub: "21 pranchas", data: "22.08.2026",
         href: "toquio-centro/apresentacao.html" }
     ]
   },
@@ -395,7 +407,7 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
         + '<span class="sub">' + [x.sub, x.data].filter(Boolean).join(' · ') + '</span></span>'
         + '<span class="acoes">'
         +   '<button class="copiar" data-url="' + url + '">copiar link</button>'
-        +   '<a class="abrir" href="' + x.href + '">abrir ' + SETA + '</a>'
+        +   '<a class="abrir" href="' + x.href + '" target="_blank" rel="noopener">abrir ' + SETA + '</a>'
         + '</span></article>';
     }).join('');
   }
