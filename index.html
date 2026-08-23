@@ -136,6 +136,12 @@
   .acoes .abrir:hover svg{transform:translateX(3px)}
   .acoes .copiado{background:var(--cream);color:var(--fundo);border-color:var(--cream)}
 
+  .orfas{border:1px solid var(--cream);border-radius:6px;padding:16px 20px;
+    margin-bottom:14px;background:var(--card-forte);
+    -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+    font-size:12.5px;line-height:1.6;color:var(--cream)}
+  .orfas b{font-weight:600}
+  .orfas code{font-family:var(--mono);font-size:11.5px;opacity:.85}
   .vazio{border:1px dashed var(--line);border-radius:6px;padding:34px 26px;
     background:var(--card);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
     color:var(--muted);font-size:13.5px;max-width:52ch}
@@ -270,6 +276,7 @@
       </div>
       <div>
         <p class="col-lbl">apresentação</p>
+        <div id="orfas"></div>
         <div class="pecas" id="lista-pecas"></div>
       </div>
     </div>
@@ -339,7 +346,7 @@ const projetos = [
   {
     nome: "tóquio · centro",
     pecas: [
-      { nome: "estudo de posicionamento", pranchas: 32, peso: 2.6, data: "23.08.2026",
+      { nome: "estudo de posicionamento", pranchas: 33, peso: 2.6, data: "22.08.2026",
         href: "toquio-centro/apresentacao.html" }
     ]
   },
@@ -490,6 +497,39 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
       document.body.removeChild(t);
     }
   });
+})();
+
+/* ── detector de peça órfã ───────────────────────────────────
+   Três Projetos publicam neste mesmo repositório, e cada um precisa lembrar
+   de registrar a peça no array acima. Esquecer não dá sintoma: o arquivo fica
+   no ar e ninguém acha. Aqui a árvore do repositório é comparada com o que
+   está listado, e o que sobra aparece como aviso.
+   A API pública limita a 60 chamadas por hora por IP — se falhar, silencia. */
+(function(){
+  const IGNORA = ['index.html', 'sistemas/', 'modulos/', 'fundo/'];
+  const listados = new Set();
+  projetos.forEach(function(p){
+    p.pecas.forEach(function(x){ listados.add(x.href.split('?')[0]); });
+  });
+
+  fetch('https://api.github.com/repos/steinvalente-dev/apresentacoes/git/trees/main?recursive=1')
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(d){
+      const orfas = (d.tree || [])
+        .filter(function(x){ return x.type === 'blob' && x.path.endsWith('.html'); })
+        .map(function(x){ return x.path; })
+        .filter(function(p){
+          return !IGNORA.some(function(i){ return p === i || p.startsWith(i); })
+              && !listados.has(p);
+        });
+      if(!orfas.length) return;
+      document.getElementById('orfas').innerHTML =
+        '<div class="orfas"><b>' + orfas.length + ' peça' + (orfas.length > 1 ? 's' : '')
+        + ' no repositório sem registro no índice.</b><br>'
+        + orfas.map(function(p){ return '<code>' + p + '</code>'; }).join('<br>')
+        + '<br>Está no ar, mas ninguém acha por aqui — falta o objeto em <code>pecas</code>.</div>';
+    })
+    .catch(function(){ /* limite da API ou sem rede: o aviso é auxílio, não requisito */ });
 })();
 
 /* ── sistema ─────────────────────────────────────────────── */
