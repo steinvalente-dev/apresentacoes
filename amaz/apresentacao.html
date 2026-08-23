@@ -285,28 +285,44 @@ body.esc .duas .inv,body.funda .duas .inv{color:var(--apoio)}
 
 /* ═══════════════════════════════════════════════════════════════════════
    MÓDULO · revelação por clique — o fio varre da esquerda, o texto desce
-   Herdado do sistema prancha. Rápido, mas com ênfase.
-   Aplicar `etapa` junto de `passo` em qualquer item que tenha borda no topo.
+   Comportamento PADRÃO de todo item `passo` do deck. Não é opcional e não
+   precisa de classe extra.
+
+   A regra que faz funcionar: o item reserva a altura do fio com uma borda
+   TRANSPARENTE, e quem desenha a linha visível é o ::before, que nasce em
+   scaleX(0). Sem isso aparecem duas linhas — uma parada no lugar onde a
+   outra vai chegar. Foi exatamente o bug de 23/08: `.dado.etapa` repunha a
+   borda em currentColor depois da regra que a apagava, com a mesma
+   especificidade, e vencia por vir depois.
+
+   Toda família de item que ganhar `passo` precisa entrar na lista abaixo.
    ═══════════════════════════════════════════════════════════════════════ */
-.passo.etapa{opacity:1;transform:none;border-top-color:transparent;position:relative}
-.passo.etapa::before{content:"";position:absolute;left:0;right:0;top:-1.5px;height:1.5px;
-  background:currentColor;transform:scaleX(0);transform-origin:left center;
-  transition:transform .40s cubic-bezier(.52,0,.18,1)}
-.passo.etapa.on::before{transform:scaleX(1)}
-.passo.etapa>*{opacity:0;transform:translateY(-11px);
+ol.lista li.passo,
+ol.credenciais li.passo,
+.dado.passo{border-top:1.5px solid transparent}
+
+.passo{opacity:1;transform:none;position:relative}
+.passo::before{content:"";position:absolute;left:0;right:0;top:-1.5px;height:1.5px;
+  background:currentColor;opacity:.42;transform:scaleX(0);transform-origin:left center;
+  transition:transform .42s cubic-bezier(.52,0,.18,1)}
+.passo.on::before{transform:scaleX(1)}
+/* nos itens de dado e credencial o fio é elemento de composição, não filete
+   de lista: entra cheio. */
+.dado.passo::before,
+ol.credenciais li.passo::before{opacity:1}
+
+.passo>*{opacity:0;transform:translateY(-11px);
   transition:opacity .28s ease,transform .28s cubic-bezier(.3,.8,.3,1)}
-.passo.etapa.on>*{opacity:1;transform:none}
-.passo.etapa.on>*:nth-child(1){transition-delay:.30s}
-.passo.etapa.on>*:nth-child(2){transition-delay:.36s}
-.passo.etapa.on>*:nth-child(3){transition-delay:.42s}
-.passo.etapa.on>*:nth-child(4){transition-delay:.48s}
-.passo.etapa.on>*:nth-child(5){transition-delay:.54s}
+.passo.on>*{opacity:1;transform:none}
+.passo.on>*:nth-child(1){transition-delay:.30s}
+.passo.on>*:nth-child(2){transition-delay:.36s}
+.passo.on>*:nth-child(3){transition-delay:.42s}
+.passo.on>*:nth-child(4){transition-delay:.48s}
+.passo.on>*:nth-child(5){transition-delay:.54s}
 @media(prefers-reduced-motion:reduce){
-  .passo.etapa::before{transform:scaleX(1)}
-  .passo.etapa>*{opacity:1;transform:none;transition:none}
+  .passo::before{transform:scaleX(1)}
+  .passo>*{opacity:1;transform:none;transition:none}
 }
-/* o fio do `dado` nasce transparente porque quem o desenha é o ::before */
-.dado.etapa{border-top:1.5px solid currentColor}
 
 /* ═══ gabarito `dado` — um número por prancha, sobre imagem sangrada ═══
    A imagem ocupa a prancha inteira; o véu garante o contraste do texto.
@@ -314,21 +330,26 @@ body.esc .duas .inv,body.funda .duas .inv{color:var(--apoio)}
 .slide.g-dado{padding-left:0;padding-right:0}
 .bleed{position:absolute;inset:0;overflow:hidden;background:var(--escura);z-index:0}
 .bleed img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+ /* véu vertical, e não diagonal: com o número centralizado, um véu que
+    escurece só de um lado deixa metade do texto sem contraste. */
 .bleed::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(100deg,#04251FEE 0%,#04251FD4 42%,#04251F70 100%)}
+  background:linear-gradient(180deg,#04251FD8 0%,#04251FB0 38%,#04251FB0 62%,#04251FE8 100%)}
 .bleed .slot{position:absolute;right:clamp(18px,2.6vw,42px);
   bottom:calc(var(--bot) + clamp(8px,1.4vh,18px));
-  z-index:2;text-align:right;font-family:var(--sans);font-size:var(--fs-cap);
+  z-index:2;text-align:right;max-width:44ch;font-family:var(--sans);font-size:var(--fs-cap);
   letter-spacing:.14em;line-height:1.7;color:#F4F1EA55}
 .bleed .slot b{display:block;color:var(--acento);font-weight:600;text-transform:uppercase}
-.dadowrap{position:relative;z-index:1;padding:0 var(--gut);max-width:min(100%,1180px)}
+.slide.g-dado{align-items:center;text-align:center}
+.dadowrap{position:relative;z-index:1;padding:0 var(--gut);
+  max-width:min(100%,1180px);margin-inline:auto}
 .dadowrap .num{font-family:var(--disp);font-weight:800;
   font-size:clamp(72px,15.5vw,290px);line-height:.84;letter-spacing:-.055em;
   color:var(--papel);display:block}
 .dadowrap .rot{font-family:var(--sans);font-weight:500;font-size:clamp(15px,1.9vw,32px);
-  line-height:1.24;color:var(--apoio);margin-top:clamp(12px,2vh,30px);max-width:20ch;display:block}
+  line-height:1.24;color:var(--apoio);margin-top:clamp(12px,2vh,30px);
+  max-width:24ch;margin-inline:auto;display:block}
 .dadowrap .nota{font-size:var(--fs-body);line-height:1.6;color:#F4F1EAb0;
-  margin-top:clamp(12px,2vh,26px);max-width:50ch;display:block}
+  margin-top:clamp(12px,2vh,26px);max-width:56ch;margin-inline:auto;display:block}
 .dadowrap .fonte{font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;
   color:#F4F1EA70;margin-top:clamp(14px,2.2vh,28px);display:block}
 
@@ -499,6 +520,13 @@ const DECK=[
  nota:'Um quarto de tudo o que foi comprado, transportado e descarregado sai de novo pelo portão, dentro de uma caçamba. Isso é considerado normal. Está dentro do orçamento, tem uma linha própria na planilha, e ninguém questiona.',
  fonte:'VERIFICAR fonte primária',
  slot:'caçamba de entulho na calçada · resíduo espalhado após chuva'},
+
+{g:'dado',funda:1,
+ num:'−22%',
+ rot:'de mão de obra a menos na construção brasileira em dez anos',
+ nota:'Estimativa da CBIC. Não é oscilação de ciclo — é evasão. O setor que mais depende de gente é o que menos consegue segurá-la, e a construção convencional precisa de muita gente pouco qualificada exatamente onde ela está desaparecendo. Quem depende desse modelo está apostando contra uma curva que não dá sinal de virar.',
+ fonte:'CBIC · VERIFICAR ano-base e metodologia',
+ slot:'canteiro convencional com equipe reduzida · ou obra parada'},
 
 {g:'dado',funda:1,
  num:'11×',
@@ -693,7 +721,7 @@ const DECK=[
  pend:'PREENCHER a economia real em m³ de resíduo evitado e custo de caçamba evitado, para este slide sair com número em vez de adjetivo.'},
 
 {g:'frase',esc:1,kick:'mão de obra',
- pre:'A construção brasileira perdeu 22% da sua mão de obra em dez anos, e não há sinal de reversão.',
+ pre:'Vale voltar ao número do começo: a construção brasileira perdeu 22% da sua mão de obra em dez anos.',
  t:'poucos montadores.<br>muito qualificados.',
  sub:'Em vez de muitos profissionais pouco qualificados, que é o que o mercado tradicional acaba tendo, uma equipe pequena e treinada, trabalhando em velocidade incomparável.',
  prem:'Não escolhemos trabalhar com menos gente. O mercado está perdendo gente — e o nosso sistema funciona nesse cenário, enquanto o convencional depende dele não acontecer.'},
@@ -932,9 +960,9 @@ function tpl(s){
   const prem=s.prem?`<p class="prem rev">${s.prem}</p>`:'';
   const pend=s.pend?`<p class="pend rev">${s.pend}</p>`:'';
   const pre=s.pre?`<p class="sub rev" style="margin-top:0;margin-bottom:clamp(10px,1.6vh,22px);max-width:46ch">${s.pre}</p>`:'';
-  /* `etapas:1` no slide faz cada dado entrar por clique com o fio varrendo.
-     Sem a chave, todos aparecem juntos — é o comportamento antigo. */
-  const et=s.etapas?' passo etapa':'';
+  /* `etapas:1` faz os dados entrarem por clique. A varredura do fio é o
+     comportamento padrão de `passo` — não precisa de classe extra. */
+  const et=s.etapas?' passo':'';
   const dad=s.dados?`<div class="dados rev">`+s.dados.map(([v,l,n])=>
     `<div class="dado${et}"><span class="v">${v}</span><span class="l">${l}</span>${n?`<span class="n">${n}</span>`:''}</div>`).join('')+`</div>`:'';
   const inicio=s.comecar?`<button class="ms-start">começar ${SETA}</button>`:'';
@@ -1023,7 +1051,7 @@ function tpl(s){
       +`<span class="scpapel rev">${s.papel}</span>`
       +`<p class="scbio rev">${s.bio}</p>`
       +`<ol class="credenciais">`+s.cred.map(([q,x])=>
-        `<li class="passo etapa"><span class="cq">${q}</span><span class="ct">${x}</span></li>`).join('')
+        `<li class="passo"><span class="cq">${q}</span><span class="ct">${x}</span></li>`).join('')
       +`</ol>${pend}</div></div>`;
   }
 
