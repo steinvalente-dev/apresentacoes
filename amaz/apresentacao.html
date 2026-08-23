@@ -489,6 +489,127 @@ ol.credenciais .ct{font-size:var(--fs-body);line-height:1.55}
   ol.lista .t{font-size:clamp(13px,1.16vw,18px);line-height:1.45}
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   MÓDULO · grifo — a faixa que destaca a palavra
+   Portado da Lavrō (v26), com a cor da AMAZ. Não é negrito: é marca de
+   caneta por trás do texto, desenhada da esquerda para a direita.
+
+   Usa `background-size` animado em vez de pseudo-elemento absoluto — assim
+   a faixa acompanha a quebra de linha via `box-decoration-break: clone`, em
+   vez de cobrir só o primeiro pedaço. Roda uma vez, com a revelação.
+   ═══════════════════════════════════════════════════════════════════════ */
+.grifo{
+  background-image:linear-gradient(var(--grifo-cor,rgba(6,57,47,.15)),
+                                   var(--grifo-cor,rgba(6,57,47,.15)));
+  background-repeat:no-repeat;background-position:0 .14em;
+  background-size:0% calc(100% - .22em);
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+  padding:0 .12em;margin:0 -.12em;border-radius:2px}
+.revelado .grifo{animation:amz-grifo 620ms cubic-bezier(.22,.61,.36,1) forwards;
+  animation-delay:var(--gd,760ms)}
+@keyframes amz-grifo{to{background-size:100% calc(100% - .22em)}}
+body.esc .grifo,body.funda .grifo{--grifo-cor:rgba(217,201,163,.24)}
+/* no acento o grifo é Cobre, e aí ele grita — reservado para uma palavra só */
+.grifo.forte{--grifo-cor:rgba(185,81,24,.34)}
+body.esc .grifo.forte,body.funda .grifo.forte{--grifo-cor:rgba(185,81,24,.52)}
+@media(prefers-reduced-motion:reduce){
+  .grifo{background-size:100% calc(100% - .22em)!important;animation:none!important}}
+
+/* ═══ lista com rótulo em palavra, e não em número ═══
+   `rotulo:1` no slide. A coluna estreita de número não cabe uma palavra como
+   "durabilidade": ela colidia com o texto. Aqui o rótulo sobe para linha
+   própria, maior, e o texto corre embaixo em largura cheia. */
+ol.lista.rot li{grid-template-columns:1fr;gap:clamp(6px,.9vh,11px)}
+ol.lista.rot .q{font-family:var(--disp);font-weight:800;
+  font-size:clamp(17px,1.85vw,30px);letter-spacing:-.035em;line-height:1;
+  text-transform:none;color:var(--tinta)}
+body.esc ol.lista.rot .q,body.funda ol.lista.rot .q{color:var(--papel)}
+ol.lista.rot .t{font-size:var(--fs-body);line-height:1.55;max-width:92ch}
+ol.lista.rot{gap:clamp(12px,1.9vh,26px)}
+
+/* ═══ sócio · foto sangrando pela borda ═══
+   O slot deixa de ser cartão e passa a encostar em cima, embaixo e na
+   lateral. `dir:'dir'` no slide inverte o lado — as três pranchas alternam. */
+/* a prancha do sócio perde TODO o padding: a foto encosta em cima, embaixo e
+   na lateral. Quem recompõe a margem é só a coluna de texto. */
+/* `display:block` no slide, e não flex: com flex + justify-content:center, um
+   filho de altura 100% resolve contra a caixa errada e o slide transborda em
+   todos os tamanhos. Foi o que aconteceu na primeira tentativa. */
+.slide.g-socio{padding:0;display:block}
+.sccols{grid-template-columns:minmax(0,.52fr) minmax(0,1fr);gap:0;
+  align-items:stretch;height:100%}
+.sccols.dir{grid-template-columns:minmax(0,1fr) minmax(0,.52fr)}
+.sccols.dir .scfoto{order:2}
+/* ATENÇÃO · elemento de sangria nunca usa o translateY da revelação.
+   A foto tem a altura exata da prancha; deslocada 14px para baixo, ela
+   transborda 14px enquanto a transição roda — invisível numa captura
+   tardia, visível no olho e pega pela varredura em 70ms. Aqui a revelação
+   é só de opacidade. Vale para qualquer elemento que encoste na borda. */
+.scfoto{aspect-ratio:auto;max-height:none;height:100%;border:0;
+  border-right:1px solid var(--hair)}
+.scfoto.rev,.revelado .scfoto.rev{transform:none}
+.sccols.dir .scfoto{border-right:0;border-left:1px solid var(--hair)}
+.sccols .wrap{align-self:center;
+  padding:calc(var(--top) + clamp(14px,2.4vh,40px)) var(--gut)
+          calc(var(--bot) + clamp(14px,2.4vh,40px))}
+@media(max-width:960px){
+  .slide.g-socio{padding-left:0;padding-right:0}
+  .sccols,.sccols.dir{grid-template-columns:1fr}
+  .sccols.dir .scfoto{order:0}
+  .scfoto{aspect-ratio:16/9;max-height:30vh;border:0;border-bottom:1px solid var(--hair)}
+  .sccols{min-height:0}
+  .sccols .wrap{padding:clamp(14px,3vw,26px) var(--gut) calc(var(--bot) + 14px)}
+}
+
+/* ═══ pergunta de tempo, na capa ═══ */
+.tempo{display:flex;flex-wrap:wrap;gap:clamp(9px,1vw,15px);margin-top:clamp(16px,2.4vh,34px)}
+.tempo .tq{width:100%;font-size:var(--fs-body);color:var(--soft);
+  margin-bottom:clamp(8px,1.2vh,16px)}
+.tbtn{font-family:var(--sans);font-weight:500;font-size:var(--fs-cap);
+  letter-spacing:.14em;text-transform:uppercase;border-radius:999px;cursor:pointer;
+  padding:clamp(8px,.95vh,13px) clamp(15px,1.5vw,26px);
+  border:1px solid rgba(244,241,234,.34);background:none;color:var(--papel);
+  display:inline-flex;align-items:center;gap:.6em;transition:all .2s}
+.tbtn:hover{border-color:var(--papel)}
+.tbtn.on{background:var(--acento);border-color:var(--acento);color:var(--papel)}
+.tbtn.on:hover{transform:translateY(-1px);gap:.95em}
+.tbtn.off{opacity:.4;cursor:not-allowed}
+.tbtn.off::after{content:"em breve";font-size:.78em;letter-spacing:.1em;
+  text-transform:lowercase;opacity:.8}
+.tbtn svg{width:15px;height:9px;stroke:currentColor;fill:none;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* ── ajuste fino de 23/08, terceira rodada ──
+   O título de quatro linhas com grifo (a prancha do metro quadrado) é o bloco
+   mais alto do deck. Em 1920 ele não é limitado por vw nenhum, então precisa
+   de teto próprio. E a lista `rot`, com rótulo em display, também cresceu. */
+.g-frase .mega{max-width:19ch}
+@media(min-width:1700px){:root{--fs-mega:clamp(30px,4.1vw,80px)}}
+@media(max-height:1120px){
+  .g-frase .mega{line-height:1.0}
+  ol.lista.rot{gap:clamp(10px,1.5vh,20px)}
+  ol.lista.rot li{padding-top:clamp(7px,1vh,12px)}
+  ol.lista.rot .q{font-size:clamp(16px,1.6vw,25px)}
+}
+@media(max-width:620px){
+  ol.lista.rot .q{font-size:clamp(15px,4vw,20px)}
+  ol.lista.rot{gap:clamp(9px,1.4vh,16px)}
+}
+
+/* prancha da Europa: quatro itens de regulação + fecho. É a mais textual do
+   deck, e o fecho é longo de propósito — é ele que faz a ponte para a madeira.
+   Cede o corpo dos itens, não o fecho. */
+.g-lista ol.lista+.sub{margin-top:clamp(12px,1.8vh,26px)}
+@media(min-width:1700px){ol.lista .t{font-size:clamp(13px,.95vw,17px)}}
+@media(max-width:620px){
+  ol.lista+.sub{font-size:clamp(12px,3.1vw,15px);line-height:1.5}
+  ol.lista .t{font-size:clamp(11.5px,2.95vw,14px);line-height:1.42}
+  /* no retrato a nota de pendência de uma prancha já longa vira nota de pé:
+     ela é lembrete de produção, não conteúdo de apresentação. */
+  .g-lista .pend{font-size:clamp(8.5px,2.2vw,10.5px);line-height:1.45;
+    margin-top:clamp(8px,1.2vh,14px)}
+}
+
 /* aviso de orientação */
 #giro{position:fixed;inset:0;z-index:90;display:none;place-items:center;padding:32px;
   background:#04251FEE;color:var(--papel);text-align:center;font-family:var(--sans)}
@@ -527,7 +648,9 @@ const DECK=[
  kick:'incorporadora de vilas em madeira',
  t:'um novo olhar<br>no mercado<br>imobiliário',
  sub:'O mercado imobiliário vende metro quadrado. Nós vendemos uma casa viva. Esta apresentação é sobre o sistema construtivo que sustenta essa diferença — e sobre por que ele é, ao mesmo tempo, o melhor argumento de venda e o melhor argumento financeiro que temos.',
- metas:[['assunto','Apresentação institucional'],['etapa','Documento de trabalho'],['data','agosto de 2026']]},
+ metas:[['assunto','Apresentação institucional'],['etapa','Documento de trabalho'],['data','agosto de 2026']],
+ tempo:'Antes de começar — quanto tempo você tem?',
+ opcoes:[['cinco minutos',0],['quinze minutos',0],['sou todo ouvidos',1]]},
 
 /* ─────────────────────── ATO 01 · O MERCADO HOJE ───────────────────────
    Renomeado. O título não acusa: quem acusa são os números. A tese do ato é
@@ -564,12 +687,10 @@ const DECK=[
  slot:'imagem abstrata · gráfico, curva, ou obra parada'},
 
 {g:'frase',esc:1,kick:'o produto',
- pre:'O mercado imobiliário vende metro quadrado.',
- t:'a unidade de medida<br>virou o argumento',
- sub:'Planta, metragem, valor de revenda. O imóvel é apresentado como aplicação financeira antes de ser apresentado como lugar de viver. E não somos contra o número — o número importa, e é ele que torna um empreendimento viável. O problema é quando ele é a única coisa na mesa.',
- prem:'Quando só o número decide, vence o método construtivo mais rápido e mais conhecido — que é também o que mais agride. Os custos que ele empurra para frente não aparecem em nenhuma planilha de lançamento: aparecem na manutenção do morador, na assistência técnica do incorporador e no ciclo inteiro.',
- pend:'O resultado é um produto nivelado por baixo. Seco, frio, igual ao do vizinho — e defendido com a justificativa de que é o que o mercado pede.'},
-
+ pre:'Planta, metragem, valor de revenda.',
+ t:'o imóvel é apresentado<br>como <span class="grifo forte">aplicação financeira</span><br>antes de ser apresentado<br>como <span class="grifo">lugar de viver</span>',
+ sub:'Não somos contra o número — ele importa, e é o que torna um empreendimento viável. <span class="grifo">O problema é quando ele é a única coisa na mesa.</span> Aí vence o método mais rápido e mais conhecido, que é também o que mais agride, e o resultado é um produto nivelado por baixo: seco, frio, igual ao do vizinho.',
+ prem:'Os custos que esse método empurra para frente não aparecem em nenhuma planilha de lançamento. Aparecem na manutenção do morador, na assistência técnica do incorporador, e no ciclo inteiro.'},
 {g:'frase',kick:'o morador',
  pre:'Nunca se esteve tão conectado. Nem tão cansado disso.',
  t:'as pessoas estão<br>pedindo outra coisa',
@@ -580,23 +701,8 @@ const DECK=[
   ['o que falta','o meio-termo','Construção artesanal no toque e industrializada no método. Ninguém no residencial brasileiro está olhando para isso de maneira profissional.']],
  etapas:1},
 
-{g:'frase',esc:1,kick:'a virada silenciosa',
- pre:'Por décadas, a briga do carbono na construção foi sobre energia de operação: ar-condicionado, iluminação, aquecimento.',
- t:'o carbono mudou<br>de lugar',
- sub:'À medida que as edificações ficam eficientes em operação, o que sobra é o carbono que já estava embutido nos materiais — gasto antes de alguém se mudar. Estima-se hoje entre 10% e 20% da pegada total de uma edificação, e a proporção só cresce conforme a operação melhora.',
- prem:'É a única parcela do carbono de um edifício que não pode ser corrigida depois. Ela é decidida uma vez, na escolha estrutural, e fica trancada ali por toda a vida útil.',
- dados:[
-  ['aço e concreto','emitem para existir','Não há como fabricá-los sem queimar. O ganho possível é marginal — otimizar traço, reduzir seção, trocar clínquer.'],
-  ['a madeira','estoca em vez de emitir','A árvore não emitiu para crescer: ela absorveu. É o único material estrutural que chega à obra como estoque de carbono, e não como dívida.'],
-  ['e ela volta','o único que renasce','Reflorestamento é a única cadeia de material estrutural em que a matéria-prima se repõe sozinha, em escala de décadas e não de eras geológicas.']],
- etapas:1,
- pend:'VERIFICAR os percentuais de carbono incorporado com fonte citável antes de qualquer material impresso.'},
-
-/* ─────────────────────── ATO 02 · A VIRADA ───────────────────────
-   Antes de introduzir a AMAZ: em que o mundo já se apoia. Três blocos —
-   industrialização, madeira engenheirada e regulação europeia. */
 {g:'divisor',div:1,funda:1,sec:'a virada',dn:'02',dt:'a virada',
- ds:'Três coisas que já estão em curso no mundo e ainda não chegaram ao residencial brasileiro.'},
+ ds:'Duas coisas que já estão em curso no mundo e ainda não chegaram ao residencial brasileiro. A terceira é consequência das duas.'},
 
 {g:'frase',kick:'01 · construção industrializada',
  pre:'O canteiro de obra é o pior lugar do mundo para fabricar qualquer coisa.',
@@ -608,17 +714,6 @@ const DECK=[
   ['montagem','onde se executa','O que chega ao terreno já está resolvido. Montagem tem duração previsível — fabricação em canteiro nunca teve.']],
  etapas:1},
 
-{g:'frase',esc:1,kick:'02 · madeira engenheirada',
- pre:'A madeira que limitava projeto era a madeira maciça serrada — com nó, fibra torta e variação de peça para peça.',
- t:'a engenharia<br>tirou os defeitos<br>da árvore',
- sub:'MLC e CLT são lamelas selecionadas e coladas em direções controladas. O resultado é uma peça sem os pontos fracos da madeira natural, com desempenho previsível, dimensão sob encomenda e resistência por unidade de peso superior à do aço.',
- dados:[
-  ['leveza','que desce até a fundação','Estrutura mais leve significa fundação menor, menos escavação e menos concreto justamente na única etapa que ainda é convencional. A economia começa antes da madeira chegar.'],
-  ['vãos','que a maciça não fazia','Peças coladas alcançam vãos e alturas que a madeira serrada nunca permitiu. A limitação que criou o preconceito deixou de existir.'],
-  ['precisão','de peça industrial','Tolerância de fábrica em milímetros, não em centímetros. É isso que permite fabricar o caixilho antes de a estrutura subir.']],
- etapas:1,
- pend:'CONFIRMAR com a ITA a tolerância dimensional real de fábrica, em milímetros, e a resistência específica da MLC fornecida.'},
-
 {g:'lista',largo:1,kick:'03 · a europa já legislou',
  t:'lá o carbono do<br>material virou lei',
  sub:'O que aqui ainda é argumento de venda, na Europa já é condição de licença. E a direção é uma só.',
@@ -627,13 +722,13 @@ const DECK=[
   ['frança','A RE2020 vale para residencial desde 2022 e usa análise de ciclo de vida dinâmica. O teto de carbono da fase de construção desce em calendário fixo, de cerca de 640 kg CO₂e/m² rumo a 415 kg no início da próxima década.'],
   ['países baixos','Foi o primeiro país a exigir análise de ciclo de vida em edificação nova, em vigor desde 2013. Treze anos de dado acumulado.'],
   ['união europeia','A diretiva revisada de desempenho energético entrou em vigor em 2024 e obriga os Estados-membros a levar exigência de carbono de ciclo de vida completo para a lei nacional, com cálculo obrigatório para edificações grandes a partir de 2028.']],
- prem:'Nada disso é regra brasileira, e ninguém aqui é obrigado a nada. Mas é o sentido único para onde a regulação caminha em todo mercado maduro — e quem chegar já operando assim não vai precisar se adaptar depois.',
- pend:'VERIFICAR todos os números desta prancha antes de circular. Fontes consultadas: Buro Happold, One Click LCA, Stora Enso e material da Comissão Europeia sobre a EPBD revisada.'},
+ fecho:'Nada disso é regra brasileira, e ninguém aqui é obrigado a nada — mas é o sentido único para onde a regulação caminha em todo mercado maduro. Junte as duas frentes: fabricação fora do canteiro, e carbono do material como critério. Existe <span class="grifo">um material estrutural que atende as duas ao mesmo tempo</span>.',
+ pend:'VERIFICAR os números antes de circular. Fontes: Buro Happold, One Click LCA, Stora Enso, Comissão Europeia (EPBD).'},
 
 /* ─────────────────────── ATO 03 · A AMAZ ───────────────────────
    A origem, a entrada da marca, a tese e a qualificação dos sócios. */
-{g:'divisor',div:1,funda:1,sec:'a amaz',dn:'03',dt:'a resposta',
- ds:'Três pessoas olharam para tudo isso ao mesmo tempo e chegaram na mesma conclusão.'},
+{g:'divisor',div:1,funda:1,sec:'a amaz',dn:'03',dt:'um novo olhar',
+ ds:'Não é uma incorporadora a mais fazendo a mesma coisa com outro nome. É outra maneira de olhar para o que uma casa deveria ser, e para como ela deveria ser feita.'},
 
 {g:'frase',esc:1,kick:'a origem',
  pre:'Um arquiteto, um engenheiro e um publicitário — cada um enxergando uma parte do mesmo problema.',
@@ -650,11 +745,11 @@ const DECK=[
  dep:'Uma incorporadora que existe para fazer uma coisa só, e fazer bem: vilas residenciais em madeira engenheirada, em bairros urbanos consolidados de São Paulo.'},
 
 {g:'frase',kick:'a tese',
- pre:'Num mercado que se diferencia por planta, metragem e acabamento, escolhemos nos diferenciar pela matéria.',
- t:'vendemos a madeira<br>primeiro. a casa<br>vem depois.',
- sub:'A AMAZ não é uma incorporadora que por acaso usa madeira. É uma incorporadora cuja tese <u>é</u> a madeira — e a vila, a casa e o projeto são consequências dela.',
- prem:'A madeira pertence à AMAZ, não à Ônica. A AMAZ domina o sistema; a Ônica é a primeira aplicação dele. Se a madeira virar atributo de produto, perdemos a plataforma.'},
-
+ pre:'Num mercado que se diferencia por planta, metragem e acabamento, escolhemos nos diferenciar por aquilo que a casa é feita.',
+ t:'a alma da casa<br>vem primeiro.<br>a planta vem depois.',
+ sub:'A maioria dos empreendimentos começa pelo produto e escolhe o material no fim, pelo custo. Nós fazemos o contrário: a escolha da matéria é a primeira decisão, e é dela que descem o projeto, o prazo, o preço e a sensação de morar ali.',
+ prem:'Isso não é vender madeira — é deixar que ela decida a casa. A AMAZ não fornece material; entrega um lugar de morar cuja natureza inteira vem de uma escolha feita antes do primeiro traço.',
+ pend:'A madeira pertence à AMAZ, não à Ônica. A AMAZ domina o sistema; a Ônica é a primeira aplicação dele. Se a matéria virar atributo de produto, perdemos a plataforma.'},
 {g:'frase',kick:'o que fazemos',
  t:'vilas residenciais<br>em bairros<br>consolidados',
  sub:'Casas independentes em formato de vila, com área comum e paisagismo, dentro da cidade que já existe — não no vazio urbano. Venda de casa mais terreno. Escala humana, poucas unidades, sistema construtivo industrializado em madeira engenheirada.',
@@ -666,12 +761,21 @@ const DECK=[
 
 /* ── os três sócios, um por prancha. Aqui a AMAZ se qualifica: não somos
    aventureiros entrando num setor que não conhecemos. ── */
-{g:'frase',esc:1,kick:'quem faz',
- t:'não somos<br>aventureiros',
- sub:'Marketing, engenharia e arquitetura. Incorporadora pequena costuma ter uma perna faltando e terceirizar caro — e é aí que ela perde margem, prazo e controle de qualidade. A nossa não tem.',
- prem:'As três competências que decidem um empreendimento estão dentro da sociedade, e cada uma delas tem quilometragem própria antes da AMAZ existir.'},
+{g:'camadas',kick:'o módulo',t:'a casa<br>industrializada',
+ sub:'Quatro camadas que chegam separadas e se montam no terreno. A fundação é a única etapa convencional; da laje para cima, tudo é peça cortada em fábrica, etiquetada e numerada.',
+ itens:[
+  ['01','fundação','A única etapa que ainda é obra convencional. Acontece enquanto a estrutura está sendo fabricada.'],
+  ['02','estrutura em MLC','Pilares, vigas e lajes em madeira lamelada colada. Chega pré-cortada, sobe em dias.'],
+  ['03','vedação e caixilharia','Produzida em paralelo à estrutura — não depois dela. É o que o controle milimétrico permite.'],
+  ['04','paisagismo e cobertura','O verde não é sobra de terreno: é parte do projeto desde a primeira camada.']],
+ pend:'Esta é uma axonométrica esquemática, gerada por código. A peça definitiva é um desenho autoral da casa-módulo Ônica — item de produção nossa.'},
 
-{g:'socio',nome:'Adriano Carvalho',papel:'marketing e comunicação',
+{g:'frase',esc:1,kick:'quem faz',
+ pre:'Marketing, engenharia e arquitetura. Não é uma sociedade que se formou para tentar alguma coisa nova — é a convergência de três carreiras que já resolviam, separadamente, as três partes deste problema.',
+ t:'três olhares que<br>já sabiam fazer<br>isso separados',
+ sub:'Incorporadora pequena costuma ter uma perna faltando e terceirizar caro — e é aí que ela perde margem, prazo e controle de qualidade. Aqui as três competências que decidem um empreendimento sentam na mesma mesa, e cada uma chega com <span class="grifo">quilometragem própria antes da AMAZ existir</span>.',
+ prem:'O que é novo é a combinação, não a capacidade. Nenhum dos três está aprendendo o próprio ofício neste projeto.'},
+{g:'socio',dir:0,nome:'Adriano Carvalho',papel:'marketing e comunicação',
  slotfoto:'retrato · filtro Hora Dourada',
  bio:'Responsável pelo posicionamento, pela construção de marca e pela conversa com o mercado. É quem transforma um sistema construtivo em argumento que o comprador entende.',
  cred:[
@@ -680,7 +784,7 @@ const DECK=[
   ['—','<b>PREENCHER:</b> prêmios, cases ou números de campanha que valham citar.']],
  pend:'Adriano: mandar as marcas de comunicação, o tempo de estrada e o que pode ser mostrado em imagem. Sem isso esta prancha não vai para fora.'},
 
-{g:'socio',nome:'Eduardo Eid',papel:'engenharia e obra',
+{g:'socio',dir:1,nome:'Eduardo Eid',papel:'engenharia e obra',
  slotfoto:'obra de grande porte · aeroporto ou instalação industrial · filtro Mata',
  bio:'Responsável pela viabilidade, pelo sistema construtivo e pela execução. Traz para a escala da vila a disciplina de quem entregou instalações de grande porte, onde erro de coordenação custa caro e prazo não se negocia.',
  cred:[
@@ -689,7 +793,7 @@ const DECK=[
   ['—','<b>PREENCHER:</b> total de m² executados na carreira. É o número que qualifica de imediato.']],
  pend:'Eduardo: mandar a lista de obras entregues, com metragem e imagem liberada para uso. Priorizar o aeroporto — é o que dá escala ao currículo aos olhos de investidor.'},
 
-{g:'socio',nome:'Michel Stein',papel:'arquitetura e produto',
+{g:'socio',dir:0,nome:'Michel Stein',papel:'arquitetura e produto',
  slotfoto:'projeto autoral entregue · filtro Mata',
  bio:'Responsável pelo projeto, pela prospecção de terreno e pelo material de venda. É quem define o produto — a casa, a vila e a relação de cada uma com o bairro em que entra.',
  cred:[
@@ -711,6 +815,22 @@ const DECK=[
 /* o slide mais forte do deck. Vem ANTES dos mitos: primeiro por que a madeira
    deveria ser o padrão, depois por que ainda não é. Invertido, começamos nos
    defendendo; nesta ordem, começamos acusando. */
+{g:'frase',esc:1,kick:'a virada silenciosa',
+ pre:'Por décadas, a briga do carbono na construção foi sobre energia de operação: ar-condicionado, iluminação, aquecimento. Essa briga está ganha.',
+ t:'o carbono mudou<br>de lugar',
+ sub:'À medida que as edificações ficam eficientes em operação, o que sobra é o carbono que já estava embutido nos materiais — gasto antes de alguém se mudar. Estima-se hoje entre 10% e 20% da pegada total de uma edificação, e a proporção só cresce conforme a operação melhora.',
+ prem:'É a única parcela do carbono de um edifício que não pode ser corrigida depois. Ela é decidida uma vez, na escolha estrutural, e fica trancada ali por toda a vida útil.',
+ dados:[
+  ['aço e concreto','emitem para existir','Não há como fabricá-los sem queimar. O ganho possível é marginal — otimizar traço, reduzir seção, trocar clínquer.'],
+  ['a madeira','estoca em vez de emitir','A árvore não emitiu para crescer: ela absorveu. É o único material estrutural que chega à obra como estoque de carbono, e não como dívida.'],
+  ['e ela volta','o único que renasce','Reflorestamento é a única cadeia de material estrutural em que a matéria-prima se repõe sozinha, em escala de décadas e não de eras geológicas.']],
+ etapas:1,
+ pend:'VERIFICAR os percentuais de carbono incorporado com fonte citável antes de qualquer material impresso.'},
+
+/* ─────────────────────── ATO 02 · A VIRADA ───────────────────────
+   Antes de introduzir a AMAZ: em que o mundo já se apoia. Três blocos —
+   industrialização, madeira engenheirada e regulação europeia. */
+
 {g:'donut',esc:1,kick:'análise de ciclo de vida',
  t:'2% do material.<br>45% das emissões.',
  sub:'A comparação entre o volume de material de uma obra e o carbono que cada material emite. O aço ocupa 2% do volume e responde por 45% das emissões — cerca de 22 vezes mais carbono por unidade de volume que a madeira. A madeira é 34% do volume e apenas 13% das emissões.',
@@ -721,14 +841,25 @@ const DECK=[
  prem:'Este slide também responde ao risco do nosso próprio nome. Reflorestamento na entrada, resíduo zero na saída — o ciclo fechado é o argumento, e ele é operacional, não decorativo.',
  pend:'CONFIRMAR com a ITA: certificação (FSC ou CERFLOR), espécie, base florestal e estado de origem.'},
 
-{g:'lista',kick:'as quatro objeções',t:'o que você acha<br>que sabe sobre<br>madeira',
+{g:'lista',rotulo:1,kick:'as quatro objeções',t:'o que você acha<br>que sabe sobre<br>madeira',
  sub:'Derrubadas de uma vez, rápido, e nunca mais se volta ao assunto. Objeção respondida devagar parece objeção verdadeira.',
  itens:[
-  ['incêndio','A madeira engenheirada <b>carboniza de fora para dentro em taxa previsível</b> e mantém a capacidade estrutural do núcleo. O aço, que o imaginário público considera seguro, perde resistência e colapsa sem aviso.'],
-  ['cupim e fungo','Toda a madeira recebe <b>imersão em tratamento preservativo</b>, antifúngico e anticupim, antes de sair da fábrica.'],
-  ['durabilidade','<b>20 anos de garantia</b> — patamar que bate de frente com o que o mercado convencional oferece, e supera boa parte.'],
-  ['escala','<b>Brock Commons, Vancouver, 2017: 18 pavimentos, 54 metros, 2.233 m³ de madeira.</b> Se dá para aprovar e operar isso, uma casa de vila de dois pavimentos está em outra ordem de grandeza de risco.']],
+  ['incêndio','<span class="grifo">Carboniza de fora para dentro em taxa previsível</span> e mantém a capacidade do núcleo. O aço, que o imaginário considera seguro, perde resistência e colapsa sem aviso.'],
+  ['cupim e fungo','Imersão em tratamento preservativo, antifúngico e anticupim, antes de sair da fábrica.'],
+  ['durabilidade','<span class="grifo">20 anos de garantia</span> — patamar que bate de frente com o mercado convencional, e supera boa parte dele.'],
+  ['escala','<span class="grifo">Brock Commons: 18 pavimentos e 54 metros em madeira, Vancouver, 2017.</span> Se dá para aprovar isso, uma casa de dois pavimentos está em outra ordem de grandeza.']],
  pend:'CONFIRMAR com a ITA: nome correto do produto de imersão, escopo exato da garantia de 20 anos, TRRF atingido e taxa de carbonização, com laudo e norma ABNT.'},
+
+{g:'frase',esc:1,kick:'02 · madeira engenheirada',
+ pre:'A madeira que limitava projeto era a madeira maciça serrada — com nó, fibra torta e variação de peça para peça.',
+ t:'a engenharia<br>tirou os defeitos<br>da árvore',
+ sub:'MLC e CLT são lamelas selecionadas e coladas em direções controladas. O resultado é uma peça sem os pontos fracos da madeira natural, com desempenho previsível, dimensão sob encomenda e resistência por unidade de peso superior à do aço.',
+ dados:[
+  ['leveza','que desce até a fundação','Estrutura mais leve significa fundação menor, menos escavação e menos concreto justamente na única etapa que ainda é convencional. A economia começa antes da madeira chegar.'],
+  ['vãos','que a maciça não fazia','Peças coladas alcançam vãos e alturas que a madeira serrada nunca permitiu. A limitação que criou o preconceito deixou de existir.'],
+  ['precisão','de peça industrial','Tolerância de fábrica em milímetros, não em centímetros. É isso que permite fabricar o caixilho antes de a estrutura subir.']],
+ etapas:1,
+ pend:'CONFIRMAR com a ITA a tolerância dimensional real de fábrica, em milímetros, e a resistência específica da MLC fornecida.'},
 
 {g:'frase',esc:1,kick:'precisão',
  pre:'Na construção convencional o arquiteto desenha, vai à obra e precisa conferir medida em loco — porque o concreto trabalha e a precisão não existe.',
@@ -736,10 +867,16 @@ const DECK=[
  sub:'Daí vem o retrabalho, o furo no meio da obra, o jeitinho. Na madeira as decisões estão todas no projeto, porque o sistema chega como solução completa, cortada em fábrica.',
  prem:'A prova material: o caixilho pode ser produzido antes da estrutura estar de pé. Nenhuma construção convencional consegue isso — porque nenhuma sabe, de antemão, onde o vão vai estar.'},
 
-{g:'frase',kick:'velocidade',t:'o cronograma<br>é o maior ativo<br>do sistema',
- sub:'A estrutura chega pré-cortada, etiquetada e numerada. A obra deixa de ser fabricação e passa a ser montagem — e montagem tem duração previsível, o que fabricação em canteiro nunca teve.',
- pend:'PREENCHER com números reais: tempo de fabricação por lote, tempo de montagem por casa, número de montadores. A confirmar com a ITA.'},
-
+{g:'frase',esc:1,kick:'a entrega',
+ pre:'A estrutura chega pré-cortada, etiquetada e numerada. A obra deixa de ser fabricação e passa a ser montagem — e montagem tem duração previsível, o que fabricação em canteiro nunca teve.',
+ t:'velocidade de<br>entrega<br>incomparável',
+ sub:'Uma equipe pequena e treinada levanta em dias o que a construção convencional levaria meses para erguer. E essa velocidade não beneficia um lado só: <span class="grifo">ela paga três vezes, para três pessoas diferentes, ao mesmo tempo</span>.',
+ dados:[
+  ['o investidor','recebe antes','Ciclo curto é capital girando antes e menos meses de exposição a juros, obra e imprevisto. É o argumento financeiro mais direto do sistema.'],
+  ['o morador','entra antes','Menos tempo de espera, menos aluguel em paralelo, menos incerteza sobre quando a casa fica pronta — e uma data que se cumpre.'],
+  ['a obra','erra menos','Menos tempo de canteiro é menos exposição a chuva, furto, acidente e rotatividade de equipe. Prazo curto não é só rápido: é mais seguro.']],
+ etapas:1,
+ pend:'PREENCHER com números reais: tempo de fabricação por lote, dias de montagem por casa e número de montadores. A confirmar com a ITA — este slide é forte demais para sair sem número.'},
 {g:'frase',kick:'resíduo',t:'a obra que não<br>suja a rua',
  sub:'Obra convencional gera resíduo e sujeira. Na primeira chuva o material se espalha, a calçada e a mata em volta ficam sujas. Há bota-fora, sobra, peça quebrada e refeita. Com o sistema industrializado isso não acontece: o que chega ao terreno é o que vai ser montado.',
  dados:[
@@ -747,12 +884,6 @@ const DECK=[
   ['0','caçambas de bota-fora','Sem sobra de fabricação, sem quebra, sem refazer. O corte aconteceu na fábrica, onde a sobra volta para a linha.'],
   ['—','de limpeza pós-obra','Não existe o serviço especializado de remover cimento grudado onde não deveria estar. Nunca houve cimento.']],
  pend:'PREENCHER a economia real em m³ de resíduo evitado e custo de caçamba evitado, para este slide sair com número em vez de adjetivo.'},
-
-{g:'frase',esc:1,kick:'mão de obra',
- pre:'Vale voltar ao número do começo: a construção brasileira perdeu 22% da sua mão de obra em dez anos.',
- t:'poucos montadores.<br>muito qualificados.',
- sub:'Em vez de muitos profissionais pouco qualificados, que é o que o mercado tradicional acaba tendo, uma equipe pequena e treinada, trabalhando em velocidade incomparável.',
- prem:'Não escolhemos trabalhar com menos gente. O mercado está perdendo gente — e o nosso sistema funciona nesse cenário, enquanto o convencional depende dele não acontecer.'},
 
 {g:'casos',kick:'referências',t:'não somos<br>os primeiros',
  sub:'Fundo de pensão dinamarquês. Hotel certificado BREEAM. Dezoito pavimentos em Vancouver.',
@@ -764,7 +895,7 @@ const DECK=[
 
 /* ─────────────────────── ATO 05 · A CASA VIVA ─────────────────────── */
 {g:'divisor',div:1,funda:1,sec:'a casa viva',dn:'05',dt:'a casa viva',
- ds:'O único território do nosso discurso que um concorrente não copia sem parecer cópia.'},
+ ds:'Aqui a conversa deixa de ser sobre sistema e passa a ser sobre a casa. O que se vê, o que se toca, e o que se sente ao chegar em casa.'},
 
 {g:'frase',esc:1,kick:'a matéria',
  pre:'A madeira trabalha com a umidade. Ela absorve, ela expele, ela responde ao clima e ao tempo. A solução técnica existe para prever esse movimento, não para impedi-lo.',
@@ -783,17 +914,46 @@ const DECK=[
  pend:'CONFIRMAR a solução acústica de entrepiso e o custo incremental. O toc-toc é assinatura da marca, mas em ticket alto precisa existir alternativa para quem pedir.'},
 
 /* ─────────────────────── ATO 06 · O PRODUTO ─────────────────────── */
-{g:'divisor',div:1,funda:1,sec:'o produto',dn:'06',dt:'o produto',
- ds:'Onde o sistema deixa de ser matéria e vira casa, vila e linha de produto.'},
+{g:'dado',funda:1,
+ num:'casa',
+ rot:'não é apartamento deitado no chão',
+ nota:'Pé-direito duplo na sala. Telhado com inclinação de verdade, e o madeiramento inteiro aparente por dentro. Pilares de madeira que atravessam o pé-direito e ficam à vista. Nada disso é decoração aplicada depois — é a própria estrutura, que a gente escolheu não esconder.',
+ slot:'render ou foto do interior · pé-direito duplo com madeiramento aparente · filtro Mata'},
 
-{g:'camadas',kick:'o módulo',t:'a casa<br>industrializada',
- sub:'Quatro camadas que chegam separadas e se montam no terreno. A fundação é a única etapa convencional; da laje para cima, tudo é peça cortada em fábrica, etiquetada e numerada.',
- itens:[
-  ['01','fundação','A única etapa que ainda é obra convencional. Acontece enquanto a estrutura está sendo fabricada.'],
-  ['02','estrutura em MLC','Pilares, vigas e lajes em madeira lamelada colada. Chega pré-cortada, sobe em dias.'],
-  ['03','vedação e caixilharia','Produzida em paralelo à estrutura — não depois dela. É o que o controle milimétrico permite.'],
-  ['04','paisagismo e cobertura','O verde não é sobra de terreno: é parte do projeto desde a primeira camada.']],
- pend:'Esta é uma axonométrica esquemática, gerada por código. A peça definitiva é um desenho autoral da casa-módulo Ônica — item de produção nossa.'},
+{g:'frase',kick:'o que se vê ao entrar',
+ t:'a estrutura<br>é o acabamento',
+ sub:'Na construção convencional a estrutura é feia e por isso é escondida: forro de gesso, revestimento, pintura — camadas inteiras existem para tapar o que sustenta a casa. Aqui a estrutura é a coisa mais bonita do ambiente, e o projeto é feito para <span class="grifo">deixá-la à mostra</span>.',
+ dados:[
+  ['pé-direito duplo','o volume da sala','A altura não é luxo de metragem: é o que permite o madeiramento aparecer inteiro e a luz entrar por cima.'],
+  ['telhado visível','a linha da cobertura','Casa com cara de casa. A cobertura é forma, não tampa — e por dentro ela é o teto que se olha.'],
+  ['pilar de madeira','o que se toca','Aquele pilar que ninguém abraça quando é de concreto. Aqui ele atravessa o ambiente e fica ao alcance da mão.']],
+ etapas:1,
+ pend:'SLOT DE IMAGEM: o 3D em andamento. Esta prancha pede duas ou três vistas internas assim que o modelo estiver apresentável.'},
+
+{g:'frase',esc:1,kick:'o entre-dentro-e-fora',
+ pre:'Uma casa de vila não se resolve pela planta interna. Ela se resolve pela soleira.',
+ t:'o avarandado<br>é o cômodo<br>mais usado',
+ sub:'Varanda profunda e coberta, ligando a sala ao quintal sem porta no meio do caminho. É onde se come no fim de semana, onde as crianças ficam quando chove e onde a casa encontra a vila. <span class="grifo">Em clima de São Paulo, é o cômodo que funciona o ano inteiro.</span>',
+ pend:'SLOT DE IMAGEM: vista do avarandado para o quintal, e a relação dele com a área comum da vila.'},
+
+{g:'dado',funda:1,
+ num:'o verde',
+ rot:'não é o que sobra do terreno — é o que organiza a vila',
+ nota:'O paisagismo entra na primeira camada do projeto, junto da implantação, e não no fim junto do orçamento. São as árvores que definem onde cada casa senta, para onde ela olha e o que ela vê pela janela. Numa vila de poucas unidades, o jardim comum é o que transforma vizinhança em convívio — e é a única parte do empreendimento que fica melhor com o tempo em vez de pior.',
+ slot:'referências de paisagismo · vila com árvores adultas, jardim comum, caminho de pedra · filtro Mata'},
+
+{g:'frase',kick:'paisagismo',
+ t:'a única coisa<br>que melhora<br>sozinha',
+ sub:'Todo o resto de um empreendimento começa a envelhecer no dia da entrega. O paisagismo é o contrário: entrega-se pela metade e fica pronto em cinco anos. Por isso ele não pode ser a última linha do orçamento — <span class="grifo">é a única linha que rende juros</span>.',
+ dados:[
+  ['espécies','nativas e adultas','Muda pequena é economia que o morador paga em dez anos de espera. Árvore adulta na entrega é o que faz a vila parecer que sempre esteve ali.'],
+  ['o jardim comum','o coração da vila','Não é área de lazer com churrasqueira e brinquedo de plástico. É um jardim de verdade, dimensionado para o número de casas.'],
+  ['a permeabilidade','o chão que respira','Menos piso, mais terra. Combina com a madeira, com o clima e com a lógica ambiental do resto do sistema.']],
+ etapas:1,
+ pend:'PREENCHER: escolher o paisagista parceiro e montar a prancha de referências. Este slide vale uma imagem forte mais do que qualquer texto.'},
+
+{g:'divisor',div:1,funda:1,sec:'o produto',dn:'06',dt:'o produto',
+ ds:'O mesmo sistema construtivo atende mais de uma faixa de mercado. Duas frentes, cada uma com o seu público e o seu momento.'},
 
 {g:'frase',esc:1,kick:'a linha autoral',t:'ônica',
  sub:'Vila residencial contemporânea, número reduzido de unidades, arquitetura autoral. Casas organizadas em torno de áreas verdes e espaços comuns, linhas claras, materialidade natural, grandes aberturas para o jardim.',
@@ -803,11 +963,11 @@ const DECK=[
   ['uma vila','de cada vez','A tese não é escala. É curadoria: unir design, natureza e vida urbana em pequenas comunidades.']],
  pend:'PREENCHER número de unidades, metragem e ticket do Ônica Madalena quando o estudo de massa estiver fechado.'},
 
-{g:'frase',kick:'a segunda linha',t:'vila do bem',
- sub:'Mesmo DNA — vila, madeira, sustentabilidade — em posicionamento mais acessível. Pé na grama, slow living, escala humana. Entra no roadmap como desdobramento natural do sistema, não como produto ativo.',
- prem:'É a prova de que a plataforma funciona em mais de uma faixa de ticket. O sistema construtivo é o mesmo; o que muda é o programa, o acabamento e o endereço.'},
-
-/* ─────────────────────── ATO 07 · O DINHEIRO ─────────────────────── */
+{g:'frase',kick:'a segunda frente',
+ t:'vila do bem',
+ sub:'Mesmo sistema construtivo, mesma tese de vila e de convívio, endereçando outra faixa de renda. Pé na grama, ritmo mais lento, escala humana — com programa, metragem e acabamento calibrados para um ticket mais acessível.',
+ prem:'Não é uma versão reduzida da Ônica. É outro produto, para outro comprador, saindo da mesma indústria — que é exatamente o que uma plataforma construtiva deveria permitir. O que torna a Ônica viável é a curadoria; o que torna a Vila do Bem viável é a repetição.',
+ pend:'Entra na apresentação como sinalização de que existe mais de uma oportunidade na mesa, não como produto em desenvolvimento. Prazo e formato ainda em aberto.'},
 {g:'divisor',div:1,funda:1,sec:'o dinheiro',dn:'07',dt:'o dinheiro',
  ds:'A conta que o mercado não faz, e por que velocidade de obra é gestão de risco.'},
 
@@ -1007,15 +1167,24 @@ function tpl(s){
   }
   const met=s.metas?`<div class="metas rev">`+s.metas.map(([l,v])=>
     `<div><span class="ml">${l}</span><span class="mv">${v}</span></div>`).join('')+`</div>`:'';
-  if(s.g==='capa') return `<div class="wrap">${k}${t}${sub}${met}<div class="regua rev"></div></div>`;
+  if(s.g==='capa'){
+    /* a sanfona: por enquanto só o percurso completo anda. Os dois atalhos
+       ficam desenhados e desligados, para o formato já existir na conversa. */
+    const tp=s.tempo?`<div class="tempo rev"><span class="tq">${s.tempo}</span>`
+      +s.opcoes.map(([rot,ativo])=>ativo
+        ? `<button class="tbtn on ms-start">${rot} ${SETA}</button>`
+        : `<button class="tbtn off" disabled>${rot} </button>`).join('')
+      +`</div>`:'<div class="regua rev"></div>';
+    return `<div class="wrap">${k}${t}${sub}${met}${tp}</div>`;
+  }
   if(s.g==='divisor') return `<div class="divisor"><span class="dn rev">${s.dn}</span>`
     +`<h1 class="dt rev">${s.dt}</h1><p class="ds rev">${s.ds}</p></div>`;
   if(s.g==='frase') return `<div class="wrap">${k}${pre}${t}${sub}${prem}${dad}${pend}</div>`;
 
   if(s.g==='lista'||s.g==='fim') return `<div class="wrap${s.largo?' largo':''}">${k}${pre}${t}${sub}`
-    +`<ol class="lista${s.largo?' largo':''}">`+s.itens.map(([q,x])=>
+    +`<ol class="lista${s.largo?' largo':''}${s.rotulo?' rot':''}">`+s.itens.map(([q,x])=>
       `<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')
-    +`</ol>${prem}${pend}</div>`;
+    +`</ol>${s.fecho?`<p class="sub rev" style="max-width:58ch">${s.fecho}</p>`:''}${prem}${pend}</div>`;
 
   if(s.g==='tabela'){
     const tab=`<div class="rev"><table class="tb"><thead><tr>`
@@ -1074,7 +1243,7 @@ function tpl(s){
   if(s.g==='socio'){
     const im=s.foto?`<img src="${s.foto}" alt="${s.nome}">`:'';
     const slot=s.foto?'':`<div class="slot"><b>slot de imagem</b><span>${s.slotfoto||''}</span></div>`;
-    return `<div class="sccols"><div class="scfoto rev">${im}${slot}</div>`
+    return `<div class="sccols${s.dir?' dir':''}"><div class="scfoto rev">${im}${slot}</div>`
       +`<div class="wrap"><span class="scnome rev">${s.nome}</span>`
       +`<span class="scpapel rev">${s.papel}</span>`
       +`<p class="scbio rev">${s.bio}</p>`
@@ -1119,7 +1288,10 @@ function go(i,tudo){
   document.body.classList.toggle('esc',!!s.esc);
   document.body.classList.toggle('funda',!!s.funda);
   document.body.classList.toggle('na-capa',!!s.capa);
-  document.body.classList.toggle('na-marca',s.g==='marca');
+  /* na abertura o chrome some; na contracapa ele FICA — sem ele não há como
+     voltar nem pular por seção, e voltar do fim é o gesto mais comum quando
+     alguém pergunta algo no meio da conversa. */
+  document.body.classList.toggle('na-marca',s.g==='marca'&&!s.fim_);
   document.querySelector('.sl').textContent=s._sec||'';
   const si=secs.findIndex(x=>x.nome===s._sec);
   document.querySelector('.sn').textContent=si>=0?String(si+1).padStart(2,'0'):'';
