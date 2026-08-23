@@ -95,6 +95,31 @@ Peça de frente que não é a prática de arquitetura segue as mesmas regras de
 sensibilidade: o repositório é público, então precificação, estratégia de
 produto, análise de concorrente e dado real de obra não vêm para cá.
 
+## ⚑ Publicar é DOIS passos, nunca um
+
+Subir o arquivo **e** registrar no índice. Peça publicada sem registro fica no
+ar e ninguém acha — não dá erro, não dá sintoma, some.
+
+E o índice é **o único arquivo que os três Projetos disputam**. Daí a regra que
+não se quebra:
+
+> **Nunca reescrever o `index.html` a partir de cópia local.** Buscar o que está
+> no repositório, alterar só o trecho necessário, e subir com o `sha` daquele
+> `GET`. Subir uma cópia inteira apaga em silêncio o que outro Projeto acabou de
+> registrar.
+
+*Armadilha paga em 23/08/2026:* às 13h05 a Lavrō registrou a peça dela, às 13h16
+a AMAZ registrou a sua, e às 13h31 uma sessão da prática subiu o índice inteiro
+de uma cópia local para aplicar um ajuste de layout. As duas peças sumiram do
+índice — os arquivos continuaram no ar. No mesmo movimento, o Tóquio voltou de
+33 para 21 pranchas, valor que a cópia local trazia de horas antes. Recuperado
+pelo histórico do Git.
+
+**O índice avisa.** Desde 23/08 ele compara a árvore do repositório com o array
+`projetos` e mostra um aviso quando encontra `.html` de peça que não está
+listado. Usa a API pública do GitHub, que limita a 60 chamadas por hora por IP —
+se estourar, o aviso silencia. É rede de segurança, não substituto do registro.
+
 ## Regras que valem sempre
 
 - **`noindex, nofollow, noarchive`** no índice e em toda apresentação. Decisão
