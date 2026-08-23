@@ -8,6 +8,7 @@ que ele descreve, então não existe versão obsoleta noutro lugar.
 | o quê | onde |
 |---|---|
 | repositório | `steinvalente-dev/apresentacoes` — **público** |
+| quem publica aqui | a prática michel stein_, a **lavrō** e a **AMAZ** — um acervo só |
 | endereço | `https://steinvalente-dev.github.io/apresentacoes/` |
 | hospedagem | GitHub Pages, `main` / `root` |
 | índice | `index.html`, com o array `acervo` no fim |
@@ -64,6 +65,21 @@ O link da peça, nunca o do índice:
 ```
 https://steinvalente-dev.github.io/apresentacoes/<slug>/apresentacao.html
 ```
+
+## Um acervo só — decidido em 22/08/2026
+
+Lavrō e AMAZ publicam **neste mesmo repositório**, como projetos do array
+`projetos`. Não há repositório por frente. Desmembrar fica para quando o volume
+pedir; até lá, um lugar só é mais fácil de manter que três.
+
+Consequência que precisa estar clara para quem publica de outro Projeto:
+**o token deste repositório dá escrita em todas as peças, de todos os projetos.**
+Uma sessão da Lavrō pode sobrescrever a apresentação da casa ITTB. Por isso a
+regra de revisão vale em dobro aqui: **não substituir por conta própria.**
+
+Peça de frente que não é a prática de arquitetura segue as mesmas regras de
+sensibilidade: o repositório é público, então precificação, estratégia de
+produto, análise de concorrente e dado real de obra não vêm para cá.
 
 ## Regras que valem sempre
 
