@@ -9,7 +9,8 @@ do Git. Nunca criar `-R2` ao lado.
 | módulo | o que faz | como entra num deck |
 |---|---|---|
 | `capa-morph.html` | a capa padrão: marca, papel, slogan e site sobre o carrossel morph, em oliva. **Nove peças, engine vigente, 561 KB** | receita de extração em `PRANCHA-CAPA.md` |
-| `divisor-morph.html` | o divisor de seção com o fundo morph atrás, em terracota. **Véu travado em 0.60** | copiar o CSS do véu e a chamada; marcar o divisor com `fundo:true` |
+| `divisor-morph.html` | divisor **com assunto**: o carrossel de peças atrás, em terracota. Véu 0.60 | copiar o CSS do véu e a chamada; marcar o divisor com `fundo:true` |
+| `divisor-trama.html` | divisor **sem assunto**: nenhuma imagem, só o retículo trocando de grelha. Véu 0.55 | mesma solda; os campos vão junto, são ~40 linhas de JS |
 | `fundo-morph-pontilhado.html` | o laboratório do fundo, com todos os controles. **Não é a capa** — serve para calibrar e copiar o preset | não entra; é banco de ensaio |
 | `ms-fundo-engine.js` | a engine do morph, ~14 KB | `<script>` no fim do `<body>` + `MSFundo.montar()` |
 
@@ -58,12 +59,48 @@ arquivo velho.
 | onde | véu | gradiente das pontas |
 |---|---|---|
 | índice do repositório | 0.18 | 0.30, transparente entre 16% e 84% |
-| divisor de seção | **0.60** | 0.50, transparente entre 26% e 74% |
+| divisor **com** imagem | **0.60** | 0.50, transparente entre 26% e 74% |
+| divisor **só trama** | **0.55** | 0.42, transparente entre 30% e 70% |
 
-O divisor pede quase o triplo do índice porque carrega o maior tipo do deck
+O divisor pede o triplo do índice porque carrega o maior tipo do deck
 (`--fs-div` chega a 124 px) e a trama compete diretamente com o título. No
 índice o texto se apoia nos cards de tinta translúcida, então o fundo pode
 ficar solto.
+
+O divisor sem assunto fica pouco abaixo do com imagem: não há foto para abafar,
+mas o contraste subiu para 0.62 e a grelha sozinha ainda disputa com o título.
+
+## O divisor sem assunto — por que existe
+
+Decidido em 22/08/2026. O carrossel da abertura é assinatura: mostrar os
+projetos ali é o ponto. No meio da apresentação de um cliente, o mesmo carrossel
+vira ruído — o cliente está pensando na casa dele e aparece a orla de outro
+projeto. O divisor deixou de puxar do acervo pessoal.
+
+Como funciona, em `divisor-trama.html`: quatro **campos de luminância gerados
+por código** num canvas 2D, passados à engine como se fossem fotos. Massa à
+esquerda, faixas diagonais, clareira central e horizonte. Zero byte de
+download; ~0,4 MB de VRAM por campo, contra 1,3 MB de uma peça real.
+
+Calibragem própria, medida e não estimada:
+
+| parâmetro | valor | por quê |
+|---|---|---|
+| transição | **serigrafia** | a grelha troca dentro do próprio retículo, sem fade e sem borrão |
+| cursor | **0, desligado** | o divisor é pausa; a trama reagir ao ponteiro puxa atenção para o lugar errado |
+| densidade | 5.2 | mais fina que a capa (4.5): com campo suave a trama fina lê melhor |
+| contraste | 0.62 | em 0.46 a troca media 0,7 em 255 entre quadros — invisível |
+| gama | 1.28 | |
+| velocidade | 0.30 | troca a cada 6,5 s, volta completa em 26 s |
+| zoom | 0.038 | deriva contínua, para não ficar parado entre uma troca e outra |
+| sangramento | 0.10 | o campo já é massa tonal, quase não precisa sangrar |
+
+*Armadilha paga:* na primeira versão os campos variavam só de 0,24 a 0,94 de
+luminância e eram parecidos entre si. Medido em Chromium: a diferença entre
+quadros consecutivos ficava em **0,7 de 255** — a troca não existia para o olho,
+só aparecia num salto isolado. Abrir os campos para quase 0–1 e subir o
+contraste deixou a passagem em `0,8 → 3,8 → 10,3 → 5,0`, ou seja, quatro
+segundos de passagem visível dentro do ciclo de 6,5.
 
 ## Base64 no deck é decisão, não descuido
 

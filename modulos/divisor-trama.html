@@ -14,7 +14,7 @@
     --olive:#6B6A4B; --cream:#EDE6DA; --ink:#211D1A; --terra:#B85C38;
     --mono:'DM Mono',ui-monospace,monospace;
     --fundo:var(--terra);
-    --veu:.34;
+    --veu:.55;              /* travado em 22/08/2026 — divisor sem assunto */
     --gut:clamp(38px,8vw,190px);
     --fs-div:clamp(42px,6.0vw,124px);
     --fs-cap:clamp(10px,.78vw,15px);
@@ -73,7 +73,7 @@
 
 <div class="painel">
   <div class="l"><span class="k">véu</span>
-    <input id="s-veu" type="range" min="0" max="90" value="34"><span class="v" id="v-veu">.34</span></div>
+    <input id="s-veu" type="range" min="0" max="90" value="55"><span class="v" id="v-veu">.55</span></div>
   <div class="l"><span class="k">densidade</span>
     <input id="s-dot" type="range" min="20" max="90" value="52"><span class="v" id="v-dot">5.2</span></div>
   <div class="l"><span class="k">respiro</span>
@@ -82,7 +82,7 @@
   <div class="l"><span class="k">fundo</span><button id="b-cor">terracota</button></div>
   <div class="l"><span class="k">preset</span><button id="b-copia">copiar</button></div>
 </div>
-<p class="dica">só a trama · troca a cada 6,5 s · espaço pausa</p>
+<p class="dica">véu travado em .55 · troca a cada 6,5 s · espaço pausa</p>
 
 <script src="ms-fundo-engine.js" defer></script>
 <script>
