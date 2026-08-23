@@ -67,8 +67,8 @@
 <section class="slide">
   <p class="num">seção 02 de 06</p>
   <h1 class="tit">o projeto<i>_</i></h1>
-  <p class="sub">Divisor sem assunto: nenhuma imagem, só o retículo respirando.
-    Os campos de luminância são gerados por código — peso zero de download.</p>
+  <p class="sub">Divisor sem assunto: nenhuma imagem, só o retículo trocando de grelha.
+    Quatro campos gerados por código — peso zero de download.</p>
 </section>
 
 <div class="painel">
@@ -77,11 +77,12 @@
   <div class="l"><span class="k">densidade</span>
     <input id="s-dot" type="range" min="20" max="90" value="52"><span class="v" id="v-dot">5.2</span></div>
   <div class="l"><span class="k">respiro</span>
-    <input id="s-vel" type="range" min="4" max="40" value="11"><span class="v" id="v-vel">.11</span></div>
+    <input id="s-vel" type="range" min="4" max="60" value="30"><span class="v" id="v-vel">.30</span></div>
+  <div class="l"><span class="k">transição</span><button id="b-trans">serigrafia</button></div>
   <div class="l"><span class="k">fundo</span><button id="b-cor">terracota</button></div>
   <div class="l"><span class="k">preset</span><button id="b-copia">copiar</button></div>
 </div>
-<p class="dica">só a trama · espaço pausa</p>
+<p class="dica">só a trama · troca a cada 6,5 s · espaço pausa</p>
 
 <script src="ms-fundo-engine.js" defer></script>
 <script>
@@ -107,15 +108,14 @@ const suave = t => t*t*(3 - 2*t);
 const bolha = (u,v,cx,cy,r) => Math.max(0, 1 - Math.hypot((u-cx)*1.78, v-cy)/r);
 
 const CAMPOS = [
-  /* diagonal larga — a trama fecha de um canto ao outro */
-  campo((u,v) => 0.30 + 0.62*suave((u*0.68 + v*0.32))),
-  /* clareira central — abre no meio, fecha nas bordas */
-  campo((u,v) => 0.24 + 0.70*suave(bolha(u,v,0.42,0.46,0.92))),
-  /* onda lenta — três cristas largas na horizontal */
-  campo((u,v) => 0.34 + 0.50*(0.5 + 0.5*Math.sin(u*4.1 + v*1.7)) * suave(1 - v*0.35)),
-  /* horizonte — massa embaixo, céu limpo em cima, a leitura que o halftone gosta */
-  campo((u,v) => 0.20 + 0.72*suave(Math.min(1, Math.max(0, (v - 0.30)/0.55)))
-                 * (0.86 + 0.14*Math.sin(u*3.3)))
+  /* massa à esquerda — a trama fecha desse lado, o outro fica quase limpo */
+  campo((u,v) => 0.06 + 0.92*suave(1 - Math.min(1, u*1.15))),
+  /* faixas diagonais largas — grelha em bandas, o mais "gráfico" dos quatro */
+  campo((u,v) => 0.08 + 0.88*(0.5 + 0.5*Math.sin((u*0.72 + v*0.68)*6.2))),
+  /* clareira central — abre no meio, fecha em volta */
+  campo((u,v) => 0.05 + 0.92*suave(bolha(u,v,0.46,0.48,0.98))),
+  /* horizonte — massa embaixo, céu limpo em cima */
+  campo((u,v) => 0.04 + 0.92*suave(Math.min(1, Math.max(0, (v - 0.26)/0.50))))
 ];
 
 let F = null, terracota = true;
@@ -130,18 +130,19 @@ function sobe(){
     /* calibragem própria do divisor sem assunto: mais lento, mais macio.
        Contraste alto sobre campo suave criaria bandas visíveis.            */
     const P = F.P;
-    P.trans = 0;      // morph: deslocamento por ruído, o mais orgânico dos quatro
-    P.cur   = 1;      // foco: a trama afina onde o ponteiro está, sem deformar
+    P.trans = 2;      // serigrafia: duas telas em ângulos diferentes, a troca
+                      // acontece dentro do próprio retículo, sem borrão
+    P.cur   = 0;      // cursor desligado: o divisor é pausa, não interação
+    P.angle2 = 34;    // ângulo da segunda tela — o moiré legítimo de impressão
     P.dot   = 5.2;    // um pouco mais fina que a capa (4.5)
-    P.speed = 0.11;   // respiro lento: a volta leva uns três minutos
-    P.contrast = 0.46;
-    P.gamma = 1.15;
+    P.speed = 0.30;   // cada troca leva uns 6,5 s; a volta completa, uns 26 s
+    P.contrast = 0.62;
+    P.gamma = 1.28;
     P.amp   = 0.05;
     P.edge  = 1.0;
     P.bleed = 0.10;   // campo já é massa tonal, quase não precisa sangrar
-    P.zoom  = 0.014;
+    P.zoom  = 0.038;   // deriva contínua: algo se move mesmo entre uma troca e outra
     P.vig   = 0.80;
-    P.mforce = 0.34;
     F.entrada();
   }catch(e){ /* sem WebGL2 o divisor fica chapado, que é estado aceitável */ }
 }
@@ -156,6 +157,13 @@ liga('s-veu','v-veu', v => document.documentElement.style.setProperty('--veu', v
      v => (v/100).toFixed(2).slice(1));
 liga('s-dot','v-dot', v => { if(F) F.P.dot = v/10; }, v => (v/10).toFixed(1));
 liga('s-vel','v-vel', v => { if(F) F.P.speed = v/100; }, v => (v/100).toFixed(2).slice(1));
+
+const TRANS = ['morph','entrelaço','serigrafia','maré'];
+document.getElementById('b-trans').addEventListener('click', function(){
+  if(!F) return;
+  F.P.trans = (F.P.trans + 1) % 4;
+  this.textContent = TRANS[F.P.trans];
+});
 
 document.getElementById('b-cor').addEventListener('click', function(){
   terracota = !terracota;
