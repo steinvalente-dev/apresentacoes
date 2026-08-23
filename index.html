@@ -307,6 +307,7 @@
    Campos da peça, os quatro sempre:
      nome      o que é a peça, minúsculas
      pranchas  quantas pranchas o deck tem
+     unid      opcional; troca o rótulo "pranchas" (a lavrō conta em "telas")
      peso      MB do arquivo NO DISCO, não o transferido. O Pages comprime:
                a casa ITTB são 11,9 MB no disco e 9,3 MB no fio. Quem vai
                mandar por e-mail ou WhatsApp precisa do primeiro número.
@@ -323,16 +324,22 @@ const projetos = [
   },
   {
     nome: "lavrō",
-    pecas: []
+    pecas: [
+      { nome: "apresentação institucional", pranchas: 15, unid: "telas", peso: 0.36,
+        data: "23.08.2026", href: "lavro/apresentacao.html" }
+    ]
   },
   {
     nome: "AMAZ",
-    pecas: []
+    pecas: [
+      { nome: "apresentação institucional", pranchas: 37, peso: 0.16,
+        data: "23.08.2026", href: "amaz/apresentacao.html" }
+    ]
   },
   {
     nome: "tóquio · centro",
     pecas: [
-      { nome: "estudo de posicionamento", pranchas: 21, peso: 2.6, data: "22.08.2026",
+      { nome: "estudo de posicionamento", pranchas: 33, peso: 2.6, data: "22.08.2026",
         href: "toquio-centro/apresentacao.html" }
     ]
   },
@@ -422,7 +429,7 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
      Peso acima de 8 MB ganha marca — passa do limite de anexo de e-mail. */
   function ficha(x){
     const p = [];
-    if(x.pranchas) p.push(x.pranchas + ' pranchas');
+    if(x.pranchas) p.push(x.pranchas + ' ' + (x.unid || 'pranchas'));
     if(x.peso){
       const n = x.peso >= 10 ? x.peso.toFixed(0) : x.peso.toFixed(1).replace('.', ',');
       p.push('<span class="' + (x.peso > 8 ? 'pesada' : '') + '">' + n + ' MB</span>');
