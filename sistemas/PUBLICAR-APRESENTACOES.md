@@ -28,11 +28,25 @@ Não passa pelo Netlify e **não consome crédito nenhum**. O site pessoal
 {
   nome: "casa ITTB",
   pecas: [
-    { nome: "estudo preliminar", sub: "29 pranchas", data: "19.08.2026",
+    { nome: "estudo preliminar", pranchas: 29, peso: 11.9, data: "19.08.2026",
       href: "casa-ittb/apresentacao.html" }
   ]
 }
 ```
+
+**Os quatro campos da peça são obrigatórios**, e a ficha do índice sai deles na
+ordem `pranchas · peso · data`.
+
+O `peso` é o tamanho **no disco**, em MB, não o transferido. O Pages comprime na
+entrega: a casa ITTB são 11,9 MB no disco e 9,3 MB no fio. Quem vai mandar a peça
+por e-mail ou WhatsApp precisa do primeiro número — é por isso que ele é o que
+aparece.
+
+Medir com `curl -s -I -L <url> | grep -i content-length` **sem** mandar
+`Accept-Encoding`, senão vem o comprimido. Acima de 8 MB o índice marca o número
+com uma seta: passa do limite de anexo da maioria dos serviços de e-mail.
+
+**Ao substituir uma peça, atualizar o `peso`.** É o campo que envelhece calado.
 
 3. **Não escrever número.** O `01`, `02` sai da ordem das peças **dentro do
    projeto**. Mais recente em cima. `oculto: true` esconde sem apagar.
