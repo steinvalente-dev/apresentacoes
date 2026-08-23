@@ -8,7 +8,7 @@ do Git. Nunca criar `-R2` ao lado.
 
 | módulo | o que faz | como entra num deck |
 |---|---|---|
-| `capa-morph.html` | a capa padrão: marca, papel, slogan e site sobre o carrossel morph, em oliva | receita de extração em `PRANCHA-CAPA.md` |
+| `capa-morph.html` | a capa padrão: marca, papel, slogan e site sobre o carrossel morph, em oliva. **Nove peças, engine vigente, 561 KB** | receita de extração em `PRANCHA-CAPA.md` |
 | `divisor-morph.html` | o divisor de seção com o fundo morph atrás, em terracota. Traz controle de véu para calibrar | copiar o CSS do véu e a chamada; marcar o divisor com `fundo:true` |
 | `fundo-morph-pontilhado.html` | o laboratório do fundo, com todos os controles. **Não é a capa** — serve para calibrar e copiar o preset | não entra; é banco de ensaio |
 | `ms-fundo-engine.js` | a engine do morph, ~14 KB | `<script>` no fim do `<body>` + `MSFundo.montar()` |
@@ -52,6 +52,25 @@ direita e libera o lado esquerdo, onde o texto ancora.
 Servidas com `?v=N` no `FUNDO_V` de quem consome. O Pages entrega com
 `max-age=600`, então trocar uma peça sem subir a versão deixa o navegador no
 arquivo velho.
+
+## Base64 no deck é decisão, não descuido
+
+As nove peças estão servidas em `../fundo/*.webp` e seria tentador o deck
+referenciá-las: tiraria ~424 KB de cada apresentação e o navegador
+reaproveitaria as mesmas entre uma peça e outra.
+
+**Não fazer.** Um deck referenciando arquivo externo só abre dentro do Pages.
+Deixa de abrir de pen drive, de arquivo baixado do WhatsApp, de rede
+corporativa que bloqueia, e de sala de reunião com wifi cativo — que é
+exatamente a lista de casos que motivou embutir as fontes em base64, depois de
+o DOM travar 12,6 s esperando uma CDN.
+
+A conta: 424 KB num deck de 12 MB são 3,5%. Trocar isso pela garantia de abrir
+sem rede é péssimo negócio. E a banda não é problema — o Pages não cobra.
+
+O módulo `capa-morph.html` segue a mesma regra: 561 KB, autossuficiente.
+Quem consome o fundo **por link**, como o índice deste repositório, aí sim
+referencia `fundo/*.webp` com `?v=`.
 
 ## Ao criar um módulo novo
 
