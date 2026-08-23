@@ -123,12 +123,39 @@ table.tb mark{background:none;color:inherit;font-weight:600}
 .marca svg{height:clamp(8px,.62vw,11px);width:auto;display:block;flex:none}
 .marca i{width:2px;height:clamp(8px,.62vw,11px);background:var(--acento);display:block;flex:none}
 body.esc .marca i,body.funda .marca i{background:var(--apoio)}
-.nav{display:flex;align-items:center;gap:clamp(10px,1.2vw,18px);pointer-events:auto}
-.cont{font-variant-numeric:tabular-nums;letter-spacing:.1em}
-.seta{width:clamp(26px,2.3vw,34px);height:clamp(26px,2.3vw,34px);border:1px solid currentColor;border-radius:50%;
-  display:grid;place-items:center;cursor:pointer;opacity:.6;transition:opacity .2s,transform .1s;
-  background:none;color:inherit;font-size:11px}
-.seta:hover{opacity:1}.seta:active{transform:scale(.94)}
+/* ── navegação · pastilha de leitura garantida ──────────────────────────
+   Regra de sistema, decidida em 23/08/2026. O contador e as setas param de
+   herdar a cor do slide e passam a viver numa pastilha própria: fundo Papel
+   a 94%, glifo em tinta, filete de tinta a 22% e sombra baixa.
+
+   Por que clara e não escura. Medi as duas contra cinco fundos — Papel,
+   Tiber, Mata funda, foto clara e foto escura:
+
+     pastilha escura → contraste do glifo entre 6,2:1 e 14,9:1
+     pastilha clara  → contraste do glifo entre 9,7:1 e 11,4:1
+
+   A clara tem o piso mais alto e a menor variação. A fraqueza dela é sumir
+   como forma sobre fundo claro (1,0:1 sobre Papel) — e isso o filete escuro
+   resolve. A escura tem a fraqueza simétrica sobre fundo escuro, e ali um
+   filete claro não salvaria a foto escura, onde ela some junto com a borda.
+
+   `backdrop-filter` é reforço, não requisito: sem suporte, os 94% de opacidade
+   já entregam o contraste. ── */
+.nav{display:flex;align-items:center;gap:clamp(8px,.9vw,14px);pointer-events:auto;
+  background:rgba(244,241,234,.94);
+  -webkit-backdrop-filter:blur(7px) saturate(1.1);backdrop-filter:blur(7px) saturate(1.1);
+  border:1px solid rgba(6,57,47,.22);border-radius:999px;
+  padding:clamp(4px,.42vw,6px) clamp(7px,.7vw,11px) clamp(4px,.42vw,6px) clamp(11px,1.05vw,17px);
+  box-shadow:0 1px 5px rgba(4,37,31,.16);
+  color:var(--tinta)}
+.cont{font-variant-numeric:tabular-nums;letter-spacing:.1em;color:var(--tinta);opacity:.72}
+.seta{width:clamp(23px,2vw,30px);height:clamp(23px,2vw,30px);
+  border:1px solid rgba(6,57,47,.34);border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;opacity:.9;
+  transition:opacity .2s,transform .1s,background .2s;
+  background:none;color:var(--tinta);font-size:11px}
+.seta:hover{opacity:1;background:rgba(6,57,47,.08)}
+.seta:active{transform:scale(.94)}
 body.na-marca .chrome{opacity:0;pointer-events:none}
 body.na-capa .chrome.pe .pj{opacity:0}
 
@@ -147,7 +174,7 @@ body.na-capa .chrome.pe .pj{opacity:0}
    uma das pendências abertas do bloco de tema: o tamanho mínimo do lockup
    completo é ~200px de largura. */
 .slide.g-marca .lockup{position:absolute;left:var(--gut);top:var(--top);
-  --W:clamp(124px,10.5vw,166px)}
+  --W:clamp(102px,8vw,132px)}
 .slide.g-marca .lockup .desc{display:none}
 .frase{display:flex;flex-direction:column;align-items:flex-start;
   gap:clamp(9px,1.35vh,20px);padding-left:var(--gut)}
@@ -161,9 +188,10 @@ body.na-capa .chrome.pe .pj{opacity:0}
 .lockup .bar{width:.28em;background:var(--acento);flex:none}
 .lockup .dtx{font-family:var(--sans);font-weight:400;font-size:1em;
   line-height:1.22;letter-spacing:.005em;margin-left:.70em;color:var(--apoio)}
-.slogan{font-family:var(--disp);font-weight:800;font-size:clamp(22px,3.75vw,82px);
-  letter-spacing:-.038em;line-height:1.04;white-space:nowrap;margin-top:clamp(6px,1vh,16px)}
-.assina{font-family:var(--disp);font-weight:800;font-size:clamp(22px,3.75vw,82px);letter-spacing:-.038em;line-height:1.04}
+.slogan{font-family:var(--disp);font-weight:800;font-size:clamp(30px,5.6vw,112px);
+  letter-spacing:-.042em;line-height:1.02;white-space:nowrap;margin-top:clamp(6px,1vh,16px)}
+.assina{font-family:var(--disp);font-weight:800;font-size:clamp(30px,5.6vw,112px);
+  letter-spacing:-.042em;line-height:1.02}
 .site{font-family:var(--sans);font-weight:400;font-size:clamp(10px,.78vw,15px);
   letter-spacing:.14em;color:var(--soft)}
 .ms-start{font-family:var(--sans);font-weight:500;font-size:var(--fs-cap);letter-spacing:.16em;
