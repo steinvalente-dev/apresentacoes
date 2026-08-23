@@ -3,7 +3,10 @@
    Preset "linha MS" (20/08/2026): serigrafia + paralaxe, contraste 0.65.
    Entrada em diagonal, ao estilo da vitrine, introduz a primeira peça.
    API: MSFundo.montar(canvas, imagens, opcoes?) → {entrada(), pausar(v), cor(o)}
-   opcoes: {ink, paper, acc, scale}. cor() troca a paleta com interpolação.   */
+   opcoes: {ink, paper, acc, scale, prep:false, sortear:true}.
+   prep:false pula a auto-exposição em JS — use com imagem já corrigida no
+   arquivo, que é o que permite carrossel de oito a dez peças sem travar.
+   sortear embaralha a ordem na carga. cor() troca a paleta com interpolação. */
 window.MSFundo=(function(){
 const VS=`#version 300 es
 void main(){
@@ -184,6 +187,7 @@ function montar(cv, IMGS, OPT){
   const COR={ink:INK.slice(),paper:PAPER.slice(),acc:ACC.slice()};
   const ALVO={ink:INK.slice(),paper:PAPER.slice(),acc:ACC.slice()};
   function prep(src){
+    if(OPT.prep===false) return src;   // já pré-exposta no arquivo
     const w=src.naturalWidth,h=src.naturalHeight;
     const c=document.createElement('canvas');c.width=w;c.height=h;
     const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(src,0,0);
@@ -222,7 +226,10 @@ function montar(cv, IMGS, OPT){
   if('IntersectionObserver' in window)
     new IntersectionObserver(e=>{visible=e[0].isIntersecting&&!document.hidden;},{threshold:.01}).observe(cv);
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) paused=true;
-  (async()=>{ for(const src of IMGS){
+  let FILA=IMGS.slice();
+  if(OPT.sortear){ for(let j=FILA.length-1;j>0;j--){
+    const r=Math.floor(Math.random()*(j+1)); const t=FILA[j]; FILA[j]=FILA[r]; FILA[r]=t; } }
+  (async()=>{ for(const src of FILA){
     const im=await new Promise(r=>{const x=new Image();x.onload=()=>r(x);x.onerror=()=>r(null);x.src=src;});
     if(im) S.push(mkTex(im)); if(S.length===2) ready=true;
     await new Promise(r=>setTimeout(r,0));

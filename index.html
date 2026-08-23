@@ -585,8 +585,10 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
 
 <script src="modulos/ms-fundo-engine.js" defer></script>
 <script>
-/* fundo morph — sobe fora do caminho crítico; sem WebGL2 a página fica chapada,
-   que é estado aceitável. A engine já auto-pausa por visibilidade.            */
+/* fundo morph — nove peças a 640px WebP, já pré-expostas no arquivo (prep:false)
+   e em ordem sorteada, para cada abertura começar por um par diferente.
+   Sobe fora do caminho crítico; sem WebGL2 a página fica chapada, que é estado
+   aceitável. A engine já auto-pausa por visibilidade.                          */
 (function(){
   function sobe(){
     if(!window.MSFundo) return;
@@ -594,10 +596,10 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
       const sis = document.body.classList.contains('sistema');
       window.MSF = MSFundo.montar(
         document.getElementById('msfundo'),
-        ['fundo/p1.jpg','fundo/p2.jpg','fundo/p3.jpg'],
+        ['01','02','03','04','05','06','07','08','09'].map(function(n){ return 'fundo/'+n+'.webp'; }),
         { paper: sis ? '#B85C38' : '#6B6A4B',
           acc:   sis ? '#211D1A' : '#B85C38',
-          scale: 0.85 }
+          scale: 0.85, prep: false, sortear: true }
       );
       window.MSF.entrada();
     }catch(e){ /* fundo é enfeite: falhar aqui não pode derrubar a página */ }
