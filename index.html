@@ -117,7 +117,11 @@
   .peca .nome{font-family:var(--mono);font-style:italic;font-weight:500;
     text-transform:lowercase;letter-spacing:-.03em;
     font-size:clamp(16px,2.1vw,21px);line-height:1.2;display:block}
-  .peca .sub{font-size:12px;color:var(--muted);margin-top:6px;display:block}
+  .peca .sub{font-size:12px;color:var(--muted);margin-top:6px;display:block;
+    font-variant-numeric:tabular-nums}
+  .peca .sub i{font-style:normal;opacity:.45;margin:0 2px}
+  .peca .sub .pesada{color:var(--cream)}
+  .peca .sub .pesada::after{content:"↑";margin-left:3px;font-size:.85em;opacity:.7}
   .acoes{display:flex;align-items:center;gap:clamp(12px,2vw,22px);flex-shrink:0}
   .acoes button,.acoes a{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--cream);background:none;
@@ -299,6 +303,14 @@
 
    Peça nova: acrescentar UM objeto em `pecas` do projeto certo.
    Projeto novo: acrescentar UM objeto a `projetos`.
+
+   Campos da peça, os quatro sempre:
+     nome      o que é a peça, minúsculas
+     pranchas  quantas pranchas o deck tem
+     peso      MB do arquivo NO DISCO, não o transferido. O Pages comprime:
+               a casa ITTB são 11,9 MB no disco e 9,3 MB no fio. Quem vai
+               mandar por e-mail ou WhatsApp precisa do primeiro número.
+     data      DD.MM.AAAA
    Não escrever número: 01, 02 saem da ordem, mais recente em cima.
    `oculto:true` esconde sem apagar o registro.
    ───────────────────────────────────────────────────────────── */
@@ -311,29 +323,23 @@ const projetos = [
   },
   {
     nome: "lavrō",
-    pecas: [
-      { nome: "apresentação institucional", sub: "15 telas", data: "23.08.2026",
-        href: "lavro/apresentacao.html" }
-    ]
+    pecas: []
   },
   {
     nome: "AMAZ",
-    pecas: [
-      { nome: "apresentação institucional", sub: "37 pranchas", data: "23.08.2026",
-        href: "amaz/apresentacao.html" }
-    ]
+    pecas: []
   },
   {
     nome: "tóquio · centro",
     pecas: [
-      { nome: "estudo de posicionamento", sub: "21 pranchas", data: "22.08.2026",
+      { nome: "estudo de posicionamento", pranchas: 21, peso: 2.6, data: "22.08.2026",
         href: "toquio-centro/apresentacao.html" }
     ]
   },
   {
     nome: "casa ITTB",
     pecas: [
-      { nome: "estudo preliminar", sub: "29 pranchas", data: "19.08.2026",
+      { nome: "estudo preliminar", pranchas: 29, peso: 11.9, data: "19.08.2026",
         href: "casa-ittb/apresentacao.html" }
     ]
   }
@@ -412,6 +418,20 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
       + p.nome + '<span class="qt">' + (n || '—') + '</span></button></li>';
   }).join('');
 
+  /* ficha da peça: pranchas · peso · data, nessa ordem, sempre.
+     Peso acima de 8 MB ganha marca — passa do limite de anexo de e-mail. */
+  function ficha(x){
+    const p = [];
+    if(x.pranchas) p.push(x.pranchas + ' pranchas');
+    if(x.peso){
+      const n = x.peso >= 10 ? x.peso.toFixed(0) : x.peso.toFixed(1).replace('.', ',');
+      p.push('<span class="' + (x.peso > 8 ? 'pesada' : '') + '">' + n + ' MB</span>');
+    }
+    if(x.data) p.push(x.data);
+    if(!p.length && x.sub) p.push(x.sub);
+    return p.join(' <i>·</i> ');
+  }
+
   function pinta(){
     const p = visiveis[atual];
     const lista = p.pecas.filter(function(x){ return !x.oculto; });
@@ -426,7 +446,7 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
       return '<article class="peca">'
         + '<span class="n">' + num + '</span>'
         + '<span><span class="nome">' + x.nome + '</span>'
-        + '<span class="sub">' + [x.sub, x.data].filter(Boolean).join(' · ') + '</span></span>'
+        + '<span class="sub">' + ficha(x) + '</span></span>'
         + '<span class="acoes">'
         +   '<button class="copiar" data-url="' + url + '">copiar link</button>'
         +   '<a class="abrir" href="' + x.href + '" target="_blank" rel="noopener">abrir ' + SETA + '</a>'
