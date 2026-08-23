@@ -9,7 +9,7 @@ do Git. Nunca criar `-R2` ao lado.
 | módulo | o que faz | como entra num deck |
 |---|---|---|
 | `capa-morph.html` | a capa padrão: marca, papel, slogan e site sobre o carrossel morph, em oliva. **Nove peças, engine vigente, 561 KB** | receita de extração em `PRANCHA-CAPA.md` |
-| `divisor-morph.html` | o divisor de seção com o fundo morph atrás, em terracota. Traz controle de véu para calibrar | copiar o CSS do véu e a chamada; marcar o divisor com `fundo:true` |
+| `divisor-morph.html` | o divisor de seção com o fundo morph atrás, em terracota. **Véu travado em 0.60** | copiar o CSS do véu e a chamada; marcar o divisor com `fundo:true` |
 | `fundo-morph-pontilhado.html` | o laboratório do fundo, com todos os controles. **Não é a capa** — serve para calibrar e copiar o preset | não entra; é banco de ensaio |
 | `ms-fundo-engine.js` | a engine do morph, ~14 KB | `<script>` no fim do `<body>` + `MSFundo.montar()` |
 
@@ -52,6 +52,18 @@ direita e libera o lado esquerdo, onde o texto ancora.
 Servidas com `?v=N` no `FUNDO_V` de quem consome. O Pages entrega com
 `max-age=600`, então trocar uma peça sem subir a versão deixa o navegador no
 arquivo velho.
+
+## Véu por contexto — travado em 22/08/2026
+
+| onde | véu | gradiente das pontas |
+|---|---|---|
+| índice do repositório | 0.18 | 0.30, transparente entre 16% e 84% |
+| divisor de seção | **0.60** | 0.50, transparente entre 26% e 74% |
+
+O divisor pede quase o triplo do índice porque carrega o maior tipo do deck
+(`--fs-div` chega a 124 px) e a trama compete diretamente com o título. No
+índice o texto se apoia nos cards de tinta translúcida, então o fundo pode
+ficar solto.
 
 ## Base64 no deck é decisão, não descuido
 

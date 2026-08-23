@@ -14,7 +14,7 @@
     --olive:#6B6A4B; --cream:#EDE6DA; --ink:#211D1A; --terra:#B85C38;
     --mono:'DM Mono',ui-monospace,monospace;
     --fundo:var(--terra);
-    --veu:.46;              /* densidade do véu — o que se calibra aqui */
+    --veu:.60;              /* travado em 22/08/2026 — padrão do divisor */
     --gut:clamp(38px,8vw,190px);
     --fs-div:clamp(42px,6.0vw,124px);
     --fs-cap:clamp(10px,.78vw,15px);
@@ -76,14 +76,14 @@
 
 <div class="painel">
   <div class="l"><span class="k">véu</span>
-    <input id="s-veu" type="range" min="0" max="90" value="46">
-    <span class="v" id="v-veu">0.46</span></div>
+    <input id="s-veu" type="range" min="0" max="90" value="60">
+    <span class="v" id="v-veu">0.60</span></div>
   <div class="l"><span class="k">fundo</span>
     <button id="b-cor">terracota</button></div>
   <div class="l"><span class="k">preset</span>
     <button id="b-copia">copiar</button></div>
 </div>
-<p class="dica">arraste o véu até o título ficar confortável · espaço pausa</p>
+<p class="dica">padrão travado em 0.60 · o slider serve para conferir, não para redefinir · espaço pausa</p>
 
 <script src="ms-fundo-engine.js" defer></script>
 <script>
