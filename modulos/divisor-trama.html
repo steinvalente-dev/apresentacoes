@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>divisor · só a trama — laboratório · michel stein_</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --olive:#6B6A4B; --cream:#EDE6DA; --ink:#211D1A; --terra:#B85C38;
+    --mono:'DM Mono',ui-monospace,monospace;
+    --fundo:var(--terra);
+    --veu:.34;
+    --gut:clamp(38px,8vw,190px);
+    --fs-div:clamp(42px,6.0vw,124px);
+    --fs-cap:clamp(10px,.78vw,15px);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{background:var(--fundo);color:var(--cream);font-family:'Inter',sans-serif;
+    transition:background-color .55s cubic-bezier(.4,0,.2,1)}
+
+  #msfundo{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+  #msveu{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:var(--fundo);opacity:var(--veu);transition:opacity .3s,background-color .55s}
+  #msveu::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,var(--fundo) 0%,transparent 30%,transparent 70%,var(--fundo) 100%);
+    opacity:.42}
+
+  .slide{position:fixed;inset:0;z-index:2;display:flex;flex-direction:column;
+    justify-content:center;padding:0 var(--gut)}
+  .num{font-family:var(--mono);font-weight:400;font-size:var(--fs-cap);
+    letter-spacing:.24em;text-transform:uppercase;color:#EDE6DAa8;margin-bottom:clamp(14px,2vh,26px)}
+  .tit{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;
+    font-size:var(--fs-div);line-height:.98;letter-spacing:-.045em;max-width:16ch}
+  .tit i{font-style:italic;color:var(--ink)}
+  body.oliva .tit i{color:var(--terra)}
+  .sub{margin-top:clamp(16px,2.4vh,30px);font-size:clamp(12px,1vw,16px);
+    color:#EDE6DAc4;max-width:48ch;line-height:1.6}
+
+  .painel{position:fixed;z-index:5;right:18px;bottom:18px;
+    background:#211D1Ad9;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border:1px solid #EDE6DA2e;border-radius:12px;padding:16px 18px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--cream);
+    display:grid;gap:11px;min-width:262px}
+  .painel .l{display:flex;justify-content:space-between;align-items:center;gap:14px}
+  .painel .k{color:#EDE6DA99;text-transform:uppercase;letter-spacing:.16em;font-size:9.5px}
+  .painel input[type=range]{width:124px;accent-color:var(--terra)}
+  .painel button{font:inherit;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    background:none;border:1px solid #EDE6DA3d;border-radius:999px;color:var(--cream);
+    padding:7px 14px;cursor:pointer;transition:background .25s,color .25s}
+  .painel button:hover{background:var(--cream);color:var(--ink)}
+  .painel .v{font-variant-numeric:tabular-nums;min-width:3.2ch;text-align:right}
+  .dica{position:fixed;left:18px;bottom:18px;z-index:5;font-family:var(--mono);
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#EDE6DA80}
+</style>
+</head>
+<body>
+
+<canvas id="msfundo" aria-hidden="true"></canvas>
+<div id="msveu" aria-hidden="true"></div>
+
+<section class="slide">
+  <p class="num">seção 02 de 06</p>
+  <h1 class="tit">o projeto<i>_</i></h1>
+  <p class="sub">Divisor sem assunto: nenhuma imagem, só o retículo respirando.
+    Os campos de luminância são gerados por código — peso zero de download.</p>
+</section>
+
+<div class="painel">
+  <div class="l"><span class="k">véu</span>
+    <input id="s-veu" type="range" min="0" max="90" value="34"><span class="v" id="v-veu">.34</span></div>
+  <div class="l"><span class="k">densidade</span>
+    <input id="s-dot" type="range" min="20" max="90" value="52"><span class="v" id="v-dot">5.2</span></div>
+  <div class="l"><span class="k">respiro</span>
+    <input id="s-vel" type="range" min="4" max="40" value="11"><span class="v" id="v-vel">.11</span></div>
+  <div class="l"><span class="k">fundo</span><button id="b-cor">terracota</button></div>
+  <div class="l"><span class="k">preset</span><button id="b-copia">copiar</button></div>
+</div>
+<p class="dica">só a trama · espaço pausa</p>
+
+<script src="ms-fundo-engine.js" defer></script>
+<script>
+/* ── campos de luminância procedurais ──────────────────────────────────────
+   A engine espera imagens. Em vez de fotos, geramos campos suaves: a trama lê
+   a luminância deles e o morph entre um e outro faz a densidade abrir e fechar.
+   Zero byte de download; ~0,4 MB de VRAM cada, contra 1,3 MB de uma peça real. */
+function campo(fn, w, h){
+  w = w || 480; h = h || 270;
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const x = c.getContext('2d'), d = x.createImageData(w, h), a = d.data;
+  for(let j = 0; j < h; j++){
+    for(let i = 0; i < w; i++){
+      const v = Math.max(0, Math.min(1, fn(i/w, j/h)));
+      const k = (j*w + i)*4, g = Math.round(v*255);
+      a[k] = a[k+1] = a[k+2] = g; a[k+3] = 255;
+    }
+  }
+  x.putImageData(d, 0, 0);
+  return c.toDataURL('image/png');
+}
+const suave = t => t*t*(3 - 2*t);
+const bolha = (u,v,cx,cy,r) => Math.max(0, 1 - Math.hypot((u-cx)*1.78, v-cy)/r);
+
+const CAMPOS = [
+  /* diagonal larga — a trama fecha de um canto ao outro */
+  campo((u,v) => 0.30 + 0.62*suave((u*0.68 + v*0.32))),
+  /* clareira central — abre no meio, fecha nas bordas */
+  campo((u,v) => 0.24 + 0.70*suave(bolha(u,v,0.42,0.46,0.92))),
+  /* onda lenta — três cristas largas na horizontal */
+  campo((u,v) => 0.34 + 0.50*(0.5 + 0.5*Math.sin(u*4.1 + v*1.7)) * suave(1 - v*0.35)),
+  /* horizonte — massa embaixo, céu limpo em cima, a leitura que o halftone gosta */
+  campo((u,v) => 0.20 + 0.72*suave(Math.min(1, Math.max(0, (v - 0.30)/0.55)))
+                 * (0.86 + 0.14*Math.sin(u*3.3)))
+];
+
+let F = null, terracota = true;
+
+function sobe(){
+  if(!window.MSFundo) return;
+  try{
+    F = MSFundo.montar(document.getElementById('msfundo'), CAMPOS, {
+      paper: '#B85C38', acc: '#211D1A',
+      scale: 0.85, prep: false, sortear: false
+    });
+    /* calibragem própria do divisor sem assunto: mais lento, mais macio.
+       Contraste alto sobre campo suave criaria bandas visíveis.            */
+    const P = F.P;
+    P.trans = 0;      // morph: deslocamento por ruído, o mais orgânico dos quatro
+    P.cur   = 1;      // foco: a trama afina onde o ponteiro está, sem deformar
+    P.dot   = 5.2;    // um pouco mais fina que a capa (4.5)
+    P.speed = 0.11;   // respiro lento: a volta leva uns três minutos
+    P.contrast = 0.46;
+    P.gamma = 1.15;
+    P.amp   = 0.05;
+    P.edge  = 1.0;
+    P.bleed = 0.10;   // campo já é massa tonal, quase não precisa sangrar
+    P.zoom  = 0.014;
+    P.vig   = 0.80;
+    P.mforce = 0.34;
+    F.entrada();
+  }catch(e){ /* sem WebGL2 o divisor fica chapado, que é estado aceitável */ }
+}
+if('requestIdleCallback' in window) requestIdleCallback(sobe, {timeout:1200});
+else addEventListener('load', function(){ setTimeout(sobe, 120); });
+
+function liga(id, saida, fn, fmt){
+  const el = document.getElementById(id), out = document.getElementById(saida);
+  el.addEventListener('input', function(){ const v = Number(el.value); fn(v); out.textContent = fmt(v); });
+}
+liga('s-veu','v-veu', v => document.documentElement.style.setProperty('--veu', v/100),
+     v => (v/100).toFixed(2).slice(1));
+liga('s-dot','v-dot', v => { if(F) F.P.dot = v/10; }, v => (v/10).toFixed(1));
+liga('s-vel','v-vel', v => { if(F) F.P.speed = v/100; }, v => (v/100).toFixed(2).slice(1));
+
+document.getElementById('b-cor').addEventListener('click', function(){
+  terracota = !terracota;
+  document.documentElement.style.setProperty('--fundo', terracota ? '#B85C38' : '#6B6A4B');
+  document.body.classList.toggle('oliva', !terracota);
+  this.textContent = terracota ? 'terracota' : 'oliva';
+  if(F) F.cor(terracota ? {paper:'#B85C38', acc:'#211D1A'} : {paper:'#6B6A4B', acc:'#B85C38'});
+});
+
+document.getElementById('b-copia').addEventListener('click', function(){
+  const txt = JSON.stringify({
+    veu: Number(document.getElementById('s-veu').value)/100,
+    fundo: terracota ? '#B85C38' : '#6B6A4B',
+    dot: F ? F.P.dot : null, speed: F ? F.P.speed : null,
+    contrast: F ? F.P.contrast : null, gamma: F ? F.P.gamma : null,
+    campos: 'procedurais, sem imagem'
+  }, null, 2);
+  const ok = () => { this.textContent = 'copiado'; setTimeout(()=>this.textContent='copiar',1600); };
+  if(navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, ()=>console.log(txt));
+  else console.log(txt);
+});
+
+addEventListener('keydown', function(e){
+  if(e.code === 'Space'){ e.preventDefault(); if(F){ F._p = !F._p; F.pausar(F._p); } }
+});
+</script>
+
+</body>
+</html>
