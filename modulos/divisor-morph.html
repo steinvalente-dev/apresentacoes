@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>divisor com fundo morph — laboratório · michel stein_</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --olive:#6B6A4B; --cream:#EDE6DA; --ink:#211D1A; --terra:#B85C38;
+    --mono:'DM Mono',ui-monospace,monospace;
+    --fundo:var(--terra);
+    --veu:.46;              /* densidade do véu — o que se calibra aqui */
+    --gut:clamp(38px,8vw,190px);
+    --fs-div:clamp(42px,6.0vw,124px);
+    --fs-cap:clamp(10px,.78vw,15px);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{background:var(--fundo);color:var(--cream);font-family:'Inter',sans-serif;
+    transition:background-color .55s cubic-bezier(.4,0,.2,1)}
+
+  #msfundo{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+  #msveu{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:var(--fundo);opacity:var(--veu);transition:opacity .3s,background-color .55s}
+  /* o divisor tem o maior tipo do deck: o véu aqui é mais denso que na abertura,
+     e ganha reforço nas pontas para o título não brigar com a trama            */
+  #msveu::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,var(--fundo) 0%,transparent 26%,transparent 74%,var(--fundo) 100%);
+    opacity:.5}
+
+  .slide{position:fixed;inset:0;z-index:2;display:flex;flex-direction:column;
+    justify-content:center;padding:0 var(--gut)}
+  .num{font-family:var(--mono);font-weight:400;font-size:var(--fs-cap);
+    letter-spacing:.24em;text-transform:uppercase;color:#EDE6DAa8;margin-bottom:clamp(14px,2vh,26px)}
+  .tit{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;
+    font-size:var(--fs-div);line-height:.98;letter-spacing:-.045em;max-width:16ch}
+  .tit i{font-style:italic;color:var(--ink)}
+  body.oliva .tit i{color:var(--terra)}
+  .sub{margin-top:clamp(16px,2.4vh,30px);font-size:clamp(12px,1vw,16px);
+    color:#EDE6DAc4;max-width:46ch;line-height:1.6}
+
+  /* chrome mínimo, só para o laboratório */
+  .painel{position:fixed;z-index:5;right:18px;bottom:18px;
+    background:#211D1Ad9;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border:1px solid #EDE6DA2e;border-radius:12px;padding:16px 18px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--cream);
+    display:grid;gap:12px;min-width:250px}
+  .painel .l{display:flex;justify-content:space-between;align-items:center;gap:14px}
+  .painel .k{color:#EDE6DA99;text-transform:uppercase;letter-spacing:.16em;font-size:9.5px}
+  .painel input[type=range]{width:130px;accent-color:var(--terra)}
+  .painel button{font:inherit;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    background:none;border:1px solid #EDE6DA3d;border-radius:999px;color:var(--cream);
+    padding:7px 14px;cursor:pointer;transition:background .25s,color .25s}
+  .painel button:hover{background:var(--cream);color:var(--ink)}
+  .painel .v{font-variant-numeric:tabular-nums}
+  .dica{position:fixed;left:18px;bottom:18px;z-index:5;font-family:var(--mono);
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#EDE6DA80}
+</style>
+</head>
+<body>
+
+<canvas id="msfundo" aria-hidden="true"></canvas>
+<div id="msveu" aria-hidden="true"></div>
+
+<section class="slide">
+  <p class="num">seção 02 de 06</p>
+  <h1 class="tit">o projeto<i>_</i></h1>
+  <p class="sub">Divisor de seção com o fundo morph atrás. O véu é mais denso do que na
+    abertura porque o tipo aqui é o maior do deck.</p>
+</section>
+
+<div class="painel">
+  <div class="l"><span class="k">véu</span>
+    <input id="s-veu" type="range" min="0" max="90" value="46">
+    <span class="v" id="v-veu">0.46</span></div>
+  <div class="l"><span class="k">fundo</span>
+    <button id="b-cor">terracota</button></div>
+  <div class="l"><span class="k">preset</span>
+    <button id="b-copia">copiar</button></div>
+</div>
+<p class="dica">arraste o véu até o título ficar confortável · espaço pausa</p>
+
+<script src="ms-fundo-engine.js" defer></script>
+<script>
+const FUNDO_V = 2;
+const PECAS = ['01','02','03','04','05','06','07','08','09']
+  .map(function(n){ return '../fundo/' + n + '.webp?v=' + FUNDO_V; });
+
+let F = null, terracota = true;
+
+function sobe(){
+  if(!window.MSFundo) return;
+  try{
+    F = MSFundo.montar(document.getElementById('msfundo'), PECAS, {
+      paper: '#B85C38', acc: '#211D1A',
+      scale: 0.85, prep: false, sortear: true
+    });
+    F.entrada();
+  }catch(e){ /* sem WebGL2 o divisor fica chapado, que é estado aceitável */ }
+}
+if('requestIdleCallback' in window) requestIdleCallback(sobe,{timeout:1200});
+else addEventListener('load', function(){ setTimeout(sobe,120); });
+
+const sVeu = document.getElementById('s-veu'), vVeu = document.getElementById('v-veu');
+sVeu.addEventListener('input', function(){
+  const v = (sVeu.value/100).toFixed(2);
+  document.documentElement.style.setProperty('--veu', v);
+  vVeu.textContent = v;
+});
+
+document.getElementById('b-cor').addEventListener('click', function(){
+  terracota = !terracota;
+  document.documentElement.style.setProperty('--fundo', terracota ? '#B85C38' : '#6B6A4B');
+  document.body.classList.toggle('oliva', !terracota);
+  this.textContent = terracota ? 'terracota' : 'oliva';
+  if(F) F.cor(terracota ? {paper:'#B85C38', acc:'#211D1A'}
+                        : {paper:'#6B6A4B', acc:'#B85C38'});
+});
+
+document.getElementById('b-copia').addEventListener('click', function(){
+  const txt = JSON.stringify({
+    veu: Number(sVeu.value)/100,
+    fundo: terracota ? '#B85C38' : '#6B6A4B',
+    acc: terracota ? '#211D1A' : '#B85C38',
+    scale: 0.85, prep: false, sortear: true
+  }, null, 2);
+  const ok = () => { this.textContent = 'copiado'; setTimeout(()=>this.textContent='copiar',1600); };
+  if(navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, ()=>console.log(txt));
+  else console.log(txt);
+});
+
+addEventListener('keydown', function(e){
+  if(e.code === 'Space'){ e.preventDefault(); if(F){ F.pausar(!F._p); F._p = !F._p; } }
+});
+</script>
+
+</body>
+</html>
