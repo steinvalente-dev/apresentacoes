@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>AMAZ — marchetaria · tábuas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MARCHETARIA · TÁBUAS — laboratório de corte
+   ------------------------------------------------------------
+   A grelha continua a mesma. O que muda é que as peças deixam de
+   ser todas 1×1: agora o campo é empacotado com quadrados e
+   TÁBUAS (2×1, 1×2, 3×1, 1×3). A junta passa a contornar a peça,
+   não a célula — é o que faz o dominó aparecer.
+
+   Divisão de matéria, que é como a madeira se comporta:
+     quadrado 1×1  →  TOPO. Anéis centrados no vértice, o corte do
+                      sistema, as 5 regras. É o bloco que você
+                      aprovou.
+     tábua         →  FIO. Uma prancha: um tom só, veio contínuo de
+                      ponta a ponta, com catedral e nó. O veio corre
+                      no comprimento OU a 45° — é o que se testa aqui.
+
+   As 5 regras seguem valendo, mas só entre quadrados. A antevisão
+   ganhou uma condição nova: o terceiro arco de um vértice só entra
+   se a célula que fecha esse vértice for QUADRADO — porque só ela
+   pode receber a fenda radial que a R2 exige. Se ali cair tábua, o
+   arco é vetado e o vértice para em meia tora.
+
+   Paleta Mata Fechada (rodada 03). Padrão: Mata funda + madeira.
+   ============================================================ */
+:root{
+  --tiber:#06392F; --mata:#04251F; --cobre:#B95118;
+  --areia:#D9C9A3; --papel:#F4F1EA; --eletrico:#0123FF;
+  --t-ui:220ms; --t-entra:560ms;
+  --e-saida:cubic-bezier(.25,.7,.3,1);
+  --e-ui:cubic-bezier(.3,.8,.3,1);
+  --f-display:'Bricolage Grotesque',sans-serif;   /* face de display da AMAZ */
+  --f-corpo:'Inter',sans-serif;
+  --f-mono:'IBM Plex Mono',monospace;
+}
+body[data-tema="mata"]{
+  --bg:#04251F;
+  --tomA:rgba(217,201,163,.130); --tomB:rgba(217,201,163,.028);
+  --veio:rgba(217,201,163,.30);  --junta:rgba(217,201,163,.13);
+  --veu:rgba(4,37,31,.74);
+  --tit:#F4F1EA; --txt:rgba(244,241,234,.66); --kick:rgba(244,241,234,.44);
+  --acento:#B95118; --borda-ui:rgba(244,241,234,.28);
+}
+body[data-tema="papel"]{
+  --bg:#F4F1EA;
+  --tomA:rgba(6,57,47,.090); --tomB:rgba(6,57,47,.020);
+  --veio:rgba(6,57,47,.36);   --junta:rgba(6,57,47,.16);
+  --veu:rgba(244,241,234,.76);
+  --tit:#04251F; --txt:rgba(4,37,31,.72); --kick:rgba(4,37,31,.48);
+  --acento:#B95118; --borda-ui:rgba(4,37,31,.24);
+}
+body[data-tema="areia"]{
+  /* o creme amadeirado da marca como CHÃO. O veio inverte: passa a
+     ser Mata funda sobre a Areia, e o tipo também. Cobre segue acento. */
+  --bg:#D9C9A3;
+  --tomA:rgba(4,37,31,.085); --tomB:rgba(4,37,31,.020);
+  --veio:rgba(4,37,31,.40);  --junta:rgba(4,37,31,.17);
+  --veu:rgba(217,201,163,.90); --veu-ate:74%;   /* par de maior competição
+     entre textura e tipo: o véu pesa mais e alcança mais longe */
+  --tit:#04251F; --txt:rgba(4,37,31,.74); --kick:rgba(4,37,31,.52);
+  --acento:#B95118; --borda-ui:rgba(4,37,31,.30);
+}
+body[data-tema="tiber"]{
+  --bg:#06392F;
+  --tomA:rgba(217,201,163,.150); --tomB:rgba(217,201,163,.032);
+  --veio:rgba(217,201,163,.32);  --junta:rgba(217,201,163,.14);
+  --veu:rgba(6,57,47,.68);
+  --tit:#F4F1EA; --txt:rgba(244,241,234,.78); --kick:rgba(244,241,234,.56);
+  --acento:#D9C9A3; --borda-ui:rgba(244,241,234,.42);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:var(--bg);color:var(--tit);font-family:var(--f-corpo);
+  overflow:hidden;-webkit-font-smoothing:antialiased;
+  transition:background-color var(--t-ui) var(--e-ui);
+}
+#tex{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+#tomA{fill:var(--tomA);stroke:none}
+#tomB{fill:var(--tomB);stroke:none}
+#veio{fill:none;stroke:var(--veio);stroke-width:1.05;stroke-linecap:round;
+      vector-effect:non-scaling-stroke}
+#junta{fill:none;stroke:var(--junta);stroke-width:1;vector-effect:non-scaling-stroke}
+#racha{fill:none;stroke:var(--veio);stroke-width:1.35;stroke-linecap:round;opacity:.92;
+       vector-effect:non-scaling-stroke}
+#fenda{fill:none;stroke:var(--veio);stroke-width:1.7;stroke-linecap:round;opacity:.85;
+       vector-effect:non-scaling-stroke}
+.veu{position:fixed;inset:0;z-index:1;pointer-events:none;
+     background:linear-gradient(104deg,var(--veu) 0%,var(--veu) 18%,
+                                rgba(0,0,0,0) var(--veu-ate,66%));
+     transition:background var(--t-ui) var(--e-ui)}
+.abertura{
+  position:relative;z-index:2;height:100%;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+  padding:clamp(40px,7vw,120px);padding-right:clamp(40px,26vw,400px);
+}
+/* o wordmark da marca — 'amaz' em Bricolage Grotesque 800 com o
+   kerning manual por par já aplicado no vetor. Proporção de tinta
+   4,178:1. Herda a cor por currentColor. */
+.wordmark{
+  display:block;color:var(--tit);
+  width:clamp(118px,11vw,196px);height:auto;
+  margin-bottom:clamp(22px,3.6vh,44px);
+}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(44px,8.2vw,132px);
+   line-height:1.0;letter-spacing:-.035em;max-width:14em}
+.ac{color:var(--acento)}
+.apoio{margin-top:clamp(22px,3.6vh,42px);font-size:clamp(15px,1.45vw,21px);
+       line-height:1.55;color:var(--txt);max-width:34em}
+.rev{opacity:0;transform:translateY(16px);animation:sobe var(--t-entra) var(--e-saida) forwards}
+.r1{animation-delay:140ms}.r2{animation-delay:260ms}.r3{animation-delay:420ms}
+@keyframes sobe{to{opacity:1;transform:none}}
+/* ---------- painel ---------- */
+.painel{position:fixed;top:20px;right:20px;z-index:6;
+        display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+.linha{display:flex;gap:6px;align-items:center}
+.rot{font-family:var(--f-mono);font-size:9px;font-weight:500;letter-spacing:.14em;
+     text-transform:uppercase;color:var(--kick);margin-right:2px}
+.temas{display:flex;gap:9px}
+.tema-btn{width:20px;height:20px;border-radius:999px;border:1px solid var(--borda-ui);
+          cursor:pointer;padding:0;transition:transform 120ms var(--e-ui),box-shadow var(--t-ui)}
+.tema-btn:active{transform:scale(.9)}
+.tema-btn.on{box-shadow:0 0 0 2px var(--borda-ui)}
+.tema-btn[data-tema="mata"]{background:#04251F}
+.tema-btn[data-tema="papel"]{background:#F4F1EA}
+.tema-btn[data-tema="tiber"]{background:#06392F}
+.tema-btn[data-tema="areia"]{background:#D9C9A3}
+.pill{
+  font-family:var(--f-mono);font-size:9.5px;font-weight:500;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--kick);background:none;cursor:pointer;
+  border:1px solid var(--borda-ui);border-radius:999px;padding:.34em .68em;
+  transition:color var(--t-ui),border-color var(--t-ui);
+  -webkit-tap-highlight-color:transparent;
+}
+.pill.on{color:var(--tit);border-color:var(--tit)}
+.rodape{
+  position:fixed;right:20px;bottom:18px;z-index:6;
+  font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--kick);text-align:right;
+}
+.rodape b{font-weight:500;color:var(--txt)}
+.rodape button{font:inherit;letter-spacing:inherit;text-transform:inherit;
+  color:var(--acento);background:none;border:none;cursor:pointer;padding:0;
+  border-bottom:1px solid currentColor}
+/* ---------- comparar ---------- */
+.comp{
+  position:fixed;inset:0;z-index:9;background:var(--bg);
+  padding:clamp(24px,3.4vw,52px);overflow-y:auto;
+  opacity:0;visibility:hidden;
+  transition:opacity var(--t-ui) var(--e-ui),visibility 0s linear var(--t-ui);
+}
+.comp.aberto{opacity:1;visibility:visible;transition:opacity var(--t-entra) var(--e-saida)}
+.comp h2{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.16em;
+         text-transform:uppercase;color:var(--kick);margin-bottom:clamp(16px,2.6vh,28px)}
+.comp-grid{display:grid;gap:clamp(14px,2vw,26px);
+           grid-template-columns:repeat(3,minmax(0,1fr));max-width:1500px}
+@media (max-width:1040px){.comp-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:660px){.comp-grid{grid-template-columns:1fr}}
+.corte{cursor:pointer;background:none;border:none;padding:0;text-align:left;display:block;width:100%}
+.corte svg{display:block;width:100%;height:auto;border:1px solid var(--junta);
+           transition:border-color var(--t-ui)}
+.corte:hover svg{border-color:var(--tit)}
+.corte .nome{font-family:var(--f-display);font-weight:700;
+             font-size:clamp(14px,1.3vw,18px);color:var(--tit);margin-top:.6em}
+.corte .desc{font-size:clamp(12px,1vw,14px);line-height:1.5;color:var(--txt);margin-top:.25em}
+.corte .cod{font-family:var(--f-mono);font-size:9px;font-weight:500;letter-spacing:.14em;
+            text-transform:uppercase;color:var(--kick);margin-top:.5em}
+.comp-fechar{position:fixed;top:20px;right:20px;z-index:10;
+  font-family:var(--f-mono);font-size:10px;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--kick);background:var(--bg);
+  border:1px solid var(--borda-ui);border-radius:999px;padding:.5em 1em;cursor:pointer}
+@media (max-width:760px){
+  .abertura{padding-right:clamp(40px,7vw,120px)}
+  .rodape{left:20px;right:auto;text-align:left}
+  .painel{top:14px;right:14px;gap:7px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .rev{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body data-tema="mata">
+<svg id="tex" aria-hidden="true">
+  <path id="tomA"/><path id="tomB"/><path id="junta"/><path id="veio"/><path id="racha"/><path id="fenda"/>
+</svg>
+<div class="veu" aria-hidden="true"></div>
+<div class="painel">
+  <div class="linha temas" aria-label="Par de cor">
+    <button class="tema-btn on" data-tema="mata" aria-label="Mata funda"></button>
+    <button class="tema-btn" data-tema="papel" aria-label="Papel"></button>
+    <button class="tema-btn" data-tema="tiber" aria-label="Tiber"></button>
+    <button class="tema-btn" data-tema="areia" aria-label="Areia — o creme amadeirado"></button>
+  </div>
+  <div class="linha" id="linCorte"><span class="rot">corte</span></div>
+  <div class="linha" id="linVeio"><span class="rot">veio da tábua</span></div>
+  <div class="linha" id="linDens"><span class="rot">tábua</span></div>
+  <div class="linha" id="linPx"><span class="rot">módulo</span></div>
+
+</div>
+<main class="abertura">
+  <svg class="wordmark rev r1" viewBox="0 0 2322.91 556.00" role="img" aria-label="amaz">
+    <title>amaz</title>
+    <g transform="translate(0 542.00) scale(1 -1)" fill="currentColor">
+      <path transform="translate(-36.00 0)" d="M186 -14Q142 -14 108.0 3.5Q74 21 55.0 54.5Q36 88 36 136Q36 181 53.5 210.5Q71 240 104.5 257.5Q138 275 185.0 286.5Q232 298 292 307Q321 312 340.5 316.5Q360 321 370.0 331.0Q380 341 380 360Q380 385 362.0 403.0Q344 421 304 421Q276 421 253.5 411.0Q231 401 215.0 382.0Q199 363 191 336L49 378Q62 420 85.5 451.0Q109 482 142.0 502.5Q175 523 217.5 532.5Q260 542 308 542Q388 542 438.5 516.5Q489 491 513.5 437.5Q538 384 538 300V219Q538 183 539.5 146.5Q541 110 543.5 73.5Q546 37 550 0H408Q404 23 400.0 55.5Q396 88 394 122H375Q361 84 334.5 52.5Q308 21 270.5 3.5Q233 -14 186 -14ZM259 100Q277 100 295.5 106.5Q314 113 331.0 124.5Q348 136 362.0 153.0Q376 170 383 190L381 269L403 264Q384 252 361.0 245.0Q338 238 314.5 234.0Q291 230 268.5 225.5Q246 221 228.5 214.0Q211 207 201.0 195.0Q191 183 191 162Q191 134 210.0 117.0Q229 100 259 100Z"/>
+      <path transform="translate(460.99 0)" d="M62 0V341V528H189L191 373H211Q225 430 248.0 467.5Q271 505 304.0 523.5Q337 542 381 542Q427 542 457.5 522.5Q488 503 506.0 465.5Q524 428 530 373H547Q563 432 589.0 469.5Q615 507 651.0 524.5Q687 542 729 542Q774 542 807.5 524.5Q841 507 863.5 472.5Q886 438 897.0 386.5Q908 335 908 267V0H746V247Q746 300 737.5 335.0Q729 370 711.0 387.5Q693 405 665 405Q633 405 610.5 384.0Q588 363 576.0 325.5Q564 288 564 241V0H406V244Q406 299 396.5 334.0Q387 369 368.5 387.0Q350 405 322 405Q290 405 268.0 384.0Q246 363 234.5 325.5Q223 288 223 241V0Z"/>
+      <path transform="translate(1324.46 0)" d="M186 -14Q142 -14 108.0 3.5Q74 21 55.0 54.5Q36 88 36 136Q36 181 53.5 210.5Q71 240 104.5 257.5Q138 275 185.0 286.5Q232 298 292 307Q321 312 340.5 316.5Q360 321 370.0 331.0Q380 341 380 360Q380 385 362.0 403.0Q344 421 304 421Q276 421 253.5 411.0Q231 401 215.0 382.0Q199 363 191 336L49 378Q62 420 85.5 451.0Q109 482 142.0 502.5Q175 523 217.5 532.5Q260 542 308 542Q388 542 438.5 516.5Q489 491 513.5 437.5Q538 384 538 300V219Q538 183 539.5 146.5Q541 110 543.5 73.5Q546 37 550 0H408Q404 23 400.0 55.5Q396 88 394 122H375Q361 84 334.5 52.5Q308 21 270.5 3.5Q233 -14 186 -14ZM259 100Q277 100 295.5 106.5Q314 113 331.0 124.5Q348 136 362.0 153.0Q376 170 383 190L381 269L403 264Q384 252 361.0 245.0Q338 238 314.5 234.0Q291 230 268.5 225.5Q246 221 228.5 214.0Q211 207 201.0 195.0Q191 183 191 162Q191 134 210.0 117.0Q229 100 259 100Z"/>
+      <path transform="translate(1819.91 0)" d="M34 0V134L296 385V400H40V528H500V395L236 143V129H503V0Z"/>
+    </g>
+  </svg>
+  <h1 class="rev r2">Uma <span class="ac">clareira</span><br>no caos.</h1>
+  <p class="apoio rev r3">Vilas de casas em madeira engenheirada, em bairros
+  consolidados de São Paulo. Uma vila de cada vez.</p>
+</main>
+<p class="rodape">semente <b id="oSemente">—</b><br><span id="oMix">—</span> ·
+  <button id="btnComp">comparar cortes</button></p>
+<section class="comp" id="comp" aria-hidden="true">
+  <h2>Marchetaria · cortes do campo <span id="compSem"></span></h2>
+  <div class="comp-grid" id="compGrid"></div>
+</section>
+<button class="comp-fechar" id="btnFechar" style="display:none">fechar</button>
+<script>
+(function(){
+  'use strict';
+  var svg = document.getElementById('tex');
+  var pA = document.getElementById('tomA'), pB = document.getElementById('tomB');
+  var pV = document.getElementById('veio'), pJ = document.getElementById('junta');
+  var pF = document.getElementById('fenda'), pR = document.getElementById('racha');
+  var elSem = document.getElementById('oSemente'), elMix = document.getElementById('oMix');
+
+  var CORTE = 'd2';         /* empacotamento do campo */
+  var VEIOT = 'sorteado';   /* comprimento · 45 · sorteado */
+  var DENS  = 1;            /* quanta tábua: .42 pouca · 1 média · 2.4 muita */
+  /* MÓDULO EM PIXEL, não em colunas.
+     Em colunas, o módulo mudava de tamanho físico junto com a janela —
+     a mesma peça ficava graúda no monitor e miúda no notebook. Aqui o
+     alvo é em px e o que varia é quantas peças caibam.
+     ENCAIXAR arredonda o alvo para o divisor mais próximo da largura,
+     para a grelha fechar sem meia peça na borda. O desvio fica em
+     poucos por cento e aparece no rodapé. */
+  var PX    = 80;           /* alvo do lado da peça, em px */
+  var SNAP  = true;         /* encaixar na largura (sem controle: ver abaixo) */
+  var ORG   = 0.55;         /* madeira (o traço escolhido em 23.08) */
+
+  /* Formas por corte: o quadrado pesa 1 e as tábuas dividem um peso
+     total calibrado para a tábua ocupar ~2/5 da área em DENS = 1.
+     A conta importa porque uma peça 2×1 cobre o dobro de campo: com
+     pesos iguais a tábua engoliria 2/3 do desenho e o topo — que é o
+     que o Michel aprovou — desapareceria. */
+  var CORTES = {
+    q:  { nome:'quadrado',   desc:'O campo que você aprovou: só peças 1×1, tudo topo de tora.',
+          cod:'1×1', pl:[], base:0 },
+    h2: { nome:'dominó ↔',   desc:'Tábuas de duas células deitadas entre os blocos de topo.',
+          cod:'1×1 · 2×1', pl:[[2,1,1]], base:.42 },
+    v2: { nome:'dominó ↕',   desc:'O mesmo, de pé. A leitura muda: o campo ganha prumo.',
+          cod:'1×1 · 1×2', pl:[[1,2,1]], base:.42 },
+    d2: { nome:'dominó',     desc:'As duas direções misturadas — o parquê de verdade.',
+          cod:'1×1 · 2×1 · 1×2', pl:[[2,1,.5],[1,2,.5]], base:.42 },
+  };
+  /* Tábua de três células saiu em 23.08.2026: o Michel preferiu manter
+     o máximo em duas. A forma continua suportada pelo empacotador — é
+     só devolver a entrada aqui se algum dia voltar. */
+  function formasDe(corte, dens){
+    var C = CORTES[corte], f = [[1,1,1]], W = C.base * dens, k;
+    for (k = 0; k < C.pl.length; k++)
+      f.push([C.pl[k][0], C.pl[k][1], C.pl[k][2] * W]);
+    return f;
+  }
+
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function num(n){ return Math.round(n); }
+  function poli(pts){
+    var d = 'M' + num(pts[0][0]) + ' ' + num(pts[0][1]) + 'L', k;
+    for (k = 1; k < pts.length; k++) d += num(pts[k][0]) + ' ' + num(pts[k][1]) + ' ';
+    return d;
+  }
+  function ehReta(p){ return !!p && p.charAt(0) === 'd'; }
+
+  /* ==========================================================
+     1 · EMPACOTAMENTO — quadrados e tábuas sobre a grelha
+     ========================================================== */
+  function empacota(semente, cols, lins, corte, dens){
+    var rnd = mulberry32((semente ^ 0x5bf03635) | 0);
+    var formas = formasDe(corte, dens === undefined ? DENS : dens);
+    var ocup = [], pecas = [], j, i, a, b, k;
+    for (j = 0; j < lins; j++){ ocup[j] = []; for (i = 0; i < cols; i++) ocup[j][i] = -1; }
+    function cabe(i, j, w, h){
+      if (i + w > cols || j + h > lins) return false;
+      for (b = 0; b < h; b++) for (a = 0; a < w; a++) if (ocup[j + b][i + a] >= 0) return false;
+      return true;
+    }
+    for (j = 0; j < lins; j++){
+      for (i = 0; i < cols; i++){
+        if (ocup[j][i] >= 0) continue;
+        var val = [];
+        for (k = 0; k < formas.length; k++)
+          if (cabe(i, j, formas[k][0], formas[k][1])) val.push(formas[k]);
+        var soma = 0;
+        for (k = 0; k < val.length; k++) soma += val[k][2];
+        var alvo = rnd() * soma, esc = val[val.length - 1];
+        for (k = 0; k < val.length; k++){ alvo -= val[k][2]; if (alvo <= 0){ esc = val[k]; break; } }
+        var id = pecas.length;
+        for (b = 0; b < esc[1]; b++) for (a = 0; a < esc[0]; a++) ocup[j + b][i + a] = id;
+        pecas.push({ i:i, j:j, w:esc[0], h:esc[1] });
+      }
+    }
+    return { ocup:ocup, pecas:pecas };
+  }
+
+  /* ==========================================================
+     2 · AS REGRAS — só entre quadrados
+     ========================================================== */
+  function sorteiaArcos(semente, cols, lins, emp){
+    var rnd = mulberry32(semente), g = [], rad = [], j, i;
+    for (j = 0; j < lins; j++){ g[j] = []; rad[j] = []; }
+    function quad(i, j){
+      if (i < 0 || j < 0 || i >= cols || j >= lins) return false;
+      var t = emp.pecas[emp.ocup[j][i]];
+      return !!t && t.w === 1 && t.h === 1;
+    }
+    function em(i, j){ if (i < 0 || j < 0 || !g[j]) return null; return g[j][i] || null; }
+    function vArco(i, j, p){
+      if (p === 'a0') return i + ',' + j;
+      if (p === 'a1') return (i + 1) + ',' + j;
+      if (p === 'a2') return (i + 1) + ',' + (j + 1);
+      if (p === 'a3') return i + ',' + (j + 1);
+      return null;
+    }
+    function nArcos(vi, vj){
+      var v = vi + ',' + vj, n = 0, dj, di, p;
+      for (dj = -1; dj <= 0; dj++) for (di = -1; di <= 0; di++){
+        p = em(vi + di, vj + dj);
+        if (p && p.charAt(0) === 'a' && vArco(vi + di, vj + dj, p) === v) n++;
+      }
+      return n;
+    }
+    function irradia(i, j, p, v){
+      if (p === 'd0') return v === i + ',' + j || v === (i + 1) + ',' + (j + 1);
+      if (p === 'd1') return v === (i + 1) + ',' + j || v === i + ',' + (j + 1);
+      return false;
+    }
+    function sorteia(pares){
+      var soma = 0, k;
+      for (k = 0; k < pares.length; k++) soma += pares[k][1];
+      var alvo = rnd() * soma;
+      for (k = 0; k < pares.length; k++){ alvo -= pares[k][1]; if (alvo <= 0) return pares[k][0]; }
+      return pares[pares.length - 1][0];
+    }
+    var nArco = 0, nFenda = 0, nFio = 0, nQuad = 0, wFio = 1;
+    var ALVO_FIO = .28;      /* alvo de fio entre os quadrados */
+    for (j = 0; j < lins; j++){
+      for (i = 0; i < cols; i++){
+        if (!quad(i, j)) continue;                 /* tábua não recebe arco */
+        var esq = em(i-1,j), cima = em(i,j-1), diag = em(i-1,j-1), diagD = em(i+1,j-1);
+        var esq2 = em(i-2,j), cima2 = em(i,j-2);
+        var okTrinca = function(q){                /* R1 */
+          if (esq === q && cima === q) return false;
+          if (esq === q && diag === q) return false;
+          if (cima === q && diag === q) return false;
+          if (esq === q && esq2 === q) return false;
+          if (cima === q && cima2 === q) return false;
+          return true;
+        };
+        /* R5, relida: a fenda é ilha — nenhuma greta encosta noutra */
+        var fendaViz = ehReta(esq) || ehReta(cima) || ehReta(diag) || ehReta(diagD);
+        var vTL = i + ',' + j, nTL = nArcos(i, j), p;
+        if (nTL === 3){                            /* R2 */
+          if (!fendaViz){ p = 'd0'; rad[j][i] = true; }
+          else {
+            var alt = ['a1','a2','a3'].filter(okTrinca);
+            p = alt.length ? alt[Math.floor(rnd() * alt.length)] : 'a2';
+          }
+        } else {
+          var pesos = { a0:1, a1:1, a2:1, a3:1, d0:wFio, d1:wFio };
+          if (nTL === 2){
+            var radial = false, viz = [[i-1,j-1],[i,j-1],[i-1,j]], k2;
+            for (k2 = 0; k2 < viz.length; k2++){
+              var q = em(viz[k2][0], viz[k2][1]);
+              if (!q) continue;
+              if (q.charAt(0) === 'a' && vArco(viz[k2][0], viz[k2][1], q) === vTL) continue;
+              if (irradia(viz[k2][0], viz[k2][1], q, vTL)) radial = true;
+            }
+            pesos.a0 = radial ? 9 : 0;
+          }
+          /* R3 + antevisão: o terceiro arco do vértice TR só entra se
+             a célula que o fecha for QUADRADO (é ela que vai receber
+             a fenda) e se a fenda não estiver barrada lá. */
+          if (nArcos(i + 1, j) === 2){
+            var podeFechar = quad(i + 1, j)
+                          && !ehReta(em(i, j - 1)) && !ehReta(em(i + 1, j - 1))
+                          && !ehReta(em(i + 2, j - 1));
+            pesos.a1 = podeFechar ? pesos.a1 * 9 : 0;
+          }
+          var cand = ['a0','a1','a2','a3','d0','d1'], validos = [], m, q3;
+          for (m = 0; m < cand.length; m++){
+            q3 = cand[m];
+            if (pesos[q3] <= 0) continue;
+            if (!okTrinca(q3)) continue;                 /* R1 */
+            if (q3.charAt(0) === 'd'){
+              /* R5, afrouxada: fio nunca lado a lado com fio — mas na
+                 diagonal pode, desde que a orientação seja a OUTRA.
+                 A proibição antiga (nenhum contato nas 8) travava o fio
+                 em ~20% e era o que deixava o campo cheio de arco. */
+              if (ehReta(esq) || ehReta(cima)) continue;
+              if (diag === q3 || diagD === q3) continue; /* nada de reta emendada */
+            }
+            validos.push([q3, pesos[q3]]);
+          }
+          if (!validos.length){
+            for (m = 0; m < 4; m++) if (pesos[cand[m]] > 0) validos.push([cand[m], 1]);
+            if (!validos.length) validos = [['a1',1],['a2',1],['a3',1]];
+          }
+          p = sorteia(validos);
+        }
+        g[j][i] = p;
+        nQuad++;
+        if (ehReta(p)){ nFio++; if (rad[j][i]) nFenda++; } else nArco++;
+        wFio = Math.max(.2, Math.min(3.5, 1 + (ALVO_FIO - nFio / nQuad) * 12));
+      }
+    }
+    /* a fenda pode nascer por dois caminhos — marca-se depois,
+       varrendo os vértices, para nenhuma ficar sem ser reconhecida */
+    for (var vj = 1; vj < lins; vj++){
+      for (var vi = 1; vi < cols; vi++){
+        var v = vi + ',' + vj, cels = [[vi-1,vj-1],[vi,vj-1],[vi-1,vj],[vi,vj]];
+        var arcos = [], fora = [], cc, pp, w;
+        for (w = 0; w < 4; w++){
+          cc = cels[w]; pp = em(cc[0], cc[1]);
+          if (pp && pp.charAt(0) === 'a' && vArco(cc[0], cc[1], pp) === v) arcos.push(cc);
+          else fora.push(cc);
+        }
+        if (arcos.length !== 3 || fora.length !== 1) continue;
+        cc = fora[0]; pp = em(cc[0], cc[1]);
+        if (pp && pp.charAt(0) === 'd' && irradia(cc[0], cc[1], pp, v)){
+          if (!rad[cc[1]][cc[0]]) nFenda++;
+          rad[cc[1]][cc[0]] = true;
+        }
+      }
+    }
+    return { grade:g, radial:rad, arcos:nArco, fios:nFio, quads:nQuad, fendas:nFenda };
+  }
+
+  /* ==========================================================
+     3 · MATÉRIA
+     ========================================================== */
+  var SG = { a0:[1,1], a1:[-1,1], a2:[-1,-1], a3:[1,-1] };
+  function verticePx(i, j, p, cel){
+    var x = i * cel, y = j * cel;
+    if (p === 'a0') return [x, y];
+    if (p === 'a1') return [x + cel, y];
+    if (p === 'a2') return [x + cel, y + cel];
+    return [x, y + cel];
+  }
+  function thetaG(p, t){
+    if (p === 'a0') return t;
+    if (p === 'a1') return Math.PI - t;
+    if (p === 'a2') return Math.PI + t;
+    return -t;
+  }
+  /* A TORA de cada vértice. Duas mudanças nesta rodada:
+     · o espaçamento dos anéis é ABSOLUTO, em px, não fração da célula.
+       Sem isso, mudar o módulo mudava o número de anéis por bloco e a
+       madeira parecia crescer ou encolher junto com a grelha. Anel de
+       árvore tem largura própria; o bloco é que muda de tamanho.
+     · a tora pode ter RACHADURAS RADIAIS, sorteadas por vértice. Como
+       pertencem ao vértice e não à célula, elas atravessam a junta e
+       leem como as gretas da ref. 07, abrindo da medula para a casca. */
+  function tora(vi, vj, semente, cache, cel){
+    var ch = vi + '_' + vj + '_' + Math.round(cel);
+    if (cache[ch]) return cache[ch];
+    var r = mulberry32((semente ^ (vi * 73856093) ^ (vj * 19349663)) | 0);
+    var esp = 7 + r() * 4.5;                    /* largura do anel, em px */
+    var pr = esp / cel, fr = [1], f, k;
+    /* para dentro, até quase a medula */
+    f = 1;
+    for (k = 0; k < 60; k++){
+      f -= pr * (.86 + r() * .30);
+      if (f * cel < 2.6) break;
+      fr.push(f);
+      if (r() < .34) fr.push(f * (1 + esp * .40 / cel));   /* lenho tardio */
+    }
+    /* para fora, até o canto oposto */
+    f = 1;
+    for (k = 0; k < 40; k++){
+      f += pr * (.86 + r() * .30);
+      if (f > 1.48) break;
+      fr.push(f);
+      if (r() < .34) fr.push(f * (1 + esp * .40 / cel));
+    }
+    fr.sort(function(a, b){ return a - b; });
+    var t = { fr:fr, esp:esp, amp:.009 + r() * .013,
+              f1:3 + Math.floor(r() * 4), p1:r() * 6.2832,
+              f2:8 + Math.floor(r() * 7), p2:r() * 6.2832, rachas:[] };
+    if (r() < .62){
+      var nr = 3 + Math.floor(r() * 4);         /* 3 a 6 gretas */
+      for (k = 0; k < nr; k++){
+        t.rachas.push({ ang:r() * 6.2832,
+                        r0:.03 + r() * .07,
+                        r1:.45 + r() * 1.0,
+                        curv:(r() - .5) * .30,
+                        ond:r() * 6.2832,
+                        fr:2 + Math.floor(r() * 3) });
+      }
+    }
+    cache[ch] = t; return t;
+  }
+  /* a parte de uma rachadura que cai DENTRO desta célula.
+     O ângulo é global: por isso a greta continua no bloco vizinho. */
+  function rachadura(p, vx, vy, cel, ra, org){
+    var s = SG[p], pts = [], k, N = 22;
+    for (k = 0; k <= N; k++){
+      var fr = ra.r0 + (ra.r1 - ra.r0) * k / N;
+      var th = ra.ang + ra.curv * fr
+             + org * .045 * Math.sin(ra.fr * fr * 6.2832 + ra.ond);
+      var lt;                                    /* ângulo local do setor */
+      if (p === 'a0') lt = th;
+      else if (p === 'a1') lt = Math.PI - th;
+      else if (p === 'a2') lt = th - Math.PI;
+      else lt = -th;
+      lt = ((lt % 6.2832) + 6.2832) % 6.2832;
+      if (lt > 1.5708 + 1e-6) { if (pts.length > 1) break; pts = []; continue; }
+      var u = fr * cel * Math.cos(lt), v = fr * cel * Math.sin(lt);
+      if (u > cel || v > cel){ if (pts.length > 1) break; pts = []; continue; }
+      pts.push([vx + s[0] * u, vy + s[1] * v]);
+    }
+    return pts.length > 1 ? pts : null;
+  }
+  function anel(p, vx, vy, cel, fr, t, org, fechado, fase){
+    /* um segmento a cada ~11 px de arco: a suavidade passa a não
+       depender do tamanho do módulo */
+    var s = SG[p], N = Math.max(5, Math.round(fr * cel * .143)), pts = [], k;
+    fase = fase || 0;
+    for (k = 0; k <= N; k++){
+      var lt = k / N * Math.PI / 2, th = thetaG(p, lt);
+      var w = org * t.amp * (.62 * Math.sin(t.f1 * th + t.p1 + fase)
+                           + .38 * Math.sin(t.f2 * th + t.p2 + fase * 1.7));
+      var r = fr * cel * (1 + w);
+      var u = r * Math.cos(lt), v = r * Math.sin(lt);
+      if (fechado){ if (u > cel) u = cel; if (v > cel) v = cel; }
+      else if (u > cel || v > cel) continue;
+      pts.push([vx + s[0] * u, vy + s[1] * v]);
+    }
+    return pts;
+  }
+
+  /* ---------- FEIXE: o veio de qualquer retângulo ----------
+     Serve tanto para a tábua (fio longo, catedral, nó) quanto para a
+     célula 1×1 que recebeu a fenda radial. */
+  /* a chance de nó acompanha a ÁREA da peça (110×110 px é a
+     referência). Sem isso, módulo miúdo enchia o campo de olhos: a
+     mesma probabilidade por bloco vira muito mais nós por metro. */
+  function chanceOlho(base, W, H){
+    return Math.min(base * 1.35, base * (W * H) / 12100);
+  }
+  function feixe(x, y, W, H, angGrau, cel, org, r, opts){
+    opts = opts || {};
+    var out = { veio:'', olho:'', fenda:'' };
+    var an = angGrau * Math.PI / 180;
+    var dx = Math.cos(an), dy = Math.sin(an), nx = -dy, ny = dx;
+    var cx = x + W / 2, cy = y + H / 2;
+    var L = (W + H) * .78;                       /* alcance generoso; recorta depois */
+    /* espaçamento e ondulação da fibra em PX — a escala da madeira não
+       muda quando o módulo muda */
+    var passo = 8.5 + r() * 4, K = Math.ceil((W + H) / (2 * passo)) + 2;
+    var amp = 3.4 + r() * 3.2, k1 = 1.6 + r() * 1.8, ph1 = r() * 6.2832,
+        k2 = 4.0 + r() * 3.2, ph2 = r() * 6.2832;
+    /* catedral: as fibras arqueiam num eixo e vão achatando para fora */
+    var cat = !!opts.catedral, sCat = (r() - .5) * L * .5,
+        sigCat = (W + H) * .13,
+        ACat = Math.min(W, H) * (.26 + r() * .16) * (r() < .5 ? 1 : -1),
+        decCat = Math.min(W, H) * (.34 + r() * .34);
+    /* nó — o centro é sorteado em PIXEL e confinado com a folga do
+       maior semieixo dos laços, senão o nó sangra para o módulo
+       vizinho (bug visto pelo Michel em 23.08). Se não couber, não
+       tem nó: bloco pequeno demais não abriga olho. */
+    var olho = !!opts.olho;
+    var rK = Math.min(Math.min(W, H) * .17, 7.5 + r() * 8);   /* nó em px */
+    var folga = rK * 1.766 * 1.14 + 1.5;          /* laço externo + ondulação */
+    var sK = 0, oK = 0, sig = rK * 2.3;
+    if (olho){
+      if (W < folga * 2.2 || H < folga * 2.2){ olho = false; }
+      else {
+        var kx = x + folga + r() * (W - folga * 2);
+        var ky = y + folga + r() * (H - folga * 2);
+        sK = (kx - cx) * dx + (ky - cy) * dy;     /* projeta no eixo do veio */
+        oK = (kx - cx) * nx + (ky - cy) * ny;
+      }
+    }
+    var jit = [], fas = [], q;
+    for (q = -K; q <= K; q++){ jit.push((r() - .5) * passo * .55); fas.push(r() * 6.2832); }
+    for (q = -K; q <= K; q++){
+      var off = q * passo + jit[q + K], fq = fas[q + K];
+      if (opts.fenda && q === 0) continue;
+      if (olho && Math.abs(off - oK) < rK * .42) continue;
+      var pts = [], S = Math.max(14, Math.round(L / cel * 16)), m;
+      for (m = 0; m <= S; m++){
+        var s = (-1 + 2 * m / S) * L;
+        var o = off + org * amp * (.6 * Math.sin(k1 * s / cel + ph1 + fq * .35)
+                                 + .4 * Math.sin(k2 * s / cel + ph2 + fq));
+        if (cat) o += ACat * Math.exp(-Math.pow((s - sCat) / sigCat, 2))
+                          * Math.exp(-Math.abs(off) / decCat);
+        if (olho){
+          var dn = off - oK, ds = s - sK;
+          o += (dn < 0 ? -1 : 1) * rK * 1.15 * Math.exp(-(ds * ds) / (2 * sig * sig))
+                                            * Math.exp(-Math.abs(dn) / (rK * 1.9));
+        }
+        var px = cx + s * dx + o * nx, py = cy + s * dy + o * ny;
+        if (px < x - .5 || px > x + W + .5 || py < y - .5 || py > y + H + .5){
+          if (pts.length > 1) out.veio += poli(pts);
+          pts = []; continue;
+        }
+        pts.push([px, py]);
+      }
+      if (pts.length > 1) out.veio += poli(pts);
+    }
+    if (olho){
+      for (var lo = 0; lo < 4; lo++){
+        var aE = rK * (.42 + lo * .24) * 1.55, bE = rK * (.28 + lo * .22), lp = [];
+        for (var f = 0; f <= 22; f++){
+          var ang2 = f / 22 * 6.2832;
+          var wob = 1 + org * .10 * Math.sin(3 * ang2 + ph1 + lo);
+          var lu = aE * Math.cos(ang2) * wob, lv = bE * Math.sin(ang2) * wob;
+          lp.push([cx + (sK + lu) * dx + (oK + lv) * nx, cy + (sK + lu) * dy + (oK + lv) * ny]);
+        }
+        out.olho += poli(lp) + 'Z';
+      }
+    }
+    if (opts.fenda){
+      var lados = [1, -1], br;
+      for (br = 0; br < 2; br++){
+        var lp2 = [];
+        for (var f2 = 0; f2 <= 16; f2++){
+          var u2 = -1 + 2 * f2 / 16;
+          var o2 = lados[br] * Math.max(1.6, cel * .016) * Math.cos(u2 * Math.PI / 2)
+               + (r() - .5) * Math.max(1.2, cel * .012);
+          lp2.push([cx + u2 * cel * .706 * dx + o2 * nx, cy + u2 * cel * .706 * dy + o2 * ny]);
+        }
+        out.fenda += poli(lp2);
+      }
+      /* um ramo só, curto e longe das pontas — dois ramos no mesmo
+         ponto viravam uma seta, que não é greta de madeira */
+      var u3 = (r() - .5) * .8, L3 = cel * (.07 + r() * .07);
+      var ag = (r() < .5 ? 1 : -1) * (.30 + r() * .22);
+      var bx = cx + u3 * cel * .706 * dx, by = cy + u3 * cel * .706 * dy;
+      var rx = dx * Math.cos(ag) - dy * Math.sin(ag), ry = dx * Math.sin(ag) + dy * Math.cos(ag);
+      out.fenda += 'M' + num(bx) + ' ' + num(by) + 'L' + num(bx + rx * L3) + ' ' + num(by + ry * L3) + ' ';
+    }
+    return out;
+  }
+
+  /* ---------- ANEL LIVRE: a tábua composta de semicírculos ----------
+     O centro fica FORA da peça, a uma distância de meia a duas células
+     e meia: os anéis atravessam a tábua em arcos amplos, que é como a
+     tora aparece numa prancha larga (refs. 2 e 3 do Michel). Mesmo
+     espaçamento absoluto dos anéis de topo. */
+  function anelLivre(x, y, W, H, cel, org, r, lado){
+    var esp = 7 + r() * 4.5;
+    var d = cel * (.45 + r() * 2.1), cx, cy;
+    if (lado === 0){ cx = x + r() * W; cy = y - d; }
+    else if (lado === 1){ cx = x + W + d; cy = y + r() * H; }
+    else if (lado === 2){ cx = x + r() * W; cy = y + H + d; }
+    else { cx = x - d; cy = y + r() * H; }
+    var cantos = [[x,y],[x+W,y],[x+W,y+H],[x,y+H]], k;
+    var base = Math.atan2((y + H / 2) - cy, (x + W / 2) - cx);
+    var lo = 0, hi = 0, rmin = 1e9, rmax = 0;
+    for (k = 0; k < 4; k++){
+      var dx = cantos[k][0] - cx, dy = cantos[k][1] - cy;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < rmin) rmin = dist;
+      if (dist > rmax) rmax = dist;
+      var da = Math.atan2(dy, dx) - base;
+      while (da > Math.PI) da -= 6.2832;
+      while (da < -Math.PI) da += 6.2832;
+      if (da < lo) lo = da;
+      if (da > hi) hi = da;
+    }
+    /* a borda mais próxima pode estar mais perto que o canto mais próximo */
+    rmin = Math.max(0, Math.min(rmin, Math.max(0, Math.min(
+      Math.abs(cy - y), Math.abs(cy - (y + H)), Math.abs(cx - x), Math.abs(cx - (x + W))))));
+    var amp = .010 + r() * .012, f1 = 3 + Math.floor(r() * 4), p1 = r() * 6.2832,
+        f2 = 8 + Math.floor(r() * 7), p2 = r() * 6.2832;
+    var d0 = '', nA = 0, rr;
+    for (rr = Math.max(esp, rmin - esp); rr <= rmax + esp && nA < 40; rr += esp * (.86 + r() * .3)){
+      nA++;
+      var dupla = r() < .3 ? [rr, rr + esp * .40] : [rr];
+      for (var q = 0; q < dupla.length; q++){
+        var R = dupla[q];
+        var N = Math.max(5, Math.round(R * (hi - lo) / 11));
+        var pts = [];
+        for (k = 0; k <= N; k++){
+          var a = lo + (hi - lo) * k / N + base;
+          var w = org * amp * (.62 * Math.sin(f1 * a + p1) + .38 * Math.sin(f2 * a + p2));
+          var Rw = R * (1 + w);
+          var px = cx + Rw * Math.cos(a), py = cy + Rw * Math.sin(a);
+          if (px < x - .5 || px > x + W + .5 || py < y - .5 || py > y + H + .5){
+            if (pts.length > 1) d0 += poli(pts);
+            pts = []; continue;
+          }
+          pts.push([px, py]);
+        }
+        if (pts.length > 1) d0 += poli(pts);
+      }
+    }
+    return d0;
+  }
+
+  /* ---------- ATRIBUIÇÃO DE APARÊNCIA + REGRA DE VIZINHANÇA ----------
+     Pedido do Michel em 23.08: duas peças vizinhas nunca podem ter ao
+     mesmo tempo o mesmo TOM e o mesmo PADRÃO — senão elas se fundem e
+     leem como um bloco único. Cada peça recebe uma ASSINATURA
+     (tom / modo de veio / ângulo ou lado do centro) e rejeita a
+     assinatura de qualquer vizinha de aresta já decidida.
+     Peça de topo e a célula da fenda ficam fora da regra: a aparência
+     delas é geométrica, não sorteada, e nunca se confunde com tábua. */
+  function atribuiLook(emp, cols, lins, grade, radial, semente, veioT){
+    var rnd = mulberry32((semente ^ 0x3ab19f5) | 0);
+    var look = [], ocup = emp.ocup;
+    function vizinhos(t, id){
+      var out = [], vis = {}, a, b, i, j, q, par;
+      for (a = 0; a < t.w; a++){
+        par = [[t.i + a, t.j - 1], [t.i + a, t.j + t.h]];
+        for (b = 0; b < 2; b++){
+          i = par[b][0]; j = par[b][1];
+          if (i < 0 || j < 0 || i >= cols || j >= lins) continue;
+          q = ocup[j][i];
+          if (q >= 0 && q !== id && !vis[q]){ vis[q] = 1; out.push(q); }
+        }
+      }
+      for (a = 0; a < t.h; a++){
+        par = [[t.i - 1, t.j + a], [t.i + t.w, t.j + a]];
+        for (b = 0; b < 2; b++){
+          i = par[b][0]; j = par[b][1];
+          if (i < 0 || j < 0 || i >= cols || j >= lins) continue;
+          q = ocup[j][i];
+          if (q >= 0 && q !== id && !vis[q]){ vis[q] = 1; out.push(q); }
+        }
+      }
+      return out;
+    }
+    emp.pecas.forEach(function(t, id){
+      var eQuad = (t.w === 1 && t.h === 1);
+      var p = eQuad ? (grade[t.j] && grade[t.j][t.i]) : null;
+      if (eQuad && (!p || p.charAt(0) === 'a')){ look[id] = { tipo:'topo', sig:'' }; return; }
+      if (eQuad && radial[t.j] && radial[t.j][t.i]){ look[id] = { tipo:'fenda', sig:'' }; return; }
+      var cands = [], toms = [['A', .45], ['B', .55]];
+      if (eQuad){
+        var angF = p === 'd0' ? 45 : 135;
+        toms.forEach(function(tm){
+          cands.push({ tipo:'fio', tom:tm[0], modo:'fio', ang:angF, peso:tm[1] });
+        });
+      } else {
+        var modos;
+        if (veioT === 'anel') modos = [['anel', 1]];
+        else if (veioT === '45') modos = [['45', 1]];
+        else if (veioT === 'comprimento') modos = [['comp', 1]];
+        else modos = [['comp', .44], ['45', .26], ['anel', .30]];
+        modos.forEach(function(md){
+          toms.forEach(function(tm){
+            if (md[0] === 'anel'){
+              for (var L = 0; L < 4; L++)
+                cands.push({ tipo:'tabua', tom:tm[0], modo:'anel', lado:L, peso:md[1] * tm[1] / 4 });
+            } else if (md[0] === '45'){
+              [45, 135].forEach(function(a){
+                cands.push({ tipo:'tabua', tom:tm[0], modo:'45', ang:a, peso:md[1] * tm[1] / 2 });
+              });
+            } else {
+              cands.push({ tipo:'tabua', tom:tm[0], modo:'comp',
+                           ang:(t.w >= t.h ? 0 : 90), peso:md[1] * tm[1] });
+            }
+          });
+        });
+      }
+      cands.forEach(function(c){
+        c.sig = c.tom + '/' + c.modo + '/' + (c.modo === 'anel' ? 'L' + c.lado : c.ang);
+      });
+      var proibidas = {};
+      vizinhos(t, id).forEach(function(q){
+        if (look[q] && look[q].sig) proibidas[look[q].sig] = 1;
+      });
+      /* sorteio sem reposição: fica com a primeira que não colide */
+      var pool = cands.slice(), primeiro = null, k;
+      while (pool.length){
+        var soma = 0;
+        for (k = 0; k < pool.length; k++) soma += pool[k].peso;
+        var alvo = rnd() * soma, esc = pool.length - 1;
+        for (k = 0; k < pool.length; k++){ alvo -= pool[k].peso; if (alvo <= 0){ esc = k; break; } }
+        var c = pool.splice(esc, 1)[0];
+        if (!primeiro) primeiro = c;
+        if (!proibidas[c.sig]){ look[id] = c; return; }
+      }
+      look[id] = primeiro;
+    });
+    return look;
+  }
+
+  /* ---------- desenho completo ---------- */
+  function desenha(alvo, dados, cel, semente, org, veioT){
+    var emp = dados.emp, grade = dados.grade, radial = dados.radial;
+    var cols = dados.cols, lins = dados.lins;
+    var dA = '', dB = '', dV = '', dJ = '', dF = '', dR = '', cache = {}, k;
+    var areaTab = 0, areaTot = 0;
+    /* a junta contorna a PEÇA, não a célula */
+    emp.pecas.forEach(function(t){
+      var x = t.i * cel, y = t.j * cel, W = t.w * cel, H = t.h * cel;
+      dJ += 'M' + num(x) + ' ' + num(y) + 'h' + num(W) + 'v' + num(H) + 'h' + num(-W) + 'Z';
+      areaTot += t.w * t.h;
+      if (t.w > 1 || t.h > 1) areaTab += t.w * t.h;
+    });
+    var look = atribuiLook(emp, cols, lins, grade, radial, semente, veioT);
+    emp.pecas.forEach(function(t, id){
+      var x = t.i * cel, y = t.j * cel, W = t.w * cel, H = t.h * cel;
+      var r = mulberry32((semente ^ (t.i * 2654435761) ^ (t.j * 40503) ^ (t.w * 7919)) | 0);
+      var lk = look[id] || { tipo:'topo' };
+      var quadT = 'M' + num(x) + ' ' + num(y) + 'h' + num(W) + 'v' + num(H) + 'h' + num(-W) + 'Z';
+      /* ---- TÁBUA: fio longo, 45° ou anel ---- */
+      if (lk.tipo === 'tabua'){
+        if (lk.tom === 'A') dA += quadT; else dB += quadT;
+        if (lk.modo === 'anel'){
+          dV += anelLivre(x, y, W, H, cel, org, r, lk.lado);
+          return;
+        }
+        var fb = feixe(x, y, W, H, lk.ang, cel, org, r,
+                       { catedral: r() < .34, olho: r() < chanceOlho(.34, W, H) });
+        dV += fb.veio + fb.olho;
+        return;
+      }
+      /* ---- QUADRADO ---- */
+      var p = grade[t.j] && grade[t.j][t.i];
+      if (!p) return;
+      if (p.charAt(0) === 'd'){                     /* quadrado de fio ou fenda */
+        if (lk.tipo === 'fio' && lk.tom === 'A') dA += quadT; else dB += quadT;
+        var fb2 = feixe(x, y, cel, cel, p === 'd0' ? 45 : 135, cel, org, r,
+                        lk.tipo === 'fenda' ? { fenda:true }
+                                            : { olho: r() < chanceOlho(.42, cel, cel) });
+        dV += fb2.veio + fb2.olho; dF += fb2.fenda;
+        return;
+      }
+      var vp = verticePx(t.i, t.j, p, cel), vx = vp[0], vy = vp[1], s = SG[p];
+      var tr = tora(p === 'a0' ? t.i : p === 'a1' ? t.i + 1 : p === 'a2' ? t.i + 1 : t.i,
+                    p === 'a0' ? t.j : p === 'a1' ? t.j : p === 'a2' ? t.j + 1 : t.j + 1,
+                    semente, cache, cel);
+      var corte = anel(p, vx, vy, cel, 1, tr, org, true);
+      dA += 'M' + num(vx) + ' ' + num(vy) + 'L';
+      for (k = 0; k < corte.length; k++) dA += num(corte[k][0]) + ' ' + num(corte[k][1]) + ' ';
+      dA += 'Z';
+      dB += 'M' + num(corte[0][0]) + ' ' + num(corte[0][1]) + 'L';
+      for (k = 1; k < corte.length; k++) dB += num(corte[k][0]) + ' ' + num(corte[k][1]) + ' ';
+      dB += num(vx + s[0] * cel) + ' ' + num(vy + s[1] * cel) + ' Z';
+      for (k = 0; k < tr.fr.length; k++){
+        var pts = anel(p, vx, vy, cel, tr.fr[k], tr, org, tr.fr[k] <= 1.0001, k * .38);
+        if (pts.length > 1) dV += poli(pts);
+      }
+      /* as gretas radiais desta tora, na parte que cabe nesta célula */
+      for (k = 0; k < tr.rachas.length; k++){
+        var rp = rachadura(p, vx, vy, cel, tr.rachas[k], org);
+        if (rp) dR += poli(rp);
+      }
+    });
+    alvo.A.setAttribute('d', dA);
+    alvo.B.setAttribute('d', dB);
+    alvo.J.setAttribute('d', dJ);
+    alvo.V.setAttribute('d', dV);
+    if (alvo.F) alvo.F.setAttribute('d', dF);
+    if (alvo.R) alvo.R.setAttribute('d', dR);
+    return { bytes: dA.length + dB.length + dV.length + dJ.length + dF.length + dR.length,
+             tabua: areaTot ? areaTab / areaTot : 0, look: look };
+  }
+
+  /* ---------- o campo ---------- */
+  function monta(semente, cols, lins, corte, dens){
+    var emp = empacota(semente, cols, lins, corte, dens);
+    var ar = sorteiaArcos(semente, cols, lins, emp);
+    return { emp:emp, grade:ar.grade, radial:ar.radial, cols:cols, lins:lins,
+             arcos:ar.arcos, fios:ar.fios, quads:ar.quads, fendas:ar.fendas };
+  }
+  var semente = 20260823;
+  function doHash(){
+    var m = /s=(\d+)/.exec(location.hash || '');
+    return m ? (parseInt(m[1], 10) % 2147483647) : 20260823;
+  }
+  function gera(){
+    var cx = svg.getBoundingClientRect();
+    var Wd = Math.round(cx.width) || window.innerWidth;
+    var Ht = Math.round(cx.height) || window.innerHeight;
+    var cel = PX;
+    if (SNAP) cel = Math.round(Wd / Math.max(1, Math.round(Wd / PX)));
+    cel = Math.max(28, cel);
+    var cols = Math.ceil(Wd / cel), lins = Math.ceil(Ht / cel);
+    var t0 = performance.now();
+    svg.setAttribute('viewBox', '0 0 ' + Wd + ' ' + Ht);
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+    var d = monta(semente, cols, lins, CORTE);
+    var res = desenha({ A:pA, B:pB, V:pV, J:pJ, F:pF, R:pR }, d, cel, semente, ORG, VEIOT);
+    elSem.textContent = semente;
+    var fq = d.quads ? d.fios / d.quads : 0;          /* fio entre os quadrados */
+    var pq = 1 - res.tabua;                          /* área de quadrado */
+    elMix.textContent = 'módulo ' + cel + ' px' + (cel !== PX ? ' (alvo ' + PX + ')' : '')
+                      + ' · ' + cols + '×' + lins + ' · '
+                      + Math.round(pq * (1 - fq) * 100) + '% topo · '
+                      + Math.round(pq * fq * 100) + '% fio · '
+                      + Math.round(res.tabua * 100) + '% tábua · '
+                      + (res.bytes / 1024).toFixed(0) + ' kB · '
+                      + (performance.now() - t0).toFixed(1) + ' ms';
+    d.look = res.look;
+    window.__tabuas = d;
+  }
+  function aplica(s){
+    semente = s; gera();
+    try { history.replaceState(null, '', '#s=' + semente); } catch (e) {}
+  }
+  aplica(doHash());
+
+  /* ---------- controles ---------- */
+  function pills(caixa, itens, atual, aoTrocar){
+    itens.forEach(function(it){
+      var b = document.createElement('button');
+      b.className = 'pill' + (it[0] === atual ? ' on' : '');
+      b.textContent = it[1]; b.dataset.v = it[0];
+      b.addEventListener('click', function(e){
+        e.stopPropagation();
+        Array.prototype.forEach.call(caixa.querySelectorAll('.pill'), function(x){
+          x.classList.toggle('on', x === b);
+        });
+        aoTrocar(it[0]);
+      });
+      caixa.appendChild(b);
+    });
+  }
+  pills(document.getElementById('linCorte'),
+        [['q','1×1'],['h2','dominó ↔'],['v2','dominó ↕'],['d2','dominó']],
+        CORTE, function(v){ CORTE = v; gera(); });
+  pills(document.getElementById('linVeio'),
+        [['comprimento','comprimento'],['45','45°'],['anel','anel'],['sorteado','sorteado']],
+        VEIOT, function(v){ VEIOT = v; gera(); });
+  pills(document.getElementById('linDens'),
+        [['0.42','pouca'],['1','média'],['2.4','muita']],
+        '1', function(v){ DENS = parseFloat(v); gera(); });
+  pills(document.getElementById('linPx'),
+        [['52','52'],['64','64'],['80','80'],['104','104'],['136','136']],
+        '80', function(v){ PX = parseFloat(v); gera(); });
+  /* O controle de grelha (encaixada/solta) saiu do painel: em largura
+     de tela comum a correção do encaixe é de 1 ou 2 px e não se vê.
+     Fica encaixada. Para peça impressa, onde o módulo precisa ter
+     medida exata, basta SNAP = false. */
+
+  var botoes = Array.prototype.slice.call(document.querySelectorAll('.tema-btn'));
+  function trocaTema(t){
+    document.body.dataset.tema = t;
+    botoes.forEach(function(b){ b.classList.toggle('on', b.dataset.tema === t); });
+  }
+  botoes.forEach(function(b){
+    b.addEventListener('click', function(e){ e.stopPropagation(); trocaTema(b.dataset.tema); });
+  });
+
+  document.addEventListener('click', function(e){
+    if (e.target.closest && (e.target.closest('.painel') || e.target.closest('.comp')
+        || e.target.closest('#btnComp') || e.target.closest('#btnFechar'))) return;
+    aplica((semente * 16807 + 1) % 2147483647);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); aplica((semente * 16807 + 1) % 2147483647); }
+    var i = ['1','2','3','4'].indexOf(e.key);
+    if (i >= 0) trocaTema(['mata','papel','tiber','areia'][i]);
+    if (e.key === 'c' || e.key === 'C') abre(!document.getElementById('comp').classList.contains('aberto'));
+    if (e.key === 'Escape') abre(false);
+  });
+  var timer = null;
+  window.addEventListener('resize', function(){
+    clearTimeout(timer); timer = setTimeout(gera, 150);
+  });
+
+  /* ---------- comparar ----------
+     Os cinco cortes na MESMA semente, mais o dominó com o veio no
+     comprimento e a 45° lado a lado. Clicar aplica no campo cheio. */
+  var PAINEIS = [
+    { corte:'q',  veio:'sorteado' },
+    { corte:'h2', veio:'sorteado' },
+    { corte:'v2', veio:'sorteado' },
+    { corte:'d2', veio:'comprimento', extra:'veio no comprimento' },
+    { corte:'d2', veio:'45',          extra:'veio a 45°' },
+    { corte:'d2', veio:'anel',        extra:'veio em anel' }
+  ];
+  function montaComp(){
+    var box = document.getElementById('compGrid');
+    document.getElementById('compSem').textContent = '· semente ' + semente;
+    box.innerHTML = '';
+    PAINEIS.forEach(function(pn){
+      var cel = PX, cols = Math.max(4, Math.ceil(660 / cel)), lins = Math.max(3, Math.ceil(430 / cel));
+      var W = cols * cel, H = lins * cel;
+      var b = document.createElement('button');
+      b.className = 'corte';
+      var C = CORTES[pn.corte];
+      b.innerHTML =
+        '<svg viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true">'
+        + '<rect width="' + W + '" height="' + H + '" fill="var(--bg)"/>'
+        + '<path class="a" fill="var(--tomA)"/><path class="b" fill="var(--tomB)"/>'
+        + '<path class="j" fill="none" stroke="var(--junta)" stroke-width="1"/>'
+        + '<path class="v" fill="none" stroke="var(--veio)" stroke-width="1" stroke-linecap="round"/>'
+        + '<path class="r" fill="none" stroke="var(--veio)" stroke-width="1.3" stroke-linecap="round" opacity=".92"/>'
+        + '<path class="f" fill="none" stroke="var(--veio)" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>'
+        + '</svg>'
+        + '<p class="nome">' + C.nome + (pn.extra ? ' · ' + pn.extra : '') + '</p>'
+        + '<p class="desc">' + C.desc + '</p>'
+        + '<p class="cod">' + C.cod + '</p>';
+      box.appendChild(b);
+      var sv = b.querySelector('svg');
+      var d = monta(semente, cols, lins, pn.corte);
+      desenha({ A:sv.querySelector('.a'), B:sv.querySelector('.b'),
+                V:sv.querySelector('.v'), J:sv.querySelector('.j'),
+                F:sv.querySelector('.f'), R:sv.querySelector('.r') },
+              d, cel, semente, ORG, pn.veio);
+      b.addEventListener('click', function(e){
+        e.stopPropagation();
+        CORTE = pn.corte; VEIOT = pn.veio;
+        Array.prototype.forEach.call(document.querySelectorAll('#linCorte .pill'), function(x){
+          x.classList.toggle('on', x.dataset.v === CORTE);
+        });
+        Array.prototype.forEach.call(document.querySelectorAll('#linVeio .pill'), function(x){
+          x.classList.toggle('on', x.dataset.v === VEIOT);
+        });
+        gera(); abre(false);
+      });
+    });
+  }
+  function abre(v){
+    document.getElementById('comp').classList.toggle('aberto', v);
+    document.getElementById('comp').setAttribute('aria-hidden', v ? 'false' : 'true');
+    document.getElementById('btnFechar').style.display = v ? 'block' : 'none';
+    if (v) montaComp();
+  }
+  document.getElementById('btnComp').addEventListener('click', function(e){ e.stopPropagation(); abre(true); });
+  document.getElementById('btnFechar').addEventListener('click', function(e){ e.stopPropagation(); abre(false); });
+})();
+</script>
+</body>
+</html>
