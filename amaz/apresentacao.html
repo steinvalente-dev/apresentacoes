@@ -807,11 +807,17 @@ body.esc .gq svg,body.funda .gq svg{stroke:var(--apoio)}
 .slide.g-pergunta .rev{transform:translateY(22px)}
 .slide.g-pergunta .bleed::after{transition:opacity 1.6s ease}
 
-/* pílulas de tempo: mesma largura E mesma altura.
-   A etiqueta "em breve" era o que empurrava as duas primeiras para cima. */
+/* ── pílulas de tempo ──
+   Mesma largura E mesma altura. `min-height` não bastava: a etiqueta
+   "em breve" tem corpo próprio mais padding e crescia ACIMA do mínimo,
+   empurrando as duas primeiras para cima. Com altura FIXA a etiqueta deixa
+   de mandar no bloco — ela se centraliza dentro e pronto.
+   E mais baixas do que estavam: a proporção horizontal é a que o Michel
+   prefere e é a que o botão ativo já tinha. */
 .tempo{align-items:stretch}
-.tbtn{width:100%;min-height:clamp(42px,4.6vh,58px);line-height:1}
-.tbtn .tag{line-height:1;align-self:center}
+.tbtn{width:100%;height:clamp(34px,3.7vh,46px);line-height:1;
+  padding:0 clamp(18px,1.8vw,30px)}
+.tbtn .tag{line-height:1;align-self:center;padding:.26em .6em .22em;font-size:.8em}
 
 /* o `.bleed` é absoluto e cobre tudo: o conteúdo da marca e da pergunta
    precisa subir de camada, senão o vídeo engole a frase. */
