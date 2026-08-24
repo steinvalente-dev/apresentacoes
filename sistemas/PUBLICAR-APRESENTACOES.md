@@ -37,6 +37,27 @@ Não passa pelo Netlify e **não consome crédito nenhum**. O site pessoal
 **Os quatro campos da peça são obrigatórios**, e a ficha do índice sai deles na
 ordem `pranchas · peso · data`.
 
+### Peça de sistema — o bloco de baixo
+
+Desde 23/08/2026 o `arquivo` tem **dois blocos por projeto**: as apresentações em
+cima, na sequência de sempre, e embaixo **`sistema visual`** — os interativos e
+demais grafismos do projeto. O separador é o mesmo `.grupo` da aba `sistema`.
+
+Dois campos opcionais governam isso:
+
+| campo | efeito |
+|---|---|
+| `tipo: "sistema"` | manda a peça para o bloco de baixo |
+| `sub: "interativo"` | texto curto no lugar da contagem de pranchas, para peça que não é deck |
+
+```js
+{ nome: "marchetaria · laboratório", tipo: "sistema", sub: "interativo",
+  peso: 0.050, data: "23.08.2026", href: "amaz-marchetaria/tabuas.html" }
+```
+
+A numeração `01, 02` passou a ser **por bloco**. Peça abaixo de 0,1 MB tem o peso
+mostrado em **kB** — sem isso um interativo de 50 kB aparecia como `0,0 MB`.
+
 O `peso` é o tamanho **no disco**, em MB, não o transferido. O Pages comprime na
 entrega: a casa ITTB são 11,9 MB no disco e 9,3 MB no fio. Quem vai mandar a peça
 por e-mail ou WhatsApp precisa do primeiro número — é por isso que ele é o que
@@ -150,6 +171,9 @@ a engine abaixo dele não se toca.
 
 ## Histórico
 
+- **23/08/2026** — o `arquivo` ganhou o bloco `sistema visual` por projeto, com
+  os campos `tipo` e `sub`. Publicadas as duas peças interativas da marchetaria
+  da AMAZ em `amaz-marchetaria/`.
 - **22/08/2026, noite** — índice refeito: fundo oliva, abas arquivo/sistema
   com fundo terracota no sistema, e o arquivo passa a ser **agrupado por
   projeto**, com copiar link e abrir em cada peça. A área do cliente do site
