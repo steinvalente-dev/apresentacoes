@@ -319,6 +319,10 @@
                a casa ITTB são 11,9 MB no disco e 9,3 MB no fio. Quem vai
                mandar por e-mail ou WhatsApp precisa do primeiro número.
      data      DD.MM.AAAA
+     tipo      opcional; "sistema" manda a peça para o bloco de baixo,
+               "sistema visual" — interativos e demais grafismos do projeto
+     sub       opcional; texto curto no lugar da contagem de pranchas,
+               para peça que não é deck ("interativo")
    Não escrever número: 01, 02 saem da ordem, mais recente em cima.
    `oculto:true` esconde sem apagar o registro.
    ───────────────────────────────────────────────────────────── */
@@ -344,7 +348,11 @@ const projetos = [
       { nome: "grafismo · marchetaria", pranchas: 9, unid: "seções", peso: 0.15,
         data: "23.08.2026", href: "amaz-grafismo/apresentacao.html" },
       { nome: "apresentação institucional", pranchas: 37, peso: 0.16,
-        data: "23.08.2026", href: "amaz/apresentacao.html" }
+        data: "23.08.2026", href: "amaz/apresentacao.html" },
+      { nome: "marchetaria · laboratório", tipo: "sistema", sub: "interativo",
+        peso: 0.050, data: "23.08.2026", href: "amaz-marchetaria/tabuas.html" },
+      { nome: "marchetaria · vocabulário", tipo: "sistema", sub: "interativo",
+        peso: 0.035, data: "23.08.2026", href: "amaz-marchetaria/campo-quadrado.html" }
     ]
   },
   {
@@ -440,13 +448,15 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
      Peso acima de 8 MB ganha marca — passa do limite de anexo de e-mail. */
   function ficha(x){
     const p = [];
+    if(x.sub) p.push(x.sub);
     if(x.pranchas) p.push(x.pranchas + ' ' + (x.unid || 'pranchas'));
     if(x.peso){
-      const n = x.peso >= 10 ? x.peso.toFixed(0) : x.peso.toFixed(1).replace('.', ',');
-      p.push('<span class="' + (x.peso > 8 ? 'pesada' : '') + '">' + n + ' MB</span>');
+      const n = x.peso < 0.1
+        ? Math.round(x.peso * 1024) + ' kB'
+        : (x.peso >= 10 ? x.peso.toFixed(0) : x.peso.toFixed(1).replace('.', ',')) + ' MB';
+      p.push('<span class="' + (x.peso > 8 ? 'pesada' : '') + '">' + n + '</span>');
     }
     if(x.data) p.push(x.data);
-    if(!p.length && x.sub) p.push(x.sub);
     return p.join(' <i>·</i> ');
   }
 
@@ -458,8 +468,13 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
         + 'Quando a apresentação deste projeto entrar no ar, ela aparece aqui.</div>';
       return;
     }
-    elPec.innerHTML = lista.map(function(x, i){
-      const num = String(lista.length - i).padStart(2, '0');
+    /* Dois blocos dentro do projeto: as apresentações em cima, na
+       sequência de sempre, e embaixo as peças de sistema — os
+       interativos e demais grafismos. `tipo:"sistema"` põe a peça no
+       segundo bloco. O separador é o mesmo .grupo da aba sistema.
+       A numeração é por bloco, mais recente em cima, como antes. */
+    function cartao(x, i, n){
+      const num = String(n - i).padStart(2, '0');
       const url = BASE + x.href;
       return '<article class="peca">'
         + '<span class="n">' + num + '</span>'
@@ -469,6 +484,15 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
         +   '<button class="copiar" data-url="' + url + '">copiar link</button>'
         +   '<a class="abrir" href="' + x.href + '" target="_blank" rel="noopener">abrir ' + SETA + '</a>'
         + '</span></article>';
+    }
+    const blocos = [
+      { rot: '',               itens: lista.filter(function(x){ return x.tipo !== 'sistema'; }) },
+      { rot: 'sistema visual', itens: lista.filter(function(x){ return x.tipo === 'sistema'; }) }
+    ];
+    elPec.innerHTML = blocos.map(function(bl){
+      if(!bl.itens.length) return '';
+      return (bl.rot ? '<p class="grupo">' + bl.rot + '</p>' : '')
+        + bl.itens.map(function(x, i){ return cartao(x, i, bl.itens.length); }).join('');
     }).join('');
   }
   pinta();
