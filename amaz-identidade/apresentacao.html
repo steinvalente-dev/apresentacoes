@@ -552,11 +552,8 @@ footer.end .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text
 </div>
 
 <section class="body"><div class="wrap">
-  <p>Uma grelha quadriculada cobre a peça. Cada célula, ou cada peça de duas células, é um <strong>bloco de madeira serrado com veio próprio</strong>, sorteado por código a partir de uma semente. O bloco quadrado é topo de tora — anéis concêntricos e gretas radiais — ou fio, um feixe de fibras a 45°. A peça de duas células é uma tábua: fibras no comprimento, a 45°, ou anéis amplos atravessando a prancha.</p>
-  <p><strong>Mesma semente, mesmo desenho, em qualquer máquina.</strong> Guarda-se a semente, nunca a imagem — o arquivo de identidade tem seis dígitos, não seis megabytes.</p>
-
-  <h3>O mecanismo</h3>
-  <p>O que faz o sistema existir cabe numa frase: <strong>os anéis pertencem ao vértice da grelha, não à célula.</strong> Raios, espaçamento e irregularidade são semeados pelas coordenadas do vértice — então a família de anéis atravessa a junta entre os blocos, e a figura emerge do encontro das peças em vez de ser desenhada dentro delas.</p>
+  <p>Uma grelha cobre a peça. Cada bloco é um pedaço de madeira serrado com veio próprio — topo de tora, fio ou tábua — <strong>sorteado por código a partir de uma semente</strong>. Mesma semente, mesmo desenho, em qualquer máquina: guarda-se a semente, nunca a imagem.</p>
+  <p>O que faz o desenho ficar bonito não é o sorteio, é a restrição. Seis regras impedem repetição, emenda e simetria fácil — e sob elas as figuras maiores aparecem sozinhas, do encontro de blocos vizinhos.</p>
 </div>
 
 <div class="wide" style="margin-top:14px">
@@ -598,47 +595,6 @@ footer.end .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text
 </div>
 
 <div class="wrap">
-  <h3>Os quatro pares</h3>
-  <p>Nenhum matiz novo entrou. Os tons de bloco são <strong>a própria paleta em opacidade sobre a base</strong> — é por isso que a textura nunca sai do sistema de cor.</p>
-  <div class="tw"><table>
-    <thead><tr><th>Par</th><th>Fundo</th><th>Madeira A</th><th>Madeira B</th><th>Veio</th><th>Junta</th></tr></thead>
-    <tbody>
-      <tr><td>Mata funda <span class="tag-pad">padrão</span></td><td><code>#04251F</code></td><td>Areia 13%</td><td>Areia 2,8%</td><td>Areia 30%</td><td>Areia 10%</td></tr>
-      <tr><td>Papel</td><td><code>#F4F1EA</code></td><td>Tiber 9%</td><td>Tiber 2%</td><td>Tiber 36%</td><td>Tiber 13%</td></tr>
-      <tr><td>Tiber</td><td><code>#06392F</code></td><td>Areia 15%</td><td>Areia 3,2%</td><td>Areia 32%</td><td>Areia 11%</td></tr>
-      <tr><td>Areia</td><td><code>#D9C9A3</code></td><td colspan="4">Receita no arquivo-fonte — não consta nos documentos do projeto <a href="#lacuna" style="color:var(--cobre)">(ver lacuna)</a></td></tr>
-    </tbody>
-  </table></div>
-  <div class="note verde"><b>O par Areia é o achado do grafismo.</b> Nos verdes a textura lê como desenho; sobre a Areia lê como <b>lâmina de madeira</b>. Isso tem consequência no sistema mestre, e está tratado em "o que isso muda".</div>
-  <p style="margin-top:26px"><strong>Cobre não entra na textura.</strong> Em 7% das células ele deixaria de ser acento. O acento vive no tipo e nos dispositivos gráficos — a barra, o filete, o marcador.</p>
-  <p>Configuração padrão da peça: <span class="mono">dominó · veio sorteado · densidade média · módulo 80 px · grelha encaixada</span>. Módulo em <b>pixel</b>, não em fração de coluna: o padrão tem tamanho físico, não tamanho de tela.</p>
-
-  <h3 id="acento">A regra de acento</h3>
-  <p>O grafismo forçou uma pergunta que o bloco de tema tinha deixado em aberto: qual é o acento quando o fundo é escuro? Medindo, a resposta muda o que estava escrito.</p>
-  <div class="tw"><table>
-    <thead><tr><th>Fundo</th><th class="num">Cobre</th><th class="num">Areia</th><th>Acento do par</th><th>Cobre pode ser…</th></tr></thead>
-    <tbody>
-      <tr><td>Papel <code>#F4F1EA</code></td><td class="num">4,38</td><td class="num">1,45</td><td><b>Cobre</b></td><td>texto e grafismo</td></tr>
-      <tr><td>Areia <code>#D9C9A3</code></td><td class="num">3,02</td><td class="num">—</td><td><b>Tiber</b> · 7,85</td><td>só título grande e grafismo</td></tr>
-      <tr><td>Mata funda <code>#04251F</code></td><td class="num">3,30</td><td class="num">9,95</td><td><b>Areia</b></td><td>só título grande e grafismo</td></tr>
-      <tr><td>Tiber <code>#06392F</code></td><td class="num">2,60</td><td class="num">7,85</td><td><b>Areia</b></td><td>só grafismo — nunca texto</td></tr>
-    </tbody>
-  </table></div>
-  <div class="note"><b>O acento é definido pelo fundo, não pela marca.</b> Continua havendo <b>uma</b> função de acento; o que muda é quem a carrega. Cobre nos fundos claros, Areia nos fundos verdes profundos. <b>Nunca os dois como acento na mesma peça.</b> E uma correção ao que estava escrito: Cobre sobre Mata funda dá 3,3:1 — melhor que sobre Tiber, mas ainda abaixo de 4,5. Serve título grande e filete; não serve legenda nem corpo.</div>
-
-  <h3>Área de proteção sobre textura</h3>
-  <p>Não existia, e a marca já está entrando sobre campo texturizado. Três regras, e a terceira é a que evita o erro difícil de ver.</p>
-  <div class="tw"><table>
-    <thead><tr><th>Regra</th><th>Valor</th><th>Por quê</th></tr></thead>
-    <tbody>
-      <tr><td>Folga sobre fundo chapado</td><td><b>0,5 H</b> em todos os lados</td><td rowspan="2">H = altura de tinta do wordmark. Sobre textura o olho precisa de mais silêncio para separar a marca do campo.</td></tr>
-      <tr><td>Folga sobre textura</td><td><b>1 H</b> em todos os lados</td></tr>
-      <tr><td>Relação módulo × marca</td><td><b>módulo ≤ H ÷ 4</b></td><td>Se a peça da grelha se aproxima da espessura da haste, a marca se desmancha no padrão. Acima disso, campo chapado sob a marca.</td></tr>
-    </tbody>
-  </table></div>
-  <p style="margin-top:24px">Medido, o campo texturizado não ameaça a marca: o tom médio do par Mata funda é <span class="mono">#153229</span>, o que dá <b>12,3:1</b> para a marca em Papel, e mesmo o bloco mais claro fica em 10,9:1. <strong>O véu de leitura não existe para salvar a marca — existe para salvar o texto de apoio</strong>, que é o que sofre, e sobretudo no par Areia, onde a textura chega ao mesmo valor do tipo.</p>
-  <div class="note"><b>Nunca janela sobre textura.</b> Wordmark preenchido com imagem em cima de campo texturizado é textura dentro de textura: as duas se anulam e a palavra some. Sobre marchetaria, a marca é sempre chapada.</div>
-
   <h3>Onde entra, e onde não entra</h3>
   <div class="dual">
     <div class="col ok">
@@ -648,73 +604,49 @@ footer.end .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text
         <li>Divisor de seção, com o título por cima</li>
         <li>Fundo de peça institucional — placa de obra, tapume, capa de proposta</li>
         <li>Superfície de apoio — verso de cartão, faixa de rodapé, embalagem</li>
-        <li>Campo de respiro entre seções, sem nada por cima</li>
       </ul>
     </div>
     <div class="col no">
       <p class="hd">Não entra</p>
       <ul>
-        <li><b>Atrás de texto corrido.</b> O véu resolve título, não parágrafo</li>
-        <li>Atrás de dado, tabela ou gráfico — número pede fundo neutro</li>
-        <li>Dentro das letras. A janela é para foto e vídeo</li>
-        <li>Atrás de fotografia — são dois assuntos disputando a mesma superfície</li>
-        <li>Em peça menor que ~200 px de lado: cinco células não leem como gramática, leem como ruído</li>
-        <li><b>Animada.</b> Nunca <span class="mono">opacity</span>, <span class="mono">transform</span> ou <span class="mono">filter</span> na textura — medido em 4 fps</li>
-        <li>Impressão em uma cor sem adaptação — a receita é opacidade, e em 1 cor os quatro níveis colapsam</li>
+        <li><b>Atrás de texto corrido</b>, nem de tabela ou gráfico</li>
+        <li>Dentro das letras — a janela é para foto e vídeo</li>
+        <li>Atrás de fotografia: são dois assuntos na mesma superfície</li>
+        <li>Em peça pequena, onde a gramática não se lê</li>
+        <li><b>Animada</b>, e impressa em uma cor sem adaptação</li>
       </ul>
     </div>
   </div>
   <div class="note verde"><b>Uma peça tem um mecanismo de superfície só.</b> Foto filtrada, <em>ou</em> marchetaria, <em>ou</em> cor chapada. A identidade agora tem três formas de tratar uma superfície; sem essa regra, a primeira peça que usar duas vai parecer confusa sem que ninguém saiba dizer por quê.</div>
 
+  <h3>Duas regras que o grafismo obrigou a escrever</h3>
+  <p><strong>O acento é definido pelo fundo, não pela marca.</strong> Continua havendo uma função de acento — o que muda é quem a carrega. Cobre nos fundos claros; <strong>Areia em todo fundo verde profundo</strong>, onde o Cobre não tem contraste para ser lido. Nunca os dois como acento na mesma peça.</p>
+  <p><strong>A marca sobre textura pede folga e escala.</strong> Onde o fundo é chapado, meia altura da marca de folga em volta; sobre textura, uma altura inteira. E o bloco da grelha nunca passa de um quarto da altura da marca — acima disso a marca se desmancha no padrão, e o campo sob ela vira chapado.</p>
+
   <h3>As cinco decisões</h3>
-  <ol class="dec">
-    <li><div>
-      <h4>Regra 4 — por que a tora inteira nunca fecha</h4>
-      <p>A razão registrada era a janela: se a tora inteira é da marca, a textura não a completa. <b>Recuso como razão principal, e proponho outra:</b> a razão é a matéria. A AMAZ constrói com madeira engenheirada — lamela, tábua, peça serrada e remontada. Uma tora inteira é exatamente a única coisa que o produto nunca mostra. Assim a regra deixa de ser proibição estética e vira fidelidade ao material — e continua de pé mesmo se a peça da janela sair do sistema. A leitura da janela permanece como reforço, não como fundamento: uma regra que depende de uma peça específica sobreviver é uma regra frágil.</p>
-    </div></li>
-    <li><div>
-      <h4>O azul elétrico — não na junta</h4>
-      <p>A tensão que ele resolve é real: madeira engenheirada é calor <i>e</i> precisão de fábrica, e a identidade hoje só tem o lado quente. Mas a junta é o pior lugar possível. Ela aparece <b>centenas de vezes</b> por peça, e hoje vive a 10–13% de opacidade: ou o azul fica nesse nível e é invisível, ou sobe e vira a coisa mais alta do campo — sendo o único elemento frio e saturado de uma paleta inteiramente quente. Acento que se repete centenas de vezes não é acento, é fundo.<br><br><b>Duas hipóteses melhores, para testar antes de decidir:</b> o azul no <b>nó e na fenda radial</b>, que o sistema já produz raros e já são o acontecimento do campo — a precisão da serra encontrando o defeito da madeira; ou o azul fora da textura, como cor de um <b>registro técnico</b> separado: planta, corte, gráfico, especificação. Esse segundo caminho dá casa ao lado frio sem nunca tocar na face quente da marca, e é o que eu testaria primeiro. Critério de reprovação, para não ficar em gosto: se aparecer mais de uma vez por tela, não é acento.</p>
-    </div></li>
-    <li><div>
-      <h4>Acento sobre Tiber — resolvido, e mais amplo que o previsto</h4>
-      <p>Não era contradição, era lacuna: o bloco de tema dizia que Cobre não é texto sobre Tiber, mas nunca disse quem assume o papel. O grafismo respondeu, e a medição amplia a resposta — <b>Areia é o acento de todo fundo verde profundo</b>, não só do Tiber. E Cobre também não passa em corpo pequeno sobre Mata funda (3,3:1) nem sobre Areia (3,02:1), o que o documento do grafismo dava como resolvido. Ver a tabela acima.</p>
-    </div></li>
-    <li><div>
-      <h4>Área de proteção — definida</h4>
-      <p>0,5 H sobre chapado, 1 H sobre textura, e módulo no máximo H ÷ 4. Fecha a pendência que estava aberta desde a rodada 03 e resolve o caso que já estava acontecendo na prática.</p>
-    </div></li>
-    <li><div>
-      <h4>Onde entra — definido, com uma regra a mais</h4>
-      <p>As duas listas acima. A regra que eu acrescentaria e que não estava na pergunta: <b>um mecanismo de superfície por peça</b>. É o risco real de somar um terceiro tratamento a um sistema que já tinha dois.</p>
-    </div></li>
-  </ol>
+  <div class="tw"><table>
+    <thead><tr><th>Questão</th><th>Decisão</th></tr></thead>
+    <tbody>
+      <tr><td>Por que a tora nunca fecha</td><td>Pela matéria: a AMAZ constrói com peça serrada e remontada, e uma tora inteira é o que o produto nunca mostra. Não pela marca — razão que dependeria de uma peça específica sobreviver.</td></tr>
+      <tr><td>O azul elétrico</td><td>Não na junta, que se repete centenas de vezes por peça. Testar no nó e na fenda, que já são raros, ou fora da textura como cor de um registro técnico.</td></tr>
+      <tr><td>Acento sobre fundo verde</td><td>Areia. Não era contradição com o bloco de tema — era lacuna.</td></tr>
+      <tr><td>Área de proteção sobre textura</td><td>Definida. Fecha uma pendência aberta desde a rodada 03.</td></tr>
+      <tr><td>Onde o grafismo entra</td><td>Definido acima, mais a regra de um mecanismo por peça.</td></tr>
+    </tbody>
+  </table></div>
 
-  <h3 id="lacuna">O que isso muda no que já estava fechado</h3>
-  <ol class="dec">
-    <li><div>
-      <h4>Areia sobe de apoio a fundo de peça</h4>
-      <p>Concordo com a promoção. Mas ela cria <b>dois fundos claros</b>, e sem regra as pessoas vão usar os dois como sinônimo. A regra que resolve: <b>Papel é o fundo de leitura, Areia é o fundo de matéria.</b> Texto mora no Papel; textura e material moram na Areia.</p>
-    </div></li>
-    <li><div>
-      <h4>O acento deixa de ser único e passa a ser condicionado ao fundo</h4>
-      <p>Emenda direta ao bloco de tema, seção Cor. Uma função de acento, dois portadores.</p>
-    </div></li>
-    <li><div>
-      <h4>“Sem gradiente, escala melhor em uma cor” passa a valer só para a marca</h4>
-      <p>Era um princípio do sistema inteiro. O grafismo é feito de opacidade sobre a base — em uma cor os quatro níveis colapsam. Não é falha: o grafismo é campo, não assinatura. Mas o princípio precisa ser reescrito com escopo, senão a primeira placa serigrafada vai cobrar isso.</p>
-    </div></li>
-    <li><div>
-      <h4>Movimento continua sendo da janela, não da textura</h4>
-      <p>A marchetaria é superfície parada, por medição, não por gosto. Vale registrar junto com a regra de animação, porque num deck a tentação de animar o fundo é imediata.</p>
-    </div></li>
-    <li><div>
-      <h4>Lacuna: a receita do par Areia não está escrita</h4>
-      <p>Os documentos do projeto trazem as opacidades de Mata funda, Papel e Tiber. O par Areia aparece como controle e como o achado do grafismo, mas <b>sem os quatro valores</b>. Ele existe no arquivo-fonte; precisa ser transcrito para o documento, senão o par mais interessante do sistema é o único que ninguém consegue reconstruir.</p>
-    </div></li>
-  </ol>
+  <h3>O que isso muda no que já estava fechado</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Item</th><th>Mudança</th></tr></thead>
+    <tbody>
+      <tr><td>Areia</td><td>Sobe de apoio a <b>fundo de peça</b>. Como isso cria dois fundos claros: <b>Papel é o fundo de leitura, Areia é o fundo de matéria.</b></td></tr>
+      <tr><td>Acento</td><td>Deixa de ser único e passa a depender do fundo. Emenda à seção Cor.</td></tr>
+      <tr><td>Uma cor</td><td>“Sem gradiente, escala melhor em uma cor” passa a valer só para a <b>marca</b>. O grafismo é opacidade sobre a base; em uma cor os níveis colapsam.</td></tr>
+      <tr><td>Movimento</td><td>Continua sendo da janela. A marchetaria é superfície parada — por medição, não por gosto.</td></tr>
+    </tbody>
+  </table></div>
 
-  <div class="note"><b>A especificação técnica não está aqui, de propósito.</b> Gramática completa, as seis regras, escala absoluta da matéria, auditoria e performance medida vivem em <span class="mono">GRAFISMO-MARCHETARIA.md</span>, na pasta do grafismo. Esta seção é o que a identidade precisa saber para usar o sistema sem reabri-lo.</div>
+  <div class="note"><b>A especificação técnica vive noutro documento.</b> Gramática completa, as seis regras, a escala absoluta da matéria, a receita de cor dos quatro pares, a configuração fechada e o custo medido estão em <a href="../amaz-grafismo/apresentacao.html" style="color:var(--cobre);font-weight:600">Marchetaria · documento técnico</a>. Esta seção é o que a identidade precisa saber para usar o sistema sem reabri-lo.</div>
 </div></section>
 
 <div class="div" id="aplic">
