@@ -86,6 +86,7 @@ section.body > .wrap > p strong{color:var(--ink);font-weight:600}
 h3{font-family:var(--disp);font-weight:700;font-size:25px;line-height:1.12;letter-spacing:-.02em;
    margin:52px 0 16px;color:var(--ink)}
 section.body > .wrap > h3:first-child{margin-top:0}
+#grafismo ~ section.body .wrap > h3:first-child{margin-top:52px}
 .wide > .piece:first-child{margin-top:0}
 .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.19em;text-transform:uppercase;
          color:var(--ink-3);margin:0 0 12px}
@@ -143,6 +144,28 @@ figure{margin:0}
   -webkit-mask-position:center;mask-position:center;
   -webkit-mask-size:62% auto;mask-size:62% auto;}
 
+/* ---------- diagrama ---------- */
+.diag svg{display:block;width:100%;max-width:760px;height:auto;margin:0 auto;color:var(--ink)}
+.diag{border:1px solid var(--rule);padding:34px 28px 26px;background:#fff}
+.diag figcaption{margin:22px auto 0;max-width:74ch}
+.tag-pad{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--cobre);border:1px solid currentColor;border-radius:999px;padding:1px 7px;margin-left:8px;vertical-align:2px}
+
+/* ---------- duas listas ---------- */
+.dual{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:34px;margin:18px 0 0}
+.dual .col{border-top:1.5px solid var(--ink);padding-top:20px}
+.dual .col.no{border-top-color:var(--cobre)}
+.dual .hd{font-family:var(--mono);font-size:10.5px;letter-spacing:.19em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 14px}
+.dual .col.no .hd{color:var(--cobre)}
+.dual ul{list-style:none;margin:0;padding:0}
+.dual li{font-size:14.5px;line-height:1.55;color:var(--ink-2);padding:11px 0 11px 20px;
+  border-bottom:1px solid var(--rule-soft);position:relative}
+.dual li:last-child{border-bottom:0}
+.dual li::before{content:"";position:absolute;left:0;top:20px;width:9px;height:1.5px;background:var(--ink-3)}
+.dual .col.no li::before{background:var(--cobre)}
+.dual li b{color:var(--ink);font-weight:600}
+
 /* ---------- nota ---------- */
 .note{border-left:3px solid var(--cobre);background:rgba(185,81,24,.06);padding:20px 22px;margin:30px 0 0;
       font-size:15px;line-height:1.6;color:var(--ink-2);max-width:68ch}
@@ -181,6 +204,7 @@ footer.end .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text
       <li><a href="#cor">Cor</a></li>
       <li><a href="#tipo">Tipografia</a></li>
       <li><a href="#foto">Fotografia</a></li>
+      <li><a href="#grafismo">Grafismo</a></li>
       <li><a href="#aplic">Aplicações</a></li>
       <li><a href="#movim">Movimento</a></li>
       <li><a href="#decidir">Decidir</a></li>
@@ -519,9 +543,183 @@ footer.end .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text
   <div class="note"><b>O que o filtro não faz.</b> Ele empurra cor que já existe na foto. Numa imagem sem verde nem laranja — um interior branco, um céu cinza — o resultado é um tingimento esverdeado pobre. O filtro é parte da direção de arte, não substituto dela: escolher a foto certa continua sendo trabalho.</div>
 </div></section>
 
-<div class="div" id="aplic">
+<div class="div" id="grafismo">
   <div class="in">
     <span class="n">06</span>
+    <h2>Grafismo</h2>
+    <p>Marchetaria: uma textura que ninguém desenha — o código serra e o encontro das peças faz a figura.</p>
+  </div>
+</div>
+
+<section class="body"><div class="wrap">
+  <p>Uma grelha quadriculada cobre a peça. Cada célula, ou cada peça de duas células, é um <strong>bloco de madeira serrado com veio próprio</strong>, sorteado por código a partir de uma semente. O bloco quadrado é topo de tora — anéis concêntricos e gretas radiais — ou fio, um feixe de fibras a 45°. A peça de duas células é uma tábua: fibras no comprimento, a 45°, ou anéis amplos atravessando a prancha.</p>
+  <p><strong>Mesma semente, mesmo desenho, em qualquer máquina.</strong> Guarda-se a semente, nunca a imagem — o arquivo de identidade tem seis dígitos, não seis megabytes.</p>
+
+  <h3>O mecanismo</h3>
+  <p>O que faz o sistema existir cabe numa frase: <strong>os anéis pertencem ao vértice da grelha, não à célula.</strong> Raios, espaçamento e irregularidade são semeados pelas coordenadas do vértice — então a família de anéis atravessa a junta entre os blocos, e a figura emerge do encontro das peças em vez de ser desenhada dentro delas.</p>
+</div>
+
+<div class="wide" style="margin-top:14px">
+<figure class="piece diag">
+  <svg viewBox="0 0 620 306" role="img" aria-label="Comparação entre anel que pertence à célula, cortado pela junta, e anel que pertence ao vértice, que atravessa a junta e forma uma seção de tora">
+    <g fill="none" stroke="currentColor" stroke-width="1.6" opacity=".26">
+      <rect x="60" y="46" width="180" height="180"/>
+      <rect x="380" y="46" width="180" height="180"/>
+    </g>
+    <g fill="none" stroke="currentColor" stroke-width="2.6" opacity=".42" stroke-dasharray="7 5">
+      <line x1="150" y1="46" x2="150" y2="226"/><line x1="60" y1="136" x2="240" y2="136"/>
+      <line x1="470" y1="46" x2="470" y2="226"/><line x1="380" y1="136" x2="560" y2="136"/>
+    </g>
+    <g fill="none" stroke="currentColor" stroke-width="2.4">
+      <path d="M90 46 A30 30 0 0 1 60 76"/><path d="M115 46 A55 55 0 0 1 60 101"/>
+      <path d="M210 46 A30 30 0 0 0 240 76"/><path d="M185 46 A55 55 0 0 0 240 101"/>
+      <path d="M60 196 A30 30 0 0 1 90 226"/><path d="M60 171 A55 55 0 0 1 115 226"/>
+      <path d="M240 196 A30 30 0 0 0 210 226"/><path d="M240 171 A55 55 0 0 0 185 226"/>
+    </g>
+    <g fill="none" stroke="#B95118" stroke-width="2.6">
+      <circle cx="470" cy="136" r="28"/><circle cx="470" cy="136" r="52"/><circle cx="470" cy="136" r="76"/>
+    </g>
+    <g fill="none" stroke="currentColor" stroke-width="2.4">
+      <polyline points="470,136 447,111 441,86 428,64 424,46"/>
+      <polyline points="470,136 497,155 519,152 543,163 560,161"/>
+    </g>
+    <circle cx="470" cy="136" r="4.2" fill="#B95118" stroke="none"/>
+    <g font-size="12.5" fill="currentColor" font-family="var(--mono)" letter-spacing=".08em">
+      <text x="150" y="264" text-anchor="middle" opacity=".62">ANEL DA CÉLULA</text>
+      <text x="150" y="284" text-anchor="middle" opacity=".62">a junta corta a figura</text>
+      <text x="470" y="264" text-anchor="middle">ANEL DO VÉRTICE</text>
+      <text x="470" y="284" text-anchor="middle">a figura atravessa a junta</text>
+      <text x="150" y="34" text-anchor="middle" opacity=".45">— — junta</text>
+      <text x="470" y="34" text-anchor="middle" opacity=".45">— — junta</text>
+    </g>
+  </svg>
+  <figcaption>À esquerda, o anel centrado na própria célula: cada bloco fecha sozinho e a junta interrompe o desenho. À direita, o anel centrado no vértice compartilhado: a mesma família de círculos e a greta radial atravessam a junta, e os quatro blocos leem como uma seção de tronco. <b>É a única diferença entre um padrão de ladrilho e um sistema de marchetaria.</b></figcaption>
+</figure>
+</div>
+
+<div class="wrap">
+  <h3>Os quatro pares</h3>
+  <p>Nenhum matiz novo entrou. Os tons de bloco são <strong>a própria paleta em opacidade sobre a base</strong> — é por isso que a textura nunca sai do sistema de cor.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Par</th><th>Fundo</th><th>Madeira A</th><th>Madeira B</th><th>Veio</th><th>Junta</th></tr></thead>
+    <tbody>
+      <tr><td>Mata funda <span class="tag-pad">padrão</span></td><td><code>#04251F</code></td><td>Areia 13%</td><td>Areia 2,8%</td><td>Areia 30%</td><td>Areia 10%</td></tr>
+      <tr><td>Papel</td><td><code>#F4F1EA</code></td><td>Tiber 9%</td><td>Tiber 2%</td><td>Tiber 36%</td><td>Tiber 13%</td></tr>
+      <tr><td>Tiber</td><td><code>#06392F</code></td><td>Areia 15%</td><td>Areia 3,2%</td><td>Areia 32%</td><td>Areia 11%</td></tr>
+      <tr><td>Areia</td><td><code>#D9C9A3</code></td><td colspan="4">Receita no arquivo-fonte — não consta nos documentos do projeto <a href="#lacuna" style="color:var(--cobre)">(ver lacuna)</a></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note verde"><b>O par Areia é o achado do grafismo.</b> Nos verdes a textura lê como desenho; sobre a Areia lê como <b>lâmina de madeira</b>. Isso tem consequência no sistema mestre, e está tratado em "o que isso muda".</div>
+  <p style="margin-top:26px"><strong>Cobre não entra na textura.</strong> Em 7% das células ele deixaria de ser acento. O acento vive no tipo e nos dispositivos gráficos — a barra, o filete, o marcador.</p>
+  <p>Configuração padrão da peça: <span class="mono">dominó · veio sorteado · densidade média · módulo 80 px · grelha encaixada</span>. Módulo em <b>pixel</b>, não em fração de coluna: o padrão tem tamanho físico, não tamanho de tela.</p>
+
+  <h3 id="acento">A regra de acento</h3>
+  <p>O grafismo forçou uma pergunta que o bloco de tema tinha deixado em aberto: qual é o acento quando o fundo é escuro? Medindo, a resposta muda o que estava escrito.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Fundo</th><th class="num">Cobre</th><th class="num">Areia</th><th>Acento do par</th><th>Cobre pode ser…</th></tr></thead>
+    <tbody>
+      <tr><td>Papel <code>#F4F1EA</code></td><td class="num">4,38</td><td class="num">1,45</td><td><b>Cobre</b></td><td>texto e grafismo</td></tr>
+      <tr><td>Areia <code>#D9C9A3</code></td><td class="num">3,02</td><td class="num">—</td><td><b>Tiber</b> · 7,85</td><td>só título grande e grafismo</td></tr>
+      <tr><td>Mata funda <code>#04251F</code></td><td class="num">3,30</td><td class="num">9,95</td><td><b>Areia</b></td><td>só título grande e grafismo</td></tr>
+      <tr><td>Tiber <code>#06392F</code></td><td class="num">2,60</td><td class="num">7,85</td><td><b>Areia</b></td><td>só grafismo — nunca texto</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><b>O acento é definido pelo fundo, não pela marca.</b> Continua havendo <b>uma</b> função de acento; o que muda é quem a carrega. Cobre nos fundos claros, Areia nos fundos verdes profundos. <b>Nunca os dois como acento na mesma peça.</b> E uma correção ao que estava escrito: Cobre sobre Mata funda dá 3,3:1 — melhor que sobre Tiber, mas ainda abaixo de 4,5. Serve título grande e filete; não serve legenda nem corpo.</div>
+
+  <h3>Área de proteção sobre textura</h3>
+  <p>Não existia, e a marca já está entrando sobre campo texturizado. Três regras, e a terceira é a que evita o erro difícil de ver.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Regra</th><th>Valor</th><th>Por quê</th></tr></thead>
+    <tbody>
+      <tr><td>Folga sobre fundo chapado</td><td><b>0,5 H</b> em todos os lados</td><td rowspan="2">H = altura de tinta do wordmark. Sobre textura o olho precisa de mais silêncio para separar a marca do campo.</td></tr>
+      <tr><td>Folga sobre textura</td><td><b>1 H</b> em todos os lados</td></tr>
+      <tr><td>Relação módulo × marca</td><td><b>módulo ≤ H ÷ 4</b></td><td>Se a peça da grelha se aproxima da espessura da haste, a marca se desmancha no padrão. Acima disso, campo chapado sob a marca.</td></tr>
+    </tbody>
+  </table></div>
+  <p style="margin-top:24px">Medido, o campo texturizado não ameaça a marca: o tom médio do par Mata funda é <span class="mono">#153229</span>, o que dá <b>12,3:1</b> para a marca em Papel, e mesmo o bloco mais claro fica em 10,9:1. <strong>O véu de leitura não existe para salvar a marca — existe para salvar o texto de apoio</strong>, que é o que sofre, e sobretudo no par Areia, onde a textura chega ao mesmo valor do tipo.</p>
+  <div class="note"><b>Nunca janela sobre textura.</b> Wordmark preenchido com imagem em cima de campo texturizado é textura dentro de textura: as duas se anulam e a palavra some. Sobre marchetaria, a marca é sempre chapada.</div>
+
+  <h3>Onde entra, e onde não entra</h3>
+  <div class="dual">
+    <div class="col ok">
+      <p class="hd">Entra</p>
+      <ul>
+        <li>Capa e abertura, campo cheio</li>
+        <li>Divisor de seção, com o título por cima</li>
+        <li>Fundo de peça institucional — placa de obra, tapume, capa de proposta</li>
+        <li>Superfície de apoio — verso de cartão, faixa de rodapé, embalagem</li>
+        <li>Campo de respiro entre seções, sem nada por cima</li>
+      </ul>
+    </div>
+    <div class="col no">
+      <p class="hd">Não entra</p>
+      <ul>
+        <li><b>Atrás de texto corrido.</b> O véu resolve título, não parágrafo</li>
+        <li>Atrás de dado, tabela ou gráfico — número pede fundo neutro</li>
+        <li>Dentro das letras. A janela é para foto e vídeo</li>
+        <li>Atrás de fotografia — são dois assuntos disputando a mesma superfície</li>
+        <li>Em peça menor que ~200 px de lado: cinco células não leem como gramática, leem como ruído</li>
+        <li><b>Animada.</b> Nunca <span class="mono">opacity</span>, <span class="mono">transform</span> ou <span class="mono">filter</span> na textura — medido em 4 fps</li>
+        <li>Impressão em uma cor sem adaptação — a receita é opacidade, e em 1 cor os quatro níveis colapsam</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note verde"><b>Uma peça tem um mecanismo de superfície só.</b> Foto filtrada, <em>ou</em> marchetaria, <em>ou</em> cor chapada. A identidade agora tem três formas de tratar uma superfície; sem essa regra, a primeira peça que usar duas vai parecer confusa sem que ninguém saiba dizer por quê.</div>
+
+  <h3>As cinco decisões</h3>
+  <ol class="dec">
+    <li><div>
+      <h4>Regra 4 — por que a tora inteira nunca fecha</h4>
+      <p>A razão registrada era a janela: se a tora inteira é da marca, a textura não a completa. <b>Recuso como razão principal, e proponho outra:</b> a razão é a matéria. A AMAZ constrói com madeira engenheirada — lamela, tábua, peça serrada e remontada. Uma tora inteira é exatamente a única coisa que o produto nunca mostra. Assim a regra deixa de ser proibição estética e vira fidelidade ao material — e continua de pé mesmo se a peça da janela sair do sistema. A leitura da janela permanece como reforço, não como fundamento: uma regra que depende de uma peça específica sobreviver é uma regra frágil.</p>
+    </div></li>
+    <li><div>
+      <h4>O azul elétrico — não na junta</h4>
+      <p>A tensão que ele resolve é real: madeira engenheirada é calor <i>e</i> precisão de fábrica, e a identidade hoje só tem o lado quente. Mas a junta é o pior lugar possível. Ela aparece <b>centenas de vezes</b> por peça, e hoje vive a 10–13% de opacidade: ou o azul fica nesse nível e é invisível, ou sobe e vira a coisa mais alta do campo — sendo o único elemento frio e saturado de uma paleta inteiramente quente. Acento que se repete centenas de vezes não é acento, é fundo.<br><br><b>Duas hipóteses melhores, para testar antes de decidir:</b> o azul no <b>nó e na fenda radial</b>, que o sistema já produz raros e já são o acontecimento do campo — a precisão da serra encontrando o defeito da madeira; ou o azul fora da textura, como cor de um <b>registro técnico</b> separado: planta, corte, gráfico, especificação. Esse segundo caminho dá casa ao lado frio sem nunca tocar na face quente da marca, e é o que eu testaria primeiro. Critério de reprovação, para não ficar em gosto: se aparecer mais de uma vez por tela, não é acento.</p>
+    </div></li>
+    <li><div>
+      <h4>Acento sobre Tiber — resolvido, e mais amplo que o previsto</h4>
+      <p>Não era contradição, era lacuna: o bloco de tema dizia que Cobre não é texto sobre Tiber, mas nunca disse quem assume o papel. O grafismo respondeu, e a medição amplia a resposta — <b>Areia é o acento de todo fundo verde profundo</b>, não só do Tiber. E Cobre também não passa em corpo pequeno sobre Mata funda (3,3:1) nem sobre Areia (3,02:1), o que o documento do grafismo dava como resolvido. Ver a tabela acima.</p>
+    </div></li>
+    <li><div>
+      <h4>Área de proteção — definida</h4>
+      <p>0,5 H sobre chapado, 1 H sobre textura, e módulo no máximo H ÷ 4. Fecha a pendência que estava aberta desde a rodada 03 e resolve o caso que já estava acontecendo na prática.</p>
+    </div></li>
+    <li><div>
+      <h4>Onde entra — definido, com uma regra a mais</h4>
+      <p>As duas listas acima. A regra que eu acrescentaria e que não estava na pergunta: <b>um mecanismo de superfície por peça</b>. É o risco real de somar um terceiro tratamento a um sistema que já tinha dois.</p>
+    </div></li>
+  </ol>
+
+  <h3 id="lacuna">O que isso muda no que já estava fechado</h3>
+  <ol class="dec">
+    <li><div>
+      <h4>Areia sobe de apoio a fundo de peça</h4>
+      <p>Concordo com a promoção. Mas ela cria <b>dois fundos claros</b>, e sem regra as pessoas vão usar os dois como sinônimo. A regra que resolve: <b>Papel é o fundo de leitura, Areia é o fundo de matéria.</b> Texto mora no Papel; textura e material moram na Areia.</p>
+    </div></li>
+    <li><div>
+      <h4>O acento deixa de ser único e passa a ser condicionado ao fundo</h4>
+      <p>Emenda direta ao bloco de tema, seção Cor. Uma função de acento, dois portadores.</p>
+    </div></li>
+    <li><div>
+      <h4>“Sem gradiente, escala melhor em uma cor” passa a valer só para a marca</h4>
+      <p>Era um princípio do sistema inteiro. O grafismo é feito de opacidade sobre a base — em uma cor os quatro níveis colapsam. Não é falha: o grafismo é campo, não assinatura. Mas o princípio precisa ser reescrito com escopo, senão a primeira placa serigrafada vai cobrar isso.</p>
+    </div></li>
+    <li><div>
+      <h4>Movimento continua sendo da janela, não da textura</h4>
+      <p>A marchetaria é superfície parada, por medição, não por gosto. Vale registrar junto com a regra de animação, porque num deck a tentação de animar o fundo é imediata.</p>
+    </div></li>
+    <li><div>
+      <h4>Lacuna: a receita do par Areia não está escrita</h4>
+      <p>Os documentos do projeto trazem as opacidades de Mata funda, Papel e Tiber. O par Areia aparece como controle e como o achado do grafismo, mas <b>sem os quatro valores</b>. Ele existe no arquivo-fonte; precisa ser transcrito para o documento, senão o par mais interessante do sistema é o único que ninguém consegue reconstruir.</p>
+    </div></li>
+  </ol>
+
+  <div class="note"><b>A especificação técnica não está aqui, de propósito.</b> Gramática completa, as seis regras, escala absoluta da matéria, auditoria e performance medida vivem em <span class="mono">GRAFISMO-MARCHETARIA.md</span>, na pasta do grafismo. Esta seção é o que a identidade precisa saber para usar o sistema sem reabri-lo.</div>
+</div></section>
+
+<div class="div" id="aplic">
+  <div class="in">
+    <span class="n">07</span>
     <h2>Aplicações</h2>
     <p>Dez peças, três mecanismos: janela, recorte e bloco de cor.</p>
   </div>
@@ -584,7 +782,7 @@ footer.end .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text
 
 <div class="div" id="movim">
   <div class="in">
-    <span class="n">07</span>
+    <span class="n">08</span>
     <h2>Movimento</h2>
     <p>A janela também funciona com vídeo — e é aí que ela convence.</p>
   </div>
@@ -604,7 +802,7 @@ footer.end .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text
 
 <div class="div" id="decidir">
   <div class="in">
-    <span class="n">08</span>
+    <span class="n">09</span>
     <h2>O que precisa de decisão</h2>
     <p>O que está aberto, dito com todas as letras.</p>
   </div>
