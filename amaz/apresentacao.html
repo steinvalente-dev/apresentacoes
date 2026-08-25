@@ -641,8 +641,11 @@ ol.lista.rot{gap:clamp(12px,1.9vh,26px)}
 /* ── donut · mouse over e a linha por unidade ── */
 .fatia{cursor:default;outline:none}
 .fatia path{transition:opacity .22s ease,transform .22s ease;transform-origin:center;transform-box:fill-box}
-.dnwrap:hover .fatia path{opacity:.42}
-.fatia:hover path,.fatia:focus-visible path{opacity:1}
+/* o hover NÃO apaga o gráfico inteiro: antes toda fatia caía a 42% e o
+   gráfico virava um fantasma. Agora só a fatia mirada reage — ela avança um
+   pouco e ganha contorno. As outras ficam como estavam. */
+.fatia:hover path,.fatia:focus-visible path{
+  transform:scale(1.035);stroke-width:2.4;filter:brightness(1.14)}
 .fatia .dica{opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;
   transform-box:view-box}
 .fatia:hover .dica,.fatia:focus-visible .dica{opacity:1}
@@ -929,6 +932,24 @@ canvas.march{position:absolute;inset:0;width:100%;height:100%;display:block;z-in
    antigas eram medidas da borda da prancha, não da borda da foto. */
 .slide.g-cheia .chtexto{top:calc(clamp(30px,5.2vw,96px) + clamp(22px,3vh,46px))}
 .slide.g-cheia .chpe{bottom:calc(clamp(30px,5.2vw,96px) + clamp(18px,2.4vh,38px))}
+
+/* ═══ `cheia` centrada ═══
+   O texto deixa de morar nas bordas e vira um bloco único no meio da folha:
+   é a primeira prancha da seção da madeira e precisa parar o olho. Um véu
+   suave por baixo do bloco garante a leitura do Tiber sobre a foto clara. */
+.slide.g-cheia .chtexto{top:50%;left:0;right:0;transform:translateY(-50%);
+  padding:0 clamp(50px,8vw,140px);text-align:center;display:flex;
+  flex-direction:column;align-items:center;gap:clamp(14px,2vh,26px)}
+.slide.g-cheia .chpe{position:static;transform:none;text-align:center;
+  display:flex;flex-direction:column;align-items:center}
+.slide.g-cheia .chpe span{font-size:clamp(13px,1.15vw,19px);line-height:1.5;
+  font-weight:500;max-width:44ch}
+.slide.g-cheia .chwrap::after{content:"";position:absolute;left:0;right:0;
+  top:50%;transform:translateY(-50%);height:min(72%,520px);
+  background:radial-gradient(ellipse 62% 60% at 50% 50%,
+    #F4F1EAD9 0%,#F4F1EA9E 46%,#F4F1EA00 78%)}
+@media(max-width:620px){
+  .slide.g-cheia .chtexto{padding:0 clamp(18px,5vw,30px)}}
 
 /* aviso de orientação */
 #giro{position:fixed;inset:0;z-index:90;display:none;place-items:center;padding:32px;
@@ -1343,6 +1364,11 @@ const DECK=[
 {g:'divisor',div:1,funda:1,sec:'a madeira',dn:'04',dt:'a madeira',
  ds:'O material mais antigo da construção acaba de chegar ao século XXI. Por que a madeira deveria ser o padrão — e por que ainda não é.'},
 
+{g:'cheia',foto:'madeira',
+ kick:'de onde vem',
+ t:'reflorestamento,<br>não floresta',
+ pe:'Madeira de reflorestamento, com cadeia de custódia rastreável e origem verificável.'},
+
 {g:'frase',esc:1,kick:'a escolha estrutural',
  pre:'Existem empreendimentos em madeira no mercado. Quase todos escondem isso.',
  t:'nós colocamos<br>a madeira<br>em primeiro lugar',
@@ -1369,11 +1395,6 @@ const DECK=[
  t:'2% do material.<br>45% das emissões.',
  sub:'A comparação entre o volume de material de uma obra e o carbono que cada material emite. O aço ocupa 2% do volume e responde por 45% das emissões — cerca de 22 vezes mais carbono por unidade de volume que a madeira. A madeira é 34% do volume e apenas 13% das emissões.',
  pend:'VERIFICAR a fonte primária e o escopo do estudo (A1-A3 ou A1-A5). Os valores aparentam ser percentuais normalizados de um caso específico, não absolutos. Se não for possível rastrear, refazer o cálculo com uma casa Ônica e fatores brasileiros.'},
-
-{g:'cheia',foto:'madeira',
- kick:'de onde vem',
- t:'reflorestamento,<br>não floresta',
- pe:'Madeira de reflorestamento, com cadeia de custódia rastreável e origem verificável.'},
 
 {g:'grelha',kick:'os quatro enganos',t:'o que você acha<br>que sabe sobre<br>madeira',
  sub:'Quatro crenças que circulam sobre madeira na construção civil. Nenhuma delas se sustenta diante do material que existe hoje — e as quatro juntas explicam por que o Brasil ainda constrói do jeito que constrói.',
@@ -1779,14 +1800,12 @@ function tpl(s){
       +`</div>`:'<div class="regua rev"></div>';
     return `<div class="wrap">${k}${t}${sub}${met}${tp}</div>`;
   }
-  if(s.g==='divisor'){
-    /* fundo de marchetaria: canvas próprio, pintado uma vez na primeira
-       exibição. Nunca animar o canvas — só o conteúdo por cima dele. */
-    const sem=(parseInt(s.dn,10)||0)*97+(s.sec||'').length*31+7;
-    return `<canvas class="march" data-sem="${sem}"></canvas>`
-      +`<div class="divisor"><span class="dn rev">${s.dn}</span>`
-      +`<h1 class="dt rev">${s.dt}</h1><p class="ds rev">${s.ds}</p></div>`;
-  }
+  /* MARCHETARIA RETIRADA em 24/08. O porte não reproduziu o campo do
+     documento e o Michel vai investigar a fonte. O gerador segue no arquivo
+     (função `marchetaria`) e o CSS `canvas.march` também: religar é devolver
+     o canvas a esta linha. Nada mais foi mexido. */
+  if(s.g==='divisor') return `<div class="divisor"><span class="dn rev">${s.dn}</span>`
+    +`<h1 class="dt rev">${s.dt}</h1><p class="ds rev">${s.ds}</p></div>`;
   if(s.g==='frase') return `<div class="wrap">${k}${pre}${t}${sub}${prem}${dad}${pend}</div>`;
 
   if(s.g==='lista'||s.g==='fim') return `<div class="wrap${s.largo?' largo':''}">${k}${pre}${t}${sub}`
@@ -1849,8 +1868,8 @@ function tpl(s){
   }
 
   if(s.g==='cheia') return `<div class="chwrap" style="--fonte:var(--img-${s.foto})"></div>`
-    +`<div class="chtexto rev">${k}${t}</div>`
-    +(s.pe?`<div class="chpe rev"><i></i><span>${s.pe}</span></div>`:'');
+    +`<div class="chtexto rev">${k}${t}`
+    +(s.pe?`<div class="chpe"><i></i><span>${s.pe}</span></div>`:'')+`</div>`;
 
   if(s.g==='pergunta') return (s.video?`<div class="bleed"><video class="bg" data-v muted loop playsinline preload="auto" aria-hidden="true"></video></div>`:'')
     +`<div class="pergwrap">`
