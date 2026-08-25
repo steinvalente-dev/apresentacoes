@@ -240,8 +240,15 @@
   @media (max-width:620px){
     .peca{grid-template-columns:auto 1fr;row-gap:14px}
     .acoes{grid-column:1/-1;justify-content:flex-start;gap:22px}
-    .doc-item a,.doc-item button{grid-template-columns:26px 1fr;row-gap:8px}
-    .doc-item .go{grid-column:2}
+  }
+  /* sistema: em tela estreita o texto corre inteiro e os botoes descem */
+  @media (max-width:760px){
+    .doc-linha{grid-template-columns:26px 1fr;column-gap:14px;row-gap:14px;
+      align-items:start;padding:16px clamp(14px,2vw,22px)}
+    .doc-item .g{padding-top:3px}
+    .doc-item .nm{font-size:18px}
+    .doc-item .ds{margin-top:5px;line-height:1.55;max-width:52ch}
+    .doc-acoes{grid-column:2/-1;justify-content:flex-start;flex-wrap:wrap;gap:10px}
   }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
