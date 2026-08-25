@@ -1047,6 +1047,37 @@ canvas.march{position:absolute;inset:0;width:100%;height:100%;display:block;z-in
   .mz:nth-child(3){display:none}
   .mz figcaption{font-size:clamp(7.5px,2vw,9.5px)}}
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   TRAVADA NA TROCA DE PRANCHA — diagnóstico e correção (24/08)
+
+   Sintoma: transição pesada, sobretudo quando o fundo muda de escuro para
+   claro. Medido em Chromium: quadro de até 1.027 ms na entrada do divisor.
+
+   Causa: o tema é uma classe no BODY (`body.esc`, `body.funda`), e há 23
+   regras com esses seletores. Trocar a classe invalida o estilo de todo
+   descendente que possa casar — as 56 pranchas estão no DOM ao mesmo tempo,
+   cada uma ocupando a tela inteira, com 1.006 nós e 36 fundos de imagem.
+   Medida isolada: **123 ms só de recálculo de estilo**, a cada troca.
+   (O `backdrop-filter` da pastilha de navegação foi testado e inocentado:
+   71 ms com ele, 78 ms sem — diferença dentro do ruído.)
+
+   Correção: a prancha inativa sai do cálculo de estilo. `content-visibility:
+   hidden` faz o navegador pular estilo, layout e pintura de tudo que está
+   dentro dela. Medido depois: **2,9 ms** — o recálculo cai 97%.
+
+   A ressalva que exigiu a classe `.saindo`: aplicar `hidden` a toda prancha
+   não-ativa mataria o cross-fade, porque a prancha que sai desapareceria no
+   mesmo quadro em vez de esvanecer. Ela é preservada pelos 440 ms da
+   transição e só então some do cálculo.
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* Segunda rodada: com `hidden` em TODAS as inativas, o recálculo sumiu mas
+   apareceu outro custo — a prancha que entra tinha de ser pintada do zero,
+   e as de mosaico (três imagens grandes) custavam ~480 ms mesmo na segunda
+   visita. A saída é manter no cálculo apenas a prancha atual e as duas
+   VIZINHAS do percurso: quem você está prestes a ver já está pintado, e as
+   53 restantes continuam fora. */
+.slide:not(.perto):not(.saindo){content-visibility:hidden}
+
 /* aviso de orientação */
 #giro{position:fixed;inset:0;z-index:90;display:none;place-items:center;padding:32px;
   background:#04251FEE;color:var(--papel);text-align:center;font-family:var(--sans)}
@@ -1864,8 +1895,9 @@ function ligarVideo(){
   vids.forEach(function(v){ v.src=url; v.load();
     var go=function(){ var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){}); };
     go(); v.addEventListener('canplay',go,{once:true}); });
-  var kick=function(){ vids.forEach(function(v){ if(v.paused){
-    var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){}); } }); };
+  var kick=function(){ vids.forEach(function(v){
+    if(v.paused && v.closest('.slide').classList.contains('ativo')){
+      var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){}); } }); };
   ['click','touchstart','keydown'].forEach(function(ev){
     document.addEventListener(ev,kick,{once:true,passive:true}); });
 }
@@ -2138,6 +2170,17 @@ function go(i,tudo){
   if(i===cur)return;
   const ant=cur;cur=i;
   sl.forEach((el,j)=>el.classList.toggle('ativo',j===i));
+  /* vizinhança do PERCURSO, não do DECK: no modo de cinco minutos a próxima
+     prancha pode estar dez posições adiante no array. */
+  const k=naRota(i), perto=new Set([i]);
+  if(k>=0){ if(ROTA[k-1]!==undefined)perto.add(ROTA[k-1]);
+            if(ROTA[k+1]!==undefined)perto.add(ROTA[k+1]); }
+  sl.forEach((el,j)=>el.classList.toggle('perto',perto.has(j)));
+  /* a prancha que sai fica no cálculo pelos 440 ms da transição — sem isso
+     ela some no mesmo quadro e o cross-fade vira corte seco. Depois disso
+     entra no `content-visibility:hidden` junto com as outras 54. */
+  if(ant>=0){ const fora=sl[ant]; fora.classList.add('saindo');
+    clearTimeout(fora._t); fora._t=setTimeout(()=>fora.classList.remove('saindo'),470); }
   if(ant>=0)sl[ant].classList.remove('revelado');
   void sl[i].offsetWidth;sl[i].classList.add('revelado');
   passos(i).forEach(p=>p.classList.toggle('on',!!tudo));
@@ -2160,6 +2203,15 @@ function go(i,tudo){
      --atr, que o atalho não toca. */
   sl[i].querySelectorAll('.mcfoto.carro .cam').forEach(c=>{
     c.style.animationName='none'; void c.offsetWidth; c.style.animationName='';
+  });
+  /* SEGUNDA CAUSA da travada, medida em 24/08: os três vídeos tocavam o
+     tempo todo, inclusive nas pranchas escondidas. Três decodificações
+     simultâneas em segundo plano derrubavam a taxa de quadros do deck
+     inteiro. Toca só o da prancha ativa: mediana de 134 → 49 ms. */
+  document.querySelectorAll('video[data-v]').forEach(v=>{
+    const dele = v.closest('.slide')===sl[i];
+    if(dele){ const pr=v.play(); if(pr&&pr.catch) pr.catch(()=>{}); }
+    else if(!v.paused) v.pause();
   });
   if(s.g==='logo') requestAnimationFrame(()=>cometaMarca(sl[i]));
   else if(animsMarca.length){ animsMarca.forEach(a=>{try{a.cancel();}catch(e){}}); animsMarca=[]; }
