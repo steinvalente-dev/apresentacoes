@@ -141,6 +141,43 @@ pelo histórico do Git.
 listado. Usa a API pública do GitHub, que limita a 60 chamadas por hora por IP —
 se estourar, o aviso silencia. É rede de segurança, não substituto do registro.
 
+## Voltar ao acervo — uma linha por peça
+
+Desde 25/08/2026 **toda peça publicada leva esta linha antes do `</body>`**:
+
+```html
+<!-- retorno ao acervo + camada de toque. Comportamento em modulos/ms-voltar.js -->
+<script defer src="../modulos/ms-voltar.js"></script>
+```
+
+É o passo 1.1 de publicar: peça sem essa linha abre sem saída, e quem chegou
+nela pelo índice — que abre em aba nova, sem histórico — fica preso.
+
+O comportamento inteiro mora em `modulos/ms-voltar.js`. **Mudar o botão em
+todas as apresentações de uma vez = editar aquele arquivo.** Nenhuma peça
+precisa ser reaberta, e o Pages não recompila nada.
+
+O que a linha traz junto:
+
+| | |
+|---|---|
+| chip `← acervo` | alto à esquerda, acima de qualquer chrome do deck. Aberto por 2,6 s na carga, depois recolhido ao disco discreto. Destino derivado do `src` do próprio script, não do endereço da peça — funciona em qualquer profundidade de pasta |
+| camada de toque | `viewport-fit=cover`, sem zoom de duplo-toque, sem puxar-para-recarregar, sem inflar tipografia no iOS, `env(safe-area-*)` respeitada |
+| tela cheia | chip `⛶` ao lado, só em dedo e só onde a API existe. iPhone não expõe: o chip não nasce |
+| aviso de girar | só em deck de tela fixa aberto em retrato **que ainda não tenha o próprio**. Página que rola não recebe aviso nenhum |
+
+**Degrada em silêncio.** Peça baixada do repositório ou mandada por e-mail não
+acha o script: nenhum chip, e a apresentação abre exatamente como antes. É
+deliberado — fora do acervo não há acervo para onde voltar.
+
+O script não toca em variável, classe nem listener da engine da prancha. As
+teclas do deck seguem intactas: o chip barra `Enter`/espaço na captura para
+não avançar a prancha junto.
+
+*Armadilha a não repetir:* o caminho é **relativo** (`../modulos/`), e vale
+porque toda peça mora a exatamente um nível da raiz (`<slug>/arquivo.html`).
+Peça em pasta mais funda precisa ajustar o `../`.
+
 ## Regras que valem sempre
 
 - **`noindex, nofollow, noarchive`** no índice e em toda apresentação. Decisão
@@ -171,6 +208,9 @@ a engine abaixo dele não se toca.
 
 ## Histórico
 
+- **25/08/2026** — todas as nove peças ganharam `modulos/ms-voltar.js`: chip
+  de retorno ao acervo e camada de toque. Uma linha por peça, comportamento
+  centralizado no módulo.
 - **23/08/2026** — o `arquivo` ganhou o bloco `sistema visual` por projeto, com
   os campos `tipo` e `sub`. Publicadas as duas peças interativas da marchetaria
   da AMAZ em `amaz-marchetaria/`.

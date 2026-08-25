@@ -13,6 +13,7 @@ do Git. Nunca criar `-R2` ao lado.
 | `divisor-trama.html` | divisor **sem assunto**: nenhuma imagem, só o retículo trocando de grelha. Véu 0.55 | mesma solda; os campos vão junto, são ~40 linhas de JS |
 | `fundo-morph-pontilhado.html` | o laboratório do fundo, com todos os controles. **Não é a capa** — serve para calibrar e copiar o preset | não entra; é banco de ensaio |
 | `ms-fundo-engine.js` | a engine do morph, ~14 KB | `<script>` no fim do `<body>` + `MSFundo.montar()` |
+| `ms-voltar.js` | o chip **voltar ao acervo** e a camada de toque, ~12 KB. Vale para toda peça publicada | `<script defer src="../modulos/ms-voltar.js">` no fim do `<body>` — e nada mais |
 
 ## A engine, hoje
 
