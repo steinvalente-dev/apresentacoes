@@ -905,6 +905,31 @@ canvas.march{position:absolute;inset:0;width:100%;height:100%;display:block;z-in
 .slide.g-divisor::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(100deg,#04251FEB 0%,#04251FC4 44%,#04251F52 100%)}
 
+/* A pílula ativa carrega `.ms-start`, que na capa tem margem própria —
+   medida: 16,2 px empurrando a terceira para baixo. Aqui a margem é da
+   grelha, não do botão. */
+.tempo .tbtn{margin:0}
+
+/* prancha `cheia`: moldura maior e texto centrado.
+   A imagem é de baixa resolução; recuar mais reduz a escala de exibição e
+   melhora a nitidez aparente — foi a saída que o Michel propôs e funciona. */
+.slide.g-cheia .chwrap{inset:clamp(30px,5.2vw,96px)}
+.chtexto{left:0;right:0;text-align:center;max-width:none;
+  padding:0 clamp(60px,9vw,150px)}
+.chtexto .kick{justify-content:center}
+.chtexto .kick::before{display:none}
+.chtexto h1{margin-left:auto;margin-right:auto}
+.chpe{left:0;right:0;text-align:center}
+.chpe i{margin-left:auto;margin-right:auto}
+.chpe span{max-width:52ch;margin-left:auto;margin-right:auto}
+@media(max-width:620px){
+  .slide.g-cheia .chwrap{inset:clamp(16px,4vw,26px)}
+  .chtexto,.chpe{padding-left:clamp(16px,4vw,26px);padding-right:clamp(16px,4vw,26px)}}
+/* com a moldura maior, o texto precisa entrar DENTRO da imagem: as posições
+   antigas eram medidas da borda da prancha, não da borda da foto. */
+.slide.g-cheia .chtexto{top:calc(clamp(30px,5.2vw,96px) + clamp(22px,3vh,46px))}
+.slide.g-cheia .chpe{bottom:calc(clamp(30px,5.2vw,96px) + clamp(18px,2.4vh,38px))}
+
 /* aviso de orientação */
 #giro{position:fixed;inset:0;z-index:90;display:none;place-items:center;padding:32px;
   background:#04251FEE;color:var(--papel);text-align:center;font-family:var(--sans)}
@@ -925,179 +950,210 @@ canvas.march{position:absolute;inset:0;width:100%;height:100%;display:block;z-in
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════════════
-   MARCHETARIA — o grafismo da AMAZ, portado para os divisores da prancha
+   MARCHETARIA — o grafismo da AMAZ nos divisores da prancha
 
-   Gramática vinda de claude/amaz-grafismo-marchetaria.md e -tabuas.md:
-   · anéis pertencem ao VÉRTICE, não à célula — a família atravessa a junta
-   · fio = feixe de fibras a 45°, sempre ilha (R5)
-   · fenda radial = a greta que fecha o três-quartos (R2)
-   · olho = o nó, com as fibras desviando em volta
-   · junta = o corte da serra, contorna a peça
+   FONTE: o documento técnico publicado em
+   steinvalente-dev.github.io/apresentacoes/amaz-grafismo/apresentacao.html
+   (que sai de GRAFISMO-MARCHETARIA.md, no Drive). Segunda versão do porte.
+   A primeira empacotava o campo só com quadrados 1×1 e por isso não parecia
+   marchetaria: faltava o DOMINÓ, que é o que o sistema tem de reconhecível.
 
-   As cinco regras: R1 nada idêntico em trinca · R2 três-quartos nunca fica
-   "quase" · R3 convergência pesa ×9 · R4 a tora inteira NUNCA fecha (ela é da
-   marca) · R5 reta não encosta em reta.
+   Configuração fechada, do documento:
+     par Mata funda · corte dominó (2×1 e 1×2 misturados) · veio da tábua
+     sorteado (≈44% comprimento, ≈26% a 45°, ≈30% anel) · densidade média
+     (≈40% da área em tábua) · módulo 80 px · grelha encaixada · traço madeira
 
-   CANVAS e não SVG: o documento de performance mediu 250 ms para pintar o SVG
+   O mecanismo: os anéis pertencem ao VÉRTICE, não à célula. Raio, espaçamento,
+   irregularidade e gretas são semeados pelas coordenadas do vértice, então a
+   família atravessa a junta. Se pertencessem à célula, cada bloco fecharia
+   sozinho — seria ladrilho, não marchetaria.
+
+   A junta contorna a PEÇA, não a célula: é isso que faz o dominó aparecer.
+
+   CANVAS e não SVG, por medição do próprio documento: 250 ms para pintar o SVG
    em 1920 contra 89 ms em canvas, e canvas pintado vira textura — não
-   re-rasteriza quando o texto animar por cima. Aqui a textura é parada, então
-   é o caso barato: uma pintura por prancha e nada depois.
-
-   PROIBIDO, do mesmo documento: animar opacity/transform/filter no elemento
-   da textura (4 fps), e promovê-la a camada com will-change (484→51 fps).
+   re-rasteriza quando o texto animar por cima. Proibido animar
+   opacity/transform/filter aqui (4 fps) ou promover a camada (484→51 fps).
    ═══════════════════════════════════════════════════════════════════════════ */
 function marchetaria(cv, semente){
-  const ctx = cv.getContext('2d', {alpha:false});
-  const dpr = Math.min(window.devicePixelRatio||1, 2);
-  const W = cv.clientWidth, H = cv.clientHeight;
-  if(!W||!H) return;
-  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  const ctx=cv.getContext('2d',{alpha:false});
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  const W=cv.clientWidth, H=cv.clientHeight; if(!W||!H) return;
+  cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
   ctx.setTransform(dpr,0,0,dpr,0,0);
 
-  /* sorteio determinístico: mesma prancha, mesmo desenho */
-  let s = semente>>>0 || 1;
-  const rnd = ()=>{ s^=s<<13; s>>>=0; s^=s>>17; s^=s<<5; s>>>=0; return s/4294967296; };
-  const ent = (a,b)=>a+Math.floor(rnd()*(b-a+1));
-  const flu = (a,b)=>a+rnd()*(b-a);
-  /* semeado pelas coordenadas do vértice: é o que faz a família de anéis
-     atravessar a junta em vez de fechar dentro da célula */
-  const sem = (x,y)=>{ let h=(x*374761393+y*668265263)>>>0;
-    h=(h^(h>>13))>>>0; h=(h*1274126177)>>>0; return ((h^(h>>16))>>>0)/4294967296; };
+  let s=(semente>>>0)||1;
+  const rnd=()=>{s^=s<<13;s>>>=0;s^=s>>17;s^=s<<5;s>>>=0;return s/4294967296;};
+  const ent=(a,b)=>a+Math.floor(rnd()*(b-a+1));
+  const sem=(x,y)=>{let h=(x*374761393+y*668265263)>>>0;h=(h^(h>>13))>>>0;
+    h=(h*1274126177)>>>0;return ((h^(h>>16))>>>0)/4294967296;};
 
-  /* ── par Mata funda: a paleta em opacidade sobre a base, nenhum matiz novo ── */
-  const BASE='#04251F', AREIA='217,201,163';
-  const madA=`rgba(${AREIA},.13)`, madB=`rgba(${AREIA},.028)`;
-  /* na prancha a textura é fundo, não assunto: os valores do documento
-     (veio 30%, junta 10%) são de peça de identidade em tela cheia. Aqui
-     descem um degrau para não brigar com o título. */
-  const veio =`rgba(${AREIA},.22)`, junta=`rgba(${AREIA},.07)`;
+  /* par Mata funda, receita da fonte. Nota: veio 30% e junta 13% são valores
+     de peça de identidade em tela cheia, onde a textura É o assunto; no
+     divisor ela é fundo e desce um degrau, senão briga com o título. */
+  const BASE='#04251F', AR='217,201,163';
+  const TOM=[`rgba(${AR},.130)`,`rgba(${AR},.028)`];
+  const VEIO=`rgba(${AR},.22)`, JUNTA=`rgba(${AR},.09)`;
 
   ctx.fillStyle=BASE; ctx.fillRect(0,0,W,H);
 
-  /* módulo em PX, não em coluna: em coluna a peça fica graúda no monitor e
-     miúda no notebook. Grelha encaixada — o alvo arredonda para o divisor
-     mais próximo, e a grelha fecha sem meia peça na borda. */
-  const alvo = W<700 ? 46 : (W<1200 ? 58 : 68);
-  const nx = Math.max(3, Math.round(W/alvo)), cel = W/nx;
-  const ny = Math.ceil(H/cel);
+  /* módulo em px, grelha encaixada: o alvo arredonda para o divisor mais
+     próximo da largura e a grelha fecha sem meia peça na borda */
+  const alvo = W<760 ? 56 : 80;
+  const nx=Math.max(4,Math.round(W/alvo)), cel=W/nx, ny=Math.ceil(H/cel)+1;
 
-  /* escala da madeira ABSOLUTA, em px — anel de árvore tem largura própria;
-     o que muda é o tamanho do bloco serrado, não a madeira */
-  const LARG_ANEL=[7,11.5], RAIO_NO=[7.5,15.5], AMOSTRA=11;
+  /* a matéria tem escala ABSOLUTA, em px — anel de árvore tem largura própria;
+     o que muda é o tamanho do bloco serrado */
+  const ANEL=[7,11.5], FIBRA=[8.5,12.5], OND=[3.4,6.6], NO=[7.5,15.5], AM=11;
+  const P_VEIO=1.05, P_RACHA=1.35;
 
-  /* ── passo 1 · sortear a peça de cada célula, respeitando as regras ── */
-  const G=[];
-  for(let j=0;j<ny;j++){ G[j]=[];
-    for(let i=0;i<nx;i++){
-      const viz=[G[j][i-1], (G[j-1]||[])[i]];
-      /* R5: reta não encosta em reta. O fio é sempre ilha. */
-      const podeFio = !viz.some(v=>v&&v.t==='fio');
-      /* fio em ~20% dos blocos (auditoria: mín 15, máx 22,5) */
-      const t = (podeFio && rnd()<.20) ? 'fio' : 'topo';
-      const v = {t, i, j};
-      if(t==='topo'){
-        /* o quarto de círculo mora num dos quatro vértices da célula */
-        v.q = ent(0,3);
-        /* R1: nada idêntico em trinca — se o vizinho tem o mesmo quadrante,
-           gira. Mata a escama que aparece quando o sorteio repete. */
-        if(viz[0]&&viz[0].t==='topo'&&viz[0].q===v.q) v.q=(v.q+ent(1,3))%4;
+  /* ═══ 1 · empacotar em dominó, densidade média ≈40% da área em tábua ═══ */
+  const ocup=Array.from({length:ny},()=>new Array(nx).fill(null)), pecas=[];
+  for(let j=0;j<ny;j++) for(let i=0;i<nx;i++){
+    if(ocup[j][i]) continue;
+    const podeH=i+1<nx&&!ocup[j][i+1], podeV=j+1<ny&&!ocup[j+1][i];
+    let w=1,h=1;
+    if(rnd()<.40&&(podeH||podeV)){ if(podeH&&(!podeV||rnd()<.5)) w=2; else h=2; }
+    const p={i,j,w,h};
+    for(let b=0;b<h;b++) for(let a=0;a<w;a++) ocup[j+b][i+a]=p;
+    pecas.push(p);
+  }
+
+  /* ═══ 2 · estado e assinatura, sujeitos às seis regras ═══ */
+  const assin=p=>p.tom+'|'+p.mod+'|'+(p.ang||0);
+  const vizinhas=p=>{ const v=new Set();
+    for(let a=-1;a<=p.w;a++) for(let b=-1;b<=p.h;b++){
+      if((a>=0&&a<p.w)===(b>=0&&b<p.h)) continue;
+      const y=p.j+b,x=p.i+a;
+      if(y>=0&&y<ny&&x>=0&&x<nx&&ocup[y][x]&&ocup[y][x]!==p) v.add(ocup[y][x]);
+    } return [...v]; };
+  for(const p of pecas){
+    const viz=vizinhas(p), vistas=new Set(viz.filter(v=>v.mod).map(assin));
+    for(let t=0;t<10;t++){
+      if(p.w*p.h===1){
+        /* R5 · o fio é ilha e nunca emenda */
+        const temFio=viz.some(v=>v.mod==='fio');
+        p.mod=(!temFio&&rnd()<.26)?'fio':'anel';   /* fio ≈26% dos quadrados */
+        if(p.mod==='anel'){ p.q=ent(0,3); p.ang=p.q; } else p.ang=rnd()<.5?1:-1;
       } else {
-        v.d = rnd()<.5 ? 1 : -1;     /* o feixe corre a 45°, num dos dois sentidos */
-        v.tom = rnd()<.5;             /* tábuas diferentes; o fio é ilha, não desmancha figura */
+        const r=rnd();
+        p.mod = r<.44?'comp' : (r<.70?'vies':'tanel');
+        p.ang = p.w>p.h?0:1;
       }
-      G[j][i]=v;
+      p.tom=rnd()<.5?0:1;
+      /* R6 · vizinha nunca repete tom E padrão juntos: duas peças lado a lado
+         sempre diferem em pelo menos uma coisa, senão se fundem num bloco */
+      if(!vistas.has(assin(p))) break;
+      p.tom^=1;
+      if(!vistas.has(assin(p))) break;
     }
   }
-  /* R4 · a tora inteira nunca fecha: onde quatro células convergirem para o
-     mesmo vértice, uma é desmanchada. A tora inteira é da marca — a textura
-     não a completa. */
+  /* R1 · nada de trinca: nenhuma peça idêntica três vezes seguidas */
+  for(let j=0;j<ny;j++){ let seq=1;
+    for(let i=1;i<nx;i++){ const a=ocup[j][i-1],b=ocup[j][i];
+      if(a&&b&&a!==b&&assin(a)===assin(b)){ if(++seq>=3){ b.tom^=1; seq=1; } } else seq=1; }}
+  /* R4 · a tora inteira nunca fecha. Motivo oficial: a AMAZ constrói com
+     madeira engenheirada — lamela, tábua, peça serrada e remontada. Uma tora
+     inteira é a única coisa que o produto nunca mostra. */
   for(let j=1;j<ny;j++) for(let i=1;i<nx;i++){
-    const c=[G[j][i],G[j][i-1],G[j-1][i],G[j-1][i-1]];
-    if(c.every(x=>x.t==='topo')){
-      const quer=[3,2,1,0];           /* os quadrantes que apontam para o vértice comum */
+    const c=[ocup[j][i],ocup[j][i-1],ocup[j-1][i],ocup[j-1][i-1]];
+    if(c.every(x=>x&&x.mod==='anel'&&x.w*x.h===1)){
+      const quer=[3,2,1,0];
       if(c.every((x,k)=>x.q===quer[k])) c[ent(0,3)].q=(quer[0]+2)%4;
     }
   }
 
-  /* ── passo 2 · pintar ── */
-  const arcoPts=(cx,cy,r,a0,a1,ond)=>{
-    const n=Math.max(3, Math.ceil(Math.abs(a1-a0)*r/AMOSTRA)), p=[];
-    for(let k=0;k<=n;k++){
-      const a=a0+(a1-a0)*k/n;
-      const rr=r+Math.sin(k*.9+r)*ond;
-      p.push([cx+rr*Math.cos(a), cy+rr*Math.sin(a)]);
-    }
-    return p;
-  };
-  const traco=(p,cor,w)=>{ ctx.beginPath(); ctx.moveTo(p[0][0],p[0][1]);
-    for(let k=1;k<p.length;k++) ctx.lineTo(p[k][0],p[k][1]);
-    ctx.strokeStyle=cor; ctx.lineWidth=w; ctx.stroke(); };
+  /* ═══ 3 · pintar ═══ */
+  const traco=(pts,cor,lw)=>{ if(pts.length<2) return;
+    ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]);
+    for(let k=1;k<pts.length;k++) ctx.lineTo(pts[k][0],pts[k][1]);
+    ctx.strokeStyle=cor; ctx.lineWidth=lw; ctx.stroke(); };
+  const arco=(cx,cy,r,a0,a1,ond)=>{
+    const n=Math.max(3,Math.ceil(Math.abs(a1-a0)*r/AM)),p=[];
+    for(let k=0;k<=n;k++){ const a=a0+(a1-a0)*k/n, rr=r+Math.sin(k*.85+r*.3)*ond;
+      p.push([cx+rr*Math.cos(a),cy+rr*Math.sin(a)]); } return p; };
+  const olho=(ox,oy,rr)=>{ for(let r=rr*.28;r<rr;r+=2.5)
+    traco(arco(ox,oy,r,0,Math.PI*2,.6),VEIO,P_VEIO); };
+  const talvezNo=(x,y,w,h)=>{
+    /* chance de nó proporcional à ÁREA, referência 110×110 px — sem isso o
+       módulo miúdo enche o campo de olhos */
+    if(rnd()<.30*(w*h)/(110*110)){
+      const rr=Math.min(NO[0]+rnd()*(NO[1]-NO[0]),Math.min(w,h)*.17);
+      olho(x+(.3+rnd()*.4)*w, y+(.3+rnd()*.4)*h, rr);
+    }};
 
   ctx.lineCap='round'; ctx.lineJoin='round';
 
-  for(let j=0;j<ny;j++) for(let i=0;i<nx;i++){
-    const c=G[j][i], x=i*cel, y=j*cel;
-    ctx.save(); ctx.beginPath(); ctx.rect(x,y,cel,cel); ctx.clip();
+  for(const p of pecas){
+    const x=p.i*cel, y=p.j*cel, w=p.w*cel, h=p.h*cel;
+    ctx.save(); ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
+    /* no bloco de topo o tom não é sorteado: a sobra côncava é SEMPRE a
+       madeira B e o setor da medula SEMPRE a A. Sorteá-lo apagava a figura
+       quando calhava de os dois caírem no mesmo tom. */
+    ctx.fillStyle = p.mod==='anel' ? TOM[1] : TOM[p.tom];
+    ctx.fillRect(x,y,w,h);
 
-    if(c.t==='topo'){
-      /* o vértice que manda no desenho */
-      const vx=i+(c.q===1||c.q===2?1:0), vy=j+(c.q>=2?1:0);
-      const cx=vx*cel, cy=vy*cel;
-      const g=sem(vx,vy);
-      const larg=LARG_ANEL[0]+g*(LARG_ANEL[1]-LARG_ANEL[0]);
-      const ond=1.1+g*1.6;
-      /* setor = o lado que contém a medula, sempre madeira A; a sobra côncava
-         sempre B. É isso que faz a figura ler como SÓLIDO e não como linha. */
-      const a0=Math.atan2(y+cel/2-cy, x+cel/2-cx);
-      ctx.fillStyle=madA;
+    if(p.mod==='anel'){
+      const vx=p.i+(p.q===1||p.q===2?1:0), vy=p.j+(p.q>=2?1:0);
+      const cx=vx*cel, cy=vy*cel, g=sem(vx,vy);
+      const larg=ANEL[0]+g*(ANEL[1]-ANEL[0]), ond=1+g*1.5;
+      const a0=Math.atan2(y+h/2-cy,x+w/2-cx);
+      /* o setor que contém a medula é SEMPRE a madeira A e a sobra côncava
+         SEMPRE a B — é isso que faz meia tora ler como sólido, não como linha */
+      ctx.fillStyle=TOM[0];
       ctx.beginPath(); ctx.moveTo(cx,cy);
-      ctx.arc(cx,cy,cel*1.02,a0-Math.PI/4,a0+Math.PI/4); ctx.closePath(); ctx.fill();
-      ctx.fillStyle=madB; ctx.fillRect(x,y,cel,cel);
-      /* a família de anéis, semeada pelo vértice — atravessa a junta */
-      for(let r=larg*.6; r<cel*1.5; r+=larg*(.85+sem(vx*7+r|0,vy*11)*.5)){
-        traco(arcoPts(cx,cy,r,a0-Math.PI*.78,a0+Math.PI*.78,ond*.5), veio, 1.05);
-      }
-      /* gretas radiais: 62% das toras, 3 a 6 gretas, ângulo global — por isso
-         a greta atravessa a junta e a tora lê como seção de tronco */
-      if(g<.62){
-        const n=3+Math.floor(g*5);
+      ctx.arc(cx,cy,cel*1.45,a0-Math.PI/4,a0+Math.PI/4); ctx.closePath(); ctx.fill();
+      for(let r=larg*.7;r<cel*1.6;r+=larg*(.85+sem((vx*7+r)|0,vy*11)*.5))
+        traco(arco(cx,cy,r,a0-Math.PI*.8,a0+Math.PI*.8,ond*.5),VEIO,P_VEIO);
+      /* gretas radiais em 62% das toras, ângulo global — por isso a greta
+         atravessa a junta e a tora lê como seção de tronco */
+      if(g<.62){ const n=3+((g*100)|0)%4;
         for(let k=0;k<n;k++){
-          const a=a0-Math.PI*.6+(k+sem(vx+k,vy))*Math.PI*1.2/n;
-          const r0=cel*(.18+sem(vx,vy+k)*.2), r1=cel*(.9+sem(vx+k,vy+k)*.5);
-          traco(arcoPts(cx,cy,(r0+r1)/2,a-.012,a+.012,0)
-            .concat([[cx+r1*Math.cos(a),cy+r1*Math.sin(a)]]), veio, 1.35);
-          ctx.beginPath();
-          ctx.moveTo(cx+r0*Math.cos(a),cy+r0*Math.sin(a));
-          ctx.lineTo(cx+r1*Math.cos(a+.02),cy+r1*Math.sin(a+.02));
-          ctx.strokeStyle=veio; ctx.lineWidth=1.35; ctx.stroke();
-        }
-      }
-    } else {
-      /* fio: o feixe de fibras a 45°, o bloco aparelhado */
-      ctx.fillStyle=c.tom?madA:madB; ctx.fillRect(x,y,cel,cel);
-      const passo=8.5+rnd()*4, ondF=3.4+rnd()*3.2, d=c.d;
-      for(let k=-cel*1.5;k<cel*1.5;k+=passo){
-        const p=[];
-        for(let t=-.2;t<=1.2;t+=.06){
-          const px=x+t*cel, py=y+(d>0?t*cel:cel-t*cel)+k
-            +Math.sin(t*4.6+k*.07)*ondF;
-          p.push([px,py]);
-        }
-        traco(p, veio, 1.05);
-      }
-      /* olho: o nó, com as fibras desviando em volta. Chance proporcional à
-         área da peça (referência 110×110 px) — sem isso, módulo miúdo enchia
-         o campo de olhos. */
-      if(rnd() < .22*(cel*cel)/(110*110)){
-        const ox=x+flu(.3,.7)*cel, oy=y+flu(.3,.7)*cel;
-        const rr=Math.min(RAIO_NO[0]+rnd()*(RAIO_NO[1]-RAIO_NO[0]), cel*.17);
-        for(let r=rr*.3;r<rr;r+=2.6) traco(arcoPts(ox,oy,r,0,Math.PI*2,.7), veio, 1.05);
-      }
+          const a=a0-Math.PI*.55+(k+sem(vx+k,vy)*.8)*Math.PI*1.1/n;
+          const r0=cel*(.16+sem(vx,vy+k)*.16), r1=cel*(1+sem(vx+k,vy+k)*.6);
+          traco([[cx+r0*Math.cos(a),cy+r0*Math.sin(a)],
+                 [cx+(r0+r1)/2*Math.cos(a+.01),cy+(r0+r1)/2*Math.sin(a+.01)],
+                 [cx+r1*Math.cos(a+.015),cy+r1*Math.sin(a+.015)]],VEIO,P_RACHA);
+        }}
+    }
+    else if(p.mod==='fio'){
+      /* bloco aparelhado no fio: feixe de fibras a 45° */
+      const passo=FIBRA[0]+rnd()*(FIBRA[1]-FIBRA[0]);
+      const ond=OND[0]+rnd()*(OND[1]-OND[0]), d=p.ang;
+      for(let k=-h-cel;k<h+cel;k+=passo){ const pts=[];
+        for(let t=-.15;t<=1.15;t+=.055)
+          pts.push([x+t*w, y+(d>0?t*h:h-t*h)+k+Math.sin(t*4.4+k*.06)*ond]);
+        traco(pts,VEIO,P_VEIO); }
+      talvezNo(x,y,w,h);
+    }
+    else if(p.mod==='comp'||p.mod==='vies'){
+      /* fibras correndo COM a peça, ou enviesadas */
+      const passo=FIBRA[0]+rnd()*(FIBRA[1]-FIBRA[0]);
+      const ond=OND[0]+rnd()*(OND[1]-OND[0]);
+      const horiz=(w>h)!==(p.mod==='vies'), lim=horiz?h:w;
+      for(let k=-lim*.3;k<lim*1.3;k+=passo){ const pts=[];
+        for(let t=-.1;t<=1.1;t+=.05){
+          const v=k+Math.sin(t*3.8+k*.05)*ond;
+          pts.push(horiz?[x+t*w,y+v]:[x+v,y+t*h]); }
+        traco(pts,VEIO,P_VEIO); }
+      talvezNo(x,y,w,h);
+    }
+    else {
+      /* tábua composta de anéis: o centro fica FORA da peça, de meia a duas
+         células e meia — os arcos atravessam a prancha, que é como a tora
+         aparece numa tábua larga */
+      const fora=cel*(.5+rnd()*2), lado=rnd()<.5?-1:1;
+      const cx=(w>h)? x+w/2 : x+(lado>0?w+fora:-fora);
+      const cy=(w>h)? y+(lado>0?h+fora:-fora) : y+h/2;
+      const larg=ANEL[0]+rnd()*(ANEL[1]-ANEL[0]);
+      const rMax=Math.hypot(Math.max(cx-x,x+w-cx),Math.max(cy-y,y+h-cy));
+      for(let r=larg;r<rMax;r+=larg*(.85+rnd()*.5))
+        traco(arco(cx,cy,r,0,Math.PI*2,1.1),VEIO,P_VEIO);
     }
     ctx.restore();
-    /* junta: o corte da serra entre blocos */
-    ctx.strokeStyle=junta; ctx.lineWidth=1;
-    ctx.strokeRect(x+.5,y+.5,cel,cel);
+    /* a junta contorna a PEÇA, não a célula — é isso que faz o dominó aparecer */
+    ctx.strokeStyle=JUNTA; ctx.lineWidth=1;
+    ctx.strokeRect(x+.5,y+.5,w,h);
   }
 }
 
