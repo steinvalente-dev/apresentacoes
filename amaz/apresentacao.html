@@ -607,8 +607,7 @@ ol.lista.rot{gap:clamp(12px,1.9vh,26px)}
 .tbtn:hover{transform:translateY(-1px);gap:1.05em;
   box-shadow:0 3px 14px rgba(185,81,24,.34)}
 /* inativo: mesmo peso, mesma cor. Quem avisa é a etiqueta. */
-.tbtn.off{cursor:not-allowed}
-.tbtn.off:hover{transform:none;gap:.7em;box-shadow:none}
+.tbtn.off{cursor:pointer}
 .tbtn .tag{font-size:.82em;letter-spacing:.08em;text-transform:lowercase;
   font-weight:400;padding:.24em .62em .2em;border-radius:999px;
   background:rgba(244,241,234,.22);color:var(--papel)}
@@ -1288,23 +1287,23 @@ const DECK=[
 
 /* ─── ABERTURA ────────────────────────────────────────────────────────── */
 
-{g:'marca',capa:1,div:1,esc:1,comecar:1,video:1,
+{min:5,g:'marca',capa:1,div:1,esc:1,comecar:1,video:1,
  lockup:1, slogan:'casas que respiram',
  site:'www.amaz.com.br'},
 
-{g:'pergunta',capa:1,esc:1,video:1,
+{min:5,g:'pergunta',capa:1,esc:1,video:1,
  pq:'Antes de começar —<br>quanto tempo você tem?',
- pd:'A apresentação se ajusta ao tempo disponível. O percurso completo leva cerca de quarenta minutos.',
- opcoes:[['cinco minutos',0],['vinte minutos',0],['sou todo ouvidos',1]]},
+ pd:'A apresentação se ajusta ao tempo disponível: o percurso muda, o conteúdo é o mesmo. O completo leva cerca de quarenta minutos.',
+ opcoes:[['cinco minutos',5],['vinte minutos',20],['sou todo ouvidos',0]]},
 
-{g:'meio',capa:1,esc:1,dir:0,
+{min:5,g:'meio',capa:1,esc:1,dir:0,
  fotos:['chuva','madeira','sombra'],
  kick:'incorporadora de vilas em madeira',
  t:'um novo olhar<br>no mercado<br>imobiliário',
  sub:'Uma casa não é um ativo que por acaso tem janelas. <span class="grifo forte">É o lugar onde a vida acontece</span> — e a matéria de que ela é feita decide como se vive dentro dela.',
  metas:[['assunto','Apresentação institucional'],['etapa','Documento de trabalho'],['data','agosto de 2026']]},
 
-{g:'divisor',div:1,funda:1,sec:'o mercado hoje',dn:'01',dt:'o mercado hoje',
+{min:5,g:'divisor',div:1,funda:1,sec:'o mercado hoje',dn:'01',dt:'o mercado hoje',
  ds:'A atual situação do mercado da construção em cinco números. Um problema crônico e estrutural que o setor inteiro passou a tratar como normal.'},
 
 {g:'dado',funda:1,
@@ -1314,7 +1313,7 @@ const DECK=[
  fonte:'VERIFICAR fonte primária',
  foto:'entulho'},
 
-{g:'dado',funda:1,
+{min:20,g:'dado',funda:1,
  num:'−22%',
  rot:'de mão de obra a menos na construção brasileira em dez anos',
  nota:'Estimativa da CBIC. Não é oscilação de ciclo — é evasão. O setor que mais depende de gente é o que menos consegue segurá-la, e a construção convencional precisa de muita gente pouco qualificada exatamente onde ela está desaparecendo. Quem depende desse modelo está apostando contra uma curva que não dá sinal de virar.',
@@ -1328,20 +1327,20 @@ const DECK=[
  fonte:'VERIFICAR fonte primária',
  foto:'juros'},
 
-{g:'dado',funda:1,
+{min:20,g:'dado',funda:1,
  num:'40%',
  rot:'das emissões globais de CO₂ vêm do setor de construção',
  nota:'Onze por cento vêm dos materiais, e oito por cento apenas da estrutura — aço e concreto. Some tudo o que veio antes: o material que vira entulho, a gente que falta, o dinheiro exposto ao tempo. Tudo isso desemboca aqui. A decisão estrutural de um projeto é, sozinha, uma das maiores decisões ambientais que um incorporador toma — e é tomada uma vez só, sem correção possível depois.',
  fonte:'VERIFICAR fonte primária · provavelmente UNEP Global Status Report',
  foto:'chamine'},
 
-{g:'frase',esc:1,kick:'o produto',
+{min:5,g:'frase',esc:1,kick:'o produto',
  pre:'Planta, metragem, valor de revenda.',
  t:'o imóvel é concebido<br>como <span class="grifo forte">aplicação financeira</span><br>antes de ser pensado<br>como <span class="grifo">um lugar pra viver</span>',
  sub:'Não somos contra o número — ele importa, e é o que torna um empreendimento viável. Mas quando ele é a única coisa na mesa, vence o método mais rápido e mais conhecido, que é também o que mais agride. O resultado é um produto nivelado por baixo: seco, frio, igual ao do vizinho. <span class="grifo">E esse modo de pensar gera custos que não aparecem em nenhuma planilha de lançamento.</span>',
  prem:'Eles são só empurrados para frente — e aparecem depois, na manutenção do morador, na assistência técnica do incorporador e no ciclo inteiro do empreendimento.'},
 
-{g:'frase',kick:'o morador',img:'sombra',
+{min:20,g:'frase',kick:'o morador',img:'sombra',
  pre:'Nunca se esteve tão conectado. Nem tão cansado disso.',
  t:'o desejo mudou<br>de lugar',
  sub:'Numa era de hiperconectividade e inteligência artificial, o que as pessoas passaram a procurar é o oposto do que a cidade oferece: contato com a <u>natureza</u>, silêncio, materialidade, um <u>ritmo</u> de vida mais leve. Quase ninguém pede isso em voz alta — mas é o que se procura quando se procura casa.',
@@ -1353,7 +1352,7 @@ const DECK=[
 
 /* ─── ATO 02 · A VIRADA ───────────────────────────────────────────────── */
 
-{g:'divisor',div:1,funda:1,sec:'a virada',dn:'02',dt:'a virada',
+{min:5,g:'divisor',div:1,funda:1,sec:'a virada',dn:'02',dt:'a virada',
  ds:'Duas mudanças já em curso no mundo que ainda não chegaram ao residencial brasileiro: a fabricação saindo do canteiro, e o carbono do material virando critério de licença.'},
 
 {g:'frase',kick:'01 · construção industrializada',
@@ -1366,7 +1365,7 @@ const DECK=[
   ['montagem','onde a previsibilidade é inteira','O que chega ao terreno já está resolvido, numerado e conferido. <span class="grifo">A obra não é lugar de decidir nem de mudar: é lugar de executar.</span>']],
  etapas:1},
 
-{g:'planilha',kick:'02 · o carbono do material',
+{min:20,g:'planilha',kick:'02 · o carbono do material',
  t:'na europa,<br>o jogo já mudou',
  sub:'Lá o carbono do material virou lei. O que aqui ainda é argumento de venda, na Europa já é condição de licença — e a direção é uma só.',
  itens:[
@@ -1379,7 +1378,7 @@ const DECK=[
 
 /* ─── ATO 03 · A AMAZ ─────────────────────────────────────────────────── */
 
-{g:'divisor',div:1,funda:1,sec:'a amaz',dn:'03',dt:'um novo olhar',
+{min:5,g:'divisor',div:1,funda:1,sec:'a amaz',dn:'03',dt:'um novo olhar',
  ds:'Não é uma incorporadora a mais fazendo a mesma coisa com outro nome. É outra maneira de olhar para o que uma casa deveria ser, e para como ela deveria ser feita.'},
 
 {g:'frase',esc:1,kick:'a origem',
@@ -1393,7 +1392,7 @@ const DECK=[
  etapas:1,
 },
 
-{g:'socio',dir:0,nome:'Adriano Carvalho',papel:'marketing e comunicação',
+{min:20,g:'socio',dir:0,nome:'Adriano Carvalho',papel:'marketing e comunicação',
  slotfoto:'retrato · filtro Hora Dourada',
  bio:'Responsável pelo posicionamento, pela construção de marca e pela conversa com o mercado. É quem transforma um sistema construtivo em argumento que o comprador entende.',
  cred:[
@@ -1402,7 +1401,7 @@ const DECK=[
   ['—','<b>PREENCHER:</b> prêmios, cases ou números de campanha que valham citar.']],
  pend:'Adriano: mandar as marcas de comunicação, o tempo de estrada e o que pode ser mostrado em imagem. Sem isso esta prancha não vai para fora.'},
 
-{g:'socio',dir:1,nome:'Eduardo Eid',papel:'engenharia e obra',
+{min:20,g:'socio',dir:1,nome:'Eduardo Eid',papel:'engenharia e obra',
  slotfoto:'obra de grande porte · aeroporto ou instalação industrial · filtro Mata',
  bio:'Responsável pela viabilidade, pelo sistema construtivo e pela execução. Traz para a escala da vila a disciplina de quem entregou instalações de grande porte, onde erro de coordenação custa caro e prazo não se negocia.',
  cred:[
@@ -1411,7 +1410,7 @@ const DECK=[
   ['—','<b>PREENCHER:</b> total de m² executados na carreira. É o número que qualifica de imediato.']],
  pend:'Eduardo: mandar a lista de obras entregues, com metragem e imagem liberada para uso. Priorizar o aeroporto — é o que dá escala ao currículo aos olhos de investidor.'},
 
-{g:'socio',dir:0,nome:'Michel Stein',papel:'arquitetura e produto',
+{min:20,g:'socio',dir:0,nome:'Michel Stein',papel:'arquitetura e produto',
  slotfoto:'projeto autoral entregue · filtro Mata',
  bio:'Responsável pelo projeto, pela prospecção de terreno e pelo material de venda. É quem define o produto — a casa, a vila e a relação de cada uma com o bairro em que entra.',
  cred:[
@@ -1426,7 +1425,7 @@ const DECK=[
  sub:'Incorporadora pequena costuma ter uma perna faltando e terceirizar caro. É aí que ela perde margem, prazo e controle de qualidade. Aqui nenhuma das três pernas é contratada — e cada uma chega com <span class="grifo">quilometragem própria antes da AMAZ existir</span>.',
  prem:'O que é novo é a combinação, não a capacidade. Nenhum dos três está aprendendo o próprio ofício neste projeto.'},
 
-{g:'frase',kick:'o que fazemos',
+{min:20,g:'frase',kick:'o que fazemos',
  t:'vilas residenciais<br>em bairros<br>consolidados',
  sub:'Casas independentes em formato de vila, com área comum e paisagismo, dentro da cidade que já existe — não no vazio urbano. Venda de casa mais terreno. Escala humana, poucas unidades, sistema construtivo industrializado em madeira engenheirada.',
  dados:[
@@ -1444,7 +1443,7 @@ const DECK=[
   ['04','paisagismo e cobertura','O verde não é sobra de terreno: é parte do projeto desde a primeira camada.']],
  pend:'Esta é uma axonométrica esquemática, gerada por código. A peça definitiva é um desenho autoral da casa-módulo Ônica — item de produção nossa.'},
 
-{g:'logo',esc:1,capa:1,video:'HERO',
+{min:5,g:'logo',esc:1,capa:1,video:'HERO',
  ante:'e foi daí que veio',
  dep:'Uma incorporadora que existe para fazer uma coisa só, e fazer bem: vilas residenciais em madeira engenheirada, em bairros urbanos consolidados de São Paulo.',
 },
@@ -1458,15 +1457,15 @@ const DECK=[
 
 /* ─── ATO 04 · A MADEIRA ──────────────────────────────────────────────── */
 
-{g:'divisor',div:1,funda:1,sec:'a madeira',dn:'04',dt:'a madeira',
+{min:5,g:'divisor',div:1,funda:1,sec:'a madeira',dn:'04',dt:'a madeira',
  ds:'O material mais antigo da construção acaba de chegar ao século XXI. Por que a madeira deveria ser o padrão — e por que ainda não é.'},
 
-{g:'cheia',foto:'madeira',
+{min:20,g:'cheia',foto:'madeira',
  kick:'de onde vem',
  t:'reflorestamento,<br>não floresta',
  pe:'Madeira de reflorestamento, com cadeia de custódia rastreável e origem verificável.'},
 
-{g:'frase',esc:1,kick:'a escolha estrutural',
+{min:5,g:'frase',esc:1,kick:'a escolha estrutural',
  pre:'Existem empreendimentos em madeira no mercado. Quase todos escondem isso.',
  t:'nós colocamos<br>a madeira<br>em primeiro lugar',
  sub:'A MLC não é acabamento nem detalhe de projeto — é o sistema estrutural inteiro. Quem usa madeira e mostra com receio está pedindo desculpa por uma escolha. Nós fazemos o oposto: é o primeiro assunto, com orgulho.',
@@ -1484,7 +1483,7 @@ const DECK=[
  etapas:1,
  pend:'VERIFICAR os percentuais de carbono incorporado com fonte citável antes de qualquer material impresso.'},
 
-{g:'donut',esc:1,kick:'análise de ciclo de vida',
+{min:20,g:'donut',esc:1,kick:'análise de ciclo de vida',
  unidade:[
   ['1 m³ de madeira','−1 t de CO₂','Retira carbono da atmosfera em vez de emitir. Número da Urbem para mass timber.'],
   ['1 m³ de concreto','+ emite','PREENCHER com fator verificado — sai do estudo de ACV.'],
@@ -1493,7 +1492,7 @@ const DECK=[
  sub:'A comparação entre o volume de material de uma obra e o carbono que cada material emite. O aço ocupa 2% do volume e responde por 45% das emissões — cerca de 22 vezes mais carbono por unidade de volume que a madeira. A madeira é 34% do volume e apenas 13% das emissões.',
  pend:'VERIFICAR a fonte primária e o escopo do estudo (A1-A3 ou A1-A5). Os valores aparentam ser percentuais normalizados de um caso específico, não absolutos. Se não for possível rastrear, refazer o cálculo com uma casa Ônica e fatores brasileiros.'},
 
-{g:'grelha',kick:'os quatro enganos',t:'o que você acha<br>que sabe sobre<br>madeira',
+{min:20,g:'grelha',kick:'os quatro enganos',t:'o que você acha<br>que sabe sobre<br>madeira',
  sub:'Quatro crenças que circulam sobre madeira na construção civil. Nenhuma delas se sustenta diante do material que existe hoje — e as quatro juntas explicam por que o Brasil ainda constrói do jeito que constrói.',
  itens:[
   ['incêndio','fogo','<span class="grifo">Carboniza de fora para dentro em taxa previsível</span> e mantém a capacidade do núcleo. O aço, que o imaginário considera seguro, perde resistência e colapsa sem aviso.'],
@@ -1519,7 +1518,7 @@ const DECK=[
  sub:'Daí vem o retrabalho, o furo no meio da obra, o jeitinho. Na madeira as decisões estão todas no projeto, porque o sistema chega como solução completa, cortada em fábrica.',
  prem:'A prova material: o caixilho pode ser produzido antes da estrutura estar de pé. Nenhuma construção convencional consegue isso — porque nenhuma sabe, de antemão, onde o vão vai estar.'},
 
-{g:'frase',esc:1,kick:'a entrega',
+{min:20,g:'frase',esc:1,kick:'a entrega',
  pre:'A estrutura chega pré-cortada, etiquetada e numerada. A obra deixa de ser fabricação e passa a ser montagem — e montagem tem duração previsível, o que fabricação em canteiro nunca teve.',
  t:'velocidade de<br>entrega<br>incomparável',
  sub:'Uma equipe pequena e treinada levanta em dias o que a construção convencional levaria meses para erguer. E essa velocidade não beneficia um lado só: <span class="grifo">ela paga três vezes, para três pessoas diferentes, ao mesmo tempo</span>.',
@@ -1545,7 +1544,7 @@ const DECK=[
   ['Hotel Jakarta','Amsterdam · SeARCH Architects','22.000 m²','Sete pavimentos, concluído em 2018, certificação BREEAM Excellent. Grande átrio tropical, estética bioclimática. É o benchmark mais próximo da nossa tese — e a prova de que o mesmo raciocínio atende hotelaria.'],
   ['Brock Commons','Vancouver · 2017','18 pav.','Tallwood House: 54 metros, 15.200 m², 2.233 m³ de CLT, GLULAM e PSL. A prova por excesso de que a engenharia de incêndio em madeira é matéria resolvida.']]},
 
-{g:'casos',esc:1,kick:'referências · o brasil',t:'e não somos<br>os primeiros aqui',
+{min:20,g:'casos',esc:1,kick:'referências · o brasil',t:'e não somos<br>os primeiros aqui',
  sub:'A pergunta que todo investidor faz é "quem já fez isso no Brasil?". A resposta existe, é recente, e um dos casos é uma vila de casas na Vila Madalena.',
  itens:[
   ['Dengo','São Paulo · Faria Lima · 2020','37 dias','Primeiro edifício multipavimentos em madeira engenheirada do Brasil. Quatro andares, 1.500 m², projeto de Matheus Farah e Manoel Maia. <span class="grifo">Fabricado em 65 dias e montado em 37, com quatro pessoas.</span> CLT da Urbem/AMATA; vigas, pilares e montagem da Rewood.'],
@@ -1556,7 +1555,7 @@ const DECK=[
 
 /* ─── ATO 05 · A CASA VIVA ────────────────────────────────────────────── */
 
-{g:'divisor',div:1,funda:1,sec:'a casa viva',dn:'05',dt:'a casa viva',
+{min:5,g:'divisor',div:1,funda:1,sec:'a casa viva',dn:'05',dt:'a casa viva',
  ds:'Aqui a conversa deixa de ser sobre sistema e passa a ser sobre a casa. O que se vê, o que se toca, e o que se sente ao chegar em casa.'},
 
 {g:'frase',esc:1,kick:'a matéria',
@@ -1600,7 +1599,7 @@ const DECK=[
   ['pj-fachada','a cobertura e o verde na mesma linha']],
  pend:'Imagens de referência de terceiros — entram como partido, não como projeto. Substituir pelas vistas do 3D da Ônica assim que o modelo estiver apresentável.'},
 
-{g:'meio',esc:1,dir:1,foto:'pj-deck',leg:'referência · avarandado profundo ligando sala e quintal',kick:'o entre-dentro-e-fora',
+{min:20,g:'meio',esc:1,dir:1,foto:'pj-deck',leg:'referência · avarandado profundo ligando sala e quintal',kick:'o entre-dentro-e-fora',
  pre:'Uma casa de vila não se resolve pela planta interna. Ela se resolve pela soleira.',
  t:'o avarandado<br>é o cômodo<br>mais usado',
  sub:'Varanda profunda e coberta, ligando a sala ao quintal sem porta no meio do caminho. É onde se come no fim de semana, onde as crianças ficam quando chove e onde a casa encontra a vila. <span class="grifo">Em clima de São Paulo, é o cômodo que funciona o ano inteiro.</span>',
@@ -1632,10 +1631,10 @@ const DECK=[
 
 /* ─── ATO 06 · O PRODUTO ──────────────────────────────────────────────── */
 
-{g:'divisor',div:1,funda:1,sec:'o produto',dn:'06',dt:'o produto',
+{min:5,g:'divisor',div:1,funda:1,sec:'o produto',dn:'06',dt:'o produto',
  ds:'O mesmo sistema construtivo atende mais de uma faixa de mercado. Duas frentes, cada uma com o seu público e o seu momento.'},
 
-{g:'frase',esc:1,kick:'a linha autoral',t:'ônica',
+{min:5,g:'frase',esc:1,kick:'a linha autoral',t:'ônica',
  sub:'Vila residencial contemporânea, número reduzido de unidades, arquitetura autoral. Casas organizadas em torno de áreas verdes e espaços comuns, linhas claras, materialidade natural, grandes aberturas para o jardim.',
  dados:[
   ['Ônica Madalena','o primeiro projeto','Vila Madalena, São Paulo. Bairro consolidado, alto cuidado de projeto, poucas unidades.'],
@@ -1654,7 +1653,7 @@ const DECK=[
 {g:'divisor',div:1,funda:1,sec:'o dinheiro',dn:'07',dt:'o dinheiro',
  ds:'A conta que o mercado não faz, e por que velocidade de obra é gestão de risco.'},
 
-{g:'tabela',kick:'custo direto x custo real',t:'a conta que o<br>mercado não faz',
+{min:20,g:'tabela',kick:'custo direto x custo real',t:'a conta que o<br>mercado não faz',
  sub:'É tentador dizer que o concreto é mais barato. No custo direto de material, talvez seja. A comparação honesta é outra.',
  cols:['','<mark>convencional</mark>','<mark>madeira industrializada</mark>'],
  linhas:[
@@ -1667,7 +1666,7 @@ const DECK=[
  fecho:'O concreto ganha na primeira linha e perde nas cinco seguintes. O erro do mercado é comparar só a primeira.',
  pend:'PREENCHER esta tabela com números do nosso próprio estudo de viabilidade. Hoje ela é qualitativa — e uma tabela qualitativa numa conversa de investidor é uma tabela pela metade.'},
 
-{g:'frase',esc:1,kick:'previsibilidade',
+{min:20,g:'frase',esc:1,kick:'previsibilidade',
  pre:'A volatilidade brasileira já inverteu a curva de juros onze vezes em vinte anos.',
  t:'obra curta não é<br>conforto. é gestão<br>de risco.',
  sub:'Cada mês de canteiro é exposição a um cenário que ninguém controla. <span class="grifo">Obra longa é aposta em juros; obra curta é blindagem.</span> E sem aditivo, porque o erro foi eliminado no projeto.'},
@@ -1683,7 +1682,7 @@ const DECK=[
 
 /* ─── ATO 08 · A PLATAFORMA ───────────────────────────────────────────── */
 
-{g:'divisor',div:1,funda:1,sec:'a plataforma',dn:'08',dt:'a plataforma',
+{min:5,g:'divisor',div:1,funda:1,sec:'a plataforma',dn:'08',dt:'a plataforma',
  ds:'Por que o sistema vale mais que qualquer empreendimento isolado que ele produza.'},
 
 {g:'lista',esc:1,largo:1,kick:'o desdobramento',
@@ -1695,7 +1694,7 @@ const DECK=[
   ['03','<b>O módulo é replicável fora da vila.</b> O mesmo sistema atende outros formatos, e o Hotel Jakarta já prova isso lá fora.'],
   ['04','<b>A Rambøll faz exatamente isso.</b> A engenharia do Marmormolen abriu uma base pública de dados de carbono para virar referência no assunto. Não é coincidência — é a mesma jogada, em outra escala.']]},
 
-{g:'fim',esc:1,fim_:1,kick:'próximos passos',t:'o que precisa<br>acontecer',
+{min:5,g:'fim',esc:1,fim_:1,kick:'próximos passos',t:'o que precisa<br>acontecer',
  itens:[
   ['01','<b>Fechar os números com a ITA.</b> Garantia, desempenho ao fogo, tolerância de fábrica, prazo de montagem e custo por m².'],
   ['02','<b>Contratar o estudo de ACV.</b> Ônica em madeira contra casa equivalente em alvenaria. Assinado por terceiro — evidência vale dez vezes mais que argumento.'],
@@ -1705,7 +1704,7 @@ const DECK=[
 
 /* ─── CONTRACAPA ─── */
 
-{g:'marca',capa:1,div:1,esc:1,fim_:1,pisca:1,
+{min:5,g:'marca',capa:1,div:1,esc:1,fim_:1,pisca:1,
  lockup:1, assina:'obrigado',
  site:'www.amaz.com.br'}
 
@@ -1934,9 +1933,8 @@ function tpl(s){
     /* a sanfona: por enquanto só o percurso completo anda. Os dois atalhos
        ficam desenhados e desligados, para o formato já existir na conversa. */
     const tp=s.tempo?`<div class="tempo rev"><span class="tq">${s.tempo}</span>`
-      +s.opcoes.map(([rot,ativo])=>ativo
-        ? `<button class="tbtn on ms-start">${rot} ${SETA}</button>`
-        : `<button class="tbtn off" disabled>${rot} </button>`).join('')
+      +s.opcoes.map(([rot,m])=>
+        `<button class="tbtn ms-start" data-modo="${m}">${rot} ${SETA}</button>`).join('')
       +`</div>`:'<div class="regua rev"></div>';
     return `<div class="wrap">${k}${t}${sub}${met}${tp}</div>`;
   }
@@ -2026,9 +2024,10 @@ function tpl(s){
     +`<div class="pergwrap">`
     +`<h1 class="pq rev">${s.pq}</h1>`
     +(s.pd?`<p class="pd rev">${s.pd}</p>`:'')
-    +`<div class="tempo rev">`+s.opcoes.map(([rot,ativo])=>ativo
-      ? `<button class="tbtn ms-start">${rot} ${SETA}</button>`
-      : `<button class="tbtn off" disabled>${rot} <span class="tag">em breve</span></button>`).join('')
+    /* as três pílulas são os três percursos. Nenhuma é decorativa: `data-modo`
+       carrega 5, 20 ou 0, e o clique reconstrói a rota antes de avançar. */
+    +`<div class="tempo rev">`+s.opcoes.map(([rot,m])=>
+      `<button class="tbtn ms-start" data-modo="${m}">${rot} ${SETA}</button>`).join('')
     +`</div></div>`;
 
   if(s.g==='planilha') return `<div class="plcols"><div class="wrap">${k}${t}${sub}${pend}</div>`
@@ -2084,15 +2083,43 @@ function tpl(s){
 }
 
 /* ═══ seções, numeração e montagem ═══ */
-let secs=[];DECK.forEach((s,i)=>{if(s.sec)secs.push({nome:s.sec,i})});
 let sa='';DECK.forEach(s=>{if(s.sec)sa=s.sec;s._sec=sa});
-let num=0;DECK.forEach(s=>{if(s.div){s._b=null;return}num++;s._b=num});
-const TOT=num;
 
-const dots=document.querySelector('.dots');
-secs.forEach((sc,i)=>{const d=document.createElement('span');d.className='sdot';
-  d.innerHTML=`<span>${sc.nome}</span>`;
-  d.onclick=e=>{e.stopPropagation();go(sc.i)};dots.appendChild(d)});
+/* ═══ A SANFONA ═══
+   Três percursos sobre o MESMO deck: nada é reescrito nem duplicado. Cada
+   prancha carrega o nível mínimo em que aparece (`min:5` ou `min:20`), e a
+   navegação percorre só o que cabe no tempo escolhido — omitir, não resumir.
+   `ROTA` é a lista de índices do percurso ativo; `cur` continua sendo o
+   índice absoluto no DECK, então gabarito nenhum precisou mudar. */
+let MODO=0, ROTA=[], secs=[], TOT=0;
+function rota(modo){
+  MODO=modo;
+  ROTA=DECK.map((s,i)=>i).filter(i=>{
+    const m=DECK[i].min;
+    return !modo || (m && m<=modo);
+  });
+  /* renumera: o rodapé conta as pranchas DO PERCURSO, não as do deck */
+  let n=0; DECK.forEach(s=>s._b=null);
+  ROTA.forEach(i=>{ if(!DECK[i].div){ DECK[i]._b=++n; } });
+  TOT=n;
+  /* as bolinhas do topo só listam as seções que sobreviveram ao corte */
+  secs=[]; ROTA.forEach(i=>{ const s=DECK[i];
+    if(s.sec && !secs.some(x=>x.nome===s.sec)) secs.push({nome:s.sec,i}); });
+  const dots=document.querySelector('.dots'); dots.innerHTML='';
+  secs.forEach(sc=>{ const d=document.createElement('span'); d.className='sdot';
+    d.innerHTML=`<span>${sc.nome}</span>`;
+    d.onclick=e=>{e.stopPropagation();go(sc.i)}; dots.appendChild(d); });
+  document.body.dataset.modo=modo||'cheio';
+}
+const naRota=i=>ROTA.indexOf(i);
+/* quem cai fora do percurso (por link ou teclado) volta para a prancha mais
+   próxima que existe nele, em vez de sumir do fluxo */
+function proxima(i,dir){
+  if(naRota(i)>=0) return i;
+  for(let k=i;k>=0&&k<DECK.length;k+=dir) if(naRota(k)>=0) return k;
+  return ROTA[dir>0?ROTA.length-1:0];
+}
+rota(0);
 document.querySelector('.marca').innerHTML=WM+'<i></i>';
 
 palco.innerHTML=DECK.map((s,i)=>
@@ -2106,7 +2133,9 @@ let cur=-1;
 const passos=i=>[...sl[i].querySelectorAll('.passo')];
 
 function go(i,tudo){
-  i=Math.max(0,Math.min(DECK.length-1,i));if(i===cur)return;
+  i=Math.max(0,Math.min(DECK.length-1,i));
+  if(naRota(i)<0) i=proxima(i,i>cur?1:-1);
+  if(i===cur)return;
   const ant=cur;cur=i;
   sl.forEach((el,j)=>el.classList.toggle('ativo',j===i));
   if(ant>=0)sl[ant].classList.remove('revelado');
@@ -2141,7 +2170,7 @@ function go(i,tudo){
   document.querySelector('.sl').textContent=s._sec||'';
   const si=secs.findIndex(x=>x.nome===s._sec);
   document.querySelector('.sn').textContent=si>=0?String(si+1).padStart(2,'0'):'';
-  [...dots.children].forEach((d,j)=>d.classList.toggle('on',j===si));
+  [...document.querySelector('.dots').children].forEach((d,j)=>d.classList.toggle('on',j===si));
   conta();location.hash=i+1;
 }
 function conta(){
@@ -2153,18 +2182,23 @@ function conta(){
 /* passo a passo por clique: o item numerado entra um de cada vez.
    Regra do deck, não opção — a apresentação é por voz. */
 function avanca(){const ps=passos(cur),p=ps.find(x=>!x.classList.contains('on'));
-  if(p){p.classList.add('on');conta();return}go(cur+1)}
-const recua=()=>go(cur>0?cur-1:0,true);
+  if(p){p.classList.add('on');conta();return}
+  const k=naRota(cur); if(k>=0&&k<ROTA.length-1) go(ROTA[k+1]);}
+function recua(){const k=naRota(cur); if(k>0) go(ROTA[k-1],true);}
 
 document.getElementById('pro').onclick=e=>{e.stopPropagation();avanca()};
 document.getElementById('ant').onclick=e=>{e.stopPropagation();recua()};
 addEventListener('keydown',e=>{
   if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();avanca()}
   else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();recua()}
-  else if(e.key==='ArrowDown'){e.preventDefault();go(cur+1,true)}
-  else if(e.key==='ArrowUp'){e.preventDefault();go(cur-1,true)}});
+  else if(e.key==='ArrowDown'){e.preventDefault();const k=naRota(cur);
+    if(k<ROTA.length-1)go(ROTA[k+1],true)}
+  else if(e.key==='ArrowUp'){e.preventDefault();const k=naRota(cur);
+    if(k>0)go(ROTA[k-1],true)}});
 palco.addEventListener('click',e=>{
-  if(e.target.closest('.ms-start')){go(cur+1);return}
+  const bt=e.target.closest('.ms-start');
+  if(bt){ if(bt.dataset.modo!==undefined) rota(+bt.dataset.modo);
+    const k=naRota(cur); go(ROTA[Math.min(k+1,ROTA.length-1)]); return; }
   if(e.target.closest('a,button'))return;avanca()});
 let tx=0;
 addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
