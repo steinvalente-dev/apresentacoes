@@ -76,7 +76,7 @@
     '  backdrop-filter:blur(9px) saturate(1.15);',
     '  font:500 11px/1 ui-monospace,"DM Mono",SFMono-Regular,Menlo,monospace;',
     '  letter-spacing:.16em;text-transform:lowercase;text-decoration:none;',
-    '  cursor:pointer;opacity:' + (toque ? '.52' : '.34') + ';',
+    '  cursor:pointer;opacity:' + (toque ? '.70' : '.34') + ';',
     '  transition:opacity .28s ease,background-color .28s ease,transform .28s ease;',
     '  -webkit-tap-highlight-color:transparent;appearance:none;outline:none}',
     '#msVoltar .g{font-size:14px;line-height:1;transform:translateY(-.5px)}',
@@ -145,17 +145,49 @@
 
   document.body.appendChild(chip);
 
-  /* Aparece aberto por 2,6 s — é o que o torna descoberto — e depois recolhe
-     para o disco discreto. Quem já sabe que ele existe acha na quina.      */
-  requestAnimationFrame(function () {
-    chip.classList.add('aberto');
-    setTimeout(function () { chip.classList.remove('aberto'); }, 2600);
-  });
+  /* Aparece aberto — é o que o torna descoberto — e depois recolhe para o
+     disco discreto. Quem já sabe que ele existe acha na quina.
+
+     A JANELA COMEÇA DEPOIS QUE A PEÇA ASSENTA, não na hora em que o chip
+     nasce. Medido em 25/08 num deck de 2,4 MB: em WebKit a classe entrava a
+     1,2 s mas o estilo só era aplicado a 2,2 s — quase metade da janela
+     comida pela decodificação das fontes e imagens em base64. Num deck de
+     6,4 MB num iPad a janela inteira cabia dentro da carga, e o chip nunca
+     era visto abrindo. No dedo não há hover para reabrir, então perder a
+     abertura é perder o botão.
+
+     `load` + dois quadros garante que a thread já respirou; e no dedo a
+     janela é mais longa, porque quem está com o aparelho na mão precisa de
+     tempo para achar o canto.                                              */
+  var JANELA = toque ? 4600 : 2600;
+  function abrir() {
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        chip.classList.add('aberto');
+        setTimeout(function () { chip.classList.remove('aberto'); }, JANELA);
+      });
+    });
+  }
+  if (document.readyState === 'complete') abrir();
+  else addEventListener('load', abrir, { once: true });
 
   /* ─── 4. tela cheia, só onde existe ─────────────────────────────────────
-     iPhone não expõe a API: o chip simplesmente não nasce. iPad e Android
-     ganham o ganho real, que é sumir com a barra do navegador.             */
-  if (toque && document.fullscreenEnabled) {
+     Corrigido em 25/08. A nota antiga dizia que iPad e Android ganhavam o
+     chip; medido em WebKit, `document.fullscreenEnabled` vem UNDEFINED e o
+     chip nunca nascia no iPad. Agora a checagem aceita a API prefixada, que
+     é a que o Safari expõe. Onde nenhuma das duas existe (iPhone), o chip
+     continua não nascendo — que é o certo.                                 */
+  var podeTela = document.fullscreenEnabled ||
+                 document.webkitFullscreenEnabled || false;
+  var pedirTela = function (el) {
+    var f = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (f) { var r = f.call(el); if (r && r.catch) r.catch(function () {}); }
+  };
+  var sairTela = function () {
+    var f = document.exitFullscreen || document.webkitExitFullscreen;
+    if (f) f.call(document);
+  };
+  if (toque && podeTela) {
     var tela = document.createElement('button');
     tela.id = 'msTela';
     tela.type = 'button';
@@ -164,8 +196,9 @@
     tela.textContent = '⛶';
     tela.addEventListener('click', function (e) {
       e.stopPropagation();
-      if (document.fullscreenElement) document.exitFullscreen();
-      else document.documentElement.requestFullscreen().catch(function () {});
+      var cheio = document.fullscreenElement || document.webkitFullscreenElement;
+      if (cheio) sairTela();
+      else pedirTela(document.documentElement);
     });
     tela.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
     tela.addEventListener('touchstart', function (e) { e.stopPropagation(); }, { passive: true });
