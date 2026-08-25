@@ -851,7 +851,10 @@ body.esc .gq svg,body.funda .gq svg{stroke:var(--apoio)}
    Camadas empilhadas, uma visível por vez, com fade lento. Não há JS: é
    `animation` com atraso escalonado, o que evita mais um temporizador
    rodando e sobrevive à navegação sem estado. */
-.mcfoto.carro::before{display:none}
+/* o carrossel ABRE com a primeira imagem: ela também é o fundo estático da
+   camada ::before, então está no lugar já no quadro zero. Sem isso a prancha
+   começava um segundo em preto enquanto a primeira camada fazia fade. */
+.mcfoto.carro::before{display:block}
 .mcfoto .cam{position:absolute;inset:0;background-size:cover;background-position:center;
   opacity:0;animation:amz-carro var(--dur,24s) ease-in-out infinite}
 @keyframes amz-carro{
@@ -950,6 +953,34 @@ canvas.march{position:absolute;inset:0;width:100%;height:100%;display:block;z-in
     #F4F1EAD9 0%,#F4F1EA9E 46%,#F4F1EA00 78%)}
 @media(max-width:620px){
   .slide.g-cheia .chtexto{padding:0 clamp(18px,5vw,30px)}}
+
+
+/* ═══ `frase` com imagem ancorada ═══
+   `img:'nome'` no slide. A foto encosta na borda direita e some para a
+   esquerda por máscara, não por gradiente sobreposto — assim o fundo Tiber
+   aparece de verdade em vez de ficar coberto por um véu esverdeado.
+   Opacidade abaixo de 1: a imagem é atmosfera, o texto é o assunto. */
+.slide.g-frase .anc{position:absolute;top:0;right:0;bottom:0;
+  width:min(62%,860px);z-index:0;pointer-events:none;
+  background-image:var(--fonte);background-size:cover;background-position:center;
+  /* a foto só ganha corpo depois da coluna de texto: com o fade começando
+     cedo demais, a terceira coluna dos itens caía em cima da parte clara da
+     imagem e perdia leitura. */
+  opacity:.34;
+  -webkit-mask-image:linear-gradient(90deg,#0000 0%,#0000 34%,#0005 58%,#000 88%);
+  mask-image:linear-gradient(90deg,#0000 0%,#0000 34%,#0005 58%,#000 88%)}
+.slide.g-frase:has(.anc) .wrap{position:relative;z-index:1}
+/* só o texto corrido recua da imagem; a lista de itens fica larga, senão
+   ela cresce em altura e a prancha transborda — foi o que aconteceu na
+   primeira tentativa, 107 px em 1600. */
+.slide.g-frase:has(.anc) .wrap>.pre,
+.slide.g-frase:has(.anc) .wrap>.sub,
+.slide.g-frase:has(.anc) .wrap>.prem{max-width:min(100%,52ch)}
+.slide.g-frase:has(.anc) .mega{max-width:min(100%,15ch)}
+@media(max-width:960px){
+  .slide.g-frase .anc{width:100%;opacity:.2;
+    -webkit-mask-image:linear-gradient(180deg,#0000 0%,#000 60%);
+    mask-image:linear-gradient(180deg,#0000 0%,#000 60%)}}
 
 /* aviso de orientação */
 #giro{position:fixed;inset:0;z-index:90;display:none;place-items:center;padding:32px;
@@ -1204,7 +1235,7 @@ const DECK=[
  fotos:['chuva','sombra','madeira','bokeh'],
  kick:'incorporadora de vilas em madeira',
  t:'um novo olhar<br>no mercado<br>imobiliário',
- sub:'Uma casa não é um ativo que por acaso tem janelas. É o lugar onde a vida acontece — e a matéria de que ela é feita decide como se vive dentro dela.',
+ sub:'Uma casa não é um ativo que por acaso tem janelas. <span class="grifo forte">É o lugar onde a vida acontece</span> — e a matéria de que ela é feita decide como se vive dentro dela.',
  metas:[['assunto','Apresentação institucional'],['etapa','Documento de trabalho'],['data','agosto de 2026']]},
 
 {g:'divisor',div:1,funda:1,sec:'o mercado hoje',dn:'01',dt:'o mercado hoje',
@@ -1244,7 +1275,7 @@ const DECK=[
  sub:'Não somos contra o número — ele importa, e é o que torna um empreendimento viável. Mas quando ele é a única coisa na mesa, vence o método mais rápido e mais conhecido, que é também o que mais agride. O resultado é um produto nivelado por baixo: seco, frio, igual ao do vizinho. <span class="grifo">E esse modo de pensar gera custos que não aparecem em nenhuma planilha de lançamento.</span>',
  prem:'Eles são só empurrados para frente — e aparecem depois, na manutenção do morador, na assistência técnica do incorporador e no ciclo inteiro do empreendimento.'},
 
-{g:'frase',kick:'o morador',
+{g:'frase',kick:'o morador',img:'sombra',
  pre:'Nunca se esteve tão conectado. Nem tão cansado disso.',
  t:'o desejo mudou<br>de lugar',
  sub:'Numa era de hiperconectividade e inteligência artificial, o que as pessoas passaram a procurar é o oposto do que a cidade oferece: contato com a <u>natureza</u>, silêncio, materialidade, um <u>ritmo</u> de vida mais leve. Quase ninguém pede isso em voz alta — mas é o que se procura quando se procura casa.',
@@ -1806,7 +1837,8 @@ function tpl(s){
      o canvas a esta linha. Nada mais foi mexido. */
   if(s.g==='divisor') return `<div class="divisor"><span class="dn rev">${s.dn}</span>`
     +`<h1 class="dt rev">${s.dt}</h1><p class="ds rev">${s.ds}</p></div>`;
-  if(s.g==='frase') return `<div class="wrap">${k}${pre}${t}${sub}${prem}${dad}${pend}</div>`;
+  if(s.g==='frase') return (s.img?`<div class="anc" style="--fonte:var(--img-${s.img})"></div>`:'')
+    +`<div class="wrap">${k}${pre}${t}${sub}${prem}${dad}${pend}</div>`;
 
   if(s.g==='lista'||s.g==='fim') return `<div class="wrap${s.largo?' largo':''}">${k}${pre}${t}${sub}`
     +`<ol class="lista${s.largo?' largo':''}${s.rotulo?' rot':''}">`+s.itens.map(it=>{
@@ -2026,7 +2058,5 @@ go(Math.max(0,(parseInt(location.hash.slice(1))||1)-1));
 ligarVideo();
 
 </script>
-<!-- retorno ao acervo + camada de toque. Comportamento em modulos/ms-voltar.js -->
-<script defer src="../modulos/ms-voltar.js"></script>
 </body>
 </html>
