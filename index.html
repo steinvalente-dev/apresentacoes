@@ -415,7 +415,7 @@ const docs = [
     desc:"Como uma peça entra no ar, o índice, os limites e o que não vem para cá",
     arq:"sistemas/PUBLICAR-APRESENTACOES.md" },
   { grupo:"sarasá", nome:"github · como trabalhar",
-    desc:"Clonar, registrar, validar e publicar. O passo a passo dos três repositórios",
+    desc:"Onde cada coisa vai, clonar, registrar, validar e publicar. Vale para apresentação, documento e ferramenta",
     arq:"sistemas/GITHUB-COMO-TRABALHAR.md" }
 ];
 
@@ -548,7 +548,7 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
    está listado, e o que sobra aparece como aviso.
    A API pública limita a 60 chamadas por hora por IP — se falhar, silencia. */
 (function(){
-  const IGNORA = ['index.html', 'sistemas/', 'modulos/', 'fundo/'];
+  const IGNORA = ['index.html', 'sistemas/', 'modulos/', 'fundo/', 'ferramentas/'];
   const listados = new Set();
   projetos.forEach(function(p){
     p.pecas.forEach(function(x){ listados.add(x.href.split('?')[0]); });
