@@ -335,10 +335,11 @@
    ───────────────────────────────────────────────────────────── */
 const BASE = "https://steinvalente-dev.github.io/apresentacoes/";
 
-/* Entrega em repositório privado: link direto por arquivo. Abre com a conta do
-   GitHub logada no navegador — sem sessão, o GitHub devolve 404. */
-const RAW = "https://github.com/steinvalente-dev/michel-stein-sistemas/raw/main/"
-          + "entregas/fazenda-lageado/bases-campo-26.08.2026/";
+/* Entrega em PSD: link público na área do cliente do site, servida pelo Netlify.
+   Sem login e com Content-Disposition: attachment, então o toque baixa e o iOS
+   oferece "Abrir em..." — é assim que o arquivo chega ao Procreate.
+   O mestre versionado continua no privado, em entregas/fazenda-lageado/. */
+const RAW = "https://michel-stein.netlify.app/cliente/sarasa-fazenda-lageado/";
 
 const projetos = [
   {
@@ -357,7 +358,9 @@ const projetos = [
       { nome: "base de campo · elevação D", sub: "PSD · 109 camadas · 63 px/m",
         peso: 2.67, data: "26.08.2026", href: RAW + "FL-TULHA_ELEVACAO-D.psd" },
       { nome: "manifesto · px/m e extensão em metros", tipo: "sistema", sub: "JSON · viaja junto com os PSD",
-        peso: 0.004, data: "26.08.2026", href: RAW + "FL-TULHA_manifesto.json" }
+        peso: 0.004, data: "26.08.2026", href: RAW + "FL-TULHA_manifesto.json" },
+      { nome: "página de download das seis bases", tipo: "sistema", sub: "área do cliente · sem login",
+        peso: 0.005, data: "26.08.2026", href: RAW }
     ]
   },
   {

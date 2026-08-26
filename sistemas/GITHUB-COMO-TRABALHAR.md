@@ -65,6 +65,33 @@ o registro é manual.**
 
 Grupo novo na aba Sistema é só escrever um `grupo` que ainda não existe.
 
+### Link que precisa funcionar no iPad, sem login
+
+`github.com/.../raw/...` e `.../blob/...` num repositório **privado** devolvem
+**404 sem sessão de navegador** — não aceitam token no header, são rotas de
+navegador. Testado em 26.08.2026. Ou seja: link de repositório privado só abre
+para quem estiver logado no GitHub naquele navegador, e no iPad em campo isso
+não se sustenta.
+
+Quando o arquivo precisa **baixar num toque e abrir em outro app**, o destino é
+`michel-stein-site/cliente/<slug>/`, servido pelo Netlify:
+
+- sem login, `robots.txt` com `Disallow: /cliente/` e `X-Robots-Tag: noindex`
+- regra no `netlify.toml` para `/cliente/*/*.psd` com
+  `Content-Type: application/octet-stream` e `Content-Disposition: attachment` —
+  é isso que faz o iOS oferecer "Abrir em..." em vez de tentar exibir
+- uma `index.html` na pasta, com um link `download` por arquivo: um endereço só
+  para mandar por mensagem
+- custo: 15 créditos por deploy e 20 por GB de banda. Um pacote de 22 MB é
+  fração de crédito
+
+**O que isso não é:** proteção. Não há senha; quem tem o endereço tem o arquivo.
+Serve para base de levantamento e croqui. **Não** serve para laudo, contrato ou
+documento com dado pessoal.
+
+O mestre versionado continua no privado, em `entregas/<projeto>/`. A cópia
+pública é distribuição, não arquivo.
+
 ### Peça que mora fora do repositório público
 
 Entrega em repositório privado — PSD, DXF, binário de trabalho — entra em
