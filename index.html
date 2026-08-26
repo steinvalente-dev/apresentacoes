@@ -337,6 +337,14 @@ const BASE = "https://steinvalente-dev.github.io/apresentacoes/";
 
 const projetos = [
   {
+    nome: "fazenda lageado",
+    pecas: [
+      { nome: "bases de campo · mapeamento de danos", sub: "PSD · repositório privado",
+        pranchas: 6, unid: "vistas", peso: 22, data: "26.08.2026",
+        href: "https://github.com/steinvalente-dev/michel-stein-sistemas/tree/main/entregas/fazenda-lageado/bases-campo-26.08.2026" }
+    ]
+  },
+  {
     nome: "lavrō",
     pecas: [
       { nome: "apresentação institucional", pranchas: 15, unid: "telas", peso: 0.36,
@@ -510,7 +518,9 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
        A numeração é por bloco, mais recente em cima, como antes. */
     function cartao(x, i, n){
       const num = String(n - i).padStart(2, '0');
-      const url = BASE + x.href;
+      /* href absoluto (peça que mora fora deste repositório, como entrega em
+         repositório privado) vai inteiro; href relativo recebe o BASE. */
+      const url = /^https?:/i.test(x.href) ? x.href : BASE + x.href;
       return '<article class="peca">'
         + '<span class="n">' + num + '</span>'
         + '<span><span class="nome">' + x.nome + '</span>'

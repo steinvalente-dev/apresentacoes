@@ -39,11 +39,58 @@ por URL** e **contém dado que não pode ser público**.
 | regra de trabalho com nome de cliente, endereço, caminho interno | `michel-stein-sistemas/<pasta>/<NOME>.md` |
 | script que roda em máquina, não em navegador | `apresentacoes/ferramentas/<slug>/`, junto com o `LEIA-ME.md` |
 | peça sensível de cliente | não vai para o público: `michel-stein-site`, em `cliente/` |
+| binário de trabalho de projeto (PSD, DXF, base de campo) | `michel-stein-sistemas/entregas/<projeto>/` |
 
 Documento **sem** dado de cliente vai para o público de propósito: URL
 raw abre sem token, então qualquer conversa lê o arquivo, inclusive as
 que não são Cowork. Esse é o ganho. Documento **com** dado de cliente
 não tem esse ganho — vai para o privado e abre no GitHub logado.
+
+## Subir sem registrar não conta como subir
+
+**Padrão, sem exceção: toda coisa que entra num repositório é registrada no
+`index.html` na mesma rodada.** Um commit que acrescenta arquivo e não acrescenta
+o registro é uma rodada pela metade — não esperar que o Michel peça.
+
+Arquivo no ar sem registro não dá sintoma nenhum: ele existe, funciona, e ninguém
+acha. O detector de peça órfã ajuda, mas só varre `.html` **deste** repositório —
+não vê `.md`, não vê binário, e não vê nada que esteja no privado. Ou seja: para
+tudo o que este documento manda guardar fora do público, **o detector não cobre e
+o registro é manual.**
+
+| o que entrou | onde registrar |
+|---|---|
+| apresentação, peça de projeto, entrega | array `projetos`, aba Arquivo |
+| documento de método, regra, ferramenta | array `docs`, aba Sistema |
+
+Grupo novo na aba Sistema é só escrever um `grupo` que ainda não existe.
+
+### Peça que mora fora do repositório público
+
+Entrega em repositório privado — PSD, DXF, binário de trabalho — entra em
+`projetos` com **`href` absoluto**, a URL da pasta no GitHub. O `cartao()` já
+distingue: `href` começando com `http` vai inteiro para o botão de copiar link;
+`href` relativo recebe o `BASE`. Não montar URL à mão no array.
+
+Campos úteis nesse caso: `sub` para dizer o que é e onde mora (`"PSD · repositório
+privado"`), `pranchas` com `unid` para a contagem (`6` + `"vistas"`), `peso` em MB
+do conjunto. Acima de 8 MB a marca de peça pesada aparece sozinha — e nesse caso
+ela é informação verdadeira, não defeito.
+
+### Binário de trabalho: `entregas/`
+
+`michel-stein-sistemas/entregas/<projeto>/` é a exceção deliberada ao "este
+repositório é só o método". Existe porque a ferramenta do Google Drive só aceita
+texto e binário pequeno: arquivo de alguns megabytes não passa por ela, e passa
+pelo Git — lendo do disco com `--data-binary` ou por `git push` normal.
+
+Vale para base de campo, croqui e afins. **Não** vale para entrega final ao
+cliente, que continua indo para o Drive, na pasta do projeto.
+
+Cada pasta de projeto leva um `LEIA-ME.md` com o que há, o peso e as ressalvas.
+Correção substitui o arquivo na pasta datada; versão nova ganha pasta com data
+nova. O Git guarda binário por inteiro em cada versão — o histórico não encolhe
+ao substituir arquivo, então repetir rodada pesada tem custo permanente.
 
 ## Clonar
 
