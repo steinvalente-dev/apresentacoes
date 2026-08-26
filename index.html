@@ -335,13 +335,29 @@
    ───────────────────────────────────────────────────────────── */
 const BASE = "https://steinvalente-dev.github.io/apresentacoes/";
 
+/* Entrega em repositório privado: link direto por arquivo. Abre com a conta do
+   GitHub logada no navegador — sem sessão, o GitHub devolve 404. */
+const RAW = "https://github.com/steinvalente-dev/michel-stein-sistemas/raw/main/"
+          + "entregas/fazenda-lageado/bases-campo-26.08.2026/";
+
 const projetos = [
   {
     nome: "fazenda lageado",
     pecas: [
-      { nome: "bases de campo · mapeamento de danos", sub: "PSD · repositório privado",
-        pranchas: 6, unid: "vistas", peso: 22, data: "26.08.2026",
-        href: "https://github.com/steinvalente-dev/michel-stein-sistemas/tree/main/entregas/fazenda-lageado/bases-campo-26.08.2026" }
+      { nome: "base de campo · corte A-A", sub: "PSD · 109 camadas · 52 px/m",
+        peso: 5.28, data: "26.08.2026", href: RAW + "FL-TULHA_CORTE-A-A.psd" },
+      { nome: "base de campo · corte B-B", sub: "PSD · 109 camadas · 60 px/m",
+        peso: 5.81, data: "26.08.2026", href: RAW + "FL-TULHA_CORTE-B-B.psd" },
+      { nome: "base de campo · corte C-C", sub: "PSD · 109 camadas · 93 px/m",
+        peso: 2.7, data: "26.08.2026", href: RAW + "FL-TULHA_CORTE-C-C.psd" },
+      { nome: "base de campo · elevação B", sub: "PSD · 109 camadas · 55 px/m",
+        peso: 2.61, data: "26.08.2026", href: RAW + "FL-TULHA_ELEVACAO-B.psd" },
+      { nome: "base de campo · elevação C", sub: "PSD · 109 camadas · 34 px/m",
+        peso: 2.54, data: "26.08.2026", href: RAW + "FL-TULHA_ELEVACAO-C.psd" },
+      { nome: "base de campo · elevação D", sub: "PSD · 109 camadas · 63 px/m",
+        peso: 2.67, data: "26.08.2026", href: RAW + "FL-TULHA_ELEVACAO-D.psd" },
+      { nome: "manifesto · px/m e extensão em metros", tipo: "sistema", sub: "JSON · viaja junto com os PSD",
+        peso: 0.004, data: "26.08.2026", href: RAW + "FL-TULHA_manifesto.json" }
     ]
   },
   {
