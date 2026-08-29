@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#6B6A4B">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>apresentações_michel stein</title>
+<title>acervo_michel stein</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -159,12 +159,16 @@
   .doc-item{border-bottom:1px solid var(--card-linha);transition:background .25s}
   .doc-item:last-child{border-bottom:0}
   .doc-item:hover{background:var(--card-forte)}
-  .doc-linha{display:grid;grid-template-columns:32px 1fr auto;
+  .doc-linha{display:grid;grid-template-columns:78px 1fr auto;
     gap:clamp(12px,2.4vw,24px);align-items:center;
     padding:14px clamp(14px,2vw,22px)}
   .doc-linha>.corpo{min-width:0}
   .doc-acoes a:focus-visible,.doc-acoes button:focus-visible{outline:2px solid var(--cream);outline-offset:3px}
-  .doc-item .g{font-family:var(--mono);font-style:italic;font-size:13px;color:var(--muted)}
+  .doc-item .g{font-family:var(--mono);font-size:8.5px;letter-spacing:.13em;
+    text-transform:uppercase;text-align:center;border-radius:999px;
+    padding:5px 0;display:block;white-space:nowrap}
+  .doc-item .g.pub{border:1px solid var(--line);color:var(--muted)}
+  .doc-item .g.priv{background:var(--cream);color:var(--fundo);font-weight:500}
   .doc-item .nm{font-family:var(--mono);font-style:italic;font-weight:500;
     text-transform:lowercase;letter-spacing:-.03em;font-size:clamp(16px,1.9vw,19px);display:block}
   .doc-item .ds{font-size:12px;color:var(--muted);margin-top:3px;display:block}
@@ -243,7 +247,7 @@
   }
   /* sistema: em tela estreita o texto corre inteiro e os botoes descem */
   @media (max-width:760px){
-    .doc-linha{grid-template-columns:26px 1fr;column-gap:14px;row-gap:14px;
+    .doc-linha{grid-template-columns:70px 1fr;column-gap:14px;row-gap:14px;
       align-items:start;padding:16px clamp(14px,2vw,22px)}
     .doc-item .g{padding-top:3px}
     .doc-item .nm{font-size:18px}
@@ -265,8 +269,8 @@
 
 <main>
   <p class="eyebrow">arquivo de projeto</p>
-  <h1 class="tit mark">apresentações<span class="tr">_</span></h1>
-  <p class="lede">Estudos e projetos em prancha única, para ler no navegador.
+  <h1 class="tit mark">acervo<span class="tr">_</span></h1>
+  <p class="lede">As peças de projeto e as regras de trabalho, num lugar só.
     Cada linha abre sempre a versão mais recente.</p>
 
   <div class="abas" role="tablist" aria-label="seções" data-sel="0">
@@ -459,9 +463,9 @@ const docs = [
   { grupo:"site", nome:"site de portfólio",
     desc:"Estado técnico, vitrine, otimização de imagem e área de cliente",
     href: GH+"site/SITE-PORTFOLIO-ESTADO.md" },
-  { grupo:"site", nome:"vitrine · acervo",
+  { grupo:"site", nome:"vitrine · esteira",
     desc:"As 1.020 imagens da esteira, o pipeline de conversão e os comandos",
-    href: GH+"site/VITRINE-ACERVO.md" },
+    href: GH+"site/VITRINE-ESTEIRA.md" },
   { grupo:"site", nome:"publicar no site",
     desc:"Runbook do Netlify e da área de cliente: receita, custo por deploy e cuidados",
     href: GH+"site/PUBLICAR-NO-SITE.md" },
@@ -669,7 +673,8 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
             ? '<button class="go" data-arq="' + d.arq + '" data-nome="' + d.nome + '">ler</button>'
             : '<a class="go" href="' + d.href + '" target="_blank" rel="noopener">github</a>');
       return '<li class="doc-item"><div class="doc-linha">'
-        + '<span class="g">' + (d.arq ? 'md' : '••') + '</span>'
+        + '<span class="g ' + (d.arq ? 'pub' : 'priv') + '">'
+        +   (d.arq ? 'público' : 'privado') + '</span>'
         + '<span class="corpo"><span class="nm">' + d.nome + '</span>'
         + '<span class="ds">' + d.desc + '</span></span>'
         + '<span class="doc-acoes">' + acoes + '</span>'
@@ -678,10 +683,12 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
   }).join('');
 
   document.getElementById('nota-docs').innerHTML =
-    'Os documentos marcados <b>••</b> trazem nome de cliente, endereço de obra e caminhos '
-    + 'internos, então moram no repositório privado <b>michel-stein-sistemas</b> e abrem no '
-    + 'GitHub, com a conta logada. Desde 22/08/2026 a versão viva é a de lá — as cópias do '
-    + 'Drive foram para <b>00-OBSOLETOS</b>.';
+    '<b>privado</b> — traz nome de cliente, endereço de obra, honorário ou caminho interno. '
+    + 'Mora no repositório <b>michel-stein-sistemas</b> e só abre no GitHub, com a conta logada. '
+    + '<br><b>público</b> — método sem dado de cliente. Abre por link direto, sem senha e sem '
+    + 'terminal, o que faz com que qualquer conversa consiga ler. É para onde vai tudo o que puder ir.'
+    + '<br><br>Desde 22/08/2026 a versão viva de cada regra é a do GitHub — as cópias do Drive '
+    + 'foram para <b>00-OBSOLETOS</b>.';
 })();
 
 /* ── leitor de markdown ──────────────────────────────────── */
