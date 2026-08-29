@@ -772,6 +772,11 @@ const ABAS = [
   projetos.forEach(function(p){
     p.pecas.forEach(function(x){ listados.add(x.href.split('?')[0]); });
   });
+  /* A aba marca e a aba sistema também são registro. Uma peça apontada por
+     `ver:` de um documento é achável por aqui — não é órfã. Sem esta linha,
+     todo bloco e todo manual de marca aparecia no aviso, e o aviso perdia o
+     sentido: quem vê falso positivo para de olhar. */
+  docs.forEach(function(d){ if(d.ver) listados.add(d.ver.split('?')[0]); });
 
   fetch('https://api.github.com/repos/steinvalente-dev/apresentacoes/git/trees/main?recursive=1')
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
