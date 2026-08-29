@@ -430,18 +430,10 @@ const projetos = [
         data: "25.08.2026", href: "amaz-pilares/apresentacao.html" },
       { nome: "protótipo · convergência dos sócios", pranchas: 2, peso: 2.4,
         data: "25.08.2026", href: "amaz-convergencia/apresentacao.html" },
-      { nome: "identidade visual", pranchas: 9, unid: "seções", peso: 3.5,
-        data: "23.08.2026", href: "amaz-identidade/apresentacao.html" },
-      { nome: "grafismo · marchetaria", pranchas: 9, unid: "seções", peso: 0.15,
-        data: "23.08.2026", href: "amaz-grafismo/apresentacao.html" },
       { nome: "apresentação institucional · R1", pranchas: 56, peso: 6.1,
         data: "26.08.2026", href: "amaz-r1/apresentacao.html" },
       { nome: "apresentação institucional", pranchas: 37, peso: 0.16,
-        data: "23.08.2026", href: "amaz/apresentacao.html" },
-      { nome: "marchetaria · laboratório", tipo: "sistema", sub: "interativo",
-        peso: 0.050, data: "23.08.2026", href: "amaz-marchetaria/tabuas.html" },
-      { nome: "marchetaria · vocabulário", tipo: "sistema", sub: "interativo",
-        peso: 0.035, data: "23.08.2026", href: "amaz-marchetaria/campo-quadrado.html" }
+        data: "23.08.2026", href: "amaz/apresentacao.html" }
     ]
   },
   {
@@ -468,24 +460,6 @@ const projetos = [
         href: "casa-ittb/apresentacao.html" }
     ]
   },
-  {
-    nome: "deck",
-    pecas: [
-      { nome: "esqueleto", tipo: "sistema", pranchas: 19, unid: "gabaritos",
-        sub: "a base de partida · sem marca, sem conteúdo",
-        peso: 0.124, data: "29.08.2026", href: "esqueleto/deck-esqueleto.html" }
-    ]
-  },
-  {
-    nome: "michel stein_",
-    pecas: [
-      { nome: "manual de marca", tipo: "sistema", pranchas: 5, unid: "folhas",
-        sub: "conceito · logotipo · monograma · sistema · aplicações",
-        peso: 0.062, data: "29.08.2026", href: "marca/michel-stein/manual.html" },
-      { nome: "bloco de marca", tipo: "sistema", sub: "o que se cola no esqueleto · fontes embutidas",
-        peso: 0.112, data: "29.08.2026", href: "marca/michel-stein/bloco.html" }
-    ]
-  }
 ];
 
 const GH = "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/";
@@ -493,6 +467,9 @@ const docs = [
   { aba:"marca", grupo:"michel stein_", nome:"marca · michel stein_",
     desc:"Cor, tipografia, assinatura, abertura, contracapa e o preset do fundo. Trocar de marca é trocar este arquivo",
     arq:"marca/MARCA-MICHEL-STEIN.md", ver:"marca/michel-stein/manual.html" },
+  { aba:"marca", grupo:"michel stein_", nome:"manual em desenho · 5 folhas",
+    desc:"Conceito, logotipo, monograma, sistema e aplicações, numa página. É a apresentação da marca; o mestre é o .md",
+    arq:"marca/michel-stein/LEIA-ME.md", ver:"marca/michel-stein/manual.html" },
   { aba:"marca", grupo:"michel stein_", nome:"bloco de marca",
     desc:"As quatro coisas que se colam no esqueleto: cores, as seis fontes, a capa e a contracapa",
     arq:"marca/MARCA-MICHEL-STEIN-CAPA.md", ver:"marca/michel-stein/bloco.html" },
@@ -505,6 +482,18 @@ const docs = [
   { aba:"marca", grupo:"AMAZ", nome:"bloco de marca",
     desc:"O que se cola no esqueleto: as quatro cores, as quatro fontes embutidas, a abertura e a contracapa",
     arq:"marca/MARCA-AMAZ.md", ver:"marca/amaz/bloco.html" },
+  { aba:"marca", grupo:"AMAZ", nome:"identidade visual",
+    desc:"Marca, cor, tipografia e fotografia. É de onde a camada de marca foi levantada",
+    arq:"marca/amaz/LEIA-ME.md", ver:"amaz-identidade/apresentacao.html" },
+  { aba:"marca", grupo:"AMAZ", nome:"grafismo · marchetaria",
+    desc:"O grafismo que dá o caráter da marca, em nove seções",
+    arq:"marca/amaz/LEIA-ME.md", ver:"amaz-grafismo/apresentacao.html" },
+  { aba:"marca", grupo:"AMAZ", nome:"marchetaria · laboratório",
+    desc:"As tábuas, interativo. Serve para calibrar o grafismo antes de aplicar",
+    arq:"marca/amaz/LEIA-ME.md", ver:"amaz-marchetaria/tabuas.html" },
+  { aba:"marca", grupo:"AMAZ", nome:"marchetaria · vocabulário",
+    desc:"O campo quadrado, interativo",
+    arq:"marca/amaz/LEIA-ME.md", ver:"amaz-marchetaria/campo-quadrado.html" },
   { aba:"marca", grupo:"Lavrō", nome:"marca · Lavrō",
     desc:"Cor, tipografia, abertura, contracapa e o que é intocável. Recorte de deck do normativo, que está ao lado",
     arq:"marca/MARCA-LAVRO.md", ver:"marca/lavro/manual.html" },
@@ -521,8 +510,8 @@ const docs = [
     desc:"Não têm sistema visual escrito — não inventar paleta. Levantar a identidade antes",
     arq:"sistemas/DECK-MOTOR.md" },
   { aba:"deck", grupo:"montar", nome:"deck · montar",
-    desc:"O arquivo curto: a receita em seis passos, os dezenove gabaritos e as três armadilhas. É o que se lê para montar",
-    arq:"sistemas/DECK-MONTAR.md", ver:"esqueleto/deck-esqueleto.html" },
+    desc:"O arquivo curto: a receita em seis passos, os gabaritos e as armadilhas. É o que se lê para montar",
+    arq:"sistemas/DECK-MONTAR.md" },
   { aba:"deck", grupo:"montar", nome:"esqueleto",
     desc:"A base de partida. Abre, cola o bloco da marca, troca o DECK. A engine não se toca",
     arq:"sistemas/DECK-MONTAR.md", ver:"esqueleto/deck-esqueleto.html" },
