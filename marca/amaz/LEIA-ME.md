@@ -17,9 +17,20 @@ foi levantada:
 | peça | o que traz |
 |---|---|
 | `../../amaz-identidade/apresentacao.html` | a identidade visual: marca, cor, tipografia, fotografia |
-| `../../amaz-grafismo/apresentacao.html` | o grafismo da marchetaria |
-| `../../amaz-marchetaria/tabuas.html` | o laboratório: as tábuas, interativo |
-| `../../amaz-marchetaria/campo-quadrado.html` | o vocabulário do campo quadrado, interativo |
+| `../../amaz-marchetaria/apresentacao.html` | o documento do grafismo — o mestre escrito |
+| `../../amaz-marchetaria/laboratorio.html` | o laboratório do gerador, interativo |
+
+**A marchetaria mora inteira em `amaz-marchetaria/`.** Reorganizada em
+29.08.2026: eram três peças — o documento em `amaz-grafismo/`, o laboratório e o
+campo quadrado. O campo quadrado saiu, porque é o corte **1×1** do laboratório e
+o vocabulário das seis peças está na seção 02 do documento. Os três documentos
+que viviam no Projeto do Claude foram apagados na mesma rodada: estavam
+desatualizados contra este acervo — falavam em cinco regras, e o sistema tem
+seis. **Não recriar. Divergiu, o acervo ganha.**
+
+**Convenção de nome: o assunto vem primeiro, a categoria depois.** É
+`marchetaria · o documento`, nunca `grafismo · marchetaria` — a AMAZ tem um
+grafismo só, e é este.
 
 **São peças de marca, não de projeto** — por isso vivem na aba *marca* do acervo,
 e não na aba *arquivo*, que guarda apresentação de cliente. Movidas em

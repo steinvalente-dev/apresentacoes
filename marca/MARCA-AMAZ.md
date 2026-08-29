@@ -255,8 +255,11 @@ adaptação.
 > escrita e não é peça no ar.**
 
 Especificação técnica — gramática, as **seis** regras de sorteio, escala absoluta,
-receita de cor dos quatro pares, custo medido: `amaz-grafismo/apresentacao.html`,
-e os geradores em `amaz-marchetaria/tabuas.html` e `campo-quadrado.html`.
+receita de cor dos quatro pares, custo medido: `amaz-marchetaria/apresentacao.html`.
+O gerador, interativo: `amaz-marchetaria/laboratorio.html`. **Tudo o que existe
+sobre a marchetaria mora nesses dois arquivos** — três peças viraram duas em
+29.08.2026, e os três documentos do Projeto do Claude saíram por estarem
+desatualizados contra este acervo.
 Receita do par Areia: fundo `#D9C9A3` · madeira A Mata funda 8,5% · B 2% · veio
 40% · junta 17%. Juntas dos outros pares: Mata funda 13% · Papel 16% · Tiber 14%.
 

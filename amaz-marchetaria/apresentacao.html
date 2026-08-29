@@ -292,6 +292,15 @@ footer a{color:var(--papel)}
   </table></div>
   <div class="note"><b>Duas regras contraintuitivas.</b> Nunca animar <span class="mono">opacity</span>, <span class="mono">transform</span> ou <span class="mono">filter</span> no elemento da textura — a entrada da peça é feita com uma cortina de cor sólida que se abre por cima, composição pura, custo zero. E nunca promover a textura a camada própria (<span class="mono">will-change</span>, <span class="mono">translateZ</span>, <span class="mono">contain:paint</span>): medido, piora de 484 para 51 fps.</div>
   <p style="margin-top:22px">Para apresentação, não há com que se preocupar: uma pintura ao abrir e nada depois; se quiser instantâneo, pré-renderize em WebP. Para site com ressorteio no clique, portar o desenho para <span class="mono">&lt;canvas&gt;</span>: o gerador não muda, é 3× mais rápido, e canvas pintado é uma textura — não re-rasteriza nunca mais.</p>
+
+  <h3>Mais três, medidas, e fáceis de perder</h3>
+  <div class="tw"><table>
+    <tbody>
+      <tr><td>Debounce do resize</td><td>150 ms. Sem ele, cada quadro do arrasto da janela é uma pintura inteira.</td></tr>
+      <tr><td><span class="mono">vector-effect: non-scaling-stroke</span></td><td>Não é gargalo — tirar economiza ~4%. Fica, porque protege o traço no transiente do resize.</td></tr>
+      <tr><td>Tela 4K</td><td>O custo quadruplica. Ou canvas, ou fixar o campo em 1920 e escalar por CSS.</td></tr>
+    </tbody>
+  </table></div>
 </section>
 
 <section id="aberto">
@@ -299,6 +308,7 @@ footer a{color:var(--papel)}
   <div class="tw"><table>
     <thead><tr><th>Questão</th><th>Estado</th></tr></thead>
     <tbody>
+      <tr><td><b>Estado no R1</b></td><td><b>Desligada.</b> Retirada da institucional em 24.08.2026 — o porte não reproduziu o campo deste documento, e a fonte está por investigar. O gerador (<span class="mono">marchetaria()</span>) e o CSS (<span class="mono">canvas.march</span>) continuam no arquivo do R1; religar é devolver o canvas àquela linha. <b>Até lá a marchetaria é identidade escrita, e não é peça no ar.</b> A decisão pendente é uma só: reproduzir o campo e religar, ou aposentar.</td></tr>
       <tr><td>A célula da fenda</td><td>Hoje é bloco de fio com a greta desenhada. A alternativa é continuar a mesma família de anéis — a tora apareceria inteira <em>partida pela fenda</em>, mais bonito e mais verdadeiro, mas encosta na R4. Decisão de marca.</td></tr>
       <tr><td>Azul elétrico</td><td><b>Não na junta</b> — ela aparece centenas de vezes por peça. Testar em duas hipóteses: no nó e na fenda radial, que o sistema já produz raros; ou fora da textura, como cor de um registro técnico separado. Critério de reprovação: se aparecer mais de uma vez por tela, não é acento.</td></tr>
       <tr><td>Acento sobre fundo verde</td><td><b>Resolvido:</b> Areia é o acento de todo fundo verde profundo. Cobre serve título grande e grafismo, nunca corpo. Ver a seção Grafismo do documento de identidade.</td></tr>
@@ -314,23 +324,21 @@ footer a{color:var(--papel)}
   <div class="tw"><table>
     <thead><tr><th>Arquivo</th><th>O que é</th></tr></thead>
     <tbody>
-      <tr><td class="mono">GRAFISMO-MARCHETARIA.md</td><td>A fonte deste documento</td></tr>
-      <tr><td class="mono">marchetaria-campo-quadrado.html</td><td>O sistema só com peças 1×1, com painel de vocabulário (tecla C)</td></tr>
-      <tr><td class="mono">marchetaria-tabuas.html</td><td>O laboratório completo: dominó, veios, densidade, módulo, quatro pares</td></tr>
-      <tr><td class="mono">01-campo-escolhido.jpg</td><td>A configuração fechada, par Areia, 80 px</td></tr>
-      <tr><td class="mono">02-vocabulario-de-pecas.jpg</td><td>As seis peças nomeadas</td></tr>
-      <tr><td class="mono">03-cortes-comparados.jpg</td><td>Os cortes do campo lado a lado, mesma semente</td></tr>
-      <tr><td class="mono">04-recorte-1a1.jpg</td><td>Recorte em escala real</td></tr>
+      <tr><td class="mono">amaz-marchetaria/apresentacao.html</td><td>Este documento — o mestre escrito do grafismo</td></tr>
+      <tr><td class="mono">amaz-marchetaria/laboratorio.html</td><td>O laboratório do gerador: corte, veio da tábua, densidade, módulo e os quatro pares. Clique ressorteia · 1–4 troca o par</td></tr>
+      <tr><td class="mono">marca/MARCA-AMAZ.md</td><td>§7 — o resumo normativo: onde a marchetaria entra, onde não entra, e o estado</td></tr>
+      <tr><td class="mono">marca/amaz/bloco.html</td><td>O bloco que se cola no esqueleto. <b>Ainda não carrega a marchetaria</b></td></tr>
     </tbody>
   </table></div>
-  <p style="margin-top:22px">Os dois HTML são arquivo único, sem imagem e sem dependência além das fontes. Clique ressorteia · 1–4 troca o par · C abre o painel. Pasta: <span class="mono">00_Identidade visual / Grafismo marchetaria</span>.</p>
+  <p style="margin-top:22px">As quatro imagens deste documento — campo escolhido, vocabulário de peças, cortes comparados e recorte em escala real — estão embutidas no arquivo. Os dois HTML são arquivo único, sem dependência além das fontes.</p>
+  <div class="note"><b>Reorganizado em 29.08.2026.</b> Eram três peças — o documento em <span class="mono">amaz-grafismo/</span>, mais dois geradores. O campo quadrado saiu: é o corte <b>1×1</b> do laboratório, e o vocabulário das seis peças está na seção 02 deste documento. <b>Marchetaria vem primeiro no nome, e tudo mora em <span class="mono">amaz-marchetaria/</span>.</b></div>
 </section>
 
 </div>
 
 <footer><div class="wrap">
   AMAZ · desenvolvimento imobiliário<br>
-  Grafismo marchetaria · documento técnico · 23.08.2026<br>
+  Marchetaria · documento técnico · 23.08.2026 · revisto 29.08.2026<br>
   <a href="../amaz-identidade/apresentacao.html">← identidade visual</a>
 </div></footer>
 

@@ -52,7 +52,7 @@ Dois campos opcionais governam isso:
 
 ```js
 { nome: "marchetaria · laboratório", tipo: "sistema", sub: "interativo",
-  peso: 0.050, data: "23.08.2026", href: "amaz-marchetaria/tabuas.html" }
+  peso: 0.050, data: "23.08.2026", href: "amaz-marchetaria/laboratorio.html" }
 ```
 
 A numeração `01, 02` passou a ser **por bloco**. Peça abaixo de 0,1 MB tem o peso
