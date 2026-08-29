@@ -463,16 +463,9 @@ const projetos = [
   {
     nome: "michel stein_",
     pecas: [
-      { nome: "marca · 01 capa e conceito", tipo: "sistema", sub: "manual de marca",
-        peso: 0.009, data: "29.08.2026", href: "marca/michel-stein/01-capa.html" },
-      { nome: "marca · 02 logotipo e assinatura", tipo: "sistema", sub: "manual de marca",
-        peso: 0.009, data: "29.08.2026", href: "marca/michel-stein/02-logotipo.html" },
-      { nome: "marca · 03 monograma", tipo: "sistema", sub: "manual de marca · inclui a versão rabisco",
-        peso: 0.012, data: "29.08.2026", href: "marca/michel-stein/03-monograma.html" },
-      { nome: "marca · 04 sistema", tipo: "sistema", sub: "tipografia, cor e regras de uso",
-        peso: 0.017, data: "29.08.2026", href: "marca/michel-stein/04-sistema.html" },
-      { nome: "marca · 05 aplicações", tipo: "sistema", sub: "cartão, e-mail e papelaria",
-        peso: 0.014, data: "29.08.2026", href: "marca/michel-stein/05-aplicacoes.html" }
+      { nome: "manual de marca", tipo: "sistema", pranchas: 5, unid: "folhas",
+        sub: "conceito · logotipo · monograma · sistema · aplicações",
+        peso: 0.062, data: "29.08.2026", href: "marca/michel-stein/manual.html" }
     ]
   }
 ];
@@ -481,13 +474,10 @@ const GH = "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/
 const docs = [
   { aba:"marca", grupo:"michel stein_", nome:"marca · michel stein_",
     desc:"Cor, tipografia, assinatura, abertura, contracapa e o preset do fundo. Trocar de marca é trocar este arquivo",
-    arq:"marca/MARCA-MICHEL-STEIN.md", ver:"marca/michel-stein/01-capa.html" },
+    arq:"marca/MARCA-MICHEL-STEIN.md", ver:"marca/michel-stein/manual.html" },
   { aba:"marca", grupo:"michel stein_", nome:"marca · a capa",
     desc:"O slide de abertura: a regra, a receita de extração, a especificação e as armadilhas já pagas",
     arq:"marca/MARCA-MICHEL-STEIN-CAPA.md", ver:"modulos/capa-morph.html" },
-  { aba:"marca", grupo:"michel stein_", nome:"manual em desenho · 5 folhas",
-    desc:"Conceito, logotipo, monograma, sistema e aplicações. É o que este arquivo de marca resume",
-    arq:"marca/MARCA-MICHEL-STEIN.md", ver:"marca/michel-stein/01-capa.html" },
   { aba:"marca", grupo:"AMAZ", nome:"marca · AMAZ",
     desc:"Levantada do que já está publicado: paleta e tipografia completas. Faltam abertura, contracapa, fundo e regras de logotipo",
     arq:"marca/MARCA-AMAZ.md", ver:"amaz-identidade/apresentacao.html" },
@@ -876,7 +866,11 @@ const ABAS = [
     document.body.style.overflow = '';
     if(volta) volta.focus();
   }
-  document.getElementById('lista-docs').addEventListener('click', function(e){
+  /* Delegação no `document`, não num contêiner. Em 29/08/2026 este ouvinte estava
+     preso a #lista-docs; ao partir a renderização em três listas (docs, deck,
+     marca) os botões `ler` das duas abas novas ficaram mudos. Ouvir no document
+     vale para toda lista, inclusive as que ainda não existem. */
+  document.addEventListener('click', function(e){
     const b = e.target.closest('button[data-arq]');
     if(b) abrir(b.dataset.arq, b.dataset.nome, b);
   });

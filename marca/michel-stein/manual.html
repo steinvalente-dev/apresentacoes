@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>michel stein_ — manual de marca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ─────────────────────────────────────────────────────────────
+     manual de marca michel stein_ — cinco folhas, uma página.
+
+     Unificado em 29/08/2026. Antes eram cinco arquivos com CSS
+     quase igual e navegação de remendo entre eles.
+
+     O CSS de cada folha está ESCOPADO por #f01..#f05. Duas folhas
+     usam o mesmo nome de classe com valores diferentes (.note,
+     .logotype, .mark), e sem escopo uma sobrescreveria a outra.
+     Ao mexer numa folha, mexer só dentro do escopo dela.
+
+     ⚑ Este arquivo é a APRESENTAÇÃO da marca. O mestre é o
+     ../MARCA-MICHEL-STEIN.md, ao lado. Divergiu, o .md ganha.
+     ───────────────────────────────────────────────────────────── */
+  :root{
+    --desk:#CFCBC2;--creme:#EDE6DA;--tinta:#211D1A;--oliva:#6B6A4B;--terra:#B85C38;
+    --hair:#211D1A22;--mono:'DM Mono', monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{background:var(--desk);color:var(--tinta);font-family:'Inter',sans-serif;line-height:1.5;
+    padding:clamp(12px,3vw,40px);background-image:radial-gradient(var(--hair) .5px,transparent .5px);
+    background-size:22px 22px}
+
+  /* a pilha de folhas */
+  .folhas{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(22px,4vw,46px)}
+  .folha{scroll-margin-top:76px;background:var(--creme);border:1px solid var(--tinta);
+    box-shadow:0 24px 60px -28px #00000055;position:relative}
+  .folha::after{content:"";position:absolute;inset:7px;border:.5px solid var(--hair);
+    pointer-events:none}
+
+  /* barra de navegação, presa no topo */
+  .barra{position:sticky;top:0;z-index:20;max-width:1100px;margin:0 auto clamp(18px,3vw,30px);
+    background:#EDE6DAf2;-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+    border:1px solid var(--tinta);display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    padding:9px clamp(10px,2vw,16px)}
+  .barra .bm{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;
+    letter-spacing:-.04em;font-size:15px;margin-right:auto;line-height:1}
+  .barra .bm i{color:var(--terra);font-style:normal}
+  .barra a{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:#211D1A99;text-decoration:none;border:.5px solid var(--hair);border-radius:999px;
+    padding:6px 11px;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
+  .barra a:hover,.barra a:focus-visible{background:var(--tinta);color:var(--creme);border-color:var(--tinta)}
+  .barra a .n{color:var(--terra)}
+  .barra a:hover .n{color:var(--creme)}
+  @media (max-width:700px){ .barra .bm{width:100%;margin-bottom:4px} .barra a{font-size:9px;padding:5px 9px} }
+
+  /* aviso de mestre, no topo da página */
+  .mestre{max-width:1100px;margin:0 auto clamp(14px,2vw,20px);font-size:11.5px;line-height:1.6;
+    color:#211D1A99;border-left:2px solid var(--terra);padding:2px 0 2px 12px}
+  .mestre b{color:var(--tinta);font-weight:600}
+  .mestre code{font-family:var(--mono);font-size:11px}
+
+  /* Correção da folha 05, herdada do arquivo original: em 390px o bloco de
+     contato da assinatura de e-mail transbordava 8px para fora da tela.
+     O avatar e o filete ficam numa linha, os dados na seguinte. */
+  @media (max-width:520px){
+    #f05 .sig{flex-wrap:wrap;gap:12px}
+    #f05 .sig .divider{width:100%;height:2px;align-self:auto}
+    #f05 .sig .info{min-width:0}
+    #f05 .sig .ct{overflow-wrap:anywhere}
+  }
+
+/* ── capa & conceito ─────────────────────────── */
+#f01 .sheet{max-width:1100px;margin:0 auto;background:var(--creme);border:1px solid var(--tinta);
+    box-shadow:0 24px 60px -28px #00000055;position:relative}
+#f01 .sheet::after{content:"";position:absolute;inset:7px;border:.5px solid var(--hair);pointer-events:none}
+#f01 .mark{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;line-height:1}
+#f01 .tr{color:var(--terra)}
+#f01 .ruler{display:flex;align-items:flex-end;height:26px;border-bottom:1px solid var(--tinta);padding:0 16px}
+#f01 .tick{flex:1;border-left:.5px solid var(--hair);height:6px}
+#f01 .tick:nth-child(5n+1){height:12px;border-left:1px solid var(--tinta)}
+#f01 .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
+#f01 .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
+#f01 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+#f01 .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,56px);line-height:.98;letter-spacing:-.06em;text-transform:lowercase}
+#f01 .tb-main h1 u{text-decoration:none;color:var(--terra)}
+#f01 .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+#f01 .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
+#f01 .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+#f01 .cell:last-child{border-bottom:0}
+#f01 .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
+#f01 .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
+#f01 section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,48px) clamp(16px,4vw,42px)}
+#f01 .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:26px;display:flex;gap:12px;align-items:center}
+#f01 .sec-label .no{font-weight:700;color:var(--tinta)}
+#f01 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair)}
+#f01 /* hero logotype */
+  .hero{text-align:center;padding:clamp(20px,6vw,54px) 0}
+#f01 .hero .logotype{font-size:clamp(44px,11vw,108px);letter-spacing:-.06em}
+#f01 .hero .role{font-family:var(--mono);font-size:clamp(10px,2vw,12px);letter-spacing:.28em;text-transform:uppercase;color:var(--oliva);margin-top:20px}
+#f01 /* conceito */
+  .concept{display:grid;grid-template-columns:.7fr 1.3fr;gap:clamp(24px,5vw,52px);align-items:center}
+#f01 .concept .big{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(70px,16vw,150px);line-height:.8;color:var(--terra);text-align:center}
+#f01 .concept .txt{font-family:'Inter',sans-serif;font-size:14px;line-height:1.7;color:#211D1Add}
+#f01 .concept .txt .tagq{font-family:var(--mono);font-style:italic;font-size:clamp(16px,3vw,22px);color:var(--tinta);display:block;margin-bottom:16px}
+#f01 .concept .txt b{font-weight:600}
+#f01 /* índice */
+  .index{display:flex;flex-direction:column}
+#f01 .ix{display:flex;align-items:baseline;gap:16px;padding:14px 0;border-top:.5px solid var(--hair);
+    text-decoration:none;color:inherit;transition:background .18s}
+#f01 .ix:last-child{border-bottom:.5px solid var(--hair)}
+#f01 a.ix:hover{background:#211D1A0A}
+#f01 .ix .n{font-family:var(--mono);font-weight:500;font-style:italic;font-size:18px;color:var(--terra);min-width:34px}
+#f01 .ix .t{font-family:var(--mono);font-size:14px;letter-spacing:.02em}
+#f01 .ix .d{margin-left:auto;font-family:'Inter',sans-serif;font-size:11.5px;color:#211D1A99;text-align:right}
+#f01 .ix.here{color:var(--tinta)}
+#f01 .ix.here .t{font-weight:700}
+#f01 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+@media (max-width:720px){#f01 .titleblock{grid-template-columns:1fr}
+#f01 .tb-meta{border-left:0;border-top:1px solid var(--tinta);grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+#f01 .cell:nth-child(odd){border-right:.5px solid var(--hair)}
+#f01 .concept{grid-template-columns:1fr;text-align:center}
+#f01 .ix .d{display:none}}
+
+/* ── logotipo & assinatura ─────────────────────────── */
+#f02 .sheet{max-width:1100px;margin:0 auto;background:var(--creme);border:1px solid var(--tinta);
+    box-shadow:0 24px 60px -28px #00000055;position:relative}
+#f02 .sheet::after{content:"";position:absolute;inset:7px;border:.5px solid var(--hair);pointer-events:none}
+#f02 .mark{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;line-height:1}
+#f02 .tr{color:var(--terra)}
+#f02 .ruler{display:flex;align-items:flex-end;height:26px;border-bottom:1px solid var(--tinta);padding:0 16px}
+#f02 .tick{flex:1;border-left:.5px solid var(--hair);height:6px}
+#f02 .tick:nth-child(5n+1){height:12px;border-left:1px solid var(--tinta)}
+#f02 .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
+#f02 .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
+#f02 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+#f02 .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,56px);line-height:.98;letter-spacing:-.06em;text-transform:lowercase}
+#f02 .tb-main h1 u{text-decoration:none;color:var(--terra)}
+#f02 .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+#f02 .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
+#f02 .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+#f02 .cell:last-child{border-bottom:0}
+#f02 .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
+#f02 .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
+#f02 section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,48px) clamp(16px,4vw,42px)}
+#f02 .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:26px;display:flex;gap:12px;align-items:center}
+#f02 .sec-label .no{font-weight:700;color:var(--tinta)}
+#f02 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair)}
+#f02 /* primary logotype */
+  .logo-hero{text-align:center;padding:clamp(16px,4vw,34px) 0}
+#f02 .logotype{font-size:clamp(40px,9.5vw,98px);letter-spacing:-.06em}
+#f02 .logo-note{font-family:'Inter',sans-serif;font-size:11px;color:#211D1A99;margin-top:22px;max-width:52ch;margin-inline:auto;line-height:1.7}
+#f02 /* signature lockup */
+  .lockup{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+#f02 .lockup .lt{font-size:clamp(30px,7vw,58px);letter-spacing:-.06em}
+#f02 .lockup .tag{font-family:var(--mono);font-weight:400;font-style:italic;font-size:clamp(13px,2.4vw,18px);letter-spacing:.02em;color:var(--oliva);padding-left:2px}
+#f02 /* versions */
+  .vers{display:flex;gap:14px;flex-wrap:wrap}
+#f02 .vbox{flex:1;min-width:200px;border:.5px solid var(--hair);display:flex;flex-direction:column}
+#f02 .vcanvas{display:flex;align-items:center;justify-content:center;padding:36px 16px;min-height:120px}
+#f02 .vcanvas .g{font-size:clamp(26px,4vw,38px);letter-spacing:-.05em}
+#f02 .v-creme{background:var(--creme)}
+#f02 .v-creme .g{color:var(--tinta)}
+#f02 .v-tinta{background:var(--tinta)}
+#f02 .v-tinta .g{color:var(--creme)}
+#f02 .v-oliva{background:var(--oliva)}
+#f02 .v-oliva .g{color:var(--creme)}
+#f02 .vcap{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#211D1A99;padding:9px 12px;border-top:.5px solid var(--hair);text-align:center}
+#f02 .note{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:#211D1A99;margin-top:18px}
+#f02 .note b{font-weight:600;color:var(--tinta)}
+#f02 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+#f02 .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
+#f02 .footer a:hover{color:var(--terra)}
+@media (max-width:720px){#f02 .titleblock{grid-template-columns:1fr}
+#f02 .tb-meta{border-left:0;border-top:1px solid var(--tinta);grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+#f02 .cell:nth-child(odd){border-right:.5px solid var(--hair)}
+#f02 .lockup{align-items:center;text-align:center;width:100%}}
+
+/* ── monograma ─────────────────────────── */
+#f03 .sheet{max-width:1100px;margin:0 auto;background:var(--creme);border:1px solid var(--tinta);
+    box-shadow:0 24px 60px -28px #00000055;position:relative}
+#f03 .sheet::after{content:"";position:absolute;inset:7px;border:.5px solid var(--hair);pointer-events:none}
+#f03 /* mark = DM Mono 500 italic */
+  .mark{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;letter-spacing:-.02em;line-height:1}
+#f03 .tr{color:var(--terra)}
+#f03 .ruler{display:flex;align-items:flex-end;height:26px;border-bottom:1px solid var(--tinta);padding:0 16px}
+#f03 .tick{flex:1;border-left:.5px solid var(--hair);height:6px}
+#f03 .tick:nth-child(5n+1){height:12px;border-left:1px solid var(--tinta)}
+#f03 .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
+#f03 .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
+#f03 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+#f03 .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,58px);line-height:.96;letter-spacing:-.03em;text-transform:lowercase}
+#f03 .tb-main h1 u{text-decoration:none;color:var(--terra)}
+#f03 .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+#f03 .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
+#f03 .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+#f03 .cell:last-child{border-bottom:0}
+#f03 .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
+#f03 .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
+#f03 section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,50px) clamp(16px,4vw,42px)}
+#f03 .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:26px;display:flex;gap:12px;align-items:center}
+#f03 .sec-label .no{font-weight:700;color:var(--tinta)}
+#f03 .sec-label .lv{margin-left:auto;font-size:9px;letter-spacing:.16em;color:var(--terra)}
+#f03 .sec-label::after{content:"";order:1;flex:1;height:.5px;background:var(--hair)}
+#f03 .sec-label .lv{order:2}
+#f03 .logo-hero{text-align:center;padding:clamp(14px,4vw,30px) 0}
+#f03 .logotype{font-size:clamp(38px,9vw,92px);letter-spacing:-.06em}
+#f03 .logo-note{font-family:'Inter',sans-serif;font-size:11px;color:#211D1A99;margin-top:22px;max-width:50ch;margin-inline:auto;line-height:1.7}
+#f03 .hero-mark{display:flex;align-items:center;justify-content:center;border:.5px solid var(--hair);
+    padding:46px 10px;margin-bottom:20px;background:var(--creme)}
+#f03 .hero-mark .glyph{font-size:clamp(64px,13vw,120px)}
+#f03 .tiles{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+#f03 .tile{flex:1;min-width:130px;border:.5px solid var(--hair);display:flex;flex-direction:column}
+#f03 .tcanvas{display:flex;align-items:center;justify-content:center;padding:28px 8px;min-height:100px}
+#f03 .tcanvas .glyph{font-size:clamp(46px,7vw,66px)}
+#f03 .tinta-bg{background:var(--tinta)}
+#f03 .tinta-bg .glyph{color:var(--creme)}
+#f03 .oliva-bg{background:var(--oliva)}
+#f03 .oliva-bg .glyph{color:var(--creme)}
+#f03 .tcap{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#211D1A99;
+    padding:9px 12px;border-top:.5px solid var(--hair);text-align:center}
+#f03 .iconrow{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+#f03 .ic{display:flex;flex-direction:column;align-items:center;gap:8px}
+#f03 .round{width:88px;height:88px;border-radius:50%;background:var(--tinta);display:flex;align-items:center;justify-content:center}
+#f03 .round .glyph{font-size:38px;color:var(--creme)}
+#f03 .app{width:88px;height:88px;border-radius:20px;background:var(--oliva);display:flex;align-items:center;justify-content:center}
+#f03 .app .glyph{font-size:38px;color:var(--creme)}
+#f03 .ic .lbl{font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#211D1A88}
+#f03 .smallwrap{margin-top:22px;border-top:.5px solid var(--hair);padding-top:16px}
+#f03 .small-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#211D1A88;margin-bottom:12px}
+#f03 .small{display:flex;align-items:baseline;gap:20px}
+#f03 .small .glyph{color:var(--tinta)}
+#f03 .s1{font-size:34px}
+#f03 .s2{font-size:22px}
+#f03 .s3{font-size:14px}
+#f03 .s4{font-size:10px}
+#f03 .scrib{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
+#f03 .scrib .sb{flex:1;min-width:220px;border:.5px solid var(--hair);display:flex;flex-direction:column;background:var(--creme)}
+#f03 .scrib .sb img{display:block;width:100%;height:auto;padding:18px}
+#f03 .scrib .sb .tcap{margin-top:auto}
+#f03 .note{font-family:'Inter',sans-serif;font-size:12.5px;line-height:1.6;color:#211D1Acc;margin-top:18px}
+#f03 .note b{font-weight:600}
+#f03 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+#f03 .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
+#f03 .footer a:hover{color:var(--terra)}
+@media (max-width:720px){#f03 .titleblock{grid-template-columns:1fr}
+#f03 .tb-meta{border-left:0;border-top:1px solid var(--tinta);grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+#f03 .cell:nth-child(odd){border-right:.5px solid var(--hair)}}
+
+/* ── sistema ─────────────────────────── */
+#f04 .sheet{max-width:1100px;margin:0 auto;background:var(--creme);border:1px solid var(--tinta);
+    box-shadow:0 24px 60px -28px #00000055;position:relative}
+#f04 .sheet::after{content:"";position:absolute;inset:7px;border:.5px solid var(--hair);pointer-events:none}
+#f04 .mark{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;line-height:1}
+#f04 .tr{color:var(--terra)}
+#f04 .ruler{display:flex;align-items:flex-end;height:26px;border-bottom:1px solid var(--tinta);padding:0 16px}
+#f04 .tick{flex:1;border-left:.5px solid var(--hair);height:6px}
+#f04 .tick:nth-child(5n+1){height:12px;border-left:1px solid var(--tinta)}
+#f04 .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
+#f04 .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
+#f04 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+#f04 .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,56px);line-height:.98;letter-spacing:-.06em;text-transform:lowercase}
+#f04 .tb-main h1 u{text-decoration:none;color:var(--terra)}
+#f04 .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+#f04 .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
+#f04 .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+#f04 .cell:last-child{border-bottom:0}
+#f04 .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
+#f04 .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
+#f04 section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,48px) clamp(16px,4vw,42px)}
+#f04 .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:30px;display:flex;gap:12px;align-items:center}
+#f04 .sec-label .no{font-weight:700;color:var(--tinta)}
+#f04 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair)}
+#f04 /* ---- Tipografia ---- */
+  .faces{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,42px);margin-bottom:38px}
+#f04 .face{border:.5px solid var(--hair);padding:22px 22px 20px}
+#f04 .face .spec{font-size:clamp(40px,7vw,68px);line-height:1;margin-bottom:14px}
+#f04 .face .spec.mono{font-family:var(--mono);font-weight:500;font-style:italic;letter-spacing:-.03em;text-transform:lowercase}
+#f04 .face .spec.inter{font-family:'Inter',sans-serif;font-weight:600;letter-spacing:-.02em}
+#f04 .face .fn{font-size:13px;font-weight:600;margin-bottom:4px}
+#f04 .face .fu{font-size:11px;color:#211D1A99;line-height:1.5}
+#f04 .face .glyphs{margin-top:14px;padding-top:12px;border-top:.5px solid var(--hair);font-size:13px;color:#211D1A99}
+#f04 .face .glyphs.mono{font-family:var(--mono);font-style:italic}
+#f04 .scale-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:18px}
+#f04 .scale-row{display:flex;align-items:baseline;gap:18px;padding:14px 0;border-top:.5px solid var(--hair);flex-wrap:wrap}
+#f04 .scale-row .demo{flex:1;min-width:200px;color:var(--tinta)}
+#f04 .scale-row .meta{font-size:10px;letter-spacing:.04em;color:#211D1A88;text-align:right;white-space:nowrap;font-family:var(--mono)}
+#f04 .d-display{font-family:var(--mono);font-weight:500;font-style:italic;font-size:40px;letter-spacing:-.06em;text-transform:lowercase;line-height:1}
+#f04 .d-h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:26px;letter-spacing:-.03em;text-transform:lowercase}
+#f04 .d-h2{font-family:var(--mono);font-weight:400;font-style:italic;font-size:18px;text-transform:lowercase}
+#f04 .d-label{font-family:var(--mono);font-weight:400;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+#f04 .d-body{font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;max-width:48ch}
+#f04 .d-cap{font-family:'Inter',sans-serif;font-size:12px;color:#211D1A99}
+#f04 /* ---- Cor ---- */
+  .pal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+#f04 .pchip{border:.5px solid var(--hair)}
+#f04 .pchip .col{height:96px}
+#f04 .pchip .info{padding:11px 13px;border-top:.5px solid var(--hair)}
+#f04 .pchip .pn{font-size:12px;font-weight:600}
+#f04 .pchip .ph{font-family:var(--mono);font-size:11px;color:#211D1A88;margin-top:4px}
+#f04 .pchip .pu{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#211D1A77;margin-top:9px}
+#f04 .pchip.accent .pu{color:var(--terra)}
+#f04 .prop-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:12px}
+#f04 .propbar{display:flex;height:46px;border:.5px solid var(--hair);overflow:hidden;margin-bottom:8px}
+#f04 .propbar span{display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;color:#EDE6DA}
+#f04 .p-creme{background:var(--creme);flex:50;color:#211D1A99}
+#f04 .p-tinta{background:var(--tinta);flex:26}
+#f04 .p-oliva{background:var(--oliva);flex:22}
+#f04 .p-terra{background:var(--terra);flex:2}
+#f04 .prop-note{font-family:'Inter',sans-serif;font-size:12px;color:#211D1A99;line-height:1.6}
+#f04 .prop-note b{font-weight:600;color:var(--terra)}
+#f04 /* ---- Uso ---- */
+  .use-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,3vw,30px);margin-bottom:10px}
+#f04 .use-card{border:.5px solid var(--hair);padding:20px}
+#f04 .use-card .ut{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:16px}
+#f04 .clearbox{position:relative;background:var(--creme);border:.5px dashed #211D1A55;
+    display:flex;align-items:center;justify-content:center;padding:40px;margin-bottom:12px}
+#f04 .clearbox .inner{outline:1px solid var(--terra);outline-offset:22px;padding:2px 4px}
+#f04 .clearbox .lt{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(24px,5vw,40px);letter-spacing:-.06em;text-transform:lowercase;line-height:1}
+#f04 .use-desc{font-family:'Inter',sans-serif;font-size:12px;color:#211D1A99;line-height:1.6}
+#f04 .use-desc b{font-weight:600;color:var(--tinta)}
+#f04 .minrow{display:flex;align-items:flex-end;gap:26px;flex-wrap:wrap;margin:6px 0 14px}
+#f04 .minitem{display:flex;flex-direction:column;align-items:center;gap:9px}
+#f04 .minitem .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;color:var(--tinta)}
+#f04 .minitem .ms{font-size:30px;letter-spacing:-.04em}
+#f04 .minitem .mm{font-size:20px}
+#f04 .minitem .mf{font-size:13px}
+#f04 .minitem .cap{font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A88}
+#f04 /* ---- Não faça ---- */
+  .dont-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+#f04 .dont{border:.5px solid var(--hair);display:flex;flex-direction:column}
+#f04 .dont .canvas{min-height:96px;display:flex;align-items:center;justify-content:center;padding:18px;position:relative;background:var(--creme)}
+#f04 .dont .canvas::after{content:"✕";position:absolute;top:7px;right:9px;color:var(--terra);font-size:13px;font-weight:700}
+#f04 .dont .lt{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:26px;letter-spacing:-.04em;color:var(--tinta);line-height:1}
+#f04 .dont .cap{font-size:9.5px;color:#211D1A99;padding:10px 12px;border-top:.5px solid var(--hair);line-height:1.4;font-family:'Inter',sans-serif}
+#f04 /* violations */
+  .v-color .tr{color:var(--oliva)}
+#f04 .v-roman .lt{font-style:normal}
+#f04 .v-upper .lt{text-transform:uppercase}
+#f04 .v-stretch .lt{transform:scaleX(1.7);display:inline-block}
+#f04 .v-shadow .lt{text-shadow:2px 3px 0 #21201a55}
+#f04 .v-lowcon{background:var(--terra)}
+#f04 .v-lowcon .lt{color:#B85C38;text-shadow:none}
+#f04 .v-lowcon .tr{color:#A8512F}
+#f04 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+#f04 .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
+#f04 .footer a:hover{color:var(--terra)}
+@media (max-width:720px){#f04 .titleblock{grid-template-columns:1fr}
+#f04 .tb-meta{border-left:0;border-top:1px solid var(--tinta);grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+#f04 .cell:nth-child(odd){border-right:.5px solid var(--hair)}
+#f04 .faces{grid-template-columns:1fr}
+#f04 .pal{grid-template-columns:1fr 1fr}
+#f04 .use-grid{grid-template-columns:1fr}
+#f04 .dont-grid{grid-template-columns:1fr 1fr}
+#f04 .scale-row .meta{text-align:left}}
+
+/* ── aplicações ─────────────────────────── */
+#f05 .sheet{max-width:1100px;margin:0 auto;background:var(--creme);border:1px solid var(--tinta);
+    box-shadow:0 24px 60px -28px #00000055;position:relative}
+#f05 .sheet::after{content:"";position:absolute;inset:7px;border:.5px solid var(--hair);pointer-events:none}
+#f05 .mark{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;line-height:1}
+#f05 .tr{color:var(--terra)}
+#f05 .ruler{display:flex;align-items:flex-end;height:26px;border-bottom:1px solid var(--tinta);padding:0 16px}
+#f05 .tick{flex:1;border-left:.5px solid var(--hair);height:6px}
+#f05 .tick:nth-child(5n+1){height:12px;border-left:1px solid var(--tinta)}
+#f05 .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
+#f05 .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
+#f05 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+#f05 .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,56px);line-height:.98;letter-spacing:-.06em;text-transform:lowercase}
+#f05 .tb-main h1 u{text-decoration:none;color:var(--terra)}
+#f05 .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+#f05 .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
+#f05 .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+#f05 .cell:last-child{border-bottom:0}
+#f05 .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
+#f05 .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
+#f05 section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,48px) clamp(16px,4vw,42px)}
+#f05 .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:28px;display:flex;gap:12px;align-items:center}
+#f05 .sec-label .no{font-weight:700;color:var(--tinta)}
+#f05 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair)}
+#f05 /* ---- Cartão ---- */
+  .cards{display:flex;gap:clamp(16px,3vw,28px);flex-wrap:wrap}
+#f05 .card{flex:1;min-width:280px;aspect-ratio:1.61/1;border:.5px solid var(--hair);
+    box-shadow:0 10px 30px -18px #00000066;position:relative;overflow:hidden;display:flex}
+#f05 .card-cap{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#211D1A88;margin-top:10px}
+#f05 /* frente */
+  .c-front{background:var(--creme);flex-direction:column;justify-content:space-between;padding:clamp(20px,3.4vw,30px)}
+#f05 .c-front .top{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--oliva)}
+#f05 .c-front .logo{font-size:clamp(28px,5vw,40px);letter-spacing:-.06em}
+#f05 .c-front .tag{font-family:var(--mono);font-style:italic;font-weight:400;font-size:clamp(11px,1.8vw,13px);color:var(--oliva);margin-top:8px}
+#f05 /* verso */
+  .c-back{background:var(--oliva);color:var(--creme);flex-direction:column;justify-content:space-between;padding:clamp(20px,3.4vw,30px)}
+#f05 .c-back .bigmono{flex:1;display:flex;align-items:center}
+#f05 .c-back .bigmono .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:clamp(46px,9vw,72px);letter-spacing:-.04em}
+#f05 .c-back .contacts{font-family:var(--mono);font-size:clamp(9.5px,1.6vw,11px);line-height:1.8;letter-spacing:.01em}
+#f05 .c-back .contacts .ln{display:block;opacity:.95}
+#f05 /* ---- Assinatura de e-mail ---- */
+  .mailwrap{background:#fff;border:.5px solid var(--hair);box-shadow:0 10px 30px -20px #00000055;
+    padding:clamp(18px,3vw,26px);max-width:520px}
+#f05 .mailclient{font-family:'Inter',sans-serif;font-size:12px;color:#211D1A99;margin-bottom:18px;line-height:1.6}
+#f05 .mailclient b{color:var(--tinta);font-weight:600}
+#f05 .sig{display:flex;align-items:center;gap:18px}
+#f05 .sig .avatar{width:62px;height:62px;border-radius:14px;background:var(--oliva);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#f05 .sig .avatar .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;
+    font-size:28px;color:var(--creme);letter-spacing:-.04em}
+#f05 .sig .divider{width:2px;align-self:stretch;background:var(--terra)}
+#f05 .sig .info{font-family:'Inter',sans-serif}
+#f05 .sig .nm{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;
+    font-size:18px;letter-spacing:-.04em;color:var(--tinta)}
+#f05 .sig .rl{font-size:11px;letter-spacing:.04em;color:var(--oliva);margin:3px 0 8px;font-weight:600}
+#f05 .sig .ct{font-size:11.5px;color:#211D1A99;line-height:1.7}
+#f05 .sig .ct a{color:#211D1A99;text-decoration:none}
+#f05 .sig .ct .sep{color:var(--terra);margin:0 6px}
+#f05 /* ---- Papelaria ---- */
+  .stat-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(16px,3vw,26px);align-items:stretch}
+#f05 .letterhead{border:.5px solid var(--hair);background:#fff;padding:clamp(20px,3vw,28px);display:flex;flex-direction:column}
+#f05 .lh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+    padding-bottom:16px;border-bottom:1px solid var(--tinta)}
+#f05 .lh-top .logo{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:22px;letter-spacing:-.06em}
+#f05 .lh-top .meta{font-family:var(--mono);font-size:9.5px;line-height:1.7;color:#211D1A99;text-align:right}
+#f05 .lh-body{flex:1;padding-top:16px}
+#f05 .lh-body .line{height:7px;background:var(--hair);border-radius:2px;margin-bottom:9px}
+#f05 .lh-body .line.s{width:55%}
+#f05 .lh-foot{margin-top:14px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#211D1A77;display:flex;justify-content:space-between}
+#f05 .lh-foot .t{color:var(--terra)}
+#f05 .avatars{display:flex;flex-direction:column;gap:14px}
+#f05 .av-row{display:flex;gap:14px;align-items:center}
+#f05 .av{display:flex;flex-direction:column;align-items:center;gap:8px}
+#f05 .circle{width:64px;height:64px;border-radius:50%;background:var(--tinta);display:flex;align-items:center;justify-content:center}
+#f05 .circle .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:26px;color:var(--creme);letter-spacing:-.04em}
+#f05 .squircle{width:64px;height:64px;border-radius:16px;background:var(--oliva);display:flex;align-items:center;justify-content:center}
+#f05 .squircle .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:30px;color:var(--creme)}
+#f05 .favi{width:36px;height:36px;border-radius:8px;background:var(--tinta);display:flex;align-items:center;justify-content:center}
+#f05 .favi .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:18px;color:var(--creme)}
+#f05 .av .cap{font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A88}
+#f05 .note{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:#211D1A99;margin-top:18px}
+#f05 .note b{font-weight:600;color:var(--tinta)}
+#f05 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+#f05 .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
+#f05 .footer a:hover{color:var(--terra)}
+@media (max-width:720px){#f05 .titleblock{grid-template-columns:1fr}
+#f05 .tb-meta{border-left:0;border-top:1px solid var(--tinta);grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+#f05 .cell:nth-child(odd){border-right:.5px solid var(--hair)}
+#f05 .stat-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="barra" aria-label="folhas do manual">
+  <span class="bm">michel stein<i>_</i></span>
+  <a href="#f01"><span class="n">01</span> capa</a>
+  <a href="#f02"><span class="n">02</span> logotipo</a>
+  <a href="#f03"><span class="n">03</span> monograma</a>
+  <a href="#f04"><span class="n">04</span> sistema</a>
+  <a href="#f05"><span class="n">05</span> aplicações</a>
+</nav>
+
+<p class="mestre"><b>Esta página é a apresentação da marca.</b> A especificação
+operável — a que as sessões leem e o deck consome — é o
+<code>MARCA-MICHEL-STEIN.md</code>, ao lado deste arquivo. Se os dois divergirem,
+o <code>.md</code> é o mestre.</p>
+
+<div class="folhas">
+
+<section class="folha" id="f01" aria-label="folha capa & conceito">
+
+  <div class="ruler" aria-hidden="true">
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+  </div>
+
+  <header class="titleblock">
+    <div class="tb-main">
+      <div class="eyebrow">Identidade Visual · Marca Pessoal</div>
+      <h1>capa &amp; conceito<u>_</u></h1>
+      <p class="tb-sub">A abertura do sistema visual de Michel Stein. Direção D — Mono Editorial: o rigor do arquiteto e a autoria do ilustrador num só gesto.</p>
+    </div>
+    <div class="tb-meta">
+      <div class="cell"><span class="k">Projeto</span><span class="v">Identidade Pessoal</span></div>
+      <div class="cell"><span class="k">Cliente</span><span class="v">Michel Stein</span></div>
+      <div class="cell"><span class="k">Direção</span><span class="v">D · Mono Editorial</span></div>
+      <div class="cell"><span class="k">Folha</span><span class="v">01 / 05 — Capa &amp; Conceito</span></div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section>
+    <div class="hero">
+      <div class="logotype mark">michel stein<span class="tr">_</span></div>
+      <div class="role">arquiteto · ilustrador</div>
+    </div>
+  </section>
+
+  <!-- CONCEITO -->
+  <section>
+    <div class="sec-label"><span class="no">01</span> O Conceito</div>
+    <div class="concept">
+      <div class="big">_</div>
+      <div class="txt">
+        <span class="tagq">a mão por trás do traço</span>
+        A marca nasce de DM Mono itálico em caixa-baixa: a inclinação carrega o <b>gesto da mão</b>, e o sistema monoespaçado dá a <b>precisão técnica</b> do projeto. O underscore terracota é o <b>traço</b> — o resíduo do desenhista dentro da máquina, e o único ponto de cor quente da identidade. Tudo o mais vive em creme, tinta e oliva.
+      </div>
+    </div>
+  </section>
+
+  <!-- ÍNDICE -->
+  <section>
+    <div class="sec-label"><span class="no">02</span> Índice das Folhas</div>
+    <div class="index">
+      <span class="ix here"><span class="n mark">01<span class="tr">_</span></span><span class="t">capa &amp; conceito</span><span class="d">história e essência da marca</span></span>
+      <a class="ix" href="#f02"><span class="n mark">02<span class="tr">_</span></span><span class="t">logotipo &amp; assinatura</span><span class="d">marca, versões e lockup com tagline</span></a>
+      <a class="ix" href="#f03"><span class="n mark">03<span class="tr">_</span></span><span class="t">monograma</span><span class="d">ms_ principal e m_ reduzido</span></a>
+      <a class="ix" href="#f04"><span class="n mark">04<span class="tr">_</span></span><span class="t">sistema</span><span class="d">tipografia, cor e regras de uso</span></a>
+      <a class="ix" href="#f05"><span class="n mark">05<span class="tr">_</span></span><span class="t">aplicações</span><span class="d">cartão, e-mail e papelaria</span></a>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span><a href="#f01">michel stein_ — Direção D</a></span>
+    <span>Capa &amp; Conceito · DM Mono 500 itálico + Inter</span>
+    <span>Folha 01 / 05</span>
+  </div>
+
+</section>
+
+<section class="folha" id="f02" aria-label="folha logotipo & assinatura">
+
+  <div class="ruler" aria-hidden="true">
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+  </div>
+
+  <header class="titleblock">
+    <div class="tb-main">
+      <div class="eyebrow">Direção D · Mono Editorial</div>
+      <h1>logotipo<u>_</u></h1>
+      <p class="tb-sub">A marca, suas versões e o lockup com tagline. DM Mono Medium itálico, caixa-baixa, com tracking fechado em −.06em.</p>
+    </div>
+    <div class="tb-meta">
+      <div class="cell"><span class="k">Projeto</span><span class="v">Identidade Pessoal</span></div>
+      <div class="cell"><span class="k">Cliente</span><span class="v">Michel Stein</span></div>
+      <div class="cell"><span class="k">Tipo</span><span class="v">DM Mono · 500 itálico</span></div>
+      <div class="cell"><span class="k">Folha</span><span class="v">02 / 05 — Logotipo</span></div>
+    </div>
+  </header>
+
+  <!-- 01 LOGOTIPO PRIMÁRIO -->
+  <section>
+    <div class="sec-label"><span class="no">01</span> Logotipo Primário</div>
+    <div class="logo-hero">
+      <div class="logotype mark">michel stein<span class="tr">_</span></div>
+      <p class="logo-note">DM Mono Medium itálico (500), caixa-baixa, tracking −.06em. O underscore terracota é fixo — parte do logotipo, não cursor. Único ponto de cor quente.</p>
+    </div>
+  </section>
+
+  <!-- 02 ASSINATURA COM TAGLINE -->
+  <section>
+    <div class="sec-label"><span class="no">02</span> Assinatura com Tagline</div>
+    <div class="lockup">
+      <div class="lt mark">michel stein<span class="tr">_</span></div>
+      <div class="tag">a mão por trás do traço</div>
+    </div>
+    <p class="note">A tagline acompanha o logotipo em DM Mono itálico regular, na oliva. Alinhada à esquerda, com respiro igual à altura do "m" entre as linhas.</p>
+  </section>
+
+  <!-- 03 VERSÕES -->
+  <section>
+    <div class="sec-label"><span class="no">03</span> Versões</div>
+    <div class="vers">
+      <div class="vbox"><div class="vcanvas v-creme"><span class="g mark">michel stein<span class="tr">_</span></span></div><div class="vcap">Positivo · creme</div></div>
+      <div class="vbox"><div class="vcanvas v-tinta"><span class="g mark">michel stein<span class="tr">_</span></span></div><div class="vcap">Negativo · tinta</div></div>
+      <div class="vbox"><div class="vcanvas v-oliva"><span class="g mark">michel stein<span class="tr">_</span></span></div><div class="vcap">Sobre oliva</div></div>
+    </div>
+    <p class="note">Em qualquer fundo, o traço permanece terracota — desde que haja contraste suficiente. Evitar fundos quentes de tom próximo (ver regras na Folha 04).</p>
+  </section>
+
+  <div class="footer">
+    <span><a href="#f01">← índice das folhas</a></span>
+    <span>Logotipo &amp; Assinatura · DM Mono 500 itálico</span>
+    <span>Folha 02 / 05</span>
+  </div>
+
+</section>
+
+<section class="folha" id="f03" aria-label="folha monograma">
+
+  <div class="ruler" aria-hidden="true">
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+  </div>
+
+  <header class="titleblock">
+    <div class="tb-main">
+      <div class="eyebrow">Direção D · Mono Editorial</div>
+      <h1>michel stein<u>_</u></h1>
+      <p class="tb-sub">Monograma em DM Mono Medium itálico — o peso mais encorpado da família. Sistema de dois níveis: ms_ principal, m_ como ícone reduzido.</p>
+    </div>
+    <div class="tb-meta">
+      <div class="cell"><span class="k">Projeto</span><span class="v">Identidade Pessoal</span></div>
+      <div class="cell"><span class="k">Cliente</span><span class="v">Michel Stein</span></div>
+      <div class="cell"><span class="k">Tipo</span><span class="v">DM Mono · 500 itálico</span></div>
+      <div class="cell"><span class="k">Folha</span><span class="v">03 / 05 — Monograma</span></div>
+    </div>
+  </header>
+
+  <!-- 01 Logotipo -->
+  <section>
+    <div class="sec-label"><span class="no">01</span> Logotipo</div>
+    <div class="logo-hero">
+      <div class="logotype mark">michel stein<span class="tr">_</span></div>
+      <p class="logo-note">DM Mono Medium itálico, caixa-baixa. A inclinação dá o gesto da mão; o underscore terracota é o traço — fixo, único ponto de cor quente.</p>
+    </div>
+  </section>
+
+  <!-- 02 Monograma principal ms_ -->
+  <section>
+    <div class="sec-label"><span class="no">02</span> Monograma Principal <span class="lv">nível 1 · ms_</span></div>
+    <div class="hero-mark"><span class="glyph mark">ms<span class="tr">_</span></span></div>
+    <div class="tiles">
+      <div class="tile"><div class="tcanvas tinta-bg"><span class="glyph mark">ms<span class="tr">_</span></span></div><div class="tcap">Tinta</div></div>
+      <div class="tile"><div class="tcanvas oliva-bg"><span class="glyph mark">ms<span class="tr">_</span></span></div><div class="tcap">Oliva</div></div>
+    </div>
+    <div class="iconrow">
+      <div class="ic"><div class="round"><span class="glyph mark">ms<span class="tr">_</span></span></div><div class="lbl">Avatar redondo</div></div>
+      <div class="ic"><div class="app"><span class="glyph mark">ms<span class="tr">_</span></span></div><div class="lbl">Ícone de app</div></div>
+    </div>
+    <p class="note"><b>Uso:</b> assinatura geral — cartão, e-mail, portfólio, redes. Carrega as iniciais completas. Em tamanho médio/grande o itálico respira bem.</p>
+  </section>
+
+  <!-- 03 Ícone reduzido m_ -->
+  <section>
+    <div class="sec-label"><span class="no">03</span> Ícone Reduzido <span class="lv">nível 2 · m_</span></div>
+    <div class="hero-mark"><span class="glyph mark">m<span class="tr">_</span></span></div>
+    <div class="tiles">
+      <div class="tile"><div class="tcanvas tinta-bg"><span class="glyph mark">m<span class="tr">_</span></span></div><div class="tcap">Tinta</div></div>
+      <div class="tile"><div class="tcanvas oliva-bg"><span class="glyph mark">m<span class="tr">_</span></span></div><div class="tcap">Oliva</div></div>
+    </div>
+    <div class="iconrow">
+      <div class="ic"><div class="round"><span class="glyph mark">m<span class="tr">_</span></span></div><div class="lbl">Avatar redondo</div></div>
+      <div class="ic"><div class="app"><span class="glyph mark">m<span class="tr">_</span></span></div><div class="lbl">Favicon / app</div></div>
+    </div>
+    <div class="smallwrap">
+      <div class="small-lbl">Teste de redução</div>
+      <div class="small">
+        <span class="glyph mark s1">m<span class="tr">_</span></span>
+        <span class="glyph mark s2">m<span class="tr">_</span></span>
+        <span class="glyph mark s3">m<span class="tr">_</span></span>
+        <span class="glyph mark s4">m<span class="tr">_</span></span>
+      </div>
+    </div>
+    <p class="note"><b>Uso:</b> tamanhos mínimos — favicon, avatar pequeno, selo. O traço isolado ganha presença e segura a leitura mesmo reduzido.</p>
+  </section>
+
+
+  <!-- 04 Versão rabisco -->
+  <section>
+    <div class="sec-label"><span class="no">04</span> Versão Rabisco <span class="lv">sem regra escrita</span></div>
+    <div class="scrib">
+      <div class="sb">
+        <img src="assets/scribble-ms-900.png" alt="Monograma ms_ sobre rabisco oliva, versão estática">
+        <div class="tcap">Estática · PNG com transparência</div>
+      </div>
+      <div class="sb">
+        <img src="assets/scribble-ms.gif" alt="Monograma ms_ sobre rabisco oliva, versão animada">
+        <div class="tcap">Animada · GIF, 5 quadros</div>
+      </div>
+    </div>
+    <p class="note">O <b>ms_</b> em branco sobre um rabisco de oliva, com o traço terracota deslocado. Existe em estática e em animada, e é a única peça da identidade que carrega gesto desenhado em vez de tipografia pura.</p>
+    <p class="note">⚠ <b>Esta versão ainda não tem regra escrita:</b> não está definido onde ela pode e onde não pode entrar, nem qual o tamanho mínimo, nem como se comporta sobre fundo escuro (o PNG tem fundo transparente e o branco do <b>ms</b> some sobre creme claro). Até que a regra exista, usar só em contexto informal — avatar, selo, assinatura de redes — e nunca em documento formal ou proposta.</p>
+    <p class="note">Mestre em resolução plena: <code>assets/scribble-ms.png</code>, 1679 × 1513.</p>
+  </section>
+
+  <div class="footer">
+    <span><a href="#f01">← índice das folhas</a></span>
+    <span>Monograma · DM Mono 500 itálico</span>
+    <span>Folha 03 / 05</span>
+  </div>
+
+</section>
+
+<section class="folha" id="f04" aria-label="folha sistema">
+
+  <div class="ruler" aria-hidden="true">
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+  </div>
+
+  <header class="titleblock">
+    <div class="tb-main">
+      <div class="eyebrow">Direção D · Mono Editorial</div>
+      <h1>sistema<u>_</u></h1>
+      <p class="tb-sub">Tipografia, cor e regras de uso. A base do sistema visual: o que é fixo, as proporções e o que não fazer.</p>
+    </div>
+    <div class="tb-meta">
+      <div class="cell"><span class="k">Projeto</span><span class="v">Identidade Pessoal</span></div>
+      <div class="cell"><span class="k">Cliente</span><span class="v">Michel Stein</span></div>
+      <div class="cell"><span class="k">Fonte</span><span class="v">DM Mono · Inter</span></div>
+      <div class="cell"><span class="k">Folha</span><span class="v">04 / 05 — Sistema</span></div>
+    </div>
+  </header>
+
+  <!-- 01 TIPOGRAFIA -->
+  <section>
+    <div class="sec-label"><span class="no">01</span> Tipografia</div>
+
+    <div class="faces">
+      <div class="face">
+        <div class="spec mono">michel<span class="tr">_</span></div>
+        <div class="fn">DM Mono — Medium Itálico (500)</div>
+        <div class="fu">Marca, logotipo, títulos e destaques. Sempre em caixa-baixa. O peso 500 é o máximo da família.</div>
+        <div class="glyphs mono">abcdefghijklm · 0123456789 · _ /</div>
+      </div>
+      <div class="face">
+        <div class="spec inter">Aa</div>
+        <div class="fn">Inter — Regular / Medium / SemiBold</div>
+        <div class="fu">Texto corrido, interface e documentos. Base neutra que equilibra o caráter da mono nos títulos.</div>
+        <div class="glyphs">abcdefghijklm · 0123456789</div>
+      </div>
+    </div>
+
+    <div class="scale-lbl">Escala tipográfica</div>
+    <div class="scale-row"><span class="demo d-display">michel stein<span class="tr">_</span></span><span class="meta">DM Mono 500i · 40px · −.06em</span></div>
+    <div class="scale-row"><span class="demo d-h1">título de seção</span><span class="meta">DM Mono 500i · 26px · −.03em</span></div>
+    <div class="scale-row"><span class="demo d-h2">subtítulo de apoio</span><span class="meta">DM Mono 400i · 18px</span></div>
+    <div class="scale-row"><span class="demo d-label">label · metadado</span><span class="meta">DM Mono 400 · 12px · +.20em · caixa-alta</span></div>
+    <div class="scale-row"><span class="demo d-body">Texto corrido em Inter para leitura confortável em blocos longos, do portfólio ao e-mail.</span><span class="meta">Inter 400 · 15px · 1.6</span></div>
+    <div class="scale-row"><span class="demo d-cap">Legenda e nota de rodapé</span><span class="meta">Inter 400 · 12px</span></div>
+  </section>
+
+  <!-- 02 COR -->
+  <section>
+    <div class="sec-label"><span class="no">02</span> Cor</div>
+
+    <div class="pal">
+      <div class="pchip"><div class="col" style="background:#EDE6DA"></div><div class="info"><div class="pn">Creme</div><div class="ph">#EDE6DA</div><div class="pu">Base / fundo</div></div></div>
+      <div class="pchip"><div class="col" style="background:#211D1A"></div><div class="info"><div class="pn">Tinta</div><div class="ph">#211D1A</div><div class="pu">Texto / principal</div></div></div>
+      <div class="pchip"><div class="col" style="background:#6B6A4B"></div><div class="info"><div class="pn">Oliva</div><div class="ph">#6B6A4B</div><div class="pu">Secundária ativa</div></div></div>
+      <div class="pchip accent"><div class="col" style="background:#B85C38"></div><div class="info"><div class="pn">Terracota</div><div class="ph">#B85C38</div><div class="pu">Destaque · mínimo</div></div></div>
+    </div>
+
+    <div class="prop-lbl">Proporção de uso</div>
+    <div class="propbar">
+      <span class="p-creme">Creme 50%</span>
+      <span class="p-tinta">Tinta 26%</span>
+      <span class="p-oliva">Oliva 22%</span>
+      <span class="p-terra"></span>
+    </div>
+    <p class="prop-note">A marca vive em creme e tinta, com a <b style="color:#6B6A4B">oliva</b> como secundária forte — presente em blocos, fundos de seção, avatares e detalhes de layout. <b>A terracota fica reservada ao traço (_) ou a uma única palavra de destaque</b> — nunca em áreas grandes, nunca como fundo. É o que mantém a cor quente contida e a afasta da paleta da antiga identidade.</p>
+  </section>
+
+  <!-- 03 USO DO LOGOTIPO -->
+  <section>
+    <div class="sec-label"><span class="no">03</span> Uso do Logotipo</div>
+    <div class="use-grid">
+      <div class="use-card">
+        <div class="ut">Área de proteção</div>
+        <div class="clearbox"><span class="inner"><span class="lt">michel stein<span class="tr">_</span></span></span></div>
+        <p class="use-desc">Mantenha ao redor do logotipo uma margem livre igual à <b>altura do "m"</b>. Nada de texto, imagem ou borda dentro dessa zona.</p>
+      </div>
+      <div class="use-card">
+        <div class="ut">Tamanho mínimo</div>
+        <div class="minrow">
+          <div class="minitem"><span class="g ms">ms<span class="tr">_</span></span><span class="cap">Monograma · 24px</span></div>
+          <div class="minitem"><span class="g mm">m<span class="tr">_</span></span><span class="cap">Ícone · 18px</span></div>
+          <div class="minitem"><span class="g mf">m<span class="tr">_</span></span><span class="cap">Favicon · 16px</span></div>
+        </div>
+        <p class="use-desc">Abaixo desses tamanhos o traço perde definição. Para favicon e avatar muito pequeno, use o <b>m_</b> em vez do logotipo completo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 NÃO FAÇA -->
+  <section>
+    <div class="sec-label"><span class="no">04</span> Não Faça</div>
+    <div class="dont-grid">
+      <div class="dont v-color"><div class="canvas"><span class="lt">ms<span class="tr">_</span></span></div><div class="cap">Não trocar a cor do traço.</div></div>
+      <div class="dont v-roman"><div class="canvas"><span class="lt">ms<span class="tr">_</span></span></div><div class="cap">Não usar a versão reta (sem itálico).</div></div>
+      <div class="dont v-upper"><div class="canvas"><span class="lt">ms<span class="tr">_</span></span></div><div class="cap">Não usar caixa-alta.</div></div>
+      <div class="dont v-stretch"><div class="canvas"><span class="lt">ms<span class="tr">_</span></span></div><div class="cap">Não esticar ou distorcer.</div></div>
+      <div class="dont v-shadow"><div class="canvas"><span class="lt">ms<span class="tr">_</span></span></div><div class="cap">Não aplicar sombra ou efeito.</div></div>
+      <div class="dont v-lowcon"><div class="canvas"><span class="lt">ms<span class="tr">_</span></span></div><div class="cap">Não usar sobre fundo de baixo contraste.</div></div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span><a href="#f01">← índice das folhas</a></span>
+    <span>Sistema · DM Mono 500 itálico + Inter</span>
+    <span>Folha 04 / 05</span>
+  </div>
+
+</section>
+
+<section class="folha" id="f05" aria-label="folha aplicações">
+
+  <div class="ruler" aria-hidden="true">
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+  </div>
+
+  <header class="titleblock">
+    <div class="tb-main">
+      <div class="eyebrow">Direção D · Mono Editorial</div>
+      <h1>aplicações<u>_</u></h1>
+      <p class="tb-sub">A identidade no mundo real: cartão de visita, assinatura de e-mail e papelaria. Contatos são exemplos — substituir pelos reais.</p>
+    </div>
+    <div class="tb-meta">
+      <div class="cell"><span class="k">Projeto</span><span class="v">Identidade Pessoal</span></div>
+      <div class="cell"><span class="k">Cliente</span><span class="v">Michel Stein</span></div>
+      <div class="cell"><span class="k">Itens</span><span class="v">Cartão · E-mail · Papelaria</span></div>
+      <div class="cell"><span class="k">Folha</span><span class="v">05 / 05 — Aplicações</span></div>
+    </div>
+  </header>
+
+  <!-- 01 CARTÃO -->
+  <section>
+    <div class="sec-label"><span class="no">01</span> Cartão de Visita</div>
+    <div class="cards">
+      <div style="flex:1;min-width:280px">
+        <div class="card c-front">
+          <div class="top">arquiteto · ilustrador</div>
+          <div>
+            <div class="logo mark">michel stein<span class="tr">_</span></div>
+            <div class="tag">a mão por trás do traço</div>
+          </div>
+        </div>
+        <div class="card-cap">Frente · creme</div>
+      </div>
+      <div style="flex:1;min-width:280px">
+        <div class="card c-back">
+          <div class="bigmono"><span class="g">ms<span class="tr">_</span></span></div>
+          <div class="contacts">
+            <span class="ln">michelstein.com.br</span>
+            <span class="ln">michel@michelstein.com.br</span>
+            <span class="ln">+55 11 99999&#8209;0000 · são paulo</span>
+          </div>
+        </div>
+        <div class="card-cap">Verso · oliva</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 ASSINATURA DE E-MAIL -->
+  <section>
+    <div class="sec-label"><span class="no">02</span> Assinatura de E-mail</div>
+    <div class="mailwrap">
+      <div class="mailclient">Atenciosamente,<br><b>Michel</b></div>
+      <div class="sig">
+        <div class="avatar"><span class="g">ms<span class="tr">_</span></span></div>
+        <div class="divider"></div>
+        <div class="info">
+          <div class="nm">michel stein<span class="tr">_</span></div>
+          <div class="rl">Arquiteto · Ilustrador</div>
+          <div class="ct">
+            michel@michelstein.com.br<span class="sep">/</span>michelstein.com.br<br>
+            +55 11 99999-0000<span class="sep">/</span>São Paulo, BR
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note"><b>Dica de implementação:</b> em clientes de e-mail, montar como tabela HTML simples; usar a fonte do sistema (a mono não carrega em todos), mantendo o traço terracota (#B85C38) como único toque de cor e a estrutura avatar + filete + dados.</p>
+    <p class="note">⚠ <b>O telefone ainda é placeholder</b> (99999-0000). Substituir pelo real antes de mandar imprimir ou de usar como assinatura.</p>
+  </section>
+
+  <!-- 03 PAPELARIA -->
+  <section>
+    <div class="sec-label"><span class="no">03</span> Papelaria &amp; Ícones</div>
+    <div class="stat-grid">
+      <div class="letterhead">
+        <div class="lh-top">
+          <span class="logo">michel stein<span class="tr">_</span></span>
+          <span class="meta">michelstein.com.br<br>são paulo · br</span>
+        </div>
+        <div class="lh-body">
+          <div class="line"></div><div class="line"></div><div class="line s"></div>
+        </div>
+        <div class="lh-foot"><span>arquiteto · ilustrador</span><span class="t">_</span></div>
+      </div>
+
+      <div class="avatars">
+        <div class="av-row">
+          <div class="av"><div class="circle"><span class="g">ms<span class="tr">_</span></span></div><span class="cap">Avatar social</span></div>
+          <div class="av"><div class="squircle"><span class="g">m<span class="tr">_</span></span></div><span class="cap">Ícone app</span></div>
+          <div class="av"><div class="favi"><span class="g">m<span class="tr">_</span></span></div><span class="cap">Favicon</span></div>
+        </div>
+        <p class="note" style="margin-top:6px">Papel timbrado com logotipo à esquerda e contato à direita; avatares usando <b>ms_</b> no social e <b>m_</b> nos tamanhos mínimos.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span><a href="#f01">← índice das folhas</a></span>
+    <span>Aplicações</span>
+    <span>Folha 05 / 05</span>
+  </div>
+
+</section>
+</div>
+
+</body>
+</html>

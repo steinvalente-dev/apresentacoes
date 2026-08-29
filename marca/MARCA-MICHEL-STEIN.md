@@ -8,8 +8,9 @@ cara da michel stein_. O motor — gabaritos, quadro, revelação, chrome,
 validação — está em `DECK-MOTOR.md`, ao lado, e não sabe de que marca é a
 peça. **Montar uma apresentação = motor + esta marca + um DECK.**
 
-As folhas do manual, em desenho: `michel-stein/01-capa.html` a
-`05-aplicacoes.html`. Este arquivo é o resumo operável delas. A capa do deck tem
+**Este arquivo é o mestre.** O manual em desenho —
+`michel-stein/manual.html`, cinco folhas numa página — é a *apresentação* desta
+marca, o que se manda para fora. Divergiram, este ganha. A capa do deck tem
 arquivo próprio, ao lado: `MARCA-MICHEL-STEIN-CAPA.md`.
 
 ---

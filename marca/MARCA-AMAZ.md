@@ -13,6 +13,9 @@ Companheiro do `../sistemas/DECK-MOTOR.md`, que é o motor
 e não sabe de que marca é a peça. **Montar uma apresentação da AMAZ = motor +
 este arquivo + um DECK.**
 
+Como na michel stein_: **o `.md` é o mestre**, e a peça em desenho é a
+apresentação. Divergiram, o `.md` ganha.
+
 ---
 
 ## 1 · Identidade
