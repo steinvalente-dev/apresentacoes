@@ -72,17 +72,50 @@ proporção real de cada uma. Quando qualquer `ar` está declarado, a grade pass
 **centrar** em vez de esticar (`align-content:center`), e é isso que faz uma
 prancha de alturas diferentes parecer composta em vez de desalinhada.
 
-**Referência costuma ser retrato.** As da casa ITTB estão entre `0.56` e `0.86`.
-Com imagem deitada em quatro colunas a grade fica baixa e sobra tarja em cima e
-embaixo — não está errado, mas o tema perde presença. Deitada, preferir 2 ou 3
-colunas.
-
 **Croqui e planta: recortar todos com o MESMO retângulo.** Recorte individual faz
 cada slide pular de posição e mata a leitura da sobreposição. O método está no
 `../DECK-MOTOR.md`, seção da regra de imagem.
 
 **Resolução:** 1800 px de largura, JPEG q82, ~400–500 KB por imagem. Referência
 de repertório — imagem pequena, fundo claro — pode ir bem abaixo disso.
+
+---
+
+## ⚑ A proporção decide o número de colunas
+
+**É a regra que mais muda o resultado, e a mais fácil de errar.**
+
+| as imagens são | `ar` | colunas |
+|---|---|---|
+| **em retrato** — o caso normal da referência | ≤ 0.85 | **3 ou 4** |
+| quadradas, ou recortadas a 1:1 | 0.85 a 1.2 | **3** |
+| **deitadas** | > 1.2 | **2** — ou 3, se recortar em quadrado |
+
+**Por que:** referência de Pinterest chega em retrato, e quatro em pé preenchem a
+tela de fora a fora. As da casa ITTB estão entre `0.56` e `0.86`, e é por isso
+que aquelas pranchas de quatro funcionam.
+
+**Imagem deitada em quatro colunas fica pequena**, e sobra tarja em cima e
+embaixo — o tema perde presença. Deitada pede duas colunas, com legenda por
+imagem. Se você precisa de três, **recorte em quadrado**: material deitado a 1:1
+volta a preencher a tela.
+
+**Regra prática:** decida a proporção primeiro, o número de colunas depois.
+O contrário — escolher quatro colunas e depois enfiar o que tiver — é o que
+produz a prancha vazada.
+
+### O gabarito avisa
+
+O render mede a proporção média das células e reclama no console quando ela
+briga com o número de colunas:
+
+```
+prancha: imagem deitada (ar~1.55) em 4 colunas.
+         Deitada pede 2 colunas, ou 3 se recortar em quadrado.
+```
+
+Vale no módulo e no esqueleto. É aviso, não bloqueio — há caso legítimo de
+quebrar a regra, e aí é decisão sua.
 
 ---
 

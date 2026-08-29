@@ -83,16 +83,19 @@
 </head>
 <body>
 
-<div class="aviso">módulo · prancha de referência — três arranjos</div>
+<div class="aviso">módulo · prancha de referência — a proporção decide as colunas</div>
 
-<p class="sep">quatro colunas · o arranjo mais comum</p>
+<p class="sep">quatro colunas · imagem em retrato · o arranjo mais comum</p>
 <div class="g-prancha" style="min-height:88vh" id="p4"></div>
 
-<p class="sep">três colunas, com uma pilha · duas quadradas na coluna de uma retrato</p>
+<p class="sep">três colunas · com uma pilha</p>
 <div class="g-prancha" style="min-height:88vh" id="p3"></div>
 
-<p class="sep">duas colunas, com legenda por imagem · o caso do ambiente</p>
+<p class="sep">duas colunas · quando a imagem é deitada</p>
 <div class="g-prancha" style="min-height:88vh" id="p2"></div>
+
+<p class="sep">três colunas · deitada recortada em quadrado</p>
+<div class="g-prancha" style="min-height:88vh" id="pq"></div>
 
 <script>
 /* ── O RENDER. É isto que se copia junto. ──────────────────────────────
@@ -123,6 +126,21 @@ function Gprancha(s){
     return '<div class="cel rev">' + foto(it.src, it.cap, it.ar || s.ar)
       + (it.cap ? '<span class="cap">'+esc(it.cap)+'</span>' : '') + '</div>';
   }).join('');
+  /* A proporção decide o número de colunas. Deitada em 4 colunas fica
+     pequena e sobra tarja; retrato em 2 estica. Aviso no console em vez de
+     regra escondida num .md que ninguém abre na hora de montar. */
+  (function(){
+    var ars = (s.items||[]).map(function(i){ return parseFloat(i.ar||s.ar||0); })
+                           .filter(function(n){ return n>0; });
+    if(!ars.length) return;
+    var med = ars.reduce(function(a,b){return a+b;},0)/ars.length, c = s.cols||3;
+    if(med > 1.2 && c > 2)
+      console.warn('prancha: imagem deitada (ar~'+med.toFixed(2)+') em '+c+' colunas. '
+        + 'Deitada pede 2 colunas, ou 3 se recortar em quadrado.');
+    if(med < 0.85 && c < 3)
+      console.warn('prancha: imagem em retrato (ar~'+med.toFixed(2)+') em '+c+' colunas. '
+        + 'Retrato aceita 3 ou 4 e preenche melhor a tela.');
+  })();
   var top = '';
   if(s.top && (s.top.h2 || s.top.lead)){
     top = '<div class="top rev"><h2>'+esc(s.top.h2||'')+'</h2>'
@@ -136,26 +154,39 @@ function Gprancha(s){
     + cels + '</div></div>';
 }
 
-/* ── a demonstração ─────────────────────────────────────────────────── */
+/* ── a demonstração: a proporção decide o número de colunas ──────────
+   As imagens do acervo são deitadas; o `ar` da célula é que manda, e o
+   `object-fit:cover` recorta para ela. É assim num deck real também —
+   a referência de Pinterest chega em retrato e o `ar` respeita isso.
+   ─────────────────────────────────────────────────────────────────── */
 var F = '../fundo/';
 document.getElementById('p4').innerHTML = Gprancha({
   cols:4,
-  top:{ h2:'o tema desta prancha', lead:'A leitura das imagens — o que elas têm em comum, e por que estão juntas.' },
-  items:[ {src:F+'01.webp', ar:'1.778'}, {src:F+'02.webp', ar:'1.698'},
-          {src:F+'03.webp', ar:'1.385'}, {src:F+'04.webp', ar:'1.051'} ]
+  top:{ h2:'quatro colunas · imagem em retrato',
+        lead:'É o arranjo mais comum. Referência de Pinterest chega em retrato, e quatro em pé preenchem a tela sem sobrar tarja.' },
+  items:[ {src:F+'01.webp', ar:'0.70'}, {src:F+'02.webp', ar:'0.70'},
+          {src:F+'03.webp', ar:'0.70'}, {src:F+'04.webp', ar:'0.70'} ]
 });
 document.getElementById('p3').innerHTML = Gprancha({
   cols:3,
-  top:{ h2:'com uma pilha', lead:'Duas imagens quase quadradas ocupam a coluna de uma retrato, sem quebrar a grade.' },
-  items:[ {src:F+'05.webp', ar:'1.293'},
-          {pilha:[{src:F+'01.webp'},{src:F+'06.webp'}], ar:'1.30'},
-          {src:'', cap:'imagem que ainda não existe', ar:'1.293'} ]
+  top:{ h2:'três colunas · com uma pilha',
+        lead:'Duas imagens quase quadradas ocupam a coluna de uma retrato, sem quebrar a grade.' },
+  items:[ {src:F+'05.webp', ar:'0.70'},
+          {pilha:[{src:F+'01.webp'},{src:F+'06.webp'}], ar:'0.70'},
+          {src:'', cap:'imagem que ainda não existe', ar:'0.70'} ]
 });
 document.getElementById('p2').innerHTML = Gprancha({
   cols:2,
-  top:{ h2:'duas, com legenda', lead:'Quando cada imagem carrega uma decisão diferente, a legenda entra por imagem.' },
-  items:[ {src:F+'03.webp', ar:'1.385', cap:'A decisão que esta imagem sustenta, em uma frase.'},
-          {src:F+'05.webp', ar:'1.293', cap:'A decisão da outra — e é por isso que elas estão na mesma prancha.'} ]
+  top:{ h2:'duas colunas · imagem deitada',
+        lead:'Deitada em quatro colunas fica pequena e sobra tarja em cima e embaixo. Duas, com legenda por imagem, é o arranjo certo.' },
+  items:[ {src:F+'03.webp', ar:'1.50', cap:'A decisão que esta imagem sustenta, em uma frase.'},
+          {src:F+'05.webp', ar:'1.50', cap:'A decisão da outra — e é por isso que estão na mesma prancha.'} ]
+});
+document.getElementById('pq').innerHTML = Gprancha({
+  cols:3,
+  top:{ h2:'três colunas · recortada em quadrado',
+        lead:'O meio-termo: material deitado recortado a 1:1 aceita três colunas e volta a preencher a tela.' },
+  items:[ {src:F+'01.webp', ar:'1'}, {src:F+'03.webp', ar:'1'}, {src:F+'06.webp', ar:'1'} ]
 });
 
 /* ── imagem que falha vira slot, não buraco ────────────────────────────

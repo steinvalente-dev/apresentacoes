@@ -80,7 +80,7 @@ Ver a nota sobre isso no fim.
 |---|---|---|
 | `duo` | duas imagens lado a lado | `figs` **+ `leg` obrigatório** · `ar` |
 | `fotos` | linha do tempo ilustrada | `itens` |
-| `prancha` | grade de 2 a 4 imagens sobre um tema | `top` `cols` `items` — ver `gabaritos/prancha-referencia.md` |
+| `prancha` | grade de 2 a 4 imagens sobre um tema. **A proporção decide as colunas: retrato 3–4, deitada 2** | `top` `cols` `items` — ver `gabaritos/prancha-referencia.md` |
 | **⚠ `cols` no `prancha` é NÚMERO** | em `tabela` e `porte` é array de cabeçalhos | o `tpl()` trata `prancha` antes, por isso |
 | `cheia` | **o render em tela cheia. É o padrão para render** | `src` `h2` `cap` — ver `gabaritos/render-cheia.md` |
 | `mapa` · localização | onde o terreno está: satélite em sangria, endereço escrito | `src` `kick` `h2` `lead` `cap` `inv` — ver `gabaritos/mapa-localizacao.md` |

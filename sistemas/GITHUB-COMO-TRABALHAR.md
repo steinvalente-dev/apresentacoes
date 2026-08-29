@@ -46,6 +46,62 @@ raw abre sem token, então qualquer conversa lê o arquivo, inclusive as
 que não são Cowork. Esse é o ganho. Documento **com** dado de cliente
 não tem esse ganho — vai para o privado e abre no GitHub logado.
 
+## ⚑ Duas sessões, um repositório — ler antes de todo push
+
+Frentes diferentes trabalham em Projetos diferentes, e **escrevem no mesmo
+repositório**. Em 29/08/2026 isso aconteceu três vezes num dia: o push da Lavrō
+apagou o registro da AMAZ, e depois um push apagou a reorganização do acervo.
+Nenhum dos dois deu erro — o Git aceita, e o trabalho some em silêncio.
+
+**O arquivo em risco é sempre o mesmo: `index.html`.** É o único que toda frente
+edita. O resto — `marca/<nome>/`, `sistemas/gabaritos/`, a pasta da peça — cada
+uma mexe no seu canto e não colide.
+
+### O procedimento, sem exceção
+
+```
+git fetch origin
+git status -sb          # "behind N" = alguém publicou desde o seu clone
+git pull --ff-only origin main
+# ... só então editar o index.html ...
+git fetch origin        # de novo, imediatamente antes de subir
+git push origin main
+```
+
+**Se o `push` for recusado, NUNCA `--force`.** Recusa quer dizer que existe
+trabalho de outra sessão no meio. `git pull --rebase`, conferir que o que o outro
+fez continua lá, e só então subir.
+
+### Depois do pull, conferir o que sobreviveu
+
+Puxar não é o bastante: o pull pode trazer uma versão em que a sua mudança
+anterior já foi desfeita. Antes de reescrever, procurar o que você espera achar:
+
+```
+grep -c 'aba:"marca"' index.html      # as linhas que você acrescentou continuam?
+```
+
+Se sumiu, **reaplicar por cima do trabalho do outro** — nunca restaurar a sua
+versão inteira, que apagaria a dele.
+
+### E quando o outro fez melhor
+
+Aconteceu no detector de peça órfã: duas sessões resolveram o mesmo problema, uma
+ignorando pastas e a outra fazendo o detector contar `docs[].ver`. **A segunda
+ataca a causa; a primeira, o sintoma.** Ficou a segunda. Ao encontrar duas
+soluções para a mesma coisa, escolher e apagar a outra — deixar as duas é como
+nasce a divergência silenciosa.
+
+### O que a cópia local não sabe
+
+Um build que gera o arquivo do zero **apaga edição feita direto no repositório**.
+Antes de republicar uma peça:
+
+```
+diff <(curl -s <url da peça>) <build local>
+```
+
+---
 ## Subir sem registrar não conta como subir
 
 **Padrão, sem exceção: toda coisa que entra num repositório é registrada no
