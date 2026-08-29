@@ -4,7 +4,7 @@
 <!-- robots.txt nao funciona em Pages de projeto: o buscador so le o da raiz
      do dominio. A meta tag e a unica protecao. Regra do runbook, 22/08. -->
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>deck · esqueleto</title>
+<title>casa tavares_ — estudo preliminar</title>
 <!-- Fontes embutidas em woff2/base64, subconjunto latino + pontuacao.
      Regra do PRANCHA-SISTEMA: nenhuma dependencia de CDN. O arquivo abre
      igual sem rede, e a tipografia da marca nunca cai para fallback. -->
@@ -1053,60 +1053,6 @@ body.em-cheia.ocioso .slide.ativo .full:after{opacity:0}
   body.em-cheia.ocioso .slide.ativo .ov,
   body.em-cheia.ocioso .slide.ativo .full:after{opacity:1}
 }
-
-/* ═══ prancha — a grade de referência ══════════════════════════════════
-   Portada da casa ITTB em 29/08/2026. Nomes próprios (.pbody, .ptop,
-   .plead, .pcap) porque .body, .top e .cap já existem em outros gabaritos.
-   Receita: sistemas/gabaritos/prancha-referencia.md
-   ═══════════════════════════════════════════════════════════════════ */
-.g-prancha{padding:calc(var(--top) + clamp(6px,1.6cqh,26px)) var(--gut)
-           calc(var(--bot) + clamp(6px,1.6cqh,26px))}
-.g-prancha .pbody{flex:1;display:flex;flex-direction:column;
-  gap:clamp(14px,2.4cqh,34px);min-height:0;height:100%}
-.g-prancha .ptop{display:flex;justify-content:space-between;align-items:flex-end;
-  gap:clamp(20px,2.5cqw,52px);flex-wrap:wrap}
-.g-prancha .ptop h2{font-family:var(--mono);font-weight:500;font-style:italic;
-  text-transform:lowercase;font-size:var(--fs-h);letter-spacing:-.022em;line-height:1}
-.g-prancha .plead{font-size:var(--fs-body);color:var(--soft);max-width:52ch;line-height:1.5}
-.g-prancha .grade{flex:1;min-height:0;display:grid;gap:clamp(8px,.9cqw,20px)}
-.g-prancha .grade .cel{display:flex;flex-direction:column;gap:.5em;min-height:0;
-  justify-content:center}
-.g-prancha .grade .cel .ph{flex:1;max-height:100%;position:relative;overflow:hidden;
-  background:#00000008}
-.g-prancha .grade .cel .ph img{width:100%;height:100%;object-fit:cover;display:block}
-.g-prancha .grade .cel.pilha{gap:clamp(6px,.65cqw,14px)}
-.g-prancha .grade .cel.pilha .ph{flex:1;background:transparent}
-.g-prancha .grade .cel.pilha .ph img{object-fit:contain}
-.g-prancha .pcap{font-family:var(--mono);font-size:var(--fs-cap);line-height:1.42;
-  color:var(--soft);letter-spacing:.02em}
-.g-prancha .slot{position:absolute;inset:0;display:grid;place-content:center;gap:.35em;
-  text-align:center;padding:1em;
-  background:repeating-linear-gradient(45deg,#211D1A08 0 6px,transparent 6px 12px);
-  border:1px dashed #211D1A2e}
-.g-prancha .slot u{text-decoration:none;color:var(--terra);font-family:var(--mono);
-  font-weight:500;font-style:italic;font-size:1.4em;line-height:1}
-.g-prancha .slot b{font-family:var(--mono);font-weight:500;font-style:italic;
-  text-transform:lowercase;font-size:var(--fs-cap);color:var(--tinta)}
-.g-prancha .slot s{text-decoration:none;font-family:var(--mono);font-size:var(--fs-cap);
-  letter-spacing:.1em;text-transform:uppercase;color:#211D1A73}
-
-/* ═══ vazio — o gabarito existe, o dado do projeto não ═════════════════
-   Estado legítimo, como o slot de imagem: permite montar a estrutura
-   antes de o levantamento existir. Vale para qualquer gabarito que
-   dependa de dado, não só o mapa.
-   ═══════════════════════════════════════════════════════════════════ */
-.vazio{position:absolute;inset:var(--top) var(--gut) var(--bot);
-  display:grid;place-content:center;justify-items:center;gap:.55em;text-align:center;
-  border:1px dashed #211D1A2e;
-  background:repeating-linear-gradient(45deg,#211D1A08 0 6px,transparent 6px 12px)}
-.vazio .vmarca{font-family:var(--mono);font-weight:500;font-style:italic;
-  color:var(--terra);font-size:clamp(20px,2.2cqw,34px);line-height:1}
-.vazio h2{font-family:var(--mono);font-weight:500;font-style:italic;
-  text-transform:lowercase;font-size:var(--fs-h);letter-spacing:-.022em;line-height:1}
-.vazio .vsub{font-size:var(--fs-body);color:var(--soft);max-width:46ch}
-.vazio .vnota{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.08em;
-  text-transform:uppercase;color:#211D1A73;max-width:52ch;margin-top:.4em}
-.vazio .vnota code{text-transform:none;letter-spacing:0}
 </style></head><body>
 <!-- #moldura mede a ÁREA SEGURA da tela, nunca a tela bruta: é o que impede
      o notch e a Dynamic Island de comerem canto de prancha.
@@ -1118,8 +1064,8 @@ body.em-cheia.ocioso .slide.ativo .full:after{opacity:0}
 <canvas id="msfundo"></canvas><div id="msveu"></div>
 <canvas id="msfundo-d"></canvas><div id="msveu-d"></div>
 <div id="palco"></div>
-<div class="chrome topo"><span class="secao"><span class="sn"></span><span class="sl"></span></span><span class="dots"></span><span class="marca">marca<u>_</u></span></div>
-<div class="chrome pe"><span class="pj">projeto · cliente</span><span class="nav"><span class="cont"></span><button class="seta" id="ant">&#9664;</button><button class="seta" id="pro">&#9654;</button></span></div>
+<div class="chrome topo"><span class="secao"><span class="sn"></span><span class="sl"></span></span><span class="dots"></span><span class="marca">michel stein<u>_</u></span></div>
+<div class="chrome pe"><span class="pj">casa tavares · ivo / supra</span><span class="nav"><span class="cont"></span><button class="seta" id="ant">&#9664;</button><button class="seta" id="pro">&#9654;</button></span></div>
 </div></div>
 <script>
 /* ─── escala do quadro ─────────────────────────────────────────────────────
@@ -1713,68 +1659,89 @@ function isometrico(cena,esc){
 }
 
 const DECK=[
-/* ══ ABERTURA ══ a capa da marca. Vem do bloco de marca, não se inventa. */
 {g:'marca',capa:1,div:1,fundo:1,esc:1,comecar:1,pisca:1,
-  sigla:'MARCA',papel:'PAPEL',slogan:'SLOGAN',site:'SITE'},
+  sigla:'michel stein',papel:'arquiteto',
+  slogan:'a mão por trás do traço',
+  site:'www.michelstein.com.br'},
 
-/* ══ CAPA DO PROJETO ══ nome, endereço e as três metas. Sem morph. */
-{g:'capa',capa:1,esc:1,kick:'ENDEREÇO · BAIRRO · CIDADE',
-  t:'NOME DO<br>PROJETO',
-  sub:'Uma linha dizendo do que se trata.',
-  metas:[['cliente','—'],['etapa','—'],['data','—']]},
+{g:'capa',capa:1,esc:1,kick:'r. aspicuelta, 751 · pinheiros · são paulo',
+  t:'casa tavares',
+  sub:'A esquina como produto: quase um quarteirão contínuo passa a pertencer ao Tavares.',
+  metas:[['cliente','Ivo / Supra'],['etapa','EP + volumetria'],['data','ago 2026']]},
 
-/* ══ DIVISOR ══ abre seção e ganha um ponto no chrome. `sec` é o que conta. */
-{g:'divisor',div:1,terra:1,fundo:1,sec:'primeira seção',dn:'01',dt:'primeira seção',
-  ds:'A frase que prepara o que vem a seguir.'},
+{g:'divisor',div:1,terra:1,fundo:1,sec:'introdução',dn:'01',dt:'introdução',
+  ds:'Onde o lote está, e por que a esquina é o argumento.'},
 
-/* ══ FRASE ══ uma ideia por tela, texto grande. */
-{g:'frase',esc:1,trama:1,kick:'olho',
-  t:'a frase que carrega<br>o argumento',
-  sub:'O apoio, em uma ou duas linhas.'},
+{g:'mapa',cel:1,which:'rua',sang:1,kick:'pinheiros, sp',t:'onde o terreno está',
+  sub:'R. Aspicuelta, 751 · lote contíguo ao restaurante, com frente para a mesma rua.',
+  hint:'Passe o cursor sobre cada lote.',
+  leg:[['#B85C38','o novo lote'],['#211D1A','tavares hoje']]},
 
-/* ══ LISTA ══ itens numerados. Entram por clique, um a um. */
-{g:'lista',largo:1,kick:'olho',t:'o título da lista',
-  pre:'Uma linha antes dos itens.',
-  itens:[['01','primeiro item','O apoio do primeiro item.'],
-         ['02','segundo item','O apoio do segundo.'],
-         ['03','terceiro item','O apoio do terceiro.']]},
+{g:'lista',largo:1,kick:'a leitura da rua',
+  t:'quatro razões para<br>a esquina',
+  pre:'Rua já consolidada como polo de bares e restaurantes.',
+  itens:[
+    ['esquina','Dobro de exposição e visibilidade — define o gesto de implantação.'],
+    ['frente de quarteirão','Quase um quarteirão contínuo passa a pertencer ao Tavares.'],
+    ['mobilidade','Estações de metrô próximas garantem fluxo constante de pedestres.'],
+    ['duas testadas','Permitem separar o acesso de carros da face visual do projeto.']]},
 
-/* ══ TABELA ══ comparação. `cols` é campo RESERVADO: exige `linhas` em seguida. */
-{g:'tabela',kick:'olho',t:'o título da tabela',
-  cols:['','coluna a','coluna b'],
-  linhas:[['linha 1','—','—'],['linha 2','—','—']]},
+{g:'divisor',div:1,terra:1,fundo:1,sec:'tavares hoje',dn:'02',dt:'tavares hoje',
+  ds:'O ponto de partida: madeira, tijolo e estrutura metálica preta.'},
 
-/* ══ DUO ══ duas imagens lado a lado. Sem `ar` a coluna estica e corta o desenho. */
-{g:'duo',kick:'olho',t:'duas imagens',
-  sub:'A linha de apoio.',
-  figs:[['rótulo a','','Legenda da primeira.',''],
-        ['rótulo b','','Legenda da segunda.','']],
-  leg:'A legenda comum às duas, embaixo.',   /* obrigatório: sem `leg` sai "undefined" */
-  ar:'1.705'},
-
-/* ══ PRANCHA ══ a grade de 2 a 4 imagens sobre um tema.
-   ⚠ `cols` aqui é NÚMERO. Em `tabela` é array. Ver o comentário no tpl. */
-{g:'prancha',num:'04',lbl:'referências',
-  top:{h2:'o tema desta prancha',
-       lead:'A leitura das imagens — o que elas têm em comum, e por que estão juntas.'},
+{g:'prancha',num:'02',lbl:'a fachada atual',
+  top:{h2:'o ponto de partida',
+       lead:'Madeira, tijolo e estrutura metálica preta — a textura que acolhe, sobre o esqueleto que organiza.'},
   cols:3,
-  items:[{src:'',cap:'primeira referência',ar:'0.75'},
-         {src:'',cap:'segunda',ar:'0.75'},
-         {src:'',cap:'terceira',ar:'0.75'}]},
+  items:[{src:'',cap:'Esquina',ar:'0.75'},
+         {src:'',cap:'Telhado shed',ar:'0.75'},
+         {src:'',cap:'Mural / empena',ar:'0.75'}]},
 
-/* ══ CHEIA ══ o render em tela cheia. É o padrão para render. */
-{g:'cheia',src:'',lbl:'render do projeto',
-  h2:'o render em tela cheia',
-  cap:'A legenda explica a decisão que a imagem mostra. Pare o ponteiro: o texto sai de cena.'},
+{g:'tabela',kick:'paleta material',t:'o que já existe na rua',
+  cols:['material','onde','cor'],
+  linhas:[['madeira ripada','lambri vertical — dominante','#AD9D6F'],
+          ['tijolinho','faixa aparente','#7A6452'],
+          ['metálica preta','esqueleto urbano / telhado shed','#212020'],
+          ['perfil verde','bordas de telhado / marquises','#7C9B8C'],
+          ['gabião','base dos muros — pedra em tela','#CCBFB3'],
+          ['mural terracota','ilustração botânica','#B06A4A']],
+  fecho:'A paleta do Tavares é quase a paleta de marca do escritório — a aproximação não é coincidência, é o que torna a intervenção contínua.'},
 
-/* ══ FIM ══ os próximos passos. É o que o cliente leva embora. */
+{g:'divisor',div:1,terra:1,fundo:1,sec:'o novo lote',dn:'03',dt:'o novo lote',
+  ds:'Hoje Boteco São Luís — a demolir.'},
+
+{g:'cheia',lbl:'render da esquina',
+  h2:'a esquina chanfrada',
+  cap:'Ponto-chave de visibilidade e acesso. O portão da vila residencial, à esquerda do lote, não pode ser obstruído.'},
+
+{g:'divisor',div:1,terra:1,fundo:1,sec:'layout',dn:'04',dt:'layout',
+  ds:'Dois cenários de operação, e o que cada um custa.'},
+
+{g:'tabela',kick:'opções de layout',t:'dois cenários',
+  cols:['','cenário a — vagas soltas','cenário b — vagas presas'],
+  linhas:[['capacidade','9 a 12 vagas','maior'],
+          ['manobrista','não','sim'],
+          ['fluxo','simples e direto','em bateria'],
+          ['operação','totalmente autônoma','depende de equipe']],
+  nota:'CONFIRMAR o número de vagas do cenário B com o levantamento.'},
+
+{g:'divisor',div:1,terra:1,fundo:1,sec:'materialidade',dn:'05',dt:'materialidade',
+  ds:'O cobogó como protagonista.'},
+
+{g:'prancha',num:'05',lbl:'cobogó',
+  top:{h2:'o cobogó, protagonista',
+       lead:'Evolui o vazado que o Tavares já tem — mesma família, gesto autoral novo. Resolve a ventilação natural da garagem e qualifica a fachada como o produto da esquina.'},
+  cols:2,
+  items:[{src:'',cap:'Referência de cobogó',ar:'1.0'},
+         {src:'',cap:'O vazado que o Tavares já usa',ar:'1.0'}]},
+
 {g:'fim',kick:'encaminhamento',t:'próximos passos',
-  sub:'Começar pelo que tem prazo.',
-  itens:[['primeiro','<b>O primeiro passo.</b> Com prazo.'],
-         ['depois','<b>O segundo.</b>']]},
+  sub:'Começar pelo que trava a aprovação.',
+  itens:[['primeiro','<b>Confirmar a restrição de aprovação.</b> O novo lote é intervenção autônoma e não pode ser unificado com o edifício existente.'],
+         ['depois','<b>Cravar o cenário de layout.</b> A capacidade de vagas muda a área útil da fachada.'],
+         ['então','<b>Levantamento fotográfico da esquina.</b> As pranchas estão montadas e esperando as imagens.']]},
 
-/* ══ CONTRACAPA ══ QR, marca e site. Fecha a peça. */
-{g:'marca',fim:1,fundo:1,esc:1,sigla:'MARCA',site:'SITE'}
+{g:'marca',fim:1,fundo:1,esc:1,sigla:'michel stein',site:'www.michelstein.com.br'}
 ];
 /* a chave numerada vem do mapdata, calculada a partir da camada oficial —
    escrita a mao ela ficou desatualizada e deu 0 ponto ao Martinelli */
@@ -1849,32 +1816,6 @@ function tpl(s){
     const im=s.itens.map(([q,x,src,cap],i)=>src?`<img data-f="${i}" src="${IMG[src]||src}" alt="${cap}" onerror="this.dataset.err=1">`:'').join('');
     return `<div class="wrap">${k}${t}<ol class="lista">${li}</ol></div>
       <div class="fbleed">${im}<div class="slot"><b>slot de imagem</b><span class="scap"></span><span class="sfon"></span></div><span class="cred"></span></div>`;
-  }
-  /* ⚑ `prancha` vem ANTES do `const tab`. Os dois usam `cols`, e com
-     significados incompatíveis: aqui é um NÚMERO de colunas, lá é um array
-     de cabeçalhos. Deixar o `tab` correr primeiro derruba o deck inteiro
-     com `s.cols.map is not a function`. É a armadilha do campo reservado,
-     registrada em 23/08 e paga de novo em 29/08.
-     Receita: sistemas/gabaritos/prancha-referencia.md */
-  if(s.g==='prancha'){
-    const foto=(src,cap,ar)=>`<div class="ph"${ar?` style="flex:0 0 auto;aspect-ratio:${ar}"`:''}>`
-      + (src?`<img loading="lazy" src="${src}" alt="${(cap||'').replace(/"/g,'&quot;')}">`
-            :`<div class="slot"><u>_</u><b>${cap||'imagem'}</b><s>16:9 ou 4:3</s></div>`)+`</div>`;
-    const cels=(s.items||[]).map(it=>{
-      if(it.pilha){
-        return `<div class="cel pilha rev" style="aspect-ratio:${it.ar||'0.70'}">`
-          + it.pilha.map(f=>foto(f.src,f.cap,null)).join('')
-          + (it.cap?`<span class="pcap">${it.cap}</span>`:'')+`</div>`;
-      }
-      return `<div class="cel rev">`+foto(it.src,it.cap,it.ar||s.ar)
-        + (it.cap?`<span class="pcap">${it.cap}</span>`:'')+`</div>`;
-    }).join('');
-    const topo=(s.top&&(s.top.h2||s.top.lead))
-      ? `<div class="ptop rev"><h2>${s.top.h2||''}</h2>`
-        + (s.top.lead?`<div class="plead">${s.top.lead}</div>`:'')+`</div>` : '';
-    const centra=s.ar||(s.items||[]).some(i=>i.ar||i.pilha);
-    return `<div class="pbody">${topo}<div class="grade" style="grid-template-columns:repeat(${s.cols||3},1fr)`
-      + (centra?';align-content:center;align-items:center':'')+`">${cels}</div></div>`;
   }
   const tab=s.cols?`<div class="rev"><table class="tb"><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`+
     s.linhas.map((r,i)=>`<tr class="${s.hi===i?'hi':''}${s.fora===i?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`).join('')+`</tbody></table></div>`:'';
@@ -1957,16 +1898,6 @@ function tpl(s){
       +`</ul></div>`).join('');
     return `<div class="wrap largo">${k}${t}${sub}`
       +`<div class="avcols n${s.grupos.length} rev">${gr}</div>${nota}${prem}</div>`;
-  }
-  if(s.g==='mapa' && !(MAP.lotes||[]).length && !(MAP.pts||[]).length){
-    /* andaime vazio: o gabarito existe, o dado do projeto não. Antes isto
-       derrubava o deck inteiro. Agora vira slot, como qualquer imagem que
-       falta. Receita: sistemas/gabaritos/mapa-lotes.md */
-    return `<div class="vazio rev"><div class="vmarca">_</div>`
-      + `<h2>${s.t||'mapa'}</h2>`
-      + (s.sub?`<p class="vsub">${s.sub}</p>`:'')
-      + `<p class="vnota">falta o objeto <code>MAP</code> deste projeto — `
-      + `receita em sistemas/gabaritos/mapa-lotes.md</p></div>`;
   }
   if(s.g==='mapa'){
     const svg=s.which==='rua'?mapaRua(s.sang):mapaCluster(s.sang);

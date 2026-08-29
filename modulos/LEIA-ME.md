@@ -15,6 +15,7 @@ do Git. Nunca criar `-R2` ao lado.
 | `ms-fundo-engine.js` | a engine do morph, ~14 KB | `<script>` no fim do `<body>` + `MSFundo.montar()` |
 | `mapa-localizacao.html` | o slide de localização: satélite em sangria, scrim, véu e o rótulo em caixa translúcida | receita em `../sistemas/gabaritos/mapa-localizacao.md` |
 | `prancha-referencia.html` | a grade de 2 a 4 imagens sobre um tema, com pilha e slot | receita em `../sistemas/gabaritos/prancha-referencia.md` |
+| `render-cheia.html` | o render em tela cheia, com o texto que sai de cena quando o ponteiro para | receita em `../sistemas/gabaritos/render-cheia.md` |
 | `ms-voltar.js` | o chip **voltar ao acervo** e a camada de toque, ~12 KB. Vale para toda peça publicada | `<script defer src="../modulos/ms-voltar.js">` no fim do `<body>` — e nada mais |
 
 ## A engine, hoje

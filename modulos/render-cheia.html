@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>módulo · render em tela cheia</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   MÓDULO · render em tela cheia — gabarito `cheia`
+
+   O render ocupa a tela inteira, e o texto vive por cima dele. Padrão
+   adotado da casa ITTB, de 04/08/2026, com a regra do Michel: "eu prefiro
+   mil vezes mostrar esses renders bem grandão, pra que eles fiquem
+   impactantes."
+
+   A mecânica que dá nome ao módulo: **o texto sai de cena quando o
+   ponteiro para.** Depois de 1,8 s sem movimento, o véu do pé, o gradiente
+   do topo e o chrome esvanecem em 0,55 s — a imagem fica inteira. Qualquer
+   gesto os traz de volta. Existe porque o gradiente do pé, necessário para
+   a legenda ser legível, comia justamente a parte de baixo do render.
+
+   Vale para uma sequência: dois, quatro, seis renders seguidos, cada um em
+   tela cheia. Use ← → ou espere parado para ver o véu sumir.
+
+   Receita de solda: ../sistemas/gabaritos/render-cheia.md
+   ═══════════════════════════════════════════════════════════════════════ */
+  :root{
+    --creme:#EDE6DA; --tinta:#211D1A; --terra:#B85C38;
+    --mono:'DM Mono',ui-monospace,monospace;
+    --sans:'Inter',system-ui,-apple-system,sans-serif;
+    --gut:clamp(22px,4.2vw,86px);
+    --bot:clamp(46px,5.4vh,74px);
+    --seta:clamp(30px,2.4vw,42px);
+    --fs-h:clamp(19px,2.3vw,36px);
+    --fs-cap:clamp(9.5px,.76vw,12.5px);
+    --e-ui:cubic-bezier(.4,0,.2,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{background:var(--tinta);color:var(--creme);font-family:var(--sans)}
+  #palco{position:fixed;inset:0}
+
+/* ── O GABARITO. É isto que se copia. ───────────────────────────────── */
+  .slide{position:absolute;inset:0;opacity:0;pointer-events:none;
+    transition:opacity .15s var(--e-ui)}
+  .slide.ativo{opacity:1;pointer-events:auto;transition:opacity .44s var(--e-ui)}
+
+  .g-cheia{padding:0;background-image:none}
+  .g-cheia .full{position:absolute;inset:0}
+  .g-cheia .full .ph{position:absolute;inset:0}
+  .g-cheia .full .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  /* gradiente do topo: dá contraste ao chrome claro sobre render claro */
+  .g-cheia .full:after{content:'';position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(#211D1Ab8 0,#211D1A00 22%)}
+  /* o texto vive sobre a imagem, no pé, dentro do próprio gradiente */
+  .g-cheia .ov{position:absolute;inset:auto 0 0 0;
+    padding:clamp(50px,8vh,120px) calc(var(--gut) + var(--seta) * 4.4) var(--bot) var(--gut);
+    background:linear-gradient(transparent,#211D1AE6 62%);color:var(--creme)}
+  .g-cheia .ov h2{color:var(--creme);font-family:var(--mono);font-weight:500;
+    font-style:italic;text-transform:lowercase;font-size:var(--fs-h);
+    letter-spacing:-.022em;line-height:1}
+  .g-cheia .ov .cap{color:#EDE6DAaa;margin-top:.7em;max-width:70ch;
+    font-family:var(--mono);font-size:var(--fs-cap);line-height:1.45}
+
+  /* ⚑ A MECÂNICA: com o ponteiro parado, tudo o que não é imagem some */
+  #chrome,.g-cheia .ov,.g-cheia .full:after{transition:opacity .55s var(--e-ui)}
+  body.em-cheia.ocioso #chrome,
+  body.em-cheia.ocioso .slide.ativo .ov,
+  body.em-cheia.ocioso .slide.ativo .full:after{opacity:0}
+  @media (prefers-reduced-motion: reduce){
+    body.em-cheia.ocioso #chrome,
+    body.em-cheia.ocioso .slide.ativo .ov,
+    body.em-cheia.ocioso .slide.ativo .full:after{opacity:1}
+  }
+
+  .slot{position:absolute;inset:0;display:grid;place-content:center;gap:.35em;
+    text-align:center;padding:1em;background:#2B2A22;
+    border:1px dashed #EDE6DA2e}
+  .slot u{text-decoration:none;color:var(--terra);font-family:var(--mono);
+    font-weight:500;font-style:italic;font-size:1.5em;line-height:1}
+  .slot b{font-family:var(--mono);font-weight:500;font-style:italic;
+    text-transform:lowercase;font-size:var(--fs-cap);color:var(--creme)}
+  .slot s{text-decoration:none;font-family:var(--mono);font-size:var(--fs-cap);
+    letter-spacing:.1em;text-transform:uppercase;color:#EDE6DA73}
+
+/* ── chrome mínimo, só para a demonstração ──────────────────────────── */
+  #chrome{position:fixed;inset:0;pointer-events:none;z-index:5}
+  #chrome .cont{position:absolute;right:var(--gut);bottom:calc(var(--bot) / 2);
+    font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.14em;
+    color:var(--creme);background:#211D1Ae6;border:1px solid #EDE6DA3d;
+    border-radius:999px;padding:7px 14px}
+  #chrome .dica{position:absolute;left:var(--gut);top:calc(var(--bot) / 2.4);
+    font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.12em;
+    text-transform:uppercase;color:#EDE6DA8f}
+</style>
+</head>
+<body>
+
+<div id="palco"></div>
+<div id="chrome">
+  <span class="dica">← → troca o render · pare o ponteiro e o texto sai de cena</span>
+  <span class="cont"></span>
+</div>
+
+<script>
+function esc(t){ return String(t==null?'':t)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function slot(cap,prop){
+  return '<div class="slot"><u>_</u><b>'+esc(cap||'render')+'</b><s>'+esc(prop||'')+'</s></div>';
+}
+
+/* ── O RENDER. É isto que se copia junto. ──────────────────────────────
+   Num deck isto é `G.cheia`, e recebe um objeto do array DECK.
+   ─────────────────────────────────────────────────────────────────── */
+function Gcheia(s){
+  return '<div class="full">'
+    + '<div class="ph" data-slot="'+esc(s.lbl||'render')+'">'
+    + (s.src ? '<img src="'+esc(s.src)+'" alt="'+esc(s.cap||'')+'">'
+             : slot(s.lbl||'render','16:9 · sangria total'))
+    + '</div></div>'
+    + '<div class="ov"><h2 class="rev">'+esc(s.h2||'')+'</h2>'
+    + (s.cap ? '<div class="cap rev">'+esc(s.cap)+'</div>' : '')
+    + '</div>';
+}
+
+/* ── a sequência ────────────────────────────────────────────────────── */
+var F = '../fundo/';
+var DECK = [
+  { g:'cheia', src:F+'01.webp', h2:'o primeiro render',
+    cap:'A legenda explica a decisão que a imagem mostra — não descreve o que já se vê.' },
+  { g:'cheia', src:F+'02.webp', h2:'o segundo, na sequência',
+    cap:'Uma sequência de renders em tela cheia é o uso normal do gabarito, não a exceção.' },
+  { g:'cheia', src:F+'06.webp', h2:'o terceiro' },
+  { g:'cheia', src:'', lbl:'render ainda não existe',
+    h2:'e o slot, quando a imagem falta',
+    cap:'A estrutura fica montada antes de a imagem existir.' }
+];
+
+var palco = document.getElementById('palco');
+palco.innerHTML = DECK.map(function(s){
+  return '<section class="slide g-'+s.g+'">'+Gcheia(s)+'</section>';
+}).join('');
+
+var cur = 0, slides = palco.children;
+function go(i){
+  if(i < 0 || i >= slides.length) return;
+  slides[cur].classList.remove('ativo');
+  cur = i;
+  slides[cur].classList.add('ativo');
+  /* a classe que restringe o esvanecimento a este gabarito */
+  document.body.classList.toggle('em-cheia', DECK[cur].g === 'cheia');
+  document.querySelector('#chrome .cont').textContent = (cur+1)+' / '+slides.length;
+}
+addEventListener('keydown', function(e){
+  if(e.key === 'ArrowRight') go(cur+1);
+  if(e.key === 'ArrowLeft')  go(cur-1);
+});
+palco.addEventListener('click', function(){ go(cur+1); });
+
+/* ── ⚑ A OCIOSIDADE DO PONTEIRO ────────────────────────────────────────
+   1,8 s parado e o body ganha `ocioso`. Qualquer gesto tira. É genérico:
+   num deck vale para a página inteira, e a classe `em-cheia` é que decide
+   onde o efeito acontece.
+   ─────────────────────────────────────────────────────────────────── */
+(function(){
+  var t = null, ATRASO = 1800;
+  window.__msAcorda = function(){
+    document.body.classList.remove('ocioso');
+    clearTimeout(t);
+    t = setTimeout(function(){ document.body.classList.add('ocioso'); }, ATRASO);
+  };
+  ['pointermove','pointerdown','wheel','keydown','touchstart'].forEach(function(ev){
+    addEventListener(ev, window.__msAcorda, {passive:true});
+  });
+  window.__msAcorda();
+})();
+
+go(0);
+</script>
+</body>
+</html>
