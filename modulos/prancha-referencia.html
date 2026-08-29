@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>módulo · prancha de referência</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   MÓDULO · prancha de referência
+
+   A grade de duas a quatro imagens que expõe um tema: repertório do
+   cliente, referências selecionadas, um ambiente. Padrão adotado da casa
+   ITTB, gabarito `prancha`, slides 02 a 06 e 21, de 04/08/2026.
+
+   Roda sozinho. As imagens da demonstração são as do acervo do fundo.
+
+   Receita de solda: ../sistemas/gabaritos/prancha-referencia.md
+   ═══════════════════════════════════════════════════════════════════════ */
+  :root{
+    --creme:#EDE6DA; --tinta:#211D1A; --oliva:#6B6A4B; --terra:#B85C38;
+    --muted:#211D1A99;
+    --mono:'DM Mono',ui-monospace,monospace;
+    --sans:'Inter',system-ui,-apple-system,sans-serif;
+    --gut-in:clamp(22px,4.6vw,90px);
+    --top:clamp(40px,5.4vh,70px); --bot:clamp(40px,5.4vh,70px);
+    --fs-h2:clamp(19px,2.3vw,36px);
+    --fs-lead:clamp(12.5px,1.05vw,17px);
+    --fs-cap:clamp(9.5px,.76vw,12.5px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--creme);color:var(--tinta);font-family:var(--sans)}
+
+/* ── O GABARITO. É isto que se copia. ───────────────────────────────── */
+  .g-prancha{padding:calc(var(--top) + clamp(6px,1.6vh,26px)) var(--gut-in)
+             calc(var(--bot) + clamp(6px,1.6vh,26px));
+    display:flex;flex-direction:column;min-height:100vh}
+  .g-prancha .body{flex:1;display:flex;flex-direction:column;
+    gap:clamp(14px,2.4vh,34px);min-height:0}
+  /* cabeçalho em duas pontas: o tema à esquerda, a leitura à direita */
+  .g-prancha .top{display:flex;justify-content:space-between;align-items:flex-end;
+    gap:clamp(20px,2.5vw,52px);flex-wrap:wrap}
+  .g-prancha .top h2{font-family:var(--mono);font-weight:500;font-style:italic;
+    text-transform:lowercase;font-size:var(--fs-h2);letter-spacing:-.022em;line-height:1}
+  .g-prancha .top .lead{font-size:var(--fs-lead);color:var(--muted);
+    max-width:52ch;line-height:1.5}
+
+  .grade{flex:1;min-height:0;display:grid;gap:clamp(8px,.9vw,20px)}
+  .grade .cel{display:flex;flex-direction:column;gap:.5em;min-height:0;
+    justify-content:center}
+  .grade .cel .ph{flex:1;max-height:100%}
+  /* duas quadradas empilhadas ocupam a coluna de uma retrato */
+  .grade .cel.pilha{gap:clamp(6px,.65vw,14px)}
+  .grade .cel.pilha .ph{flex:1;background:transparent}
+  .grade .cel.pilha .ph img{object-fit:contain}
+
+  .ph{position:relative;overflow:hidden;background:#00000008;flex:1;min-height:0}
+  .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .cap{font-family:var(--mono);font-size:var(--fs-cap);line-height:1.42;
+    color:var(--muted);letter-spacing:.02em}
+
+  /* slot: imagem que ainda não existe, ou que falhou. É recurso, não erro */
+  .slot{position:absolute;inset:0;display:grid;place-content:center;gap:.35em;
+    text-align:center;padding:1em;
+    background:repeating-linear-gradient(45deg,#211D1A08 0 6px,transparent 6px 12px);
+    border:1px dashed #211D1A2e}
+  .slot u{text-decoration:none;color:var(--terra);font-family:var(--mono);
+    font-weight:500;font-style:italic;font-size:1.4em;line-height:1}
+  .slot b{font-family:var(--mono);font-weight:500;font-style:italic;
+    text-transform:lowercase;font-size:var(--fs-cap);color:var(--tinta)}
+  .slot s{text-decoration:none;font-family:var(--mono);font-size:var(--fs-cap);
+    letter-spacing:.1em;text-transform:uppercase;color:#211D1A73}
+
+/* ── só desta demonstração ──────────────────────────────────────────── */
+  .aviso{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:9;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:#EDE6DAcc;background:#211D1Aee;border-radius:999px;padding:7px 15px}
+  .sep{font-family:var(--mono);font-size:10px;letter-spacing:.22em;
+    text-transform:uppercase;color:#211D1A73;padding:0 var(--gut-in);
+    margin-top:clamp(20px,4vh,50px);display:flex;gap:12px;align-items:center}
+  .sep::after{content:"";flex:1;height:.5px;background:#211D1A2e}
+</style>
+</head>
+<body>
+
+<div class="aviso">módulo · prancha de referência — três arranjos</div>
+
+<p class="sep">quatro colunas · o arranjo mais comum</p>
+<div class="g-prancha" style="min-height:88vh" id="p4"></div>
+
+<p class="sep">três colunas, com uma pilha · duas quadradas na coluna de uma retrato</p>
+<div class="g-prancha" style="min-height:88vh" id="p3"></div>
+
+<p class="sep">duas colunas, com legenda por imagem · o caso do ambiente</p>
+<div class="g-prancha" style="min-height:88vh" id="p2"></div>
+
+<script>
+/* ── O RENDER. É isto que se copia junto. ──────────────────────────────
+   Assinatura igual à do deck: recebe o objeto do slide e devolve HTML.
+   Num deck isto é `G.prancha`, e o `esc()` já existe na engine.
+   ─────────────────────────────────────────────────────────────────── */
+function esc(t){ return String(t==null?'':t)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function slot(cap, prop){
+  return '<div class="slot"><u>_</u><b>' + esc(cap||'imagem')
+       + '</b><s>' + esc(prop||'') + '</s></div>';
+}
+
+function Gprancha(s){
+  function foto(src, cap, ar){
+    return '<div class="ph" data-slot="'+esc(cap||'imagem')+'"'
+      + (ar ? ' style="flex:0 0 auto;aspect-ratio:'+ar+'"' : '') + '>'
+      + (src ? '<img loading="lazy" src="'+esc(src)+'" alt="'+esc(cap||'')+'">'
+             : slot(cap,'16:9 ou 4:3')) + '</div>';
+  }
+  var cels = s.items.map(function(it){
+    if(it.pilha){
+      return '<div class="cel pilha rev" style="aspect-ratio:'+(it.ar||'0.70')+'">'
+        + it.pilha.map(function(f){ return foto(f.src, f.cap, null); }).join('')
+        + (it.cap ? '<span class="cap">'+esc(it.cap)+'</span>' : '') + '</div>';
+    }
+    return '<div class="cel rev">' + foto(it.src, it.cap, it.ar || s.ar)
+      + (it.cap ? '<span class="cap">'+esc(it.cap)+'</span>' : '') + '</div>';
+  }).join('');
+  var top = '';
+  if(s.top && (s.top.h2 || s.top.lead)){
+    top = '<div class="top rev"><h2>'+esc(s.top.h2||'')+'</h2>'
+        + (s.top.lead ? '<div class="lead">'+esc(s.top.lead)+'</div>' : '') + '</div>';
+  }
+  /* com proporção declarada a grade centra em vez de esticar */
+  var centra = s.ar || s.items.some(function(i){ return i.ar || i.pilha; });
+  return '<div class="body">' + top
+    + '<div class="grade" style="grid-template-columns:repeat('+(s.cols||3)+',1fr)'
+    + (centra ? ';align-content:center;align-items:center' : '') + '">'
+    + cels + '</div></div>';
+}
+
+/* ── a demonstração ─────────────────────────────────────────────────── */
+var F = '../fundo/';
+document.getElementById('p4').innerHTML = Gprancha({
+  cols:4,
+  top:{ h2:'o tema desta prancha', lead:'A leitura das imagens — o que elas têm em comum, e por que estão juntas.' },
+  items:[ {src:F+'01.webp', ar:'1.778'}, {src:F+'02.webp', ar:'1.698'},
+          {src:F+'03.webp', ar:'1.385'}, {src:F+'04.webp', ar:'1.051'} ]
+});
+document.getElementById('p3').innerHTML = Gprancha({
+  cols:3,
+  top:{ h2:'com uma pilha', lead:'Duas imagens quase quadradas ocupam a coluna de uma retrato, sem quebrar a grade.' },
+  items:[ {src:F+'05.webp', ar:'1.293'},
+          {pilha:[{src:F+'01.webp'},{src:F+'06.webp'}], ar:'1.30'},
+          {src:'', cap:'imagem que ainda não existe', ar:'1.293'} ]
+});
+document.getElementById('p2').innerHTML = Gprancha({
+  cols:2,
+  top:{ h2:'duas, com legenda', lead:'Quando cada imagem carrega uma decisão diferente, a legenda entra por imagem.' },
+  items:[ {src:F+'03.webp', ar:'1.385', cap:'A decisão que esta imagem sustenta, em uma frase.'},
+          {src:F+'05.webp', ar:'1.293', cap:'A decisão da outra — e é por isso que elas estão na mesma prancha.'} ]
+});
+
+/* ── imagem que falha vira slot, não buraco ────────────────────────────
+   Ouvinte, não `onerror` inline. O inline que existe em outra peça faz
+   `this.remove()` antes de ler `this.parentNode`, e aí o pai já é nulo —
+   o slot nunca aparecia. Aqui o `ph` é lido antes de qualquer remoção.
+   ─────────────────────────────────────────────────────────────────── */
+Array.prototype.forEach.call(document.querySelectorAll('.ph img'), function(img){
+  img.addEventListener('error', function(){
+    var ph = img.parentNode;
+    ph.innerHTML = '<div class="slot"><u>_</u><b>'
+      + esc(ph.getAttribute('data-slot')||'imagem')
+      + '</b><s>arquivo não encontrado</s></div>';
+  });
+});
+</script>
+</body>
+</html>

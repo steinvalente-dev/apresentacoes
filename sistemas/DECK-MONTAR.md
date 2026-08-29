@@ -14,6 +14,7 @@ acontece toda vez.
 | **montar uma peça** | este arquivo, e mais nada |
 | um gabarito com máquina própria | `gabaritos/<nome>.md` — só o que entrar na peça |
 | um mapa de localização | `gabaritos/mapa-localizacao.md` · módulo em `modulos/mapa-localizacao.html` |
+| uma prancha de referência | `gabaritos/prancha-referencia.md` · módulo em `modulos/prancha-referencia.html` |
 | entender por que algo é assim, ou consertar | `DECK-MOTOR.md` |
 | a identidade | `../marca/MARCA-<nome>.md` |
 
@@ -78,6 +79,7 @@ Ver a nota sobre isso no fim.
 |---|---|---|
 | `duo` | duas imagens lado a lado | `figs` **+ `leg` obrigatório** · `ar` |
 | `fotos` | linha do tempo ilustrada | `itens` |
+| `prancha` | grade de 2 a 4 imagens sobre um tema | `top` `cols` `items` — ver `gabaritos/prancha-referencia.md` |
 | `mapa` · localização | onde o terreno está: satélite em sangria, endereço escrito | `src` `kick` `h2` `lead` `cap` `inv` — ver `gabaritos/mapa-localizacao.md` |
 | `mapa` · lotes | o cadastro desenhado, com hover por lote | `which` `sang` `leg` — ver `gabaritos/mapa-lotes.md` |
 
@@ -168,6 +170,6 @@ seu tipo de argumento: a casa ITTB é arquitetura, a AMAZ é institucional, a to
 documento antigo descrever um sistema que já não era o que estava no ar.
 
 **O que isso significa na prática:** este esqueleto entrega o vocabulário
-comercial. Para uma apresentação de arquitetura vão faltar `cheia`, `planta`,
-`prancha` e `desenho` — que estão na casa ITTB e ainda não foram trazidos para
-cá. É a pendência mais visível deste arquivo.
+comercial. Para uma apresentação de arquitetura ainda faltam `cheia`, `planta` e
+`desenho` — que estão na casa ITTB e não foram trazidos para o esqueleto.
+O `prancha` já tem módulo próprio, em `gabaritos/prancha-referencia.md`.
