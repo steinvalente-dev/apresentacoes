@@ -461,11 +461,21 @@ const projetos = [
     ]
   },
   {
+    nome: "deck",
+    pecas: [
+      { nome: "esqueleto", tipo: "sistema", pranchas: 19, unid: "gabaritos",
+        sub: "a base de partida · sem marca, sem conteúdo",
+        peso: 0.124, data: "29.08.2026", href: "esqueleto/deck-esqueleto.html" }
+    ]
+  },
+  {
     nome: "michel stein_",
     pecas: [
       { nome: "manual de marca", tipo: "sistema", pranchas: 5, unid: "folhas",
         sub: "conceito · logotipo · monograma · sistema · aplicações",
-        peso: 0.062, data: "29.08.2026", href: "marca/michel-stein/manual.html" }
+        peso: 0.062, data: "29.08.2026", href: "marca/michel-stein/manual.html" },
+      { nome: "bloco de marca", tipo: "sistema", sub: "o que se cola no esqueleto · fontes embutidas",
+        peso: 0.112, data: "29.08.2026", href: "marca/michel-stein/bloco.html" }
     ]
   }
 ];
@@ -475,6 +485,9 @@ const docs = [
   { aba:"marca", grupo:"michel stein_", nome:"marca · michel stein_",
     desc:"Cor, tipografia, assinatura, abertura, contracapa e o preset do fundo. Trocar de marca é trocar este arquivo",
     arq:"marca/MARCA-MICHEL-STEIN.md", ver:"marca/michel-stein/manual.html" },
+  { aba:"marca", grupo:"michel stein_", nome:"bloco de marca",
+    desc:"As quatro coisas que se colam no esqueleto: cores, as seis fontes, a capa e a contracapa",
+    arq:"marca/MARCA-MICHEL-STEIN-CAPA.md", ver:"marca/michel-stein/bloco.html" },
   { aba:"marca", grupo:"michel stein_", nome:"marca · a capa",
     desc:"O slide de abertura: a regra, a receita de extração, a especificação e as armadilhas já pagas",
     arq:"marca/MARCA-MICHEL-STEIN-CAPA.md", ver:"modulos/capa-morph.html" },
@@ -484,8 +497,26 @@ const docs = [
   { aba:"marca", grupo:"a levantar", nome:"Lavrō · Baraka · Sarasá",
     desc:"Lavrō tem tokens levantados e ainda não virou arquivo. Baraka e Sarasá não têm sistema visual — não inventar paleta",
     arq:"sistemas/DECK-MOTOR.md" },
-  { aba:"deck", grupo:"o motor", nome:"deck · motor",
-    desc:"Gabaritos, quadro fixo, chrome, mecânicas, validação e armadilhas. Agnóstico de marca, abre sem token",
+  { aba:"deck", grupo:"montar", nome:"deck · montar",
+    desc:"O arquivo curto: a receita em seis passos, os dezenove gabaritos e as três armadilhas. É o que se lê para montar",
+    arq:"sistemas/DECK-MONTAR.md", ver:"esqueleto/deck-esqueleto.html" },
+  { aba:"deck", grupo:"montar", nome:"esqueleto",
+    desc:"A base de partida. Abre, cola o bloco da marca, troca o DECK. A engine não se toca",
+    arq:"sistemas/DECK-MONTAR.md", ver:"esqueleto/deck-esqueleto.html" },
+  { aba:"deck", grupo:"gabaritos", nome:"mapa",
+    desc:"O contrato do objeto MAP, os dois desenhos e por que o dado real não vem junto",
+    arq:"sistemas/gabaritos/mapa.md" },
+  { aba:"deck", grupo:"gabaritos", nome:"modelo · visor 3D",
+    desc:"Sem título e sem legenda: o slide é o visor. A trava de teclado e a dependência de rede",
+    arq:"sistemas/gabaritos/modelo.md" },
+  { aba:"deck", grupo:"gabaritos", nome:"popover",
+    desc:"O apoio que sai da tela e volta no ponteiro. Inclui a divisão por k, que o quadro fixo exige",
+    arq:"sistemas/gabaritos/popover.md" },
+  { aba:"deck", grupo:"gabaritos", nome:"isométrico",
+    desc:"Nunca escrever o viewBox à mão. Calcular de getBBox com 3,5% de folga",
+    arq:"sistemas/gabaritos/isometrico.md" },
+  { aba:"deck", grupo:"consulta", nome:"deck · motor",
+    desc:"A referência de fundo: as três arquiteturas, as armadilhas já pagas e a validação completa. Não é o que se lê para montar",
     arq:"sistemas/DECK-MOTOR.md" },
   { aba:"deck", grupo:"as peças de montar", nome:"fundo morph pontilhado",
     desc:"O shader da abertura: preset, transições, cursor e desempenho medido",
@@ -594,7 +625,14 @@ const ABAS = [
 
 /* ── arquivo ─────────────────────────────────────────────── */
 (function(){
-  const visiveis = projetos.filter(function(p){ return !p.oculto; });
+  /* Ordem alfabética pt-BR, aplicada aqui e não nos dados: projeto novo entra
+     ordenado sozinho, não importa onde for escrito no array. `sensitivity:base`
+     ignora caixa e acento — sem isso `AMAZ` iria para o topo por ser maiúscula,
+     não por ser primeira. */
+  const visiveis = projetos.filter(function(p){ return !p.oculto; })
+    .slice().sort(function(a, b){
+      return a.nome.localeCompare(b.nome, 'pt-BR', {sensitivity:'base'});
+    });
   const elProj = document.getElementById('lista-projetos');
   const elPec  = document.getElementById('lista-pecas');
   let atual = 0;

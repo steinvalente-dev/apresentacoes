@@ -4,7 +4,23 @@ Documento de método, **sem dado de cliente**, no repositório público de
 apresentações. Abre por URL raw, sem token, em qualquer conversa:
 `https://raw.githubusercontent.com/steinvalente-dev/apresentacoes/main/sistemas/DECK-MOTOR.md`
 
-Criado 04/08/2026 · separado do documento único em **29/08/2026**.
+Criado 04/08/2026 · separado do documento único em **29/08/2026** · partido por
+ocasião de leitura no mesmo dia.
+
+> **⚑ Este não é mais o arquivo que se lê para montar.** Em 29/08/2026 ele foi
+> partido por ocasião de leitura, porque 9.300 tokens eram pagos toda vez que
+> alguém ia montar uma peça — e montar usa um terço disto.
+>
+> | você quer | leia |
+> |---|---|
+> | **montar uma peça** | `DECK-MONTAR.md` — o arquivo curto |
+> | um gabarito com máquina própria | `gabaritos/<nome>.md` |
+> | a identidade | `../marca/MARCA-<nome>.md` |
+> | **entender por que algo é assim, ou consertar** | este arquivo |
+>
+> O que sobrou aqui: a história das três arquiteturas, as armadilhas já pagas, a
+> validação completa, o desenho do chrome e do fundo. Consulta, não leitura
+> corrente.
 
 ---
 

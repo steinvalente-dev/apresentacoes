@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!-- robots.txt nao funciona em Pages de projeto: o buscador so le o da raiz
+     do dominio. A meta tag e a unica protecao. Regra do runbook, 22/08. -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>deck · esqueleto</title>
+<!-- Fontes embutidas em woff2/base64, subconjunto latino + pontuacao.
+     Regra do PRANCHA-SISTEMA: nenhuma dependencia de CDN. O arquivo abre
+     igual sem rede, e a tipografia da marca nunca cai para fallback. -->
+<style>
+/* ═══ FONTES DA MARCA ═══════════════════════════════════════════════════
+   AQUI ENTRAM AS SEIS @font-face EM BASE64, do bloco da marca.
+   Sem elas a peça cai na fonte do sistema num notebook de cliente —
+   inclusive online, porque não há link para CDN nenhum. É a diferença
+   entre a peça rodar sem internet e parecer outra coisa na reunião.
+   michel stein_ → marca/michel-stein/bloco.html · AMAZ → marca/amaz/bloco.html
+   ═══════════════════════════════════════════════════════════════════ */
+:root{
+  /* ═══ CORES: VÊM DA MARCA ═══════════════════════════════════════════
+     Estas quatro linhas são a única coisa de marca que sobrou aqui, e
+     estão com os valores da michel stein_ para o esqueleto abrir pintado.
+     Trocar de marca = substituir este bloco pelo :root do bloco da marca.
+     Os nomes seguem por cor (--creme, --oliva…) porque toda peça publicada
+     usa assim; quando virarem papel (--papel, --primaria…), muda aqui.
+     ══════════════════════════════════════════════════════════════════ */
+  --creme:#EDE6DA; --tinta:#211D1A; --oliva:#6B6A4B; --terra:#B85C38;
+  --moldura:#1A1714;
+  --soft:#211D1A99; --hair:#211D1A26;
+  --mono:'DM Mono',ui-monospace,monospace; --sans:'Inter',system-ui,sans-serif;
+
+  /* ═══ ESCALA: É MOTOR, NÃO MARCA ════════════════════════════════════
+     Calibrada em 19/08/2026 e travada. Não recalibrar sem medir.
+     As unidades são cqw/cqh, do #quadro de 1600x900 — não vw/vh.
+     ══════════════════════════════════════════════════════════════════ */
+  --gut:clamp(22px,4.2cqw,86px); --top:clamp(46px,5.4cqh,74px); --bot:clamp(46px,5.4cqh,74px);
+  --fs-mega:clamp(30px,5.6cqw,88px); --fs-big:clamp(24px,3.9cqw,62px); --fs-h:clamp(19px,2.3cqw,36px);
+  --fs-item:clamp(14px,1.32cqw,21px); --fs-body:clamp(13px,1.05cqw,17px);
+  --fs-cap:clamp(9.5px,.74cqw,12.5px); --fs-num:clamp(25px,3.15cqw,54px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+/* o body deixou de ser o fundo da prancha e virou a MOLDURA: quem pinta o
+   tema agora é o #quadro. Sem isso as tarjas do letterbox mudavam de cor a
+   cada slide, e a peça parecia piscar por fora. */
+body{background:var(--moldura);color:var(--tinta);font-family:var(--sans);-webkit-font-smoothing:antialiased;
+  transition:color .38s ease}
+#quadro{background:var(--creme);transition:background .38s ease}
+body.esc{color:var(--creme)}
+body.esc #quadro{background:var(--oliva)}
+#palco{position:absolute;inset:0}
+.slide{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:calc(var(--top) + clamp(14px,2.4cqh,40px)) var(--gut) calc(var(--bot) + clamp(14px,2.4cqh,40px));
+  display:flex;flex-direction:column;justify-content:center;
+  opacity:0;pointer-events:none;transform:translateY(14px);transition:opacity .15s,transform .15s}
+.slide.ativo{opacity:1;pointer-events:auto;transform:none;transition:opacity .44s ease,transform .44s ease}
+.rev{opacity:0;transform:translateY(14px)}
+.revelado .rev{opacity:1;transform:none;transition:opacity .5s ease,transform .5s ease;transition-delay:calc(var(--i,0)*42ms)}
+.passo{opacity:0;transform:translateY(14px);transition:opacity .34s,transform .34s}
+.passo.on{opacity:1;transform:none}
+h1,h2,h3{font-family:var(--mono);font-weight:500;font-style:italic;letter-spacing:-.045em;line-height:1.02;text-transform:lowercase}
+u{text-decoration:none;color:var(--terra)}
+.kick{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.24em;text-transform:uppercase;color:var(--soft);margin-bottom:clamp(14px,2cqh,28px)}
+body.esc .kick{color:#EDE6DAaa}
+.mega{font-size:var(--fs-mega);max-width:19ch}
+.big{font-size:var(--fs-big);max-width:22ch}
+.sub{font-size:var(--fs-body);line-height:1.62;max-width:58ch;color:var(--soft);margin-top:clamp(11px,1.8cqh,28px)}
+body.esc .sub{color:#EDE6DAcc}
+.prem{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.06em;line-height:1.7;color:var(--terra);
+  border-left:2px solid var(--terra);padding-left:13px;margin-top:clamp(14px,2cqh,26px);max-width:62ch}
+body.esc .prem{color:#E9A184;border-color:#E9A184}
+.dados{display:grid;gap:clamp(14px,2cqw,34px);margin-top:clamp(18px,3cqh,52px);
+  grid-template-columns:repeat(auto-fit,minmax(clamp(150px,15cqw,230px),1fr))}
+.dado{border-top:1px solid var(--hair);padding-top:clamp(10px,1.4cqh,18px)}
+body.esc .dado{border-color:#EDE6DA3d}
+.dado .v{font-family:var(--mono);font-weight:500;font-size:var(--fs-num);letter-spacing:-.05em;line-height:1;display:block}
+.dado .l{font-size:var(--fs-cap);letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-top:10px;display:block;line-height:1.5}
+body.esc .dado .l{color:#EDE6DAaa}
+.dado .n{font-size:var(--fs-body);color:var(--soft);margin-top:8px;line-height:1.5;display:block}
+body.esc .dado .n{color:#EDE6DAbb}
+ol.lista{list-style:none;margin-top:clamp(20px,3cqh,42px);display:grid;gap:clamp(10px,1.5cqh,20px)}
+ol.lista li{display:grid;grid-template-columns:clamp(46px,4.6cqw,78px) 1fr;gap:clamp(10px,1.4cqw,22px);
+  align-items:baseline;border-top:1px solid var(--hair);padding-top:clamp(9px,1.2cqh,15px)}
+body.esc ol.lista li{border-color:#EDE6DA3d}
+ol.lista .q{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;color:var(--terra)}
+ol.lista .t{font-size:var(--fs-item);line-height:1.5}
+ol.lista .t b{font-weight:600}
+table.tb{width:100%;border-collapse:collapse;margin-top:clamp(20px,3cqh,42px);font-size:var(--fs-item)}
+table.tb th{font-family:var(--mono);font-weight:400;font-size:var(--fs-cap);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--soft);text-align:left;padding:0 0 12px;border-bottom:1px solid var(--tinta)}
+body.esc table.tb th{color:#EDE6DAaa;border-color:#EDE6DA}
+table.tb td{padding:clamp(11px,1.5cqh,19px) 0;border-bottom:1px solid var(--hair);vertical-align:baseline;line-height:1.45}
+body.esc table.tb td{border-color:#EDE6DA30}
+table.tb td+td,table.tb th+th{padding-left:clamp(14px,2cqw,40px);text-align:right}
+table.tb td.d{font-family:var(--mono);font-weight:500;font-size:clamp(15px,1.5cqw,25px);letter-spacing:-.03em;white-space:nowrap}
+table.tb tr.hi td{color:var(--terra)}
+body.esc table.tb tr.hi td{color:#E9A184}
+/* mapa */
+.mcols{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(20px,3cqw,56px);align-items:center;width:100%}
+.mtxt{min-width:0}
+.mapa{min-width:0;display:flex;align-items:center;justify-content:center}
+.mapa svg{width:100%;height:auto;max-height:calc(100cqh - var(--top) - var(--bot) - clamp(28px,4.8cqh,80px));display:block}
+.mapa image{opacity:.92}
+.pin{cursor:pointer}
+.pin circle.hit{fill:transparent}
+.pin .anel{fill:none;stroke:var(--terra);stroke-width:0;opacity:0;transition:stroke-width .16s,opacity .16s}
+.pin.on .anel{stroke-width:2.4;opacity:.9}
+.raio{transition:fill-opacity .16s,stroke-opacity .16s}
+.raio.on{fill-opacity:.3!important;stroke-opacity:.75!important}
+#minfo{margin-top:clamp(11px,1.6cqh,20px);border-top:1px solid var(--hair);padding-top:clamp(8px,1.1cqh,14px);min-height:clamp(70px,8.6cqh,102px)}
+#minfo .mn{font-family:var(--mono);font-style:italic;font-size:var(--fs-h);letter-spacing:-.03em;line-height:1.1;display:block}
+#minfo .mp{font-family:var(--mono);font-weight:500;font-size:var(--fs-cap);letter-spacing:.16em;text-transform:uppercase;color:var(--terra);margin-top:8px;display:block}
+#minfo .md{font-size:var(--fs-body);color:var(--soft);line-height:1.55;margin-top:8px;display:block}
+#minfo.vazio .mn{color:var(--soft);font-size:var(--fs-body);font-style:normal;font-family:var(--sans)}
+.leg{display:flex;flex-wrap:wrap;gap:clamp(11px,1.6cqw,26px);margin-top:clamp(9px,1.3cqh,16px);font-size:var(--fs-cap);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+body.esc .leg{color:#EDE6DAbb}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:-1px}
+.leg i.ln{width:16px;height:0;border-top:1.5px dashed var(--terra);border-radius:0;vertical-align:3px}
+.pend{font-family:var(--mono);font-size:var(--fs-cap);color:var(--terra);border-left:2px dashed var(--terra);
+  padding-left:12px;margin-top:clamp(12px,1.8cqh,22px);line-height:1.6;max-width:64ch}
+.credito{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#211D1A55;margin-top:10px}
+/* fotos */
+.fcols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:clamp(20px,3cqw,56px);align-items:center;width:100%}
+.fbox{position:relative;aspect-ratio:4/3;background:#211D1A0d;border:1px solid var(--hair);overflow:hidden;
+  display:flex;align-items:center;justify-content:center}
+.fbox img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .5s ease}
+.fbox img.on{opacity:1}
+.fbox .slot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;padding:clamp(14px,2cqw,26px);
+  font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.06em;line-height:1.6;color:var(--soft)}
+.fbox .slot b{color:var(--terra);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.fcap{font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin-top:11px;line-height:1.6}
+/* chrome */
+.chrome{position:absolute;left:0;right:0;pointer-events:none;z-index:9;font-family:var(--mono);font-size:var(--fs-cap);
+  letter-spacing:.16em;text-transform:lowercase;color:var(--soft);padding:0 var(--gut);
+  display:flex;align-items:center;justify-content:space-between;height:var(--top)}
+body.esc .chrome{color:#EDE6DAb0}
+.chrome.pe{top:auto;bottom:0;height:var(--bot)}
+.chrome.topo{top:0}
+.secao{font-style:italic;position:relative;padding-left:26px;white-space:nowrap}
+.secao .sn{position:absolute;left:0;top:50%;transform:translateY(-50%);font-style:normal;opacity:.55}
+.dots{display:flex;gap:9px;pointer-events:auto}
+.sdot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.28;cursor:pointer;position:relative;transition:opacity .25s}
+.sdot.on{opacity:1}
+.sdot span{position:absolute;bottom:150%;left:50%;transform:translateX(-50%);opacity:0;white-space:nowrap;font-style:italic;letter-spacing:.1em;transition:opacity .2s;pointer-events:none}
+.sdot:hover span{opacity:.9}
+.marca{font-style:italic;font-weight:500;text-transform:lowercase}
+/* ── navegação · pastilha de leitura garantida ──────────────────────────
+   Regra de sistema, 23/08/2026 (prancha/PRANCHA-SISTEMA.md, seção Chrome,
+   commit b3f95705). O contador e as setas param de herdar a cor do slide e
+   passam a viver numa pastilha própria: fundo creme a 94%, glifo em tinta,
+   filete de tinta a 22% e sombra baixa.
+   Por que clara e não escura: medida contra creme, oliva, tinta, terracota
+   e foto, a clara entrega piso de 11,9:1 contra ~6:1 da escura. A fraqueza
+   dela — sumir como forma sobre fundo creme — é o que o filete resolve.
+   `backdrop-filter` é reforço, não requisito: sem suporte, os 94% de
+   opacidade já entregam o contraste sozinhos. ── */
+.nav{display:flex;align-items:center;gap:clamp(8px,.9cqw,14px);pointer-events:auto;
+  background:rgba(237,230,218,.94);
+  -webkit-backdrop-filter:blur(7px) saturate(1.1);backdrop-filter:blur(7px) saturate(1.1);
+  border:1px solid rgba(33,29,26,.22);border-radius:999px;
+  padding:clamp(4px,.42cqw,6px) clamp(7px,.7cqw,11px) clamp(4px,.42cqw,6px) clamp(11px,1.05cqw,17px);
+  box-shadow:0 1px 5px rgba(33,29,26,.16);
+  color:var(--tinta)}
+.cont{font-variant-numeric:tabular-nums;letter-spacing:.1em;color:var(--tinta);opacity:.72}
+.seta{width:clamp(23px,2cqw,30px);height:clamp(23px,2cqw,30px);
+  border:1px solid rgba(33,29,26,.34);border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;opacity:.9;
+  transition:opacity .2s,transform .1s,background .2s;
+  background:none;color:var(--tinta);font-size:11px}
+.seta:hover{opacity:1;background:rgba(33,29,26,.08)}
+.seta:active{transform:scale(.94)}
+body.na-capa .chrome.pe .pj,body.na-capa .marca{opacity:0}
+/* [quadro 1600x900: nunca dispara — retirado] (max-height:780px) */
+
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
+
+/* ===== v2 ===== */
+body.terra{color:#FBF3EA}
+body.terra #quadro{background:var(--terra)}
+body.terra .kick,body.terra .sub,body.terra .leg{color:#FBF3EAbb}
+body.terra .dado{border-color:#FBF3EA44}
+body.terra .dado .l,body.terra .dado .n{color:#FBF3EAc4}
+body.terra u{color:#FBF3EA}
+body.esc u{color:#D9C7A8}
+.wrap{max-width:min(100%,1180px)}
+.sub{max-width:52ch}
+.mega{max-width:16ch}
+/* divisor de ato */
+.divisor{justify-content:center}
+.divisor .dn{font-family:var(--mono);font-weight:500;font-size:clamp(54px,13cqw,190px);line-height:.82;letter-spacing:-.07em;opacity:.16;display:block}
+.divisor .dt{font-family:var(--mono);font-style:italic;font-weight:500;font-size:clamp(30px,6.6cqw,104px);letter-spacing:-.055em;line-height:1;text-transform:lowercase;margin-top:clamp(-30px,-3.4cqw,-14px)}
+.divisor .ds{font-size:var(--fs-item);color:var(--soft);margin-top:clamp(16px,2.4cqh,32px);max-width:44ch;line-height:1.6}
+body.esc .divisor .ds,body.terra .divisor .ds{color:#EDE6DAc4}
+/* duas jogadas */
+.jogadas{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4cqw,80px);margin-top:clamp(24px,4cqh,60px)}
+.jogada{border-top:1.5px solid currentColor;padding-top:clamp(12px,1.8cqh,22px)}
+.jogada .jn{font-family:var(--mono);font-weight:500;font-size:clamp(46px,8.4cqw,132px);line-height:.86;letter-spacing:-.07em;display:block;opacity:.9}
+.jogada .jt{font-family:var(--mono);font-style:italic;font-size:clamp(17px,2.1cqw,32px);letter-spacing:-.03em;line-height:1.12;margin-top:clamp(10px,1.5cqh,20px);display:block}
+.jogada .jd{font-size:var(--fs-body);line-height:1.55;margin-top:clamp(8px,1.2cqh,14px);display:block;opacity:.72;max-width:26ch}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
+
+/* porte com isometria */
+.pcols{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1fr);gap:clamp(20px,3.4cqw,64px);align-items:center;width:100%}
+.iso{min-width:0}.iso svg{width:100%;height:auto;max-height:52cqh;display:block}
+/* unitario por porte */
+.unit{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.6cqw,52px);margin-top:clamp(22px,3.4cqh,54px)}
+.uc{border-top:1.5px solid currentColor;padding-top:clamp(12px,1.7cqh,20px)}
+.uc .ut{font-family:var(--mono);font-style:italic;font-size:var(--fs-item);letter-spacing:-.02em;display:block}
+.uc .ua{font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin-top:5px;display:block}
+.uc .ur{font-family:var(--mono);font-weight:500;font-size:clamp(24px,3.5cqw,58px);letter-spacing:-.05em;line-height:1;color:var(--terra);margin-top:clamp(12px,1.8cqh,22px);display:block}
+body.esc .uc .ur{color:#E9A184}
+.uc .ul{font-size:var(--fs-cap);letter-spacing:.13em;text-transform:uppercase;color:var(--soft);margin-top:8px;display:block}
+.uc .um{font-size:var(--fs-body);color:var(--soft);margin-top:9px;line-height:1.55;display:block}
+body.esc .uc .ua,body.esc .uc .ul,body.esc .uc .um{color:#EDE6DAaa}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
+
+/* barra de destaque no kicker */
+.kick.barra{display:inline-block;background:var(--terra);color:#FBF3EA;padding:7px 14px 6px;letter-spacing:.2em;margin-bottom:clamp(16px,2.3cqh,30px)}
+/* trio tempo/memoria/dominio */
+ol.trio{list-style:none;margin-top:clamp(22px,3.4cqh,52px);display:grid;gap:clamp(14px,2.2cqh,30px)}
+ol.trio li{display:grid;grid-template-columns:minmax(0,.46fr) minmax(0,1fr);gap:clamp(16px,2.6cqw,52px);
+  align-items:baseline;border-top:1px solid var(--hair);padding-top:clamp(11px,1.6cqh,20px)}
+ol.trio .q{font-family:var(--mono);font-style:italic;font-weight:500;font-size:clamp(24px,3.6cqw,58px);letter-spacing:-.05em;line-height:1;color:var(--terra)}
+ol.trio .t{font-size:var(--fs-body);line-height:1.6}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
+
+/* nota com numero grande */
+.notaN{display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,2cqw,28px);align-items:center;margin-top:clamp(18px,2.6cqh,40px);
+  border-top:1px solid var(--hair);padding-top:clamp(12px,1.8cqh,22px)}
+.notaN .nn{font-family:var(--mono);font-weight:500;font-size:clamp(38px,6.4cqw,104px);letter-spacing:-.06em;line-height:.9;color:var(--terra)}
+.notaN .nt{font-size:var(--fs-item);line-height:1.5;max-width:34ch;color:var(--soft)}
+/* foto full bleed */
+.fbleed{position:absolute;top:0;right:0;bottom:0;width:48cqw;overflow:hidden;background:#211D1A0e}
+.fbleed img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .55s ease}
+.fbleed img.on{opacity:1}
+.fbleed .slot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;
+  padding:clamp(18px,2.6cqw,42px);font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.06em;line-height:1.65;color:var(--soft)}
+.fbleed .slot b{color:var(--terra);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.fbleed .cred{position:absolute;left:clamp(18px,2.6cqw,42px);bottom:clamp(14px,2cqh,26px);font-family:var(--mono);
+  font-size:var(--fs-cap);letter-spacing:.1em;color:#EDE6DA;text-shadow:0 1px 6px #211D1Acc;opacity:0;transition:opacity .5s}
+.fbleed .cred.on{opacity:.92}
+.slide.temfoto{padding-right:calc(48cqw + clamp(22px,3cqw,56px))}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
+
+/* moldura do mapa */
+.mapa{border:1.5px solid var(--terra);padding:0;background:#EDE6DA;position:relative}
+.mapa::after{content:"";position:absolute;inset:5px;border:.5px solid #B85C3855;pointer-events:none}
+#minfo .mn,#minfo .mp,#minfo .md{transition:opacity .22s ease,transform .22s ease}
+#minfo.trocando .mn,#minfo.trocando .mp,#minfo.trocando .md{opacity:0;transform:translateY(5px)}
+.lote{cursor:pointer}
+.lote path{transition:fill-opacity .18s,stroke-opacity .18s,stroke-width .18s}
+.lote.on path{fill-opacity:.42!important;stroke-opacity:1!important;stroke-width:2.6!important}
+/* ===== v3 · fundo morph + antes/depois ===== */
+#msfundo{position:absolute;inset:0;z-index:0;display:block;width:100%;height:100%;opacity:0;
+  transition:opacity .8s ease;pointer-events:none}
+#msveu{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .8s ease;
+  background:linear-gradient(180deg,#211D1A66 0%,transparent 30%,transparent 58%,#211D1A88 100%)}
+body.com-fundo #msfundo,body.com-fundo #msveu{opacity:1}
+#palco{z-index:1}
+body.com-fundo .slide.ativo{background:transparent}
+body.com-fundo{color:var(--creme)}
+body.com-fundo #quadro{background:var(--oliva)}
+body.com-fundo .kick,body.com-fundo .sub{color:#EDE6DAcc}
+.ms-start{display:inline-flex;align-items:center;gap:11px;margin-top:clamp(22px,3.4cqh,44px);
+  background:var(--terra);color:#FBF3EA;border:0;cursor:pointer;font-family:var(--mono);font-style:italic;
+  font-size:var(--fs-body);letter-spacing:.02em;padding:11px 22px 10px;border-radius:100px;
+  animation:convite 2.6s ease-in-out infinite}
+.ms-start:hover{animation:none;filter:brightness(1.08)}
+.ms-start i{font-style:normal;font-size:.8em;opacity:.85}
+@keyframes convite{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.pisca{animation:pisca 1060ms step-end infinite}
+@keyframes pisca{50%{opacity:0}}
+/* antes e depois */
+.dcols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2cqw,34px);width:100%;align-items:stretch}
+.dfig{position:relative;min-height:clamp(220px,52cqh,620px);background:#211D1A0e;border:1px solid var(--hair);overflow:hidden}
+.dfig img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dfig.pb img{filter:grayscale(1) contrast(1.06)}
+.dfig .slot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
+  padding:clamp(14px,2cqw,28px);font-family:var(--mono);font-size:var(--fs-cap);line-height:1.6;color:var(--soft)}
+.dfig .slot b{color:var(--terra);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.dfig .tag{position:absolute;top:0;left:0;background:var(--tinta);color:var(--creme);font-family:var(--mono);
+  font-style:italic;font-size:var(--fs-item);padding:7px 15px 6px;letter-spacing:-.02em}
+.dfig.pb .tag{background:#211D1A}
+.dfig.ag .tag{background:var(--terra)}
+.dleg{font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin-top:10px}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
+
+
+/* ═══ abertura de marca — gabarito `marca` ══════════════════════════════════
+   Regra permanente (21/08/2026): toda apresentação abre por este slide, no
+   arranjo fixado em agosto/2026 — marca, papel, slogan e site empilhados no
+   mesmo eixo, bloco centrado à esquerda, fundo oliva, texto creme.
+   O nome do projeto vem no slide seguinte, no gabarito `capa`.             */
+.slide.g-marca{justify-content:center}
+/* a abertura fica limpa: nada de secao, bolinhas ou contador sobre a marca */
+body.na-marca .chrome{opacity:0;pointer-events:none}
+.g-marca .frase{display:flex;flex-direction:column;align-items:flex-start;
+  gap:clamp(9px,1.35cqh,20px)}
+/* marca + papel: margem no <em>, NUNCA gap de flex — o gap descola o
+   underscore do nome. Armadilha já paga duas vezes.                        */
+.g-marca .sigla-mini{font-family:var(--mono);font-weight:500;font-style:italic;
+  font-size:clamp(11px,1.0cqw,20px);text-transform:lowercase;letter-spacing:-.01em;
+  line-height:1;color:#EDE6DAe6}
+.g-marca .sigla-mini i{font-style:normal;color:var(--terra)}
+.g-marca .sigla-mini em{font-family:var(--mono);font-style:normal;font-weight:400;
+  font-size:.68em;letter-spacing:.02em;text-transform:none;color:#EDE6DAa6;
+  margin-left:1.1em;position:relative;top:-.04em}
+.g-marca .slogan{font-family:var(--mono);font-weight:500;font-style:italic;
+  font-size:clamp(22px,3.75cqw,82px);text-transform:lowercase;letter-spacing:-.028em;
+  line-height:1.04;color:var(--creme);white-space:nowrap}
+.g-marca .slogan i{font-style:normal;color:var(--terra)}
+.g-marca .site{font-family:var(--sans);font-weight:400;
+  font-size:clamp(10px,.78cqw,15px);letter-spacing:.14em;color:#EDE6DAa6;line-height:1}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:620px) */
+
+
+/* cortina diagonal — a saída da abertura para o primeiro slide */
+#mscortina{position:absolute;top:-12%;bottom:-12%;left:0;width:132%;z-index:95;
+  pointer-events:none;background:var(--creme);
+  border-left:3px solid var(--terra);border-right:3px solid var(--terra);
+  transform:translateX(-134%) skewX(-14deg);visibility:hidden}
+#mscortina.on{visibility:visible;transform:translateX(-2%) skewX(-14deg);
+  transition:transform .60s cubic-bezier(.62,0,.30,1)}
+#mscortina.sai{visibility:visible;transform:translateX(134%) skewX(-14deg);
+  transition:transform .64s cubic-bezier(.55,0,.35,1)}
+
+/* metas da capa de projeto — cliente · etapa · data */
+.metas{display:flex;flex-wrap:wrap;gap:clamp(18px,2.6cqw,44px);
+  margin-top:clamp(20px,3cqh,40px);padding-top:clamp(12px,1.8cqh,22px);
+  border-top:1px solid #EDE6DA3d}
+.metas div{display:flex;flex-direction:column;gap:5px}
+.metas .ml{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.2em;
+  text-transform:uppercase;color:#EDE6DAa6}
+.metas .mv{font-family:var(--mono);font-style:italic;font-size:var(--fs-item);
+  letter-spacing:-.02em;color:var(--creme)}
+@media(prefers-reduced-motion:reduce){#mscortina{display:none}}
+
+/* ═══ ajustes de 21/08/2026 ════════════════════════════════════════════════ */
+
+/* pílula da abertura: igual à do capamorph_R6 — menor, só "começar" e a seta */
+.g-marca .ms-start{margin-top:clamp(14px,2.2cqh,30px);font-style:normal;
+  font-size:var(--fs-cap);letter-spacing:.16em;gap:.6em;
+  padding:clamp(7px,.85cqh,11px) clamp(14px,1.35cqw,22px);animation:none}
+.g-marca .ms-start:hover{gap:.95em;transform:translateY(-1px)}
+
+/* fechamento: QR acima da marca, mesmo eixo */
+.g-marca .qr{width:clamp(64px,7cqw,128px);line-height:0;border-radius:3px;
+  overflow:hidden;box-shadow:0 0 0 1px #EDE6DA26;margin-bottom:clamp(6px,1cqh,14px)}
+.g-marca .qr svg{display:block;width:100%;height:auto}
+.g-marca .assina{font-family:var(--mono);font-weight:500;font-style:italic;
+  font-size:clamp(26px,4.2cqw,90px);text-transform:lowercase;letter-spacing:-.03em;
+  line-height:1;color:var(--creme)}
+.g-marca .assina i{font-style:normal;color:var(--terra)}
+
+/* divisor: o underscore piscante avisa que o assunto mudou.
+   O terracota é EXCLUSIVO do divisor — nenhum outro slide usa. */
+.divisor .dt i{font-style:normal;color:#FBF3EA;opacity:.72;margin-left:.06em}
+
+/* chrome: as bolinhas e o rótulo de seção estavam apagados demais para ler */
+.chrome{color:#211D1Ac9}
+body.esc .chrome,body.com-fundo .chrome{color:#EDE6DAdb}
+body.terra .chrome{color:#FBF3EAdb}
+.sdot{opacity:.42}
+.sdot:hover{opacity:.8}
+.sdot span{letter-spacing:.1em}
+.sdot:hover span{opacity:1}
+.chrome .secao .sn{opacity:.7}
+
+/* grifo terracota — destaque dentro de célula de tabela ou de texto corrido */
+mark{background:var(--terra);color:#FBF3EA;padding:.12em .42em .16em;
+  border-radius:2px;font-style:inherit;font-weight:500}
+table.tb th mark{letter-spacing:.16em}
+
+/* nota de ressalva: quando o número é leitura nossa, não dado declarado */
+.notaN .nn{font-family:var(--mono);font-weight:500;color:var(--terra)}
+
+/* colisao de nome: `.seta` ja era o botao redondo de navegacao do chrome,
+   e a seta da pilula saia dentro de um circulo. O markup segue igual ao do
+   R6; o reset e local.                                                    */
+.ms-start .seta{width:auto;height:auto;border:0;border-radius:0;display:inline;
+  background:none;color:inherit;font-size:inherit;font-style:normal;opacity:.85;
+  transform:none;cursor:inherit}
+
+/* antes e depois: legenda sobre a foto, slot so quando a imagem nao carrega */
+.dfig .slot{opacity:0;pointer-events:none}
+.dfig.semimg .slot{opacity:1}
+.dfig .dcap{position:absolute;left:0;right:0;bottom:0;padding:clamp(26px,4cqh,52px) clamp(12px,1.4cqw,20px) clamp(9px,1.2cqh,14px);
+  font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.1em;color:#EDE6DAd9;
+  background:linear-gradient(to top,#0e0f0bcc,#0e0f0b00)}
+.dfig.semimg .dcap{display:none}
+
+/* o terracota cheio ficou reservado ao divisor de secao. O kicker em barra
+   passa para a oliva, para nao competir com a troca de assunto. */
+.kick.barra{background:var(--oliva);color:#EDE6DA}
+body.esc .kick.barra,body.com-fundo .kick.barra{background:#EDE6DA1f;color:#EDE6DA}
+
+/* ═══ ajustes de 22/08/2026 ════════════════════════════════════════════════ */
+
+/* caixa de texto mais larga: o título vinha muito empilhado na esquerda */
+.mega{max-width:24ch}
+.big{max-width:26ch}
+.sub{max-width:66ch}
+.wrap.largo .sub{max-width:74ch}
+
+/* lista larga — texto maior e rótulo de uma palavra só */
+ol.lista.largo li{grid-template-columns:clamp(78px,7.6cqw,132px) 1fr}
+ol.lista.largo .t{font-size:clamp(15px,1.52cqw,25px);line-height:1.48}
+ol.lista.largo .q{font-size:clamp(10px,.86cqw,14px);letter-spacing:.16em}
+
+/* a nota de número não precisa de fio próprio: as linhas da tabela bastam */
+.notaN{border-top:0;padding-top:0;margin-top:clamp(20px,3cqh,44px)}
+
+/* ─── mapa em sangria: metade direita de fora a fora, sem moldura ───
+   O mapa do cluster é denso; a moldura terracota estrangulava a leitura. */
+.mcols.sang{display:block}
+.mcols.sang .mtxt{max-width:min(100%,640px)}
+/* a moldura dupla de terracota e do mapa emoldurado; na sangria ela sai */
+.mapa.sang::after{display:none}
+.mapa.sang{position:absolute;top:0;right:0;bottom:0;width:48cqw;border:0;
+  padding:0;background:#E4DCCE;display:block;overflow:hidden}
+.mapa.sang svg{width:100%;height:100%;max-height:none;display:block}
+.slide.temmapa{padding-right:calc(48cqw + clamp(22px,3cqw,56px))}
+/* legenda empilhada na vertical, debaixo do texto */
+.mcols.sang .leg{flex-direction:column;gap:clamp(6px,.86cqh,11px);align-items:flex-start}
+.mcols.sang .leg span{display:flex;align-items:center}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
+
+
+/* fotinha do empreendimento no painel de informação do mapa */
+#minfo{display:grid;grid-template-columns:1fr;gap:clamp(10px,1.4cqw,18px);align-items:start}
+#minfo:has(.mfoto){grid-template-columns:clamp(78px,7.4cqw,124px) 1fr}
+#minfo .mfoto{display:block;line-height:0;overflow:hidden;background:#211D1A12;
+  aspect-ratio:3/4;border:1px solid var(--hair)}
+#minfo .mfoto img{width:100%;height:100%;object-fit:cover;display:block}
+#minfo .mtx{display:block;min-width:0}
+body.esc #minfo .mfoto,body.terra #minfo .mfoto{border-color:#EDE6DA3d}
+
+/* ─── revelação por clique: o fio varre da esquerda, o texto desce ───
+   Rápido, mas com ênfase. Vale para as fichas de porte e para as jogadas. */
+.passo.etapa{opacity:1;transform:none;border-top-color:transparent;position:relative}
+.passo.etapa::before{content:"";position:absolute;left:0;right:0;top:-1.5px;height:1.5px;
+  background:currentColor;transform:scaleX(0);transform-origin:left center;
+  transition:transform .40s cubic-bezier(.52,0,.18,1)}
+.passo.etapa.on::before{transform:scaleX(1)}
+.passo.etapa>*{opacity:0;transform:translateY(-11px);
+  transition:opacity .28s ease,transform .28s cubic-bezier(.3,.8,.3,1)}
+.passo.etapa.on>*{opacity:1;transform:none}
+.passo.etapa.on>*:nth-child(1){transition-delay:.30s}
+.passo.etapa.on>*:nth-child(2){transition-delay:.36s}
+.passo.etapa.on>*:nth-child(3){transition-delay:.42s}
+.passo.etapa.on>*:nth-child(4){transition-delay:.48s}
+.passo.etapa.on>*:nth-child(5){transition-delay:.54s}
+@media(prefers-reduced-motion:reduce){
+  .passo.etapa::before{transform:scaleX(1)}
+  .passo.etapa>*{opacity:1;transform:none;transition:none}
+}
+
+/* ─── fechamento: bolinhas no alto ao centro, setas no pé à direita ───
+   Some só o rótulo de seção e o nome do projeto, que ali seriam repetição. */
+body.no-fim .secao,body.no-fim .chrome.topo .marca,body.no-fim .chrome.pe .pj{opacity:0}
+body.no-fim .chrome{opacity:1;pointer-events:none}
+body.no-fim .dots,body.no-fim .nav{pointer-events:auto}
+/* no slide de mapa em sangria a marca do alto-direita cairia sobre o mapa */
+body:has(.slide.ativo.temmapa) .chrome.topo .marca{opacity:0}
+
+/* o painel do mapa e posicionado por bottom:0 — o translateY de entrada do
+   .rev o empurrava 14 px para fora e criava barra de rolagem. Entra so em
+   opacidade. */
+.mapa.sang.rev,.revelado .mapa.sang.rev{transform:none}
+/* o crédito da foto batia no contador do chrome; sobe acima do rodapé */
+.fbleed .cred{bottom:calc(var(--bot) + clamp(6px,1cqh,12px))}
+/* na foto de sangria a marca do alto-direita também cairia sobre a imagem */
+body:has(.slide.ativo.temfoto) .chrome.topo .marca{opacity:0}
+/* numeração da lista sobre a oliva: o terracota cheio some no fundo verde */
+body.esc ol.lista .q,body.com-fundo ol.lista .q{color:#E9A184}
+body.terra ol.lista .q{color:#FBF3EA}
+
+/* ═══ 22/08/2026 · o rótulo da linha é título, e título é grande ═══════════
+   Vale para toda lista: "âncoras / regra / mix", os números 01–04, as datas
+   de encaminhamento. Mesmo tratamento do trio (tempo/memória/domínio):
+   DM Mono 500 itálico, caixa-baixa, terracota. O texto corrido não muda.
+   Exceção: a linha do tempo ao lado da foto de sangria, onde o rótulo é
+   data de acontecimento e não cabeça de assunto.                          */
+ol.lista li{grid-template-columns:clamp(104px,10.6cqw,208px) 1fr;
+  gap:clamp(14px,2cqw,34px);align-items:baseline}
+ol.lista .q{font-family:var(--mono);font-weight:500;font-style:italic;
+  font-size:clamp(19px,2.5cqw,42px);letter-spacing:-.045em;line-height:1.02;
+  text-transform:lowercase;color:var(--terra)}
+ol.lista.largo li{grid-template-columns:clamp(120px,12cqw,240px) 1fr}
+ol.lista.largo .q{font-size:clamp(21px,2.85cqw,50px);letter-spacing:-.05em}
+
+/* a linha do tempo da foto de sangria mantém a data pequena */
+.slide.temfoto ol.lista li{grid-template-columns:clamp(46px,4.6cqw,78px) 1fr;
+  gap:clamp(10px,1.4cqw,22px)}
+.slide.temfoto ol.lista .q{font-family:var(--mono);font-weight:400;font-style:normal;
+  font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;line-height:1.5}
+
+/* ═══ 22/08/2026 · segunda rodada ══════════════════════════════════════════ */
+
+/* alinhamento: o rótulo grande centra com o bloco de texto, não flutua no topo */
+ol.lista li{align-items:center}
+ol.trio li{align-items:center}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
+
+
+/* ─── mapa em sangria: as três faixas ficam ancoradas ───────────────────
+   Antes tudo dividia o mesmo fluxo, então o painel de hover empurrava o
+   título e o layout dançava a cada passagem de mouse. Agora: título e
+   legenda grudados no alto, painel de informação grudado no pé, e o vazio
+   fica no meio. Nada se move.                                          */
+.slide.temmapa{justify-content:stretch}
+.mcols.sang{height:100%}
+.mcols.sang .mtxt{display:flex;flex-direction:column;height:100%;
+  padding-top:clamp(2px,.6cqh,12px)}
+.mcols.sang .kick,.mcols.sang h1,.mcols.sang .sub{order:1;flex:0 0 auto}
+.mcols.sang .leg{order:2;flex:0 0 auto;margin-top:clamp(12px,1.9cqh,26px)}
+.mcols.sang ol.chave{order:3;flex:0 0 auto}
+.mcols.sang #minfo{order:8;flex:0 0 auto;margin-top:auto;
+  min-height:clamp(120px,15.5cqh,196px);border-top:1px solid var(--hair)}
+.mcols.sang .credito{order:9;flex:0 0 auto;margin-top:clamp(6px,1cqh,14px)}
+
+/* tabela: a linha que está fora do estudo entra apagada */
+table.tb tr.fora td{opacity:.42}
+
+/* duas frentes lado a lado */
+.frcols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,3.6cqw,72px);
+  margin-top:clamp(20px,3cqh,44px);width:100%}
+.fr{min-width:0}
+.frt{font-family:var(--mono);font-style:italic;font-weight:500;
+  font-size:clamp(15px,1.62cqw,27px);letter-spacing:-.03em;line-height:1.1;
+  color:var(--terra);border-bottom:1.5px solid currentColor;
+  padding-bottom:clamp(8px,1.1cqh,14px)}
+body.esc .frt{color:#E9A184}
+.frl{list-style:none;display:grid;gap:clamp(9px,1.3cqh,18px);
+  margin-top:clamp(11px,1.6cqh,22px)}
+.frl li{display:grid;gap:4px;border-top:1px solid var(--hair);
+  padding-top:clamp(7px,1cqh,13px)}
+.frl li:first-child{border-top:0;padding-top:0}
+body.esc .frl li{border-color:#EDE6DA3d}
+.frti{font-family:var(--mono);font-style:italic;font-size:var(--fs-item);
+  letter-spacing:-.02em;line-height:1.2}
+.frd{font-size:var(--fs-body);line-height:1.5;color:var(--soft)}
+body.esc .frd{color:#EDE6DAbb}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
+
+
+/* ─── popover de justificativa ───────────────────────────────────────────
+   O número grifado abre um painel com a memória de cálculo. Serve para não
+   engordar o slide com o que só é perguntado às vezes. */
+mark.pop{cursor:help;position:relative;transition:filter .2s}
+mark.pop:hover,mark.pop.aberto{filter:brightness(1.12)}
+.obs{font-family:var(--mono);font-size:.86em;letter-spacing:.1em;
+  text-transform:lowercase;color:var(--terra);cursor:help;
+  border-bottom:1px dashed currentColor;padding-bottom:1px;margin-left:.35em}
+body.esc .obs,body.com-fundo .obs{color:#E9A184}
+body.terra .obs{color:#FBF3EA}
+.obs:hover,.obs.aberto{filter:brightness(1.15)}
+/* a caixa é terracota e nasce colada à linha do elemento que a abriu.
+   Sem título dentro: ele já está na tela, logo acima. */
+.popbox{position:absolute;z-index:40;max-width:min(44ch,58cqw);
+  background:var(--terra);color:#FBF3EA;
+  padding:clamp(13px,1.8cqh,20px) clamp(15px,1.6cqw,24px);
+  box-shadow:0 14px 36px #211d1a26;
+  opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease}
+.popbox.on{opacity:1;transform:none;pointer-events:auto}
+.popd{display:block;font-size:var(--fs-body);line-height:1.58;color:#FBF3EAe8}
+.popd b{font-weight:600;color:#FFF}
+
+/* ═══ 22/08/2026 · terceira rodada ═════════════════════════════════════════ */
+
+/* subitens dentro de uma jogada: cada velocidade na sua linha */
+.jogada .jd ul.jsub{list-style:none;margin-top:.7em;display:grid;gap:.55em}
+.jogada .jd ul.jsub li{padding-left:1.1em;position:relative;line-height:1.5}
+.jogada .jd ul.jsub li::before{content:"";position:absolute;left:0;top:.62em;
+  width:.5em;height:1px;background:currentColor;opacity:.55}
+.jogada .jd{max-width:34ch}
+
+/* ─── a carteira que se redistribui ──────────────────────────────────────
+   Sete âncoras em pílula; abaixo de cada uma, as oportunidades do entorno.
+   O sorteio existe para dizer que a distribuição é indefinida de propósito. */
+.pgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:clamp(8px,1cqw,18px);margin-top:clamp(24px,3.6cqh,58px);width:100%;
+  align-items:start}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:1080px) */
+
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:620px) */
+
+.pg{display:flex;flex-direction:column;align-items:center;gap:clamp(9px,1.3cqh,17px)}
+.pgn{font-family:var(--mono);font-style:italic;font-size:clamp(11px,1.02cqw,17px);
+  letter-spacing:-.02em;line-height:1.15;text-align:center;
+  padding:clamp(7px,.9cqh,12px) clamp(9px,.9cqw,15px);border-radius:999px;
+  border:1.5px solid currentColor;max-width:100%;
+  display:flex;align-items:center;justify-content:center;
+  min-height:clamp(34px,4.2cqh,54px)}
+.pgo{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
+  min-height:clamp(20px,2.4cqh,30px);align-content:flex-start}
+.pgo i{display:block;width:clamp(13px,1.24cqw,21px);height:clamp(13px,1.24cqw,21px);
+  border-radius:50%;background:var(--terra);
+  animation:pgpop .34s cubic-bezier(.3,1.5,.5,1) backwards}
+.pgo i:nth-child(2){animation-delay:.07s}
+.pgo i:nth-child(3){animation-delay:.14s}
+.pgo i:nth-child(n+4){animation-delay:.21s}
+@keyframes pgpop{from{transform:scale(0);opacity:0}}
+.pg.vazia .pgn{opacity:.42}
+.pgr{margin-top:clamp(18px,2.6cqh,36px);font-size:var(--fs-cap);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--soft)}
+body.esc .pgr{color:#EDE6DAaa}
+@media(prefers-reduced-motion:reduce){.pgo i{animation:none}}
+
+/* ═══ fundo morph no divisor de seção · padrão travado em 22/08/2026 ═══════
+   Copiado de modulos/divisor-morph.html. Véu do divisor a 0,60 — quase o
+   triplo do véu do índice (0,18) — porque o divisor carrega o maior tipo do
+   deck, e a trama compete com o título. Não recalibrar.                   */
+/* (o véu do divisor migrou para #msveu-d, no bloco do segundo canvas) */
+
+/* especificidade: body.com-fundo pinta o corpo de oliva e venceria o
+   body.terra do divisor por vir depois na folha. Mesmo conflito que o
+   .slide.ativo{background:transparent} resolveu na abertura. */
+body.com-fundo.terra #quadro{background:var(--terra)}
+body.com-fundo.terra .kick,body.com-fundo.terra .sub{color:#FBF3EAbb}
+/* o chrome invertido do divisor tem de sobreviver ao com-fundo */
+body.com-fundo.terra .chrome{color:#FBF3EAdb}
+
+/* ═══ o segundo canvas: o fundo dos divisores ══════════════════════════════
+   Mesma geometria do primeiro, empilhado atrás do palco. Só um dos dois
+   aparece por vez, e o que não aparece está pausado pelo go(). */
+#msfundo-d{position:absolute;inset:0;z-index:0;display:block;width:100%;height:100%;
+  opacity:0;transition:opacity .8s ease;pointer-events:none}
+#msveu-d{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;
+  background:var(--terra);transition:opacity .3s ease}
+#msveu-d::after{content:"";position:absolute;inset:0;opacity:.5;
+  background:linear-gradient(180deg,var(--terra) 0%,transparent 26%,
+                             transparent 74%,var(--terra) 100%)}
+body.fundo-div #msfundo-d{opacity:1}
+body.fundo-div #msveu-d{opacity:.60}   /* travado em 22/08/2026 */
+/* no divisor o canvas e o véu da marca somem, e vice-versa */
+body.fundo-div #msfundo,body.fundo-div #msveu{opacity:0}
+
+/* ═══ 23/08/2026 · legibilidade e grifo ════════════════════════════════════ */
+
+/* o terracota cheio sobre a oliva some. O `lista` já tinha o clareado; o
+   `trio` e o `jogadas` não tinham, e é ali que o texto ficava ilegível. */
+body.esc ol.trio .q,body.com-fundo ol.trio .q{color:#E9A184}
+body.terra ol.trio .q{color:#FBF3EA}
+body.esc .jogada .jn,body.esc .jogada .jt{color:#F0E7DC}
+body.esc .frt{color:#E9A184}
+
+/* ─── grifo — a faixa que destaca a frase ────────────────────────────────
+   Trazido da apresentação da Lavro (mecânica de 22/08). Não é negrito: é
+   marca de caneta POR TRÁS do texto, que se desenha da esquerda para a
+   direita. Usa background-size animado em vez de pseudo-elemento absoluto,
+   para acompanhar a quebra de linha com box-decoration-break: clone.     */
+.grifo{
+  background-image:linear-gradient(var(--grifo-cor,#B85C3833),var(--grifo-cor,#B85C3833));
+  background-repeat:no-repeat;
+  background-position:0 .14em;
+  background-size:0% calc(100% - .22em);
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+  padding:0 .14em;margin:0 -.14em;border-radius:2px}
+.revelado .grifo{animation:ms-grifo 620ms cubic-bezier(.62,0,.30,1) forwards;
+  animation-delay:var(--gd,760ms)}
+@keyframes ms-grifo{to{background-size:100% calc(100% - .22em)}}
+/* sobre oliva e terracota a marca inverte para o creme */
+body.esc .grifo,body.com-fundo .grifo{--grifo-cor:#EDE6DA2e}
+body.terra .grifo{--grifo-cor:#FBF3EA33}
+@media(prefers-reduced-motion:reduce){
+  .grifo{background-size:100% calc(100% - .22em)!important;animation:none!important}}
+
+/* R$ nunca vira r$: os títulos são caixa-baixa, o símbolo da moeda não */
+.ru{text-transform:none}
+
+/* subitens da jogada com bolinha, não traço */
+.jogada .jd ul.jsub li::before{width:.42em;height:.42em;border-radius:50%;
+  background:currentColor;opacity:.75;top:.55em}
+
+/* linha de tabela fora do estudo: o valor também apaga */
+table.tb tr.fora td{opacity:.38}
+
+/* o texto de apoio do dado vive no popover, não no slide */
+.dado .n{display:none}
+.dado.tem{cursor:help;position:relative;transition:border-color .22s}
+.dado.tem .l::after{content:"+";margin-left:.5em;font-family:var(--mono);
+  opacity:.5;transition:opacity .22s}
+/* no hover o dado inteiro assume o destaque: a linha, o número e o rótulo */
+.dado.tem:hover,.dado.tem.aberto{border-top-color:var(--terra)}
+.dado.tem:hover .v,.dado.tem.aberto .v,
+.dado.tem:hover .l,.dado.tem.aberto .l{color:var(--terra)}
+.dado.tem:hover .l::after,.dado.tem.aberto .l::after{opacity:1}
+body.esc .dado.tem:hover,body.esc .dado.tem.aberto{border-top-color:#E9A184}
+body.esc .dado.tem:hover .v,body.esc .dado.tem.aberto .v,
+body.esc .dado.tem:hover .l,body.esc .dado.tem.aberto .l{color:#E9A184}
+.dado .v,.dado .l{transition:color .22s ease}
+/* os dois slides da carteira: texto ancorado no topo, para o isométrico e o
+   título ficarem parados na tela enquanto só o conteúdo da direita troca */
+.pcols.alto{align-items:start}
+.pcols.alto .wrap{padding-top:clamp(10px,2.4cqh,44px)}
+.pcols.alto .notaN{margin-top:clamp(16px,2.4cqh,34px)}
+
+/* ─── só trama: o mesmo carrossel da marca, sob véu quase opaco ──────────
+   Nos slides verdes de conteúdo o fundo não é imagem, é textura. O véu vai
+   a 0,90 e troca o gradiente diagonal por oliva chapada: a foto some, o
+   pontilhado continua respirando. Nenhum contexto WebGL novo.           */
+body.fundo-trama #msveu{background:var(--oliva);opacity:.90;
+  transition:opacity .45s ease,background-color .45s ease}
+body.fundo-trama #msfundo{opacity:1}
+body.fundo-trama .slide.ativo{background:transparent}
+
+/* ─── carteira: dois estados no mesmo slide ──────────────────────────────
+   Os dois blocos ocupam a MESMA célula de grade, então a caixa cresce pelo
+   mais alto e nada salta quando um troca pelo outro. O isométrico e o
+   título ficam fora dessa troca — não re-animam. */
+.trbox{display:grid;margin-top:clamp(14px,2.2cqh,30px)}
+.trbox>.tr{grid-area:1/1;transition:opacity .42s ease,transform .42s ease}
+.tr-b{opacity:0;transform:translateY(9px);pointer-events:none}
+.tr-b.on{opacity:1;transform:none;pointer-events:auto}
+.trbox:has(.tr-b.on) .tr-a{opacity:0;transform:translateY(-9px);pointer-events:none}
+.trbox .notaN{margin-top:clamp(14px,2cqh,26px)}
+.trbox .dados{margin-top:clamp(14px,2cqh,28px)}
+/* o slide da carteira divide a tela ao meio: o desenho tem sete volumes */
+.pcols.meia{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.pcols.meia .iso svg{max-height:60cqh}
+@media(prefers-reduced-motion:reduce){.trbox>.tr{transition:none}}
+/* na meia tela o número e o texto empilham: lado a lado a coluna de texto
+   ficava com quatro palavras por linha */
+.pcols.meia .notaN{grid-template-columns:1fr;gap:clamp(6px,1cqh,12px)}
+.pcols.meia .notaN .nt{max-width:46ch}
+.pcols.meia .notaN .nn{font-size:clamp(34px,5.2cqw,86px)}
+
+/* ═══ 23/08 · duas frentes: pílula, subtítulo e item numerado ══════════════ */
+.frcab{display:flex;flex-direction:column;align-items:flex-start;
+  gap:clamp(7px,1cqh,12px);padding-bottom:clamp(10px,1.4cqh,17px);
+  border-bottom:1.5px solid currentColor}
+.frpil{font-family:var(--mono);font-style:italic;font-weight:500;
+  font-size:clamp(14px,1.5cqw,25px);letter-spacing:-.03em;line-height:1;
+  text-transform:lowercase;color:#EDE6DA;background:var(--terra);
+  padding:clamp(6px,.8cqh,11px) clamp(11px,1.1cqw,18px);border-radius:999px}
+.frsub{font-size:var(--fs-cap);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--soft)}
+body.esc .frsub{color:#EDE6DAaa}
+.frl li{grid-template-columns:auto 1fr;gap:clamp(10px,1.2cqw,20px);align-items:baseline}
+.frn{font-family:var(--mono);font-weight:500;font-size:var(--fs-cap);
+  letter-spacing:.1em;color:var(--terra);line-height:1.6}
+body.esc .frn{color:#E9A184}
+.frtx{display:grid;gap:4px;min-width:0}
+
+/* ═══ 23/08 · destaque terracota dentro de título ═══════════════════════════ */
+.tt{color:var(--terra)}
+body.esc .tt,body.com-fundo .tt{color:#E9A184}
+body.terra .tt{color:#FBF3EA}
+
+/* ═══ 23/08 · duas frentes: a caixa terracota que cresce ════════════════════
+   Cada item revelado empurra a caixa para baixo — o pacote se fecha na frente
+   do cliente. O que NÃO entra fica fora da caixa, na linha de baixo da grade,
+   para quebrar a leitura de propósito. */
+.frcols{align-items:start}
+.frcx{position:relative;padding:clamp(11px,1.5cqh,18px) clamp(12px,1.15cqw,19px);
+  margin-top:clamp(9px,1.3cqh,16px)}
+.frbg{position:absolute;left:0;right:0;top:0;height:0;background:var(--terra);
+  transition:height .46s cubic-bezier(.62,0,.30,1);border-radius:3px}
+.frcx .frl{position:relative;z-index:1;margin-top:0}
+.frcx .frl li{border-color:#FBF3EA33}
+.frcx .frti{color:#FBF3EA}
+.frcx .frd{color:#FBF3EAc4}
+.frcx .frn,body.esc .frcx .frn{color:#FBF3EA;opacity:.62}
+.frfora{margin-top:clamp(13px,1.9cqh,26px);display:grid;gap:6px;
+  border-top:1px dashed var(--terra);padding-top:clamp(9px,1.3cqh,15px)}
+body.esc .frfora{border-top-color:#E9A184}
+.ffl{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--terra)}
+body.esc .ffl{color:#E9A184}
+.fft{font-size:var(--fs-body);line-height:1.55;color:var(--soft)}
+body.esc .fft{color:#EDE6DAbb}
+@media(prefers-reduced-motion:reduce){.frbg{transition:none}}
+
+/* ═══ 23/08 · sumário: o argumento inteiro, seis blocos ═════════════════════ */
+.smgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(16px,2.4cqw,44px) clamp(18px,2.8cqw,52px);
+  margin-top:clamp(20px,3.2cqh,48px);width:100%}
+.sm{border-top:1.5px solid currentColor;padding-top:clamp(10px,1.5cqh,18px)}
+.smn{font-family:var(--mono);font-weight:500;font-size:var(--fs-cap);
+  letter-spacing:.16em;color:var(--terra);display:block}
+body.esc .smn{color:#E9A184}
+.smt{font-family:var(--mono);font-style:italic;font-size:clamp(15px,1.75cqw,29px);
+  letter-spacing:-.03em;line-height:1.1;text-transform:lowercase;
+  margin-top:clamp(7px,1cqh,12px);display:block}
+.smd{font-size:var(--fs-body);line-height:1.55;color:var(--soft);
+  margin-top:clamp(7px,1cqh,12px);display:block}
+body.esc .smd{color:#EDE6DAbb}
+.smf{font-size:var(--fs-item);line-height:1.5;max-width:64ch;
+  margin-top:clamp(18px,2.8cqh,42px)}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
+
+
+/* ═══ 23/08 · players: faixas verticais, uma por operador ═══════════════════ */
+.plcols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(12px,1.5cqw,28px);margin-top:clamp(18px,2.8cqh,42px);
+  width:100%;align-items:stretch}
+.pl{display:flex;flex-direction:column;min-width:0;
+  border-left:1.5px solid var(--hair);padding-left:clamp(10px,1.1cqw,20px)}
+body.esc .pl{border-left-color:#EDE6DA3d}
+.pl:first-child{border-left:0;padding-left:0}
+.plpil{align-self:flex-start;font-family:var(--mono);font-style:italic;font-weight:500;
+  font-size:clamp(13px,1.32cqw,22px);letter-spacing:-.03em;line-height:1;
+  text-transform:lowercase;color:#EDE6DA;background:var(--terra);
+  padding:clamp(5px,.7cqh,10px) clamp(9px,1cqw,16px);border-radius:999px}
+.plesc{font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--soft);margin-top:clamp(8px,1.2cqh,14px);line-height:1.6;display:block}
+body.esc .plesc{color:#EDE6DAaa}
+.plv{font-family:var(--mono);font-weight:500;font-size:clamp(22px,2.9cqw,50px);
+  letter-spacing:-.055em;line-height:1;margin-top:clamp(10px,1.6cqh,22px);display:block}
+.pll{font-size:var(--fs-cap);letter-spacing:.13em;text-transform:uppercase;
+  color:var(--soft);margin-top:7px;display:block}
+body.esc .pll{color:#EDE6DAaa}
+.plu{list-style:none;margin-top:clamp(11px,1.6cqh,20px);display:grid;
+  gap:clamp(5px,.8cqh,10px)}
+.plu li{font-size:var(--fs-body);line-height:1.45;color:var(--soft);
+  padding-left:.95em;position:relative}
+body.esc .plu li{color:#EDE6DAbb}
+.plu li::before{content:"";position:absolute;left:0;top:.55em;width:.34em;height:.34em;
+  border-radius:50%;background:var(--terra)}
+body.esc .plu li::before{background:#E9A184}
+.plf{font-size:var(--fs-item);line-height:1.5;max-width:74ch;
+  margin-top:clamp(16px,2.4cqh,36px)}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:1100px) */
+
+
+/* ═══ 23/08 · avulso: preço de mercado de cada frente ═══════════════════════ */
+.avcols{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+  gap:clamp(20px,3.2cqw,64px);margin-top:clamp(18px,2.6cqh,40px);
+  width:100%;align-items:start}
+.avcab{padding-bottom:clamp(9px,1.2cqh,15px);border-bottom:1.5px solid var(--terra);
+  display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.avfora .avcab{border-bottom-style:dashed}
+body.esc .avcab{border-bottom-color:#E9A184}
+.avpil{font-family:var(--mono);font-style:italic;font-weight:500;
+  font-size:clamp(13px,1.32cqw,22px);letter-spacing:-.03em;line-height:1;
+  text-transform:lowercase;color:#EDE6DA;background:var(--terra);
+  padding:clamp(5px,.7cqh,10px) clamp(10px,1.05cqw,17px);border-radius:999px}
+.avfora .avpil{background:transparent;color:var(--terra);
+  border:1.5px dashed var(--terra)}
+body.esc .avfora .avpil{color:#E9A184;border-color:#E9A184}
+.avsub{font-size:var(--fs-cap);letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+.avl{list-style:none;margin-top:clamp(9px,1.3cqh,16px);display:grid;gap:clamp(6px,.9cqh,12px)}
+.avl li{display:grid;grid-template-columns:minmax(0,1fr) auto;
+  gap:4px clamp(12px,1.4cqw,26px);align-items:baseline;
+  border-top:1px solid var(--hair);padding-top:clamp(6px,.9cqh,11px)}
+body.esc .avl li{border-color:#EDE6DA3d}
+.avl li:first-child{border-top:0;padding-top:0}
+.ava{font-family:var(--mono);font-style:italic;font-size:var(--fs-item);
+  letter-spacing:-.02em;line-height:1.2}
+.avb{grid-column:1;font-size:var(--fs-body);line-height:1.45;color:var(--soft)}
+body.esc .avb{color:#EDE6DAaa}
+.avc{grid-column:2;grid-row:1/3;font-family:var(--mono);font-weight:500;
+  font-size:var(--fs-item);letter-spacing:-.02em;color:var(--terra);
+  white-space:nowrap;text-align:right}
+body.esc .avc{color:#E9A184}
+.avfora .avc{color:var(--soft);font-style:italic;font-weight:400}
+body.esc .avfora .avc{color:#EDE6DAaa}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
+
+
+/* ── compactação medida: os dois slides novos estouravam a altura em 720p ── */
+.g-avulso .sub{max-width:64ch}
+.g-avulso .avl{gap:clamp(4px,.6cqh,8px)}
+.g-avulso .avl li{padding-top:clamp(4px,.6cqh,8px);gap:2px clamp(12px,1.4cqw,26px)}
+.g-avulso .ava{font-size:clamp(13px,1.15cqw,18px)}
+.g-avulso .avb{font-size:clamp(11.5px,.92cqw,15px);line-height:1.35}
+.g-avulso .avc{font-size:clamp(12px,1.02cqw,16px)}
+.g-avulso .notaN{margin-top:clamp(12px,1.7cqh,26px);padding-top:clamp(9px,1.3cqh,16px)}
+.g-avulso .notaN .nn{font-size:clamp(30px,4.4cqw,72px)}
+.g-avulso .notaN .nt{max-width:52ch;font-size:clamp(12.5px,1cqw,16px)}
+.g-avulso .prem{margin-top:clamp(9px,1.3cqh,18px);line-height:1.5}
+.g-avulso .avcols{margin-top:clamp(13px,1.9cqh,30px)}
+
+.g-duasfrentes .frl{gap:clamp(6px,.95cqh,13px)}
+.g-duasfrentes .frl li{padding-top:clamp(5px,.75cqh,10px)}
+.g-duasfrentes .frcx{padding:clamp(8px,1.1cqh,14px) clamp(10px,1cqw,17px);
+  margin-top:clamp(7px,1cqh,13px)}
+.g-duasfrentes .frfora{margin-top:clamp(10px,1.4cqh,19px);padding-top:clamp(7px,1cqh,12px)}
+.g-duasfrentes .fft{font-size:clamp(12px,.96cqw,15.5px);line-height:1.45}
+.g-duasfrentes .frd{font-size:clamp(12px,.96cqw,15.5px);line-height:1.42}
+.g-duasfrentes .frcols{gap:clamp(18px,3cqw,60px) clamp(22px,3.6cqw,72px)}
+.g-duasfrentes .sub{max-width:66ch}
+
+.g-players .plu li{font-size:clamp(11.5px,.92cqw,15px);line-height:1.4}
+.g-players .plf{font-size:clamp(12.5px,1.05cqw,17px);margin-top:clamp(13px,2cqh,30px)}
+.g-duasfrentes .frti{font-size:clamp(13px,1.18cqw,19px)}
+.g-duasfrentes .frcab{padding-bottom:clamp(7px,1cqh,13px);gap:clamp(5px,.8cqh,9px)}
+.g-duasfrentes .frpil{font-size:clamp(13px,1.32cqw,22px);padding:clamp(5px,.65cqh,9px) clamp(10px,1cqw,16px)}
+.g-duasfrentes .frcols{margin-top:clamp(14px,2.2cqh,34px)}
+.g-avulso .avcab{padding-bottom:clamp(7px,1cqh,12px)}
+.g-avulso .avpil{font-size:clamp(12px,1.2cqw,20px);padding:clamp(4px,.6cqh,8px) clamp(9px,.95cqw,15px)}
+.g-avulso .avcols{margin-top:clamp(11px,1.6cqh,26px)}
+.g-avulso .avl li{padding-top:clamp(3px,.5cqh,7px)}
+.g-duasfrentes .frcols{gap:clamp(15px,2.4cqw,46px) clamp(22px,3.6cqw,72px)}
+.g-duasfrentes .frd{line-height:1.38}
+/* [quadro 1600x900: sempre verdadeiro] */
+
+  .g-duasfrentes .frcols{gap:clamp(12px,1.9cqw,34px) clamp(22px,3.6cqw,72px);margin-top:clamp(11px,1.7cqh,26px)}
+  .g-duasfrentes .frl{gap:clamp(4px,.62cqh,9px)}
+  .g-duasfrentes .sub{margin-top:clamp(6px,.9cqh,13px)}
+  .g-duasfrentes .frfora{margin-top:clamp(8px,1.1cqh,15px);padding-top:clamp(6px,.85cqh,10px)}
+  .g-duasfrentes .frcx{padding:clamp(6px,.8cqh,11px) clamp(10px,1cqw,17px)}
+  .g-duasfrentes .frl li{padding-top:clamp(4px,.6cqh,8px)}
+
+/* players e avulso ocupam a largura toda: com 4 e 2 colunas o teto de
+   1180px do wrap deixava um quarto da tela vazio à direita */
+.g-players .wrap.largo,.g-avulso .wrap.largo{max-width:none}
+.g-players .sub{max-width:80ch}
+/* o endereço ocupa uma ou duas linhas conforme a coluna; travar a altura
+   alinha os quatro números grandes na mesma base */
+.plesc{min-height:3.2em}
+
+/* ── avulso em três colunas: recorrência · por operação · de terceiros ──
+   A estruturação da incorporação saiu do fixo em 23/08 — 3 a 6% do VGV é
+   taxa por operação, e mantê-la na recorrência colidia com as camadas 02
+   e 03. As três colunas tornam a separação visível de uma olhada. */
+.avcols.n3{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.2cqw,44px)}
+.av1 .avcab{border-bottom-style:solid}
+.av1 .avpil{background:transparent;color:var(--terra);border:1.5px dashed var(--terra)}
+body.esc .av1 .avpil{color:#E9A184;border-color:#E9A184}
+.av2 .avcab{border-bottom-style:dashed;border-bottom-color:var(--hair)}
+.av2 .avpil{background:transparent;color:var(--soft);border:1.5px dashed var(--hair)}
+body.esc .av2 .avpil{color:#EDE6DAaa;border-color:#EDE6DA3d}
+.av1 .avc{color:var(--terra);font-style:italic}
+body.esc .av1 .avc{color:#E9A184}
+.av2 .avc{color:var(--soft);font-style:italic;font-weight:400}
+body.esc .av2 .avc{color:#EDE6DAaa}
+/* com três colunas o valor volta a ficar na direita da linha: empilhado,
+   cada linha ganhava uma altura a mais e o slide estourava em 720p */
+.avcols.n3 .ava{font-size:clamp(11px,.93cqw,15px)}
+.avcols.n3 .avb{font-size:clamp(10.5px,.8cqw,13px);line-height:1.3}
+.avcols.n3 .avc{font-size:clamp(10.5px,.86cqw,14px);white-space:normal;max-width:13ch}
+.avcols.n3 .avl{gap:clamp(3px,.5cqh,7px)}
+.avcols.n3 .avl li{padding-top:clamp(3px,.45cqh,6px);gap:1px clamp(8px,.9cqw,16px)}
+.avcols.n3 .avpil{font-size:clamp(11px,1.02cqw,17px);padding:clamp(4px,.5cqh,7px) clamp(8px,.85cqw,13px)}
+.avcols.n3 .avsub{font-size:clamp(8.5px,.66cqw,11px);letter-spacing:.14em}
+/* a quebra para coluna única empilhava as doze linhas e estourava em 1024:
+   as três colunas seguem até 820px, só apertando o gutter */
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:1200px) */
+
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:820px) */
+
+
+.g-players .plv{font-size:clamp(19px,2.55cqw,46px)}
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:1200px) */
+
+
+/* [quadro 1600x900: nunca dispara — retirado] (max-width:1100px) */
+
+
+/* ─── prancha que transborda para de centralizar ─────────────────────────
+   `.slide` é flex com `justify-content:center`. Se o conteúdo transborda um
+   contêiner centralizado, o topo sai ACIMA da origem de rolagem e fica
+   inalcançável — `scrollTop` já em 0 com o kicker em −127px. Com o quadro
+   fixo nenhuma prancha transborda e isto nunca dispara; fica como rede.
+   O tratamento responsivo por gabarito que existia aqui foi retirado em
+   25/08 e está em `_R8/cel-responsivo.css.txt` — o quadro fixo o dispensa. */
+.slide.rola{justify-content:flex-start}
+
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   O QUADRO · letterbox de proporção fixa · 25/08/2026
+   ──────────────────────────────────────────────────────────────────────────
+   A prancha é uma PRANCHA: tem proporção, como uma folha. Antes ela tentava
+   se acomodar a qualquer tela e, num celular, a escala em `vw` caía toda no
+   piso do clamp — texto no mínimo, layout no máximo, tudo brigando.
+
+   Agora o deck vive num quadro de 1600 × 900 FIXO, em pixels, e o quadro
+   inteiro é escalado por `transform` até caber na tela — como um vídeo em
+   tela cheia. Consequências, todas desejadas:
+
+   · a peça é IDÊNTICA em qualquer tela. Não há mais layout que se refaz,
+     fonte que cai no piso, nem coluna que empilha. O que se vê no notebook
+     é o que se vê no celular, menor.
+   · nenhuma prancha transborda, por construção: o quadro tem exatamente a
+     proporção para a qual ela foi desenhada.
+   · o notch e a Dynamic Island deixam de comer informação — o quadro é
+     medido contra a área segura, nunca contra a tela bruta.
+   · as `@media` de largura viraram código morto e foram retiradas: dentro
+     de um quadro de 1600 × 900 elas nunca disparam.
+
+   As unidades de dentro são `cqw`/`cqh`, do CONTÊINER, não da janela. Com
+   `container-type:size` no quadro, 1cqw = 16px e 1cqh = 9px SEMPRE — os
+   mesmos valores que 1cqw e 1cqh entregavam num 1600 × 900. Por isso nenhuma
+   clamp precisou ser recalibrada.
+   ══════════════════════════════════════════════════════════════════════════ */
+#moldura{position:fixed;
+  top:env(safe-area-inset-top,0px);right:env(safe-area-inset-right,0px);
+  bottom:env(safe-area-inset-bottom,0px);left:env(safe-area-inset-left,0px);
+  overflow:hidden}
+#quadro{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+  transform-origin:50% 50%;transform:translate(-50%,-50%) scale(1);
+  container-type:size;container-name:q;overflow:hidden;
+  box-shadow:0 0 0 1px #EDE6DA1a}
+
+/* ─── retrato ────────────────────────────────────────────────────────────
+   Num celular em pé, 16:9 dá 390 x 219 — a peça inteira, correta, pequena.
+   O aviso de girar NÃO mora aqui: é comportamento universal do acervo e vive
+   em modulos/ms-voltar.js, que o desenha sozinho ao detectar deck de tela
+   fixa em retrato. Ter um aviso próprio aqui faria aparecerem dois.
+   A classe `retrato` fica: é barata e diz em que regime o quadro está. */
+
+.leg i.lnv{border-top:2px dotted #6B6A4B}
+.leg i.anc{width:11px;height:11px;border-radius:50%;background:none;border:1.5px dashed #B85C38}
+.mtxt ol.chave{list-style:none;margin-top:clamp(12px,1.8cqh,24px);display:grid;gap:clamp(2px,.42cqh,6px)}
+.mtxt ol.chave li{display:grid;grid-template-columns:22px 1fr auto;gap:11px;align-items:baseline;font-size:var(--fs-body)}
+.mtxt ol.chave .ci{font-family:var(--mono);font-size:var(--fs-cap);color:#EDE6DA;background:var(--terra);border-radius:50%;width:19px;height:19px;display:grid;place-items:center;line-height:1}
+.mtxt ol.chave .cn{color:var(--soft)}
+.mtxt ol.chave .cp{font-family:var(--mono);font-weight:500;letter-spacing:-.02em}
+.mtxt ol.chave li:nth-child(-n+3) .cn{color:var(--tinta)}
+</style></head><body>
+<!-- #moldura mede a ÁREA SEGURA da tela, nunca a tela bruta: é o que impede
+     o notch e a Dynamic Island de comerem canto de prancha.
+     #quadro é a prancha em si — 1600x900 fixos, escalados por transform. -->
+<div id="moldura"><div id="quadro">
+<div id="mscortina"></div>
+<!-- Os dois canvas e os dois véus ficam imediatamente ANTES do palco,
+     nunca dentro: o deck indexa slides por palco.children[i]. -->
+<canvas id="msfundo"></canvas><div id="msveu"></div>
+<canvas id="msfundo-d"></canvas><div id="msveu-d"></div>
+<div id="palco"></div>
+<div class="chrome topo"><span class="secao"><span class="sn"></span><span class="sl"></span></span><span class="dots"></span><span class="marca">marca<u>_</u></span></div>
+<div class="chrome pe"><span class="pj">projeto · cliente</span><span class="nav"><span class="cont"></span><button class="seta" id="ant">&#9664;</button><button class="seta" id="pro">&#9654;</button></span></div>
+</div></div>
+<script>
+/* ─── escala do quadro ─────────────────────────────────────────────────────
+   k = o menor entre caber pela largura e caber pela altura. Idêntico ao que
+   um vídeo faz em tela cheia. Medido contra #moldura, que já é a área
+   segura — por isso o recorte da câmera nunca entra na conta. */
+(function(){
+  var W=1600,H=900,m=document.getElementById('moldura'),q=document.getElementById('quadro');
+  function ajusta(){
+    var lw=m.clientWidth,lh=m.clientHeight,k=Math.min(lw/W,lh/H);
+    q.style.transform='translate(-50%,-50%) scale('+k+')';
+    document.documentElement.style.setProperty('--k',k);
+    document.body.classList.toggle('retrato',lw < lh);
+  }
+  ajusta();
+  addEventListener('resize',ajusta);
+  addEventListener('orientationchange',function(){setTimeout(ajusta,140)});
+  if(window.visualViewport)visualViewport.addEventListener('resize',ajusta);
+  addEventListener('pointerdown',function(){document.body.classList.add('tocou')},{once:true});
+})();
+</script>
+<script>
+
+/* ─── fundo morph pontilhado · núcleo ────────────────────────────────────────
+   Preset "linha MS" (20/08/2026): serigrafia + paralaxe, contraste 0.65.
+   Entrada em diagonal, ao estilo da vitrine, introduz a primeira peça.
+   API: MSFundo.montar(canvas, imagens, opcoes?) → {entrada(), pausar(v), cor(o)}
+   opcoes: {ink, paper, acc, scale, prep:false, sortear:true}.
+   prep:false pula a auto-exposição em JS — use com imagem já corrigida no
+   arquivo, que é o que permite carrossel de oito a dez peças sem travar.
+   sortear embaralha a ordem na carga. cor() troca a paleta com interpolação. */
+window.MSFundo=(function(){
+const VS=`#version 300 es
+void main(){
+  vec2 p = vec2(gl_VertexID==1 ? 3.0 : -1.0, gl_VertexID==2 ? 3.0 : -1.0);
+  gl_Position = vec4(p,0.0,1.0);
+}`;
+const FS=`#version 300 es
+precision highp float;
+out vec4 frag;
+uniform sampler2D uA,uB;
+uniform vec2 uRes,uSA,uSB,uM;
+uniform float uT,uTime,uAmp,uEdge,uDot,uAng,uAng2,uContrast,uGamma,uMode,uTrans,
+              uGrain,uZoom,uAcc,uVig,uBleed,uFit,uCur,uMAmt,uMRad,uEnter;
+uniform vec3 uInk,uPaper,uAccent;
+
+float hash(vec2 p){p=fract(p*vec2(127.1,311.7));p+=dot(p,p+34.5);return fract(p.x*p.y*95.43);}
+float vnoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);
+  return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 p){float s=0.0,a=0.5;for(int i=0;i<5;i++){s+=a*vnoise(p);p*=2.03;a*=0.5;}return s;}
+mat2 rot(float a){return mat2(cos(a),-sin(a),sin(a),cos(a));}
+float bayer(vec2 p){
+  int x=int(mod(p.x,8.0)),y=int(mod(p.y,8.0));
+  int m[64]=int[64](0,32,8,40,2,34,10,42,48,16,56,24,50,18,58,26,12,44,4,36,14,46,6,38,
+    60,28,52,20,62,30,54,22,3,35,11,43,1,33,9,41,51,19,59,27,49,17,57,25,15,47,7,39,13,45,5,37,
+    63,31,55,23,61,29,53,21);
+  return (float(m[y*8+x])+0.5)/64.0;
+}
+// enquadra (contain ou sangria) e devolve luminância; uBleed vira linha em massa tonal
+float lum(sampler2D t, vec2 imgSize, vec2 uv){
+  float ca=uRes.x/uRes.y, ia=imgSize.x/imgSize.y;
+  vec2 sc = uFit>0.5 ? (ca>ia ? vec2(1.0,ca/ia) : vec2(ia/ca,1.0))
+                     : (ca>ia ? vec2(ia/ca,1.0) : vec2(1.0,ca/ia));
+  vec2 q=(uv-0.5)/(sc*(uFit>0.5?1.0:0.86))+0.5;
+  if(q.x<-0.05||q.x>1.05||q.y<-0.05||q.y>1.05) return 1.0;
+  vec2 qq=vec2(clamp(q.x,0.0,1.0),1.0-clamp(q.y,0.0,1.0));
+  vec4 c=mix(texture(t,qq),textureLod(t,qq,2.0+uBleed*4.5),uBleed);
+  float l=mix(1.0, dot(c.rgb,vec3(0.299,0.587,0.114)), c.a);
+  if(q.x<0.0||q.x>1.0||q.y<0.0||q.y>1.0) l=mix(1.0,l,uBleed*0.6);
+  return l;
+}
+float cover(vec2 q,float cell,float r){          // cobertura de um ponto da trama
+  vec2 g=mod(q,cell)-cell*0.5;
+  return 1.0-smoothstep(-0.9,0.9,length(g)-r);
+}
+
+void main(){
+  vec2 uv=gl_FragCoord.xy/uRes;
+  float br=sin(uTime*0.18)*0.5+0.5;
+  uv=(uv-0.5)*(1.0-uZoom*br)+0.5+vec2(sin(uTime*0.07),cos(uTime*0.05))*uZoom*0.35;
+
+  // ---- cursor ---------------------------------------------------------------
+  float asp=uRes.x/uRes.y;
+  vec2 mp=uM/uRes;
+  vec2 dm=(uv-mp)*vec2(asp,1.0);
+  float rr=length(dm)/(max(uMRad,1.0)/uRes.y);
+  float fm=exp(-rr*rr*2.0)*uMAmt;
+  float cellMod=1.0, angMod=0.0, glitch=0.0, light=1.0, sharp=0.0;
+  vec2 pxA=vec2(0.0), pxB=vec2(0.0);
+  if(uCur>0.5&&uCur<1.5){                                   // foco: resolve onde se olha
+    cellMod=1.0-fm*0.45; sharp=fm*0.30;
+  }else if(uCur>1.5&&uCur<2.5){                             // luz: claridade rasante
+    float ring=exp(-pow(rr-1.35,2.0)*3.0)*uMAmt;
+    light=1.0-fm*0.55+ring*0.20;
+  }else if(uCur>2.5&&uCur<3.5){                             // paralaxe: as duas camadas
+    /* as amplitudes trocam de papel ao longo da passagem: a que entra com 0.026
+       termina em 0.012, que é exatamente o valor com que reaparece como camada A
+       no ciclo seguinte. Sem isso há um salto a cada troca de peça.            */
+    vec2 d=(mp-0.5)*uMAmt;
+    pxA=d*mix(0.012,0.026,uT); pxB=d*mix(0.026,0.012,uT);
+  }else if(uCur>3.5&&uCur<4.5){                             // ímã: a trama abre
+    cellMod=1.0+fm*1.8; angMod=fm*30.0;
+  }else if(uCur>4.5){                                       // quebra: fenda fina
+    float t2=floor(uTime*7.0);
+    float w2=(1.5+9.0*uMAmt)/uRes.x;
+    float band=step(abs(uv.x-mp.x),w2);
+    uv.y+=band*(hash(vec2(t2,7.0))-0.5)*0.10*uMAmt;
+    float rowH=0.030;
+    float row=floor((uv.y-mp.y)/rowH);
+    float h=hash(vec2(row,t2));
+    float tear=step(0.55,h)*step(abs(uv.y-mp.y),rowH*1.6)*step(abs(uv.x-mp.x),0.06+0.10*uMAmt);
+    uv.x+=(h-0.5)*0.045*uMAmt*tear;
+    glitch=max(band,tear*0.55);
+    cellMod=1.0+band*0.6*uMAmt;
+  }
+
+  // ---- luminâncias das duas peças ------------------------------------------
+  float t=uT;
+  vec2 n=vec2(fbm(uv*2.6+uTime*0.03), fbm(uv*2.6+7.3-uTime*0.025))*2.0-1.0;
+  float bump=sin(t*3.14159);
+  vec2 dA=uv+pxA, dB=uv+pxB;
+  if(uTrans<0.5){ dA+=n*uAmp*t*bump; dB-=n*uAmp*(1.0-t)*bump; }
+  float a=clamp((lum(uA,uSA,dA)-0.5)*(uContrast+sharp)+0.5,0.0,1.0);
+  float b=clamp((lum(uB,uSB,dB)-0.5)*(uContrast+sharp)+0.5,0.0,1.0);
+  float vA=pow(1.0-a,uGamma), vB=pow(1.0-b,uGamma);
+
+  // frente que varre da esquerda para a direita
+  float soft=0.06+uEdge*0.55;
+  float front=mix(-soft,1.0+soft,t);
+  float w=clamp((front-uv.x+soft)/(2.0*soft),0.0,1.0);
+
+  float cell=max(uDot*cellMod,2.0);
+  vec2 p=gl_FragCoord.xy-0.5*uRes;
+  vec2 q=rot(radians(uAng+angMod))*p;
+  float v=0.0, ink=0.0, band=0.0;
+
+  if(uTrans<0.5){                                  // morph — dissolução por ruído
+    float th=mix(fbm(uv*7.5+31.7),vnoise(uv*uRes.x/26.0),0.35);
+    float e=clamp(uEdge,0.02,1.0);
+    float lo=th*(1.0-e);
+    float k=smoothstep(lo,lo+e,t);
+    v=mix(vA,vB,k);
+    band=smoothstep(0.42,0.5,k)*(1.0-smoothstep(0.5,0.58,k));
+  }else if(uTrans<1.5){                            // entrelaço — cada ponto escolhe um lado
+    float own=step(hash(floor(q/cell)+0.5),w);
+    v=mix(vA,vB,own);
+    band=exp(-pow((uv.x-front)/(soft*0.8),2.0)*2.0);
+  }else if(uTrans<2.5){                            // serigrafia — duas telas, dois ângulos
+    vec2 qB=rot(radians(uAng+angMod+uAng2))*p;
+    float iA=cover(q ,cell,sqrt(max(vA*(1.0-w),0.0))*cell*0.70)*smoothstep(0.0,0.02,vA*(1.0-w));
+    float iB=cover(qB,cell,sqrt(max(vB*w      ,0.0))*cell*0.70)*smoothstep(0.0,0.02,vB*w);
+    ink=1.0-(1.0-iA)*(1.0-iB);
+    v=vA*(1.0-w)+vB*w;
+    band=exp(-pow((uv.x-front)/(soft*0.8),2.0)*2.0);
+  }else{                                           // maré — a massa do desenho conduz
+    float th=mix(uv.x,1.0-vA,0.42);
+    float k=smoothstep(th-soft,th+soft,front);
+    v=mix(vA,vB,k);
+    v*=1.0-0.30*exp(-pow((front-th)/soft,2.0)*2.0);
+    band=exp(-pow((front-th)/soft,2.0)*2.0);
+  }
+  v*=light;
+
+  if(uTrans>1.5&&uTrans<2.5){                      // serigrafia já montou a tinta
+  }else if(uMode<0.5){ ink=cover(q,cell,sqrt(max(v,0.0))*cell*0.70); }
+  else if(uMode<1.5){ ink=1.0-smoothstep(-0.8,0.8,abs(mod(q.y,cell)-cell*0.5)-v*cell*0.5); }
+  else if(uMode<2.5){ ink=step(bayer(gl_FragCoord.xy/max(1.0,cell/6.0)),v); }
+  else { ink=v; }
+  ink*=smoothstep(0.0,0.05,v);
+
+  /* ---- entrada diagonal: a trama nasce ao longo de uma reta inclinada ---- */
+  float sx=uv.x+(uv.y-0.5)*0.26;                 // eixo da varredura, ~14° de inclinação
+  float bandW=0.30;
+  float fEnter=uEnter*(1.0+2.0*bandW)-bandW;
+  float rev=clamp((fEnter-sx)/bandW+0.5,0.0,1.0);
+  float fio=exp(-pow((sx-fEnter)/0.0045,2.0))*step(0.001,uEnter)*step(uEnter,0.999);
+  ink*=rev; band=mix(band,0.0,1.0-rev);
+
+  vec3 tinta=mix(uInk,uAccent,clamp(band,0.0,1.0)*uAcc);
+  vec3 col=mix(uPaper,tinta,clamp(ink,0.0,1.0));
+  col=mix(col,uAccent,clamp(fio,0.0,1.0)*0.85);
+  col=mix(col,uAccent,glitch*0.12*uMAmt);
+  col+= (hash(gl_FragCoord.xy+fract(uTime)*97.0)-0.5)*uGrain;
+  float d=length((uv-0.5)*vec2(asp,1.0));
+  col=mix(col,uPaper*0.96+uInk*0.04,smoothstep(0.42,0.95,d)*uVig);
+  frag=vec4(col,1.0);
+}`;
+
+function montar(cv, IMGS, OPT){
+  OPT = OPT || {};
+  const gl=cv.getContext('webgl2',{antialias:false,powerPreference:'low-power'});
+  if(!gl) return {entrada(){},pausar(){}};
+  function sh(t,src){const s=gl.createShader(t);gl.shaderSource(s,src);gl.compileShader(s);
+    if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))console.error(gl.getShaderInfoLog(s));return s;}
+  const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));
+  gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);
+  if(!gl.getProgramParameter(pr,gl.LINK_STATUS))console.error(gl.getProgramInfoLog(pr));
+  gl.useProgram(pr);gl.bindVertexArray(gl.createVertexArray());
+  const U={};for(const k of ['uA','uB','uRes','uSA','uSB','uM','uT','uTime','uAmp','uEdge','uDot',
+   'uAng','uAng2','uContrast','uGamma','uMode','uTrans','uEnter','uGrain','uZoom','uAcc','uVig',
+   'uBleed','uFit','uCur','uMAmt','uMRad','uInk','uPaper','uAccent'])U[k]=gl.getUniformLocation(pr,k);
+  gl.uniform1i(U.uA,0);gl.uniform1i(U.uB,1);
+  const P={trans:2,cur:3,mode:0,fit:1,dot:4.5,angle:22,angle2:32,bleed:.42,contrast:.65,
+    gamma:1.45,amp:.08,edge:1.0,speed:.30,zoom:.01,accent:0,grain:0,vig:.86,mforce:.46,mrad:240};
+  const hex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16)/255);
+  const INK=hex(OPT.ink||'#0e0f0b'),PAPER=hex(OPT.paper||'#6B6A4B'),
+        ACC=hex(OPT.acc||'#B85C38'),SCALE=OPT.scale||0.9;
+  /* paleta trocável em tempo real: MSFundo.montar(...).cor({paper:'#B85C38'}) */
+  const COR={ink:INK.slice(),paper:PAPER.slice(),acc:ACC.slice()};
+  const ALVO={ink:INK.slice(),paper:PAPER.slice(),acc:ACC.slice()};
+  function prep(src){
+    if(OPT.prep===false) return src;   // já pré-exposta no arquivo
+    const w=src.naturalWidth,h=src.naturalHeight;
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(src,0,0);
+    let d;try{d=x.getImageData(0,0,w,h);}catch(e){return src;}
+    const a=d.data;let s=0,n=0;
+    for(let k=0;k<a.length;k+=64){s+=(a[k]*.299+a[k+1]*.587+a[k+2]*.114)/255;n++;}
+    const mean=s/Math.max(n,1); if(mean>=0.45) return src;
+    const g=Math.max(0.42,Math.log(0.50)/Math.log(Math.max(mean,0.03)));
+    const lut=new Uint8Array(256);for(let v=0;v<256;v++)lut[v]=Math.round(255*Math.pow(v/255,g));
+    for(let k=0;k<a.length;k+=4){a[k]=lut[a[k]];a[k+1]=lut[a[k+1]];a[k+2]=lut[a[k+2]];}
+    x.putImageData(d,0,0);return c;
+  }
+  function mkTex(raw){
+    const src=prep(raw);const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,src);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    return {tex:t,w:src.width||src.naturalWidth,h:src.height||src.naturalHeight};
+  }
+  let S=[],i=0,t=0,clock=0,last=performance.now(),ready=false,visible=true,paused=false;
+  let mx=0,my=0,tmx=0,tmy=0,mAmt=0,mOn=false,enter=1,enterT=0;
+  const easeOut=x=>1-Math.pow(1-x,3);
+  function resize(){const d=Math.min(devicePixelRatio||1,2)*SCALE;
+    cv.width=Math.round(cv.clientWidth*d)||Math.round(innerWidth*d);
+    cv.height=Math.round(cv.clientHeight*d)||Math.round(innerHeight*d);
+    gl.viewport(0,0,cv.width,cv.height);}
+  addEventListener('resize',resize);resize();
+  addEventListener('pointermove',e=>{const k=cv.width/(cv.clientWidth||innerWidth);
+    tmx=e.clientX*k;tmy=cv.height-e.clientY*k;
+    if(mAmt<0.02){mx=tmx;my=tmy;}mOn=true;});
+  addEventListener('pointerleave',()=>mOn=false);
+  document.addEventListener('visibilitychange',()=>visible=!document.hidden);
+  if('IntersectionObserver' in window)
+    new IntersectionObserver(e=>{visible=e[0].isIntersecting&&!document.hidden;},{threshold:.01}).observe(cv);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) paused=true;
+  let FILA=IMGS.slice();
+  if(OPT.sortear){ for(let j=FILA.length-1;j>0;j--){
+    const r=Math.floor(Math.random()*(j+1)); const t=FILA[j]; FILA[j]=FILA[r]; FILA[r]=t; } }
+  (async()=>{ for(const src of FILA){
+    const im=await new Promise(r=>{const x=new Image();x.onload=()=>r(x);x.onerror=()=>r(null);x.src=src;});
+    if(im) S.push(mkTex(im)); if(S.length===2) ready=true;
+    await new Promise(r=>setTimeout(r,0));
+  } if(S.length) ready=true; })();
+  function frame(now){
+    requestAnimationFrame(frame);
+    if(!visible||!ready){last=now;return;}
+    const dt=Math.min((now-last)/1000,.05);last=now;
+    if(!paused){clock+=dt;t+=dt*P.speed*0.5;if(t>=1){t=0;i=(i+1)%S.length;}}
+    const A=S[i],B=S[(i+1)%S.length],k=cv.width/(cv.clientWidth||innerWidth);
+    const kp=1-Math.exp(-dt*9.05),ka=1-Math.exp(-dt*4.35);
+    mx+=(tmx-mx)*kp;my+=(tmy-my)*kp;mAmt+=((mOn?1:0)-mAmt)*ka;
+    if(enter<1){enterT+=dt;enter=Math.min(1,easeOut(Math.max(0,enterT-0.15)/1.45));}
+    const kc=1-Math.exp(-dt*3.2);
+    for(const nome of ['ink','paper','acc'])
+      for(let c=0;c<3;c++) COR[nome][c]+=(ALVO[nome][c]-COR[nome][c])*kc;
+    const e0=t*t*(3-2*t);
+    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,A.tex);
+    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,B.tex);
+    gl.uniform2f(U.uRes,cv.width,cv.height);
+    gl.uniform2f(U.uSA,A.w,A.h);gl.uniform2f(U.uSB,B.w,B.h);gl.uniform2f(U.uM,mx,my);
+    gl.uniform1f(U.uT,Math.min(1,Math.max(0,(e0-0.5)*1.55+0.5)));
+    gl.uniform1f(U.uTime,clock);gl.uniform1f(U.uEnter,enter);
+    gl.uniform1f(U.uDot,P.dot*k);gl.uniform1f(U.uAng,P.angle);gl.uniform1f(U.uAng2,P.angle2);
+    gl.uniform1f(U.uBleed,P.bleed);gl.uniform1f(U.uContrast,P.contrast);gl.uniform1f(U.uGamma,P.gamma);
+    gl.uniform1f(U.uAmp,P.amp);gl.uniform1f(U.uEdge,P.edge);gl.uniform1f(U.uZoom,P.zoom);
+    gl.uniform1f(U.uAcc,P.accent);gl.uniform1f(U.uGrain,P.grain);gl.uniform1f(U.uVig,P.vig);
+    gl.uniform1f(U.uMode,P.mode);gl.uniform1f(U.uTrans,P.trans);gl.uniform1f(U.uFit,P.fit);
+    gl.uniform1f(U.uCur,P.cur);gl.uniform1f(U.uMAmt,mAmt*P.mforce);gl.uniform1f(U.uMRad,P.mrad*k);
+    gl.uniform3fv(U.uInk,COR.ink);gl.uniform3fv(U.uPaper,COR.paper);gl.uniform3fv(U.uAccent,COR.acc);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  }
+  requestAnimationFrame(frame);
+  return {entrada(){enter=0;enterT=0;}, pausar(v){paused=!!v;}, P:P,
+    cor(o){ if(o.ink)ALVO.ink=hex(o.ink); if(o.paper)ALVO.paper=hex(o.paper);
+            if(o.acc)ALVO.acc=hex(o.acc); }};
+}
+return {montar:montar};
+})();
+
+</script>
+<script>
+const MAP = {
+  /* ═══ DADO DO PROJETO ═══════════════════════════════════════════════
+     Andaime vazio, com o contrato à vista. O deck de origem trazia 107 KB
+     de lotes reais — endereço, nome de operador, coordenada — e isso não
+     entra num arquivo público. Como montar o seu: sistemas/gabaritos/mapa.md
+     ═══════════════════════════════════════════════════════════════════ */
+  "base": {
+    "rua":     {"img": "", "w": 1200, "h": 1500, "tex": ""},
+    "cluster": {"img": "", "w": 1024, "h": 768,  "tex": ""}
+  },
+  "lotes": [
+    /* {"n":"rótulo","end":"Endereço, 000","lat":-23.55,"lon":-46.63,
+        "d":[[x,y],…] (contorno),"r":0,"t":0,"offset":[0,0]} */
+  ],
+  "pts":   [],   /* pontos do mapa de cluster */
+  "msrua": [],   /* recorte da rua           */
+  "sj":    [],   /* recorte auxiliar         */
+  "fundo": [],   /* massa de fundo           */
+  "aiu": 0, "calc": 0, "chave": 0, "req": 0
+} /* ← DADO DESTE DECK. O do estudo de posicionamento tinha 107 KB de lotes
+       reais, com endereço e nome de operador: saiu daqui porque este arquivo é
+       público. Ao montar um mapa, gerar o MAP do projeto — receita em
+       sistemas/gabaritos/mapa.md. */;
+/* imagens embutidas — carrossel da capa (capamorph_R6) e o par antes/depois */
+/* carrossel da abertura — nove peças de 640 px em WebP, com a
+   auto-exposição já aplicada no arquivo. A engine sobe com prep:false:
+   sem isso são nove correções de histograma na thread principal, na carga. */
+/* carrossel da abertura e dos divisores — imagens DESTA apresentação.
+   Regra de 22/08/2026: cada deck usa as suas, senão a trama de fundo vira
+   enfeite genérico e briga com o assunto. Três a cinco imagens, não dez —
+   cada uma de 1024 px custa ~3,7 MB de VRAM.
+   640 px de largura, WebP, com a auto-exposição da engine JÁ APLICADA no
+   arquivo — por isso a chamada sobe com prep:false. A gama de cada uma
+   saiu de log(0,50)/log(média), piso 0,42, igual ao prep() da engine. */
+/* ═══ dois carrosséis, dois canvas ════════════════════════════════════════
+   Decisão do Michel em 22/08/2026, depois de ver os dois lados:
+
+   CAPA_IMGS — as nove peças do portfólio dele. Ficam ATRÁS DA MARCA, na
+   abertura e no fechamento. É a assinatura: a frase da marca roda sempre
+   sobre o trabalho de quem assina, seja qual for o deck.
+
+   DIV_IMGS — as imagens DESTE deck. Ficam atrás dos divisores de seção.
+   Três a cinco imagens do próprio projeto, não dez.
+
+   Todas a 640 px em WebP, com a auto-exposição da engine JÁ APLICADA no
+   arquivo — por isso as duas chamadas sobem com prep:false. A gama de cada
+   uma saiu de log(0,50)/log(média), piso 0,42, igual ao prep() da engine. */
+const CAPA_IMGS=[] /* ← acervo da MARCA. Vem do bloco da marca. Vazio = fundo chapado, que é estado aceitável. */;
+const DIV_IMGS=[] /* ← imagens DESTE deck para o divisor. Vazio = divisor só trama, que é o padrão. */;
+const F_ANTES=""; /* ← foto do deck. Slot vazio renderiza retângulo hachurado. */
+const F_DEPOIS=""; /* ← foto do deck. Slot vazio renderiza retângulo hachurado. */
+const F_FOTO1=""; /* ← foto do deck. Slot vazio renderiza retângulo hachurado. */
+const F_FOTO2=""; /* ← foto do deck. Slot vazio renderiza retângulo hachurado. */
+const F_FOTO3=""; /* ← foto do deck. Slot vazio renderiza retângulo hachurado. */
+const F_FOTO4=""; /* ← foto do deck. Slot vazio renderiza retângulo hachurado. */
+/* lote destacado no mapa da quadra -> foto do empreendimento */
+const FOTO_LOTE={0:F_FOTO1,1:F_FOTO2,2:F_FOTO3,3:F_FOTO4};
+
+const COR={toq:'#B85C38',ret:'#211D1A',obra:'#6B6A4B',novo:'#8C8A5E',planta:'#6E6486'};
+function wpx(lat,lon,z){const n=Math.pow(2,z)*256,la=lat*Math.PI/180;
+  return [(lon+180)/360*n,(1-Math.log(Math.tan(la)+1/Math.cos(la))/Math.PI)/2*n];}
+function proj(m){const {z,ox,oy,esc,mpp,fw,fh}=m;
+  const n=Math.pow(2,z)*256;
+  return {X:(la,lo)=>+((wpx(la,lo,z)[0]-ox)*esc).toFixed(1),
+          Y:(la,lo)=>+((wpx(la,lo,z)[1]-oy)*esc).toFixed(1),
+          /* inverso: o locador precisa de lat/lon a partir do pixel do viewBox */
+          lo:x=>(x/esc+ox)/n*360-180,
+          la:y=>{const t=Math.PI-2*Math.PI*(y/esc+oy)/n;
+                 return 180/Math.PI*Math.atan(0.5*(Math.exp(t)-Math.exp(-t)));},
+          r:v=>+(v/mpp*esc).toFixed(1),w:fw,h:fh};}
+const via=(P,a)=>a.map(c=>`${P.X(c[0],c[1])},${P.Y(c[0],c[1])}`).join(' ');
+const vias=(P,arr,attr)=>arr.map(c=>`<polyline points="${via(P,c)}" ${attr}/>`).join('');
+function barra(P,m,x,y){const L=P.r(m);
+  return `<g transform="translate(${x},${y})"><line x1="0" y1="0" x2="${L}" y2="0" stroke="#211D1A" stroke-width="1.4"/><line x1="0" y1="-5" x2="0" y2="5" stroke="#211D1A" stroke-width="1.4"/><line x1="${L}" y1="-5" x2="${L}" y2="5" stroke="#211D1A" stroke-width="1.4"/><text x="${(L/2).toFixed(1)}" y="-10" text-anchor="middle" font-family="DM Mono,monospace" font-size="15" fill="#211D1A" opacity=".72">${m} m</text></g>`;}
+
+
+/* ─── janela retrato para o mapa em sangria ───────────────────────────────
+   O painel do mapa e 48vw x 100vh — em 16:9 isso da 0,85 de proporcao.
+   O viewBox cheio da base e paisagem, entao com `slice` os rotulos da
+   esquerda eram decepados. Aqui se recorta uma janela ja no formato do
+   painel, centrada no que interessa, e o slice so come a folga.          */
+function janela(P,pts,asp){
+  asp=asp||0.85;
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+  pts.forEach(([x,y])=>{if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;});
+  const mx=(x1-x0)*0.035+10, my=(y1-y0)*0.035+10;
+  x0-=mx;x1+=mx;y0-=my;y1+=my;
+  let w=x1-x0,h=y1-y0,cx=(x0+x1)/2,cy=(y0+y1)/2;
+  if(w/h>asp){ h=w/asp; } else { w=h*asp; }
+  x0=cx-w/2;y0=cy-h/2;
+  return `${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`;
+}
+function mapaRua(sang){
+  const B=MAP.base.rua,P=proj(B);
+  const rot={0:[16,30,'start'],1:[0,-18,'middle'],2:[24,-6,'start'],3:[0,30,'middle'],4:[0,-16,'middle'],5:[-20,2,'end'],6:[-20,2,'end']};
+  /* a janela tem de conter os rotulos, nao so os poligonos: eles saem bem
+     para fora do lote e eram decepados pelo slice. Largura estimada pelo
+     avanco da DM Mono, ~0,60 em, a 17 px.                                */
+  const alvo=[];
+  MAP.lotes.forEach((l,i)=>{
+    l.r.forEach(c=>alvo.push([P.X(c[0],c[1]),P.Y(c[0],c[1])]));
+    const X=P.X(l.lat,l.lon),Y=P.Y(l.lat,l.lon),o=rot[i]||[0,24,'middle'];
+    const lw=l.n.length*10.2, ax=X+o[0], ay=Y+o[1];
+    const e=o[2]==='start'?[ax,ax+lw]:o[2]==='end'?[ax-lw,ax]:[ax-lw/2,ax+lw/2];
+    alvo.push([e[0],ay-14],[e[1],ay+6]);
+  });
+  const vb=sang?janela(P,alvo):`0 0 ${P.w} ${P.h}`;
+  let s=`<svg viewBox="${vb}" role="img" aria-label="mapa de lotes">`;
+  s+=`<image href="${B.img}" x="0" y="0" width="${P.w}" height="${P.h}"/>`;
+  MAP.fundo.forEach(r=>{s+=`<polygon points="${via(P,r)}" fill="none" stroke="#211D1A" stroke-opacity=".16" stroke-width=".8"/>`;});
+  s+=vias(P,MAP.msrua,'fill="none" stroke="#B85C38" stroke-opacity=".15" stroke-width="'+P.r(12)+'" stroke-linecap="round"');
+  const fl=MAP.msrua.flat(); const r0=fl[Math.floor(fl.length*0.28)];
+  s+=`<text x="${P.X(r0[0],r0[1])}" y="${P.Y(r0[0],r0[1])-16}" text-anchor="middle" font-family="DM Mono,monospace" font-style="italic" font-size="17" fill="#B85C38" opacity=".95">${MAP.rotulo||''}</text>`;
+  MAP.lotes.forEach((l,i)=>{
+    const c=COR[l.t];
+    s+=`<g class="lote" data-l="${i}" tabindex="0"><path d="M${via(P,l.r).replace(/ /g,'L')}Z" fill="${c}" fill-opacity=".2" stroke="${c}" stroke-width="1.8" stroke-opacity=".85" stroke-dasharray="6 4"/></g>`;});
+  MAP.lotes.forEach((l,i)=>{
+    const X=P.X(l.lat,l.lon),Y=P.Y(l.lat,l.lon),o=rot[i]||[0,24,'middle'];
+    s+=`<text x="${X+o[0]}" y="${Y+o[1]}" text-anchor="${o[2]}" font-family="DM Mono,monospace" font-style="italic" font-size="17" fill="#211D1A" paint-order="stroke" stroke="#EDE6DA" stroke-width="4" pointer-events="none">${l.n}</text>`;});
+  s+=barra(P,50,44,P.h-20);
+  return s+`</svg>`;
+}
+
+/* ─── locador: os dois perímetros da subvenção ────────────────────────────
+   O Requalifica Centro tem 6,4 km² e a AIU do Setor Central, 2.780 ha —
+   quatro vezes o recorte do mapa principal. Desenhar por cima só cruzaria
+   a tela com uma linha. Vai como locador no canto, com o retângulo do
+   recorte atual dentro.
+   A distinção importa em dinheiro: desde o Decreto 65.205 de 26/05/2026 a
+   AIU vale para HIS-1, HIS-2 e HMP; residencial de mercado (R2v) e não
+   residencial continuam restritos ao perímetro do Requalifica.          */
+function locador(P,vb,W){
+  const A=[].concat(MAP.aiu||[],MAP.req||[]).flat();
+  if(!A.length) return '';
+  const H=Math.round(W*1.02), pad=9;
+  let la0=1e9,la1=-1e9,lo0=1e9,lo1=-1e9;
+  A.forEach(([la,lo])=>{if(la<la0)la0=la;if(la>la1)la1=la;if(lo<lo0)lo0=lo;if(lo>lo1)lo1=lo;});
+  const kx=(W-2*pad)/(lo1-lo0), ky=(H-2*pad)/(la1-la0), k=Math.min(kx,ky);
+  const cx=(lo0+lo1)/2, cy=(la0+la1)/2;
+  const X=lo=>pad+(W-2*pad)/2+(lo-cx)*k, Y=la=>pad+(H-2*pad)/2-(la-cy)*k;
+  /* 1 vértice a cada N: a AIU tem 2.259 e o locador tem 190 px de largura */
+  const cam=(an,n)=>an.filter((_,i)=>i%n===0||i===an.length-1)
+    .map(([la,lo])=>`${X(lo).toFixed(1)},${Y(la).toFixed(1)}`).join(' ');
+  let g=`<rect x="0" y="0" width="${W}" height="${H}" fill="#EFEAE0" stroke="#211D1A" stroke-opacity=".28" stroke-width="1"/>`;
+  (MAP.aiu||[]).forEach(an=>{g+=`<polygon points="${cam(an,9)}" fill="#6B6A4B" fill-opacity=".13" stroke="#6B6A4B" stroke-width="1" stroke-opacity=".7" stroke-dasharray="3 2.5"/>`;});
+  (MAP.req||[]).forEach(an=>{g+=`<polygon points="${cam(an,2)}" fill="#B85C38" fill-opacity=".16" stroke="#B85C38" stroke-width="1.3"/>`;});
+  /* o retângulo do recorte que está sendo mostrado ao lado */
+  const v=vb.split(' ').map(Number);
+  const cantos=[[v[0],v[1]],[v[0]+v[2],v[1]],[v[0]+v[2],v[1]+v[3]],[v[0],v[1]+v[3]]]
+    .map(([x,y])=>{const la=P.la(y),lo=P.lo(x);return `${X(lo).toFixed(1)},${Y(la).toFixed(1)}`;}).join(' ');
+  g+=`<polygon points="${cantos}" fill="none" stroke="#211D1A" stroke-width="1.6"/>`;
+  g+=`<text x="${pad}" y="${H-19}" font-family="DM Mono,monospace" font-size="10.5" fill="#B85C38">requalifica · 6,4 km² · tudo</text>`;
+  g+=`<text x="${pad}" y="${H-6}" font-family="DM Mono,monospace" font-size="10.5" fill="#6B6A4B">aiu · 2.780 ha · só his</text>`;
+  return g;
+}
+function mapaCluster(sang){
+  const B=MAP.base.cluster,P=proj(B),r=P.r(200);
+  const alvo2=[];MAP.pts.forEach(q=>{const X=P.X(q.lat,q.lon),Y=P.Y(q.lat,q.lon);
+    alvo2.push([X-r,Y-r],[X+r,Y+r]);});
+  const vb2=sang?janela(P,alvo2):`0 0 ${P.w} ${P.h}`;
+  let s=`<svg viewBox="${vb2}" role="img" aria-label="Centro — raios de 200 m">`;
+  s+=`<image href="${B.img}" x="0" y="0" width="${P.w}" height="${P.h}"/>`;
+  s+=vias(P,MAP.calc,'fill="none" stroke="#6B6A4B" stroke-width="11" stroke-opacity=".3" stroke-linecap="round"');
+  s+=vias(P,MAP.calc,'fill="none" stroke="#3F3E2C" stroke-width="2.4" stroke-dasharray="1.5 6" stroke-linecap="round" stroke-opacity="1"');
+  s+=vias(P,MAP.sj,'fill="none" stroke="#B85C38" stroke-width="16" stroke-opacity=".2" stroke-linecap="round"');
+  s+=vias(P,MAP.sj,'fill="none" stroke="#B85C38" stroke-width="2.6" stroke-dasharray="11 7" stroke-linecap="round" stroke-opacity=".95"');
+  const sjf=MAP.sj.flat(); const m0=sjf[Math.floor(sjf.length*0.5)];
+  if(m0) s+=`<text x="${P.X(m0[0],m0[1])+14}" y="${P.Y(m0[0],m0[1])-12}" font-family="DM Mono,monospace" font-style="italic" font-size="19" fill="#B85C38" paint-order="stroke" stroke="#EFEAE0" stroke-width="4">boulevard são joão</text>`;
+  MAP.pts.forEach((p,i)=>{if(!p.cred)return;
+    s+=`<circle class="raio" data-i="${i}" cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="${r}" fill="#6B6A4B" fill-opacity=".11" stroke="#6B6A4B" stroke-opacity=".34" stroke-width="1"/>`;});
+  MAP.pts.forEach((p,i)=>{if(!p.cred)return;
+    s+=`<g class="pin" data-i="${i}" tabindex="0"><circle class="hit" cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="16"/><circle class="anel" cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="9"/><circle cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="4" fill="#4F4E38"/></g>`;});
+  MAP.pts.forEach((p,i)=>{if(!p.toq)return;
+    const X=P.X(p.lat,p.lon),Y=P.Y(p.lat,p.lon);
+    if(p.anc) s+=`<circle cx="${X}" cy="${Y}" r="21" fill="none" stroke="#B85C38" stroke-width="1.6" stroke-dasharray="3 3" opacity=".85"/>`;
+    s+=`<g class="pin" data-i="${i}" tabindex="0"><circle class="hit" cx="${X}" cy="${Y}" r="24"/><circle class="anel" cx="${X}" cy="${Y}" r="18"/><circle cx="${X}" cy="${Y}" r="${p.anc?15:12}" fill="#B85C38" stroke="#EDE6DA" stroke-width="${p.anc?2.6:1.8}"/><text x="${X}" y="${Y+5}" text-anchor="middle" font-family="DM Mono,monospace" font-weight="500" font-size="15" fill="#EDE6DA">${p.k}</text></g>`;});
+  s+=barra(P,200,48,P.h-20);
+  if(sang){
+    const v=vb2.split(' ').map(Number), W=Math.round(v[2]*0.30);
+    const gx=v[0]+v[2]*0.035, gy=v[1]+v[3]-Math.round(W*1.02)-v[3]*0.035;
+    s+=`<g transform="translate(${gx.toFixed(1)},${gy.toFixed(1)})">${locador(P,vb2,W)}</g>`;
+  }
+  return s+`</svg>`;
+}
+function ligaHover(root){
+  const box=root.querySelector('#minfo'); if(!box)return;
+  const base=box.innerHTML;
+  let tmr;
+  const pinta=html=>{box.classList.add('trocando');clearTimeout(tmr);
+    tmr=setTimeout(()=>{box.innerHTML=html;box.classList.remove('trocando');},170);};
+  const mostra=(n,p,d,f)=>{box.classList.remove('vazio');
+    pinta((f?`<span class="mfoto"><img src="${f}" alt="${n}"></span>`:'')
+      +`<span class="mtx"><span class="mn">${n}</span>${p?`<span class="mp">${p}</span>`:''}${d?`<span class="md">${d}</span>`:''}</span>`);};
+  const limpa=()=>{box.classList.add('vazio');pinta(base);};
+  const solta=()=>root.querySelectorAll('.pin.on,.raio.on,.lote.on').forEach(e=>e.classList.remove('on'));
+  root.querySelectorAll('.lote').forEach(g=>{
+    const on=()=>{solta();g.classList.add('on');const i=+g.dataset.l,l=MAP.lotes[i];
+      mostra(l.n,l.end,l.d, (typeof FOTO_LOTE!=='undefined'?FOTO_LOTE[i]:null)||null);};
+    g.addEventListener('mouseenter',on);g.addEventListener('focus',on);
+    g.addEventListener('click',e=>{e.stopPropagation();on();});});
+  root.querySelectorAll('.pin').forEach(g=>{
+    const on=()=>{solta();g.classList.add('on');
+      const i=+g.dataset.i,p=MAP.pts[i],rr=root.querySelector(`.raio[data-i="${i}"]`);
+      if(rr)rr.classList.add('on');
+      let d='';
+      if(p.cred){
+        const brl=v=>'R$ '+v.toLocaleString('pt-BR',{maximumFractionDigits:0});
+        d=`${p.quem}. Categoria ${p.cat}, ${p.pts} pontos, `
+          +`${p.pct!=null?p.pct.toString().replace('.',',')+'% de subvenção — ':''}`
+          +`${brl(p.vl)} concedidos no chamamento ${p.cham}.`;
+      }else{
+        d=p.viz.length?'Credenciados no raio de 200 m: '+p.viz.map(([m,n])=>`${n} a ${m} m`).join(' · ')+'.':'Nenhum credenciado dentro de 200 m.';
+        if(p.fora.length)d+=` O mais próximo fora do raio é ${p.fora[0][1]}, a ${p.fora[0][0]} m.`;
+      }
+      mostra(p.n,p.toq?`${p.pt} pontos de proximidade`:'projeto credenciado',d);};
+    g.addEventListener('mouseenter',on);g.addEventListener('focus',on);
+    g.addEventListener('click',e=>{e.stopPropagation();on();});});
+  root.querySelector('.mapa').addEventListener('mouseleave',()=>{solta();limpa();});
+  box.classList.add('vazio');
+}
+function isometrico(cena,esc){
+  /* sobre a oliva a tinta some: o desenho troca de cor, nao de forma */
+  const TI = esc ? '#EDE6DA' : '#211D1A';
+  const W=620,H=660,ux=0.866,uy=0.5;
+  /* o viewBox sai do proprio desenho. Escrito a mao, ele decepava os dois
+     ultimos predios da carteira toda vez que o espacamento mudava. */
+  let bx0=1e9,by0=1e9,bx1=-1e9,by1=-1e9;
+  const marca=(px,py)=>{if(px<bx0)bx0=px;if(px>bx1)bx1=px;if(py<by0)by0=py;if(py>by1)by1=py;};
+  const janelaIso=(padx,pady)=>{
+    const x0=bx0-padx,y0=by0-pady,w=(bx1-bx0)+padx*2,h=(by1-by0)+pady*2;
+    return `${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`;};
+  const S=1.16;const iso=(x,y,z)=>[300+(x-y)*ux*S,H-130-((x+y)*uy*.52*S)-z*S];
+  const P=(a)=>a.map(p=>p.join(',')).join(' ');
+  function caixa(cx,cy,w,d,pav,alt,rot,pal){
+    /* pal: o prédio grande ficou fora dos cenários; entra só como escala */
+    const o=pal?0.34:1, h=pav*alt,pts=[];
+    const A=iso(cx,cy,0),Bp=iso(cx+w,cy,0),C=iso(cx+w,cy+d,0),D=iso(cx,cy+d,0);
+    const A2=iso(cx,cy,h),B2=iso(cx+w,cy,h),C2=iso(cx+w,cy+d,h),D2=iso(cx,cy+d,h);
+    /* o vertice mais proximo da camera e A (menor x+y). As duas faces visiveis
+       sao as que encostam na aresta A-A2: a esquerda (A-D) e a direita (A-B).
+       Antes desenhava-se B-C, que fica ESCONDIDA atras do solido, e a esquerda
+       ficava vazada. Corrigido em 21/08/2026.                                */
+    let g=`<polygon points="${P([A,D,D2,A2])}" fill="${TI}" fill-opacity="${(.17*o).toFixed(3)}" stroke="${TI}" stroke-width="1" stroke-opacity="${(.5*o).toFixed(2)}"/>`;
+    g+=`<polygon points="${P([A,Bp,B2,A2])}" fill="${TI}" fill-opacity="${(.075*o).toFixed(3)}" stroke="${TI}" stroke-width="1" stroke-opacity="${(.5*o).toFixed(2)}"/>`;
+    g+=`<polygon points="${P([A2,B2,C2,D2])}" fill="#B85C38" fill-opacity="${(.26*o).toFixed(3)}" stroke="#B85C38" stroke-width="1.2" stroke-opacity="${o}"/>`;
+    /* aresta vertical da frente, marcada: e ela que le a altura */
+    g+=`<line x1="${A[0]}" y1="${A[1]}" x2="${A2[0]}" y2="${A2[1]}" stroke="${TI}" stroke-width="1.1" stroke-opacity="${(.55*o).toFixed(2)}"/>`;
+    for(let i=1;i<pav;i++){const l=iso(cx,cy+d,i*alt),m=iso(cx,cy,i*alt),o=iso(cx+w,cy,i*alt);
+      g+=`<polyline points="${P([l,m,o])}" fill="none" stroke="${TI}" stroke-width=".5" stroke-opacity="${(.3*o).toFixed(2)}"/>`;}
+    [A,Bp,C,D,A2,B2,C2,D2].forEach(q=>marca(q[0],q[1]));
+    const top=iso(cx+w/2,cy+d/2,h);
+    if(rot){ const lw=rot.length*4.6; marca(top[0]-lw,top[1]-46); marca(top[0]+lw,top[1]-30); }
+    /* 34 px acima da cumeeira: com 16 o rotulo encostava no telhado */
+    g+=`<text x="${top[0]}" y="${top[1]-34}" text-anchor="middle" font-family="DM Mono,monospace" font-style="italic" font-size="15" fill="${TI}" opacity="${pal?0.55:1}">${rot}</text>`;
+    return g;
+  }
+  function arvore(x,y){const b=iso(x,y,0),t=iso(x,y,26);
+    return `<line x1="${b[0]}" y1="${b[1]}" x2="${t[0]}" y2="${t[1]}" stroke="#6B6A4B" stroke-width="1.6"/><circle cx="${t[0]}" cy="${t[1]}" r="9" fill="#6B6A4B" fill-opacity=".45" stroke="#6B6A4B" stroke-width="1"/>`;}
+  function carro(x,y){const a=iso(x,y,0),b=iso(x+16,y,0),c=iso(x+16,y+8,0),d=iso(x,y+8,0),
+    a2=iso(x,y,9),b2=iso(x+16,y,9),c2=iso(x+16,y+8,9),d2=iso(x,y+8,9);
+    return `<polygon points="${P([a,b,c,d])}" fill="${TI}" fill-opacity=".1"/><polygon points="${P([a2,b2,c2,d2])}" fill="${TI}" fill-opacity=".3" stroke="${TI}" stroke-width=".8"/><polygon points="${P([b,c,c2,b2])}" fill="${TI}" fill-opacity=".2" stroke="${TI}" stroke-width=".8"/>`;}
+  let s=`<svg viewBox="55 66 545 596" role="img" aria-label="Escala comparativa de porte">`;
+  /* a fileira da carteira e mais longa que a do porte: o chao e a rua
+     acompanham, senao os dois ultimos predios ficam sem calcada */
+  const XM = cena==='portfolio' ? 500 : 330;
+  const g0=iso(-34,40,0),g1=iso(XM,40,0),g2=iso(XM,200,0),g3=iso(-34,200,0);
+  s+=`<polygon points="${P([g0,g1,g2,g3])}" fill="${TI}" fill-opacity=".045"/>`;
+  const r0=iso(-34,52,0),r1=iso(XM,52,0),r2=iso(XM,80,0),r3=iso(-34,80,0);
+  s+=`<polygon points="${P([r0,r1,r2,r3])}" fill="${TI}" fill-opacity=".1"/>`;
+  if(cena==='portfolio'){
+    /* a carteira desenhada: 4 pequenos e 3 medios, na mesma escala do slide
+       do porte. E o mesmo desenho, para o olho reconhecer o tamanho.     */
+    /* tudo numa fileira só: com os pequenos atrás dos médios a conta não
+       se lia. Agora é da esquerda para a direita, 4 + 3, mesma linha. */
+    /* mais respiro entre os volumes: colados, a conta de 4 + 3 nao se lia */
+    let x=0;
+    for(let i=0;i<4;i++){ s+=caixa(x,96,38,34,5,10,i===1?'4 × pequeno':''); x+=62; }
+    x+=34;
+    for(let i=0;i<3;i++){ s+=caixa(x,96,52,42,12,10,i===1?'3 × médio':''); x+=78; }
+    /* a arvore acompanha a fileira inteira, ate o ultimo predio */
+    for(let v=-18;v<=x-30;v+=56) s+=arvore(v,66);
+    const vb=janelaIso(26,22);
+    const cy2=(by1+26);
+    s+=`<text x="${((bx0+bx1)/2).toFixed(1)}" y="${(cy2+16).toFixed(1)}" text-anchor="middle" font-family="DM Mono,monospace" font-size="13" fill="${TI}" opacity=".5">15.600 m² construídos · mesma escala do slide do porte</text>`;
+    marca(bx0,cy2+22);marca(bx1,cy2+22);
+    return s.replace('viewBox="55 66 545 596"','viewBox="'+janelaIso(26,22)+'"')+`</svg>`;
+  }
+  s+=caixa(0,96,52,44,5,10,'pequeno · 5 pav');
+  s+=caixa(112,96,62,50,12,10,'médio · 12 pav');
+  s+=caixa(238,96,72,56,24,10,'grande · 24 pav','pal');
+  [ -18, 46, 100, 160, 216, 288 ].forEach(x=>{s+=arvore(x,66);});
+  s+=carro(56,60); s+=carro(196,60);
+  s+=`<text x="${W/2}" y="${H-16}" text-anchor="middle" font-family="DM Mono,monospace" font-size="14" fill="${TI}" opacity=".55">escala comparativa · pé-direito de 3 m</text>`;
+  return s+`</svg>`;
+}
+
+const DECK=[
+/* ══ ABERTURA ══ a capa da marca. Vem do bloco de marca, não se inventa. */
+{g:'marca',capa:1,div:1,fundo:1,esc:1,comecar:1,pisca:1,
+  sigla:'MARCA',papel:'PAPEL',slogan:'SLOGAN',site:'SITE'},
+
+/* ══ CAPA DO PROJETO ══ nome, endereço e as três metas. Sem morph. */
+{g:'capa',capa:1,esc:1,kick:'ENDEREÇO · BAIRRO · CIDADE',
+  t:'NOME DO<br>PROJETO',
+  sub:'Uma linha dizendo do que se trata.',
+  metas:[['cliente','—'],['etapa','—'],['data','—']]},
+
+/* ══ DIVISOR ══ abre seção e ganha um ponto no chrome. `sec` é o que conta. */
+{g:'divisor',div:1,terra:1,fundo:1,sec:'primeira seção',dn:'01',dt:'primeira seção',
+  ds:'A frase que prepara o que vem a seguir.'},
+
+/* ══ FRASE ══ uma ideia por tela, texto grande. */
+{g:'frase',esc:1,trama:1,kick:'olho',
+  t:'a frase que carrega<br>o argumento',
+  sub:'O apoio, em uma ou duas linhas.'},
+
+/* ══ LISTA ══ itens numerados. Entram por clique, um a um. */
+{g:'lista',largo:1,kick:'olho',t:'o título da lista',
+  pre:'Uma linha antes dos itens.',
+  itens:[['01','primeiro item','O apoio do primeiro item.'],
+         ['02','segundo item','O apoio do segundo.'],
+         ['03','terceiro item','O apoio do terceiro.']]},
+
+/* ══ TABELA ══ comparação. `cols` é campo RESERVADO: exige `linhas` em seguida. */
+{g:'tabela',kick:'olho',t:'o título da tabela',
+  cols:['','coluna a','coluna b'],
+  linhas:[['linha 1','—','—'],['linha 2','—','—']]},
+
+/* ══ DUO ══ duas imagens lado a lado. Sem `ar` a coluna estica e corta o desenho. */
+{g:'duo',kick:'olho',t:'duas imagens',
+  sub:'A linha de apoio.',
+  figs:[['rótulo a','','Legenda da primeira.',''],
+        ['rótulo b','','Legenda da segunda.','']],
+  leg:'A legenda comum às duas, embaixo.',   /* obrigatório: sem `leg` sai "undefined" */
+  ar:'1.705'},
+
+/* ══ FIM ══ os próximos passos. É o que o cliente leva embora. */
+{g:'fim',kick:'encaminhamento',t:'próximos passos',
+  sub:'Começar pelo que tem prazo.',
+  itens:[['primeiro','<b>O primeiro passo.</b> Com prazo.'],
+         ['depois','<b>O segundo.</b>']]},
+
+/* ══ CONTRACAPA ══ QR, marca e site. Fecha a peça. */
+{g:'marca',fim:1,fundo:1,esc:1,sigla:'MARCA',site:'SITE'}
+];
+/* a chave numerada vem do mapdata, calculada a partir da camada oficial —
+   escrita a mao ela ficou desatualizada e deu 0 ponto ao Martinelli */
+const CHAVE=(typeof MAP!=='undefined'&&MAP.chave)?MAP.chave:[];
+
+const QR='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29"><path fill="#ede6da" d="M0 0h29v29h-29z"/><path stroke="#211d1a" d="M2 2.5h7m1 0h2m4 0h3m1 0h7m-25 1h1m5 0h1m4 0h1m1 0h2m1 0h1m1 0h1m5 0h1m-25 1h1m1 0h3m1 0h1m2 0h2m1 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h4m1 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h5m1 0h3m1 0h1m1 0h3m1 0h1m-25 1h1m5 0h1m1 0h1m3 0h1m5 0h1m5 0h1m-25 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-17 1h1m6 0h1m-16 1h1m3 0h1m1 0h6m2 0h1m1 0h6m2 0h1m-24 1h3m3 0h2m1 0h1m1 0h1m1 0h3m3 0h2m1 0h1m-24 1h2m1 0h1m1 0h3m2 0h1m2 0h3m1 0h3m1 0h2m-22 1h1m14 0h1m2 0h2m1 0h2m-22 1h1m3 0h2m2 0h3m3 0h4m1 0h4m-25 1h5m5 0h1m1 0h5m3 0h1m2 0h1m-20 1h4m1 0h1m1 0h1m1 0h1m1 0h3m1 0h4m-21 1h1m4 0h1m6 0h2m2 0h3m1 0h2m-24 1h2m1 0h1m2 0h1m3 0h1m4 0h8m-15 1h2m1 0h1m2 0h1m1 0h1m3 0h1m-21 1h7m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m1 0h1m-21 1h1m5 0h1m7 0h1m1 0h1m3 0h5m-25 1h1m1 0h3m1 0h1m1 0h2m2 0h1m3 0h7m-23 1h1m1 0h3m1 0h1m4 0h1m2 0h2m1 0h3m2 0h3m-25 1h1m1 0h3m1 0h1m4 0h1m2 0h1m1 0h3m2 0h1m1 0h1m-24 1h1m5 0h1m2 0h2m1 0h1m1 0h2m1 0h7m-24 1h7m1 0h1m1 0h3m1 0h2m2 0h1m3 0h3"/></svg>';
+const palco=document.getElementById('palco');
+/* as fotos moram em js_fotos.js como constantes; o DECK guarda o NOME delas.
+   Assim o array de slides continua legivel e o base64 fica de fora.        */
+const IMG={};
+['F_ANTES','F_DEPOIS','F_FOTO1','F_FOTO2','F_FOTO3','F_FOTO4'].forEach(k=>{
+  try{ IMG[k]=eval(k); }catch(e){ IMG[k]=''; }
+});
+
+function tpl(s){
+  const k=s.kick?`<div class="kick${s.barra?' barra':''} rev">${s.kick}</div>`:'';
+  const et=s.etapas?' passo etapa':'';
+  const grande=(s.g==='frase'||s.g==='capa'||s.g==='jogadas');
+  /* R$ é símbolo de moeda, não texto: sobrevive ao text-transform:lowercase
+     dos títulos. Aplicado no render para não poluir o DECK com <span>. */
+  const RS=x=>String(x).replace(/R\$/g,'<span class="ru">R$</span>');
+  const t=s.t?`<h1 class="${grande?'mega':'big'} rev">${RS(s.t)}</h1>`:'';
+  const sub=s.sub?`<p class="sub rev">${s.sub}</p>`:'';
+  const prem=s.prem?`<p class="prem rev">${s.prem}</p>`:'';
+  const pre=s.pre?`<p class="sub rev" style="margin-top:0;margin-bottom:clamp(10px,1.6vh,22px);max-width:44ch">${s.pre}</p>`:'';
+  /* o texto de apoio do dado não fica na tela: o slide mostra número e
+     rótulo, e a memória de cálculo abre no ponteiro. Menos coisa competindo
+     pela atenção, e o argumento continua a um gesto de distância. */
+  const dad=s.dados?`<div class="dados rev">`+s.dados.map(([v,l,n],j)=>
+    `<div class="dado${n?' tem':''}"${n?` tabindex="0" data-dn="${j}"`:''}>`
+    +`<span class="v">${RS(v)}</span><span class="l">${l}</span>`
+    +(n?`<span class="n">${n}</span>`:'')+`</div>`).join('')+`</div>`:'';
+  /* pilula da abertura: markup identico ao do capa-morph_R6, inclusive a
+     seta como glifo &rarr;. Tentei SVG para nao depender de fonte de
+     sistema e o desenho saiu diferente do padrao — o R6 manda.          */
+  const inicio=s.comecar?'<button class="ms-start">começar <span class="seta">&rarr;</span></button>':'';
+  if(s.g==='marca'){
+    const u=s.pisca?'<i class="pisca">_</i>':'<i>_</i>';
+    return `<div class="frase">`
+      +(s.qr?`<div class="qr rev">${QR}</div>`:'')
+      +`<div class="sigla-mini rev">${s.sigla}<i>_</i>${s.papel?`<em>${s.papel}</em>`:''}</div>`
+      +(s.slogan?`<div class="slogan rev">${s.slogan}${u}</div>`:'')
+      +(s.assinatura?`<div class="assina rev">${s.assinatura}${u}</div>`:'')
+      +(s.site?`<div class="site rev">${s.site}</div>`:'')
+      +inicio+`</div>`;
+  }
+  const met=s.metas?`<div class="metas rev">`+s.metas.map(([l,v])=>`<div><span class="ml">${l}</span><span class="mv">${v}</span></div>`).join('')+`</div>`:'';
+  if(s.g==='capa') return `<div class="wrap">${k}${t}${sub}${met}${inicio}</div>`;
+  if(s.g==='divisor') return `<div class="divisor"><span class="dn rev">${s.dn}</span><h1 class="dt rev">${RS(s.dt)}<i class="pisca">_</i></h1><p class="ds rev">${s.ds}</p></div>`;
+  if(s.g==='frase') return `<div class="wrap">${k}${pre}${t}${sub}${prem}${dad}</div>`;
+  if(s.g==='jogadas') return `<div class="wrap">${k}${t}<div class="jogadas rev">`+s.itens.map(([n,ti,d])=>`<div class="jogada${et}"><span class="jn">${n}</span><span class="jt">${ti}</span><span class="jd">${d}</span></div>`).join('')+`</div></div>`;
+  if(s.g==='unit') return `<div class="wrap">${k}${t}${sub}<div class="unit rev">`+s.cards.map(([ti,a,r,l,m])=>`<div class="uc${et}"><span class="ut">${ti}</span><span class="ua">${a}</span><span class="ur">${RS(r)}</span><span class="ul">${l}</span><span class="um">${m}</span></div>`).join('')+`</div></div>`;
+  if(s.g==='trio') return `<div class="wrap">${k}${t}${sub}<ol class="trio">`+s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')+`</ol></div>`;
+  if(s.g==='lista'||s.g==='fim') return `<div class="wrap${s.largo?' largo':''}">${k}${pre}${t}${sub}<ol class="lista${s.largo?' largo':''}">`+s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')+`</ol></div>`;
+  if(s.g==='duo'){
+    const RES=IMG;
+    /* o slot so aparece se a imagem falhar — antes ele ficava por cima da foto */
+    const f=s.figs.map(([tag,src,cap,cl])=>`<div class="dfig ${cl}"><img src="${RES[src]||src}" alt="${cap}" onerror="const p=this.parentNode;this.remove();p.classList.add('semimg')"><span class="tag">${tag}</span><div class="slot"><b>slot de imagem</b><span>${cap}</span></div><span class="dcap">${cap}</span></div>`).join('');
+    return `<div class="wrap" style="max-width:none">${k}${t}${sub}<div class="dcols rev">${f}</div><p class="dleg rev">${s.leg}</p></div>`;
+  }
+  if(s.g==='fotos'){
+    const li=s.itens.map(([q,x],i)=>`<li class="passo" data-f="${i}"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('');
+    const im=s.itens.map(([q,x,src,cap],i)=>src?`<img data-f="${i}" src="${IMG[src]||src}" alt="${cap}" onerror="this.dataset.err=1">`:'').join('');
+    return `<div class="wrap">${k}${t}<ol class="lista">${li}</ol></div>
+      <div class="fbleed">${im}<div class="slot"><b>slot de imagem</b><span class="scap"></span><span class="sfon"></span></div><span class="cred"></span></div>`;
+  }
+  const tab=s.cols?`<div class="rev"><table class="tb"><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`+
+    s.linhas.map((r,i)=>`<tr class="${s.hi===i?'hi':''}${s.fora===i?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`).join('')+`</tbody></table></div>`:'';
+  if(s.g==='porte'){
+    const f2=s.fecho?`<p class="sub rev" style="max-width:44ch">${s.fecho}</p>`:'';
+    const nota=(n)=>n?`<div class="notaN"><span class="nn">${RS(n[0])}</span><span class="nt">${n[1]}</span></div>`:'';
+    /* troca:1 — dois estados no MESMO slide. O isometrico e o titulo nao
+       re-animam; o clique so faz o bloco da direita atravessar. Como dois
+       slides, tudo entrava de novo a cada passagem. */
+    const miolo = s.troca
+      ? `<div class="trbox rev"><div class="tr tr-a">${tab}${nota(s.nota)}</div>`
+        + `<div class="tr tr-b passo">${nota(s.nota2)}${dad}</div></div>`
+      : `${tab}${s.nota?`<div class="rev">${nota(s.nota)}</div>`:''}${dad}${f2}`;
+    return `<div class="pcols${s.alto?' alto':''}${s.meia?' meia':''}">`
+      + `<div class="iso${s.troca?'':' rev'}">${isometrico(s.iso,s.esc)}</div>`
+      + `<div class="wrap">${k}${t}${sub}${miolo}</div></div>`;
+  }
+  if(s.g==='tabela'){
+    const f=s.fecho?`<p class="sub rev" style="max-width:56ch">${s.fecho}</p>`:'';
+    const nt=s.nota?`<div class="notaN rev"><span class="nn">${RS(s.nota[0])}</span><span class="nt">${s.nota[1]}</span></div>`:'';
+    return `<div class="wrap">${k}${t}${sub}${tab}${f}${nt}${prem}</div>`;
+  }
+  if(s.g==='plug'){
+    /* mapa-resumo da carteira: as sete âncoras do Epicentro em pílula, cada
+       uma com as oportunidades que saem do seu entorno. A distribuição se
+       redesenha sozinha porque ela é mesmo indefinida — o que se afirma é
+       estar plugado nas sete, não um número por âncora.                   */
+    const A=s.ancoras.map((n,i)=>`<div class="pg" data-a="${i}">`
+      +`<span class="pgn">${n}</span>`
+      +`<span class="pgo" data-o="${i}"></span></div>`).join('');
+    return `<div class="wrap largo">${k}${t}${sub}<div class="pgrid rev">${A}</div>`
+      +`<p class="pgr rev">${s.rodape||''}</p></div>`;
+  }
+  if(s.g==='duasfrentes'){
+    /* pilula + subtitulo em duas linhas, e item numerado em mono terracota.
+       23/08: a caixa terracota CRESCE para baixo a cada item revelado — o
+       pacote se fecha na frente do cliente. O que nao entra fica FORA da
+       caixa, na segunda linha da grade, para quebrar a leitura de propósito. */
+    const col=(c)=>`<div class="fr">`
+      + `<div class="frcab rev"><span class="frpil">${c[0]}</span>`
+      + `<span class="frsub">${c[1]}</span></div>`
+      + `<div class="frcx"><div class="frbg"></div><ul class="frl">`
+      + c.slice(2).map(([ti,d],j)=>`<li class="passo"><span class="frn">${String(j+1).padStart(2,'0')}</span>`
+        + `<span class="frtx"><span class="frti">${ti}</span><span class="frd">${d}</span></span></li>`).join('')
+      + `</ul></div></div>`;
+    /* os dois "fora" sao filhos diretos da grade: caem na linha de baixo,
+       alinhados entre si, e so entram depois dos oito itens das duas colunas */
+    const fora=(x)=>x?`<div class="frfora passo"><span class="ffl">não está incluso</span>`
+      + `<span class="fft">${x}</span></div>`:'<div></div>';
+    return `<div class="wrap largo">${k}${t}${sub}<div class="frcols rev">`
+      + col(s.esq)+col(s.dir)+fora(s.esqfora)+fora(s.dirfora)+`</div></div>`;
+  }
+
+  /* ─── sumario: o argumento inteiro em seis blocos, um por secao ───────── */
+  if(s.g==='sumario'){
+    const it=s.itens.map(([n,ti,d])=>`<div class="sm passo"><span class="smn">${n}</span>`
+      +`<span class="smt">${RS(ti)}</span><span class="smd">${RS(d)}</span></div>`).join('');
+    return `<div class="wrap largo">${k}${t}${sub}<div class="smgrid rev">${it}</div>`
+      +(s.fecho?`<p class="smf rev">${RS(s.fecho)}</p>`:'')+`</div>`;
+  }
+
+  /* ─── players: quem ja compra no mesmo perimetro, em faixas verticais ─── */
+  if(s.g==='players'){
+    const c=s.casas.map(([nome,esco,num,rot,linhas])=>`<div class="pl passo">`
+      +`<span class="plpil">${nome}</span><span class="plesc">${esco}</span>`
+      +`<span class="plv">${RS(num)}</span><span class="pll">${rot}</span>`
+      +`<ul class="plu">`+linhas.map(x=>`<li>${RS(x)}</li>`).join('')+`</ul></div>`).join('');
+    return `<div class="wrap largo">${k}${t}${sub}<div class="plcols rev">${c}</div>`
+      +(s.fecho?`<p class="plf rev">${RS(s.fecho)}</p>`:'')+`</div>`;
+  }
+
+  /* ─── avulso: o preco de mercado de cada frente, dentro e fora do pacote ─ */
+  if(s.g==='avulso'){
+    const nota=s.nota?`<div class="notaN rev"><span class="nn">${RS(s.nota[0])}</span><span class="nt">${RS(s.nota[1])}</span></div>`:'';
+    const gr=s.grupos.map(([tit,sb,rows],gi)=>`<div class="av av${gi}">`
+      +`<div class="avcab rev"><span class="avpil">${tit}</span>`
+      +(sb?`<span class="avsub">${sb}</span>`:'')+`</div>`
+      +`<ul class="avl">`+rows.map(([a,b,cc])=>`<li class="passo"><span class="ava">${RS(a)}</span>`
+        +`<span class="avb">${RS(b)}</span><span class="avc">${RS(cc)}</span></li>`).join('')
+      +`</ul></div>`).join('');
+    return `<div class="wrap largo">${k}${t}${sub}`
+      +`<div class="avcols n${s.grupos.length} rev">${gr}</div>${nota}${prem}</div>`;
+  }
+  if(s.g==='mapa'){
+    const svg=s.which==='rua'?mapaRua(s.sang):mapaCluster(s.sang);
+    const lg=s.leg?`<div class="leg rev">`+s.leg.map(([c,x])=>{
+      const cl=c==='ln'?'ln':c==='lnv'?'ln lnv':c==='anc'?'anc':'';
+      const st=(c==='ln'||c==='lnv'||c==='anc')?'':`background:${c}`;
+      return `<span><i class="${cl}" style="${st}"></i>${x}</span>`;}).join('')+`</div>`:'';
+    const ch=s.chave?`<ol class="chave rev">`+CHAVE.map(([n,p],i)=>`<li><span class="ci">${i+1}</span><span class="cn">${n}</span><span class="cp">${p}</span></li>`).join('')+`</ol>`:'';
+    const inf=`<div id="minfo" class="vazio rev"><span class="mn">${s.hint||''}</span></div>`;
+    /* sang:1 — o mapa toma a metade direita de fora a fora, sem moldura.
+       O texto e a legenda ficam empilhados a esquerda. Decidido em 21/08. */
+    const cl=s.sang?' sang':'';
+    const sv=s.sang?svg.replace('<svg ','<svg preserveAspectRatio="xMidYMid slice" '):svg;
+    return `<div class="mcols${cl}"><div class="mtxt">${k}${t}${sub}${ch}${inf}${lg}<p class="credito">base cartográfica © OpenStreetMap · CARTO — lotes: cadastro municipal / GeoSampa</p></div><div class="mapa${cl} rev">${sv}</div></div>`;
+  }
+  return '';
+}
+let secs=[];DECK.forEach((s,i)=>{if(s.sec)secs.push({nome:s.sec,i})});
+let sa='';DECK.forEach(s=>{if(s.sec)sa=s.sec;s._sec=sa});
+let num=0;DECK.forEach(s=>{if(s.div){s._b=null;return}if(!s.sub_)num++;s._b=num});
+const TOT=num;
+DECK.forEach(s=>{if(s._b===null){s._sub=0;return}const ir=DECK.filter(x=>x._b===s._b);s._sub=ir.length>1?ir.indexOf(s)+1:0});
+const dots=document.querySelector('.dots');
+secs.forEach((sc,i)=>{const d=document.createElement('span');d.className='sdot';d.innerHTML=`<span>${sc.nome}</span>`;d.onclick=e=>{e.stopPropagation();go(sc.i)};dots.appendChild(d)});
+palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}" data-i="${i}">${tpl(s)}</section>`).join('');
+const sl=[...document.querySelectorAll('.slide')];
+sl.forEach(el=>[...el.querySelectorAll('.rev')].forEach((r,j)=>r.style.setProperty('--i',Math.min(j,10))));
+sl.forEach((el,i)=>{if(DECK[i].g==='mapa')ligaHover(el)});
+/* ─── o viewBox do isométrico sai do desenho, não de conta à mão ─────────
+   Toda vez que o espaçamento dos volumes mudava, o número escrito no código
+   decepava os dois últimos prédios. getBBox() mede o que de fato foi
+   desenhado — chão, rua, árvores, rótulos e legenda — e o quadro passa a
+   acompanhar sozinho. */
+sl.forEach(el=>{
+  const sv=el.querySelector('.iso svg'); if(!sv)return;
+  requestAnimationFrame(()=>{ try{
+    const b=sv.getBBox(); if(!b.width||!b.height)return;
+    const m=Math.max(b.width,b.height)*0.035;
+    sv.setAttribute('viewBox',
+      `${(b.x-m).toFixed(1)} ${(b.y-m).toFixed(1)} ${(b.width+m*2).toFixed(1)} ${(b.height+m*2).toFixed(1)}`);
+  }catch(e){} });
+});
+/* ─── carteira que se redistribui ────────────────────────────────────────
+   Sete oportunidades caindo em sete âncoras, sorteadas a cada ciclo. Só
+   roda no slide ativo, e para com prefers-reduced-motion.               */
+sl.forEach((el,i)=>{
+  if(DECK[i].g!=='plug')return;
+  const n=DECK[i].ancoras.length, alvos=[...el.querySelectorAll('.pgo')];
+  const parado=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pinta=(d)=>alvos.forEach((o,j)=>{
+    o.innerHTML=Array.from({length:d[j]},()=>'<i></i>').join('');
+    o.parentNode.classList.toggle('vazia',d[j]===0);});
+  const sorteia=()=>{const d=new Array(n).fill(0);
+    for(let q=0;q<7;q++)d[Math.floor(Math.random()*n)]++;return d;};
+  pinta(parado?new Array(n).fill(1):sorteia());
+  if(parado)return;
+  let t=null;
+  const liga=()=>{clearInterval(t);t=setInterval(()=>{
+    if(!el.classList.contains('ativo')){clearInterval(t);t=null;return;}
+    pinta(sorteia());},2600);};
+  const obs=new MutationObserver(()=>{if(el.classList.contains('ativo')&&!t)liga();});
+  obs.observe(el,{attributes:true,attributeFilter:['class']});
+  if(el.classList.contains('ativo'))liga();
+});
+/* ─── popover de justificativa ────────────────────────────────────────────
+   Um numero que sustenta um argumento precisa poder ser aberto na frente do
+   cliente sem virar mais um paragrafo no slide. `<mark class="pop"
+   data-pop="chave">` abre o par [titulo, corpo] declarado em `pops`.      */
+sl.forEach((el,i)=>{
+  const ps=DECK[i].pops||{};
+  /* cada dado com texto de apoio vira uma entrada de popover, gerada do
+     próprio markup — assim o DECK não precisa declarar `pops` para isso */
+  el.querySelectorAll('.dado.tem').forEach(d=>{
+    const k='d'+d.dataset.dn;
+    ps[k]=[d.querySelector('.l').textContent, d.querySelector('.n').innerHTML];
+    d.classList.add('pop'); d.dataset.pop=k;
+  });
+  if(!Object.keys(ps).length)return;
+  const cx=document.createElement('div'); cx.className='popbox';
+  el.appendChild(cx);
+  let t=null;
+  const abre=(g)=>{const d=ps[g.dataset.pop]; if(!d)return;
+    clearTimeout(t);
+    /* só o texto: o título já está na tela, no próprio elemento que abriu.
+       Repeti-lo dentro da caixa era eco. */
+    cx.innerHTML=`<span class="popd">${d[1]}</span>`;
+    /* ⚠ 25/08 · o quadro é escalado por transform, então getBoundingClientRect
+       devolve pixel de TELA e style.left/top são pixel de LAYOUT. Sem dividir
+       por k a caixa saía do lugar em toda tela que não fosse 1600x900 — e
+       quanto mais longe da medida de projeto, mais longe ela ia. */
+    const K=(+getComputedStyle(document.documentElement).getPropertyValue('--k'))||1;
+    const r=g.getBoundingClientRect(), e=el.getBoundingClientRect();
+    /* a caixa alinha pela ESQUERDA do elemento e nasce logo abaixo da linha
+       dele, para o olho ler os dois como uma coisa só */
+    cx.style.minWidth=Math.min(r.width/K,420)+'px';
+    cx.style.left='0px'; cx.style.top='0px';
+    const w=cx.offsetWidth, ew=e.width/K;
+    cx.style.left=Math.max(8,Math.min((r.left-e.left)/K, ew-w-8))+'px';
+    /* sem espaço embaixo, a caixa vira para cima do elemento em vez de
+       sangrar para fora da tela */
+    const h=cx.offsetHeight, folga=(innerHeight-r.bottom)/K-24;
+    cx.style.top = (h>folga ? ((r.top-e.top)/K-h-12) : ((r.bottom-e.top)/K+12))+'px';
+    cx.classList.add('on'); g.classList.add('aberto');};
+  const fecha=(g)=>{t=setTimeout(()=>cx.classList.remove('on'),160);
+    if(g)g.classList.remove('aberto');};
+  el.querySelectorAll('.pop').forEach(g=>{
+    g.addEventListener('mouseenter',()=>abre(g));
+    g.addEventListener('focus',()=>abre(g));
+    g.addEventListener('mouseleave',()=>fecha(g));
+    g.addEventListener('blur',()=>fecha(g));
+    g.addEventListener('click',e=>{e.stopPropagation();abre(g);});
+    g.tabIndex=0;
+  });
+  cx.addEventListener('mouseenter',()=>clearTimeout(t));
+  cx.addEventListener('mouseleave',()=>fecha(null));
+});
+let cur=-1;
+const passos=i=>[...sl[i].querySelectorAll('.passo')];
+function foto(i){
+  const s=DECK[i];if(s.g!=='fotos')return;
+  const el=sl[i],ps=passos(i),on=ps.filter(p=>p.classList.contains('on'));
+  const k=on.length?+on[on.length-1].dataset.f:-1;
+  let ok=false;
+  el.querySelectorAll('.fbleed img').forEach(im=>{const v=+im.dataset.f===k&&!im.dataset.err;im.classList.toggle('on',v);if(v)ok=true});
+  const it=k>=0?s.itens[k]:null;
+  el.querySelector('.scap').textContent=it?it[3]:'';
+  el.querySelector('.sfon').textContent=it?`fonte — ${it[4]}`:'';
+  el.querySelector('.slot').style.opacity=ok?0:1;
+  const c=el.querySelector('.cred');c.textContent=it?it[3]:'';c.classList.toggle('on',ok);
+}
+/* ─── a caixa terracota do `duasfrentes` ──────────────────────────────────
+   A altura sai do LAYOUT (offsetTop), nao do getBoundingClientRect: o item
+   entra com translateY, e medir a caixa pelo retangulo pintado faria a
+   borda pular junto com a animacao do texto. */
+function caixa(i){
+  if(DECK[i].g!=='duasfrentes')return;
+  sl[i].querySelectorAll('.frcx').forEach(cx=>{
+    const bg=cx.querySelector('.frbg'); if(!bg)return;
+    const on=[...cx.querySelectorAll('li.passo.on')];
+    if(!on.length){bg.style.height='0px';bg.classList.remove('on');return}
+    const l=on[on.length-1], pad=parseFloat(getComputedStyle(cx).paddingBottom)||0;
+    bg.classList.add('on');
+    bg.style.height=(l.offsetTop+l.offsetHeight+pad)+'px';
+  });
+}
+/* ─── dica de rolagem ────────────────────────────────────────────────────
+   Em tela grande nenhuma prancha rola. No celular algumas rolam de
+   propósito — e o usuário precisa VER que rola, senão lê meia prancha e
+   passa adiante. `rola` só entra quando de fato transborda. */
+function rola(i){
+  const el=sl[i];
+  requestAnimationFrame(()=>el.classList.toggle('rola',el.scrollHeight-el.clientHeight>4));
+}
+addEventListener('resize',()=>{if(cur>=0)rola(cur)});
+function go(i,tudo){
+  i=Math.max(0,Math.min(DECK.length-1,i));if(i===cur)return;
+  const ant=cur;cur=i;
+  sl.forEach((el,j)=>el.classList.toggle('ativo',j===i));
+  if(ant>=0)sl[ant].classList.remove('revelado');
+  void sl[i].offsetWidth;sl[i].classList.add('revelado');
+  passos(i).forEach(p=>p.classList.toggle('on',!!tudo));
+  foto(i);caixa(i);rola(i);
+  const s=DECK[i];
+  document.body.classList.toggle('esc',!!s.esc);
+  document.body.classList.toggle('terra',!!s.terra);
+  /* ─── fundo morph nos divisores ───────────────────────────────────────
+     O canvas e as texturas ja estao na GPU desde a abertura: ligar o fundo
+     num divisor nao carrega imagem nem ocupa VRAM. O custo e so o rAF
+     enquanto o slide esta visivel, e a engine auto-pausa fora dele.
+     `?semdivisor` na URL desliga, para comparar o ritmo lado a lado.    */
+  const divFundo = s.g==='divisor' && s.fundo && !location.search.includes('semdivisor');
+  /* "divisor só trama": slide verde de conteúdo roda o MESMO carrossel da
+     marca, mas sob véu quase opaco. O que sobra é o pontilhado em movimento,
+     sem imagem legível — que é o efeito pedido, e sem um terceiro contexto
+     WebGL só para isso. */
+  const trama = !!s.trama && !location.search.includes('semtrama');
+  const marcaFundo = (!!s.fundo && s.g!=='divisor') || trama;
+  document.body.classList.toggle('com-fundo',marcaFundo||divFundo);
+  document.body.classList.toggle('fundo-div',divFundo);
+  document.body.classList.toggle('fundo-trama',trama);
+  /* cada canvas tem o seu conjunto de imagens e a sua paleta, fixados no
+     montar(). A troca entre os dois e por opacidade, nao por cor(). */
+  if(window.MSF ){ MSF .pausar(!marcaFundo); if(marcaFundo) MSF .entrada(); }
+  if(window.MSFD){ MSFD.pausar(!divFundo);   if(divFundo)   MSFD.entrada(); }
+  document.body.classList.toggle('na-capa',!!s.capa);
+  document.body.classList.toggle('na-marca',s.g==='marca'&&!s.fim_);
+  /* no fechamento o chrome fica: as bolinhas para voltar a qualquer secao e
+     as setas, para o caso de um clique a mais passar do fim. */
+  document.body.classList.toggle('no-fim',!!s.fim_);
+  document.querySelector('.sl').textContent=s._sec||'';
+  const si=secs.findIndex(x=>x.nome===s._sec);
+  document.querySelector('.sn').textContent=si>=0?String(si+1).padStart(2,'0'):'';
+  [...dots.children].forEach((d,j)=>d.classList.toggle('on',j===si));
+  conta();location.hash=i+1;
+}
+function conta(){
+  const s=DECK[cur],ps=passos(cur),on=ps.filter(p=>p.classList.contains('on')).length;
+  let txt=s._b===null?`— / ${TOT}`:(s._sub?`${s._b}.${s._sub}`:s._b)+` / ${TOT}`;
+  if(ps.length)txt+=` · ${on}/${ps.length}`;
+  document.querySelector('.cont').textContent=txt;
+}
+function avanca(){const ps=passos(cur),p=ps.find(x=>!x.classList.contains('on'));
+  if(p){p.classList.add('on');foto(cur);caixa(cur);rola(cur);conta();return}go(cur+1)}
+const recua=()=>go(cur>0?cur-1:0,true);
+document.getElementById('pro').onclick=e=>{e.stopPropagation();avanca()};
+document.getElementById('ant').onclick=e=>{e.stopPropagation();recua()};
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();avanca()}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();recua()}
+  else if(e.key==='ArrowDown'){e.preventDefault();go(cur+1,true)}
+  else if(e.key==='ArrowUp'){e.preventDefault();go(cur-1,true)}});
+palco.addEventListener('click',e=>{if(e.target.closest('.ms-start')){go(cur+1);return}if(e.target.closest('a,button,.pin,.lote'))return;avanca()});
+let tx=0;
+addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>52){d<0?avanca():recua()}},{passive:true});
+go(Math.max(0,(parseInt(location.hash.slice(1))||1)-1));
+
+
+/* ─── cortina diagonal: intercepta a primeira saída da abertura, venha de onde
+   vier (pílula, seta do chrome, teclado ou toque). ─── */
+(function(){
+  const cortina=document.getElementById('mscortina');let correndo=false;
+  const _go=window.go||go;
+  function varre(depois){
+    correndo=true;cortina.classList.remove('sai');void cortina.offsetWidth;
+    cortina.classList.add('on');
+    setTimeout(depois,580);
+    setTimeout(()=>{cortina.classList.remove('on');cortina.classList.add('sai')},660);
+    setTimeout(()=>{cortina.classList.remove('sai');cortina.style.visibility='hidden';
+      void cortina.offsetWidth;cortina.style.visibility='';correndo=false},1340);
+  }
+  window.go=function(i,tudo){
+    const j=Math.max(0,Math.min(DECK.length-1,i));
+    /* a diagonal marca duas coisas: a saida da abertura e a entrada de cada
+       divisor de secao. Em nenhum outro lugar. */
+    const vale = !correndo && j>cur && (cur===0 || DECK[j].g==='divisor');
+    if(vale && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+      varre(()=>_go(j,tudo));return;
+    }
+    _go(i,tudo);
+  };
+})();
+
+/* ─── dois fundos morph, um por papel ──────────────────────────────────────
+   O canvas da marca roda o portfólio do Michel; o do divisor roda as imagens
+   do deck. Duas instâncias em vez de uma porque o `montar()` fixa o conjunto
+   de texturas na carga — não há como trocar a lista depois.
+   Custo real: um segundo contexto WebGL2 e ~8 MB de VRAM. Nenhuma das duas
+   desenha fora do seu slide: o go() pausa a que não está em cena.
+   `?semfundo` desliga as duas. `?semdivisor` desliga só a do divisor.      */
+if(!location.search.includes('semfundo')){
+  const sobe=(id,imgs,opt)=>{
+    try{ return MSFundo.montar(document.getElementById(id), imgs,
+      Object.assign({scale:0.85, prep:false, sortear:true}, opt)); }
+    catch(e){ console.warn('fundo morph indisponivel em #'+id,e); return null; }
+  };
+  const subir=()=>{
+    /* marca: oliva, com o terracota de acento — a paleta da casa */
+    window.MSF  = sobe('msfundo',   CAPA_IMGS, {paper:'#6B6A4B', acc:'#B85C38'});
+    /* divisor: terracota chapada, acento na tinta */
+    window.MSFD = sobe('msfundo-d', DIV_IMGS,  {paper:'#B85C38', acc:'#211D1A'});
+    const b=document.body.classList;
+    if(window.MSF ){ MSF .pausar(!b.contains('com-fundo')||b.contains('fundo-div'));
+                     if(b.contains('com-fundo')&&!b.contains('fundo-div')) MSF.entrada(); }
+    if(window.MSFD){ MSFD.pausar(!b.contains('fundo-div'));
+                     if(b.contains('fundo-div')) MSFD.entrada(); }
+  };
+  ('requestIdleCallback' in window) ? requestIdleCallback(subir,{timeout:1200}) : setTimeout(subir,300);
+}
+
+</script>
+<!-- retorno ao acervo + camada de toque. Comportamento em modulos/ms-voltar.js.
+     Reposto em 25/08: veio de outra sessão, no commit e8bf561, e o build local
+     não sabia dele. Toda peça do acervo carrega esta linha. -->
+<script defer src="../modulos/ms-voltar.js"></script>
+</body></html>
