@@ -468,24 +468,6 @@ const projetos = [
         href: "casa-ittb/apresentacao.html" }
     ]
   },
-  {
-    nome: "deck",
-    pecas: [
-      { nome: "esqueleto", tipo: "sistema", pranchas: 19, unid: "gabaritos",
-        sub: "a base de partida · sem marca, sem conteúdo",
-        peso: 0.124, data: "29.08.2026", href: "esqueleto/deck-esqueleto.html" }
-    ]
-  },
-  {
-    nome: "michel stein_",
-    pecas: [
-      { nome: "manual de marca", tipo: "sistema", pranchas: 5, unid: "folhas",
-        sub: "conceito · logotipo · monograma · sistema · aplicações",
-        peso: 0.062, data: "29.08.2026", href: "marca/michel-stein/manual.html" },
-      { nome: "bloco de marca", tipo: "sistema", sub: "o que se cola no esqueleto · fontes embutidas",
-        peso: 0.112, data: "29.08.2026", href: "marca/michel-stein/bloco.html" }
-    ]
-  }
 ];
 
 const GH = "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/";
@@ -493,9 +475,12 @@ const docs = [
   { aba:"marca", grupo:"michel stein_", nome:"marca · michel stein_",
     desc:"Cor, tipografia, assinatura, abertura, contracapa e o preset do fundo. Trocar de marca é trocar este arquivo",
     arq:"marca/MARCA-MICHEL-STEIN.md", ver:"marca/michel-stein/manual.html" },
+  { aba:"marca", grupo:"michel stein_", nome:"manual em desenho · 5 folhas",
+    desc:"Conceito, logotipo, monograma, sistema e aplicações, numa página. É a apresentação da marca; o mestre é o .md",
+    arq:"marca/michel-stein/LEIA-ME.md", ver:"marca/michel-stein/manual.html" },
   { aba:"marca", grupo:"michel stein_", nome:"bloco de marca",
-    desc:"As quatro coisas que se colam no esqueleto: cores, as seis fontes, a capa e a contracapa",
-    arq:"marca/MARCA-MICHEL-STEIN-CAPA.md", ver:"marca/michel-stein/bloco.html" },
+    desc:"As quatro coisas que se colam no esqueleto: cores, as seis fontes, a capa e a contracapa. Roda sozinho",
+    arq:"marca/michel-stein/LEIA-ME.md", ver:"marca/michel-stein/bloco.html" },
   { aba:"marca", grupo:"michel stein_", nome:"marca · a capa",
     desc:"O slide de abertura: a regra, a receita de extração, a especificação e as armadilhas já pagas",
     arq:"marca/MARCA-MICHEL-STEIN-CAPA.md", ver:"modulos/capa-morph.html" },
@@ -509,7 +494,7 @@ const docs = [
     desc:"O arquivo curto: a receita em seis passos, os dezenove gabaritos e as três armadilhas. É o que se lê para montar",
     arq:"sistemas/DECK-MONTAR.md", ver:"esqueleto/deck-esqueleto.html" },
   { aba:"deck", grupo:"montar", nome:"esqueleto",
-    desc:"A base de partida. Abre, cola o bloco da marca, troca o DECK. A engine não se toca",
+    desc:"A base de partida: 21 gabaritos, sem marca e sem conteúdo. Abre, cola o bloco da marca, troca o DECK",
     arq:"sistemas/DECK-MONTAR.md", ver:"esqueleto/deck-esqueleto.html" },
   { aba:"deck", grupo:"gabaritos", nome:"render em tela cheia",
     desc:"O padrão para render: sangria total e o texto que sai de cena com o ponteiro parado",
@@ -755,7 +740,10 @@ const ABAS = [
    está listado, e o que sobra aparece como aviso.
    A API pública limita a 60 chamadas por hora por IP — se falhar, silencia. */
 (function(){
-  const IGNORA = ['index.html', 'sistemas/', 'modulos/', 'fundo/', 'ferramentas/'];
+  /* marca/ e esqueleto/ são sistema, não peça de projeto: aparecem nas abas
+     marca e deck, e não no array `projetos`. */
+  const IGNORA = ['index.html', 'sistemas/', 'modulos/', 'fundo/', 'ferramentas/',
+                  'marca/', 'esqueleto/'];
   const listados = new Set();
   projetos.forEach(function(p){
     p.pecas.forEach(function(x){ listados.add(x.href.split('?')[0]); });
