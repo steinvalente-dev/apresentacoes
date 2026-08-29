@@ -8,8 +8,9 @@ cara da michel stein_. O motor — gabaritos, quadro, revelação, chrome,
 validação — está em `DECK-MOTOR.md`, ao lado, e não sabe de que marca é a
 peça. **Montar uma apresentação = motor + esta marca + um DECK.**
 
-As folhas do manual, em desenho: `../michel-stein-marca/01-capa.html` a
-`05-aplicacoes.html`. Este arquivo é o resumo operável delas.
+As folhas do manual, em desenho: `michel-stein/01-capa.html` a
+`05-aplicacoes.html`. Este arquivo é o resumo operável delas. A capa do deck tem
+arquivo próprio, ao lado: `MARCA-MICHEL-STEIN-CAPA.md`.
 
 ---
 
@@ -152,7 +153,7 @@ assunto** — ver o motor.
 
 ## 6 · Versão rabisco
 
-`../michel-stein-marca/assets/scribble-ms.png` (mestre, 1679 × 1513),
+`michel-stein/assets/scribble-ms.png` (mestre, 1679 × 1513),
 `scribble-ms-900.png` (uso) e `scribble-ms.gif` (animada, 5 quadros).
 
 **Sem regra escrita.** Não está definido onde entra, tamanho mínimo, nem

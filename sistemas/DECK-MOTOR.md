@@ -16,7 +16,7 @@ trocar de marca:
 | camada | o que é | onde mora |
 |---|---|---|
 | **motor** | gabaritos, quadro, revelação, chrome, validação. **Não sabe de que marca é a peça.** | este arquivo |
-| **marca** | cor, tipografia, logotipo, assinatura, capa, acervo do fundo | `MARCA-<nome>.md`, ao lado deste |
+| **marca** | cor, tipografia, logotipo, assinatura, capa, acervo do fundo | `../marca/MARCA-<nome>.md` — pasta própria, uma por marca |
 | **peça** | o array `DECK` de uma apresentação | o HTML da peça |
 
 **Montar uma apresentação = motor + uma marca + um DECK.** Trocar de marca é
@@ -517,7 +517,7 @@ Título e ações **próximos e centrados como par**, não jogados nos cantos:
 
 Shader WebGL2 de ~13 KB (`modulos/ms-fundo-engine.js`, núcleo compartilhado) que
 faz transição entre imagens e converte tudo em trama de pontos. **Quais imagens,
-qual paleta e qual preset é decisão da marca** — está em `MARCA-<nome>.md`. O
+qual paleta e qual preset é decisão da marca** — está em `../marca/MARCA-<nome>.md`. O
 registro técnico do shader está em `FUNDO-MORPH-PONTILHADO.md`.
 
 **Onde vive:** só nos slides marcados com `fundo:true`. Fora deles o canvas é
@@ -630,9 +630,10 @@ letterbox, na v3).
 
 | marca | estado | onde |
 |---|---|---|
-| michel stein_ | implementada, é o padrão | `MARCA-MICHEL-STEIN.md` |
+| michel stein_ | implementada, é o padrão | `../marca/MARCA-MICHEL-STEIN.md` |
+| AMAZ | tokens levantados de peça publicada, faltam abertura, contracapa, fundo e regras de logotipo | `../marca/MARCA-AMAZ.md` |
 | Lavrō | tokens levantados, bloco pronto, ainda não virou arquivo de marca | `temas.md` · azul `#0123FF` só como preenchimento; traço fino elétrico no escuro reprova, usar `#7C8BFF`; uma só superfície azul por tela; status verde/âmbar/vermelho não é tematizável |
-| Samburá · AMAZ · Baraka · Sarasá | **sem sistema visual documentado** | **não inventar paleta** — levantar a identidade antes e escrever o `MARCA-<nome>.md` |
+| Baraka · Sarasá | **sem sistema visual documentado** | **não inventar paleta** — levantar a identidade antes e escrever o `MARCA-<nome>.md` |
 
 ### O que ainda não está separado
 
@@ -754,8 +755,8 @@ têm proporções diferentes e o corte é aceitável.
 
 | assunto | onde |
 |---|---|
-| cor, tipografia, logotipo, capa, acervo do fundo | `MARCA-<nome>.md`, ao lado |
+| cor, tipografia, logotipo, capa, acervo do fundo | `../marca/MARCA-<nome>.md` |
 | o shader do fundo, preset a preset | `michel-stein-sistemas/deck/FUNDO-MORPH-PONTILHADO.md` |
-| a capa padrão da michel stein_, receita de extração | `michel-stein-sistemas/deck/DECK-CAPA.md` |
+| a capa padrão da michel stein_, receita de extração | `../marca/MARCA-MICHEL-STEIN-CAPA.md` |
 | como publicar, registrar e validar no ar | `PUBLICAR-APRESENTACOES.md` e `GITHUB-COMO-TRABALHAR.md`, ao lado |
 | rodadas com nome de cliente, histórico por projeto | `michel-stein-sistemas/deck/` |

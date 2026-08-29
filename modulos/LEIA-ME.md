@@ -8,7 +8,7 @@ do Git. Nunca criar `-R2` ao lado.
 
 | módulo | o que faz | como entra num deck |
 |---|---|---|
-| `capa-morph.html` | a capa padrão: marca, papel, slogan e site sobre o carrossel morph, em oliva. **Nove peças, engine vigente, 561 KB** | receita de extração em `DECK-CAPA.md` |
+| `capa-morph.html` | a capa padrão: marca, papel, slogan e site sobre o carrossel morph, em oliva. **Nove peças, engine vigente, 561 KB** | receita de extração em `../marca/MARCA-MICHEL-STEIN-CAPA.md` |
 | `divisor-morph.html` | divisor **com assunto**: o carrossel de peças atrás, em terracota. Véu 0.60 | copiar o CSS do véu e a chamada; marcar o divisor com `fundo:true` |
 | `divisor-trama.html` | divisor **sem assunto**: nenhuma imagem, só o retículo trocando de grelha. Véu 0.55 | mesma solda; os campos vão junto, são ~40 linhas de JS |
 | `fundo-morph-pontilhado.html` | o laboratório do fundo, com todos os controles. **Não é a capa** — serve para calibrar e copiar o preset | não entra; é banco de ensaio |
