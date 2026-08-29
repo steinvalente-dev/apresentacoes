@@ -170,9 +170,9 @@ O que a linha traz junto:
 acha o script: nenhum chip, e a apresentação abre exatamente como antes. É
 deliberado — fora do acervo não há acervo para onde voltar.
 
-O script não toca em variável, classe nem listener da engine da prancha. As
+O script não toca em variável, classe nem listener da engine do deck. As
 teclas do deck seguem intactas: o chip barra `Enter`/espaço na captura para
-não avançar a prancha junto.
+não avançar o deck junto.
 
 *Armadilha a não repetir:* o caminho é **relativo** (`../modulos/`), e vale
 porque toda peça mora a exatamente um nível da raiz (`<slug>/arquivo.html`).
@@ -201,9 +201,9 @@ Peça em pasta mais funda precisa ajustar o `../`.
 
 ## Antes de montar a apresentação
 
-O sistema de pranchas — os quinze gabaritos, a escala tipográfica, as regras de
-marca, a lista de validação — **não está aqui**. Ler `PRANCHA-SISTEMA.md` e
-`PRANCHA-CAPA.md` antes de mexer em qualquer deck. Trocar só o array `DECK`;
+O sistema do deck — os quinze gabaritos, a escala tipográfica, as regras de
+marca, a lista de validação — **não está aqui**. Ler `DECK-MOTOR.md` e
+`MARCA-MICHEL-STEIN.md`, ao lado, antes de mexer em qualquer deck. Trocar só o array `DECK`;
 a engine abaixo dele não se toca.
 
 ## Histórico

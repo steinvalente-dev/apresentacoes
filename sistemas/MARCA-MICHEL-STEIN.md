@@ -5,7 +5,7 @@ apresentações para abrir por URL raw, sem token, em qualquer conversa.
 
 Esta é a **camada de marca**: tudo o que uma peça precisa saber para sair com a
 cara da michel stein_. O motor — gabaritos, quadro, revelação, chrome,
-validação — está em `PRANCHA-MOTOR.md`, ao lado, e não sabe de que marca é a
+validação — está em `DECK-MOTOR.md`, ao lado, e não sabe de que marca é a
 peça. **Montar uma apresentação = motor + esta marca + um DECK.**
 
 As folhas do manual, em desenho: `../michel-stein-marca/01-capa.html` a
@@ -65,7 +65,7 @@ Ficou para depois.
 | label e metadado | DM Mono 400, caixa-alta, +.20em |
 | texto corrido, interface | **Inter** 400 / 500 / 600 |
 
-Numa prancha as duas vão **embutidas em base64**, subset latino `U+0000-00FF`,
+Num deck as duas vão **embutidas em base64**, subset latino `U+0000-00FF`,
 seis faces: DM Mono 400 e 500 (reto e itálico) mais Inter 400 e 500. No manual de
 marca elas vêm do Google Fonts, porque ali a rede está pressuposta.
 
@@ -193,5 +193,5 @@ lista de validação. Isso é o motor.
 cada deck, com nomes de variável que são desta marca (`--creme`, `--oliva`,
 `--terra`), e a capa é um HTML de 561 KB com a marca soldada. **Enquanto for
 assim, trocar de marca é edição peça a peça, não substituição de camada.** O
-caminho está descrito no fim do `PRANCHA-MOTOR.md`, e passa por o
-`prancha-esqueleto.html` existir — coisa que ainda não acontece.
+caminho está descrito no fim do `DECK-MOTOR.md`, e passa por o
+`deck-esqueleto.html` existir — coisa que ainda não acontece.

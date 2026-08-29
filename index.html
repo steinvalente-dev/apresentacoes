@@ -25,6 +25,14 @@
     --fundo:var(--terra);
     --acento:var(--ink);           /* sobre terracota o traço vira tinta */
   }
+  body.deck{
+    --fundo:var(--ink);            /* a aba do deck é tinta */
+    --acento:var(--terra);
+    /* sobre tinta o cartão de tinta some: inverte para creme translúcido */
+    --card:#EDE6DA12;
+    --card-forte:#EDE6DA1c;
+    --card-linha:#EDE6DA2b;
+  }
   *{margin:0;padding:0;box-sizing:border-box}
   #msfundo{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
   #msveu{position:fixed;inset:0;z-index:1;pointer-events:none;
@@ -66,10 +74,12 @@
     border:1px solid var(--card-linha);border-radius:999px;padding:4px;
     background:var(--card);-webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
     transition:border-color .55s,background .55s}
-  .knob{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);
+  .knob{position:absolute;top:4px;bottom:4px;left:4px;
+    width:calc((100% - 8px) / var(--n,2));
     background:var(--cream);border-radius:999px;
     transition:transform .42s cubic-bezier(.65,0,.25,1);pointer-events:none}
   .abas[data-sel="1"] .knob{transform:translateX(100%)}
+  .abas[data-sel="2"] .knob{transform:translateX(200%)}
   .aba{position:relative;z-index:1;font-family:var(--mono);font-size:11.5px;
     letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
     background:none;border:0;padding:9px clamp(18px,3vw,30px);border-radius:999px;
@@ -80,6 +90,9 @@
   .aba:focus-visible{outline:2px solid var(--cream);outline-offset:3px}
 
   .painel[hidden]{display:none}
+  /* linha de abertura de cada aba: diz o que aquela aba guarda */
+  .lede-aba{margin:-14px 0 34px;max-width:60ch;font-size:13.5px;color:var(--soft)}
+  .lede-aba b{color:var(--cream);font-weight:600}
   .col-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.24em;
     text-transform:uppercase;color:var(--muted);margin-bottom:20px}
 
@@ -273,9 +286,10 @@
   <p class="lede">As peças de projeto e as regras de trabalho, num lugar só.
     Cada linha abre sempre a versão mais recente.</p>
 
-  <div class="abas" role="tablist" aria-label="seções" data-sel="0">
+  <div class="abas" role="tablist" aria-label="seções" data-sel="0" style="--n:3">
     <span class="knob" aria-hidden="true"></span>
     <button class="aba" role="tab" id="t-arquivo" aria-controls="p-arquivo" aria-selected="true">arquivo</button>
+    <button class="aba" role="tab" id="t-deck" aria-controls="p-deck" aria-selected="false">deck</button>
     <button class="aba" role="tab" id="t-sistema" aria-controls="p-sistema" aria-selected="false">sistema</button>
   </div>
 
@@ -293,9 +307,18 @@
     </div>
   </section>
 
+  <section class="painel" id="p-deck" role="tabpanel" aria-labelledby="t-deck" hidden>
+    <p class="lede lede-aba">O sistema de apresentações: o motor, a marca, as peças de
+      montar e o registro. <b>Montar uma peça = motor + uma marca + um DECK.</b></p>
+    <div id="lista-deck"></div>
+    <p class="nota nota-priv"></p>
+  </section>
+
   <section class="painel" id="p-sistema" role="tabpanel" aria-labelledby="t-sistema" hidden>
+    <p class="lede lede-aba">As regras de trabalho que não são de apresentação:
+      site, arquivamento, publicação, contexto, proposta, Notion e Sarasá.</p>
     <div id="lista-docs"></div>
-    <p class="nota" id="nota-docs"></p>
+    <p class="nota nota-priv"></p>
   </section>
 </main>
 
@@ -430,36 +453,36 @@ const projetos = [
 
 const GH = "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/";
 const docs = [
-  { grupo:"prancha", nome:"prancha · motor",
-    desc:"O motor, agnóstico de marca: gabaritos, quadro fixo, chrome, mecânicas, validação e armadilhas. Abre sem token",
-    arq:"sistemas/PRANCHA-MOTOR.md" },
-  { grupo:"prancha", nome:"prancha · ponteiro e registro",
-    desc:"Onde cada camada foi parar, o histórico por projeto e as pendências abertas",
-    href: GH+"prancha/PRANCHA-SISTEMA.md" },
-  { grupo:"prancha", nome:"prancha · capa",
-    desc:"A capa padrão de toda apresentação, com o carrossel morph",
-    href: GH+"prancha/PRANCHA-CAPA.md", ver:"modulos/capa-morph.html" },
-  { grupo:"prancha", nome:"fundo morph pontilhado",
-    desc:"O shader da abertura: preset, transições, cursor e desempenho medido",
-    href: GH+"prancha/FUNDO-MORPH-PONTILHADO.md", ver:"modulos/fundo-morph-pontilhado.html" },
-  { grupo:"prancha", nome:"divisor · com imagem",
-    desc:"O divisor com o carrossel de peças atrás, em terracota. Véu 0.60",
-    href: GH+"prancha/PRANCHA-SISTEMA.md", ver:"modulos/divisor-morph.html" },
-  { grupo:"prancha", nome:"divisor · só trama",
-    desc:"Divisor sem assunto: nenhuma imagem, só o retículo trocando de grelha. Véu 0.55",
-    href: GH+"prancha/PRANCHA-SISTEMA.md", ver:"modulos/divisor-trama.html" },
-  { grupo:"prancha", nome:"módulos",
-    desc:"As peças de montar — capa, engine, laboratório. Sem revisão: o arquivo é o vigente",
-    arq:"modulos/LEIA-ME.md" },
-  { grupo:"prancha · rodadas", nome:"tokyo · grafia e mecânicas de slide",
-    desc:"A grafia TOKYO, o popover, o grifo animado, os gabaritos novos e o campo reservado cols",
-    href: GH+"prancha/rodadas/TOKYO-GRAFIA-E-MECANICAS.md" },
-  { grupo:"prancha · rodadas", nome:"tokyo · pastilha de chrome e três camadas",
-    desc:"A pastilha de navegação, a pendência do topo e a varredura de nove viewports",
-    href: GH+"prancha/rodadas/TOKYO-CHROME-E-CAMADAS.md" },
-  { grupo:"marca", nome:"marca · michel stein_",
-    desc:"A camada de marca: cor, tipografia, assinatura, abertura, contracapa e o preset do fundo. Abre sem token",
+  { aba:"deck", grupo:"o motor", nome:"deck · motor",
+    desc:"Gabaritos, quadro fixo, chrome, mecânicas, validação e armadilhas. Agnóstico de marca, abre sem token",
+    arq:"sistemas/DECK-MOTOR.md" },
+  { aba:"deck", grupo:"a marca", nome:"marca · michel stein_",
+    desc:"Cor, tipografia, assinatura, abertura, contracapa e o preset do fundo. Trocar de marca é trocar este arquivo",
     arq:"sistemas/MARCA-MICHEL-STEIN.md", ver:"michel-stein-marca/01-capa.html" },
+  { aba:"deck", grupo:"a marca", nome:"deck · capa",
+    desc:"A capa padrão de toda apresentação, com o carrossel morph",
+    href: GH+"deck/DECK-CAPA.md", ver:"modulos/capa-morph.html" },
+  { aba:"deck", grupo:"as peças de montar", nome:"fundo morph pontilhado",
+    desc:"O shader da abertura: preset, transições, cursor e desempenho medido",
+    href: GH+"deck/FUNDO-MORPH-PONTILHADO.md", ver:"modulos/fundo-morph-pontilhado.html" },
+  { aba:"deck", grupo:"as peças de montar", nome:"divisor · com imagem",
+    desc:"O divisor com o carrossel de peças atrás, em terracota. Véu 0.60",
+    arq:"sistemas/DECK-MOTOR.md", ver:"modulos/divisor-morph.html" },
+  { aba:"deck", grupo:"as peças de montar", nome:"divisor · só trama",
+    desc:"Divisor sem assunto: nenhuma imagem, só o retículo trocando de grelha. Véu 0.55. É o padrão",
+    arq:"sistemas/DECK-MOTOR.md", ver:"modulos/divisor-trama.html" },
+  { aba:"deck", grupo:"as peças de montar", nome:"módulos",
+    desc:"Capa, engine, laboratório e o chip de voltar. Sem revisão: o arquivo é o vigente",
+    arq:"modulos/LEIA-ME.md" },
+  { aba:"deck", grupo:"rodadas", nome:"tokyo · grafia e mecânicas de slide",
+    desc:"A grafia TOKYO, o popover, o grifo animado, os gabaritos novos e o campo reservado cols",
+    href: GH+"deck/rodadas/TOKYO-GRAFIA-E-MECANICAS.md" },
+  { aba:"deck", grupo:"rodadas", nome:"tokyo · pastilha de chrome e três camadas",
+    desc:"A pastilha de navegação, a pendência do topo e a varredura de nove viewports",
+    href: GH+"deck/rodadas/TOKYO-CHROME-E-CAMADAS.md" },
+  { aba:"deck", grupo:"registro", nome:"deck · registro",
+    desc:"Onde cada camada foi parar, o histórico por projeto e as pendências abertas",
+    href: GH+"deck/DECK-REGISTRO.md" },
   { grupo:"site", nome:"site de portfólio",
     desc:"Estado técnico, vitrine, otimização de imagem e área de cliente",
     href: GH+"site/SITE-PORTFOLIO-ESTADO.md" },
@@ -505,26 +528,39 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
   + 'fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 /* ── abas ────────────────────────────────────────────────── */
+/* Aba nova: acrescentar UM objeto a ABAS, na ordem em que aparece no HTML,
+   e o `--n` do .abas tem de bater com o total. `cls` é a classe de tema no
+   body; a primeira aba não tem classe porque o :root já é o tema dela. */
+const ABAS = [
+  { id:'t-arquivo', hash:'#arquivo', cls:null,      cor:'#6B6A4B', fundo:{paper:'#6B6A4B', acc:'#B85C38'} },
+  { id:'t-deck',    hash:'#deck',    cls:'deck',    cor:'#211D1A', fundo:{paper:'#211D1A', acc:'#B85C38'} },
+  { id:'t-sistema', hash:'#sistema', cls:'sistema', cor:'#B85C38', fundo:{paper:'#B85C38', acc:'#211D1A'} }
+];
+
 (function(){
-  const abas = [document.getElementById('t-arquivo'), document.getElementById('t-sistema')];
   const caixa = document.querySelector('.abas');
+  const classes = ABAS.map(function(a){ return a.cls; }).filter(Boolean);
   function mostra(id){
-    abas.forEach(function(a){
-      const on = a.id === id;
-      a.setAttribute('aria-selected', on ? 'true' : 'false');
-      document.getElementById(a.getAttribute('aria-controls')).hidden = !on;
+    let sel = ABAS.findIndex(function(a){ return a.id === id; });
+    if(sel < 0) sel = 0;
+    const alvo = ABAS[sel];
+    ABAS.forEach(function(a){
+      const el = document.getElementById(a.id);
+      const on = a.id === alvo.id;
+      el.setAttribute('aria-selected', on ? 'true' : 'false');
+      document.getElementById(el.getAttribute('aria-controls')).hidden = !on;
     });
-    const sis = id === 't-sistema';
-    caixa.dataset.sel = sis ? '1' : '0';
-    document.body.classList.toggle('sistema', sis);
-    document.querySelector('meta[name="theme-color"]')
-      .setAttribute('content', sis ? '#B85C38' : '#6B6A4B');
-    if(window.MSF) window.MSF.cor(sis ? {paper:'#B85C38', acc:'#211D1A'}
-                                      : {paper:'#6B6A4B', acc:'#B85C38'});
-    history.replaceState(null, '', sis ? '#sistema' : '#arquivo');
+    caixa.dataset.sel = String(sel);
+    classes.forEach(function(c){ document.body.classList.toggle(c, c === alvo.cls); });
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', alvo.cor);
+    if(window.MSF) window.MSF.cor(alvo.fundo);
+    history.replaceState(null, '', alvo.hash);
   }
-  abas.forEach(function(a){ a.addEventListener('click', function(){ mostra(a.id); }); });
-  if(location.hash === '#sistema') mostra('t-sistema');
+  ABAS.forEach(function(a){
+    document.getElementById(a.id).addEventListener('click', function(){ mostra(a.id); });
+  });
+  const daUrl = ABAS.find(function(a){ return a.hash === location.hash; });
+  if(daUrl) mostra(daUrl.id);
 })();
 
 /* ── arquivo ─────────────────────────────────────────────── */
@@ -660,13 +696,16 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
 
 /* ── sistema ─────────────────────────────────────────────── */
 (function(){
+  /* `aba:"deck"` manda o documento para a aba do deck; sem o campo, ele fica
+     na aba sistema. É o único campo que decide onde a linha aparece. */
+  function pinta(alvo, lista){
   const ordem = [], mapa = {};
-  docs.forEach(function(d){
+  lista.forEach(function(d){
     const g = d.grupo || 'outros';
     if(!mapa[g]){ mapa[g] = []; ordem.push(g); }
     mapa[g].push(d);
   });
-  document.getElementById('lista-docs').innerHTML = ordem.map(function(g){
+  document.getElementById(alvo).innerHTML = ordem.map(function(g){
     return '<p class="grupo">' + g + '</p><ul class="docs">' + mapa[g].map(function(d){
       const acoes = (d.ver ? '<a class="ver" href="' + d.ver + '" target="_blank" rel="noopener">ver artefato</a>' : '')
         + (d.arq
@@ -681,14 +720,21 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
         + '</div></li>';
     }).join('') + '</ul>';
   }).join('');
+  }
 
-  document.getElementById('nota-docs').innerHTML =
+  pinta('lista-deck', docs.filter(function(d){ return d.aba === 'deck'; }));
+  pinta('lista-docs', docs.filter(function(d){ return d.aba !== 'deck'; }));
+
+  const nota =
     '<b>privado</b> — traz nome de cliente, endereço de obra, honorário ou caminho interno. '
     + 'Mora no repositório <b>michel-stein-sistemas</b> e só abre no GitHub, com a conta logada. '
     + '<br><b>público</b> — método sem dado de cliente. Abre por link direto, sem senha e sem '
     + 'terminal, o que faz com que qualquer conversa consiga ler. É para onde vai tudo o que puder ir.'
     + '<br><br>Desde 22/08/2026 a versão viva de cada regra é a do GitHub — as cópias do Drive '
     + 'foram para <b>00-OBSOLETOS</b>.';
+  Array.prototype.forEach.call(document.querySelectorAll('.nota-priv'), function(el){
+    el.innerHTML = nota;
+  });
 })();
 
 /* ── leitor de markdown ──────────────────────────────────── */

@@ -1,4 +1,4 @@
-# módulos da prancha
+# módulos do deck
 
 As peças de montar. Cada módulo é um arquivo que roda sozinho no navegador e
 pode ser soldado num deck sem reescrever nada.
@@ -8,7 +8,7 @@ do Git. Nunca criar `-R2` ao lado.
 
 | módulo | o que faz | como entra num deck |
 |---|---|---|
-| `capa-morph.html` | a capa padrão: marca, papel, slogan e site sobre o carrossel morph, em oliva. **Nove peças, engine vigente, 561 KB** | receita de extração em `PRANCHA-CAPA.md` |
+| `capa-morph.html` | a capa padrão: marca, papel, slogan e site sobre o carrossel morph, em oliva. **Nove peças, engine vigente, 561 KB** | receita de extração em `DECK-CAPA.md` |
 | `divisor-morph.html` | divisor **com assunto**: o carrossel de peças atrás, em terracota. Véu 0.60 | copiar o CSS do véu e a chamada; marcar o divisor com `fundo:true` |
 | `divisor-trama.html` | divisor **sem assunto**: nenhuma imagem, só o retículo trocando de grelha. Véu 0.55 | mesma solda; os campos vão junto, são ~40 linhas de JS |
 | `fundo-morph-pontilhado.html` | o laboratório do fundo, com todos os controles. **Não é a capa** — serve para calibrar e copiar o preset | não entra; é banco de ensaio |
@@ -124,7 +124,7 @@ referencia `fundo/*.webp` com `?v=`.
 
 ## Ao criar um módulo novo
 
-Um módulo entra aqui quando resolve **um** problema de prancha de forma
+Um módulo entra aqui quando resolve **um** problema de deck de forma
 reaproveitável. Três exigências:
 
 1. **Roda sozinho.** Abrir o arquivo no navegador mostra o módulo funcionando,
@@ -132,5 +132,5 @@ reaproveitável. Três exigências:
 2. **Tem receita de solda.** O que copiar, onde encaixar, o que ele espera do deck.
 3. **Entra nesta tabela**, com uma linha só.
 
-Módulo que precisa de documentação longa ganha um `.md` no `prancha/` do
+Módulo que precisa de documentação longa ganha um `.md` no `deck/` do
 repositório de sistemas.

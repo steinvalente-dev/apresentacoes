@@ -1,8 +1,8 @@
-# prancha — o motor
+# deck — o motor
 
 Documento de método, **sem dado de cliente**, no repositório público de
 apresentações. Abre por URL raw, sem token, em qualquer conversa:
-`https://raw.githubusercontent.com/steinvalente-dev/apresentacoes/main/sistemas/PRANCHA-MOTOR.md`
+`https://raw.githubusercontent.com/steinvalente-dev/apresentacoes/main/sistemas/DECK-MOTOR.md`
 
 Criado 04/08/2026 · separado do documento único em **29/08/2026**.
 
@@ -10,7 +10,7 @@ Criado 04/08/2026 · separado do documento único em **29/08/2026**.
 
 ## As três camadas — leia isto primeiro
 
-O sistema de apresentações tem três camadas, e confundi-las é o que impedia
+O sistema de apresentações — o **deck** — tem três camadas, e confundi-las é o que impedia
 trocar de marca:
 
 | camada | o que é | onde mora |
@@ -25,7 +25,25 @@ próprio de marca alguma: onde precisaria, cita o **papel** (papel, tinta,
 primária, acento) e a marca resolve.
 
 Registros de rodada com nome de cliente ficam no repositório privado, em
-`michel-stein-sistemas/prancha/rodadas/`.
+`michel-stein-sistemas/deck/rodadas/`.
+
+### Uma palavra, três trabalhos — resolvido em 29/08/2026
+
+O sistema chamava-se **prancha**, e a palavra fazia três trabalhos ao mesmo
+tempo: o sistema, um dos quinze gabaritos e a unidade de contagem do acervo.
+Confundia, e "prancha" já é palavra carregada em arquitetura.
+
+**O sistema passou a se chamar `deck`** — nome que já era o do array de conteúdo
+de toda peça. Os outros dois trabalhos ficaram como estavam, porque ali a
+palavra está certa:
+
+| onde aparece | o que significa | mudou? |
+|---|---|---|
+| o sistema, os documentos, a pasta | **deck** | sim |
+| `g:'prancha'` dentro de um `DECK` | o gabarito de grade de imagens | não |
+| `pranchas: 29` no acervo | quantas telas a peça tem | não |
+
+Por isso **nenhuma peça publicada precisou ser editada.**
 
 ---
 
@@ -73,7 +91,7 @@ sem tarja e sem proporção fixa.
   `inset:0` cobre o slide **inteiro**, inclusive o padding. É o que faz `cheia`,
   `mapa` e `modelo` sangrarem.
 
-**Por que a v2 não bastou.** A prancha é uma **prancha**: tem proporção, como
+**Por que a v2 não bastou.** Um deck é uma **prancha**: tem proporção, como
 uma folha. Mas a folha de estilo tratava-a como página web — toda a escala em
 `clamp(min, N vw, max)`. Num celular `1vw` vale 3,9 px, então **todo o texto
 caía no piso do clamp** enquanto o volume de conteúdo continuava o mesmo, e os
@@ -117,7 +135,7 @@ armadilhas abaixo — não é reescrita.
    LAYOUT.** O popover posicionava-se pela diferença entre os dois e saía do
    lugar em toda tela que não fosse 1600 × 900. Corrigido dividindo cada delta
    por `k`, lido de `--k` no momento de abrir.
-2. **O `body` deixou de ser o fundo da prancha** — ele agora é a moldura. Se as
+2. **O `body` deixou de ser o fundo do deck** — ele agora é a moldura. Se as
    classes de tema continuassem pintando o body, **as tarjas do letterbox
    mudariam de cor a cada slide**. Quem pinta o tema é o `#quadro`; o body pinta
    `--moldura`.
@@ -363,7 +381,7 @@ entregam o contraste sozinhos.
 
 **Vale para toda marca.** A pastilha é sempre papel-sobre-tinta, independente de
 o slide ser claro ou escuro — é justamente o ponto: o chrome de navegação deixa
-de depender do tema da prancha. Cada marca entra com os seus `--papel` e
+de depender do tema do deck. Cada marca entra com os seus `--papel` e
 `--tinta`; a estrutura não muda.
 
 ⚠ **Pendência de desenho, não de implementação.** As bolinhas de seção, o rótulo
@@ -628,7 +646,7 @@ O caminho, quando for a hora: renomear as variáveis para os papéis
 `MARCA-<nome>.md` passa a ser literalmente o bloco `:root` que se cola. Renomear
 em peça publicada não vale a pena — vale a partir do esqueleto.
 
-⚠ **O `prancha-esqueleto.html` ainda não existe em repositório nenhum.** Está
+⚠ **O `deck-esqueleto.html` ainda não existe em repositório nenhum.** Está
 listado como pendência desde 19/08/2026. Sem ele, "partir do esqueleto" significa
 na prática partir do HTML da revisão anterior de outra peça — que traz junto a
 marca e o conteúdo dela.
@@ -658,7 +676,7 @@ marca e o conteúdo dela.
    máquina dele.
 10. **A linha do `ms-voltar.js` está antes do `</body>`?** Conferir no arquivo e,
     depois de publicar, no ar: `#msVoltar` existe, o `href` aponta para o índice
-    do acervo, e `Enter` com foco no chip não avança prancha.
+    do acervo, e `Enter` com foco no chip não avança o deck.
 
 **Cuidado ao testar:** forçar `cur=-1` antes de `go(n)` deixa o slide anterior
 com a classe `ativo` e a captura sai errada. Navegar sempre por `go()`, `#hash`
@@ -737,7 +755,7 @@ têm proporções diferentes e o corte é aceitável.
 | assunto | onde |
 |---|---|
 | cor, tipografia, logotipo, capa, acervo do fundo | `MARCA-<nome>.md`, ao lado |
-| o shader do fundo, preset a preset | `michel-stein-sistemas/prancha/FUNDO-MORPH-PONTILHADO.md` |
-| a capa padrão da michel stein_, receita de extração | `michel-stein-sistemas/prancha/PRANCHA-CAPA.md` |
+| o shader do fundo, preset a preset | `michel-stein-sistemas/deck/FUNDO-MORPH-PONTILHADO.md` |
+| a capa padrão da michel stein_, receita de extração | `michel-stein-sistemas/deck/DECK-CAPA.md` |
 | como publicar, registrar e validar no ar | `PUBLICAR-APRESENTACOES.md` e `GITHUB-COMO-TRABALHAR.md`, ao lado |
-| rodadas com nome de cliente, histórico por projeto | `michel-stein-sistemas/prancha/` |
+| rodadas com nome de cliente, histórico por projeto | `michel-stein-sistemas/deck/` |
