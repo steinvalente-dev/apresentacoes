@@ -13,6 +13,7 @@ acontece toda vez.
 |---|---|
 | **montar uma peça** | este arquivo, e mais nada |
 | um gabarito com máquina própria | `gabaritos/<nome>.md` — só o que entrar na peça |
+| um mapa de localização | `gabaritos/mapa-localizacao.md` · módulo em `modulos/mapa-localizacao.html` |
 | entender por que algo é assim, ou consertar | `DECK-MOTOR.md` |
 | a identidade | `../marca/MARCA-<nome>.md` |
 
@@ -77,7 +78,8 @@ Ver a nota sobre isso no fim.
 |---|---|---|
 | `duo` | duas imagens lado a lado | `figs` **+ `leg` obrigatório** · `ar` |
 | `fotos` | linha do tempo ilustrada | `itens` |
-| `mapa` | mapa de lotes ou de cluster | `which` `sang` `leg` — ver `gabaritos/mapa.md` |
+| `mapa` · localização | onde o terreno está: satélite em sangria, endereço escrito | `src` `kick` `h2` `lead` `cap` `inv` — ver `gabaritos/mapa-localizacao.md` |
+| `mapa` · lotes | o cadastro desenhado, com hover por lote | `which` `sang` `leg` — ver `gabaritos/mapa-lotes.md` |
 
 ---
 
@@ -110,6 +112,11 @@ por isso usa `casas`.
 
 **`duo` sem `leg` escreve "undefined" na tela.** E sem `ar` a coluna estica e o
 `object-fit:cover` come o desenho.
+
+**`mapa` é dois gabaritos com o mesmo nome.** O de localização é um embed de
+satélite, sem dado e dependente de internet; o de lotes é SVG gerado de um objeto
+`MAP`, roda offline e exige levantamento. Herdaram o nome em decks diferentes.
+Ao pedir "um mapa", dizer qual.
 
 **Slot de imagem vazio é recurso, não falha.** `src:''` renderiza retângulo
 hachurado com o nome do slot. Dá para entregar a estrutura antes de a imagem

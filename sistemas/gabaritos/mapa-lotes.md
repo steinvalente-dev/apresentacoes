@@ -1,7 +1,18 @@
-# gabarito `mapa`
+# gabarito `mapa` · lotes — o cadastro desenhado
 
-Módulo do deck. **Ler só quando um mapa entrar na peça.** O resto está em
-`../DECK-MONTAR.md`.
+Módulo do deck. **Ler só quando um mapa de lotes entrar na peça.** O resto está
+em `../DECK-MONTAR.md`.
+
+> **Não confundir com `mapa-localizacao.md`, ao lado.** São dois mapas
+> diferentes que herdaram o mesmo nome de gabarito em decks diferentes:
+>
+> | quer mostrar | use |
+> |---|---|
+> | **onde o terreno fica** — satélite, endereço, contexto | `mapa-localizacao.md` |
+> | **quais lotes são quais** — cadastro desenhado, hover por lote | este arquivo |
+>
+> O de localização é um embed, depende de internet e não tem dado nenhum. Este é
+> SVG gerado de um objeto `MAP`, roda offline e exige levantamento.
 
 Dois desenhos no mesmo gabarito: `which:'rua'` (os lotes de uma via, sobre o
 cadastro) e `which:'cluster'` (pontos espalhados num perímetro).

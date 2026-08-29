@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>módulo · mapa de localização</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   MÓDULO · mapa de localização
+
+   O slide que abre a seção de localização: satélite em sangria total, com o
+   endereço por escrito. Padrão adotado da casa ITTB, slide 01, de 04/08/2026.
+
+   Roda sozinho — mas o mapa só aparece com internet. Sem rede, o slide
+   degrada para o fundo chapado com o rótulo legível, que é o comportamento
+   correto e o motivo de o endereço ir escrito no `lead`.
+
+   Receita de solda: ../sistemas/gabaritos/mapa-localizacao.md
+   ═══════════════════════════════════════════════════════════════════════ */
+  :root{
+    /* cores da marca. Num deck vêm do bloco da marca; aqui ficam locais. */
+    --creme:#EDE6DA; --tinta:#211D1A; --terra:#B85C38;
+    --mono:'DM Mono',ui-monospace,monospace;
+    --sans:'Inter',system-ui,-apple-system,sans-serif;
+    --gut-in:clamp(24px,5vw,96px);
+    --bot:clamp(46px,7vh,74px);
+    --fs-h2:clamp(24px,3.4vw,48px);
+    --fs-lead:clamp(13px,1.15vw,17px);
+    --fs-cap:clamp(9.5px,.78vw,12.5px);
+    --fs-item:clamp(14px,1.35vw,21px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--tinta);color:var(--creme);font-family:var(--sans);overflow:hidden}
+
+/* ── O SLIDE. É isto que se copia. ──────────────────────────────────── */
+  .g-mapa{position:absolute;inset:0;padding:0;overflow:hidden;background:#2B2A22}
+  .g-mapa .visor{position:absolute;inset:0}
+  .g-mapa iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
+    pointer-events:none;filter:saturate(.82) contrast(1.04)}
+  .g-mapa.girando iframe{pointer-events:auto}
+  /* escurece topo e pé para o chrome claro continuar legível sobre o satélite.
+     Denso nas pontas, transparente no meio — não é degradê suave. */
+  .g-mapa .scrim{position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,
+      #211D1Aeb 0, #211D1Ae6 7%, #211D1A00 30%,
+      #211D1A00 48%, #211D1Ae6 88%, #211D1Af7 100%)}
+  .g-mapa .veu{position:absolute;inset:0;display:grid;place-content:center;gap:.6em;
+    text-align:center;background:#211D1A5c;transition:opacity .3s ease;cursor:pointer}
+  .g-mapa.girando .veu{opacity:0;pointer-events:none}
+  .g-mapa .veu b{font-family:var(--mono);font-weight:500;font-style:italic;
+    font-size:var(--fs-item);color:var(--creme)}
+  .g-mapa .veu s{text-decoration:none;font-family:var(--mono);font-size:var(--fs-cap);
+    letter-spacing:.14em;text-transform:uppercase;color:#EDE6DAa6}
+  .g-mapa .sair{position:absolute;bottom:clamp(9px,1.2vh,18px);left:50%;
+    transform:translateX(-50%);display:none;align-items:center;gap:.5em;z-index:3;
+    cursor:pointer;font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.12em;
+    text-transform:uppercase;color:var(--creme);background:#211D1Ae6;
+    border:1px solid #EDE6DA3d;border-radius:999px;padding:.5em 1.1em}
+  .g-mapa.girando .sair{display:flex}
+  /* rótulo: caixa translúcida própria, garante a leitura sobre qualquer
+     trecho do satélite sem apagar a imagem embaixo */
+  .g-mapa .rotulo{position:absolute;left:var(--gut-in);
+    bottom:calc(var(--bot) + clamp(4px,1.4vh,22px));z-index:2;pointer-events:none;
+    max-width:min(46ch,60vw);
+    padding:clamp(14px,1.9vh,30px) clamp(18px,1.9vw,38px);
+    background:#211D1A73;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    border:1px solid #EDE6DA1f;border-radius:3px}
+  .g-mapa .rotulo .kick{color:#F0B79Bdd;font-family:var(--mono);
+    font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase}
+  .g-mapa .rotulo h2{color:var(--creme);font-size:var(--fs-h2);line-height:1;
+    letter-spacing:-.022em;margin-top:.22em;font-family:var(--mono);
+    font-weight:500;font-style:italic;text-transform:lowercase}
+  .g-mapa .rotulo .lead{color:#EDE6DAd9;font-size:var(--fs-lead);margin-top:.5em;line-height:1.5}
+  .g-mapa .rotulo .cap{display:block;font-family:var(--mono);font-size:var(--fs-cap);
+    letter-spacing:.1em;text-transform:uppercase;color:#EDE6DA8f;margin-top:.85em}
+
+/* ── só desta demonstração ──────────────────────────────────────────── */
+  .aviso{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:5;
+    font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:#EDE6DA8f;background:#211D1Ae0;border:1px solid #EDE6DA26;
+    border-radius:999px;padding:7px 15px;text-align:center;max-width:92vw}
+</style>
+</head>
+<body>
+
+<div class="aviso">módulo · mapa de localização — sem internet o mapa não carrega, e o rótulo continua legível</div>
+
+<div class="g-mapa" id="slide">
+  <div class="visor">
+    <iframe data-src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d117023!2d-46.63!3d-23.55!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSão+Paulo!5e1!3m2!1spt-BR!2sbr!4v1700000000000"
+            title="mapa de localização" loading="lazy" allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <div class="scrim"></div>
+    <div class="veu">
+      <b>clique para navegar no mapa</b>
+      <s>precisa de internet · o teclado passa a ser do mapa</s>
+    </div>
+    <button class="sair" type="button">devolver o teclado ao slide</button>
+  </div>
+  <div class="rotulo">
+    <span class="kick">cidade, uf · distância da capital</span>
+    <h2>onde o terreno está</h2>
+    <div class="lead">rua, número · lote, quadra · condomínio ou bairro.</div>
+    <span class="cap">Clique no mapa para navegar · o botão devolve o teclado ao slide · precisa de internet.</span>
+  </div>
+</div>
+
+<script>
+/* ── A MECÂNICA. É isto que se copia junto. ────────────────────────────
+   O iframe rouba as setas e a navegação do deck para. Por isso a ativação
+   é por clique num véu, e o botão de saída fica FORA do iframe.
+
+   Num deck, estas três coisas já existem na engine — não duplicar:
+   · desativaModelo() varre '.g-modelo,.g-mapa'
+   · o clique do palco ignora '.g-mapa .visor'
+   · o go() atribui o src a partir de data-src ao chegar no slide
+   ─────────────────────────────────────────────────────────────────── */
+(function(){
+  var slide = document.getElementById('slide');
+
+  /* o src só entra ao chegar no slide: atribuir na carga faz o navegador
+     baixar o mapa antes da primeira prancha */
+  function acorda(sl){
+    var f = sl.querySelector('iframe[data-src]');
+    if(f){ f.src = f.getAttribute('data-src'); f.removeAttribute('data-src'); }
+  }
+  function desativa(){
+    Array.prototype.forEach.call(document.querySelectorAll('.g-modelo,.g-mapa'),
+      function(sl){ sl.classList.remove('girando'); });
+  }
+  document.addEventListener('click', function(e){
+    var sl = e.target.closest('.g-modelo,.g-mapa');
+    if(!sl) return;
+    if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando'); }
+    else if(e.target.closest('.sair')){ e.stopPropagation(); desativa(); document.body.focus(); }
+  });
+
+  acorda(slide);   /* num deck, isto acontece dentro do go() */
+})();
+</script>
+</body>
+</html>
