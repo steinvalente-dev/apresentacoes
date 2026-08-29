@@ -294,9 +294,14 @@ Aberto, e é decisão do Michel e dos sócios:
    frente, o provável é a escala dele subir para o esqueleto — mas isso é rodada
    própria, não se resolve de passagem.
 7. **Marchetaria** — reproduzir o campo do documento e religar, ou aposentar.
-8. **Validação com Eduardo Eid e Adriano Carvalho** — a paleta é escolha do
+8. **Amostra do campo na identidade** — a seção 06 de `amaz-identidade/apresentacao.html`
+   tem o diagrama do mecanismo e **nenhuma imagem da textura**. As quatro amostras
+   existem, embutidas em `amaz-marchetaria/apresentacao.html`: campo escolhido,
+   vocabulário de peças, cortes comparados e recorte em escala real. Falta a faixa de
+   sangria total com o campo em Mata funda e em Areia, que é o que o Michel pediu.
+9. **Validação com Eduardo Eid e Adriano Carvalho** — a paleta é escolha do
    Michel, ainda não do grupo.
-9. **INPI e domínio** — o `www.amaz.com.br` está escrito na peça e não está
+10. **INPI e domínio** — o `www.amaz.com.br` está escrito na peça e não está
    confirmado como registrado.
 
 ---
