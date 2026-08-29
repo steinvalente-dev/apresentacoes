@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Michel Stein — Aplicações · Direção D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --desk:#CFCBC2;--creme:#EDE6DA;--tinta:#211D1A;--oliva:#6B6A4B;--terra:#B85C38;
+    --hair:#211D1A22;--mono:'DM Mono', monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--desk);color:var(--tinta);font-family:'Inter',sans-serif;line-height:1.5;
+    padding:clamp(12px,3vw,40px);background-image:radial-gradient(var(--hair) .5px,transparent .5px);background-size:22px 22px}
+  .sheet{max-width:1100px;margin:0 auto;background:var(--creme);border:1px solid var(--tinta);
+    box-shadow:0 24px 60px -28px #00000055;position:relative}
+  .sheet::after{content:"";position:absolute;inset:7px;border:.5px solid var(--hair);pointer-events:none}
+
+  .mark{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;line-height:1}
+  .tr{color:var(--terra)}
+
+  .ruler{display:flex;align-items:flex-end;height:26px;border-bottom:1px solid var(--tinta);padding:0 16px}
+  .tick{flex:1;border-left:.5px solid var(--hair);height:6px}
+  .tick:nth-child(5n+1){height:12px;border-left:1px solid var(--tinta)}
+
+  .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
+  .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
+  .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+  .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,56px);line-height:.98;letter-spacing:-.06em;text-transform:lowercase}
+  .tb-main h1 u{text-decoration:none;color:var(--terra)}
+  .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+  .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
+  .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+  .cell:last-child{border-bottom:0}
+  .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
+  .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
+
+  section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,48px) clamp(16px,4vw,42px)}
+  .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:28px;display:flex;gap:12px;align-items:center}
+  .sec-label .no{font-weight:700;color:var(--tinta)}
+  .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair)}
+
+  /* ---- Cartão ---- */
+  .cards{display:flex;gap:clamp(16px,3vw,28px);flex-wrap:wrap}
+  .card{flex:1;min-width:280px;aspect-ratio:1.61/1;border:.5px solid var(--hair);
+    box-shadow:0 10px 30px -18px #00000066;position:relative;overflow:hidden;display:flex}
+  .card-cap{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#211D1A88;margin-top:10px}
+
+  /* frente */
+  .c-front{background:var(--creme);flex-direction:column;justify-content:space-between;padding:clamp(20px,3.4vw,30px)}
+  .c-front .top{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--oliva)}
+  .c-front .logo{font-size:clamp(28px,5vw,40px);letter-spacing:-.06em}
+  .c-front .tag{font-family:var(--mono);font-style:italic;font-weight:400;font-size:clamp(11px,1.8vw,13px);color:var(--oliva);margin-top:8px}
+
+  /* verso */
+  .c-back{background:var(--oliva);color:var(--creme);flex-direction:column;justify-content:space-between;padding:clamp(20px,3.4vw,30px)}
+  .c-back .bigmono{flex:1;display:flex;align-items:center}
+  .c-back .bigmono .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:clamp(46px,9vw,72px);letter-spacing:-.04em}
+  .c-back .contacts{font-family:var(--mono);font-size:clamp(9.5px,1.6vw,11px);line-height:1.8;letter-spacing:.01em}
+  .c-back .contacts .ln{display:block;opacity:.95}
+
+  /* ---- Assinatura de e-mail ---- */
+  .mailwrap{background:#fff;border:.5px solid var(--hair);box-shadow:0 10px 30px -20px #00000055;
+    padding:clamp(18px,3vw,26px);max-width:520px}
+  .mailclient{font-family:'Inter',sans-serif;font-size:12px;color:#211D1A99;margin-bottom:18px;line-height:1.6}
+  .mailclient b{color:var(--tinta);font-weight:600}
+  .sig{display:flex;align-items:center;gap:18px}
+  .sig .avatar{width:62px;height:62px;border-radius:14px;background:var(--oliva);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .sig .avatar .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;
+    font-size:28px;color:var(--creme);letter-spacing:-.04em}
+  .sig .divider{width:2px;align-self:stretch;background:var(--terra)}
+  .sig .info{font-family:'Inter',sans-serif}
+  .sig .nm{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;
+    font-size:18px;letter-spacing:-.04em;color:var(--tinta)}
+  .sig .rl{font-size:11px;letter-spacing:.04em;color:var(--oliva);margin:3px 0 8px;font-weight:600}
+  .sig .ct{font-size:11.5px;color:#211D1A99;line-height:1.7}
+  .sig .ct a{color:#211D1A99;text-decoration:none}
+  .sig .ct .sep{color:var(--terra);margin:0 6px}
+
+  /* ---- Papelaria ---- */
+  .stat-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(16px,3vw,26px);align-items:stretch}
+  .letterhead{border:.5px solid var(--hair);background:#fff;padding:clamp(20px,3vw,28px);display:flex;flex-direction:column}
+  .lh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+    padding-bottom:16px;border-bottom:1px solid var(--tinta)}
+  .lh-top .logo{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:22px;letter-spacing:-.06em}
+  .lh-top .meta{font-family:var(--mono);font-size:9.5px;line-height:1.7;color:#211D1A99;text-align:right}
+  .lh-body{flex:1;padding-top:16px}
+  .lh-body .line{height:7px;background:var(--hair);border-radius:2px;margin-bottom:9px}
+  .lh-body .line.s{width:55%}
+  .lh-foot{margin-top:14px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#211D1A77;display:flex;justify-content:space-between}
+  .lh-foot .t{color:var(--terra)}
+
+  .avatars{display:flex;flex-direction:column;gap:14px}
+  .av-row{display:flex;gap:14px;align-items:center}
+  .av{display:flex;flex-direction:column;align-items:center;gap:8px}
+  .circle{width:64px;height:64px;border-radius:50%;background:var(--tinta);display:flex;align-items:center;justify-content:center}
+  .circle .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:26px;color:var(--creme);letter-spacing:-.04em}
+  .squircle{width:64px;height:64px;border-radius:16px;background:var(--oliva);display:flex;align-items:center;justify-content:center}
+  .squircle .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:30px;color:var(--creme)}
+  .favi{width:36px;height:36px;border-radius:8px;background:var(--tinta);display:flex;align-items:center;justify-content:center}
+  .favi .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:18px;color:var(--creme)}
+  .av .cap{font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A88}
+
+  .note{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:#211D1A99;margin-top:18px}
+  .note b{font-weight:600;color:var(--tinta)}
+
+  .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+  .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
+  .footer a:hover{color:var(--terra)}
+
+  @media (max-width:720px){
+    .titleblock{grid-template-columns:1fr}
+    .tb-meta{border-left:0;border-top:1px solid var(--tinta);grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+    .cell:nth-child(odd){border-right:.5px solid var(--hair)}
+    .stat-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="ruler" aria-hidden="true">
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+  </div>
+
+  <header class="titleblock">
+    <div class="tb-main">
+      <div class="eyebrow">Direção D · Mono Editorial</div>
+      <h1>aplicações<u>_</u></h1>
+      <p class="tb-sub">A identidade no mundo real: cartão de visita, assinatura de e-mail e papelaria. Contatos são exemplos — substituir pelos reais.</p>
+    </div>
+    <div class="tb-meta">
+      <div class="cell"><span class="k">Projeto</span><span class="v">Identidade Pessoal</span></div>
+      <div class="cell"><span class="k">Cliente</span><span class="v">Michel Stein</span></div>
+      <div class="cell"><span class="k">Itens</span><span class="v">Cartão · E-mail · Papelaria</span></div>
+      <div class="cell"><span class="k">Folha</span><span class="v">05 / 05 — Aplicações</span></div>
+    </div>
+  </header>
+
+  <!-- 01 CARTÃO -->
+  <section>
+    <div class="sec-label"><span class="no">01</span> Cartão de Visita</div>
+    <div class="cards">
+      <div style="flex:1;min-width:280px">
+        <div class="card c-front">
+          <div class="top">arquiteto · ilustrador</div>
+          <div>
+            <div class="logo mark">michel stein<span class="tr">_</span></div>
+            <div class="tag">a mão por trás do traço</div>
+          </div>
+        </div>
+        <div class="card-cap">Frente · creme</div>
+      </div>
+      <div style="flex:1;min-width:280px">
+        <div class="card c-back">
+          <div class="bigmono"><span class="g">ms<span class="tr">_</span></span></div>
+          <div class="contacts">
+            <span class="ln">michelstein.com.br</span>
+            <span class="ln">michel@michelstein.com.br</span>
+            <span class="ln">+55 11 99999&#8209;0000 · são paulo</span>
+          </div>
+        </div>
+        <div class="card-cap">Verso · oliva</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 ASSINATURA DE E-MAIL -->
+  <section>
+    <div class="sec-label"><span class="no">02</span> Assinatura de E-mail</div>
+    <div class="mailwrap">
+      <div class="mailclient">Atenciosamente,<br><b>Michel</b></div>
+      <div class="sig">
+        <div class="avatar"><span class="g">ms<span class="tr">_</span></span></div>
+        <div class="divider"></div>
+        <div class="info">
+          <div class="nm">michel stein<span class="tr">_</span></div>
+          <div class="rl">Arquiteto · Ilustrador</div>
+          <div class="ct">
+            michel@michelstein.com.br<span class="sep">/</span>michelstein.com.br<br>
+            +55 11 99999-0000<span class="sep">/</span>São Paulo, BR
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note"><b>Dica de implementação:</b> em clientes de e-mail, montar como tabela HTML simples; usar a fonte do sistema (a mono não carrega em todos), mantendo o traço terracota (#B85C38) como único toque de cor e a estrutura avatar + filete + dados.</p>
+    <p class="note">⚠ <b>O telefone ainda é placeholder</b> (99999-0000). Substituir pelo real antes de mandar imprimir ou de usar como assinatura.</p>
+  </section>
+
+  <!-- 03 PAPELARIA -->
+  <section>
+    <div class="sec-label"><span class="no">03</span> Papelaria &amp; Ícones</div>
+    <div class="stat-grid">
+      <div class="letterhead">
+        <div class="lh-top">
+          <span class="logo">michel stein<span class="tr">_</span></span>
+          <span class="meta">michelstein.com.br<br>são paulo · br</span>
+        </div>
+        <div class="lh-body">
+          <div class="line"></div><div class="line"></div><div class="line s"></div>
+        </div>
+        <div class="lh-foot"><span>arquiteto · ilustrador</span><span class="t">_</span></div>
+      </div>
+
+      <div class="avatars">
+        <div class="av-row">
+          <div class="av"><div class="circle"><span class="g">ms<span class="tr">_</span></span></div><span class="cap">Avatar social</span></div>
+          <div class="av"><div class="squircle"><span class="g">m<span class="tr">_</span></span></div><span class="cap">Ícone app</span></div>
+          <div class="av"><div class="favi"><span class="g">m<span class="tr">_</span></span></div><span class="cap">Favicon</span></div>
+        </div>
+        <p class="note" style="margin-top:6px">Papel timbrado com logotipo à esquerda e contato à direita; avatares usando <b>ms_</b> no social e <b>m_</b> nos tamanhos mínimos.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <span><a href="01-capa.html">← índice das folhas</a></span>
+    <span>Aplicações</span>
+    <span>Folha 05 / 05</span>
+  </div>
+
+</div>
+</body>
+</html>

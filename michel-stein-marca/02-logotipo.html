@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Michel Stein — Logotipo & Assinatura · Direção D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --desk:#CFCBC2;--creme:#EDE6DA;--tinta:#211D1A;--oliva:#6B6A4B;--terra:#B85C38;
+    --hair:#211D1A22;--mono:'DM Mono', monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--desk);color:var(--tinta);font-family:'Inter',sans-serif;line-height:1.5;
+    padding:clamp(12px,3vw,40px);background-image:radial-gradient(var(--hair) .5px,transparent .5px);background-size:22px 22px}
+  .sheet{max-width:1100px;margin:0 auto;background:var(--creme);border:1px solid var(--tinta);
+    box-shadow:0 24px 60px -28px #00000055;position:relative}
+  .sheet::after{content:"";position:absolute;inset:7px;border:.5px solid var(--hair);pointer-events:none}
+
+  .mark{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;line-height:1}
+  .tr{color:var(--terra)}
+
+  .ruler{display:flex;align-items:flex-end;height:26px;border-bottom:1px solid var(--tinta);padding:0 16px}
+  .tick{flex:1;border-left:.5px solid var(--hair);height:6px}
+  .tick:nth-child(5n+1){height:12px;border-left:1px solid var(--tinta)}
+
+  .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
+  .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
+  .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+  .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,56px);line-height:.98;letter-spacing:-.06em;text-transform:lowercase}
+  .tb-main h1 u{text-decoration:none;color:var(--terra)}
+  .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+  .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
+  .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+  .cell:last-child{border-bottom:0}
+  .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
+  .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
+
+  section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,48px) clamp(16px,4vw,42px)}
+  .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:26px;display:flex;gap:12px;align-items:center}
+  .sec-label .no{font-weight:700;color:var(--tinta)}
+  .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair)}
+
+  /* primary logotype */
+  .logo-hero{text-align:center;padding:clamp(16px,4vw,34px) 0}
+  .logotype{font-size:clamp(40px,9.5vw,98px);letter-spacing:-.06em}
+  .logo-note{font-family:'Inter',sans-serif;font-size:11px;color:#211D1A99;margin-top:22px;max-width:52ch;margin-inline:auto;line-height:1.7}
+
+  /* signature lockup */
+  .lockup{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+  .lockup .lt{font-size:clamp(30px,7vw,58px);letter-spacing:-.06em}
+  .lockup .tag{font-family:var(--mono);font-weight:400;font-style:italic;font-size:clamp(13px,2.4vw,18px);letter-spacing:.02em;color:var(--oliva);padding-left:2px}
+
+  /* versions */
+  .vers{display:flex;gap:14px;flex-wrap:wrap}
+  .vbox{flex:1;min-width:200px;border:.5px solid var(--hair);display:flex;flex-direction:column}
+  .vcanvas{display:flex;align-items:center;justify-content:center;padding:36px 16px;min-height:120px}
+  .vcanvas .g{font-size:clamp(26px,4vw,38px);letter-spacing:-.05em}
+  .v-creme{background:var(--creme)}.v-creme .g{color:var(--tinta)}
+  .v-tinta{background:var(--tinta)}.v-tinta .g{color:var(--creme)}
+  .v-oliva{background:var(--oliva)}.v-oliva .g{color:var(--creme)}
+  .vcap{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#211D1A99;padding:9px 12px;border-top:.5px solid var(--hair);text-align:center}
+
+  .note{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:#211D1A99;margin-top:18px}
+  .note b{font-weight:600;color:var(--tinta)}
+
+  .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+  .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
+  .footer a:hover{color:var(--terra)}
+
+  @media (max-width:720px){
+    .titleblock{grid-template-columns:1fr}
+    .tb-meta{border-left:0;border-top:1px solid var(--tinta);grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+    .cell:nth-child(odd){border-right:.5px solid var(--hair)}
+    .lockup{align-items:center;text-align:center;width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="ruler" aria-hidden="true">
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+    <span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span><span class="tick"></span>
+  </div>
+
+  <header class="titleblock">
+    <div class="tb-main">
+      <div class="eyebrow">Direção D · Mono Editorial</div>
+      <h1>logotipo<u>_</u></h1>
+      <p class="tb-sub">A marca, suas versões e o lockup com tagline. DM Mono Medium itálico, caixa-baixa, com tracking fechado em −.06em.</p>
+    </div>
+    <div class="tb-meta">
+      <div class="cell"><span class="k">Projeto</span><span class="v">Identidade Pessoal</span></div>
+      <div class="cell"><span class="k">Cliente</span><span class="v">Michel Stein</span></div>
+      <div class="cell"><span class="k">Tipo</span><span class="v">DM Mono · 500 itálico</span></div>
+      <div class="cell"><span class="k">Folha</span><span class="v">02 / 05 — Logotipo</span></div>
+    </div>
+  </header>
+
+  <!-- 01 LOGOTIPO PRIMÁRIO -->
+  <section>
+    <div class="sec-label"><span class="no">01</span> Logotipo Primário</div>
+    <div class="logo-hero">
+      <div class="logotype mark">michel stein<span class="tr">_</span></div>
+      <p class="logo-note">DM Mono Medium itálico (500), caixa-baixa, tracking −.06em. O underscore terracota é fixo — parte do logotipo, não cursor. Único ponto de cor quente.</p>
+    </div>
+  </section>
+
+  <!-- 02 ASSINATURA COM TAGLINE -->
+  <section>
+    <div class="sec-label"><span class="no">02</span> Assinatura com Tagline</div>
+    <div class="lockup">
+      <div class="lt mark">michel stein<span class="tr">_</span></div>
+      <div class="tag">a mão por trás do traço</div>
+    </div>
+    <p class="note">A tagline acompanha o logotipo em DM Mono itálico regular, na oliva. Alinhada à esquerda, com respiro igual à altura do "m" entre as linhas.</p>
+  </section>
+
+  <!-- 03 VERSÕES -->
+  <section>
+    <div class="sec-label"><span class="no">03</span> Versões</div>
+    <div class="vers">
+      <div class="vbox"><div class="vcanvas v-creme"><span class="g mark">michel stein<span class="tr">_</span></span></div><div class="vcap">Positivo · creme</div></div>
+      <div class="vbox"><div class="vcanvas v-tinta"><span class="g mark">michel stein<span class="tr">_</span></span></div><div class="vcap">Negativo · tinta</div></div>
+      <div class="vbox"><div class="vcanvas v-oliva"><span class="g mark">michel stein<span class="tr">_</span></span></div><div class="vcap">Sobre oliva</div></div>
+    </div>
+    <p class="note">Em qualquer fundo, o traço permanece terracota — desde que haja contraste suficiente. Evitar fundos quentes de tom próximo (ver regras na Folha 04).</p>
+  </section>
+
+  <div class="footer">
+    <span><a href="01-capa.html">← índice das folhas</a></span>
+    <span>Logotipo &amp; Assinatura · DM Mono 500 itálico</span>
+    <span>Folha 02 / 05</span>
+  </div>
+
+</div>
+</body>
+</html>

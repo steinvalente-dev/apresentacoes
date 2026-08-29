@@ -406,6 +406,21 @@ const projetos = [
       { nome: "estudo preliminar", pranchas: 29, peso: 11.9, data: "19.08.2026",
         href: "casa-ittb/apresentacao.html" }
     ]
+  },
+  {
+    nome: "michel stein_",
+    pecas: [
+      { nome: "marca · 01 capa e conceito", tipo: "sistema", sub: "manual de marca",
+        peso: 0.009, data: "29.08.2026", href: "michel-stein-marca/01-capa.html" },
+      { nome: "marca · 02 logotipo e assinatura", tipo: "sistema", sub: "manual de marca",
+        peso: 0.009, data: "29.08.2026", href: "michel-stein-marca/02-logotipo.html" },
+      { nome: "marca · 03 monograma", tipo: "sistema", sub: "manual de marca · inclui a versão rabisco",
+        peso: 0.012, data: "29.08.2026", href: "michel-stein-marca/03-monograma.html" },
+      { nome: "marca · 04 sistema", tipo: "sistema", sub: "tipografia, cor e regras de uso",
+        peso: 0.017, data: "29.08.2026", href: "michel-stein-marca/04-sistema.html" },
+      { nome: "marca · 05 aplicações", tipo: "sistema", sub: "cartão, e-mail e papelaria",
+        peso: 0.014, data: "29.08.2026", href: "michel-stein-marca/05-aplicacoes.html" }
+    ]
   }
 ];
 
@@ -417,6 +432,9 @@ const docs = [
   { grupo:"prancha", nome:"prancha · capa",
     desc:"A capa padrão de toda apresentação, com o carrossel morph",
     href: GH+"prancha/PRANCHA-CAPA.md", ver:"modulos/capa-morph.html" },
+  { grupo:"prancha", nome:"prancha · quadro fixo",
+    desc:"O letterbox de 1600 x 900: a peça idêntica em qualquer tela, e as tres armadilhas pagas",
+    href: GH+"prancha/PRANCHA-QUADRO-FIXO.md" },
   { grupo:"prancha", nome:"fundo morph pontilhado",
     desc:"O shader da abertura: preset, transições, cursor e desempenho medido",
     href: GH+"prancha/FUNDO-MORPH-PONTILHADO.md", ver:"modulos/fundo-morph-pontilhado.html" },
@@ -429,12 +447,24 @@ const docs = [
   { grupo:"prancha", nome:"módulos",
     desc:"As peças de montar — capa, engine, laboratório. Sem revisão: o arquivo é o vigente",
     arq:"modulos/LEIA-ME.md" },
+  { grupo:"prancha · rodadas", nome:"tokyo · grafia e mecânicas de slide",
+    desc:"A grafia TOKYO, o popover, o grifo animado, os gabaritos novos e o campo reservado cols",
+    href: GH+"prancha/rodadas/TOKYO-GRAFIA-E-MECANICAS.md" },
+  { grupo:"prancha · rodadas", nome:"tokyo · pastilha de chrome e três camadas",
+    desc:"A pastilha de navegação, a pendência do topo e a varredura de nove viewports",
+    href: GH+"prancha/rodadas/TOKYO-CHROME-E-CAMADAS.md" },
+  { grupo:"marca", nome:"marca michel stein_",
+    desc:"A camada de marca: cor, tipografia, logotipo e o que precisa se separar do motor para trocar de marca",
+    arq:"sistemas/MARCA-MICHEL-STEIN.md", ver:"michel-stein-marca/01-capa.html" },
   { grupo:"site", nome:"site de portfólio",
     desc:"Estado técnico, vitrine, otimização de imagem e área de cliente",
     href: GH+"site/SITE-PORTFOLIO-ESTADO.md" },
   { grupo:"site", nome:"vitrine · acervo",
     desc:"As 1.020 imagens da esteira, o pipeline de conversão e os comandos",
     href: GH+"site/VITRINE-ACERVO.md" },
+  { grupo:"site", nome:"publicar no site",
+    desc:"Runbook do Netlify e da área de cliente: receita, custo por deploy e cuidados",
+    href: GH+"site/PUBLICAR-NO-SITE.md" },
   { grupo:"operação", nome:"arquivamento de entregas",
     desc:"Onde cada arquivo vai parar no Drive, a árvore de pastas e as armadilhas",
     href: GH+"operacao/ARQUIVAMENTO-ENTREGAS.md" },
@@ -453,7 +483,7 @@ const docs = [
   { grupo:"notion", nome:"bancos de consulta · Baraka",
     desc:"Consultas técnicas e normativas: IDs, schema, templates e manhas do Notion",
     href: GH+"notion/CONSULTAS-BARAKA.md" },
-  { grupo:"sarasá", nome:"github · como trabalhar",
+  { grupo:"publicação", nome:"github · como trabalhar",
     desc:"Onde cada coisa vai, clonar, registrar, validar e publicar. Vale para apresentação, documento e ferramenta",
     arq:"sistemas/GITHUB-COMO-TRABALHAR.md" },
   { grupo:"sarasá · mapeamento de danos", nome:"o sistema, do DXF ao croqui",
