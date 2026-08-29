@@ -1,0 +1,1102 @@
+<!doctype html>
+<!-- ============================================================================
+     LAVRŌ — 03_TELA_Hoje.html · IMPLEMENTAÇÃO DE REFERÊNCIA
+     Styleguide vivo. Corresponde a 02_DESIGN-SYSTEM_Lavro.md v1.1 (26.07.2026).
+     Inclui o modal de registro (+ Novo) das seções 5.10 e 9.
+
+     ARQUIVO ÚNICO E CANÔNICO: sobrescrever a cada versão, nunca acumular.
+     O rastro versionado vive em _estudos/. Se este arquivo divergir do .md,
+     ELE está velho — o .md é a fonte de verdade.
+
+     Controles no rodapé: modo, movimento, cabeçalho (sombra/blur), densidade,
+     fundo, rever entrada, varredura.
+     ========================================================================= -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lavrō — 03 · Tela Hoje · referência do DS v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   LAVRŌ — PROTÓTIPO "HOJE" v3
+   ----------------------------------------------------------------------------
+   MUDANÇA ESTRUTURAL DESTA RODADA (itens 1, 5 e 6 do lote eram o mesmo
+   problema): "Hoje" entra dentro de "Obra", e a pílula da Obra passa a ser o
+   ÚNICO gatilho da navegação — gaveta pela ESQUERDA, igual no celular e no
+   desktop. Some o hambúrguer, some a barra de pílulas de seção, some a
+   inconsistência de gatilho entre plataformas.
+     esquerda = onde estou / para onde vou   (Obra ▾, gaveta esquerda)
+     direita  = eu e minhas ações           (busca, + Novo, avatar → gaveta direita)
+   Gatilho e gaveta sempre na mesma borda. Sem exceção.
+
+   CABEÇALHO SEM FUNDO: só é possível porque TUDO nele é pílula. Pílula de
+   alta ênfase (preta no claro, branca no escuro) sobrevive passando por cima
+   de qualquer card — nenhum scrim necessário.
+
+   CUSTO ASSUMIDO: Hoje e Evolução deixam de ser um clique. Mitigado por o app
+   abrir no Hoje e por "+ Novo" seguir exposto.
+
+   EXCEÇÕES DOCUMENTADAS à regra "só transform/opacity":
+     1. stroke-dashoffset — desenho do anel do donut. Repaint, elemento pequeno.
+     2. width — busca retrátil. Layout, mas num elemento pequeno do cabeçalho;
+        a alternativa (paleta em overlay) está anotada como recomendação.
+   ========================================================================== */
+:root{
+  --azul:#0123FF; --azul-fundo:#0016C7; --azul-claro:#7C8BFF; --marca-escuro:#5B6BFF;
+  --n-950:#0E1116; --n-900:#1C222E; --n-800:#262E3C; --n-700:#323B4B;
+  --n-600:#3F4959; --n-500:#5E6779; --n-400:#8790A2; --n-300:#B0B7C4;
+  --n-200:#D3D8E0; --n-100:#E9EBF0; --n-050:#F5F6F9; --n-000:#FFFFFF;
+  --ok-c:#1E7F4F; --ok-e:#4ADE80; --at-c:#B26A00; --at-e:#FFB84D;
+  --er-c:#C62828; --er-e:#FF6B6B;
+  --r-pill:999px; --r-md:12px; --r-lg:20px;
+  --ff-d:'Space Grotesk',sans-serif; --ff-t:'Inter',system-ui,sans-serif; --ff-m:'IBM Plex Mono',monospace;
+  --pad-tela:clamp(16px,3vw,40px);
+  /* DENSIDADE: só vertical. font-size NUNCA muda, nada reflui. */
+  --pad-card:22px; --gap-card:14px; --alt-li:48px; --toque:48px; --gap-grade:16px;
+  --t-toque:120ms; --t-ui:220ms; --t-entra:420ms; --t-gesto:900ms;
+  --t-varre:820ms;   /* 180 cobrindo + 420 parado + 220 revelando */
+  --t-pulso:1500ms; --t-caret:1060ms; --stagger:38ms;   /* 10 elementos x 38ms = 380ms, dentro do teto */
+  /* REGRA: sombra = repouso · brilho = significado. Nada brilha só por ser azul. */
+  --sombra-pil:0 3px 14px rgba(14,17,22,.24);
+  --sombra-pil-esc:0 4px 18px rgba(0,0,0,.6);
+  --e-saida:cubic-bezier(.25,.7,.3,1); --e-ui:cubic-bezier(.3,.8,.3,1);
+}
+[data-modo="claro"]{
+  --bg:var(--n-050); --sup-1:var(--n-000); --sup-2:var(--n-100); --sup-3:var(--n-200);
+  --linha:var(--n-200); --linha-forte:var(--n-300);
+  --texto:var(--n-950); --texto-2:var(--n-600); --texto-3:var(--n-400);
+  --acento:var(--azul); --acao:var(--azul); --sobre-acao:#fff; --marcador:var(--azul-claro);
+  --ok:var(--ok-c); --at:var(--at-c); --er:var(--er-c); --neutro:var(--n-500);
+  --pil-bg:var(--n-950); --pil-texto:#FFFFFF;
+  --cap-bg:#FFFFFF; --cap-texto:var(--n-950); --cap-borda:rgba(14,17,22,.16); --marca-cap:var(--azul);
+  --e-1:0 1px 2px rgba(14,17,22,.06), 0 0 0 1px rgba(14,17,22,.05);
+  --e-2:0 4px 14px rgba(14,17,22,.09), 0 0 0 1px rgba(14,17,22,.05);
+}
+[data-modo="escuro"]{
+  --bg:var(--n-950); --sup-1:var(--n-800); --sup-2:var(--n-700); --sup-3:#3B4556;
+  --linha:rgba(255,255,255,.11); --linha-forte:rgba(255,255,255,.22);
+  --texto:#EDEFF5; --texto-2:var(--n-300); --texto-3:var(--n-500);
+  --acento:var(--azul-claro); --acao:var(--azul); --sobre-acao:#fff; --marcador:var(--azul);
+  --ok:var(--ok-e); --at:var(--at-e); --er:var(--er-e); --neutro:var(--n-400);
+  --pil-bg:#FFFFFF; --pil-texto:var(--n-950);
+  --cap-bg:var(--n-800); --cap-texto:#EDEFF5; --cap-borda:rgba(255,255,255,.22); --marca-cap:var(--marca-escuro,#5B6BFF);
+  --e-1:0 0 0 1px rgba(255,255,255,.09), inset 0 1px 0 rgba(255,255,255,.07);
+  --e-2:0 0 0 1px rgba(255,255,255,.11), inset 0 1px 0 rgba(255,255,255,.10), 0 10px 28px rgba(0,0,0,.55);
+}
+[data-dens="compacto"]{--pad-card:14px; --gap-card:9px; --alt-li:44px; --toque:44px; --gap-grade:11px}
+[data-mov="reduzido"] *{animation:none!important;transition:none!important}
+[data-mov="reduzido"] .rev{opacity:1!important;transform:none!important}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .rev{opacity:1!important;transform:none!important}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);font-family:var(--ff-t);line-height:1.6;overflow-x:hidden}
+.app{background:var(--bg);color:var(--texto);min-height:100vh;transition:background .28s,color .28s;position:relative}
+/* Com o azul contido num card, o fundo da página liberou. Elemento fixo e
+   ESTÁTICO: pintado uma vez, nunca reanimado — não custa scroll. */
+/* Conceito reaproveitável: a densidade fica na METADE SUPERIOR e dissolve
+   para baixo, deixando limpa a faixa onde vivem os dados. Máscara em
+   gradiente — pintada uma vez, não custa scroll. */
+.fundo{position:fixed;left:0;right:0;top:0;height:56vh;z-index:0;pointer-events:none;opacity:0;
+  transition:opacity .4s;
+  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,.88) 30%,rgba(0,0,0,.40) 66%,rgba(0,0,0,0) 100%);
+          mask-image:linear-gradient(to bottom,rgba(0,0,0,1) 0%,rgba(0,0,0,.88) 30%,rgba(0,0,0,.40) 66%,rgba(0,0,0,0) 100%)}
+[data-fundo="grad"] .fundo.grad,[data-fundo="foto"] .fundo.foto{opacity:1}
+.fundo.grad{background:
+  radial-gradient(120% 90% at 12% 0%,  #7C88A0 0%, transparent 52%),
+  radial-gradient(90% 70%  at 88% 14%, #B9A98E 0%, transparent 48%),
+  radial-gradient(80% 80%  at 70% 92%, #2E3746 0%, transparent 56%)}
+.fundo.grad,.fundo.foto{opacity:0}   /* base explícita, sem depender de ordem */
+[data-modo="escuro"][data-fundo="grad"] .fundo.grad{opacity:.42}
+[data-modo="claro"][data-fundo="grad"] .fundo.grad{opacity:.24}
+/* PADRÃO das telas. Quando houver foto de capa real, ela entra NESTA camada,
+   com o mesmo blur, a mesma máscara e a mesma altura. */
+.fundo.foto{background:
+  radial-gradient(70% 55% at 22% 18%, #8E9AAE 0%, transparent 60%),
+  radial-gradient(60% 50% at 74% 30%, #C4B394 0%, transparent 58%),
+  radial-gradient(80% 60% at 50% 96%, #232A36 0%, transparent 62%),
+  linear-gradient(160deg,#5A6580,#2A313D);
+  filter:blur(46px) saturate(.85);transform:scale(1.18);transform-origin:50% 0%}
+[data-modo="escuro"][data-fundo="foto"] .fundo.foto{opacity:.48}
+[data-modo="claro"][data-fundo="foto"] .fundo.foto{opacity:.30}
+/* CUIDADO: NÃO usar `.app > *` aqui — o cabeçalho é filho direto de .app e
+   `position:relative` sobrescreve o `sticky` dele. Só os invólucros de
+   conteúdo precisam de contexto para ficar acima da camada de fundo. */
+.app > .folha,.app > section{position:relative;z-index:1}
+.folha{max-width:1180px;margin:0 auto;padding:0 var(--pad-tela)}
+.anot{font-family:var(--ff-m);font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--texto-3)}
+@keyframes lv-rev{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.rev{animation:lv-rev var(--t-entra) var(--e-saida) both;animation-delay:calc(var(--i,0) * var(--stagger))}
+@keyframes lv-pulso{0%,100%{opacity:1}50%{opacity:.22}}
+/* caret de linha de comando: pisca SECO, sem transição. Padrão para todo
+   lugar onde este elemento aparecer. */
+@keyframes lv-caret{0%{opacity:1}50%{opacity:0}100%{opacity:1}}
+@keyframes lv-anel{0%{transform:scale(1);opacity:.9}70%{transform:scale(2.6);opacity:0}100%{opacity:0}}
+@keyframes lv-desenha{from{stroke-dashoffset:248}to{stroke-dashoffset:0}}
+@keyframes lv-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes lv-aura{0%{transform:scale(1,1);opacity:.85}70%{transform:scale(1.015,2.6);opacity:0}100%{opacity:0}}
+
+/* ============ CABEÇALHO: transparente, só pílulas ============ */
+.barra{position:sticky;top:0;z-index:60;width:100%;padding:14px var(--pad-tela);
+  display:flex;align-items:center;gap:10px;justify-content:space-between;
+  background:transparent;pointer-events:none}
+.barra > *{pointer-events:auto;position:relative;z-index:1}
+/* o wordmark voltou como texto solto, e texto solto não sobrevive passando por
+   cima de um card. Scrim que só aparece ao rolar — opacity, custo zero. */
+/* Duas estratégias para o cabeçalho transparente:
+   SOMBRA (padrão) — nenhum véu; a elevação vem de sombra marcada nas pílulas.
+     Não tinge nada, então não briga com card azul passando por baixo.
+   BLUR — barra translúcida que DISSOLVE o conteúdo por baixo em vez de
+     clareá-lo. Visualmente superior, mas backdrop-filter em elemento sticky
+     repinta a cada frame de rolagem: é o custo que não se paga no celular
+     fraco em campo. Por isso não é o padrão. */
+.barra::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+  transition:opacity var(--t-ui)}
+[data-elev="blur"] .barra::before{
+  -webkit-backdrop-filter:blur(16px) saturate(1.08);backdrop-filter:blur(16px) saturate(1.08);
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 58%,transparent 100%);
+          mask-image:linear-gradient(to bottom,#000 0%,#000 58%,transparent 100%)}
+[data-elev="blur"] .barra[data-rolou="true"]::before{opacity:1}
+/* sombra marcada: duas camadas — contato curto + halo largo */
+[data-elev="sombra"] .pil,[data-elev="sombra"] .busca,[data-elev="sombra"] .capsula{
+  box-shadow:0 2px 6px rgba(14,17,22,.34), 0 12px 28px rgba(14,17,22,.30)}
+[data-modo="escuro"][data-elev="sombra"] .pil,
+[data-modo="escuro"][data-elev="sombra"] .busca,
+[data-modo="escuro"][data-elev="sombra"] .capsula{
+  box-shadow:0 2px 8px rgba(0,0,0,.72), 0 14px 34px rgba(0,0,0,.62)}
+/* o scrim ficou mais fraco: a cápsula é opaca, só as bordas precisam de véu */
+/* cápsula branca da direita: assinatura do produto + minhas obras + usuário.
+   Branca nos dois modos de propósito — é lockup de marca, não elemento de UI. */
+/* cápsula acompanha o tema: clara no claro, escura no escuro */
+.capsula{display:inline-flex;align-items:center;gap:12px;background:var(--cap-bg);border-radius:var(--r-pill);
+  padding:6px 8px 6px 18px;box-shadow:0 4px 18px rgba(14,17,22,.22);min-width:0}
+[data-modo="claro"] .capsula{box-shadow:0 3px 14px rgba(14,17,22,.14),0 0 0 1px rgba(14,17,22,.07)}
+[data-modo="escuro"] .capsula{box-shadow:0 6px 22px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.10)}
+.capsula .div{width:1px;height:22px;background:var(--cap-borda)}
+.capsula .obras{display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:0 14px;border-radius:var(--r-pill);
+  border:1.5px solid var(--cap-borda);background:transparent;color:var(--cap-texto);
+  font-family:var(--ff-t);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;
+  transition:transform var(--t-toque),border-color var(--t-ui)}
+.capsula .obras:hover{border-color:var(--cap-texto)}
+.capsula .obras svg{flex:0 0 auto;display:none}
+.capsula .obras:active{transform:scale(.96)}
+.capsula .av{width:32px;height:32px;border-radius:50%;border:0;background:var(--azul);color:#fff;
+  display:grid;place-items:center;font-family:var(--ff-d);font-weight:700;font-size:13px;cursor:pointer;
+  transition:transform var(--t-toque)}
+.capsula .av:active{transform:scale(.94)}
+.mk-topo{font-family:var(--ff-d);font-weight:700;font-size:22px;letter-spacing:.015em;line-height:1;
+  color:var(--cap-texto);display:inline-flex;align-items:baseline;user-select:none;white-space:nowrap}
+.mk-topo .o{position:relative;display:inline-block;color:var(--marca-cap)}
+.mk-topo .o i{position:absolute;left:7%;right:7%;top:.17em;height:.115em;background:var(--marca-cap);border-radius:1px}
+.lado{display:flex;align-items:center;gap:8px;min-width:0}
+.lado:first-child{flex:1 1 auto;min-width:0}
+.lado:last-child{flex:0 0 auto}
+.pil{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:var(--r-pill);
+  border:0;background:var(--pil-bg);color:var(--pil-texto);font-family:var(--ff-t);font-size:13px;font-weight:600;
+  cursor:pointer;white-space:nowrap;position:relative;
+  box-shadow:0 3px 14px rgba(14,17,22,.24);transition:transform var(--t-toque) var(--e-ui),opacity var(--t-ui)}
+[data-modo="escuro"] .pil{box-shadow:0 4px 18px rgba(0,0,0,.6)}
+.pil:active{transform:scale(.965)}
+.pil .chev{width:8px;height:8px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;
+  transform:rotate(45deg) translateY(-2px);opacity:.6;transition:transform var(--t-ui)}
+.pil[aria-expanded="true"] .chev{transform:rotate(-135deg) translateY(-1px)}
+.pil.acao{background:var(--acao);color:var(--sobre-acao)}  /* sombra herdada de .pil — sem brilho */
+.pil.avatar{padding:0 6px;border-radius:50%;width:40px;justify-content:center}
+.pil.avatar .foto{width:28px;height:28px;border-radius:50%;background:var(--acao);color:var(--sobre-acao);
+  display:grid;place-items:center;font-family:var(--ff-d);font-weight:700;font-size:12px}
+/* badge sem depender da cor do fundo atrás — anel próprio */
+.pil .badge{position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;border-radius:var(--r-pill);
+  background:#E14B4B;color:#fff;font-family:var(--ff-m);font-size:10.5px;font-weight:600;
+  display:grid;place-items:center;padding:0 5px;box-shadow:0 0 0 2.5px var(--pil-bg),0 2px 8px rgba(0,0,0,.4)}
+/* gatilho da obra: contexto + página atual + gaveta */
+.pil.obra{padding-left:14px;min-width:0}
+.pil.obra .nome-obra{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28ch;display:block}
+.pil.obra .barras{display:flex;flex-direction:column;gap:3px;margin-right:2px}
+.pil.obra .barras i{display:block;width:14px;height:1.6px;background:currentColor;border-radius:1px}
+.pil.obra .pag{opacity:.62;font-weight:500}
+/* busca retrátil */
+.busca{display:flex;align-items:center;gap:0;width:40px;height:40px;padding:0;overflow:hidden;
+  border-radius:var(--r-pill);background:var(--pil-bg);color:var(--pil-texto);
+  box-shadow:0 3px 14px rgba(14,17,22,.24);transition:width var(--t-ui) var(--e-ui),gap var(--t-ui)}
+[data-modo="escuro"] .busca{box-shadow:0 4px 18px rgba(0,0,0,.6)}
+.busca.aberta{width:min(300px,42vw);gap:9px;padding:0 16px}
+.busca .lupa{width:40px;height:40px;flex:0 0 auto;display:grid;place-items:center;border:0;background:transparent;
+  color:inherit;cursor:pointer}
+.busca.aberta .lupa{width:15px;height:15px}
+.busca input{flex:1;min-width:0;border:0;background:transparent;outline:none;color:var(--pil-texto);
+  font-family:var(--ff-t);font-size:13px;opacity:0;transition:opacity 140ms}
+.busca.aberta input{opacity:1}
+.busca input::placeholder{color:color-mix(in srgb,var(--pil-texto) 55%,transparent)}
+
+/* ============ RESPONSIVO DO CABEÇALHO ============
+   Sem quebra de linha: a barra é sticky e mudar de altura ao rolar é pior que
+   truncar. A degradação é por prioridade — o que sai primeiro é o que menos
+   custa: wordmark, depois o rótulo de Minhas obras, depois a largura do nome. */
+@media(max-width:1180px){ .pil.obra .nome-obra{max-width:20ch} }
+@media(max-width:1024px){ .capsula .mk-topo,.capsula .div{display:none}
+  .capsula{padding:6px 8px 6px 10px} }
+@media(max-width:860px){ .capsula .obras{padding:0;width:32px;justify-content:center;gap:0}
+  .capsula .obras .rot-obras{display:none}
+  .capsula .obras svg{display:block} }
+@media(max-width:640px){ .pil.obra .nome-obra{max-width:11ch}
+  .barra{gap:8px;padding:12px var(--pad-tela)}
+  .lado{gap:6px} }
+@media(max-width:420px){ .pil.obra .nome-obra{max-width:7ch}
+  .pil{padding:0 12px} .pil.obra{padding-left:10px}
+  .barra{--pad-tela:12px;gap:6px} .lado{gap:5px}
+  .capsula{padding:5px 6px 5px 8px;gap:8px} }
+@media(max-width:365px){ .pil.obra .nome-obra{max-width:5ch} }
+
+/* ============ HERO (não-inteligente) ============ */
+.hero{padding:26px 0 22px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.hero .data-anc{display:flex;align-items:baseline;gap:9px}
+.hero .dia{font-family:var(--ff-m);font-weight:600;font-size:clamp(40px,6vw,66px);line-height:.9;
+  letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--texto)}
+.hero .mes{font-family:var(--ff-m);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--texto-3)}
+.hero h1{font-family:var(--ff-d);font-weight:700;font-size:clamp(21px,2.6vw,30px);letter-spacing:-.02em;
+  line-height:1.1;margin-top:10px}
+.hero .sub{font-family:var(--ff-m);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--texto-3);margin-top:6px}
+.live{display:inline-flex;align-items:center;gap:7px}
+.live .pt{position:relative;width:8px;height:8px;flex:0 0 auto}
+.live .pt i{position:absolute;inset:0;border-radius:50%;background:var(--acento)}
+.live .pt i.anel{background:transparent;border:1.5px solid var(--acento);animation:lv-anel var(--t-pulso) ease-out infinite}
+.live .pt i.nucleo{animation:lv-pulso var(--t-pulso) ease-in-out infinite}
+.live span{font-family:var(--ff-m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);font-weight:600}
+
+/* ============ ASSESSOR: card contido (o card do manual) ============ */
+.assessor{background:var(--azul);color:#fff;border-radius:var(--r-lg);padding:30px 32px 28px;
+  display:flex;flex-direction:column;gap:0;box-shadow:0 10px 34px rgba(1,35,255,.22)}
+[data-modo="escuro"] .assessor{background:var(--azul-fundo);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.assessor .eyebrow{font-family:var(--ff-m);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.7);display:inline-flex;align-items:center;gap:7px}
+.assessor .txt{font-family:var(--ff-d);font-weight:700;font-size:clamp(21px,2.7vw,33px);letter-spacing:-.022em;
+  line-height:1.17;margin:14px 0 0;max-width:32ch;min-height:2.3em;text-wrap:pretty;color:#fff}
+.assessor .txt .cursor{background:#fff}
+.assessor .infos{font-family:var(--ff-m);font-size:12px;letter-spacing:.02em;color:rgba(255,255,255,.78);margin-top:16px}
+.assessor .acoes-a{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn-b{background:#fff;color:var(--azul-fundo);border:0;border-radius:var(--r-pill);font-family:var(--ff-t);
+  font-weight:700;font-size:13px;min-height:var(--toque);padding:0 22px;cursor:pointer;transition:transform var(--t-toque)}
+.btn-v{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:var(--r-pill);
+  font-family:var(--ff-t);font-weight:600;font-size:13px;min-height:var(--toque);padding:0 18px;cursor:pointer}
+.btn-b:active,.btn-v:active{transform:scale(.97)}
+.cursor{display:inline-block;width:.62em;height:.115em;min-height:2px;background:currentColor;border-radius:1px;
+  vertical-align:-.16em;animation:lv-caret var(--t-caret) step-end infinite}
+/* -0,16em coloca a base da barra 0,16em ABAIXO da linha de base e o topo a
+   0,048em — a mesma posição que a fonte reserva ao glifo "_". */
+
+/* ============ grade e cards ============ */
+.grade{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gap-grade);padding:26px 0 60px}
+.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c12{grid-column:span 12}
+@media(max-width:980px){.c4,.c5,.c6,.c7,.c8{grid-column:span 12}}
+.card{background:var(--sup-1);padding:var(--pad-card);display:flex;flex-direction:column;gap:var(--gap-card);box-shadow:var(--e-1)}
+.registro{border-radius:0 0 var(--r-md) var(--r-md);border-top:4px solid var(--acento)}
+.registro.er{border-top-color:var(--er)}
+.apoio{border-radius:var(--r-md)}
+.card h3{font-family:var(--ff-d);font-weight:600;font-size:17px;letter-spacing:-.005em}
+.eti{font-family:var(--ff-m);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--texto-3)}
+.topo{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.grandeza{font-family:var(--ff-d);font-weight:700;letter-spacing:-.025em;color:var(--texto);line-height:1;font-variant-numeric:tabular-nums}
+.grandeza.lg{font-size:26px}
+.grandeza .un{font-family:var(--ff-t);font-weight:600;font-size:.42em;color:var(--texto-3);margin-left:.12em}
+.linhas{display:flex;flex-direction:column;gap:2px;padding-top:12px;border-top:1px solid var(--linha)}
+.li{display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:var(--alt-li)}
+.li .k{font-size:14px;color:var(--texto-3)}
+.li .v{font-family:var(--ff-m);font-size:14px;font-weight:500;font-variant-numeric:tabular-nums;color:var(--texto)}
+.li .v.neg{color:var(--er)}
+.selo{display:inline-flex;align-items:center;gap:6px;min-height:26px;padding:0 11px;border-radius:var(--r-pill);
+  font-family:var(--ff-m);font-size:10.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  border:1.5px solid currentColor;background:color-mix(in srgb,currentColor 9%,transparent);white-space:nowrap}
+.selo.solido{border:0;color:#fff;font-weight:600;background:var(--er-c)}
+.s-at{color:var(--at)}.s-ne{color:var(--neutro)}
+.selo .ponto{width:6px;height:6px;border-radius:50%;background:currentColor}
+.btn{font-family:var(--ff-t);font-size:13px;font-weight:600;padding:0 18px;min-height:var(--toque);
+  border-radius:var(--r-pill);border:1.5px solid transparent;cursor:pointer;transition:transform var(--t-toque)}
+.btn:active{transform:scale(.97)}
+.btn-1{background:var(--acao);color:var(--sobre-acao)}
+.btn-2{background:transparent;color:var(--texto);border-color:var(--linha-forte)}
+.donut-bloco{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.donut{width:150px;height:150px;flex:0 0 auto}
+.donut .trilho{stroke:var(--sup-3)}
+.donut .arco{stroke:var(--acento);stroke-linecap:round;stroke-dashoffset:0;
+  animation:lv-desenha var(--t-gesto) var(--e-saida) both;animation-delay:280ms}
+.donut-num{font-family:var(--ff-d);font-weight:700;font-size:27px;fill:var(--texto);letter-spacing:-.02em}
+.donut-rot{font-family:var(--ff-m);font-size:8.5px;letter-spacing:.14em;fill:var(--texto-3)}
+.gantt{display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid var(--linha)}
+.gl{display:grid;grid-template-columns:minmax(96px,1.2fr) 3fr;gap:12px;align-items:center;min-height:34px}
+.gl .nm{font-family:var(--ff-m);font-size:11px;color:var(--texto-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gl .pista{position:relative;height:15px;background:var(--sup-2);border-radius:4px;overflow:visible}
+.gl .bar{position:absolute;top:0;bottom:0;border-radius:4px;background:var(--neutro);color:var(--neutro);
+  transform-origin:left center;overflow:hidden;animation:lv-bar var(--t-gesto) var(--e-saida) both}
+.gl .bar.ok{background:var(--ok);color:var(--ok)}
+.gl .bar.at{background:var(--at);color:var(--at)}
+.gl .bar.er{background:var(--er);color:var(--er)}
+.gl .aura{position:absolute;top:0;bottom:0;border-radius:5px;border:1.5px solid currentColor;pointer-events:none;opacity:0}
+.gl .aura.at{color:var(--at)}.gl .aura.ok{color:var(--ok)}
+.gl .aura.rodando{animation:lv-aura var(--t-pulso) ease-out infinite}
+.gl .hoje{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--texto);opacity:.5}
+/* ---- próximo marco: data-âncora é CÓDIGO, então mono e sem contador ---- */
+.prox{display:flex;gap:16px;align-items:flex-start}
+.data-g{display:flex;align-items:baseline;gap:7px;flex:0 0 auto}
+.data-g .d{font-family:var(--ff-m);font-weight:600;font-size:52px;line-height:.86;letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;color:var(--texto)}
+.data-g .m{font-family:var(--ff-m);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--texto-3);line-height:1.35}
+.prox .frase{font-size:13.5px;line-height:1.5;color:var(--texto-2)}
+.prox .frase b{color:var(--texto);font-weight:600}
+
+/* ---- clima ---- */
+.clima{display:flex;align-items:center;gap:14px}
+.clima .ic{width:44px;height:44px;flex:0 0 auto;color:var(--texto-2)}
+.clima .temp{font-family:var(--ff-d);font-weight:700;font-size:38px;letter-spacing:-.03em;line-height:1;
+  font-variant-numeric:tabular-nums}
+.clima .temp .un{font-family:var(--ff-t);font-weight:600;font-size:.4em;color:var(--texto-3);margin-left:.1em}
+.prev{display:flex;gap:2px;padding-top:4px}
+.prev .h{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 2px;border-radius:8px}
+.prev .h.alerta{background:color-mix(in srgb,var(--at) 14%,transparent)}
+.prev .hh{font-family:var(--ff-m);font-size:9.5px;letter-spacing:.06em;color:var(--texto-3)}
+.prev .tt{font-family:var(--ff-m);font-size:13px;font-weight:500;color:var(--texto);font-variant-numeric:tabular-nums}
+.prev .pp{font-family:var(--ff-m);font-size:9px;color:var(--texto-3)}
+.prev .h.alerta .pp{color:var(--at);font-weight:600}
+
+/* ---- efetivo por dia: grandeza, então as barras podem crescer ---- */
+.barras-dia{display:flex;align-items:flex-end;gap:3px;height:104px}
+.barras-dia .b{flex:1;position:relative;background:var(--sup-3);border-radius:3px 3px 0 0;
+  transform-origin:bottom center;animation:lv-barv var(--t-gesto) var(--e-saida) both}
+@keyframes lv-barv{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.barras-dia .b:nth-child(n){animation-delay:calc(var(--t-entra) * 0.5 + 12ms * var(--n,0))}
+.barras-dia .b i{position:absolute;left:0;right:0;top:-15px;text-align:center;font-family:var(--ff-m);
+  font-size:9px;color:var(--texto-3);font-style:normal;opacity:0;transition:opacity var(--t-ui)}
+.barras-dia .b:hover i{opacity:1}
+.barras-dia .b.hoje{background:var(--acento)}
+.barras-dia .b.hoje i{opacity:1;color:var(--acento);font-weight:600}
+
+.carro{position:relative;border-radius:var(--r-md);overflow:hidden;aspect-ratio:4/3;background:var(--sup-2)}
+.carro .foto{position:absolute;inset:0;opacity:0;transition:opacity 600ms var(--e-saida)}
+.carro .foto.on{opacity:1}
+.carro .foto .g{position:absolute;inset:0}
+.carro .veu{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,17,22,.86),transparent 52%)}
+.carro .leg{position:absolute;left:14px;right:14px;bottom:12px;color:#fff}
+.carro .leg .d{font-family:var(--ff-m);font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.75)}
+.carro .leg .t{font-size:13.5px;font-weight:600;line-height:1.35;margin-top:3px}
+.carro .pontos{position:absolute;top:12px;right:12px;display:flex;gap:5px}
+.carro .pontos i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.45);transition:all var(--t-ui)}
+.carro .pontos i.on{background:#fff;width:16px;border-radius:var(--r-pill)}
+
+/* ============ gavetas: esquerda = nav, direita = perfil ============ */
+.veu{position:fixed;inset:0;background:rgba(10,12,18,.5);backdrop-filter:blur(2px);
+  opacity:0;pointer-events:none;transition:opacity var(--t-ui);z-index:80}
+.veu[data-aberto="true"]{opacity:1;pointer-events:auto}
+.gaveta{position:fixed;top:0;bottom:0;width:min(370px,88vw);z-index:90;background:var(--azul);color:#fff;
+  display:flex;flex-direction:column;padding:22px 22px 26px;overflow-y:auto;
+  transition:transform .3s var(--e-ui),box-shadow .3s;box-shadow:none}
+[data-modo="escuro"] .gaveta{background:var(--azul-fundo)}
+.gaveta.esq{left:0;transform:translateX(-105%)}
+.gaveta.dir{right:0;transform:translateX(105%)}
+.gaveta[data-aberto="true"]{transform:none}
+.gaveta.esq[data-aberto="true"]{box-shadow:18px 0 50px rgba(0,0,0,.35)}
+.gaveta.dir[data-aberto="true"]{box-shadow:-18px 0 50px rgba(0,0,0,.35)}
+.gaveta .cab{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.gaveta .mk{font-family:var(--ff-d);font-weight:700;font-size:19px;letter-spacing:.015em;line-height:1;color:#fff;
+  display:inline-flex;align-items:baseline}
+.gaveta .mk .o{position:relative;display:inline-block}
+.gaveta .mk .o i{position:absolute;left:7%;right:7%;top:.17em;height:.115em;background:#fff;border-radius:1px}
+.gaveta .fechar{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.35);
+  background:transparent;color:#fff;font-size:15px;cursor:pointer;display:grid;place-items:center}
+.gaveta nav{display:flex;flex-direction:column}
+.gaveta nav a{color:#fff;text-decoration:none;font-family:var(--ff-t);font-weight:600;font-size:19px;
+  letter-spacing:-.01em;min-height:52px;display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(255,255,255,.16);cursor:pointer;transition:transform var(--t-ui)}
+.gaveta nav a:hover{transform:translateX(6px)}
+.gaveta nav a .k{font-family:var(--ff-m);font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.55);margin-left:auto}
+.gaveta .obra-nome{font-family:var(--ff-m);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.66);margin-bottom:10px}
+/* HOJE é o destino principal: pílula vazada, destacada de todos os blocos */
+.gaveta .pil-hoje{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:56px;
+  padding:0 20px;border-radius:var(--r-pill);border:2px solid #fff;background:transparent;color:#fff;
+  font-family:var(--ff-d);font-weight:700;font-size:23px;letter-spacing:-.01em;cursor:pointer;
+  transition:transform var(--t-toque),background var(--t-ui)}
+.gaveta .pil-hoje:hover{background:rgba(255,255,255,.1)}
+.gaveta .pil-hoje:active{transform:scale(.985)}
+.gaveta .bloco{margin-top:30px}
+.gaveta .rot-b{font-family:var(--ff-m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.6);padding-bottom:7px;border-bottom:1.5px solid rgba(255,255,255,.42);
+  display:flex;align-items:baseline;gap:8px}
+.gaveta .rot-b .mp{font-size:8.5px;letter-spacing:.08em;text-transform:none;color:rgba(255,255,255,.42);margin-left:auto}
+/* item com dica: texto pequeno fixo em vez de tooltip — funciona no dedo */
+.gaveta nav a .it{display:flex;flex-direction:column;gap:1px;min-width:0}
+.gaveta nav a .it .t{line-height:1.2}
+.gaveta nav a .it .d{font-family:var(--ff-m);font-size:9.5px;font-weight:400;letter-spacing:.02em;
+  color:rgba(255,255,255,.58);line-height:1.3;white-space:normal}
+.gaveta nav a:has(.it){min-height:58px;padding-top:8px;padding-bottom:8px;align-items:flex-start}
+/* rodapé: informações secundárias, ancoradas embaixo e discretas */
+.gaveta .rodape-nav{margin-top:auto;padding-top:26px;display:flex;flex-direction:column;gap:2px}
+.gaveta .rodape-nav a{color:rgba(255,255,255,.66);text-decoration:none;font-family:var(--ff-t);
+  font-weight:500;font-size:12.5px;min-height:44px;display:flex;align-items:center;cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.10);transition:color var(--t-ui)}
+.gaveta .rodape-nav a:last-child{border-bottom:0}
+.gaveta .rodape-nav a:hover{color:#fff}
+.gaveta nav a.atual{outline:1.5px solid #fff;outline-offset:-1.5px;border-radius:8px;padding-left:12px}
+.gaveta .badge-g{min-width:22px;height:22px;border-radius:var(--r-pill);background:#fff;color:var(--azul-fundo);
+  font-family:var(--ff-m);font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 6px}
+.gaveta .rot-g{font-family:var(--ff-m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.55);margin:20px 0 6px}
+/* separador de admin: só ESPAÇO e rótulo. As duas barras (vertical branca
+   + horizontal azul) eram ruído concorrente. */
+.gaveta .admin{margin-top:38px;padding-top:0;border:0}
+.gaveta .admin nav a:last-child{border-bottom:0}
+.gaveta .rodape-g{margin-top:auto;padding-top:20px}
+.gaveta .rodape-g button{width:100%;min-height:50px;border-radius:var(--r-pill);border:1.5px solid rgba(255,255,255,.6);
+  background:transparent;color:#fff;font-family:var(--ff-t);font-weight:700;font-size:15px;cursor:pointer}
+.gaveta .perfil{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.gaveta .perfil .foto{width:52px;height:52px;border-radius:50%;background:#fff;color:var(--azul-fundo);
+  display:grid;place-items:center;font-family:var(--ff-d);font-weight:700;font-size:20px}
+.gaveta .perfil .nome{font-family:var(--ff-d);font-weight:600;font-size:19px}
+.gaveta .perfil .cargo{font-family:var(--ff-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.seg-g{display:flex;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);
+  border-radius:var(--r-pill);padding:3px;gap:2px;margin:6px 0}
+.seg-g button{flex:1;font-family:var(--ff-t);font-size:12.5px;font-weight:600;padding:8px 12px;border:0;cursor:pointer;
+  border-radius:var(--r-pill);background:transparent;color:rgba(255,255,255,.75)}
+.seg-g button[aria-pressed="true"]{background:#fff;color:var(--azul-fundo)}
+
+/* ============ popup de perfil ============ */
+.popup{position:fixed;left:50%;top:50%;z-index:95;width:min(420px,92vw);
+  transform:translate(-50%,-50%) scale(.96);opacity:0;pointer-events:none;
+  background:var(--sup-1);color:var(--texto);border-radius:var(--r-lg);padding:22px;
+  box-shadow:0 40px 110px rgba(0,0,0,.5),0 0 0 1px var(--linha);
+  transition:transform .2s var(--e-ui),opacity .16s}
+.popup[data-aberto="true"]{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto}
+.pop-cab{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.perfil-p{display:flex;align-items:center;gap:13px}
+.perfil-p .foto{width:48px;height:48px;border-radius:50%;background:var(--acao);color:var(--sobre-acao);
+  display:grid;place-items:center;font-family:var(--ff-d);font-weight:700;font-size:19px}
+.perfil-p .nome{font-family:var(--ff-d);font-weight:600;font-size:18px}
+.perfil-p .cargo{font-family:var(--ff-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--texto-3)}
+.fechar-p{width:36px;height:36px;border-radius:50%;border:1px solid var(--linha-forte);background:transparent;
+  color:var(--texto);font-size:14px;cursor:pointer;display:grid;place-items:center;flex:0 0 auto}
+.rot-p{font-family:var(--ff-m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--texto-3);margin:22px 0 7px}
+.seg-p{display:flex;background:var(--sup-2);border-radius:var(--r-pill);padding:3px;gap:2px}
+.seg-p button{flex:1;font-family:var(--ff-t);font-size:12.5px;font-weight:600;padding:9px 12px;border:0;cursor:pointer;
+  border-radius:var(--r-pill);background:transparent;color:var(--texto-2)}
+.seg-p button[aria-pressed="true"]{background:var(--acao);color:var(--sobre-acao)}
+.nav-p{display:flex;flex-direction:column;margin-top:16px}
+.nav-p a{min-height:var(--toque);display:flex;align-items:center;font-size:14.5px;font-weight:500;color:var(--texto);
+  border-bottom:1px solid var(--linha);cursor:pointer;text-decoration:none}
+.nav-p a:last-child{border-bottom:0}
+.sair-p{width:100%;min-height:46px;margin-top:18px;border-radius:var(--r-pill);border:1.5px solid var(--linha-forte);
+  background:transparent;color:var(--texto);font-family:var(--ff-t);font-weight:600;font-size:14px;cursor:pointer}
+
+
+/* ============ MODAL DE REGISTRO (+ Novo) — DS 5.10 ============
+   Ato central do sistema: modal centralizado, não submenu. Superfície de
+   marca, e sobre azul nenhuma ação é azul. O TÍTULO é a frase rotativa (DS 9). */
+.lavrar{position:fixed;left:50%;top:50%;z-index:95;width:min(560px,92vw);
+  transform:translate(-50%,-50%) scale(.96);opacity:0;pointer-events:none;
+  background:var(--azul);color:#fff;border-radius:var(--r-lg);padding:26px 26px 16px;
+  box-shadow:0 40px 120px rgba(0,0,0,.55);
+  transition:transform .22s var(--e-ui),opacity .18s}
+[data-modo="escuro"] .lavrar{background:var(--azul-fundo)}
+.lavrar[data-aberto="true"]{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto}
+.lavrar .cab-m{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px}
+.lavrar .eyebrow-m{font-family:var(--ff-m);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.62)}
+.lavrar .origem{font-family:var(--ff-m);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.28);border-radius:var(--r-pill);padding:3px 9px}
+.lavrar .fechar-m{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.35);
+  background:transparent;color:#fff;font-size:15px;cursor:pointer;display:grid;place-items:center;flex:0 0 auto}
+.lavrar h3{font-family:var(--ff-d);font-weight:700;font-size:clamp(24px,4vw,32px);letter-spacing:-.02em;
+  line-height:1.15;margin:8px 0 26px;text-wrap:balance;max-width:24ch}
+/* a palavra marcada é inline-block: sem o invólucro nowrap a pontuação órfã */
+.lavrar h3 .u{position:relative;display:inline-block}
+.lavrar h3 .u::after{content:"";position:absolute;left:2%;right:2%;bottom:-5px;height:3px;border-radius:1px;background:#fff}
+.lavrar h3 .nb{white-space:nowrap}
+.lavrar .ops{display:flex;flex-direction:column}
+.lavrar .ops button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;
+  border:0;background:transparent;color:#fff;cursor:pointer;text-align:left;padding:15px 6px;
+  border-bottom:1px solid rgba(255,255,255,.18);transition:transform .14s var(--e-ui),opacity .14s}
+.lavrar .ops button:last-child{border-bottom:0}
+.lavrar .ops button:hover{transform:translateX(8px)}
+.lavrar .ops button:active{transform:translateX(8px) scale(.99);opacity:.85}
+.lavrar .ops .nome{font-family:var(--ff-d);font-weight:700;font-size:clamp(20px,3vw,26px);
+  letter-spacing:-.015em;line-height:1.1}
+.lavrar .ops .mais{font-family:var(--ff-d);font-weight:500;opacity:.55;margin-right:.34em;display:inline-block}
+.lavrar .ops .desc-m{font-family:var(--ff-m);font-size:10px;letter-spacing:.05em;color:rgba(255,255,255,.62)}
+
+/* ============ varredura com PAUSA de leitura ============ */
+.varre{position:fixed;inset:0;z-index:200;background:var(--azul);display:grid;place-items:center;
+  transform:translateX(-101%);pointer-events:none}
+[data-modo="escuro"] .varre{background:var(--azul-fundo)}
+.varre .mk{font-family:var(--ff-d);font-weight:700;font-size:clamp(30px,5vw,46px);letter-spacing:.015em;
+  line-height:1;color:#fff;display:inline-flex;align-items:baseline;opacity:0}
+.varre .mk .o{position:relative;display:inline-block}
+.varre .mk .o i{position:absolute;left:7%;right:7%;top:.17em;height:.115em;background:#fff;border-radius:1px}
+.varre.rodando{animation:lv-varre var(--t-varre) cubic-bezier(.5,0,.5,1) both}
+.varre.rodando .mk{animation:lv-varre-mk var(--t-varre) ease-out both}
+@keyframes lv-varre{
+  0%{transform:translateX(-101%)}
+  22%{transform:translateX(0)}      /* 180ms cobrindo   */
+  73%{transform:translateX(0)}      /* 420ms PARADO     */
+  100%{transform:translateX(101%)}  /* 220ms revelando  */
+}
+@keyframes lv-varre-mk{
+  0%,17%{opacity:0;transform:translateY(7px)}
+  32%,66%{opacity:1;transform:none}
+  80%,100%{opacity:0;transform:none}
+}
+
+/* ============ lab ============ */
+.lab{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:150;display:flex;gap:8px;
+  align-items:center;flex-wrap:wrap;justify-content:center;padding:10px 14px;border-radius:var(--r-pill);
+  background:var(--sup-1);box-shadow:var(--e-2);max-width:calc(100vw - 24px)}
+.lab .seg{display:flex;background:var(--sup-2);border-radius:var(--r-pill);padding:3px;gap:2px}
+.lab .seg button{font-family:var(--ff-t);font-size:11.5px;font-weight:600;padding:6px 12px;border:0;cursor:pointer;
+  border-radius:var(--r-pill);background:transparent;color:var(--texto-2)}
+.lab .seg button[aria-pressed="true"]{background:var(--acao);color:var(--sobre-acao)}
+.lab .rep{font-family:var(--ff-m);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--linha-forte);background:transparent;color:var(--texto);border-radius:var(--r-pill);
+  padding:7px 13px;cursor:pointer}
+.nota{background:var(--sup-1);border:1px solid var(--linha);border-left:3px solid var(--acento);
+  border-radius:0 var(--r-md) var(--r-md) 0;padding:15px 17px;box-shadow:var(--e-1)}
+.nota .t{font-family:var(--ff-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--acento)}
+.nota p{margin-top:6px;font-size:13px;color:var(--texto-2)}
+.nota p b{color:var(--texto)}
+.nota p + p{margin-top:9px}
+:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+</style>
+</head>
+<body data-elev="sombra" data-modo="escuro" data-mov="completo" data-fundo="foto" data-dens="confortavel">
+<div class="app" id="app">
+  <div class="fundo grad"></div>
+  <div class="fundo foto"></div>
+
+  <!-- ============ CABEÇALHO SEM FUNDO ============ -->
+  <header class="barra" id="barra" data-rolou="false">
+    <div class="lado">
+      <button class="pil obra" type="button" id="abre-nav" aria-expanded="false" aria-haspopup="menu">
+        <span class="barras"><i></i><i></i><i></i></span>
+        <span class="nome-obra">SPK Martinelli</span>
+        <span class="badge">3</span>
+      </button>
+      <button class="pil acao" type="button" id="abre-novo">+ Novo</button>
+      <div class="busca" id="busca">
+        <button class="lupa" type="button" id="lupa" aria-label="Pesquisar" aria-expanded="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <input type="search" id="busca-in" placeholder="RDO, marco, material, pessoa…" aria-label="Pesquisar">
+      </div>
+    </div>
+    <div class="lado">
+      <div class="capsula">
+        <span class="mk-topo">Lavr<span class="o">o<i></i></span></span>
+        <span class="div"></span>
+        <button class="obras" type="button" aria-label="Minhas obras" title="Minhas obras">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span class="rot-obras">Minhas obras</span>
+        </button>
+        <button class="av" type="button" id="abre-perfil" aria-label="Perfil">M</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ HERO: o que NÃO é inteligência ============ -->
+  <div class="folha">
+    <section class="hero">
+      <div class="rev" style="--i:0">
+        <div class="data-anc"><span class="dia">24</span><span class="mes">jul · quinta</span></div>
+        <h1>Bom dia, Michel.</h1>
+        <div class="sub">SPK Martinelli · combate a incêndio · dia 302 de obra</div>
+      </div>
+      <div class="rev" style="--i:1">
+        <span class="live"><span class="pt"><i class="anel"></i><i class="nucleo"></i></span><span>dados ao vivo</span></span>
+      </div>
+    </section>
+  </div>
+
+  <div class="folha" id="palco">
+    <div class="grade">
+
+      <div class="assessor c12 rev" style="--i:2">
+        <span class="eyebrow">Assessor Lavrō</span>
+        <p class="txt" id="ia-txt"></p>
+        <div class="infos">2 marcos em risco · 1 material abaixo do mínimo · comentário da Baraka há 2 dias</div>
+        <div class="acoes-a">
+          <button class="btn-b" type="button">Ver o que fazer</button>
+          <button class="btn-v" type="button">Como cheguei nisso?</button>
+        </div>
+      </div>
+
+      <div class="card registro er c6 rev" style="--i:3">
+        <div class="topo"><div><h3>Precisa de você hoje</h3><div class="eti">3 pendências · calculadas</div></div>
+          <span class="selo solido"><span class="ponto"></span>Responder</span></div>
+        <div class="linhas" style="border-top:0;padding-top:0">
+          <div class="li"><span class="k">Baraka comentou no RDO 0147</span><span class="v">há 2 d</span></div>
+          <div class="li"><span class="k">M-09 atrasado · bloqueia M-10 e M-12</span><span class="v neg">12 d</span></div>
+          <div class="li"><span class="k">Tubo aço SCH40 2½" abaixo do mínimo</span><span class="v neg">−18 m</span></div>
+        </div>
+        <div><button class="btn btn-1" type="button">Resolver pendências</button></div>
+      </div>
+
+      <div class="card registro c6 rev" style="--i:4">
+        <div class="topo"><div><h3>Avanço físico</h3><div class="eti">acumulado · 40 marcos</div></div>
+          <span class="selo s-at"><span class="ponto"></span>2 em risco</span></div>
+        <div class="donut-bloco">
+          <svg class="donut" viewBox="0 0 150 150">
+            <circle class="trilho" cx="75" cy="75" r="58" fill="none" stroke-width="13"/>
+            <circle class="arco" cx="75" cy="75" r="58" fill="none" stroke-width="13" stroke-dasharray="248 364" transform="rotate(-90 75 75)"/>
+            <text class="donut-num" x="75" y="79" text-anchor="middle" id="donut-num">0%</text>
+            <text class="donut-rot" x="75" y="97" text-anchor="middle">CONCLUÍDO</text>
+          </svg>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div><div class="eti">Nesta semana</div><div class="grandeza lg" id="n-semana">+0<span class="un">p.p.</span></div></div>
+            <div><div class="eti">Previsto para hoje</div><div class="grandeza lg" style="color:var(--texto-3)">71<span class="un">%</span></div></div>
+            <button class="btn btn-2" type="button">Ver Evolução →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRÓXIMO MARCO — data-âncora grande (código, em mono) -->
+      <div class="card registro at c4 rev" style="--i:5">
+        <div class="topo"><div><h3>Próximo marco</h3><div class="eti">o que vence primeiro</div></div></div>
+        <div class="prox">
+          <div class="data-g"><span class="d">30</span><span class="m">jul<br>qua</span></div>
+          <p class="frase"><b>M-12 · Teste de pressão do trecho B</b> vence em 3 dias. Depende do M-09, que segue não iniciado.</p>
+        </div>
+        <div class="linhas">
+          <div class="li"><span class="k">Começa · M-13 comissionamento</span><span class="v">12 ago</span></div>
+        </div>
+        <div class="acoes"><button class="btn btn-2" type="button">Ver marcos →</button></div>
+      </div>
+
+      <!-- CLIMA -->
+      <div class="card apoio c4 rev" style="--i:6">
+        <div class="topo"><div><h3>Clima na obra</h3><div class="eti">Centro · São Paulo · 09h12</div></div>
+          <span class="selo s-at"><span class="ponto"></span>chuva 14h</span></div>
+        <div class="clima">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M17.5 18a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.6-1.3A4 4 0 0 0 7 18h10.5z"/>
+            <path d="M9 21l-1 2M13 21l-1 2M17 21l-1 2"/></svg>
+          <div><div class="temp" id="c-temp">0<span class="un">°C</span></div>
+            <div class="eti" style="margin-top:2px">nublado · vento 12 km/h</div></div>
+        </div>
+        <div class="prev">
+          <div class="h"><span class="hh">10h</span><span class="tt">21°</span><span class="pp">10%</span></div>
+          <div class="h"><span class="hh">12h</span><span class="tt">23°</span><span class="pp">25%</span></div>
+          <div class="h alerta"><span class="hh">14h</span><span class="tt">21°</span><span class="pp">80%</span></div>
+          <div class="h alerta"><span class="hh">16h</span><span class="tt">19°</span><span class="pp">70%</span></div>
+          <div class="h"><span class="hh">18h</span><span class="tt">18°</span><span class="pp">20%</span></div>
+        </div>
+        <div class="linhas">
+          <div class="li"><span class="k">Horas paradas no mês</span><span class="v">18,5 h</span></div>
+        </div>
+      </div>
+
+      <!-- EFETIVO POR DIA -->
+      <div class="card apoio c4 rev" style="--i:7">
+        <div class="topo"><div><h3>Efetivo por dia</h3><div class="eti">últimos 14 dias úteis</div></div>
+          <div class="grandeza lg" id="n-efetivo">0</div></div>
+        <div class="barras-dia" aria-label="Efetivo por dia nos últimos 14 dias">
+          <span class="b" style="height:53%"><i>9</i></span>
+          <span class="b" style="height:65%"><i>11</i></span>
+          <span class="b" style="height:71%"><i>12</i></span>
+          <span class="b" style="height:88%"><i>15</i></span>
+          <span class="b" style="height:100%"><i>17</i></span>
+          <span class="b" style="height:100%"><i>17</i></span>
+          <span class="b" style="height:94%"><i>16</i></span>
+          <span class="b" style="height:88%"><i>15</i></span>
+          <span class="b" style="height:100%"><i>17</i></span>
+          <span class="b" style="height:82%"><i>14</i></span>
+          <span class="b" style="height:82%"><i>14</i></span>
+          <span class="b" style="height:76%"><i>13</i></span>
+          <span class="b" style="height:82%"><i>14</i></span>
+          <span class="b hoje" style="height:82%"><i>14</i></span>
+        </div>
+        <div class="linhas">
+          <div class="li"><span class="k">Média do período</span><span class="v">14,2</span></div>
+        </div>
+      </div>
+
+      <!-- ALMOXARIFADO -->
+      <div class="card apoio c6 rev" style="--i:8">
+        <div class="topo"><div><h3>Almoxarifado</h3><div class="eti">saldo recalculado · 09h12</div></div>
+          <span class="selo s-ne"><span class="ponto"></span>18 itens</span></div>
+        <div class="linhas" style="border-top:0;padding-top:0">
+          <div class="li"><span class="k">Tubo aço SCH40 2½"</span><span class="v neg">−18 m</span></div>
+          <div class="li"><span class="k">Tubo aço SCH40 4"</span><span class="v">126 m</span></div>
+          <div class="li"><span class="k">Sprinkler pendente 68 °C</span><span class="v neg">4 un</span></div>
+        </div>
+        <div class="acoes"><button class="btn btn-2" type="button">Ver materiais →</button></div>
+      </div>
+
+      <!-- ÚLTIMAS FOTOS -->
+      <div class="card apoio c6 rev" style="--i:9">
+        <div class="topo"><div><h3>Últimas fotos</h3><div class="eti">5 mais recentes dos RDOs</div></div></div>
+        <div class="carro" id="carro" tabindex="0" aria-label="Fotos recentes">
+          <div class="foto on"><span class="g" style="background:radial-gradient(120% 90% at 18% 12%,#7C88A0 0%,transparent 56%),linear-gradient(150deg,#55607A,#262C38)"></span><span class="veu"></span>
+            <span class="leg"><span class="d">RDO 0147 · 24 jul</span><span class="t">Prumada trecho B — teste de alinhamento</span></span></div>
+          <div class="foto"><span class="g" style="background:radial-gradient(100% 80% at 78% 22%,#B9A98E 0%,transparent 54%),linear-gradient(30deg,#55607A,#3A4354)"></span><span class="veu"></span>
+            <span class="leg"><span class="d">RDO 0146 · 23 jul</span><span class="t">Suportes tipo trapézio no 14º pavimento</span></span></div>
+          <div class="foto"><span class="g" style="background:radial-gradient(110% 90% at 44% 88%,#2E3746 0%,transparent 58%),linear-gradient(210deg,#7C88A0,#3A4354)"></span><span class="veu"></span>
+            <span class="leg"><span class="d">RDO 0145 · 22 jul</span><span class="t">Chegada de tubo SCH40 4" — 3 feixes</span></span></div>
+          <div class="foto"><span class="g" style="background:radial-gradient(90% 90% at 12% 62%,#B9A98E 0%,transparent 52%),linear-gradient(96deg,#55607A,#262C38)"></span><span class="veu"></span>
+            <span class="leg"><span class="d">RDO 0144 · 19 jul</span><span class="t">Sprinklers pendentes — subsolo 2</span></span></div>
+          <div class="foto"><span class="g" style="background:radial-gradient(120% 70% at 68% 8%,#7C88A0 0%,transparent 55%),linear-gradient(140deg,#3A4354,#262C38)"></span><span class="veu"></span>
+            <span class="leg"><span class="d">RDO 0143 · 18 jul</span><span class="t">Ensaio de pressão — registro do manômetro</span></span></div>
+          <span class="pontos" id="pontos"><i class="on"></i><i></i><i></i><i></i><i></i></span>
+        </div>
+      </div>
+
+      <div class="c12 rev" style="--i:10">
+        <div class="nota">
+          <div class="t">O que mudou nesta rodada</div>
+          <p><b>Um gatilho só.</b> "Hoje" entrou em Obra; a pílula da Obra abre a gaveta pela <b>esquerda</b>, igual no celular e no desktop. Sem hambúrguer, sem barra de seções, sem gatilho diferente por plataforma.</p>
+          <p><b>Cabeçalho sem fundo.</b> Só é possível porque tudo nele é pílula — role a página e veja os cards passando por baixo. Pílula de alta ênfase sobrevive a qualquer fundo.</p>
+          <p><b>Varredura com pausa:</b> 180ms cobrindo, <b>420ms parado</b> para ler Lavrō, 220ms revelando. Total 820ms — reservado a mudança de contexto, não a navegação de rotina.</p>
+          <p><b>Busca retrátil:</b> pílula redonda que expande. Alternativa que eu recomendaria testar: lupa abre uma <b>paleta central</b> tipo Cmd+K — idêntica no celular e no desktop, e sem animar largura.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="varre" id="varre"><span class="mk">Lavr<span class="o">o<i></i></span></span></div>
+<div class="veu" id="veu" data-aberto="false"></div>
+
+<div class="lavrar" id="lavrar" data-aberto="false" role="dialog" aria-modal="true" aria-label="Novo registro">
+  <div class="cab-m">
+    <span class="eyebrow-m">Novo registro · SPK Martinelli</span>
+    <span class="origem" id="origem-frase">baralho</span>
+    <button class="fechar-m" type="button" data-fecha aria-label="Fechar">✕</button>
+  </div>
+  <h3 id="frase-lavrar">O que vamos <span class="nb"><span class="u">lavrar</span>?</span></h3>
+  <div class="ops">
+    <button type="button"><span class="nome"><span class="mais">+</span>Nova RDO</span><span class="desc-m">relatório diário · efetivo, clima, serviços, fotos</span></button>
+    <button type="button"><span class="nome"><span class="mais">+</span>Registro</span><span class="desc-m">ocorrência avulsa · foto, nota, evento da obra</span></button>
+    <button type="button"><span class="nome"><span class="mais">+</span>Pergunta</span><span class="desc-m">questão formal à equipe ou ao cliente · fica no histórico</span></button>
+    <button type="button"><span class="nome"><span class="mais">+</span>Ata de reunião</span><span class="desc-m">decisões e presentes · entra no acervo da obra</span></button>
+  </div>
+</div>
+
+
+<!-- GAVETA DE NAVEGAÇÃO — ESQUERDA -->
+<aside class="gaveta esq" id="gaveta-nav" data-aberto="false" aria-label="Navegação da obra">
+  <div class="cab">
+    <span class="mk">Lavr<span class="o">o<i></i></span></span>
+    <button class="fechar" type="button" data-fecha aria-label="Fechar">✕</button>
+  </div>
+
+  <div class="obra-nome">SPK Martinelli</div>
+  <button class="pil-hoje" type="button">Hoje <span class="badge-g">3</span></button>
+
+  <div class="bloco" data-admin="true">
+    <div class="rot-b">Controles de Admin</div>
+    <nav>
+      <a><span class="it"><span class="t">Editar obra</span><span class="d">dados, checklists, alertas e prazos</span></span></a>
+      <a><span class="it"><span class="t">Usuários e acessos</span><span class="d">quem entra e o que pode fazer</span></span></a>
+    </nav>
+  </div>
+
+  <div class="bloco">
+    <div class="rot-b">Controle</div>
+    <nav>
+      <a>RDOs <span class="k">147</span></a>
+      <a>Marcos <span class="k">40</span></a>
+      <a>Materiais</a>
+      <a>Cargos e pessoas</a>
+    </nav>
+  </div>
+
+  <div class="bloco">
+    <div class="rot-b">Evolução <span class="mp">mesma página</span></div>
+    <nav>
+      <a>Linha do tempo</a>
+      <a>Gantt</a>
+      <a>Físico-financeiro</a>
+    </nav>
+  </div>
+
+  <div class="rodape-nav">
+    <a>Novidades do app</a>
+    <a>Sobre a Lavrō</a>
+    <a>Sobre a Baraka</a>
+  </div>
+</aside>
+
+<!-- PERFIL: popup central (a gaveta azul fica exclusiva da navegação) -->
+<div class="popup" id="pop-perfil" data-aberto="false" role="dialog" aria-modal="true" aria-label="Perfil">
+  <div class="pop-cab">
+    <div class="perfil-p"><span class="foto">M</span>
+      <div><div class="nome">Michel Stein</div><div class="cargo">Admin · Baraka Engenharia</div></div></div>
+    <button class="fechar-p" type="button" data-fecha aria-label="Fechar">✕</button>
+  </div>
+  <div class="rot-p">Aparência</div>
+  <div class="seg-p" role="group" aria-label="Modo de cor">
+    <button type="button" data-set="modo" data-val="claro" aria-pressed="false">Claro</button>
+    <button type="button" data-set="modo" data-val="escuro" aria-pressed="true">Escuro</button>
+  </div>
+  <div class="seg-p" style="margin-top:8px" role="group" aria-label="Densidade">
+    <button type="button" data-set="dens" data-val="compacto" aria-pressed="false">Compacto</button>
+    <button type="button" data-set="dens" data-val="confortavel" aria-pressed="true">Confortável</button>
+  </div>
+  <nav class="nav-p">
+    <a>Configurações do perfil</a>
+    <a>Reportar erro</a>
+  </nav>
+  <button class="sair-p" type="button">Sair</button>
+</div>
+
+<div class="lab">
+  <span class="anot">Modo</span>
+  <div class="seg" role="group" aria-label="Modo">
+    <button type="button" data-set="modo" data-val="claro" aria-pressed="false">Claro</button>
+    <button type="button" data-set="modo" data-val="escuro" aria-pressed="true">Escuro</button>
+  </div>
+  <span class="anot">Movimento</span>
+  <div class="seg" role="group" aria-label="Movimento">
+    <button type="button" data-set="mov" data-val="completo" aria-pressed="true">Completo</button>
+    <button type="button" data-set="mov" data-val="reduzido" aria-pressed="false">Reduzido</button>
+  </div>
+  <span class="anot">Cabeçalho</span>
+  <div class="seg" role="group" aria-label="Elevação do cabeçalho">
+    <button type="button" data-set="elev" data-val="sombra" aria-pressed="true">Sombra</button>
+    <button type="button" data-set="elev" data-val="blur" aria-pressed="false">Blur</button>
+  </div>
+  <span class="anot">Densidade</span>
+  <div class="seg" role="group" aria-label="Densidade">
+    <button type="button" data-set="dens" data-val="confortavel" aria-pressed="true">Conf.</button>
+    <button type="button" data-set="dens" data-val="compacto" aria-pressed="false">Comp.</button>
+  </div>
+  <span class="anot">Fundo</span>
+  <div class="seg" role="group" aria-label="Fundo">
+    <button type="button" data-set="fundo" data-val="nenhum" aria-pressed="false">Nenhum</button>
+    <button type="button" data-set="fundo" data-val="grad" aria-pressed="false">Gradiente</button>
+    <button type="button" data-set="fundo" data-val="foto" aria-pressed="true">Padrão</button>
+  </div>
+  <button class="rep" type="button" id="replay">Rever entrada ↻</button>
+  <button class="rep" type="button" id="varrer">Varredura ↦</button>
+</div>
+
+<script>
+(function(){
+  var b=document.body, palco=document.getElementById('palco');
+  function reduz(){ return b.dataset.mov==='reduzido' ||
+    (window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches); }
+  function sincroniza(chave,v){ b.dataset[chave]=v;
+    document.querySelectorAll('[data-set="'+chave+'"]').forEach(function(y){
+      y.setAttribute('aria-pressed',String(y.dataset.val===v)); }); }
+  function setModo(v){ sincroniza('modo',v); }
+  document.querySelectorAll('[data-set]').forEach(function(x){
+    x.addEventListener('click',function(e){
+      e.stopPropagation();
+      if(x.dataset.set==='modo'){ setModo(x.dataset.val); return; }
+      if(x.dataset.set==='dens'){ sincroniza('dens',x.dataset.val); return; }
+      b.dataset[x.dataset.set]=x.dataset.val;
+      x.parentElement.querySelectorAll('button').forEach(function(y){y.setAttribute('aria-pressed',String(y===x));});
+      if(x.dataset.set==='mov'){ entrada(); liga(); }
+    });
+  });
+
+  /* contadores: só grandeza */
+  function contaHTML(el,fim,dur,un,pre){
+    if(!el) return; pre=pre||''; un=un||'';
+    if(reduz()){ el.innerHTML=pre+fim+un; return; }
+    var t0=null;
+    (function passo(ts){ if(!t0) t0=ts;
+      var p=Math.min(1,(ts-t0)/dur), e=1-Math.pow(1-p,3);
+      el.innerHTML=pre+Math.round(fim*e)+un;
+      if(p<1) requestAnimationFrame(passo); })(performance.now());
+  }
+
+  /* assessor: texto curto e acionável */
+  var TXT="O M-09 está travando dois marcos há 12 dias. Se ele andar esta semana, "+
+          "o teste do trecho B volta para o prazo";
+  var rafIA=null;
+  /* SEM glitch: o texto simplesmente surge, caractere a caractere. O caret
+     pisca seco (step-end) e permanece — marca de procedência. */
+  function escreveIA(){
+    var el=document.getElementById('ia-txt'); if(!el) return;
+    if(rafIA) cancelAnimationFrame(rafIA);
+    if(reduz()){ el.innerHTML=TXT+' <span class="cursor"></span>'; return; }
+    var t0=null, dur=1500;
+    (function passo(ts){ if(!t0) t0=ts;
+      var p=Math.min(1,(ts-t0)/dur), n=Math.floor(p*TXT.length);
+      el.innerHTML=TXT.slice(0,n)+' <span class="cursor"></span>';
+      if(p<1) rafIA=requestAnimationFrame(passo); })(performance.now());
+  }
+
+  function entrada(){
+    document.querySelectorAll('.rev, .donut .arco, .gl .bar, .barras-dia .b').forEach(function(el){
+      el.style.animation='none'; void el.offsetWidth; el.style.animation='';
+    });
+    var auras=document.querySelectorAll('.gl .aura');
+    auras.forEach(function(a){a.classList.remove('rodando');});
+    if(!reduz()) setTimeout(function(){auras.forEach(function(a){a.classList.add('rodando');});},950);
+    ['donut-num','n-semana','t1','t2','t3'].forEach(function(id){var e=document.getElementById(id); if(e) e.textContent='0';});
+    setTimeout(function(){
+      contaHTML(document.getElementById('donut-num'),68,900,'%');
+      contaHTML(document.getElementById('n-semana'),6,900,'<span class="un">p.p.</span>','+');
+      contaHTML(document.getElementById('t1'),3,700,'<span class="un">pendências</span>');
+      contaHTML(document.getElementById('c-temp'),22,700,'<span class="un">°C</span>');
+      contaHTML(document.getElementById('n-efetivo'),14,700,'');
+      contaHTML(document.getElementById('t2'),2,700,'<span class="un">de 40</span>');
+      contaHTML(document.getElementById('t3'),14,700,'<span class="un">pessoas</span>');
+    }, reduz()?0:300);
+    escreveIA();
+  }
+
+  /* gavetas: gatilho e gaveta sempre na mesma borda */
+  var veu=document.getElementById('veu');
+  function fechaTudo(){
+    document.querySelectorAll('.gaveta').forEach(function(g){g.dataset.aberto='false';});
+    var lv=document.getElementById('lavrar'); if(lv) lv.dataset.aberto='false';
+    document.getElementById('pop-perfil').dataset.aberto='false';
+    veu.dataset.aberto='false';
+    document.getElementById('abre-nav').setAttribute('aria-expanded','false');
+  }
+  function abre(id){ fechaTudo(); document.getElementById(id).dataset.aberto='true'; veu.dataset.aberto='true'; }
+  document.getElementById('abre-nav').addEventListener('click',function(e){
+    e.stopPropagation(); abre('gaveta-nav'); this.setAttribute('aria-expanded','true'); });
+  document.getElementById('abre-perfil').addEventListener('click',function(e){ e.stopPropagation();
+    fechaTudo(); document.getElementById('pop-perfil').dataset.aberto='true'; veu.dataset.aberto='true'; });
+  veu.addEventListener('click',fechaTudo);
+  document.querySelectorAll('[data-fecha]').forEach(function(x){x.addEventListener('click',fechaTudo);});
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ fechaTudo(); fechaBusca(); } });
+
+  /* busca retrátil */
+  var busca=document.getElementById('busca'), inp=document.getElementById('busca-in');
+  function abreBusca(){ busca.classList.add('aberta'); document.getElementById('lupa').setAttribute('aria-expanded','true');
+    setTimeout(function(){inp.focus();},180); }
+  function fechaBusca(){ if(!inp.value){ busca.classList.remove('aberta');
+    document.getElementById('lupa').setAttribute('aria-expanded','false'); } }
+  document.getElementById('lupa').addEventListener('click',function(e){
+    e.stopPropagation();
+    if(busca.classList.contains('aberta')) fechaBusca(); else abreBusca();
+  });
+  inp.addEventListener('blur',fechaBusca);
+
+  /* carrossel */
+  var timer=null, pausado=false, i=0;
+  function liga(){
+    var carro=document.getElementById('carro'); if(!carro) return;
+    var fotos=carro.querySelectorAll('.foto'), pts=document.getElementById('pontos').children;
+    function mostra(n){ fotos[i].classList.remove('on'); pts[i].classList.remove('on');
+      i=(n+fotos.length)%fotos.length; fotos[i].classList.add('on'); pts[i].classList.add('on'); }
+    if(timer){clearInterval(timer);timer=null;}
+    if(!carro.__lig){
+      ['mouseenter','focusin'].forEach(function(ev){carro.addEventListener(ev,function(){pausado=true;if(timer){clearInterval(timer);timer=null;}});});
+      ['mouseleave','focusout'].forEach(function(ev){carro.addEventListener(ev,function(){pausado=false;liga();});});
+      carro.addEventListener('click',function(){mostra(i+1);});
+      carro.addEventListener('keydown',function(e){ if(e.key==='ArrowRight')mostra(i+1); if(e.key==='ArrowLeft')mostra(i-1); });
+      carro.__lig=true;
+    }
+    if(reduz()||pausado) return;
+    timer=setInterval(function(){mostra(i+1);},5000);
+  }
+
+  /* varredura */
+  var varre=document.getElementById('varre');
+  function varrer(depois){
+    if(reduz()){ if(depois) depois(); return; }
+    varre.classList.remove('rodando'); void varre.offsetWidth; varre.classList.add('rodando');
+    setTimeout(function(){ if(depois) depois(); }, 560);   // reentra ainda coberto
+    setTimeout(function(){ varre.classList.remove('rodando'); }, 880);
+  }
+  document.getElementById('varrer').addEventListener('click',function(e){e.stopPropagation();varrer(entrada);});
+  document.getElementById('replay').addEventListener('click',function(e){e.stopPropagation();entrada();});
+
+  /* scrim do cabeçalho só ao rolar */
+  var barra=document.getElementById('barra');
+  function marcaScroll(){ barra.dataset.rolou = String(window.scrollY > 8); }
+  window.addEventListener('scroll',marcaScroll,{passive:true}); marcaScroll();
+
+  /* atraso escalonado das barras do efetivo, com teto */
+  document.querySelectorAll('.barras-dia .b').forEach(function(x,i){ x.style.setProperty('--n', Math.min(i,13)); });
+
+
+  /* ---------- frases do modal de registro — DS 9 ----------
+     BARALHO, não sorteio: embaralha as 20, consome uma por abertura, só
+     reembaralha quando a última sai. Garante 20 aberturas sem repetição;
+     sorteio puro repetiria em ~6. No app, o índice é persistido por usuário. */
+  var FRASES = [
+    "O que vamos {lavrar}?",
+    "O que merece {atenção} hoje?",
+    "O que vale {registrar} hoje?",
+    "Trabalho bem feito merece {foto}.",
+    "Como anda o {trabalho} hoje?",
+    "O que {aconteceu} na obra hoje?",
+    "O que precisa ficar {documentado}?",
+    "Alguma coisa para deixar {por escrito}?",
+    "O que {avançou} hoje?",
+    "O que a obra tem para {contar}?",
+    "Serviço concluído? Vale uma {foto}.",
+    "O que não pode ser {esquecido} amanhã?",
+    "O que {mudou} desde ontem?",
+    "Que parte do trabalho merece ficar {guardada}?",
+    "Alguma pendência para {formalizar}?",
+    "O que vale {mostrar} ao cliente?",
+    "Como foi o {dia} na obra?",
+    "O que a equipe {entregou} hoje?",
+    "Hoje é fácil {lembrar}. Amanhã, não.",
+    "Vamos deixar isso {registrado}."
+  ];
+  /* CONTEXTUAIS sobrepõem o baralho. `sempre:false` dispara com 50% de chance,
+     para o baralho continuar aparecendo — segunda e sexta cobrem 40% da semana.
+     No app, o texto vem parametrizado: nada de dado cravado.
+
+     E aqui também: `M-12` e `3 dias` estavam cravados nas frases, contra a
+     regra do 02 §9.4. Agora vêm de DADOS, e a mesma chave `{}` serve para as
+     duas coisas porque a resolução é em duas etapas — `dados()` troca só os
+     nomes que conhece, e o que sobra vira palavra marcada pelo `marca()`.
+     No app quem faz a primeira etapa é o `t()` do i18n. */
+  var DADOS = { marco:"M-12", dias:3 };
+  function dados(t){
+    for(var k in DADOS) t = t.split("{"+k+"}").join(DADOS[k]);
+    return t;
+  }
+  var CONTEXTO = {};
+  var FRASES_CTX = [
+    { id:"primeiro", sempre:true,  txt:"Primeiro registro desta obra. Vamos {começar}." },
+    { id:"lacuna",   sempre:true,  txt:"Sem registro há {dias} dias. Vamos {pôr em dia}?" },
+    { id:"marco",    sempre:true,  txt:"{marco} {vence} em {dias} dias. Tem evidência para anexar?" },
+    { id:"chuva",    sempre:true,  txt:"Choveu hoje. Vale registrar a {parada}." },
+    { id:"sexta",    sempre:false, txt:"Sexta-feira. O que {fechamos} esta semana?" },
+    { id:"segunda",  sempre:false, txt:"Segunda-feira. Como a obra {amanheceu}?" }
+  ];
+  var baralho=[], ultima=null;
+  function embaralha(){
+    baralho=FRASES.slice();
+    for(var i=baralho.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=baralho[i];baralho[i]=baralho[j];baralho[j]=t;}
+    if(baralho[0]===ultima && baralho.length>1){ baralho.push(baralho.shift()); }
+  }
+  function marca(t){ return t.replace(/\{([^}]+)\}([?!.,:;]*)/g,'<span class="nb"><span class="u">$1</span>$2</span>'); }
+  function fraseContextual(){
+    for(var i=0;i<FRASES_CTX.length;i++){
+      var f=FRASES_CTX[i];
+      if(CONTEXTO[f.id] && (f.sempre || Math.random()<0.5)) return f;
+    }
+    return null;
+  }
+  function pintaFrase(){
+    var ctx=fraseContextual(), h=document.getElementById('frase-lavrar'), sel=document.getElementById('origem-frase');
+    if(ctx){ h.innerHTML=marca(dados(ctx.txt)); sel.textContent='contexto · '+ctx.id; return; }
+    if(!baralho.length) embaralha();
+    var f=baralho.shift(); ultima=f;
+    h.innerHTML=marca(f);
+    sel.textContent='baralho · '+(FRASES.length-baralho.length)+'/'+FRASES.length;
+  }
+  var lavrar=document.getElementById('lavrar');
+  document.getElementById('abre-novo').addEventListener('click',function(e){
+    e.stopPropagation(); fechaTudo(); pintaFrase();
+    lavrar.dataset.aberto='true'; veu.dataset.aberto='true';
+  });
+
+  entrada(); liga();
+})();
+</script>
+</body>
+</html>

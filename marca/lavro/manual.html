@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lavrō — Manual da marca v1.4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   LAVRŌ — MANUAL DA MARCA v1.4
+   Derivado de 01_MARCA_Lavro.md. O .md é a fonte de verdade; se divergirem,
+   o .md manda e este arquivo está desatualizado.
+
+   NOTA DE MANUTENÇÃO — leia antes de mexer no diagrama da seção 02:
+   qualquer elemento que meça em `em` contra o glifo precisa de
+   `line-height:1` E da mesma `font-family` do wordmark. Sem os dois, o
+   strut do invólucro desloca a caixa da marca e as guias mentem. Esse erro
+   derrubou três versões deste documento.
+   ========================================================================== */
+:root{
+  --marca:#0123FF; --marca-escuro:#5B6BFF;
+  --azul-fundo:#0016C7; --azul-claro:#7C8BFF; --azul-grafico:#5B6BFF;
+  --tinta:#0E1116; --tinta-2:#3F4959; --tinta-3:#8790A2;
+  --papel:#FFFFFF; --papel-2:#F5F6F9; --papel-3:#E9EBF0; --linha:#D3D8E0;
+  --escuro:#0E1116; --escuro-2:#1C222E;
+  --creme-papel:#F1EBDD;
+  --ok:#1E7F4F; --atencao:#B26A00; --erro:#C62828;
+  --ff-d:'Space Grotesk','Segoe UI',sans-serif;
+  --ff-t:'Inter','Segoe UI',system-ui,sans-serif;
+  --ff-m:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{background:var(--papel-2);color:var(--tinta);font-family:var(--ff-t);line-height:1.6}
+.pagina{max-width:960px;margin:0 auto;padding:0 20px 96px}
+
+.capa{padding:88px 0 56px;border-bottom:2px solid var(--tinta)}
+.eyebrow{font-family:var(--ff-m);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-3)}
+.capa h1{font-family:var(--ff-d);font-weight:700;font-size:clamp(34px,6vw,56px);letter-spacing:-.025em;line-height:1.02;margin-top:10px}
+.capa .lede{font-size:16px;color:var(--tinta-2);max-width:58ch;margin-top:18px}
+
+.sec{padding-top:60px}
+.sec-num{font-family:var(--ff-m);font-size:11px;letter-spacing:.16em;color:var(--marca)}
+.sec h2{font-family:var(--ff-d);font-weight:600;font-size:26px;letter-spacing:-.015em;margin-top:6px}
+.sec h3{font-family:var(--ff-d);font-weight:600;font-size:17px;margin-top:34px}
+.sec p{font-size:14.5px;color:var(--tinta-2);max-width:64ch;margin-top:14px}
+.sec p b{color:var(--tinta);font-weight:600}
+.sec p code,.sec li code,td code{font-family:var(--ff-m);font-size:13px;color:var(--marca)}
+.sec ul{margin:14px 0 0 18px;max-width:64ch}
+.sec li{font-size:14.5px;color:var(--tinta-2);margin-bottom:7px}
+.sec li b{color:var(--tinta);font-weight:600}
+.hr{border:0;border-top:1px solid var(--linha);margin:52px 0 0}
+.rot{font-family:var(--ff-m);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--tinta-3)}
+
+.tab{width:100%;border-collapse:collapse;margin-top:20px;font-size:13.5px}
+.tab th,.tab td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--linha);vertical-align:top}
+.tab th{font-family:var(--ff-m);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-3);font-weight:500}
+.tab td{color:var(--tinta-2)}
+.tab td b{color:var(--tinta)}
+.tab td:first-child{font-family:var(--ff-m);font-size:12px;color:var(--tinta);white-space:nowrap}
+.tab.tk td:first-child{color:var(--marca)}
+.pastilha{display:inline-block;width:13px;height:13px;border-radius:3px;vertical-align:-2px;margin-right:7px}
+.rolar{overflow-x:auto}
+
+/* ---------- wordmark ---------- */
+.mark{font-family:var(--ff-d);font-weight:700;letter-spacing:.015em;line-height:1;user-select:none;
+      display:inline-flex;align-items:baseline;white-space:nowrap;color:var(--tinta)}
+.mark .o{position:relative;display:inline-block;color:var(--cor,var(--marca))}
+.mark .o .bar{position:absolute;left:7%;right:7%;top:var(--bt,.17em);height:var(--bh,.115em);
+              background:var(--cor,var(--marca));border-radius:1px}
+
+.palco{border-radius:14px;padding:60px 30px;display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:22px}
+/* Painel de cor: o rótulo sai do fluxo para que a marca — a peça central —
+   fique de fato no centro óptico do painel, e não empurrada para baixo. */
+.palco.vitrine{position:relative;display:grid;place-items:center;min-height:150px;padding:34px 18px}
+.palco.vitrine > .rot{position:absolute;top:15px;left:0;right:0;text-align:center}
+.p-claro{background:var(--papel);border:1px solid var(--linha)}
+.p-escuro{background:var(--escuro)}
+.p-escuro .mark{color:#EDEFF5}
+.p-escuro .rot{color:#5E6779}
+.p-azul{background:var(--azul-fundo)}
+.p-azul .mark{color:#fff}
+.p-azul .rot{color:rgba(255,255,255,.6)}
+.p-creme{background:var(--creme-papel)}
+.p-creme .rot{color:rgba(14,17,22,.45)}
+
+.d2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.d3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.d4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px}
+@media(max-width:900px){.d4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.d2,.d3{grid-template-columns:1fr}}
+
+/* ---------- diagrama de construção (ver nota de manutenção no topo) ---------- */
+.constr{background:var(--papel);border:1px solid var(--linha);border-radius:14px;padding:44px 28px 34px;margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:26px;overflow-x:auto}
+.diag{position:relative;display:inline-block;font-family:var(--ff-d);font-size:var(--fs,96px);line-height:1;padding:0 12px}
+.diag .mark{font-size:1em}
+.diag .g{position:absolute;left:0;right:0;border-top:1px dashed;pointer-events:none}
+.diag .g .tg{position:absolute;left:calc(100% + 8px);top:-8px;font-family:var(--ff-m);font-size:9px;letter-spacing:.05em;white-space:nowrap;line-height:1}
+.g-cap{top:.145em;border-color:rgba(1,35,255,.6)} .g-cap .tg{color:var(--marca)}
+.g-o{top:.335em;border-color:rgba(198,40,40,.5)}  .g-o .tg{color:var(--erro)}
+.g-b{top:.845em;border-color:rgba(14,17,22,.4)}   .g-b .tg{color:var(--tinta-3)}
+.vao{position:absolute;left:calc(100% - 46px);top:.285em;height:.050em;width:54px;
+     background:rgba(178,106,0,.22);border-top:1px solid rgba(178,106,0,.85);border-bottom:1px solid rgba(178,106,0,.85)}
+.vao .tg{position:absolute;left:calc(100% + 6px);top:-6px;font-family:var(--ff-m);font-size:9px;color:var(--atencao);white-space:nowrap;line-height:1}
+.medidas{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.medida{font-family:var(--ff-m);font-size:11px;color:var(--tinta-2);background:var(--papel-2);border:1px solid var(--linha);border-radius:999px;padding:5px 12px}
+
+.escada{display:flex;flex-wrap:wrap;gap:26px 40px;align-items:flex-end;margin-top:22px;background:var(--papel);border:1px solid var(--linha);border-radius:14px;padding:30px 26px}
+.degrau{display:flex;flex-direction:column;gap:10px}
+.degrau .px{font-family:var(--ff-m);font-size:9.5px;letter-spacing:.1em;color:var(--tinta-3)}
+
+/* ---------- símbolo ---------- */
+/* Símbolo L_ : a barra ocupa a posição do glifo "_" da fonte —
+   top 0,893em (base 0,845 + vão 0,048), left 0,607em (após o avanço do L). */
+.sim{display:grid;place-items:center;width:var(--box);height:var(--box);flex:0 0 auto}
+.sim.quad{background:var(--marca);border-radius:calc(var(--box)*.23)}
+.sim .gl{font-family:var(--ff-d);font-weight:700;font-size:calc(var(--box)*.62);line-height:1;
+         position:relative;display:inline-block;transform:translateY(-.0765em)}
+.sim .gl .bar{position:absolute;top:.893em;height:var(--bh,.115em);left:.607em;width:.49em;
+              background:currentColor;border-radius:1px}
+.cx{background:var(--papel);border:1px solid var(--linha);border-radius:12px;padding:24px 18px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.cx.dk{background:var(--escuro);border-color:#262E3C}.cx.dk .rot{color:#5E6779}
+.fila{display:flex;gap:26px;align-items:flex-end;flex-wrap:wrap;justify-content:center}
+.fila-i{display:flex;flex-direction:column;align-items:center;gap:9px}
+.fila-i .px{font-family:var(--ff-m);font-size:9px;letter-spacing:.08em;color:var(--tinta-3)}
+.cx.dk .fila-i .px{color:#5E6779}
+
+/* ---------- cores ---------- */
+.cor{border:1px solid var(--linha);border-radius:12px;overflow:hidden;background:var(--papel)}
+.cor .chapa{height:96px;display:flex;align-items:flex-end;padding:13px}
+.cor .chapa span{font-family:var(--ff-m);font-size:10.5px}
+.cor .meta{padding:15px}
+.cor .tok{font-family:var(--ff-m);font-size:12.5px;font-weight:600;color:var(--tinta)}
+.cor .hex{font-family:var(--ff-m);font-size:11.5px;color:var(--tinta-3);margin-top:2px}
+.cor .quando{font-size:13px;color:var(--tinta-2);margin-top:9px;line-height:1.5}
+
+/* ---------- régua / cards ---------- */
+.card-demo{background:var(--papel);border:1px solid var(--linha);border-top:4px solid var(--marca);
+           border-radius:0 0 12px 12px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.card-demo.apoio{border:1px solid var(--linha);border-radius:12px}
+.card-demo h4{font-family:var(--ff-d);font-weight:600;font-size:17px}
+.card-demo .sub{font-family:var(--ff-m);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-3)}
+.card-demo p{margin-top:0;font-size:14px}
+
+/* ---------- gradiente ---------- */
+.grad{border-radius:14px;min-height:180px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:18px}
+.grad .veu{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,17,22,.82),rgba(14,17,22,.2) 62%,transparent)}
+.grad.claro .veu{background:linear-gradient(to top,rgba(255,255,255,.88),rgba(255,255,255,.18) 62%,transparent)}
+.grad .txt{position:relative}
+.grad .txt .n{font-family:var(--ff-d);font-weight:700;font-size:18px;letter-spacing:-.01em;color:#fff}
+.grad .txt .s{font-family:var(--ff-m);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.grad.claro .txt .n{color:var(--tinta)}
+.grad.claro .txt .s{color:var(--tinta-2)}
+
+/* ---------- lockup ---------- */
+.lockup{display:flex;align-items:center;gap:16px;background:var(--papel);border:1px solid var(--linha);border-radius:12px;padding:22px;margin-top:22px}
+.lockup .filete{width:1px;height:34px;background:var(--linha)}
+.lockup .cliente{font-family:var(--ff-m);font-size:11.5px;font-weight:500;letter-spacing:.1em;line-height:1.5;color:var(--tinta-2)}
+.lockup .cliente span{display:block;font-size:9.5px;color:var(--tinta-3)}
+
+.nao{background:var(--papel);border:1px solid var(--linha);border-left:3px solid var(--erro);border-radius:0 12px 12px 0;padding:16px 18px}
+.nao .t{font-family:var(--ff-m);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--erro)}
+.nao p{margin-top:7px;font-size:13.5px;max-width:none}
+.at{border-left-color:var(--atencao)}.at .t{color:var(--atencao)}
+.pend{background:var(--papel-3);border-radius:12px;padding:18px}
+.pend h4{font-family:var(--ff-d);font-weight:600;font-size:15px}
+.pend p{margin-top:7px;font-size:13px}
+
+/* ---------- manifesto (seção 00) ---------- */
+/* Creme é a superfície institucional definida na seção 07 — é o lugar certo
+   para o texto de fundação da marca. O painel não leva régua nem azul: a
+   disciplina de cor é o próprio argumento do texto. Espaçamento em `em` para
+   acompanhar o corpo maior sem recalcular. */
+.manif{background:var(--creme-papel);border-radius:14px;padding:40px 34px;margin-top:22px}
+.manif p{font-family:var(--ff-d);font-weight:400;font-size:16.5px;line-height:1.72;
+         color:var(--tinta);max-width:56ch;margin-top:1.15em}
+.manif p:first-child{margin-top:0}
+.manif p em{font-style:italic;color:var(--tinta-2)}
+.manif p b{font-weight:600}
+.manif .fecho{font-weight:600;font-size:18px;margin-top:1.5em}
+.manif .corrente{font-family:var(--ff-m);font-size:13px;letter-spacing:.02em;
+                 line-height:1.75;color:var(--tinta-2);text-transform:none}
+/* Frase-assinatura: display grande, sem caixa alta — a marca é title case. */
+.sec p.tagline{font-family:var(--ff-d);font-weight:700;font-size:clamp(26px,4.4vw,38px);
+         letter-spacing:-.02em;line-height:1.1;color:var(--tinta);margin-top:6px}
+.sec p.tagline-en{font-family:var(--ff-m);font-size:11px;letter-spacing:.14em;
+            text-transform:uppercase;color:var(--tinta-3);margin-top:10px}
+
+.rodape{margin-top:76px;padding-top:22px;border-top:1px solid var(--linha);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+:focus-visible{outline:2px solid var(--marca);outline-offset:2px}
+@media print{body{background:#fff}.palco,.grad,.cor .chapa{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="pagina">
+
+  <header class="capa">
+    <p class="eyebrow">Manual da marca · versão 1.4 · julho 2026</p>
+    <h1>Lavrō</h1>
+    <p class="lede">
+      O livro de registro do empreendimento, do projeto à obra. Este manual
+      cobre a marca: conceito, wordmark, símbolo, cor, tipografia, gradiente e
+      convivência com a marca do cliente. Tokens de interface, componentes e
+      pílulas ficam no documento de design system.
+    </p>
+    <div style="margin-top:38px"><div class="mark" style="font-size:min(72px,13vw)">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+  </header>
+
+  <!-- 00 -->
+  <section class="sec" style="padding-top:52px">
+    <p class="sec-num">00</p>
+    <h2>Conceito</h2>
+    <p>
+      Lavrō é o <b>livro de registro do empreendimento</b> — da decisão de
+      projeto ao dia de obra. Esta seção é a fundação: o que a marca significa,
+      como a história se conta e que palavras entram. Tudo o que vem depois é
+      forma.
+    </p>
+
+    <h3>Manifesto</h3>
+    <div class="manif">
+      <p>
+        Toda obra é a execução de uma decisão. E quase nenhuma decisão chega
+        inteira até lá.
+      </p>
+      <p>
+        Ela nasceu numa reunião de projeto, virou um pedido do cliente, uma
+        alteração de escopo, uma prancha revisada. Passou por e-mail, por
+        WhatsApp, por uma ata que ninguém releu. Quando a obra pergunta
+        <em>quem aprovou isso</em>, o que existe é lembrança. E lembrança não
+        sustenta nada.
+      </p>
+      <p>
+        Lavrar é outro verbo. Antes de tudo ele quer dizer trabalho de mão:
+        lavra-se a terra, lavra-se a pedra, lavra-se a madeira. Trabalho feito
+        no lugar, no dia, por quem estava lá. Desse sentido veio o outro —
+        lavra-se a ata, lavra-se o termo: dar forma ao que aconteceu para que
+        possa ser cobrado, defendido, lembrado.
+      </p>
+      <p>
+        Os dois sentidos carregam a mesma exigência: <b>quem lavra assina
+        embaixo</b>. Lavrar não é anotar. É declarar, de boa-fé, que aquilo é
+        verdade — com nome e com data. Registro que ninguém assume não é
+        registro, é rascunho.
+      </p>
+      <p>
+        Lavrō lavra o empreendimento inteiro. Antes da obra: a decisão fica com
+        data, autor e as alternativas que foram descartadas. Na obra: sequência
+        que o sistema atribui e ninguém edita, foto onde a foto foi tirada,
+        assinatura de quem estava lá. E o cliente vendo o mesmo dado, no mesmo
+        instante, sem precisar pedir.
+      </p>
+      <p class="corrente">
+        Uma corrente só:<br>decidiu-se, registrou-se, executou-se, provou-se.
+      </p>
+      <p class="fecho">Não é sobre controlar. É sobre poder provar.</p>
+    </div>
+
+    <h3>Tagline</h3>
+    <div class="palco p-claro" style="padding:44px 30px;align-items:flex-start">
+      <span class="rot">Assinatura</span>
+      <p class="tagline">Da decisão à prova</p>
+      <p class="tagline-en">From decision to proof</p>
+    </div>
+    <div class="rolar">
+      <table class="tab">
+        <thead><tr><th>Uso</th><th>Frase</th></tr></thead>
+        <tbody>
+          <tr><td>Tagline</td><td><b>Da decisão à prova</b></td></tr>
+          <tr><td>Em inglês</td><td>From decision to proof</td></tr>
+          <tr><td>Descritor</td><td>O livro de registro do empreendimento, do projeto à obra</td></tr>
+          <tr><td>Posicionamento</td><td>Prova, não versão</td></tr>
+          <tr><td>Corte interno</td><td>"Paga por prova ou por exatidão? Prova é Lavrō. Exatidão é ERP."</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d2" style="gap:12px;margin-top:20px">
+      <div class="nao at">
+        <div class="t">Cuidado</div>
+        <p>
+          <b>"Prova, não versão"</b> serve em conversa de venda, não como
+          assinatura. No universo de projeto, <em>versão</em> é revisão de
+          prancha — legítima e obrigatória — e a frase pode ser lida como
+          "aqui não tem versionamento", o oposto do que o módulo de projeto faz.
+        </p>
+      </div>
+      <div class="pend">
+        <h4>Arquivada</h4>
+        <p>
+          "Do traço ao registro". A construção é bonita, mas dependia de
+          <em>risco</em> no sentido de desenho, que está vetado. Com "traço" no
+          lugar, perde o duplo sentido e fica genérica.
+        </p>
+      </div>
+    </div>
+
+    <h3>Vocabulário</h3>
+    <div class="rolar">
+      <table class="tab">
+        <thead><tr><th>Termo</th><th>Regra</th></tr></thead>
+        <tbody>
+          <tr><td>empreendimento</td><td>termo guarda-chuva que abrange projeto e obra. Usar quando a frase precisa cobrir as duas fases.</td></tr>
+          <tr><td>projeto</td><td>a fase que antecede a obra. <b>Nunca</b> como sinônimo de empreendimento.</td></tr>
+          <tr><td>obra</td><td>a fase de execução. <b>Nunca</b> como sinônimo de empreendimento.</td></tr>
+          <tr><td>lavrar</td><td>verbo próprio da marca: registrar de boa-fé, com autor e data. Não é sinônimo de "anotar" nem de "salvar".</td></tr>
+          <tr><td>risco</td><td><b>vetado em toda comunicação.</b> Em obra a palavra carrega perigo. Vale inclusive no sentido de desenho — usar <em>traço</em> ou <em>rabisco</em>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Nota etimológica</h3>
+    <div class="nao at">
+      <div class="t">A verificar</div>
+      <p>
+        <em>Lavrar</em> vem do latim <em>laborare</em>, trabalhar. O sentido
+        material veio primeiro — trabalhar a terra, a pedra, a madeira — e o
+        sentido documental (lavrar a escritura, lavrar a ata) é extensão dele:
+        dar forma a um documento como se dá forma à matéria.
+        <b>Esta derivação ainda não foi conferida em dicionário etimológico</b>
+        — não usar em material público antes de checar no Houaiss. Vale
+        aprofundar: é a raiz mais rica da marca e ainda está subaproveitada.
+      </p>
+    </div>
+    <hr class="hr">
+  </section>
+
+  <!-- 01 -->
+  <section class="sec">
+    <p class="sec-num">01</p>
+    <h2>Nome e grafia</h2>
+    <p>
+      O mácron não existe em português, então ninguém o lê como acento — lê como
+      <b>elemento gráfico</b>. A regra de grafia é <b>técnica, não estilística</b>:
+      onde nós desenhamos o texto, usa-se o mácron; onde a máquina lê, não.
+    </p>
+    <div class="rolar">
+      <table class="tab">
+        <thead><tr><th>Contexto</th><th>Grafia</th><th>Por quê</th></tr></thead>
+        <tbody>
+          <tr><td>Site, manual, apresentação, copy, impresso</td><td><b>Lavrō</b></td><td>é nosso, e o mácron é a marca</td></tr>
+          <tr><td>Domínio</td><td><b>lavro</b></td><td>punycode; <code>ō</code> em URL é hostil</td></tr>
+          <tr><td>E-mail</td><td><b>lavro</b></td><td>idem</td></tr>
+          <tr><td>Registro de marca</td><td><b>LAVRO</b></td><td>o mácron pertence ao logo</td></tr>
+          <tr><td>Arquivo, código, chave de banco</td><td><b>lavro</b></td><td>evita problema de encoding</td></tr>
+          <tr><td>SEO, loja de aplicativo</td><td><b>Lavro</b></td><td>é o que a pessoa digita</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Caixa da marca: <b>title case</b>. Nunca caixa alta no logo.</p>
+    <hr class="hr">
+  </section>
+
+  <!-- 02 -->
+  <section class="sec">
+    <p class="sec-num">02</p>
+    <h2>Wordmark e construção</h2>
+    <p>
+      Space Grotesk peso 700. O mácron <b>não é o glifo <code>ō</code></b> — é uma
+      barra construída sobre o "o" minúsculo, o que dá controle de espessura e
+      afastamento. Os marcos abaixo foram lidos do arquivo da fonte e conferidos
+      renderizando: não são estimativa.
+    </p>
+
+    <div class="constr">
+      <div class="diag" style="--fs:min(96px,15vw)">
+        <div class="mark">Lavr<span class="o">o<span class="bar"></span></span></div>
+        <div class="g g-cap"><span class="tg">topo "L" 0,145</span></div>
+        <div class="g g-o"><span class="tg">topo "o" 0,335</span></div>
+        <div class="g g-b"><span class="tg">base 0,845</span></div>
+        <div class="vao"><span class="tg">vão 0,050</span></div>
+      </div>
+      <div class="medidas">
+        <span class="medida">Space Grotesk 700</span>
+        <span class="medida">letter-spacing 0,015em</span>
+        <span class="medida">line-height 1</span>
+        <span class="medida">barra top 0,17em</span>
+        <span class="medida">barra height 0,115em</span>
+        <span class="medida">barra left/right 7%</span>
+        <span class="medida">radius 1px</span>
+      </div>
+    </div>
+
+    <div class="rolar">
+      <table class="tab">
+        <thead><tr><th>Marco</th><th>Valor</th><th>Origem</th></tr></thead>
+        <tbody>
+          <tr><td>Linha de base</td><td><b>0,845em</b></td><td>ascent 984 · descent −292 · meio-espaçamento −138</td></tr>
+          <tr><td>Topo da capital "L"</td><td><b>0,145em</b></td><td>capHeight 700</td></tr>
+          <tr><td>Topo do "o"</td><td><b>0,335em</b></td><td>glifo yMax 510</td></tr>
+          <tr><td>Fundo do "o"</td><td><b>0,855em</b></td><td>glifo yMin −14 · overshoot sob a base</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      <b>Por que 0,17em:</b> fica 0,025em abaixo do topo do "L" — praticamente
+      alinhada com a palavra — e deixa vão de 0,050em sobre o "o". As duas
+      condições ao mesmo tempo: a barra pertence à letra sem colar nela.
+    </p>
+    <div class="nao">
+      <div class="t">A barra nunca encosta no "o"</div>
+      <p>
+        Colada, a marca deixa de ler como diacrítico e passa a ler como glifo
+        grego ou emblema. O vão é obrigatório, e é ele que exige a versão de
+        redução da seção 03.
+      </p>
+    </div>
+
+    <h3>Cor: o "o" e a barra</h3>
+    <p>Os demais caracteres seguem a cor do texto do contexto. Colorir apenas a barra falha na redução.</p>
+    <div class="d4">
+      <div class="palco vitrine p-claro"><span class="rot">claro</span><div class="mark" style="font-size:34px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+      <div class="palco vitrine p-escuro"><span class="rot">escuro</span><div class="mark" style="--cor:#5B6BFF;font-size:34px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+      <div class="palco vitrine p-azul"><span class="rot">monocromática</span><div class="mark" style="--cor:#fff;font-size:34px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+      <div class="palco vitrine p-creme"><span class="rot">creme</span><div class="mark" style="--cor:#0123FF;font-size:34px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+    </div>
+    <hr class="hr">
+  </section>
+
+  <!-- 03 -->
+  <section class="sec">
+    <p class="sec-num">03</p>
+    <h2>Versão de redução</h2>
+    <p>
+      A 15px o vão de 0,050em dá 0,75px e fecha no antialiasing — o ômega volta
+      justamente no tamanho do rodapé e do RDO impresso. Abaixo de <b>24px</b>,
+      a marca usa <code>top 0,07em</code> e <code>height 0,14em</code>, o que abre
+      o vão para 0,125em. Mesma marca, ajuste ótico.
+    </p>
+    <div class="d2">
+      <div class="cx">
+        <span class="rot">Padrão · o vão fecha</span>
+        <div class="fila">
+          <div class="fila-i"><span class="px">26 px</span><div class="mark" style="font-size:26px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+          <div class="fila-i"><span class="px">15 px</span><div class="mark" style="font-size:15px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+          <div class="fila-i"><span class="px">ícone 16</span><div class="sim quad" style="--box:16px;color:#fff"><span class="gl">L<span class="bar"></span></span></div></div>
+        </div>
+      </div>
+      <div class="cx">
+        <span class="rot">Redução · vão aberto, barra grossa</span>
+        <div class="fila">
+          <div class="fila-i"><span class="px">26 px</span><div class="mark" style="--bt:.07em;--bh:.14em;font-size:26px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+          <div class="fila-i"><span class="px">15 px</span><div class="mark" style="--bt:.07em;--bh:.14em;font-size:15px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+          <div class="fila-i"><span class="px">ícone 16</span><div class="sim quad" style="--box:16px;--bh:.14em;color:#fff"><span class="gl">L<span class="bar"></span></span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Reduções de referência</h3>
+    <div class="escada">
+      <div class="degrau"><span class="px">54 px · splash, capa</span><div class="mark" style="font-size:54px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+      <div class="degrau"><span class="px">34 px · login</span><div class="mark" style="font-size:34px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+      <div class="degrau"><span class="px">26 px · cabeçalho</span><div class="mark" style="font-size:26px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+      <div class="degrau"><span class="px">15 px · rodapé · redução</span><div class="mark" style="--bt:.07em;--bh:.14em;font-size:15px">Lavr<span class="o">o<span class="bar"></span></span></div></div>
+    </div>
+    <hr class="hr">
+  </section>
+
+  <!-- 04 -->
+  <section class="sec">
+    <p class="sec-num">04</p>
+    <h2>Símbolo</h2>
+    <p>
+      O símbolo é <b><code>L_</code></b> — a capital "L" seguida da barra na
+      posição de underscore, sem inclinação. <b>É provisório</b>, e a seção
+      04.4 explica por quê.
+    </p>
+    <div class="d3">
+      <div class="cx">
+        <span class="rot">Quadrado azul · negativo</span>
+        <div class="fila">
+          <div class="fila-i"><span class="px">96</span><div class="sim quad" style="--box:96px;color:#fff"><span class="gl">L<span class="bar"></span></span></div></div>
+          <div class="fila-i"><span class="px">48</span><div class="sim quad" style="--box:48px;color:#fff"><span class="gl">L<span class="bar"></span></span></div></div>
+          <div class="fila-i"><span class="px">32</span><div class="sim quad" style="--box:32px;color:#fff"><span class="gl">L<span class="bar"></span></span></div></div>
+          <div class="fila-i"><span class="px">16</span><div class="sim quad" style="--box:16px;--bh:.14em;color:#fff"><span class="gl">L<span class="bar"></span></span></div></div>
+        </div>
+      </div>
+      <div class="cx">
+        <span class="rot">Livre sobre claro · L tinta, barra azul</span>
+        <div class="fila">
+          <div class="fila-i"><span class="px">96</span><div class="sim" style="--box:96px;color:var(--tinta)"><span class="gl">L<span class="bar" style="background:var(--marca)"></span></span></div></div>
+          <div class="fila-i"><span class="px">48</span><div class="sim" style="--box:48px;color:var(--tinta)"><span class="gl">L<span class="bar" style="background:var(--marca)"></span></span></div></div>
+          <div class="fila-i"><span class="px">32</span><div class="sim" style="--box:32px;color:var(--tinta)"><span class="gl">L<span class="bar" style="background:var(--marca)"></span></span></div></div>
+          <div class="fila-i"><span class="px">16</span><div class="sim" style="--box:16px;--bh:.14em;color:var(--tinta)"><span class="gl">L<span class="bar" style="background:var(--marca)"></span></span></div></div>
+        </div>
+      </div>
+      <div class="cx" style="background:var(--escuro);border-color:#262E3C">
+        <span class="rot" style="color:#5E6779">Livre sobre escuro · L claro, barra #5B6BFF</span>
+        <div class="fila">
+          <div class="fila-i"><span class="px" style="color:#5E6779">96</span><div class="sim" style="--box:96px;color:#EDEFF5"><span class="gl">L<span class="bar" style="background:var(--marca-escuro)"></span></span></div></div>
+          <div class="fila-i"><span class="px" style="color:#5E6779">48</span><div class="sim" style="--box:48px;color:#EDEFF5"><span class="gl">L<span class="bar" style="background:var(--marca-escuro)"></span></span></div></div>
+          <div class="fila-i"><span class="px" style="color:#5E6779">32</span><div class="sim" style="--box:32px;color:#EDEFF5"><span class="gl">L<span class="bar" style="background:var(--marca-escuro)"></span></span></div></div>
+          <div class="fila-i"><span class="px" style="color:#5E6779">16</span><div class="sim" style="--box:16px;--bh:.14em;color:#EDEFF5"><span class="gl">L<span class="bar" style="background:var(--marca-escuro)"></span></span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d2">
+      <div class="cx" style="background:var(--creme-papel);border-color:rgba(14,17,22,.12)">
+        <span class="rot" style="color:rgba(14,17,22,.45)">Livre sobre creme</span>
+        <div class="fila">
+          <div class="fila-i"><span class="px" style="color:rgba(14,17,22,.45)">96</span><div class="sim" style="--box:96px;color:var(--tinta)"><span class="gl">L<span class="bar" style="background:var(--marca)"></span></span></div></div>
+          <div class="fila-i"><span class="px" style="color:rgba(14,17,22,.45)">48</span><div class="sim" style="--box:48px;color:var(--tinta)"><span class="gl">L<span class="bar" style="background:var(--marca)"></span></span></div></div>
+          <div class="fila-i"><span class="px" style="color:rgba(14,17,22,.45)">32</span><div class="sim" style="--box:32px;color:var(--tinta)"><span class="gl">L<span class="bar" style="background:var(--marca)"></span></span></div></div>
+        </div>
+      </div>
+      <div class="cx">
+        <span class="rot">Uma cor · fallback de impressão</span>
+        <div class="fila">
+          <div class="fila-i"><span class="px">96</span><div class="sim" style="--box:96px;color:var(--tinta)"><span class="gl">L<span class="bar"></span></span></div></div>
+          <div class="fila-i"><span class="px">48</span><div class="sim" style="--box:48px;color:var(--tinta)"><span class="gl">L<span class="bar"></span></span></div></div>
+          <div class="fila-i"><span class="px">32</span><div class="sim" style="--box:32px;color:var(--tinta)"><span class="gl">L<span class="bar"></span></span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <h3>04.1 As duas versões do símbolo</h3>
+    <div class="rolar">
+      <table class="tab">
+        <thead><tr><th>Versão</th><th>Letra</th><th>Barra</th><th>Onde</th></tr></thead>
+        <tbody>
+          <tr><td>Quadrado</td><td>branco (ou creme sobre creme)</td><td>igual à letra</td><td>ícone de aplicativo, favicon, avatar — onde precisa de recorte sólido</td></tr>
+          <tr><td>Livre</td><td>cor do texto do contexto</td><td><b>azul</b> — <code>#0123FF</code> no claro, <code>#5B6BFF</code> no escuro</td><td>digital com cor disponível</td></tr>
+          <tr><td>Uma cor</td><td>cor do texto</td><td>igual à letra (<code>currentColor</code>)</td><td>impressão de uma cor, carimbo, gravação</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Na versão livre, <b>só a barra é azul</b> — é a mesma dica visual do mácron
+      no wordmark, e é o que faz o símbolo remeter à palavra sem precisar dela ao
+      lado. A distinção de cor é <b>refinamento, não identidade</b>: o símbolo
+      tem de funcionar em uma cor, e o quadrado é o fallback sólido.
+    </p>
+
+    <h3>04.2 Construção</h3>
+    <div class="rolar">
+      <table class="tab">
+        <thead><tr><th>Parâmetro</th><th>Valor</th><th>Origem</th></tr></thead>
+        <tbody>
+          <tr><td>barra · top</td><td><b>0,893em</b></td><td>base 0,845em + vão de 0,048em</td></tr>
+          <tr><td>barra · height</td><td><b>0,115em</b></td><td>mesma espessura do mácron</td></tr>
+          <tr><td>barra · left</td><td><b>0,607em</b></td><td>após o avanço do L, que é 0,542em</td></tr>
+          <tr><td>barra · width</td><td><b>0,490em</b></td><td>ink do glifo "_" da fonte</td></tr>
+          <tr><td>glifo no quadro</td><td><b>0,62 × lado</b></td><td>tinta ocupa 68% da largura, 54% da altura</td></tr>
+          <tr><td>deslocamento</td><td><b>translateY(−0,0765em)</b></td><td>centra a tinta (0,145em a 1,008em)</td></tr>
+          <tr><td>raio do quadro</td><td><b>0,23 × lado</b></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Abaixo de 24px, engrossar a barra para <code>0,14em</code>.</p>
+
+    <h3>04.3 Por que underscore</h3>
+    <p>
+      O glifo <code>_</code> da Space Grotesk 700 tem espessura <b>0,114em</b> e
+      fica a <b>0,048em</b> abaixo da base. A barra do mácron tem 0,115em e fica
+      a 0,050em acima do "o". <b>São o mesmo traço, espelhado</b> — o símbolo não
+      inventa geometria, usa a que a fonte já reserva. E tem leitura própria:
+      underscore é a linha onde se escreve, e o produto é um formulário
+      preenchido todo dia.
+    </p>
+    <div class="rolar">
+      <table class="tab">
+        <thead><tr><th>Hipótese descartada</th><th>Por que caiu</th></tr></thead>
+        <tbody>
+          <tr><td>Barra <b>sobre</b> o "L"</td><td>Fecha o vão superior esquerdo e o conjunto lê como "C"</td></tr>
+          <tr><td>Barra sobre a <b>palavra</b></td><td>Vira sobrelinha, com parentesco de riscado — risco num app onde coisas são canceladas</td></tr>
+          <tr><td><b>L sublinhado</b></td><td>O "L" já termina em horizontal; duas paralelas próximas leem como "E" deitado</td></tr>
+          <tr><td>Barra em <b>paralelogramo</b></td><td>Resolvia o wordmark, que não era o problema; com o símbolo fora do "o", perdeu função</td></tr>
+          <tr><td><b>Segunda cor</b></td><td>Cor morre em monocromático, impressão de uma cor e favicon — onde a distinção importa</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>04.4 O símbolo é provisório</h3>
+    <div class="nao at">
+      <div class="t">Cravado, não resolvido</div>
+      <p>
+        <code>L_</code> é correto e coerente, mas <b>não é distintivo</b>: há
+        muitas empresas usando um "L" sobre azul em tonalidade próxima. Fica
+        cravado nesta versão para desbloquear favicon e ícone de aplicativo, com
+        a intenção declarada de buscar um símbolo mais marcante se houver
+        necessidade real. <b>Não investir em aplicação cara sobre ele</b> —
+        fachada, relevo, brinde, bordado, sinalização física.
+      </p>
+    </div>
+
+    <h3>04.5 Símbolo e wordmark nunca aparecem juntos</h3>
+    <div class="nao">
+      <div class="t">Regra</div>
+      <p>
+        O símbolo só é usado <b>onde não cabe escrever a palavra</b>: favicon,
+        ícone de aplicativo, avatar, marca d'água pequena. Onde a palavra couber,
+        é a palavra. <b>Não existe lockup símbolo + wordmark.</b> O lockup da
+        seção 11 é Lavrō + marca do cliente, sempre com o wordmark.
+      </p>
+    </div>
+
+    <h3>04.6 Antes de aprovar em definitivo</h3>
+    <div class="nao at">
+      <div class="t">Teste de aceitação</div>
+      <p>
+        Conferir o favicon a 16px <b>na aba do navegador, ao lado de outras abas
+        abertas</b>. <code>L_</code> isolado pode ler como campo vazio a
+        preencher em vez de logotipo — é o preço que marcas construídas sobre
+        pontuação pagam, e só o contexto real responde. E o glifo precisa do
+        <b>contorno em vetor</b>: não se pode depender do webfont num favicon.
+      </p>
+    </div>
+    <hr class="hr">
+  </section>
+
+  <!-- 05 -->
+  <section class="sec">
+    <p class="sec-num">05</p>
+    <h2>Cor da marca</h2>
+    <p>Uma condição: <b>fundo escuro pede o azul mais claro quando a leitura do elétrico se prejudica.</b></p>
+    <div class="d2">
+      <div class="cor">
+        <div class="chapa" style="background:#0123FF"><span style="color:#fff">7,8:1 contra branco</span></div>
+        <div class="meta"><div class="tok">--marca</div><div class="hex">#0123FF</div>
+          <p class="quando"><b>Padrão.</b> Qualquer tamanho sobre fundo claro.</p></div>
+      </div>
+      <div class="cor">
+        <div class="chapa" style="background:#5B6BFF"><span style="color:#0E1116">4,5:1 contra grafite</span></div>
+        <div class="meta"><div class="tok">--marca-escuro</div><div class="hex">#5B6BFF</div>
+          <p class="quando">Sobre fundo escuro, quando o elétrico perde leitura.</p></div>
+      </div>
+    </div>
+    <h3>Elétrico no escuro: preenchimento sim, traço não</h3>
+    <p>
+      O que falha sobre grafite é <b>traço fino ou texto</b> elétrico (2,4:1).
+      Branco <b>sobre</b> <code>#0123FF</code> dá 7,8:1 em qualquer fundo. Logo, no
+      modo escuro: preenchimento de ação, superfície de marca e gaveta seguem
+      <code>#0123FF</code>; texto, link, foco e ícone fino usam
+      <code>#7C8BFF</code>; wordmark e traço de gráfico usam
+      <code>#5B6BFF</code>.
+    </p>
+    <div class="nao at">
+      <div class="t">A isenção vale para a marca, não para o acento</div>
+      <p>
+        O mínimo de contraste da WCAG aplica-se a texto e componentes de
+        interface — marcas são isentas. Mas <code>--acento</code> (botão, link,
+        foco, texto pequeno) <b>tem</b> essa obrigação, e no modo escuro continua
+        <code>#7C8BFF</code>. Marca e acento são tokens distintos com deveres
+        distintos.
+      </p>
+    </div>
+
+    <h3>Azuis vizinhos — não são cor de marca</h3>
+    <div class="rolar">
+      <table class="tab tk">
+        <thead><tr><th>Token</th><th>Valor</th><th>Papel</th></tr></thead>
+        <tbody>
+          <tr><td>--azul-fundo</td><td><span class="pastilha" style="background:#0016C7"></span>#0016C7</td><td>Superfície de marca em tela cheia, no escuro</td></tr>
+          <tr><td>--azul-claro</td><td><span class="pastilha" style="background:#7C8BFF"></span>#7C8BFF</td><td>Acento de interface no escuro. <b>Nunca na marca</b> — faz o logo parecer botão</td></tr>
+          <tr><td>--azul-grafico</td><td><span class="pastilha" style="background:#5B6BFF"></span>#5B6BFF</td><td>Traço e gráfico sobre escuro</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <hr class="hr">
+  </section>
+
+  <!-- 06 -->
+  <section class="sec">
+    <p class="sec-num">06</p>
+    <h2>Superfície de marca</h2>
+    <p>O azul deixa de ser acento e passa a ser o fundo, em tela cheia.</p>
+    <div class="palco p-azul" style="align-items:flex-start;padding:42px 30px;gap:13px">
+      <span class="rot">Assessor Lavrō</span>
+      <div style="font-family:var(--ff-d);font-weight:700;font-size:clamp(22px,3.4vw,32px);letter-spacing:-.015em;line-height:1.12;color:#fff;max-width:26ch">Três coisas exigem sua atenção na SPK Martinelli hoje.</div>
+      <div style="font-family:var(--ff-m);font-size:13px;color:rgba(255,255,255,.82)">2 marcos em risco · 1 material abaixo do mínimo · 4 dias sem RDO</div>
+      <button style="margin-top:8px;background:#fff;color:#0016C7;font-family:var(--ff-t);font-weight:600;font-size:13px;border:0;border-radius:999px;padding:11px 22px;cursor:pointer">Ver o que fazer</button>
+    </div>
+    <ul>
+      <li><b>O azul não aponta para si mesmo.</b> Quando ele é o fundo, o acento inverte para branco.</li>
+      <li><b>Só em tela de permanência curta:</b> login, splash, assessor, confirmação, onboarding. <b>Nunca em tela de trabalho</b> — azul saturado é substrato ruim para leitura longa e compete com verde, âmbar e vermelho de status, que num app de obra carregam significado operacional.</li>
+    </ul>
+    <hr class="hr">
+  </section>
+
+  <!-- 07 -->
+  <section class="sec">
+    <p class="sec-num">07</p>
+    <h2>Registro creme</h2>
+    <p>
+      Superfície <b>institucional e de acervo</b> — site, apresentação, capa,
+      listagem de documentos. Lê como papel e arquivo. Uma cor só:
+      <code>#F1EBDD</code>, com o mácron em azul.
+    </p>
+    <div class="palco p-creme" style="padding:52px 26px">
+      <span class="rot">#F1EBDD · mácron azul</span>
+      <div class="mark" style="--cor:#0123FF;font-size:min(48px,9vw)">Lavr<span class="o">o<span class="bar"></span></span></div>
+    </div>
+    <div class="nao at">
+      <div class="t">O limite do creme</div>
+      <p>
+        Sobre creme o tint de <code>--atencao</code> quase desaparece — são a mesma
+        família de matiz. Num acervo de documentos é tolerável, porque a densidade
+        de estado é baixa. <b>Numa tela de obra seria grave.</b> Portanto: creme
+        não é superfície de trabalho com muito status. Se um dia for,
+        <code>--atencao</code> precisa de valor próprio sobre creme.
+      </p>
+    </div>
+    <hr class="hr">
+  </section>
+
+  <!-- 08 -->
+  <section class="sec">
+    <p class="sec-num">08</p>
+    <h2>A régua</h2>
+    <p>
+      O mácron traduzido para a interface: barra de <b>4px</b> na aresta superior,
+      de borda a borda, com <b>topo reto e base arredondada</b>. Além da conexão
+      com a marca, o topo reto resolve um problema de execução — com canto
+      arredondado a régua tem de curvar ou ser cortada.
+    </p>
+    <div class="d2">
+      <div>
+        <p class="rot" style="margin-bottom:10px">Registro · topo reto + régua</p>
+        <div class="card-demo">
+          <div><h4>SPK Martinelli</h4><div class="sub">RDO 0147 · quinta, 24 jul</div></div>
+          <p>Sprinklers do trecho B aguardam liberação do projetista antes do teste de pressão.</p>
+        </div>
+      </div>
+      <div>
+        <p class="rot" style="margin-bottom:10px">Apoio · quatro cantos, sem régua</p>
+        <div class="card-demo apoio">
+          <div><h4>Período</h4><div class="sub">filtro do painel</div></div>
+          <p>Superfície de apoio: lista, filtro, formulário. Não carrega decisão.</p>
+        </div>
+      </div>
+    </div>
+    <ul>
+      <li><b>A régua marca superfície que carrega decisão ou registro assinado</b> — RDO, ata, marco, alerta. Não todo card. Sem esse critério, vira listra.</li>
+      <li><b>Topo reto e régua andam juntos.</b> Topo reto sem régua parece corte acidental.</li>
+      <li><b>Modal e sheet</b> mantêm os quatro cantos arredondados: no celular o topo reto encosta na borda da tela.</li>
+    </ul>
+    <h3>Sombra é repouso, brilho é significado</h3>
+    <p>
+      Regra inviolável de aplicação: <b>nada brilha por ser azul</b>. Brilho —
+      <code>filter</code>, aura, halo — é reservado a <b>estado com significado</b>:
+      a barra em execução, o indicador de dado ao vivo. Elemento parado usa sombra.
+      Erro corrigido na prototipação: o anel de avanço brilhava em repouso sem
+      significar nada, enquanto a pílula de ação não tinha sombra e não parecia
+      elevada. Os dois estavam trocados.
+    </p>
+    <div class="nao" style="margin-top:22px">
+      <div class="t">Aposentado</div>
+      <p>O canto assimétrico <code>10px 10px 34px 10px</code> da Baraka sai. Chegou a 16 variações de escala no código, e a maioria dos cards já o havia perdido.</p>
+    </div>
+    <hr class="hr">
+  </section>
+
+  <!-- 09 -->
+  <section class="sec">
+    <p class="sec-num">09</p>
+    <h2>Gradiente de marca</h2>
+    <p>
+      Elemento gráfico da marca e fallback de capa quando a obra não tem foto.
+      <b>Determinístico:</b> ângulo e focos derivam do <code>id</code> da obra, e as
+      quatro cores nunca mudam. Cada obra tem sempre a sua capa.
+    </p>
+    <div class="d4">
+      <div class="grad" style="background:
+        radial-gradient(120% 90% at 12% 8%,#7C88A0 0%,transparent 55%),
+        radial-gradient(90% 70% at 88% 22%,#B9A98E 0%,transparent 52%),
+        radial-gradient(80% 80% at 70% 92%,#2E3746 0%,transparent 60%),
+        linear-gradient(155deg,#55607A 0%,#3A4354 45%,#262C38 100%)">
+        <div class="veu"></div><div class="txt"><div class="n">SPK Martinelli</div><div class="s">id 1 · 155°</div></div>
+      </div>
+      <div class="grad" style="background:
+        radial-gradient(110% 95% at 82% 14%,#7C88A0 0%,transparent 58%),
+        radial-gradient(95% 65% at 18% 34%,#B9A98E 0%,transparent 50%),
+        radial-gradient(85% 75% at 40% 96%,#2E3746 0%,transparent 62%),
+        linear-gradient(28deg,#55607A 0%,#3A4354 52%,#262C38 100%)">
+        <div class="veu"></div><div class="txt"><div class="n">UAM Mooca</div><div class="s">id 2 · 28°</div></div>
+      </div>
+      <div class="grad" style="background:
+        radial-gradient(130% 80% at 48% 4%,#7C88A0 0%,transparent 52%),
+        radial-gradient(80% 80% at 6% 78%,#B9A98E 0%,transparent 55%),
+        radial-gradient(90% 70% at 92% 62%,#2E3746 0%,transparent 58%),
+        linear-gradient(212deg,#55607A 0%,#3A4354 40%,#262C38 100%)">
+        <div class="veu"></div><div class="txt"><div class="n">Ed. Fictício</div><div class="s">id 3 · 212°</div></div>
+      </div>
+      <div class="grad claro" style="background:
+        radial-gradient(100% 100% at 24% 92%,#C7D0E0 0%,transparent 56%),
+        radial-gradient(85% 75% at 72% 10%,#E6DCC8 0%,transparent 54%),
+        radial-gradient(95% 65% at 10% 30%,#9BA6BA 0%,transparent 60%),
+        linear-gradient(96deg,#DCE2EC 0%,#CBD3E0 48%,#B4BDCC 100%)">
+        <div class="veu"></div><div class="txt"><div class="n">Variante clara</div><div class="s">id 4 · 96°</div></div>
+      </div>
+    </div>
+    <ul>
+      <li><b>Nunca aleatório.</b> Gradiente que muda a cada carregamento parece defeito e destrói o reconhecimento da obra.</li>
+      <li><b>As quatro cores não mudam.</b> Varia o desenho, não a paleta.</li>
+      <li><b>A areia fica dessaturada</b> (<code>#B9A98E</code>). Âmbar saturado é a cor de atenção; um campo decorativo grande nessa matiz dilui o significado de alerta.</li>
+      <li>Substitui <code>FOTO_GRADS</code> em <code>clienteUi.jsx</code>.</li>
+      <li><b>Também é o fundo padrão das telas</b>, com a densidade na metade superior e dissolvida para baixo: 56vh ancorado no topo, máscara em gradiente, blur de 46px, opacidade .30 no claro e .48 no escuro. Pico entre 10% e 22% da altura, zero aos 61%. Detalhe na seção 7 do design system.</li>
+    </ul>
+    <hr class="hr">
+  </section>
+
+  <!-- 10 -->
+  <section class="sec">
+    <p class="sec-num">10</p>
+    <h2>Tipografia</h2>
+    <div class="d3">
+      <div class="cx" style="align-items:flex-start;gap:11px">
+        <span class="rot">Marca e títulos</span>
+        <div style="font-family:var(--ff-d);font-weight:700;font-size:26px;letter-spacing:-.015em">Space Grotesk</div>
+        <div style="font-size:13px;color:var(--tinta-2);line-height:1.5">Wordmark, display, título. Único papel <b style="color:var(--tinta)">trocável</b> no tier pago.</div>
+      </div>
+      <div class="cx" style="align-items:flex-start;gap:11px">
+        <span class="rot">Corpo</span>
+        <div style="font-family:var(--ff-t);font-weight:600;font-size:26px;letter-spacing:-.015em">Inter</div>
+        <div style="font-size:13px;color:var(--tinta-2);line-height:1.5">Texto, rótulo, botão, formulário. Desenhada para tamanho pequeno. <b style="color:var(--tinta)">Travada.</b></div>
+      </div>
+      <div class="cx" style="align-items:flex-start;gap:11px">
+        <span class="rot">Dado</span>
+        <div style="font-family:var(--ff-m);font-weight:500;font-size:23px">IBM Plex Mono</div>
+        <div style="font-size:13px;color:var(--tinta-2);line-height:1.5">RDO, cota, data, saldo, etiqueta. Zero cortado por padrão. <b style="color:var(--tinta)">Travada.</b></div>
+      </div>
+    </div>
+    <p>
+      <b>Montserrat não é fonte da Lavrō.</b> Passa a ser uma das opções de display
+      do tier pago — quem quiser a cara mais próxima da Baraka a escolhe. Muda de
+      papel em vez de desaparecer.
+    </p>
+    <div class="nao at">
+      <div class="t">Infraestrutura, não detalhe</div>
+      <p>
+        As fontes precisam ser <b>auto-hospedadas</b> (woff2, subset latino).
+        Depender da fonte instalada no dispositivo é risco de identidade — e como
+        a escolha de display é item vendido, isso deixa de ser opcional.
+      </p>
+    </div>
+    <hr class="hr">
+  </section>
+
+  <!-- 11 -->
+  <section class="sec">
+    <p class="sec-num">11</p>
+    <h2>Convivência com a marca do cliente</h2>
+    <p>
+      A Baraka Engenharia é <b>o primeiro cliente da Lavrō</b>, não a dona da
+      marca. O amarelo <code>#F5C400</code> não é cor da Lavrō — é o acento do
+      <b>tema Baraka</b>, um tema de cliente entre outros.
+    </p>
+    <div class="lockup">
+      <div class="mark" style="font-size:26px">Lavr<span class="o">o<span class="bar"></span></span></div>
+      <div class="filete"></div>
+      <div class="cliente">BARAKA ENGENHARIA<span>cliente · tema aplicado</span></div>
+    </div>
+    <div class="rolar">
+      <table class="tab">
+        <thead><tr><th>Onde</th><th>Que marca aparece</th></tr></thead>
+        <tbody>
+          <tr><td>Menu e cabeçalho</td><td><b>Marca do cliente</b> — é o espaço dele</td></tr>
+          <tr><td>Login, rodapé, plataforma</td><td><b>Lavrō</b></td></tr>
+          <tr><td>Convite, e-mail transacional</td><td><b>Lavrō</b>, com o cliente como remetente</td></tr>
+          <tr><td>RDO impresso</td><td>Marca do cliente no cabeçalho, Lavrō discreta no rodapé</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>No lockup: Lavrō, filete de 1px, marca do cliente. Nunca sobrepostas, nunca de tamanhos iguais — a marca do contexto domina.</p>
+    <hr class="hr">
+  </section>
+
+  <!-- 12 -->
+  <section class="sec">
+    <p class="sec-num">12</p>
+    <h2>Proibições</h2>
+    <div class="d2" style="gap:12px">
+      <div class="nao"><div class="t">No logo</div><p>Substituir a barra construída pelo glifo <code>ō</code>. <b>Em texto corrido o glifo é o correto</b> — não se constrói barra num parágrafo.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Deixar a barra encostar no "o".</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Caixa alta no logo.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Azul da marca sobre superfície de marca.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Usar <code>#7C8BFF</code> como cor da marca.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Colorir só a barra, deixando o "o" na cor do texto.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Usar a versão padrão abaixo de 24px — usar a de redução.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p><b>O símbolo ao lado do wordmark.</b> Ele só existe onde a palavra não cabe.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Aplicar o símbolo provisório em suporte caro — fachada, relevo, brinde.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Régua em superfície que não carregue decisão, ou topo reto sem régua.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Gradiente aleatório ou que mude entre carregamentos.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Creme como superfície de trabalho com muito status.</p></div>
+      <div class="nao"><div class="t">Nunca</div><p>Montserrat como fonte da Lavrō.</p></div>
+    </div>
+    <hr class="hr">
+  </section>
+
+  <!-- 13 -->
+  <section class="sec">
+    <p class="sec-num">13</p>
+    <h2>Pendências</h2>
+    <div class="d2" style="gap:12px">
+      <div class="pend"><h4>Vetor do símbolo</h4><p>Geometria definida na seção 04.2; desenho vetorial com cotas ainda não feito. Bloqueia favicon e ícone de aplicativo.</p></div>
+      <div class="pend"><h4>Símbolo definitivo</h4><p><code>L_</code> é provisório por não ser distintivo. Buscar alternativa se e quando houver necessidade real.</p></div>
+      <div class="pend"><h4>Displays alternativos</h4><p>Duas opções além da Space Grotesk para o tier pago, com métricas compensadas.</p></div>
+      <div class="pend"><h4>Cursor da IA — fechado</h4><p>Ver <code>02_DESIGN-SYSTEM_Lavro.md</code> 5.8. Barra ao final de texto de IA, <b>permanecendo depois que o texto termina</b> — procedência, não progresso. <b>Pisca seco</b> (<code>step-end</code>, 1060ms), como caret de linha de comando; a ideia de pulso suave foi descartada. Frase de IA não leva ponto final: o underscore é o ponto.</p></div>
+      <div class="pend"><h4>Escala de movimento</h4><p>Botão animado, hover com leve expansão, tudo em CSS. Ponto de atenção: <code>:hover</code> não existe no dedo — campo precisa de <code>:active</code>.</p></div>
+      <div class="pend"><h4>Pílulas com contorno</h4><p>Possivelmente base do menu principal. Vai para o design system. Atenção: pílula de estado e pílula de navegação precisam ser distinguíveis.</p></div>
+      <div class="pend"><h4>Acento âmbar de tenant</h4><p>Cliente com marca amarela colide com <code>--atencao</code>. Prevista separação mínima de matiz e valor reserva.</p></div>
+      <div class="pend"><h4>Creme #E2DCCE</h4><p>Não adotado. Se for, assumir que a leitura muda de herança da Baraka para registro de papel da Lavrō.</p></div>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    <div class="mark" style="--bt:.07em;--bh:.14em;font-size:17px">Lavr<span class="o">o<span class="bar"></span></span></div>
+    <span class="rot">Manual da marca 1.4 · derivado de 01_MARCA_Lavro.md · nada implementado no repositório</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -468,6 +468,24 @@ const projetos = [
         href: "casa-ittb/apresentacao.html" }
     ]
   },
+  {
+    nome: "deck",
+    pecas: [
+      { nome: "esqueleto", tipo: "sistema", pranchas: 19, unid: "gabaritos",
+        sub: "a base de partida · sem marca, sem conteúdo",
+        peso: 0.124, data: "29.08.2026", href: "esqueleto/deck-esqueleto.html" }
+    ]
+  },
+  {
+    nome: "michel stein_",
+    pecas: [
+      { nome: "manual de marca", tipo: "sistema", pranchas: 5, unid: "folhas",
+        sub: "conceito · logotipo · monograma · sistema · aplicações",
+        peso: 0.062, data: "29.08.2026", href: "marca/michel-stein/manual.html" },
+      { nome: "bloco de marca", tipo: "sistema", sub: "o que se cola no esqueleto · fontes embutidas",
+        peso: 0.112, data: "29.08.2026", href: "marca/michel-stein/bloco.html" }
+    ]
+  }
 ];
 
 const GH = "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/";
@@ -475,29 +493,35 @@ const docs = [
   { aba:"marca", grupo:"michel stein_", nome:"marca · michel stein_",
     desc:"Cor, tipografia, assinatura, abertura, contracapa e o preset do fundo. Trocar de marca é trocar este arquivo",
     arq:"marca/MARCA-MICHEL-STEIN.md", ver:"marca/michel-stein/manual.html" },
-  { aba:"marca", grupo:"michel stein_", nome:"manual em desenho · 5 folhas",
-    desc:"Conceito, logotipo, monograma, sistema e aplicações, numa página. É a apresentação da marca; o mestre é o .md",
-    arq:"marca/michel-stein/LEIA-ME.md", ver:"marca/michel-stein/manual.html" },
   { aba:"marca", grupo:"michel stein_", nome:"bloco de marca",
-    desc:"As quatro coisas que se colam no esqueleto: cores, as seis fontes, a capa e a contracapa. Roda sozinho",
-    arq:"marca/michel-stein/LEIA-ME.md", ver:"marca/michel-stein/bloco.html" },
+    desc:"As quatro coisas que se colam no esqueleto: cores, as seis fontes, a capa e a contracapa",
+    arq:"marca/MARCA-MICHEL-STEIN-CAPA.md", ver:"marca/michel-stein/bloco.html" },
   { aba:"marca", grupo:"michel stein_", nome:"marca · a capa",
     desc:"O slide de abertura: a regra, a receita de extração, a especificação e as armadilhas já pagas",
     arq:"marca/MARCA-MICHEL-STEIN-CAPA.md", ver:"modulos/capa-morph.html" },
   { aba:"marca", grupo:"AMAZ", nome:"marca · AMAZ",
-    desc:"A camada de marca, levantada da institucional R1 — a referência da frente. Cor, tipografia, lockup, abertura, contracapa e o grafismo",
-    arq:"marca/MARCA-AMAZ.md", ver:"amaz-r1/apresentacao.html" },
-  { aba:"marca", grupo:"AMAZ", nome:"bloco de marca · AMAZ",
-    desc:"O que se cola no esqueleto: as quatro cores, as quatro fontes embutidas, a abertura e a contracapa",
-    arq:"marca/MARCA-AMAZ.md", ver:"marca/amaz/bloco.html" },
-  { aba:"marca", grupo:"a levantar", nome:"Lavrō · Baraka · Sarasá",
-    desc:"Lavrō tem tokens levantados e ainda não virou arquivo. Baraka e Sarasá não têm sistema visual — não inventar paleta",
+    desc:"Levantada do que já está publicado: paleta e tipografia completas. Faltam abertura, contracapa, fundo e regras de logotipo",
+    arq:"marca/MARCA-AMAZ.md", ver:"amaz-identidade/apresentacao.html" },
+  { aba:"marca", grupo:"Lavrō", nome:"marca · Lavrō",
+    desc:"Cor, tipografia, abertura, contracapa e o que é intocável. Recorte de deck do normativo, que está ao lado",
+    arq:"marca/MARCA-LAVRO.md", ver:"marca/lavro/manual.html" },
+  { aba:"marca", grupo:"Lavrō", nome:"bloco de marca",
+    desc:"O que se cola no esqueleto: as oito faces em base64, as cores e o wordmark. Abre sozinho, sem internet",
+    arq:"marca/MARCA-LAVRO.md", ver:"marca/lavro/bloco.html" },
+  { aba:"marca", grupo:"Lavrō", nome:"normativo da marca · v1.6",
+    desc:"O mestre. Conceito, wordmark, símbolo, cor, régua, gradiente, Azulejo e as proibições. Canônico no repositório do app",
+    arq:"marca/lavro/01-MARCA-normativo.md", ver:"marca/lavro/wordmark.svg" },
+  { aba:"marca", grupo:"Lavrō", nome:"design system",
+    desc:"A camada de interface: tokens, componentes, densidade e movimento. O styleguide vivo nunca vence este arquivo",
+    arq:"marca/lavro/02-DESIGN-SYSTEM.md", ver:"marca/lavro/03-styleguide.html" },
+  { aba:"marca", grupo:"a levantar", nome:"Baraka · Sarasá",
+    desc:"Não têm sistema visual escrito — não inventar paleta. Levantar a identidade antes",
     arq:"sistemas/DECK-MOTOR.md" },
   { aba:"deck", grupo:"montar", nome:"deck · montar",
     desc:"O arquivo curto: a receita em seis passos, os dezenove gabaritos e as três armadilhas. É o que se lê para montar",
     arq:"sistemas/DECK-MONTAR.md", ver:"esqueleto/deck-esqueleto.html" },
   { aba:"deck", grupo:"montar", nome:"esqueleto",
-    desc:"A base de partida: 21 gabaritos, sem marca e sem conteúdo. Abre, cola o bloco da marca, troca o DECK",
+    desc:"A base de partida. Abre, cola o bloco da marca, troca o DECK. A engine não se toca",
     arq:"sistemas/DECK-MONTAR.md", ver:"esqueleto/deck-esqueleto.html" },
   { aba:"deck", grupo:"gabaritos", nome:"render em tela cheia",
     desc:"O padrão para render: sangria total e o texto que sai de cena com o ponteiro parado",
@@ -743,10 +767,7 @@ const ABAS = [
    está listado, e o que sobra aparece como aviso.
    A API pública limita a 60 chamadas por hora por IP — se falhar, silencia. */
 (function(){
-  /* marca/ e esqueleto/ são sistema, não peça de projeto: aparecem nas abas
-     marca e deck, e não no array `projetos`. */
-  const IGNORA = ['index.html', 'sistemas/', 'modulos/', 'fundo/', 'ferramentas/',
-                  'marca/', 'esqueleto/'];
+  const IGNORA = ['index.html', 'sistemas/', 'modulos/', 'fundo/', 'ferramentas/'];
   const listados = new Set();
   projetos.forEach(function(p){
     p.pecas.forEach(function(x){ listados.add(x.href.split('?')[0]); });
