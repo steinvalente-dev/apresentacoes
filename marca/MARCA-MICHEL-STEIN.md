@@ -20,11 +20,9 @@ arquivo próprio, ao lado: `MARCA-MICHEL-STEIN-CAPA.md`.
 | campo | valor |
 |---|---|
 | nome | `michel stein_` — sempre caixa-baixa, com o underscore |
-| assinatura em slide | **`arquiteto`**, nunca "arquiteto · ilustrador" |
-| papel no manual de marca | `arquiteto · ilustrador` |
+| papel | **`arquiteto`**, sempre só isto — em slide, cartão, assinatura e manual |
 | tagline | `a mão por trás do traço` |
 | site | `michelstein.com.br` |
-| direção | D · Mono Editorial |
 | monograma nível 1 | `ms_` |
 | monograma nível 2 | `m_` — favicon, avatar pequeno, selo |
 
