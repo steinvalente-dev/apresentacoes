@@ -240,7 +240,7 @@
      sem erro nenhum no console. Testado e confirmado em 30/08/2026.
      A Elevation API resolveria sozinha, mas está — corretamente — fora da
      restrição da chave. Por isso o valor é campo, não constante. */
-  var CAM = { alt:760, range:380, tilt:58, heading:30, tiltEntrada:45 };
+  var CAM = { alt:760, range:600, tilt:58, heading:30, tiltEntrada:45 };
 
   var mapa = null, orbitando = false, lib = null;
 
@@ -392,8 +392,8 @@
      altitude, a chave e o file://. O sintoma dos quatro é o mesmo.
 
      De quebra, a chegada é bonita: a peça abre com um mergulho. */
-  var DEGRAUS = [2000, 1000, 600];
-  var PAUSA   = 2200;
+  var DEGRAUS = [6000, 2500, 1200];
+  var PAUSA   = 3000;
 
   function aproxima(ponto){
     var passos = DEGRAUS.concat([CAM.range]);
@@ -406,11 +406,16 @@
       mapa.heading = CAM.heading;
       i++;
       if(i < passos.length){ setTimeout(passo, PAUSA); return; }
-      /* último degrau dado: a peça está pronta para ser vista */
+      /* Último degrau dado. A espera extra aqui não é margem de segurança
+         — é o tempo que a malha fina leva para chegar. Sem ela o slide se
+         declara pronto mostrando geometria bruta, aqueles prismas cinza
+         que parecem erro de render e são só nível de detalhe baixo.
+         Não existe evento de "terminei": `gmp-steadychange` não dispara
+         nesta versão do preview. Testado em 30/08. */
       setTimeout(function(){
         slide.classList.remove('esperando');
         solta();
-      }, PAUSA);
+      }, 4000);
     })();
   }
 

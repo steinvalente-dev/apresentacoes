@@ -124,8 +124,8 @@ Travado no módulo, em `CAM`, para os slides de localização não parecerem cad
 um de um projeto:
 
 ```js
-var CAM = { alt:760, range:380, tilt:58, heading:30, tiltEntrada:45 };
-var DEGRAUS = [2000, 1000, 600];   // a aproximação
+var CAM = { alt:760, range:600, tilt:58, heading:30, tiltEntrada:45 };
+var DEGRAUS = [6000, 2500, 1200];   // a aproximação, ~13 s no total
 ```
 
 Calibrado sobre a Vila Madalena em 30/08/2026. `range` abaixo de ~250 entra na
@@ -142,8 +142,8 @@ nenhum.** O motor ainda não tem a malha daquele pedaço e a câmera nasce dentr
 do chão. Os tiles chegam — todos `200` na aba de rede —, mas não há o que
 desenhar na frente da lente.
 
-A cura é chegar de longe: entrar largo, onde a malha grossa já existe, e
-fechar em degraus de ~2,2 s. Cada degrau dá ao motor tempo de puxar o nível
+A cura é chegar de longe: entrar **muito** largo — 6 km, não 2 —, onde a malha
+grossa já existe, e fechar em degraus de 3 s. Cada degrau dá ao motor tempo de puxar o nível
 seguinte e reconciliar a altitude do terreno — dá para ver ele reescrevendo
 `center.altitude` sozinho no caminho.
 
@@ -153,6 +153,16 @@ solução. Publicado direto no enquadramento final, o mesmo código não desenha
 nada.
 
 De quebra, a peça abre com um mergulho, que é melhor do que aparecer pronta.
+
+**Não há evento de "terminei".** `gmp-steadychange` não dispara nesta versão do
+preview — testado em 30/08, zero eventos em sete segundos. Por isso a espera é
+por relógio, e é generosa: declarar pronto cedo demais mostra a geometria bruta,
+aqueles prismas cinza que parecem erro de render e são só nível de detalhe baixo.
+
+**O tempo de montagem é o calcanhar deste gabarito.** Em máquina boa e rede de
+escritório, a malha fina de um bairro levou de dez segundos a alguns minutos,
+sem padrão claro e sem nada no console. É instabilidade de produto em preview, e
+é o argumento mais forte para ele continuar fora de peça de cliente.
 
 **O modo é `SATELLITE`, não `HYBRID`.** O híbrido cobre a cidade de pinos de
 restaurante e rótulos de rua — numa peça de arquitetura, só atrapalham.
