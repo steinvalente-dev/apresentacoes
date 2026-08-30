@@ -240,7 +240,7 @@
      sem erro nenhum no console. Testado e confirmado em 30/08/2026.
      A Elevation API resolveria sozinha, mas está — corretamente — fora da
      restrição da chave. Por isso o valor é campo, não constante. */
-  var CAM = { alt:760, range:320, tilt:58, heading:30 };
+  var CAM = { alt:760, range:380, tilt:58, heading:30, tiltEntrada:45 };
 
   var mapa = null, orbitando = false, lib = null;
 
@@ -334,7 +334,7 @@
     slide.classList.remove('falhou');
     slide.classList.add('esperando');
     estado.querySelector('b').textContent = 'montando a malha 3d…';
-    estadoTxt.textContent = 'A primeira carga baixa a malha do bairro. Num notebook em rede de escritório, alguns segundos; em 4G de canteiro, bem mais.';
+    estadoTxt.textContent = 'A câmera entra larga e fecha em degraus — é assim que o motor consegue montar a malha do bairro. Num notebook em rede de escritório, uns dez segundos; em 4G de canteiro, bem mais.';
     gritou = null;
 
     carregaApi(chave).then(function(){
@@ -346,9 +346,12 @@
       mapa = new m3d.Map3DElement({
         center:  { lat:ponto.lat, lng:ponto.lng, altitude:CAM.alt },
         range:   CAM.range,
-        tilt:    CAM.tilt,
+        tilt:    CAM.tiltEntrada,
         heading: CAM.heading,
-        mode:    m3d.MapMode ? m3d.MapMode.HYBRID : 'HYBRID'   /* MapMode, não Map3DMode */
+        /* MapMode, não Map3DMode. SATELLITE e não HYBRID: o híbrido cobre a
+           cidade de pinos de restaurante e rótulos de rua, que numa peça de
+           arquitetura só atrapalham. */
+        mode:    m3d.MapMode ? m3d.MapMode.SATELLITE : 'SATELLITE'
       });
       visor.insertBefore(mapa, visor.firstChild);
 
@@ -357,9 +360,7 @@
       setTimeout(function(){
         var d = diagnostica();
         if(d){ falha(d); return; }
-        slide.classList.remove('esperando');
-        solta();
-        /* tela azul e sem erro = câmera enterrada. Ver a nota em CAM. */
+        aproxima(ponto);
       }, 1400);
 
     })['catch'](function(e){
@@ -373,6 +374,44 @@
       falha(d || 'Não deu para carregar a API do Google (<code>' + msg +
         '</code>). Confira a rede — este módulo não funciona offline, e é uma das razões de ele não ser vigente.');
     });
+  }
+
+  /* ── A APROXIMAÇÃO ─────────────────────────────────────────────────
+     ⚠ NÃO NASCER COLADO NO LOTE. Criar o visor já com o `range` final
+     (algumas centenas de metros) devolve TELA AZUL LISA, sem erro nenhum:
+     o motor ainda não tem a malha daquele pedaço e a câmera nasce dentro
+     do chão. Os tiles chegam — todos 200 na rede —, mas não há o que
+     desenhar na frente da lente.
+
+     A cura é chegar de longe: entrar largo, onde a malha grossa já existe,
+     e fechar em degraus. Cada degrau dá ao motor tempo de puxar o nível
+     seguinte e reconciliar a altitude do terreno — dá para ver isso
+     acontecendo: ele reescreve `center.altitude` sozinho no caminho.
+
+     Descoberto em 30/08/2026 depois de uma tarde inteira culpando a
+     altitude, a chave e o file://. O sintoma dos quatro é o mesmo.
+
+     De quebra, a chegada é bonita: a peça abre com um mergulho. */
+  var DEGRAUS = [2000, 1000, 600];
+  var PAUSA   = 2200;
+
+  function aproxima(ponto){
+    var passos = DEGRAUS.concat([CAM.range]);
+    var i = 0;
+    (function passo(){
+      if(!mapa) return;
+      mapa.center  = { lat:ponto.lat, lng:ponto.lng, altitude:CAM.alt };
+      mapa.range   = passos[i];
+      mapa.tilt    = (i === 0) ? CAM.tiltEntrada : CAM.tilt;
+      mapa.heading = CAM.heading;
+      i++;
+      if(i < passos.length){ setTimeout(passo, PAUSA); return; }
+      /* último degrau dado: a peça está pronta para ser vista */
+      setTimeout(function(){
+        slide.classList.remove('esperando');
+        solta();
+      }, PAUSA);
+    })();
   }
 
   /* ── órbita ────────────────────────────────────────────────────────

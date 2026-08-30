@@ -124,12 +124,38 @@ Travado no módulo, em `CAM`, para os slides de localização não parecerem cad
 um de um projeto:
 
 ```js
-var CAM = { alt:760, range:320, tilt:58, heading:30 };
+var CAM = { alt:760, range:380, tilt:58, heading:30, tiltEntrada:45 };
+var DEGRAUS = [2000, 1000, 600];   // a aproximação
 ```
 
-Calibrado no ensaio de 30/08/2026, sobre a Vila Madalena. `range` abaixo de
-~250 entra na malha e mostra a costura da fotogrametria; `tilt` acima de ~72
-deita o horizonte e o scrim perde a função.
+Calibrado sobre a Vila Madalena em 30/08/2026. `range` abaixo de ~250 entra na
+malha e mostra a costura da fotogrametria; `tilt` acima de ~72 deita o
+horizonte e o scrim perde a função.
+
+**A câmera não nasce no enquadramento final — ela chega nele.** Ver a próxima
+seção: não é enfeite, é o que faz o slide desenhar alguma coisa.
+
+## A aproximação — a armadilha que custou a tarde
+
+**Criar o visor já com o `range` final devolve tela azul lisa, sem erro
+nenhum.** O motor ainda não tem a malha daquele pedaço e a câmera nasce dentro
+do chão. Os tiles chegam — todos `200` na aba de rede —, mas não há o que
+desenhar na frente da lente.
+
+A cura é chegar de longe: entrar largo, onde a malha grossa já existe, e
+fechar em degraus de ~2,2 s. Cada degrau dá ao motor tempo de puxar o nível
+seguinte e reconciliar a altitude do terreno — dá para ver ele reescrevendo
+`center.altitude` sozinho no caminho.
+
+Isso também explica por que o ensaio de manhã funcionou: eu tinha mexido no
+`range` na mão, de 900 para 700 para 320, sem perceber que a sequência *era* a
+solução. Publicado direto no enquadramento final, o mesmo código não desenhava
+nada.
+
+De quebra, a peça abre com um mergulho, que é melhor do que aparecer pronta.
+
+**O modo é `SATELLITE`, não `HYBRID`.** O híbrido cobre a cidade de pinos de
+restaurante e rótulos de rua — numa peça de arquitetura, só atrapalham.
 
 ## A trava de teclado
 
@@ -143,6 +169,11 @@ do visor. Ao soldar num deck, acrescentar `.g-earth` aos três pontos da engine:
   de MB de malha antes da primeira prancha
 
 ## Armadilhas
+
+**Quatro coisas diferentes dão a MESMA tela azul lisa, sem erro:** altitude
+errada, `range` final sem aproximação, câmera sob a superfície e — de longe —
+o globo visto do espaço. Diante de tela azul, checar nesta ordem: a altitude,
+depois a aproximação. O console não ajuda em nenhuma das duas.
 
 **A altitude é acima do NÍVEL DO MAR, não altura de voo.** É a pior das
 armadilhas, porque falha em silêncio. São Paulo está a ~760 m: pôr `alt:180`
