@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>protótipo · visor earth 3d — NÃO VIGENTE</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   PROTÓTIPO · visor earth 3d          ⚠ NÃO VIGENTE — não entra em peça
+                                          de cliente enquanto estiver assim
+
+   O que é: o slide de localização com o globo fotorrealista do Google
+   Earth dentro — malha 3D de verdade, com tilt, heading e órbita — em vez
+   do satélite chapado do `mapa-localizacao.html`, que continua sendo o
+   vigente.
+
+   POR QUE AINDA NÃO É VIGENTE — três coisas, nesta ordem de gravidade:
+
+   1. O `<gmp-map-3d>` está em PREVIEW no canal `v=beta` do Google. Sem
+      SLA, com API que pode mudar sem aviso. Peça de cliente não se
+      apoia em beta de terceiro.
+   2. Depende de rede boa. O satélite 2D degrada mal; a malha 3D degrada
+      pior — carrega em blocos e a reunião assiste.
+   3. ⚑ SÓ FUNCIONA POR LINK. A API recusa página aberta do disco
+      (file://). Deck com este slide não se manda como arquivo: publica-se
+      e manda-se o endereço. Quem abre o link não precisa de nada.
+
+   A CHAVE vem de `ms-maps-chave.js`, ao lado. Restrita aos domínios do
+   Michel — ler aquele arquivo antes de mexer em qualquer coisa de chave.
+
+   O ENDEREÇO NÃO ENTRA AQUI. O ponto de partida abaixo é um marco
+   público de São Paulo. Localização de projeto entra na peça do projeto.
+
+   Vigente para localização hoje: ../modulos/mapa-localizacao.html
+   ═══════════════════════════════════════════════════════════════════════ */
+  :root{
+    --creme:#EDE6DA; --tinta:#211D1A; --terra:#B85C38;
+    --mono:'DM Mono',ui-monospace,monospace;
+    --sans:'Inter',system-ui,-apple-system,sans-serif;
+    --gut-in:clamp(24px,5vw,96px);
+    --bot:clamp(46px,7vh,74px);
+    --fs-h2:clamp(24px,3.4vw,48px);
+    --fs-lead:clamp(13px,1.15vw,17px);
+    --fs-cap:clamp(9.5px,.78vw,12.5px);
+    --fs-item:clamp(14px,1.35vw,21px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--tinta);color:var(--creme);font-family:var(--sans);overflow:hidden}
+
+/* ── O SLIDE. É isto que se copia. ──────────────────────────────────── */
+  .g-earth{position:absolute;inset:0;padding:0;overflow:hidden;background:#12110E}
+  .g-earth .visor{position:absolute;inset:0}
+  .g-earth gmp-map-3d{position:absolute;inset:0;width:100%;height:100%;
+    pointer-events:none;filter:saturate(.86) contrast(1.03)}
+  .g-earth.girando gmp-map-3d{pointer-events:auto}
+
+  /* mesmo scrim do mapa vigente: denso nas pontas, limpo no meio. É o que
+     mantém o chrome legível sobre qualquer trecho da imagem. */
+  .g-earth .scrim{position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,
+      #211D1Aeb 0, #211D1Ae6 7%, #211D1A00 30%,
+      #211D1A00 48%, #211D1Ae6 88%, #211D1Af7 100%)}
+
+  .g-earth .veu{position:absolute;inset:0;display:grid;place-content:center;gap:.6em;
+    text-align:center;background:#211D1A5c;transition:opacity .3s ease;cursor:pointer;z-index:2}
+  .g-earth.girando .veu{opacity:0;pointer-events:none}
+  .g-earth .veu b{font-family:var(--mono);font-weight:500;font-style:italic;
+    font-size:var(--fs-item);color:var(--creme)}
+  .g-earth .veu s{text-decoration:none;font-family:var(--mono);font-size:var(--fs-cap);
+    letter-spacing:.14em;text-transform:uppercase;color:#EDE6DAa6}
+
+  .g-earth .sair{position:absolute;bottom:clamp(9px,1.2vh,18px);left:50%;
+    transform:translateX(-50%);display:none;align-items:center;gap:.5em;z-index:4;
+    cursor:pointer;font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.12em;
+    text-transform:uppercase;color:var(--creme);background:#211D1Ae6;
+    border:1px solid #EDE6DA3d;border-radius:999px;padding:.5em 1.1em}
+  .g-earth.girando .sair{display:flex}
+
+  .g-earth .rotulo{position:absolute;left:var(--gut-in);
+    bottom:calc(var(--bot) + clamp(4px,1.4vh,22px));z-index:3;pointer-events:none;
+    max-width:min(46ch,60vw);
+    padding:clamp(14px,1.9vh,30px) clamp(18px,1.9vw,38px);
+    background:#211D1A73;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    border:1px solid #EDE6DA1f;border-radius:3px}
+  .g-earth .rotulo .kick{color:#F0B79Bdd;font-family:var(--mono);
+    font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase}
+  .g-earth .rotulo h2{color:var(--creme);font-size:var(--fs-h2);line-height:1;
+    letter-spacing:-.022em;margin-top:.22em;font-family:var(--mono);
+    font-weight:500;font-style:italic;text-transform:lowercase}
+  .g-earth .rotulo .lead{color:#EDE6DAd9;font-size:var(--fs-lead);margin-top:.5em;line-height:1.5}
+  .g-earth .rotulo .cap{display:block;font-family:var(--mono);font-size:var(--fs-cap);
+    letter-spacing:.1em;text-transform:uppercase;color:#EDE6DA8f;margin-top:.85em}
+
+  /* órbita — o único comando que o slide precisa expor numa reunião */
+  .g-earth .orb{position:absolute;right:var(--gut-in);
+    bottom:calc(var(--bot) + clamp(4px,1.4vh,22px));z-index:3;cursor:pointer;
+    font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.12em;
+    text-transform:uppercase;color:var(--creme);background:#211D1A9e;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    border:1px solid #EDE6DA30;border-radius:999px;padding:.62em 1.2em;
+    display:flex;align-items:center;gap:.55em;transition:border-color .2s,color .2s}
+  .g-earth .orb:hover{border-color:#B85C38;color:#F0B79B}
+  .g-earth .orb i{display:block;width:7px;height:7px;border-radius:50%;
+    background:var(--terra);opacity:.45;transition:opacity .2s}
+  .g-earth.orbitando .orb i{opacity:1;animation:pulsa 1.9s ease-in-out infinite}
+  @keyframes pulsa{50%{opacity:.3}}
+
+  /* estado de erro / espera — degradação explícita, nunca tela preta muda */
+  .g-earth .estado{position:absolute;inset:0;z-index:5;display:none;
+    place-content:center;text-align:center;padding:0 8vw;gap:.9em;
+    background:#12110Ef2}
+  .g-earth.falhou .estado,.g-earth.esperando .estado{display:grid}
+  .estado b{font-family:var(--mono);font-weight:500;font-style:italic;
+    font-size:var(--fs-item);color:var(--creme)}
+  .estado span{font-size:var(--fs-lead);color:#EDE6DAa6;line-height:1.6;max-width:56ch;
+    margin:0 auto}
+  .estado code{font-family:var(--mono);font-size:.9em;color:#F0B79B}
+
+/* ── painel: só do protótipo. NÃO se copia para um deck. ───────────── */
+  .painel{position:absolute;top:0;left:0;right:0;z-index:9;
+    background:#12110Eec;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    border-bottom:1px solid #EDE6DA1f;padding:12px clamp(14px,3vw,34px);
+    display:flex;flex-wrap:wrap;gap:9px;align-items:center;
+    font-family:var(--mono);font-size:11px;letter-spacing:.05em}
+  .painel .tag{color:#F0B79B;letter-spacing:.16em;text-transform:uppercase;
+    border:1px solid #B85C3866;border-radius:999px;padding:5px 11px;white-space:nowrap}
+  .painel input{flex:1;min-width:150px;background:#211D1A;color:var(--creme);
+    border:1px solid #EDE6DA26;border-radius:3px;padding:8px 11px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.03em}
+  .painel input:focus{outline:none;border-color:#B85C38}
+  .painel input::placeholder{color:#EDE6DA52}
+  .painel button{background:var(--terra);color:#12110E;border:0;border-radius:3px;
+    padding:8px 15px;cursor:pointer;font-family:var(--mono);font-size:11px;
+    font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+  .painel button.ghost{background:transparent;color:#EDE6DA8f;border:1px solid #EDE6DA26}
+  .painel .msg{width:100%;color:#EDE6DA8f;font-size:10.5px;line-height:1.6;letter-spacing:.02em}
+  .painel .msg u{text-decoration:none;color:#F0B79B}
+  .painel.oculto{display:none}
+  .reabrir{position:absolute;top:10px;left:10px;z-index:9;display:none;
+    background:#211D1Ae6;color:#EDE6DA8f;border:1px solid #EDE6DA26;border-radius:999px;
+    padding:6px 13px;cursor:pointer;font-family:var(--mono);font-size:10px;
+    letter-spacing:.14em;text-transform:uppercase}
+  .painel.oculto ~ .reabrir{display:block}
+</style>
+</head>
+<body>
+
+<div class="g-earth esperando" id="slide">
+  <div class="visor" id="visor">
+    <!-- o <gmp-map-3d> é injetado só depois da chave: criar antes deixa um
+         elemento morto no DOM e o Google reclama no console -->
+    <div class="scrim"></div>
+    <div class="veu">
+      <b>clique para navegar no 3d</b>
+      <s>arrastar gira · ctrl + arrastar inclina · o teclado passa a ser do mapa</s>
+    </div>
+    <button class="sair" type="button">devolver o teclado ao slide</button>
+  </div>
+
+  <div class="rotulo">
+    <span class="kick">cidade, uf · o olho do slide</span>
+    <h2>onde o terreno está</h2>
+    <div class="lead">rua, número · bairro. O endereço vai escrito: é o que sobrevive à queda da rede.</div>
+    <span class="cap">Protótipo · clique para navegar · o botão devolve o teclado ao slide.</span>
+  </div>
+
+  <button class="orb" type="button" id="orb"><i></i>orbitar</button>
+
+  <div class="estado" id="estado">
+    <b>o visor 3d ainda não carregou</b>
+    <span id="estadoTxt">Cole uma chave da Google Maps Platform no painel acima. Sem chave este
+      módulo não desenha nada — é o comportamento esperado, não um defeito.</span>
+  </div>
+</div>
+
+<div class="painel" id="painel">
+  <span class="tag">protótipo · não vigente</span>
+  <input id="chave" type="password" placeholder="chave da Maps Platform (fica só neste navegador)" autocomplete="off">
+  <input id="local" type="text" placeholder="lat,lng  ou  cole um link do Google Maps">
+  <input id="altsolo" type="number" step="10" title="altitude do solo, em metros acima do nivel do mar" placeholder="alt. solo (m)" style="flex:0 0 118px;min-width:0">
+  <button type="button" id="carregar">carregar</button>
+  <button type="button" class="ghost" id="esconder">esconder</button>
+  <div class="msg">
+    A chave vem de <u>ms-maps-chave.js</u>, ao lado deste arquivo, e é restrita aos domínios do
+    Michel — fora deles não funciona. Trocar aqui só afeta este navegador.
+    Para pegar a coordenada: botão direito no ponto, no Google Maps, e colar aqui.
+    <u>Altitude do solo</u> é acima do nível do mar, não altura de voo: São Paulo ~760, litoral ~10,
+    serra gaúcha ~800. Errar para baixo enterra a câmera e a tela fica azul.
+  </div>
+</div>
+<button class="reabrir" type="button" id="reabrir">painel</button>
+
+<!-- A chave da casa, num arquivo só. Num deck publicado é esta linha que
+     entra, e o painel acima nem existe. -->
+<script src="ms-maps-chave.js"></script>
+
+<script>
+/* ── A MECÂNICA ────────────────────────────────────────────────────────
+   Mesma trava de teclado do mapa vigente: o visor rouba as setas e a
+   navegação do deck para. Ativação por clique no véu, botão de saída
+   FORA do visor.
+
+   Num deck, estas três coisas já existem na engine — não duplicar:
+   · desativaModelo() varre '.g-modelo,.g-mapa' — acrescentar '.g-earth'
+   · o clique do palco ignora '.g-earth .visor'
+   · o carrega() entra no go(), ao chegar no slide: montar o 3d na carga
+     baixa dezenas de MB de malha antes da primeira prancha
+   ─────────────────────────────────────────────────────────────────── */
+(function(){
+  'use strict';
+
+  var slide  = document.getElementById('slide');
+  var visor  = document.getElementById('visor');
+  var painel = document.getElementById('painel');
+  var estado = document.getElementById('estado');
+  var estadoTxt = document.getElementById('estadoTxt');
+  var orbBt  = document.getElementById('orb');
+
+  var CHAVE_LS = 'ms.earth3d.chave';
+  var LOCAL_LS = 'ms.earth3d.local';
+
+  /* a chave da casa, se ms-maps-chave.js estiver ao lado. É o caminho
+     normal num deck publicado; o campo do painel é só do protótipo, para
+     ensaiar com outra chave sem mexer no arquivo. */
+  var CHAVE_CASA = (window.MS_MAPS && window.MS_MAPS.chave) || '';
+  var CANAL      = (window.MS_MAPS && window.MS_MAPS.canal) || 'beta';
+
+  /* ponto de partida: marco público, nunca localização de projeto.
+     Praça da Sé — e o Centro é justamente onde a malha 3D é mais densa. */
+  var PADRAO = { lat:-23.5505, lng:-46.6333 };
+
+  /* enquadramento da casa: o mesmo em toda peça, para os slides de
+     localização não parecerem cada um de um projeto.
+
+     ⚠ `alt` É ALTITUDE ABSOLUTA, ACIMA DO NÍVEL DO MAR — não altura de voo.
+     São Paulo está a ~760 m. Com um valor baixo (180, o "parece razoável"),
+     a câmera nasce SEIS CENTOS METROS ABAIXO DO SOLO e a tela fica só azul,
+     sem erro nenhum no console. Testado e confirmado em 30/08/2026.
+     A Elevation API resolveria sozinha, mas está — corretamente — fora da
+     restrição da chave. Por isso o valor é campo, não constante. */
+  var CAM = { alt:760, range:320, tilt:58, heading:30 };
+
+  var mapa = null, orbitando = false, lib = null;
+
+  /* ── coordenada: aceita "lat,lng" ou um link do Maps ────────────────
+     O link vem em três formatos, e os três aparecem no dia a dia:
+     @-23.5,-46.6,17z  ·  !3d-23.5!4d-46.6  ·  ?q=-23.5,-46.6          */
+  /* C8R5+77, 588MC8R5+77 — o formato Open Location Code */
+  function ehPlusCode(txt){
+    return /(^|\s)[23456789CFGHJMPQRVWX]{4,8}\+[23456789CFGHJMPQRVWX]{2,3}\b/i.test(String(txt||''));
+  }
+
+  function leCoord(txt){
+    if(!txt) return null;
+    txt = txt.trim();
+    var m = txt.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)
+         || txt.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)
+         || txt.match(/(?:^|[?&=\s(])(-?\d{1,2}\.\d{3,})\s*,\s*(-?\d{1,3}\.\d{3,})/);
+    if(!m) return null;
+    var la = parseFloat(m[1]), ln = parseFloat(m[2]);
+    if(isNaN(la) || isNaN(ln) || Math.abs(la) > 90 || Math.abs(ln) > 180) return null;
+    return { lat:la, lng:ln };
+  }
+
+  function falha(txt){
+    slide.classList.remove('esperando');
+    slide.classList.add('falhou');
+    estado.querySelector('b').textContent = 'o visor 3d não abriu';
+    estadoTxt.innerHTML = txt;
+  }
+
+  /* ── o loader do Google, injetado só quando há chave ────────────────
+     Canal v=beta, obrigatório: maps3d não existe no canal estável.      */
+  var promessaApi = null;   /* MEMOIZADA — ver a nota abaixo */
+
+  function carregaApi(chave){
+    /* ⚠ O LOADER DO GOOGLE SÓ PODE ENTRAR UMA VEZ NA PÁGINA.
+       Injetar o script duas vezes — o que acontece se alguém clicar
+       CARREGAR enquanto a primeira carga ainda está no ar — quebra por
+       dentro com `Cannot read properties of undefined (reading 'keys')`,
+       um erro que não diz nada sobre a causa. Por isso a promessa é
+       guardada e reaproveitada, e o botão fica travado enquanto carrega.
+       Bug encontrado no uso real, 30/08/2026. */
+    if(window.google && window.google.maps && window.google.maps.importLibrary){
+      return Promise.resolve();
+    }
+    if(promessaApi) return promessaApi;
+
+    promessaApi = new Promise(function(ok, erro){
+      var s = document.createElement('script');
+      s.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(chave)
+            + '&v=' + encodeURIComponent(CANAL) + '&libraries=maps3d&language=pt-BR&region=BR';
+      s.async = true;
+      s.onload = ok;
+      s.onerror = function(){ promessaApi = null; erro(new Error('rede')); };
+      document.head.appendChild(s);
+    });
+    return promessaApi;
+  }
+
+  /* o Google não rejeita a promise quando a chave é ruim: ele desenha o
+     erro dentro do elemento e grita no console. Por isso a janela de
+     verificação abaixo — sem ela, chave inválida vira tela preta muda. */
+  var gritou = null;
+  (function espiaConsole(){
+    var orig = console.error;
+    console.error = function(){
+      var t = Array.prototype.join.call(arguments, ' ');
+      if(/ApiNotActivated|InvalidKey|BillingNotEnabled|RefererNotAllowed|ApiTargetBlocked/i.test(t)){
+        gritou = t;
+      }
+      return orig.apply(console, arguments);
+    };
+  })();
+
+  function diagnostica(){
+    if(!gritou) return null;
+    if(/BillingNotEnabled/i.test(gritou))
+      return 'A chave existe, mas o <code>billing</code> não está ativo no projeto do Google Cloud. O 3D não roda sem faturamento habilitado, mesmo estando em preview e sem custo.';
+    if(/ApiNotActivated|ApiTargetBlocked/i.test(gritou))
+      return 'Falta ativar a <code>Maps JavaScript API</code> no projeto do Google Cloud, ou a chave está restrita a outras APIs.';
+    if(/RefererNotAllowed/i.test(gritou))
+      return 'A chave está restrita por referrer e este endereço não está na lista. Acrescente <code>' + location.origin + '/*</code> às restrições, ou teste com uma chave sem restrição.';
+    if(/InvalidKey/i.test(gritou))
+      return 'Chave inválida — confira se copiou inteira, sem espaço no fim.';
+    if(/reading .keys./i.test(gritou))
+      return 'A API do Google entrou duas vezes na página. Recarregue com <code>F5</code> e clique CARREGAR uma vez só.';
+    return 'O Google recusou a chave: <code>' + gritou.slice(0,140) + '</code>';
+  }
+
+  function monta(chave, ponto){
+    slide.classList.remove('falhou');
+    slide.classList.add('esperando');
+    estado.querySelector('b').textContent = 'montando a malha 3d…';
+    estadoTxt.textContent = 'A primeira carga baixa a malha do bairro. Num notebook em rede de escritório, alguns segundos; em 4G de canteiro, bem mais.';
+    gritou = null;
+
+    carregaApi(chave).then(function(){
+      return google.maps.importLibrary('maps3d');
+    }).then(function(m3d){
+      lib = m3d;
+      if(mapa && mapa.parentNode) mapa.parentNode.removeChild(mapa);
+
+      mapa = new m3d.Map3DElement({
+        center:  { lat:ponto.lat, lng:ponto.lng, altitude:CAM.alt },
+        range:   CAM.range,
+        tilt:    CAM.tilt,
+        heading: CAM.heading,
+        mode:    m3d.MapMode ? m3d.MapMode.HYBRID : 'HYBRID'   /* MapMode, não Map3DMode */
+      });
+      visor.insertBefore(mapa, visor.firstChild);
+
+      /* a malha não avisa quando terminou; a janela dá tempo de o erro de
+         chave aparecer no console antes de declarar sucesso */
+      setTimeout(function(){
+        var d = diagnostica();
+        if(d){ falha(d); return; }
+        slide.classList.remove('esperando');
+        solta();
+        /* tela azul e sem erro = câmera enterrada. Ver a nota em CAM. */
+      }, 1400);
+
+    })['catch'](function(e){
+      var d = diagnostica();
+      var msg = (e && e.message) || 'erro';
+      if(/reading .keys./i.test(msg)){
+        d = d || 'A API do Google entrou duas vezes nesta página. Recarregue com <code>F5</code> e clique CARREGAR <b>uma vez só</b> — o módulo já sobe sozinho quando há chave guardada.';
+      } else if(!d && location.protocol === 'file:'){
+        d = 'A página está aberta como arquivo (<code>file://</code>). A Maps JavaScript API costuma recusar essa origem. Sirva a pasta por HTTP — no terminal, dentro dela: <code>python -m http.server 8000</code> — e abra <code>http://localhost:8000</code>.';
+      }
+      falha(d || 'Não deu para carregar a API do Google (<code>' + msg +
+        '</code>). Confira a rede — este módulo não funciona offline, e é uma das razões de ele não ser vigente.');
+    });
+  }
+
+  /* ── órbita ────────────────────────────────────────────────────────
+     flyCameraAround é da própria API e é o movimento certo: mantém o
+     alvo e gira em torno. Se sumir do beta, o fallback manual embaixo
+     faz o mesmo empurrando o heading — mais duro, mas não quebra.     */
+  var timerOrb = null;
+  function orbita(liga){
+    if(!mapa) return;
+    orbitando = liga;
+    slide.classList.toggle('orbitando', liga);
+    orbBt.lastChild.textContent = liga ? 'parar' : 'orbitar';
+
+    if(!liga){
+      if(mapa.stopCameraAnimation) mapa.stopCameraAnimation();
+      if(timerOrb){ clearInterval(timerOrb); timerOrb = null; }
+      return;
+    }
+    if(mapa.flyCameraAround){
+      mapa.flyCameraAround({
+        camera:{ center:mapa.center, tilt:mapa.tilt, range:mapa.range, heading:mapa.heading },
+        durationMillis: 42000,
+        rounds: 1
+      });
+      return;
+    }
+    timerOrb = setInterval(function(){
+      mapa.heading = ((mapa.heading || 0) + 0.28) % 360;
+    }, 40);
+  }
+  orbBt.addEventListener('click', function(e){
+    e.stopPropagation();
+    orbita(!orbitando);
+  });
+
+  /* ── trava de teclado ───────────────────────────────────────────── */
+  function desativa(){
+    Array.prototype.forEach.call(
+      document.querySelectorAll('.g-modelo,.g-mapa,.g-earth'),
+      function(sl){ sl.classList.remove('girando'); });
+  }
+  document.addEventListener('click', function(e){
+    var sl = e.target.closest && e.target.closest('.g-modelo,.g-mapa,.g-earth');
+    if(!sl) return;
+    if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando'); }
+    else if(e.target.closest('.sair')){ e.stopPropagation(); desativa(); document.body.focus(); }
+  });
+
+  /* ── painel do protótipo ────────────────────────────────────────── */
+  var iChave = document.getElementById('chave');
+  var iLocal = document.getElementById('local');
+  var iAlt   = document.getElementById('altsolo');
+  var btCarregar = document.getElementById('carregar');
+  var ALT_LS = 'ms.earth3d.alt';
+
+  /* nada aqui pode derrubar o script: um campo ausente não pode apagar o
+     visor inteiro. Foi o que aconteceu na primeira versão. */
+  function poe(el, v){ if(el) el.value = v; }
+  try{
+    poe(iChave, localStorage.getItem(CHAVE_LS) || CHAVE_CASA);
+    poe(iLocal, localStorage.getItem(LOCAL_LS) || '');
+    poe(iAlt,   localStorage.getItem(ALT_LS)   || CAM.alt);
+  }catch(e){ poe(iAlt, CAM.alt); poe(iChave, CHAVE_CASA); }
+
+  var carregando = false;
+
+  function carregar(){
+    if(carregando) return;              /* dois cliques = duas cargas = quebra */
+    var k = iChave.value.trim();
+    if(!k){ falha('Sem chave não há o que desenhar. Cole a chave no painel.'); return; }
+
+    /* Plus Code não é coordenada. O menu do Google Maps oferece os dois, e o
+       de cima costuma ser o Plus Code — daí a confusão. Converter exigiria a
+       Geocoding API, que está fora da restrição da chave, de propósito. */
+    if(ehPlusCode(iLocal.value)){
+      falha('Isso é um <code>Plus Code</code>, não uma coordenada. No Google Maps, clique com o botão <b>direito</b> sobre o ponto: a primeira linha do menu traz <code>-23.5553, -46.6893</code>. É essa que cola aqui.');
+      return;
+    }
+
+    var p = leCoord(iLocal.value) || PADRAO;
+    var a = parseFloat(iAlt ? iAlt.value : CAM.alt);
+    CAM.alt = (isNaN(a) ? 760 : a);
+    try{
+      localStorage.setItem(CHAVE_LS, k);
+      localStorage.setItem(LOCAL_LS, iLocal.value.trim());
+      localStorage.setItem(ALT_LS, String(CAM.alt));
+    }catch(e){}
+    carregando = true;
+    btCarregar.disabled = true;
+    btCarregar.textContent = 'carregando…';
+    monta(k, p);
+  }
+
+  /* solta o botão quando o visor decidir seu estado, dando ou não certo */
+  var solta = function(){
+    carregando = false;
+    btCarregar.disabled = false;
+    btCarregar.textContent = 'carregar';
+  };
+  btCarregar.addEventListener('click', carregar);
+  iLocal.addEventListener('keydown', function(e){ if(e.key === 'Enter') carregar(); });
+  if(iAlt) iAlt.addEventListener('keydown', function(e){ if(e.key === 'Enter') carregar(); });
+  iChave.addEventListener('keydown', function(e){ if(e.key === 'Enter') carregar(); });
+
+  document.getElementById('esconder').addEventListener('click', function(){
+    painel.classList.add('oculto');
+  });
+  document.getElementById('reabrir').addEventListener('click', function(){
+    painel.classList.remove('oculto');
+  });
+
+  /* chave já guardada de uma sessão anterior: sobe sozinho */
+  if(iChave.value.trim()) carregar();
+})();
+</script>
+</body>
+</html>
