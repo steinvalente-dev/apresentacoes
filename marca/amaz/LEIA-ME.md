@@ -16,9 +16,18 @@ foi levantada:
 
 | peça | o que traz |
 |---|---|
-| `../../amaz-identidade/apresentacao.html` | a identidade visual: marca, cor, tipografia, fotografia |
+| `../../amaz-identidade/apresentacao.html` | **a identidade visual — o artefato da linha `marca · amaz`** no acervo |
 | `../../amaz-marchetaria/apresentacao.html` | o documento do grafismo — o mestre escrito |
 | `../../amaz-marchetaria/laboratorio.html` | o laboratório do gerador, interativo |
+
+**A linha `marca · amaz` abre a identidade visual, não a institucional.** Até
+29.08.2026 o `ver artefato` dessa linha apontava para `amaz-r1/apresentacao.html`
+— o deck institucional inteiro, que não é peça de marca. Corrigido em 30.08: a
+linha passou a abrir `amaz-identidade/apresentacao.html`, e a linha separada
+`identidade visual`, que apontava para o mesmo arquivo, foi absorvida. É o mesmo
+desenho das outras marcas: uma linha `marca · <nome>`, com o `.md` no **ler** e a
+peça da identidade no **ver artefato**. **O R1 é apresentação, e vive só na aba
+arquivo.**
 
 **A marchetaria mora inteira em `amaz-marchetaria/`.** Reorganizada em
 29.08.2026: eram três peças — o documento em `amaz-grafismo/`, o laboratório e o
