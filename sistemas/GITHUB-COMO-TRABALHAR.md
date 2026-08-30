@@ -40,6 +40,8 @@ por URL** e **contém dado que não pode ser público**.
 | script que roda em máquina, não em navegador | `apresentacoes/ferramentas/<slug>/`, junto com o `LEIA-ME.md` |
 | peça sensível de cliente | não vai para o público: `michel-stein-site`, em `cliente/` |
 | binário de trabalho de projeto (PSD, DXF, base de campo) | `michel-stein-sistemas/entregas/<projeto>/` |
+| arquivo que saiu de uso, guardado só como registro | `apresentacoes/superado/` — ver o `LEIA-ME.md` de lá |
+| proposta de substituição, ainda não aprovada | `proposta/`, ao lado do arquivo que ela quer substituir |
 
 Documento **sem** dado de cliente vai para o público de propósito: URL
 raw abre sem token, então qualquer conversa lê o arquivo, inclusive as
