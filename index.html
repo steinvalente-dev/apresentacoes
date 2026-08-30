@@ -13,6 +13,7 @@
 <style>
   :root{
     --olive:#6B6A4B; --cream:#EDE6DA; --ink:#211D1A; --terra:#B85C38;
+    --grafite:#3E3833;              /* tinta clareada: sem isso o halftone some */
     --soft:#EDE6DAcc; --muted:#EDE6DA8c; --line:#EDE6DA2e; --hair:#EDE6DA1a;
     --mono:'DM Mono',ui-monospace,monospace;
     --card:#211D1Aa6;              /* tinta translúcida, garante a leitura */
@@ -22,8 +23,12 @@
     --acento:var(--terra);         /* o traço da marca */
   }
   body.sistema{
-    --fundo:var(--terra);
-    --acento:var(--ink);           /* sobre terracota o traço vira tinta */
+    --fundo:var(--grafite);        /* tinta clareada, para o ponto aparecer */
+    --acento:var(--terra);
+    /* sobre tinta o cartão de tinta some: inverte para creme translúcido */
+    --card:#EDE6DA12;
+    --card-forte:#EDE6DA1c;
+    --card-linha:#EDE6DA2b;
   }
   body.marca{
     /* --cream é o token de PRIMEIRO PLANO em todo o CSS. Inverter o par
@@ -38,15 +43,11 @@
   /* o knob fica escuro nesta aba, então o rótulo escolhido tem de clarear */
   body.marca .aba[aria-selected="true"]{color:#EDE6DA}
   /* sobre papel claro o halftone compete com o texto: recua para um sussurro */
-  body.marca #msveu{opacity:.93}
+  body.marca #msveu{opacity:.86}
   body.marca #msveu::after{opacity:.10}
   body.deck{
-    --fundo:var(--ink);            /* a aba do deck é tinta */
-    --acento:var(--terra);
-    /* sobre tinta o cartão de tinta some: inverte para creme translúcido */
-    --card:#EDE6DA12;
-    --card-forte:#EDE6DA1c;
-    --card-linha:#EDE6DA2b;
+    --fundo:var(--terra);          /* a aba do deck é terracota */
+    --acento:var(--ink);           /* sobre terracota o traço vira tinta */
   }
   html{background:var(--fundo);transition:background-color .55s}
   *{margin:0;padding:0;box-sizing:border-box}
@@ -640,9 +641,9 @@ const SETA = '<svg viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h13.4M9.6
    body; a primeira aba não tem classe porque o :root já é o tema dela. */
 const ABAS = [
   { id:'t-arquivo', hash:'#arquivo', cls:null,      cor:'#6B6A4B', fundo:{paper:'#6B6A4B', acc:'#B85C38'} },
-  { id:'t-deck',    hash:'#deck',    cls:'deck',    cor:'#211D1A', fundo:{paper:'#211D1A', acc:'#B85C38'} },
+  { id:'t-deck',    hash:'#deck',    cls:'deck',    cor:'#B85C38', fundo:{paper:'#B85C38', acc:'#211D1A'} },
   { id:'t-marca',   hash:'#marca',   cls:'marca',   cor:'#EDE6DA', fundo:{paper:'#EDE6DA', acc:'#CFCBC2'} },
-  { id:'t-sistema', hash:'#sistema', cls:'sistema', cor:'#B85C38', fundo:{paper:'#B85C38', acc:'#211D1A'} }
+  { id:'t-sistema', hash:'#sistema', cls:'sistema', cor:'#3E3833', fundo:{paper:'#3E3833', acc:'#B85C38'} }
 ];
 
 (function(){
@@ -987,13 +988,15 @@ const FUNDO_V = 2;   /* subir ao trocar qualquer peça: o Pages serve com max-ag
   function sobe(){
     if(!window.MSFundo) return;
     try{
-      const sis = document.body.classList.contains('sistema');
+      /* a paleta sai da ABAS, fonte única: aba nova não precisa ser repetida aqui */
+      const ativa = (typeof ABAS !== 'undefined') ? ABAS.find(function(a){
+        return a.cls && document.body.classList.contains(a.cls); }) : null;
+      const pal = ativa ? ativa.fundo : { paper:'#6B6A4B', acc:'#B85C38' };
       window.MSF = MSFundo.montar(
         document.getElementById('msfundo'),
         ['01','02','03','04','05','06','07','08','09']
           .map(function(n){ return 'fundo/'+n+'.webp?v=' + FUNDO_V; }),
-        { paper: sis ? '#B85C38' : '#6B6A4B',
-          acc:   sis ? '#211D1A' : '#B85C38',
+        { paper: pal.paper, acc: pal.acc,
           scale: 0.85, prep: false, sortear: true }
       );
       window.MSF.entrada();
