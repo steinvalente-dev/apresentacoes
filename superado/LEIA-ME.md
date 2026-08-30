@@ -16,6 +16,7 @@ em `superado/`, não vale.
 2. **Marcar o arquivo por dentro.** Um `.md` recebe o aviso no topo; um
    `.html` recebe a faixa (o trecho está abaixo) e o `noindex`.
 3. Registrar a linha na tabela deste arquivo.
+3b. **Consertar os caminhos relativos.** O arquivo desceu um nível: `src="assets/…"` deixa de resolver e a peça abre sem imagem, sem erro visível na página. Apontar para o caminho de origem — `../<pasta original>/assets/…`. Conferir com o navegador, não a olho.
 4. Só então substituir o vigente.
 
 Copiar **antes** de substituir, sempre na mesma rodada. Um push que troca o
@@ -60,4 +61,5 @@ função.
 
 | arquivo | o que era | saiu de uso | substituído por |
 |---|---|---|---|
-| _(vazio)_ | | | |
+| `2026-08-30-manual-marca-michel-stein.html` | o manual de marca em cinco folhas, antes da revisão gráfica | 30/08/2026 | `marca/michel-stein/manual.html` |
+| `2026-08-30-MARCA-MICHEL-STEIN.md` | o mestre da marca, antes do grifo e da escala de números | 30/08/2026 | `marca/MARCA-MICHEL-STEIN.md` |

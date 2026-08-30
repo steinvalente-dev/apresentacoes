@@ -465,11 +465,8 @@ const projetos = [
 const GH = "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/";
 const docs = [
   { aba:"marca", grupo:"michel stein_", nome:"marca · michel stein_",
-    desc:"Cor, tipografia, assinatura, abertura, contracapa e o preset do fundo. Trocar de marca é trocar este arquivo. Ver artefato abre o manual em desenho — conceito, logotipo, monograma, sistema e aplicações nas cinco folhas, numa página",
+    desc:"Cor, tipografia, as três assinaturas, o grifo, a escala de números, abertura e contracapa. Trocar de marca é trocar este arquivo. Ver artefato abre o manual em desenho — as cinco folhas numa página, revisão de 30.08.2026",
     arq:"marca/MARCA-MICHEL-STEIN.md", ver:"marca/michel-stein/manual.html" },
-  { aba:"marca", grupo:"michel stein_", nome:"manual · proposta de revisão",
-    desc:"Proposta, ainda não vigente. Aplica os seis pontos do relatório de 30.08.2026: cabeçalho de seção com número em terracota, escala de números, grifo, chamada com filete e etiqueta, três pesos de separador e uma seção invertida em oliva. O manual vigente continua sendo o de cima",
-    arq:"marca/MARCA-MICHEL-STEIN.md", ver:"marca/michel-stein/proposta/manual.html" },
   { aba:"marca", grupo:"michel stein_", nome:"bloco de marca",
     desc:"As quatro coisas que se colam no esqueleto: cores, as seis fontes, a capa e a contracapa",
     arq:"marca/MARCA-MICHEL-STEIN-CAPA.md", ver:"marca/michel-stein/bloco.html" },
@@ -780,7 +777,11 @@ const ABAS = [
    está listado, e o que sobra aparece como aviso.
    A API pública limita a 60 chamadas por hora por IP — se falhar, silencia. */
 (function(){
-  const IGNORA = ['index.html', 'sistemas/', 'modulos/', 'fundo/', 'ferramentas/'];
+  /* 'superado/' entra aqui de propósito: arquivo tirado de uso não é peça e
+     não se registra em `pecas` nem em `docs` — o registro dele é a tabela do
+     próprio superado/LEIA-ME.md. Sem esta linha, todo arquivo arquivado
+     apareceria como órfã e o aviso voltaria a dar falso positivo. */
+  const IGNORA = ['index.html', 'sistemas/', 'modulos/', 'fundo/', 'ferramentas/', 'superado/'];
   const listados = new Set();
   projetos.forEach(function(p){
     p.pecas.forEach(function(x){ listados.add(x.href.split('?')[0]); });

@@ -15,6 +15,12 @@
      Unificado em 29/08/2026. Antes eram cinco arquivos com CSS
      quase igual e navegação de remendo entre eles.
 
+     Revisado em 30/08/2026: cabeçalho de seção com número em terracota,
+     escala de números, grifo, chamada (filete + etiqueta), três pesos de
+     separador, a seção 03 da folha 04 invertida em oliva, as três
+     assinaturas na folha 02 e o ritmo vertical do site. A versão anterior
+     está em ../../superado/2026-08-30-manual-marca-michel-stein.html
+
      O CSS de cada folha está ESCOPADO por #f01..#f05. Duas folhas
      usam o mesmo nome de classe com valores diferentes (.note,
      .logotype, .mark), e sem escopo uma sobrescreveria a outra.
@@ -34,7 +40,7 @@
     background-size:22px 22px}
 
   /* a pilha de folhas */
-  .folhas{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(22px,4vw,46px)}
+  .folhas{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(30px,5vw,62px)}
   .folha{scroll-margin-top:76px;background:var(--creme);border:1px solid var(--tinta);
     box-shadow:0 16px 40px -32px #0000003d;position:relative}
 
@@ -60,6 +66,27 @@
   .mestre b{color:var(--tinta);font-weight:600}
   .mestre code{font-family:var(--mono);font-size:11px}
 
+  /* ── elementos do sistema ───────────────────────────────────
+     grifo · chamada (filete + etiqueta) · pesos de separador.
+     Escopo global de propósito: são elementos do sistema, não de
+     uma folha. Especificação desenhada na folha 04, seção 05. */
+  .grifo{background:var(--oliva);color:var(--creme);
+    -webkit-box-decoration-break:clone;box-decoration-break:clone;
+    padding:.14em .3em;line-height:1.85;margin-inline:6px;
+    box-shadow:6px 0 0 var(--oliva),-6px 0 0 var(--oliva)}
+  .grifo.t{background:var(--terra);
+    box-shadow:6px 0 0 var(--terra),-6px 0 0 var(--terra)}
+
+  .chamada{display:flex;align-items:center;gap:10px}
+  .chamada::before{content:"";width:40px;height:1px;background:var(--terra);flex:0 0 auto}
+  .chamada .et{background:var(--terra);color:var(--creme);padding:.5em .8em;
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+    line-height:1;text-decoration:none;transition:background .25s}
+  .chamada .et:hover{background:var(--tinta)}
+  /* vence o "#fNN .footer a" de cada folha */
+  #f01 .footer .chamada .et,#f02 .footer .chamada .et,#f03 .footer .chamada .et,
+  #f04 .footer .chamada .et,#f05 .footer .chamada .et{color:var(--creme);border-bottom:0}
+
   /* Correção da folha 05, herdada do arquivo original: em 390px o bloco de
      contato da assinatura de e-mail transbordava 8px para fora da tela.
      O avatar e o filete ficam numa linha, os dados na seguinte. */
@@ -77,22 +104,22 @@
 #f01 .tick{flex:1;border-left:.5px solid #211D1A14;height:4px}
 #f01 .tick:nth-child(5n+1){height:8px;border-left:.5px solid #211D1A33}
 #f01 .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
-#f01 .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
-#f01 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+#f01 .tb-main{padding:clamp(30px,5.2vw,58px) clamp(16px,4vw,42px)}
+#f01 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:22px}
 #f01 .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,56px);line-height:.98;letter-spacing:-.06em;text-transform:lowercase}
 #f01 .tb-main h1 u{text-decoration:none;color:var(--terra)}
-#f01 .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+#f01 .tb-sub{margin-top:20px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
 #f01 .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
-#f01 .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+#f01 .cell{border-bottom:.5px solid var(--hair);padding:17px 16px;display:flex;flex-direction:column;justify-content:center}
 #f01 .cell:last-child{border-bottom:0}
 #f01 .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
 #f01 .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
-#f01 section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,48px) clamp(16px,4vw,42px)}
-#f01 .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:26px;display:flex;gap:12px;align-items:center}
-#f01 .sec-label .no{font-weight:700;color:var(--tinta)}
-#f01 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair)}
+#f01 section{border-bottom:1px solid var(--tinta);padding:clamp(46px,7.5vw,92px) clamp(16px,4vw,42px)}
+#f01 .sec-label{display:flex;align-items:baseline;gap:14px;margin-bottom:clamp(32px,4.6vw,54px);font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;letter-spacing:-.03em;font-size:22px;line-height:1;color:var(--tinta)}
+#f01 .sec-label .no{font-size:18px;color:var(--terra);letter-spacing:0}
+#f01 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair);align-self:center}
 #f01 /* hero logotype */
-  .hero{text-align:center;padding:clamp(20px,6vw,54px) 0}
+  .hero{text-align:center;padding:clamp(28px,7vw,74px) 0}
 #f01 .hero .logotype{font-size:clamp(44px,11vw,108px);letter-spacing:-.06em}
 #f01 .hero .role{font-family:var(--mono);font-size:clamp(10px,2vw,12px);letter-spacing:.28em;text-transform:uppercase;color:var(--oliva);margin-top:20px}
 #f01 /* conceito */
@@ -103,8 +130,9 @@
 #f01 .concept .txt b{font-weight:600}
 #f01 /* índice */
   .index{display:flex;flex-direction:column}
-#f01 .ix{display:flex;align-items:baseline;gap:16px;padding:14px 0;border-top:.5px solid var(--hair);
+#f01 .ix{display:flex;align-items:baseline;gap:16px;padding:22px 0;border-top:.5px solid var(--hair);
     text-decoration:none;color:inherit;transition:background .18s}
+#f01 .ix:first-child{border-top:3px solid var(--oliva)}
 #f01 .ix:last-child{border-bottom:.5px solid var(--hair)}
 #f01 a.ix:hover{background:#211D1A0A}
 #f01 .ix .n{font-family:var(--mono);font-weight:500;font-style:italic;font-size:18px;color:var(--terra);min-width:34px}
@@ -113,7 +141,7 @@
 #f01 .ix.here{color:var(--tinta)}
 #f01 .ix.here .t{font-weight:700}
 #f01 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
-    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+    padding:19px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
 #f01 .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
 #f01 .footer a:hover{color:var(--terra)}
 @media (max-width:720px){#f01 .titleblock{grid-template-columns:1fr}
@@ -129,22 +157,22 @@
 #f02 .tick{flex:1;border-left:.5px solid #211D1A14;height:4px}
 #f02 .tick:nth-child(5n+1){height:8px;border-left:.5px solid #211D1A33}
 #f02 .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
-#f02 .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
-#f02 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+#f02 .tb-main{padding:clamp(30px,5.2vw,58px) clamp(16px,4vw,42px)}
+#f02 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:22px}
 #f02 .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,56px);line-height:.98;letter-spacing:-.06em;text-transform:lowercase}
 #f02 .tb-main h1 u{text-decoration:none;color:var(--terra)}
-#f02 .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+#f02 .tb-sub{margin-top:20px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
 #f02 .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
-#f02 .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+#f02 .cell{border-bottom:.5px solid var(--hair);padding:17px 16px;display:flex;flex-direction:column;justify-content:center}
 #f02 .cell:last-child{border-bottom:0}
 #f02 .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
 #f02 .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
-#f02 section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,48px) clamp(16px,4vw,42px)}
-#f02 .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:26px;display:flex;gap:12px;align-items:center}
-#f02 .sec-label .no{font-weight:700;color:var(--tinta)}
-#f02 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair)}
+#f02 section{border-bottom:1px solid var(--tinta);padding:clamp(46px,7.5vw,92px) clamp(16px,4vw,42px)}
+#f02 .sec-label{display:flex;align-items:baseline;gap:14px;margin-bottom:clamp(32px,4.6vw,54px);font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;letter-spacing:-.03em;font-size:22px;line-height:1;color:var(--tinta)}
+#f02 .sec-label .no{font-size:18px;color:var(--terra);letter-spacing:0}
+#f02 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair);align-self:center}
 #f02 /* primary logotype */
-  .logo-hero{text-align:center;padding:clamp(16px,4vw,34px) 0}
+  .logo-hero{text-align:center;padding:clamp(26px,5.5vw,54px) 0}
 #f02 .logotype{font-size:clamp(40px,9.5vw,98px);letter-spacing:-.06em}
 #f02 .logo-note{font-family:'Inter',sans-serif;font-size:11px;color:#211D1A99;margin-top:22px;max-width:52ch;margin-inline:auto;line-height:1.7}
 #f02 /* signature lockup */
@@ -154,7 +182,7 @@
 #f02 /* versions */
   .vers{display:flex;gap:14px;flex-wrap:wrap}
 #f02 .vbox{flex:1;min-width:200px;border:.5px solid var(--hair);display:flex;flex-direction:column}
-#f02 .vcanvas{display:flex;align-items:center;justify-content:center;padding:36px 16px;min-height:120px}
+#f02 .vcanvas{display:flex;align-items:center;justify-content:center;padding:50px 16px;min-height:154px}
 #f02 .vcanvas .g{font-size:clamp(26px,4vw,38px);letter-spacing:-.05em}
 #f02 .v-creme{background:var(--creme)}
 #f02 .v-creme .g{color:var(--tinta)}
@@ -162,17 +190,31 @@
 #f02 .v-tinta .g{color:var(--creme)}
 #f02 .v-oliva{background:var(--oliva)}
 #f02 .v-oliva .g{color:var(--creme)}
-#f02 .vcap{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#211D1A99;padding:9px 12px;border-top:.5px solid var(--hair);text-align:center}
-#f02 .note{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:#211D1A99;margin-top:18px}
+#f02 .vcap{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#211D1A99;padding:13px 12px;border-top:.5px solid var(--hair);text-align:center}
+#f02 .sig-hero{display:flex;flex-direction:column;align-items:flex-start;
+    gap:clamp(14px,2vw,24px);padding:clamp(10px,2vw,22px) 0 clamp(22px,3.4vw,36px)}
+#f02 .sig-mini{font-size:clamp(15px,2vw,20px);letter-spacing:-.05em;display:inline-flex;align-items:baseline;white-space:nowrap}
+#f02 .sig-mini em{font-family:var(--mono);font-weight:400;font-style:normal;font-size:.68em;
+    letter-spacing:.02em;text-transform:lowercase;color:#211D1A99;margin-left:1.1em}
+#f02 .sig-mini.s{font-size:clamp(13px,1.7vw,16px)}
+#f02 .sig-slogan{font-size:clamp(26px,5.6vw,58px);letter-spacing:-.02em;color:var(--oliva);line-height:1.05}
+#f02 .sig-alts{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,3vw,32px);
+    border-top:.5px solid var(--hair);padding-top:clamp(28px,4.4vw,44px);margin-top:clamp(28px,4.4vw,42px)}
+#f02 .sig-alt .acap{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:26px}
+#f02 .sig-alt .note{margin-top:14px}
+#f02 .sig-red{padding:22px 0 6px}
+#f02 .note code{font-family:var(--mono);font-size:11px}
+#f02 .note{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:#211D1A99;margin-top:26px}
 #f02 .note b{font-weight:600;color:var(--tinta)}
 #f02 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
-    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+    padding:19px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
 #f02 .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
 #f02 .footer a:hover{color:var(--terra)}
 @media (max-width:720px){#f02 .titleblock{grid-template-columns:1fr}
 #f02 .tb-meta{border-left:0;border-top:1px solid var(--tinta);grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
 #f02 .cell:nth-child(odd){border-right:.5px solid var(--hair)}
-#f02 .lockup{align-items:center;text-align:center;width:100%}}
+#f02 .lockup{align-items:center;text-align:center;width:100%}
+#f02 .sig-alts{grid-template-columns:1fr}}
 
 /* ── monograma ─────────────────────────── */
 #f03 /* mark = DM Mono 500 italic */
@@ -182,23 +224,23 @@
 #f03 .tick{flex:1;border-left:.5px solid #211D1A14;height:4px}
 #f03 .tick:nth-child(5n+1){height:8px;border-left:.5px solid #211D1A33}
 #f03 .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
-#f03 .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
-#f03 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+#f03 .tb-main{padding:clamp(30px,5.2vw,58px) clamp(16px,4vw,42px)}
+#f03 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:22px}
 #f03 .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,58px);line-height:.96;letter-spacing:-.03em;text-transform:lowercase}
 #f03 .tb-main h1 u{text-decoration:none;color:var(--terra)}
-#f03 .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+#f03 .tb-sub{margin-top:20px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
 #f03 .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
-#f03 .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+#f03 .cell{border-bottom:.5px solid var(--hair);padding:17px 16px;display:flex;flex-direction:column;justify-content:center}
 #f03 .cell:last-child{border-bottom:0}
 #f03 .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
 #f03 .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
-#f03 section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,50px) clamp(16px,4vw,42px)}
-#f03 .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:26px;display:flex;gap:12px;align-items:center}
-#f03 .sec-label .no{font-weight:700;color:var(--tinta)}
-#f03 .sec-label .lv{margin-left:auto;font-size:9px;letter-spacing:.16em;color:var(--terra)}
-#f03 .sec-label::after{content:"";order:1;flex:1;height:.5px;background:var(--hair)}
+#f03 section{border-bottom:1px solid var(--tinta);padding:clamp(46px,7.5vw,94px) clamp(16px,4vw,42px)}
+#f03 .sec-label{display:flex;align-items:baseline;gap:14px;margin-bottom:clamp(32px,4.6vw,54px);font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;letter-spacing:-.03em;font-size:22px;line-height:1;color:var(--tinta)}
+#f03 .sec-label .no{font-size:18px;color:var(--terra);letter-spacing:0}
+#f03 .sec-label .lv{margin-left:auto;font-family:'Inter',sans-serif;font-style:normal;font-weight:500;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);align-self:center}
+#f03 .sec-label::after{content:"";order:1;flex:1;height:.5px;background:var(--hair);align-self:center}
 #f03 .sec-label .lv{order:2}
-#f03 .logo-hero{text-align:center;padding:clamp(14px,4vw,30px) 0}
+#f03 .logo-hero{text-align:center;padding:clamp(24px,5.5vw,50px) 0}
 #f03 .logotype{font-size:clamp(38px,9vw,92px);letter-spacing:-.06em}
 #f03 .logo-note{font-family:'Inter',sans-serif;font-size:11px;color:#211D1A99;margin-top:22px;max-width:50ch;margin-inline:auto;line-height:1.7}
 #f03 .hero-mark{display:flex;align-items:center;justify-content:center;border:.5px solid var(--hair);
@@ -233,10 +275,10 @@
 #f03 .scrib .sb{flex:1;min-width:220px;border:.5px solid var(--hair);display:flex;flex-direction:column;background:var(--creme)}
 #f03 .scrib .sb img{display:block;width:100%;height:auto;padding:18px}
 #f03 .scrib .sb .tcap{margin-top:auto}
-#f03 .note{font-family:'Inter',sans-serif;font-size:12.5px;line-height:1.6;color:#211D1Acc;margin-top:18px}
+#f03 .note{font-family:'Inter',sans-serif;font-size:12.5px;line-height:1.6;color:#211D1Acc;margin-top:26px}
 #f03 .note b{font-weight:600}
 #f03 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
-    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+    padding:19px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
 #f03 .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
 #f03 .footer a:hover{color:var(--terra)}
 @media (max-width:720px){#f03 .titleblock{grid-template-columns:1fr}
@@ -250,23 +292,23 @@
 #f04 .tick{flex:1;border-left:.5px solid #211D1A14;height:4px}
 #f04 .tick:nth-child(5n+1){height:8px;border-left:.5px solid #211D1A33}
 #f04 .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
-#f04 .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
-#f04 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+#f04 .tb-main{padding:clamp(30px,5.2vw,58px) clamp(16px,4vw,42px)}
+#f04 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:22px}
 #f04 .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,56px);line-height:.98;letter-spacing:-.06em;text-transform:lowercase}
 #f04 .tb-main h1 u{text-decoration:none;color:var(--terra)}
-#f04 .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+#f04 .tb-sub{margin-top:20px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
 #f04 .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
-#f04 .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+#f04 .cell{border-bottom:.5px solid var(--hair);padding:17px 16px;display:flex;flex-direction:column;justify-content:center}
 #f04 .cell:last-child{border-bottom:0}
 #f04 .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
 #f04 .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
-#f04 section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,48px) clamp(16px,4vw,42px)}
-#f04 .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:30px;display:flex;gap:12px;align-items:center}
-#f04 .sec-label .no{font-weight:700;color:var(--tinta)}
-#f04 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair)}
+#f04 section{border-bottom:1px solid var(--tinta);padding:clamp(46px,7.5vw,92px) clamp(16px,4vw,42px)}
+#f04 .sec-label{display:flex;align-items:baseline;gap:14px;margin-bottom:clamp(32px,4.6vw,54px);font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;letter-spacing:-.03em;font-size:22px;line-height:1;color:var(--tinta)}
+#f04 .sec-label .no{font-size:18px;color:var(--terra);letter-spacing:0}
+#f04 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair);align-self:center}
 #f04 /* ---- Tipografia ---- */
-  .faces{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,42px);margin-bottom:38px}
-#f04 .face{border:.5px solid var(--hair);padding:22px 22px 20px}
+  .faces{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,42px);margin-bottom:56px}
+#f04 .face{border:.5px solid var(--hair);padding:30px 26px 28px}
 #f04 .face .spec{font-size:clamp(40px,7vw,68px);line-height:1;margin-bottom:14px}
 #f04 .face .spec.mono{font-family:var(--mono);font-weight:500;font-style:italic;letter-spacing:-.03em;text-transform:lowercase}
 #f04 .face .spec.inter{font-family:'Inter',sans-serif;font-weight:600;letter-spacing:-.02em}
@@ -274,8 +316,8 @@
 #f04 .face .fu{font-size:11px;color:#211D1A99;line-height:1.5}
 #f04 .face .glyphs{margin-top:14px;padding-top:12px;border-top:.5px solid var(--hair);font-size:13px;color:#211D1A99}
 #f04 .face .glyphs.mono{font-family:var(--mono);font-style:italic}
-#f04 .scale-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:18px}
-#f04 .scale-row{display:flex;align-items:baseline;gap:18px;padding:14px 0;border-top:.5px solid var(--hair);flex-wrap:wrap}
+#f04 .scale-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:26px}
+#f04 .scale-row{display:flex;align-items:baseline;gap:18px;padding:21px 0;border-top:.5px solid var(--hair);flex-wrap:wrap}
 #f04 .scale-row .demo{flex:1;min-width:200px;color:var(--tinta)}
 #f04 .scale-row .meta{font-size:10px;letter-spacing:.04em;color:#211D1A88;text-align:right;white-space:nowrap;font-family:var(--mono)}
 #f04 .d-display{font-family:var(--mono);font-weight:500;font-style:italic;font-size:40px;letter-spacing:-.06em;text-transform:lowercase;line-height:1}
@@ -285,15 +327,15 @@
 #f04 .d-body{font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;max-width:48ch}
 #f04 .d-cap{font-family:'Inter',sans-serif;font-size:12px;color:#211D1A99}
 #f04 /* ---- Cor ---- */
-  .pal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+  .pal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:42px}
 #f04 .pchip{border:.5px solid var(--hair)}
 #f04 .pchip .col{height:96px}
-#f04 .pchip .info{padding:11px 13px;border-top:.5px solid var(--hair)}
+#f04 .pchip .info{padding:16px 14px;border-top:.5px solid var(--hair)}
 #f04 .pchip .pn{font-size:12px;font-weight:600}
 #f04 .pchip .ph{font-family:var(--mono);font-size:11px;color:#211D1A88;margin-top:4px}
 #f04 .pchip .pu{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#211D1A77;margin-top:9px}
 #f04 .pchip.accent .pu{color:var(--terra)}
-#f04 .prop-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:12px}
+#f04 .prop-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:18px}
 #f04 .propbar{display:flex;height:46px;border:.5px solid var(--hair);overflow:hidden;margin-bottom:8px}
 #f04 .propbar span{display:flex;align-items:center;justify-content:center;font-size:10px;letter-spacing:.1em;
     text-transform:uppercase;color:#EDE6DA}
@@ -305,7 +347,7 @@
 #f04 .prop-note b{font-weight:600;color:var(--terra)}
 #f04 /* ---- Uso ---- */
   .use-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,3vw,30px);margin-bottom:10px}
-#f04 .use-card{border:.5px solid var(--hair);padding:20px}
+#f04 .use-card{border:.5px solid var(--hair);padding:28px 24px}
 #f04 .use-card .ut{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:16px}
 #f04 .clearbox{position:relative;background:var(--creme);border:.5px dashed #211D1A55;
     display:flex;align-items:center;justify-content:center;padding:40px;margin-bottom:12px}
@@ -326,7 +368,7 @@
 #f04 .dont .canvas{min-height:96px;display:flex;align-items:center;justify-content:center;padding:18px;position:relative;background:var(--creme)}
 #f04 .dont .canvas::after{content:"✕";position:absolute;top:7px;right:9px;color:var(--terra);font-size:13px;font-weight:700}
 #f04 .dont .lt{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:26px;letter-spacing:-.04em;color:var(--tinta);line-height:1}
-#f04 .dont .cap{font-size:9.5px;color:#211D1A99;padding:10px 12px;border-top:.5px solid var(--hair);line-height:1.4;font-family:'Inter',sans-serif}
+#f04 .dont .cap{font-size:9.5px;color:#211D1A99;padding:14px 13px;border-top:.5px solid var(--hair);line-height:1.4;font-family:'Inter',sans-serif}
 #f04 /* violations */
   .v-color .tr{color:var(--oliva)}
 #f04 .v-roman .lt{font-style:normal}
@@ -336,8 +378,39 @@
 #f04 .v-lowcon{background:var(--terra)}
 #f04 .v-lowcon .lt{color:#B85C38;text-shadow:none}
 #f04 .v-lowcon .tr{color:#A8512F}
+#f04 section.inv{background:var(--oliva);color:var(--creme)}
+#f04 section.inv .sec-label{color:var(--creme)}
+#f04 section.inv .sec-label .no{color:var(--creme)}
+#f04 section.inv .sec-label::after{background:#EDE6DA33}
+#f04 section.inv .use-card{border-color:#EDE6DA33}
+#f04 section.inv .use-card .ut{color:#EDE6DAaa}
+#f04 section.inv .use-desc{color:#EDE6DAcc}
+#f04 section.inv .use-desc b{color:var(--creme)}
+#f04 section.inv .minitem .g{color:var(--creme)}
+#f04 section.inv .minitem .cap{color:#EDE6DAaa}
+#f04 .el-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,3vw,30px);margin-bottom:56px}
+#f04 .el{border:.5px solid var(--hair);padding:28px 24px}
+#f04 .el .ut{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:18px}
+#f04 .el-demo{font-family:var(--mono);font-style:italic;font-size:15px;margin-bottom:20px;line-height:1.85}
+#f04 .el-demo:last-of-type{margin-bottom:16px}
+#f04 .sep-demo{margin-bottom:52px}
+#f04 .sd{display:flex;align-items:center;gap:18px;padding:16px 0}
+#f04 .sd .l{flex:0 0 110px}
+#f04 .sd .l1{height:.5px;background:var(--hair)}
+#f04 .sd .l2{height:1px;background:var(--tinta)}
+#f04 .sd .l3{height:3px;background:var(--oliva)}
+#f04 .sd .c{font-family:'Inter',sans-serif;font-size:11.5px;color:#211D1A99}
+#f04 .n-ord i,#f04 .n-idx i,#f04 .n-qtd i,#f04 .n-ano i{font-style:italic;margin-right:12px;line-height:1}
+#f04 .n-ord{font-family:var(--mono);font-style:italic;font-size:22px;letter-spacing:-.03em;text-transform:lowercase}
+#f04 .n-ord i{font-size:18px;color:var(--terra);letter-spacing:0}
+#f04 .n-idx{font-family:'Inter',sans-serif;font-size:14px}
+#f04 .n-idx i{font-family:var(--mono);font-style:normal;font-size:12px;color:var(--terra)}
+#f04 .n-qtd{font-family:'Inter',sans-serif;font-size:14px}
+#f04 .n-qtd i{font-family:var(--mono);font-weight:500;font-size:34px;color:var(--tinta);letter-spacing:-.02em}
+#f04 .n-ano{font-family:'Inter',sans-serif;font-size:14px}
+#f04 .n-ano i{font-family:var(--mono);font-weight:500;font-size:24px;color:var(--oliva);letter-spacing:-.02em}
 #f04 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
-    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+    padding:19px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
 #f04 .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
 #f04 .footer a:hover{color:var(--terra)}
 @media (max-width:720px){#f04 .titleblock{grid-template-columns:1fr}
@@ -356,25 +429,25 @@
 #f05 .tick{flex:1;border-left:.5px solid #211D1A14;height:4px}
 #f05 .tick:nth-child(5n+1){height:8px;border-left:.5px solid #211D1A33}
 #f05 .titleblock{display:grid;grid-template-columns:1.4fr .9fr;border-bottom:1px solid var(--tinta)}
-#f05 .tb-main{padding:clamp(20px,4vw,40px) clamp(16px,4vw,42px)}
-#f05 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:16px}
+#f05 .tb-main{padding:clamp(30px,5.2vw,58px) clamp(16px,4vw,42px)}
+#f05 .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#211D1A99;margin-bottom:22px}
 #f05 .tb-main h1{font-family:var(--mono);font-weight:500;font-style:italic;font-size:clamp(30px,7vw,56px);line-height:.98;letter-spacing:-.06em;text-transform:lowercase}
 #f05 .tb-main h1 u{text-decoration:none;color:var(--terra)}
-#f05 .tb-sub{margin-top:16px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
+#f05 .tb-sub{margin-top:20px;font-size:12.5px;max-width:46ch;color:#211D1Acc;line-height:1.65}
 #f05 .tb-meta{border-left:1px solid var(--tinta);display:grid;grid-template-rows:repeat(4,1fr)}
-#f05 .cell{border-bottom:.5px solid var(--hair);padding:11px 16px;display:flex;flex-direction:column;justify-content:center}
+#f05 .cell{border-bottom:.5px solid var(--hair);padding:17px 16px;display:flex;flex-direction:column;justify-content:center}
 #f05 .cell:last-child{border-bottom:0}
 #f05 .cell .k{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#211D1A80}
 #f05 .cell .v{font-size:12.5px;margin-top:4px;font-weight:600}
-#f05 section{border-bottom:1px solid var(--tinta);padding:clamp(26px,4.5vw,48px) clamp(16px,4vw,42px)}
-#f05 .sec-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#211D1A88;margin-bottom:28px;display:flex;gap:12px;align-items:center}
-#f05 .sec-label .no{font-weight:700;color:var(--tinta)}
-#f05 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair)}
+#f05 section{border-bottom:1px solid var(--tinta);padding:clamp(46px,7.5vw,92px) clamp(16px,4vw,42px)}
+#f05 .sec-label{display:flex;align-items:baseline;gap:14px;margin-bottom:clamp(32px,4.6vw,54px);font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;letter-spacing:-.03em;font-size:22px;line-height:1;color:var(--tinta)}
+#f05 .sec-label .no{font-size:18px;color:var(--terra);letter-spacing:0}
+#f05 .sec-label::after{content:"";flex:1;height:.5px;background:var(--hair);align-self:center}
 #f05 /* ---- Cartão ---- */
   .cards{display:flex;gap:clamp(16px,3vw,28px);flex-wrap:wrap}
 #f05 .card{flex:1;min-width:280px;aspect-ratio:1.61/1;border:.5px solid var(--hair);
     box-shadow:0 10px 30px -18px #00000066;position:relative;overflow:hidden;display:flex}
-#f05 .card-cap{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#211D1A88;margin-top:10px}
+#f05 .card-cap{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#211D1A88;margin-top:15px}
 #f05 /* frente */
   .c-front{background:var(--creme);flex-direction:column;justify-content:space-between;padding:clamp(20px,3.4vw,30px)}
 #f05 .c-front .top{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--oliva)}
@@ -389,7 +462,7 @@
 #f05 /* ---- Assinatura de e-mail ---- */
   .mailwrap{background:#fff;border:.5px solid var(--hair);box-shadow:0 10px 30px -20px #00000055;
     padding:clamp(18px,3vw,26px);max-width:520px}
-#f05 .mailclient{font-family:'Inter',sans-serif;font-size:12px;color:#211D1A99;margin-bottom:18px;line-height:1.6}
+#f05 .mailclient{font-family:'Inter',sans-serif;font-size:12px;color:#211D1A99;margin-bottom:26px;line-height:1.6}
 #f05 .mailclient b{color:var(--tinta);font-weight:600}
 #f05 .sig{display:flex;align-items:center;gap:18px}
 #f05 .sig .avatar{width:62px;height:62px;border-radius:14px;background:var(--oliva);
@@ -406,7 +479,7 @@
 #f05 .sig .ct .sep{color:var(--terra);margin:0 6px}
 #f05 /* ---- Papelaria ---- */
   .stat-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(16px,3vw,26px);align-items:stretch}
-#f05 .letterhead{border:.5px solid var(--hair);background:#fff;padding:clamp(20px,3vw,28px);display:flex;flex-direction:column}
+#f05 .letterhead{border:.5px solid var(--hair);background:#fff;padding:clamp(26px,3.8vw,38px);display:flex;flex-direction:column}
 #f05 .lh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
     padding-bottom:16px;border-bottom:1px solid var(--tinta)}
 #f05 .lh-top .logo{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:22px;letter-spacing:-.06em}
@@ -426,10 +499,10 @@
 #f05 .favi{width:36px;height:36px;border-radius:8px;background:var(--tinta);display:flex;align-items:center;justify-content:center}
 #f05 .favi .g{font-family:var(--mono);font-weight:500;font-style:italic;text-transform:lowercase;font-size:18px;color:var(--creme)}
 #f05 .av .cap{font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A88}
-#f05 .note{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:#211D1A99;margin-top:18px}
+#f05 .note{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:#211D1A99;margin-top:26px}
 #f05 .note b{font-weight:600;color:var(--tinta)}
 #f05 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
-    padding:13px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
+    padding:19px clamp(16px,4vw,42px);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#211D1A80}
 #f05 .footer a{color:inherit;text-decoration:none;border-bottom:.5px solid var(--hair)}
 #f05 .footer a:hover{color:var(--terra)}
 @media (max-width:720px){#f05 .titleblock{grid-template-columns:1fr}
@@ -497,8 +570,8 @@ o <code>.md</code> é o mestre.</p>
     <div class="concept">
       <div class="big">_</div>
       <div class="txt">
-        <span class="tagq">a mão por trás do traço</span>
-        A marca nasce de DM Mono itálico em caixa-baixa: a inclinação carrega o <b>gesto da mão</b>, e o sistema monoespaçado dá a <b>precisão técnica</b> do projeto. O underscore terracota é o <b>traço</b> — o resíduo do desenhista dentro da máquina, e o único ponto de cor quente da identidade. Tudo o mais vive em creme, tinta e oliva.
+        <span class="tagq"><span class="grifo">a mão por trás do traço</span></span>
+        A marca nasce de DM Mono itálico em caixa-baixa: a inclinação carrega o <b>gesto da mão</b>, e o sistema monoespaçado dá a <b>precisão técnica</b> do projeto. O underscore terracota é o <b class="grifo t">traço</b> — o resíduo do desenhista dentro da máquina, e o único ponto de cor quente da identidade. Tudo o mais vive em creme, tinta e oliva.
       </div>
     </div>
   </section>
@@ -508,15 +581,15 @@ o <code>.md</code> é o mestre.</p>
     <div class="sec-label"><span class="no">02</span> Índice das Folhas</div>
     <div class="index">
       <span class="ix here"><span class="n mark">01<span class="tr">_</span></span><span class="t">capa &amp; conceito</span><span class="d">história e essência da marca</span></span>
-      <a class="ix" href="#f02"><span class="n mark">02<span class="tr">_</span></span><span class="t">logotipo &amp; assinatura</span><span class="d">marca, versões e lockup com tagline</span></a>
+      <a class="ix" href="#f02"><span class="n mark">02<span class="tr">_</span></span><span class="t">logotipo &amp; assinatura</span><span class="d">marca, as três assinaturas e as versões</span></a>
       <a class="ix" href="#f03"><span class="n mark">03<span class="tr">_</span></span><span class="t">monograma</span><span class="d">ms_ principal e m_ reduzido</span></a>
-      <a class="ix" href="#f04"><span class="n mark">04<span class="tr">_</span></span><span class="t">sistema</span><span class="d">tipografia, cor e regras de uso</span></a>
+      <a class="ix" href="#f04"><span class="n mark">04<span class="tr">_</span></span><span class="t">sistema</span><span class="d">tipografia, cor, elementos gráficos e regras de uso</span></a>
       <a class="ix" href="#f05"><span class="n mark">05<span class="tr">_</span></span><span class="t">aplicações</span><span class="d">cartão, e-mail e papelaria</span></a>
     </div>
   </section>
 
   <div class="footer">
-    <span><a href="#f01">michel stein_</a></span>
+    <span class="chamada"><a class="et" href="#f02">02 · logotipo</a></span>
     <span>Capa &amp; Conceito · DM Mono 500 itálico + Inter</span>
     <span>Folha 01 / 05</span>
   </div>
@@ -540,7 +613,7 @@ o <code>.md</code> é o mestre.</p>
     <div class="tb-main">
       <div class="eyebrow">Identidade Visual · Marca Pessoal</div>
       <h1>logotipo<u>_</u></h1>
-      <p class="tb-sub">A marca, suas versões e o lockup com tagline. DM Mono Medium itálico, caixa-baixa, com tracking fechado em −.06em.</p>
+      <p class="tb-sub">A marca, as três assinaturas e as versões sobre fundo. DM Mono Medium itálico, caixa-baixa, com tracking fechado em −.06em.</p>
     </div>
     <div class="tb-meta">
       <div class="cell"><span class="k">Projeto</span><span class="v">Identidade Pessoal</span></div>
@@ -559,14 +632,31 @@ o <code>.md</code> é o mestre.</p>
     </div>
   </section>
 
-  <!-- 02 ASSINATURA COM TAGLINE -->
+  <!-- 02 ASSINATURAS -->
   <section>
-    <div class="sec-label"><span class="no">02</span> Assinatura com Tagline</div>
-    <div class="lockup">
-      <div class="lt mark">michel stein<span class="tr">_</span></div>
-      <div class="tag">a mão por trás do traço</div>
+    <div class="sec-label"><span class="no">02</span> Assinaturas</div>
+
+    <div class="sig-hero">
+      <div class="sig-mini mark">michel stein<span class="tr">_</span><em>arquiteto</em></div>
+      <div class="sig-slogan mark">a mão por trás do traço<span class="tr">_</span></div>
     </div>
-    <p class="note">A tagline acompanha o logotipo em DM Mono itálico regular, na oliva. Alinhada à esquerda, com respiro igual à altura do "m" entre as linhas.</p>
+    <p class="note"><b>Principal.</b> É a da abertura de deck e a do topo do site: o nome vai <b>pequeno</b> e quem carrega o peso é <b>o slogan</b>. Slogan em DM Mono 500 itálico caixa-baixa, na oliva, com o traço terracota no fim. O <code>arquiteto</code> ao lado do nome é DM Mono 400 <b>reto</b>, 0,68em, caixa-baixa, <code>+.02em</code>, em <code>--muted</code> — <b>nunca em terracota</b>, que disputaria com o traço. O respiro de 1,1em vai como <code>margin-left</code> no <code>&lt;em&gt;</code>, nunca como <code>gap</code> de flex: o gap entra também entre o nome e o traço e descola o underscore. Liga com <code>frase:true</code> no gabarito <code>marca</code>.</p>
+
+    <div class="sig-alts">
+      <div class="sig-alt">
+        <div class="acap">Alternativa · nome em primeiro plano</div>
+        <div class="lockup">
+          <div class="lt mark">michel stein<span class="tr">_</span></div>
+          <div class="tag">a mão por trás do traço</div>
+        </div>
+        <p class="note">Inverte a hierarquia: o nome grande, a tagline abaixo em DM Mono itálico regular, na oliva, com respiro igual à altura do "m". Para a peça em que <b>o nome é a informação</b> — capa de proposta, ficha técnica, crédito de autoria.</p>
+      </div>
+      <div class="sig-alt">
+        <div class="acap">Reduzida · uma linha</div>
+        <div class="sig-red"><span class="sig-mini mark s">michel stein<span class="tr">_</span><em>arquiteto</em></span></div>
+        <p class="note">A primeira linha da principal, sozinha. Rodapé de peça, chrome de navegação, assinatura de e-mail, e qualquer lugar de uma linha só. O <code>arquiteto</code> em texto corrido é <b>exceção consciente</b> à regra de label da folha 04, que pede caixa-alta e +.20em: aqui se quer a leitura do site, não a de metadado.</p>
+      </div>
+    </div>
   </section>
 
   <!-- 03 VERSÕES -->
@@ -581,7 +671,7 @@ o <code>.md</code> é o mestre.</p>
   </section>
 
   <div class="footer">
-    <span><a href="#f01">← índice das folhas</a></span>
+    <span class="chamada"><a class="et" href="#f03">03 · monograma</a></span>
     <span>Logotipo &amp; Assinatura · DM Mono 500 itálico</span>
     <span>Folha 02 / 05</span>
   </div>
@@ -683,7 +773,7 @@ o <code>.md</code> é o mestre.</p>
   </section>
 
   <div class="footer">
-    <span><a href="#f01">← índice das folhas</a></span>
+    <span class="chamada"><a class="et" href="#f04">04 · sistema</a></span>
     <span>Monograma · DM Mono 500 itálico</span>
     <span>Folha 03 / 05</span>
   </div>
@@ -766,8 +856,8 @@ o <code>.md</code> é o mestre.</p>
     <p class="prop-note">A marca vive em creme e tinta, com a <b style="color:#6B6A4B">oliva</b> como secundária forte — presente em blocos, fundos de seção, avatares e detalhes de layout. <b>A terracota fica reservada ao traço (_) ou a uma única palavra de destaque</b> — nunca em áreas grandes, nunca como fundo. É o que mantém a cor quente contida e a afasta da paleta da antiga identidade.</p>
   </section>
 
-  <!-- 03 USO DO LOGOTIPO -->
-  <section>
+  <!-- 03 USO DO LOGOTIPO — a seção invertida -->
+  <section class="inv">
     <div class="sec-label"><span class="no">03</span> Uso do Logotipo</div>
     <div class="use-grid">
       <div class="use-card">
@@ -800,8 +890,42 @@ o <code>.md</code> é o mestre.</p>
     </div>
   </section>
 
+
+  <!-- 05 ELEMENTOS GRÁFICOS -->
+  <section>
+    <div class="sec-label"><span class="no">05</span> Elementos Gráficos</div>
+
+    <div class="el-grid">
+      <div class="el">
+        <div class="ut">Grifo</div>
+        <p class="el-demo"><span class="grifo">a frase inteira, em oliva</span></p>
+        <p class="el-demo">a <span class="grifo t">palavra</span> sozinha, em terracota</p>
+        <p class="use-desc">Não é negrito: é <b>marca de caneta por trás do texto</b>. Oliva grifa frase; terracota grifa palavra — a divisão é de <b>extensão</b>, e é ela que mantém a cor quente contida. Acompanha a quebra de linha por <code>box-decoration-break: clone</code>, com respiro simétrico de 6px. No deck, a mesma faixa se desenha da esquerda para a direita em 620 ms.</p>
+      </div>
+      <div class="el">
+        <div class="ut">Chamada — filete + etiqueta</div>
+        <div class="el-demo"><span class="chamada"><span class="et">role para ver</span></span></div>
+        <p class="use-desc">Filete de <b>40 × 1px</b> em terracota, respiro de 10px e etiqueta de fundo cheio com texto creme, em 10px e <b>+.20em</b>. Só para chamada de ação, e só em rótulo curto — é a exceção pequena à regra de que terracota não é área.</p>
+      </div>
+    </div>
+
+    <div class="scale-lbl">Pesos de separador</div>
+    <div class="sep-demo">
+      <div class="sd"><span class="l l1"></span><span class="c"><b>.5px</b> hairline — divide dentro de um bloco</span></div>
+      <div class="sd"><span class="l l2"></span><span class="c"><b>1px</b> tinta — divide blocos de uma mesma folha</span></div>
+      <div class="sd"><span class="l l3"></span><span class="c"><b>3px</b> oliva — abre uma sequência: índice, lista numerada, linha do tempo</span></div>
+    </div>
+
+    <div class="scale-lbl">Escala de números</div>
+    <div class="scale-row"><span class="demo n-ord"><i>01</i>ordinal de seção</span><span class="meta">terracota · DM Mono 500i · .68× do título</span></div>
+    <div class="scale-row"><span class="demo n-idx"><i>01</i>índice de item em lista</span><span class="meta">terracota · DM Mono 400 reto · 12px</span></div>
+    <div class="scale-row"><span class="demo n-qtd"><i>20+</i>quantidade, dado</span><span class="meta">tinta · DM Mono 500i · 40px</span></div>
+    <div class="scale-row"><span class="demo n-ano"><i>2004</i>ano, cronologia</span><span class="meta">oliva · DM Mono 500i · 20–30px</span></div>
+    <p class="use-desc" style="margin-top:18px">A cor do número diz <b>que tipo de número ele é</b>. Terracota é ordem; tinta é quantidade; oliva é tempo. Fora dessa escala, número não recebe cor.</p>
+  </section>
+
   <div class="footer">
-    <span><a href="#f01">← índice das folhas</a></span>
+    <span class="chamada"><a class="et" href="#f05">05 · aplicações</a></span>
     <span>Sistema · DM Mono 500 itálico + Inter</span>
     <span>Folha 04 / 05</span>
   </div>
@@ -912,7 +1036,7 @@ o <code>.md</code> é o mestre.</p>
   </section>
 
   <div class="footer">
-    <span><a href="#f01">← índice das folhas</a></span>
+    <span class="chamada"><a class="et" href="#f01">voltar ao índice</a></span>
     <span>Aplicações</span>
     <span>Folha 05 / 05</span>
   </div>

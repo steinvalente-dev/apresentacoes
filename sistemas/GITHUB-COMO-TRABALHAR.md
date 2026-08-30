@@ -297,7 +297,7 @@ python3 - <<'EOF'
 import re, pathlib
 s = open('index.html', encoding='utf-8').read()
 reg = set(re.findall(r'(?:href|ver)\s*:\s*"([^"?]+)"', s))
-IGN = ('index.html','sistemas/','modulos/','fundo/','ferramentas/','.git')
+IGN = ('index.html','sistemas/','modulos/','fundo/','ferramentas/','superado/','.git')
 orfas = sorted(str(p) for p in pathlib.Path('.').rglob('*.html')
                if not str(p).startswith(IGN) and str(p) not in reg)
 print('\n'.join(orfas) if orfas else 'nenhuma órfã')

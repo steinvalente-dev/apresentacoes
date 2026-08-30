@@ -1,9 +1,10 @@
-# marca michel stein_ — a camada de marca
+# ⚠ SUPERADO — marca michel stein_ (até 30/08/2026)
 
-> ⚠ **PROPOSTA, ainda não vigente.** Cópia do mestre com os acréscimos da
-> rodada de 30/08/2026: o grifo (§2) e a escala de números (§3). O arquivo
-> em uso continua sendo `../../MARCA-MICHEL-STEIN.md`. Aprovado, este
-> substitui aquele e o antigo vai para `superado/`.
+> **Este arquivo está fora de uso desde 30/08/2026 e é mantido só como registro.**
+> O mestre vigente é `marca/MARCA-MICHEL-STEIN.md`, que acrescentou as três
+> assinaturas (§1), o grifo (§2) e a escala de números (§3).
+> Não ler daqui, não citar daqui.
+
 
 Documento de método, sem dado de cliente. Mora no repositório **público** de
 apresentações para abrir por URL raw, sem token, em qualquer conversa.
@@ -33,20 +34,6 @@ arquivo próprio, ao lado: `MARCA-MICHEL-STEIN-CAPA.md`.
 
 O underscore é **parte do logotipo, não cursor**, e é sempre o acento.
 
-### As três assinaturas
-
-| | arranjo | onde |
-|---|---|---|
-| **principal** | nome **pequeno** com `arquiteto` ao lado, e o **slogan grande** embaixo | abertura de deck (`frase:true`), topo do site, qualquer peça de apresentação |
-| **alternativa** | nome grande, tagline pequena abaixo, na oliva | quando **o nome é a informação**: capa de proposta, ficha técnica, crédito de autoria |
-| **reduzida** | `michel stein_ arquiteto`, uma linha só | rodapé de peça, chrome de navegação, assinatura de e-mail |
-
-A principal e a reduzida compartilham a mesma primeira linha — a reduzida é
-essa linha sozinha. **O peso normal da marca está no slogan, não no nome:**
-inverter isso é o caso alternativo, não o padrão.
-
-Especificação do `arquiteto` ao lado e do respiro de 1,1em: ver §4, abertura.
-
 ---
 
 ## 2 · Cor — os quatro papéis
@@ -70,25 +57,6 @@ para `#E9A184`; sobre terracota vai a creme.
 > acima de contraste medido. Já foi proposta variante clara, medida em 3,03:1, e
 > recusada. **Não reintroduzir "para corrigir".**
 
-### O grifo
-
-Faixa de cor por trás do texto — **marca de caneta, não negrito**. Acompanha a
-quebra de linha (`box-decoration-break: clone`), com respiro **simétrico de 6px**
-para cada lado e `margin-inline` igual, para não comer a palavra vizinha.
-
-| extensão do que se grifa | cor |
-|---|---|
-| uma frase, um lead, várias linhas | **oliva**, texto creme |
-| uma palavra, um rótulo curto | **terracota**, texto creme |
-
-A divisão é de **extensão, não de gosto** — é ela que faz o grifo obedecer à
-regra da terracota contida. Grifo terracota em frase longa está errado.
-
-Uso: ponto-chave, não todo parágrafo. No deck a mesma faixa se desenha da
-esquerda para a direita em 620 ms, uma vez, junto da revelação do slide.
-Nasceu na apresentação da Lavrō, está no site em duas variantes, e só agora
-vira regra.
-
 Michel cogitou usar **verde como destaque em slide creme** em alguns momentos.
 Ficou para depois.
 
@@ -102,22 +70,6 @@ Ficou para depois.
 | subtítulo de apoio | DM Mono 400 itálico |
 | label e metadado | DM Mono 400, caixa-alta, +.20em |
 | texto corrido, interface | **Inter** 400 / 500 / 600 |
-
-### Escala de números
-
-**A cor do número diz que tipo de número ele é.** Terracota é ordem, tinta é
-quantidade, oliva é tempo. Fora desta escala, número não recebe cor.
-
-| tipo | cor | tamanho | face |
-|---|---|---|---|
-| ordinal de seção | terracota | **0,68×** o título ao lado | DM Mono 500 itálico |
-| índice de item em lista | terracota | 12px | DM Mono 400 **reto** |
-| quantidade, dado | tinta | 40px | DM Mono 500 itálico |
-| ano, cronologia | oliva | 20–30px | DM Mono 500 itálico |
-
-O ordinal vem **antes** do título, alinhado pela linha de base, com respiro de
-14px. O título ao lado é DM Mono 500 itálico caixa-baixa — nunca caixa-alta
-espaçada, que é forma de label e não de cabeçalho.
 
 Num deck as duas vão **embutidas em base64**, subset latino `U+0000-00FF`,
 seis faces: DM Mono 400 e 500 (reto e itálico) mais Inter 400 e 500. No manual de
