@@ -27,6 +27,8 @@ carrega a sua:
 | `Sarasa-logotipo-principal.svg` (oficial, servido pelo site) | **AFIRMÁVEL** | os dois fills, e toda a geometria do §4 |
 | `Sarasa-logotipo-negativo.svg` (oficial) | **AFIRMÁVEL** | a regra do fundo escuro (§2) |
 | **`PORTFOLIO_SARASA_2026.pdf`** (88 pp., PowerPoint 2019, 1440×810) | **AFIRMÁVEL** | a capa em campo Vinho, o grafismo de linha, a serifada, a família (§2, §5, §6, §7) |
+| **pasta `LOGOTIPO/`** — vetores originais, .ai e .pdf, abril/2025 | **AFIRMÁVEL** | o CMYK da marca, o vetor do grafismo, a semente, as cinco disciplinas |
+| **`Instituto Sarasá/Manual01-17.pdf`** — manual, InDesign, set/2024 | **AFIRMÁVEL** | as cores e a área de não interferência do **Instituto** (§8) |
 | CSS vivo de `estudiosarasa.com.br` (`--e-global-color-*`) | **CONFIRMAR** | paleta de apoio e faces — pode ser default do tema WordPress Vamtam |
 | decisões do Michel, 29/08/2026 | **DECISÃO** | papel Cal (§2), crédito (§5), escopo da frente |
 
@@ -36,6 +38,13 @@ carrega a sua:
 > antes do portfólio e afirmava três coisas que o portfólio derruba: que a
 > Sarasá é marca só de fundo claro, que não tem grafismo, e que não existe
 > símbolo na casa. As três estão corrigidas abaixo, nos §2, §7 e §4.
+>
+> **Segunda revisão, mesma data.** A pasta `LOGOTIPO/` acrescentou o que o
+> portfólio não tinha: o **CMYK da marca**, o **vetor original do grafismo**, a
+> **semente** como peça isolada, o **sistema das cinco disciplinas** e o
+> **manual do Instituto**. E obrigou a rever a crítica do §6 — parte do que eu
+> chamei de veladura arbitrária é uma paleta de cinco cores que eu ainda não
+> tinha visto.
 
 ---
 
@@ -68,6 +77,21 @@ inventar um símbolo seria arbitrário, é que **o `S` sozinho já é o símbolo
 Instituto Sarasá** (§8). Usar o `S` pelo Estúdio colide com a outra marca da
 casa. Mesma proibição, motivo mais forte.
 
+### A semente
+
+Na pasta de originais o **acento agudo do `á` existe como arquivo próprio**:
+`semente-vinho-sem-fundo.pdf`, um só caminho, um só fill Vinho. **O nome é
+deles, não meu.** E ecoa o texto do próprio portfólio, p. 45, sobre Antonio
+Sarasá ter formado a equipe do zero: *"Inicia, portanto, nova semeadura."*
+
+Está no acervo como `sarasa/semente.svg`, herdando cor por `currentColor`.
+
+**O que isso é:** um fragmento do wordmark que eles isolaram e nomearam — o
+candidato natural a marcador, bullet, vinheta de fim de seção, módulo de padrão.
+**O que isso não é:** um símbolo aprovado. Existir como arquivo não é o mesmo
+que poder assinar sozinho. Usar a semente como marca autônoma é **decisão deles**,
+não derivação minha — §8.
+
 **Sem underscore piscante** — é a assinatura da michel stein_.
 **Sem barra de acento fora da caixa** — é a assinatura da AMAZ.
 
@@ -77,12 +101,17 @@ casa. Mesma proibição, motivo mais forte.
 
 Tokens nomeados **por papel**, não por cor, que é a nomenclatura que o motor pede.
 
-| papel do motor | token | hex | nome | origem |
-|---|---|---|---|---|
-| **papel** | `--papel` | `#F3EEE7` | Cal | DECISÃO 29/08 |
-| **tinta** | `--tinta` | `#231F20` | Ferro | **AFIRMÁVEL** — fill do logotipo |
-| **primária** | `--vinho` | `#79242F` | Vinho | **AFIRMÁVEL** — fill do logotipo e campo da capa |
-| **acento** | `--vinho` | `#79242F` | Vinho | **é a mesma cor** — ver abaixo |
+| papel do motor | token | tela (RGB) | impresso (CMYK) | nome | origem |
+|---|---|---|---|---|---|
+| **papel** | `--papel` | `#F3EEE7` | — | Cal | DECISÃO 29/08 |
+| **tinta** | `--tinta` | `#231F20` | **K100** | Ferro | **AFIRMÁVEL** |
+| **primária** | `--vinho` | `#79242F` | **C33 M92 Y73 K38** | Vinho | **AFIRMÁVEL** |
+| **acento** | `--vinho` | `#79242F` | **C33 M92 Y73 K38** | Vinho | **é a mesma cor** |
+
+O CMYK saiu do `logotipo-sarasa-vetor.pdf`, o vetor oficial: dois fills, e só
+dois. A `semente-vinho-sem-fundo.pdf` traz C31 M92 Y73 K39 — a mesma cor, com
+arredondamento de arquivo. **Peça impressa usa o CMYK, peça de tela usa o RGB;
+não converter um no outro na hora, que dá cor errada.**
 
 **A Sarasá não tem quatro cores, tem três.** Primária e acento são o mesmo
 Vinho, e isso é a marca, não uma lacuna: a cor que carrega o nome é a mesma que
@@ -134,6 +163,31 @@ quatorze elementos, um único fill branco.
 mapa de danos, ficha — roda em **Cal**. Campo Vinho é gesto de abertura e de
 fechamento, não superfície de leitura longa.
 
+### As cinco disciplinas — a paleta que eu não tinha visto
+
+Existe um **sistema de cinco cores, uma por linha de serviço**, aplicado nos
+quadrados de disciplina e na faixa que emoldura a placa de obra:
+
+| disciplina | `cores-sarasa.pdf` | aplicado nos quadrados |
+|---|---|---|
+| **Consultoria** | C83 M40 Y48 K13 · `#268573` | C66 M37 Y38 K5 · `#529996` |
+| **Conservação e Restauro** | C51 M99 Y49 K56 · `#370139` | C69 M78 Y46 K42 · `#2E2150` |
+| **Projetos** | C6 M100 Y87 K1 · `#ED0021` | C26 M99 Y60 K13 · `#A40259` |
+| **Zeladoria** | C0 M84 Y87 K0 · `#FF2921` | C14 M70 Y68 K2 · `#D74B50` |
+| **Pesquisa** | C4 M16 Y69 K0 · `#F5D64F` | C10 M13 Y56 K0 · `#E6DE70` |
+
+> ⚠ **As duas versões não batem.** A faixa de amostras é saturada; o aplicado é
+> lavado. Não é conversão de perfil: são valores de CMYK diferentes no arquivo.
+> **Qual das duas é a paleta não se decide por dedução** — perguntar. Até lá,
+> nenhuma das duas entra em peça desta frente.
+
+**O que importa para o Núcleo de Arquitetura:** nenhuma dessas cinco é o Vinho,
+e a disciplina desta frente — **Conservação e Restauro** — é o roxo escuro, não
+o vinho do logotipo. Isso é um sistema de sinalização de serviço, paralelo à
+marca, não uma extensão dela. **Não entra na camada de marca do deck.** Se um dia
+entrar, entra como legenda de disciplina, com o mesmo cuidado que o §7 exige da
+legenda de patologia.
+
 ### Contrastes medidos
 
 Ferro sobre Cal **14,12** · Vinho sobre Cal **8,64** · Chumbo sobre Cal **7,21**
@@ -170,20 +224,28 @@ alta, tracking 0,5–1 px (**+.042 a +.083em**). Ambas são Google Fonts sob SIL
 OFL — embutíveis em base64, que é o requisito do motor. Fallback
 `system-ui, sans-serif` para as duas.
 
-> ⚠ **A divergência, aberta por decisão.** O portfólio **não usa** Poppins nem
-> Archivo em display. Os títulos e as aberturas de seção estão em uma
-> **serifada didone de alto contraste** — eixo vertical, serifas em fio,
-> caixa-alta generosamente espaçada — e o corpo em uma geométrica monolinear
-> compatível com Poppins. A face serifada não foi identificada: o PDF saiu do
-> PowerPoint 2019 e não expõe nome utilizável.
+> ⚠ **Não existe padrão tipográfico na casa. São quatro mundos.**
 >
-> **Fica em aberto de propósito.** O Michel vai montar um deck esta semana e
-> decidir vendo. **Tendência declarada em 29/08: seguir a sans do site, sem
-> serifa** — o argumento é que esta frente é a identidade do *núcleo de
-> arquitetura*, não a da Sarasá inteira, e que isso se refina em rodada própria.
+> | onde | face | o que é |
+> |---|---|---|
+> | site | Poppins + Archivo | provável default do tema Vamtam |
+> | portfólio 2026 | serifada didone + geométrica | escolha de quem diagramou o PPT |
+> | placa de obra e quadrados de disciplina | **Tahoma Bold** | fonte de sistema Microsoft |
+> | manual do Instituto | **FF Meta Pro** (Norm, Book, Bold, Black) | escolha de quem diagramou o InDesign |
 >
-> Se a serifada entrar, o equivalente OFL mais próximo é **Playfair Display**, e
-> o bloco passa de quatro para seis faces.
+> A Tahoma está confirmada duas vezes: no relatório de empacotamento do
+> Illustrator (`Fontes: Tahoma Bold (OTF)`) e nas fontes embutidas dos PDFs. É
+> fonte de sistema — **mesma categoria do default de tema**, não decisão de
+> marca. A Meta Pro é do documento do Instituto, e o manual **não especifica
+> tipografia**: nenhuma das 17 páginas trata de fonte.
+>
+> **Consequência prática, e é libertadora:** não há herança tipográfica a
+> respeitar. Escolher Poppins e Archivo para o Núcleo de Arquitetura é tão
+> legítimo quanto qualquer outra escolha — é decisão, não acidente.
+>
+> **Fica em aberto de propósito.** O Michel decide vendo o primeiro deck.
+> **Tendência declarada em 29/08: a sans, sem serifa.** Se a serifada entrar, o
+> equivalente OFL é Playfair Display e o bloco passa de quatro para seis faces.
 
 **A face do logotipo não é nenhuma das duas e não foi identificada.** Duas
 consequências práticas:
@@ -248,9 +310,17 @@ primeiro detalhe a fechar.
 **No Micro o que fica é `Sarasá`, nunca o `S` sozinho** — o `S` sozinho é o
 símbolo do Instituto (§1, §8).
 
-**Área de proteção: não medida.** Valor de trabalho, meu, até haver manual —
-folga de **½ altura-x de `Sarasá`** (23,5 unidades ≈ 10% da largura do lockup)
-em todos os lados. Sobre fotografia, campo chapado sob a marca.
+**Área de proteção — agora pela convenção da casa.** O manual do Instituto
+define área de não interferência como **2x**, onde `x` é um módulo tirado da
+própria marca, e diz que os espaços podem ser maiores, nunca menores. Adoto a
+mesma convenção, com o módulo desta marca:
+
+**x = a altura-x de `estúdio`** (12,48 unidades do viewBox). Folga mínima em
+todos os lados: **2x = 24,96 unidades**, ou seja **10,7% da largura do lockup**.
+
+Não é medida do manual do Estúdio, que não existe — é a **regra da casa aplicada
+ao módulo desta marca**, e está marcada como tal no §8. Sobre fotografia,
+campo chapado sob a marca além da folga.
 
 ### Usos proibidos
 
@@ -318,13 +388,16 @@ Edifício Matarazzo, Estação da Luz, Cine São Luiz, Convento de Itanhaém,
 Fortaleza da Barra Grande. O Michel fornece os arquivos em resolução e a
 autorização; a substituição é **troca de arquivo, não de regra**.
 
-> **Nenhum LUT nesta frente — e agora sei que estou proibindo uma prática, não
-> prevenindo uma hipótese.** No portfólio, **85 das 88 páginas** carregam
-> veladura de cor sobre fotografia. Vinho e ocre se defendem, são as cores da
-> casa. Mas seis páginas estão em matizes que não pertencem a marca nenhuma —
-> azul (p. 3), verde (p. 17), ciano (p. 18 e 55), amarelo (p. 29), roxo (p. 75)
-> — e o organograma da p. 2 tem bolhas em rosa, azul, amarelo e verde sem regra.
-> A matiz é escolhida por página, não por sistema.
+> **Nenhum LUT nesta frente — e a crítica está corrigida.** No portfólio,
+> **85 das 88 páginas** carregam veladura de cor sobre fotografia. Eu chamei isso
+> de arbitrário antes de ver a pasta de originais, e estava **parcialmente
+> errado**: o ciano das p. 18 e 55 e o amarelo da p. 29 caem em cima das cores de
+> disciplina (teal e amarelo), e o roxo da p. 75 fica perto do roxo de
+> Conservação. Há sistema por baixo — o das cinco disciplinas (§2).
+>
+> O que **não** se explica continua: azul (p. 3), verde (p. 17) e as bolhas do
+> organograma da p. 2 em rosa, azul, amarelo e verde. E mesmo onde há sistema, a
+> intensidade da veladura varia sem regra de página para página.
 >
 > Numa frente de patrimônio isso não é direção de arte: a cor do material é
 > **dado técnico** — argamassa, pátina, pigmento, oxidação. Filtro que empurra
@@ -353,11 +426,27 @@ dentro das letras · sobre fotografia · em peça pequena · animado.
 **Uma peça tem um mecanismo de superfície só:** fotografia, *ou* contorno, *ou*
 campo chapado.
 
-**Arquivo: `sarasa/grafismo-linha.svg`.** ⚠ **Derivado, não oficial.** No
-portfólio o desenho é **raster** de 960 px, colado no PowerPoint. O SVG ao lado
-é vetorização minha desse raster — serve para montar peça agora e escala sem
-perda, mas o traço não é o original. **Pedir o vetor** junto com o pacote de
-marca (§8). Herda cor por `currentColor`; `viewBox 0 0 2880 429`.
+**Arquivo: `sarasa/grafismo-linha.svg` — agora é o vetor oficial.** Veio de
+`LOGOTIPO/desenho-forte.pdf`: **trinta caminhos, nenhuma imagem**, prancheta de
+8504 × 3402 pt, desenhado em Ferro. A vetorização derivada que eu tinha feito do
+raster do portfólio foi descartada. Herda cor por `currentColor`;
+`viewBox 0 1530 8504 1272`.
+
+O desenho é a **Fortaleza da Barra Grande, Guarujá** — a mesma que legenda a
+prancha de SERVIÇOS do portfólio, com foto de Victor Hugo Mori.
+
+### Os cinco quadrados
+
+O contorno não é só faixa de rodapé. No `logo-quadrados-disciplinas` e na placa
+de obra ele é **cortado em cinco quadrados, um por disciplina** — e o traço
+**atravessa os cinco continuamente**, de modo que os quadrados só fazem sentido
+na ordem e juntos. É o melhor achado do sistema deles: um desenho só, cinco
+recortes, cinco cores.
+
+**Não porto isso para o deck agora.** Depende de resolver qual é a paleta de
+disciplina (§2), e é sinalização de serviço, não camada de marca. Fica
+registrado para a rodada em que o Núcleo de Arquitetura definir a sua posição
+dentro das cinco linhas.
 
 > **O candidato óbvio continua sendo o que não pode entrar.** O sistema de
 > mapeamento de danos (`sarasa/MAPEAMENTO-DANOS.md`, 25 patologias × 11
@@ -377,7 +466,7 @@ Contra o checklist do `MARCA-MICHEL-STEIN.md`:
 |---|---|
 | 1 · nome, assinatura, site | ✅ |
 | 2 · os quatro papéis de cor | ✅ com contrastes medidos e as duas superfícies |
-| 3 · as faces, com peso por uso | ⚠️ **divergência aberta** entre a serifada do portfólio e a sans do site |
+| 3 · as faces, com peso por uso | ⚠️ **não há padrão na casa** — quatro mundos tipográficos (§3) |
 | 4 · a abertura | ✅ §5, campo Vinho |
 | 5 · a contracapa | ✅ §5, QR e crédito decididos |
 | 6 · o acervo do fundo | ⚠️ a regra existe, os arquivos são provisórios |
@@ -391,39 +480,60 @@ contracapa: **Estúdio Sarasá Conservação e Restauração S/S Ltda** (CNPJ
 Arte, Cultura e Cidadania — ISACC** (CNPJ [cnpj removido], [endereço removido]
 1.099). Decisão do Michel em 29/08: **este arquivo cobre só o Estúdio.**
 
-O que foi medido do Instituto, para que nenhuma peça o invente:
+**O Instituto tem manual; o Estúdio não.** `Instituto Sarasá/Manual01-17.pdf`,
+17 páginas, InDesign, setembro/2024 — "Guia básico de identidade visual". Dele,
+declarado pelo próprio documento:
 
-- **Cor própria: ocre `#E5A11A`.** Não é cor do Estúdio e não entra em peça
-  desta frente.
-- **Símbolo: o `S` vazado em branco sobre bloco ocre**, rompendo a borda do
-  bloco em cima e embaixo. É o mesmo `S` do wordmark, ampliado.
-- **Mesma estrutura de lockup** — palavra pequena em cima, nome grande embaixo —
-  diferenciada por peso e caixa: o Instituto usa `sarasá` **bold, caixa baixa**;
-  o Estúdio usa `Sarasá` leve com `S` capitular.
+| campo | valor |
+|---|---|
+| primária | **Pantone 228** · C15 M100 Y11 K41 · `#8a0054` |
+| secundária | **Pantone 138** · C3 M36 Y100 K6 · `#e4a11b` |
+| monocromática | preto 100% e preto 50% |
+| duas versões | lettering **lateral** (preferencial em impresso) e lettering **blocado** — sem prioridade entre si |
+| área de não interferência | **2x**, com `x` tirado da própria marca |
+| fundo escuro | máximo **80%** para o negativo; acima disso, versão com reserva branca |
+
+**Correção da minha leitura anterior:** eu tinha medido o ocre do Instituto na
+capa do portfólio como `#E5A11A`. O manual declara `#e4a11b` — praticamente o
+mesmo, e agora com Pantone e CMYK. Mas a **primária do Instituto é `#8a0054`**,
+um magenta escuro, e não o Vinho do Estúdio. **São duas cores diferentes, de
+duas marcas diferentes.** Confundir as duas é o erro mais fácil de cometer aqui.
+
+O símbolo é o `S` vazado em branco sobre bloco, rompendo a borda em cima e
+embaixo; a estrutura de lockup é a mesma do Estúdio — palavra pequena em cima,
+nome grande embaixo — diferenciada por peso e caixa: o Instituto usa `sarasá`
+**bold, caixa baixa**, o Estúdio usa `Sarasá` leve com `S` capitular.
 
 Levantar de verdade quando houver peça do Instituto. Até lá, **nada do Instituto
 entra em peça do Estúdio**, e vice-versa.
 
 ### Aberto, e é decisão do Michel com o os sócios do Estúdio
 
-1. **Face do logotipo** — pedir o pacote de marca: manual, ou o AI/EPS com as
-   fontes. Fecha o §3 e libera a variante de uma linha.
+1. **Face do logotipo — continua desconhecida.** Todos os vetores da pasta
+   `LOGOTIPO/` estão com o texto convertido em contorno: `pdffonts` não acusa
+   fonte nenhuma nos arquivos do logotipo. **Só o `.ai` aberto no Illustrator,
+   ou quem desenhou, responde.** Fecha o §3 e libera a variante de uma linha.
 2. **Serifada × sans (§3)** — decidir vendo o primeiro deck montado. Tendência
    declarada: sans do site.
 3. **Papel Cal `#F3EEE7`** — decisão do Michel, não validada com os sócios. É a
    superfície de metade de toda peça de leitura.
 4. **Poppins e Archivo** — confirmar se são escolha de marca ou default do tema
    Vamtam. Se forem default, a tipografia de corpo volta a ser lacuna.
-5. **Vetor do grafismo** — hoje só existe raster de 960 px; o SVG do acervo é
-   vetorização derivada (§7).
-6. **Área de proteção** — não medida. §4 traz valor de trabalho.
-7. **Lista de usos proibidos** — rascunhada no §4, não validada.
-8. **Acervo do morph** — arquivos em resolução e autorização de uso.
-9. **A veladura de cor (§6)** — a proibição de LUT contraria a prática atual do
-   portfólio. Conversa a ter, com as palavras do §6.
-10. **INPI e domínio** — não verificados nesta rodada.
-11. **O escopo da frente** — a identidade do núcleo de arquitetura, distinta da
-    identidade da Sarasá inteira, se refina em rodada própria.
+5. **Qual é a paleta das cinco disciplinas** — `cores-sarasa.pdf` e os quadrados
+   aplicados trazem CMYK diferentes (§2). Não se decide por dedução.
+6. **A semente pode assinar sozinha?** Existe como arquivo e tem nome deles;
+   virar marcador, vinheta ou módulo de padrão é decisão deles (§1).
+7. **Área de proteção** — o §4 aplica a convenção 2x do manual do Instituto ao
+   módulo desta marca. Confirmar que vale para o Estúdio.
+8. **Lista de usos proibidos** — rascunhada no §4, não validada. O manual do
+   Instituto tampouco tem uma.
+9. **Acervo do morph** — arquivos em resolução e autorização de uso.
+10. **A veladura de cor (§6)** — a proibição de LUT contraria a prática atual do
+    portfólio. Conversa a ter, com as palavras do §6.
+11. **INPI e domínio** — não verificados nesta rodada.
+12. **O escopo da frente** — a identidade do núcleo de arquitetura, distinta da
+    identidade da Sarasá inteira, se refina em rodada própria. Inclui decidir
+    onde o Núcleo se encaixa nas cinco disciplinas (§2).
 
 ---
 
