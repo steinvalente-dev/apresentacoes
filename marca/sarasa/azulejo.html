@@ -136,14 +136,13 @@
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">Sarasá · núcleo de arquitetura — protótipo de grafismo · rodada 7 · 30 ago 2026</div>
+    <div class="eyebrow">Sarasá · núcleo de arquitetura — protótipo de grafismo · rodada 8 · 30 ago 2026</div>
     <h1>azulejo <span class="nome">Sarasá</span></h1>
     <p class="lede">O Azulejo Sarasá é a grelha geométrica herdada da Lavrō com salpico de peças de
-    contorno português, nas três cores da marca. Nesta rodada, duas mudanças de natureza: filete e
-    juntas agora têm <b>peso fixo em pixels</b> — a linha não engrossa em tela cheia, em nenhuma
-    escala — e entra a <b>camada vitral</b>: festão de folhas com rosas, arco de chumbo e quadrados
-    de canto correndo por cima da grelha, para a leitura dupla — de perto, azulejos; de longe, um
-    grande vitral.</p>
+    contorno português, nas três cores da marca. Nesta rodada o vitral deixou de ser sobreposição e
+    virou <b>ingrediente do módulo</b>: três peças novas entram no sorteio do salpico — a rosa
+    emoldurada e o festão, dentro de um quadradinho, e o pendente, peça dupla de duas alturas que a
+    junta atravessa. De perto, azulejos; no conjunto, a parede sugere o vitral.</p>
     <div class="aviso">marca própria Sarasá — levantamento fechado em 29.08 · vinho afirmável · papel Cal ainda não validado com os sócios</div>
   </header>
 
@@ -156,6 +155,8 @@
     <div class="fileira" id="vocabGeo"></div>
     <div class="grupo-label">antigos — cheio e contorno</div>
     <div class="fileira" id="vocabAnt"></div>
+    <div class="grupo-label">vitral — peças do módulo (1×1 e 1×2)</div>
+    <div class="fileira" id="vocabVit"></div>
   </section>
 
   <section>
@@ -214,32 +215,32 @@
   </section>
 
   <section class="notas">
-    <h2>notas da rodada 7</h2>
+    <h2>notas da rodada 8</h2>
 
     <h3>o que mudou — a seu pedido</h3>
     <ul>
-      <li><strong>Peso fixo em pixels.</strong> Filete e juntas não escalam mais com o painel: são
-      1&nbsp;px de tela sempre — no painel da página, nas miniaturas e em tela cheia, em qualquer
-      resolução. E os dois têm exatamente o mesmo peso gráfico: mesma espessura, mesma opacidade
-      (a do filete desceu para igualar a da junta, por paleta).</li>
-      <li><strong>Camada vitral.</strong> Nova chave "vitral" ao lado das juntas, ligada por padrão:
-      da referência entram o festão — corrente de folhas em catenária com rosas nas âncoras, nos
-      flancos e no buquê central —, os pendentes verticais, o arco de chumbo em duas linhas
-      concêntricas, os quadrados de canto com flor e os losangos de acento. Tudo corre por cima da
-      grelha, atravessando as juntas — de perto se lê azulejo, de longe se lê o vitral.</li>
+      <li><strong>O vitral entrou na lógica dos módulos.</strong> A sobreposição da rodada 7 saiu
+      inteira — sem festão atravessando o painel, sem arco, sem quadrados de canto fixos. No lugar,
+      três peças de vitral que entram no mesmo sorteio do salpico, com as mesmas regras de
+      vizinhança das peças antigas: <strong>rosa emoldurada</strong> (1×1 — a moldura dupla de
+      chumbo com a rosa e as quatro folhas), <strong>festão</strong> (1×1 — a catenária de folhas
+      com rosa no mergulho e losangos nas âncoras) e <strong>pendente</strong> (1×2, a peça dupla de
+      duas alturas — haste de folhas que desce e termina em rosa e losango).</li>
+      <li><strong>A junta atravessa a peça dupla</strong> — o pendente ocupa dois azulejos e a linha
+      da junta corre por cima, como numa parede real: é o que segura a leitura dupla no nível do
+      módulo.</li>
     </ul>
 
-    <h3>como o vitral obedece às regras que já valem</h3>
+    <h3>regras que as peças de vitral seguem</h3>
     <ul>
-      <li><strong>Vidro opaco, nunca opacidade empilhada:</strong> os tons do vitral (folha, rosa)
-      são cores pré-misturadas de fundo+traço, aplicadas chapadas — a peça de vidro cobre o que está
-      embaixo em vez de somar transparência. A regra da rodada 6 segue intacta.</li>
-      <li><strong>Três cores só:</strong> nada de verde nem rosa — folhas e rosas são degraus tonais
-      do próprio par fundo×traço de cada paleta, como vidros de densidades diferentes de um mesmo
-      banho. O chumbo é a cor da peça, com peso fixo de 1,4&nbsp;px.</li>
-      <li>A composição é ancorada em proporção do painel (âncoras a 18% e 82% da largura, mergulho a
-      ~54% da altura), então funciona no painel 16×9, nas miniaturas e em tela cheia; a semente dá
-      pequenas variações nos raios das rosas.</li>
+      <li><strong>Vidro opaco, nunca opacidade empilhada:</strong> folha e rosa são tons
+      pré-misturados do par fundo×traço de cada paleta, aplicados chapados; o chumbo é a cor da peça
+      em peso fixo de 1,4&nbsp;px. Três cores só — nada de verde nem rosa literais.</li>
+      <li>As peças de vitral são material próprio: não mudam com cheio/contorno nem com a ancoragem
+      de canto — sempre inteiras, sempre vidro. Se o pendente não couber (última linha, ou vizinho
+      ocupado), o sorteio o troca por uma peça 1×1.</li>
+      <li>Com a chave "vitral" desligada, o sorteio volta a só ter as três peças antigas — dá para
+      comparar a parede com e sem vitral na mesma semente.</li>
     </ul>
 
     <h3>marcações de confiança</h3>
@@ -247,23 +248,22 @@
       <li><strong>Afirmável:</strong> vinho #79242F e Ferro #231F20 (fills do logotipo); o par
       vinho×Cal dá 8,64 nos dois sentidos.</li>
       <li><strong>Decisão de 29.08, não validada com o os sócios do Estúdio:</strong> o papel Cal #F3EEE7.</li>
-      <li><strong>Aberto com os sócios:</strong> "ter ou não ter grafismo" — e a camada vitral
-      amplia essa conversa: deixa de ser padrão puro e vira composição figurada. Vale validar com a
-      Sarasá também pelo repertório deles — vitral é matéria de restauro da casa (Bolsa do Café).</li>
+      <li><strong>Aberto com os sócios:</strong> "ter ou não ter grafismo" — e agora com peças
+      figuradas de vitral no vocabulário. Vale validar com a Sarasá também pelo repertório deles —
+      vitral é matéria de restauro da casa (Bolsa do Café).</li>
     </ul>
 
     <h3>o que você pediu × sugestão minha</h3>
     <ul>
-      <li>Pedido: linha de espessura fixa em pixels, filete com o mesmo peso gráfico da junta,
-      vitrais como referência estética e a leitura dupla azulejo/vitral, a partir da imagem enviada.</li>
-      <li class="sug">Sugestões minhas: os tons do vitral como degraus do par fundo×traço (para não
-      inventar quarta cor), o chumbo um fio mais presente que a junta (1,4&nbsp;px a 80%, para o
-      vitral se destacar da grelha), e a composição ancorada em proporção para sobreviver a qualquer
-      formato de tela.</li>
+      <li>Pedido: vitral dentro dos quadradinhos, na lógica dos módulos — peça 1×1 ou peça dupla de
+      duas alturas — como mais um ingrediente replicável.</li>
+      <li class="sug">Sugestões minhas: as três peças específicas (rosa emoldurada, festão, pendente),
+      a junta correndo por cima da peça dupla, a troca automática do pendente por 1×1 quando não
+      cabe, e manter os tons do vitral como degraus do par fundo×traço.</li>
     </ul>
   </section>
 
-  <footer>azulejo sarasá · protótipo · rodada 7 · não é entrega final · mesmo par semente+paleta reproduz o desenho idêntico</footer>
+  <footer>azulejo sarasá · protótipo · rodada 8 · não é entrega final · mesmo par semente+paleta reproduz o desenho idêntico</footer>
 </div>
 
 <div id="fsOverlay" hidden>
@@ -458,7 +458,7 @@
   var ARC_KEYS = ['aTL','aTR','aBR','aBL'];
 
   /* ---------- geração da grelha ---------- */
-  function geraGrelha(cols, rows, dens, modo, anc, rnd){
+  function geraGrelha(cols, rows, dens, modo, anc, vitral, rnd){
     var g = [], r, c;
     for (r=0; r<rows; r++){
       g.push([]);
@@ -470,7 +470,8 @@
           if (!dr && !dc) continue;
           var r2 = rr+dr, c2 = cc+dc;
           if (r2<0 || c2<0 || r2>=rows || c2>=cols) continue;
-          if (g[r2][c2] && g[r2][c2].antigo) return true;
+          var v = g[r2][c2];
+          if (v && (v.antigo || v.vitral || v.ref)) return true;
         }
       }
       return false;
@@ -480,7 +481,22 @@
       for (c=0; c<cols; c++){
         if (g[r][c]) continue;
         if (!temAntigoPerto(r, c) && rnd() < dens){
-          var tipo = Math.floor(rnd() * ANTIGOS.length);
+          var total = ANTIGOS.length + (vitral ? VITRAIS.length : 0);
+          var sorteio = Math.floor(rnd() * total);
+          if (sorteio >= ANTIGOS.length){
+            var v = sorteio - ANTIGOS.length;
+            if (VITRAIS[v].alto === 2){
+              if (r+1 < rows && !temAntigoPerto(r+1, c)){
+                g[r][c] = { vitral:true, tipo:v, dupla:true };
+                g[r+1][c] = { ref:true };
+                continue;
+              }
+              v = Math.floor(rnd()*2); /* não coube: vira peça 1×1 */
+            }
+            g[r][c] = { vitral:true, tipo:v };
+            continue;
+          }
+          var tipo = sorteio;
           var mv = rnd();
           var m = (modo === 'misto') ? (mv < .5 ? 'cheio' : 'contorno') : modo;
           var eCanto = anc === 'canto' || (anc === 'mista' && rnd() < .5);
@@ -513,7 +529,9 @@
           continue;
         }
         var viz = vizinhosAnteriores(g, r, c);
-        var temDiag = viz.some(function(v){ return v && !v.antigo && v.tipo.charAt(0) === 'd'; });
+        var temDiag = viz.some(function(v){
+          return v && !v.antigo && !v.vitral && !v.ref && v.tipo.charAt(0) === 'd';
+        });
         var pool = [];
         for (var i=0; i<GEO_KEYS.length; i++){
           var k = GEO_KEYS[i];
@@ -547,123 +565,90 @@
     return a || b;
   }
 
-  /* ---------- camada vitral ----------
-     Vidros OPACOS em tons pré-misturados de fundo+traço (nunca opacidade
-     empilhada) com chumbo de peso fixo em pixels. Corre por cima da grelha:
-     a leitura dupla — azulejo ou vitral. */
+  /* ---------- peças de vitral ----------
+     O vitral como ingrediente: peças que vivem DENTRO do módulo (1×1) ou em
+     peça dupla de duas alturas (1×2). Vidros opacos em tons pré-misturados de
+     fundo+traço — nunca opacidade empilhada — e chumbo de peso fixo em pixels. */
   function mixCor(a, b, t){
     function c(s,i){ return parseInt(s.substr(i,2),16); }
     function h(v){ v = Math.round(v).toString(16); return v.length < 2 ? '0'+v : v; }
     return '#' + h(c(a,1)+(c(b,1)-c(a,1))*t) + h(c(a,3)+(c(b,3)-c(a,3))*t) +
            h(c(a,5)+(c(b,5)-c(a,5))*t);
   }
-  function svgVitral(W, H, P, seed){
-    var rnd = mulberry32((seed ^ 0x5A5A) >>> 0);
-    var lead = ' stroke="' + P.salpico + '" stroke-opacity=".8" stroke-width="' + PX_CHUMBO +
-               '" stroke-linejoin="round"' + NSC;
-    var tomFolha = mixCor(P.fundo, P.traco, Math.min(P.fillAlpha*1.8, .55));
-    var tomRosa  = mixCor(P.fundo, P.traco, Math.min(P.fillAlpha*2.6, .70));
-    var s = '<g>';
-
-    /* arco — só chumbo, duas linhas concêntricas */
-    var meia = W*.22, y1 = H*.60;
-    var R = (meia*meia + .16*H*H) / (.8*H);
-    var kc = .20*H + R;
-    function arco(r){
-      var d2 = r*r - (kc-y1)*(kc-y1);
-      if (d2 <= 0) return '';
-      var dx = Math.sqrt(d2);
-      return '<path d="M ' + (W/2-dx) + ' ' + y1 + ' A ' + r + ' ' + r + ' 0 0 1 ' +
-             (W/2+dx) + ' ' + y1 + '" fill="none"' + lead + '/>';
-    }
-    s += arco(R) + arco(R-13);
-
-    function folha(x, y, ang, len, w, tom){
-      return '<g transform="translate(' + x + ',' + y + ') rotate(' + ang + ')">' +
-             '<path d="' + petala(len, w) + '" fill="' + tom + '"' + lead + '/></g>';
-    }
-    function rosa(x, y, r){
-      var s2 = '';
-      for (var k=0; k<4; k++) s2 += folha(x, y, 45 + k*90, r*1.5, r*.42, tomFolha);
-      s2 += '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + tomRosa + '"' + lead + '/>';
-      s2 += '<circle cx="' + (x - r*.18) + '" cy="' + (y - r*.12) + '" r="' + (r*.52) +
-            '" fill="none"' + lead + '/>';
-      s2 += '<circle cx="' + (x + r*.08) + '" cy="' + (y + r*.06) + '" r="' + (r*.22) +
-            '" fill="none"' + lead + '/>';
-      return s2;
-    }
-
-    /* escala do vitral: proporcional ao painel, não à célula */
-    var M = Math.min(W, H);
-    var LF = M*.075;                 /* comprimento da folha do festão */
-    var ax1 = W*.18, ax2 = W*.82, ay = H*.30;
-
-    /* pendentes verticais */
-    [ax1, ax2].forEach(function(ax){
-      var alt = 1;
-      for (var y = LF*.4; y < ay - LF*.5; y += LF*.62){
-        s += folha(ax, y, 180 + alt*26, LF*.92, LF*.28, tomFolha);
-        alt = -alt;
-      }
-    });
-
-    /* festão em catenária */
-    var P0 = [ax1, ay], P1 = [W/2, H*.78], P2 = [ax2, ay];
-    function pq(t){
-      var u = 1-t;
-      return [u*u*P0[0] + 2*t*u*P1[0] + t*t*P2[0],
-              u*u*P0[1] + 2*t*u*P1[1] + t*t*P2[1]];
-    }
-    function tg(t){
-      var u = 1-t;
-      var dx = 2*u*(P1[0]-P0[0]) + 2*t*(P2[0]-P1[0]);
-      var dy = 2*u*(P1[1]-P0[1]) + 2*t*(P2[1]-P1[1]);
-      return Math.atan2(dy, dx) * 180 / Math.PI;
-    }
-    var N = Math.max(14, Math.round((ax2-ax1) / (LF*.48))), alt2 = 1;
-    for (var i=0; i<=N; i++){
-      var t = .02 + .96*i/N, pos = pq(t);
-      s += folha(pos[0], pos[1], tg(t) + 90 + alt2*50, LF, LF*.32, tomFolha);
-      alt2 = -alt2;
-    }
-
-    /* rosas: nas âncoras, nos flancos e o buquê central */
-    var rA = M*.034, rF = M*.030, rC = M*.046;
-    s += rosa(ax1, ay, rA*(0.95 + rnd()*.15));
-    s += rosa(ax2, ay, rA*(0.95 + rnd()*.15));
-    var f1 = pq(.40), f2 = pq(.60), cm = pq(.5);
-    s += rosa(f1[0], f1[1], rF*(0.95 + rnd()*.15));
-    s += rosa(f2[0], f2[1], rF*(0.95 + rnd()*.15));
-    s += rosa(cm[0], cm[1] + rC*.15, rC*(0.95 + rnd()*.15));
-
-    /* quadrados de canto (superiores) com flor */
-    var Q = M*.15, mq = Q*.16;
-    [mq, W-Q-mq].forEach(function(x0){
-      var cx = x0 + Q/2, cy = mq + Q/2;
-      s += '<rect x="' + x0 + '" y="' + mq + '" width="' + Q + '" height="' + Q +
-           '" fill="none"' + lead + '/>';
-      s += '<rect x="' + (x0+Q*.17) + '" y="' + (mq+Q*.17) + '" width="' + (Q*.66) +
-           '" height="' + (Q*.66) + '" fill="' + tomFolha + '"' + lead + '/>';
-      for (var k=0; k<4; k++) s += folha(cx, cy, k*90, Q*.26, Q*.085, tomRosa);
-      s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (Q*.055) + '" fill="' + tomRosa +
-           '"' + lead + '/>';
-    });
-
-    /* losangos de acento sob o festão */
-    [[W*.37, H*.62],[W*.63, H*.62]].forEach(function(pxy){
-      var x = pxy[0], y = pxy[1], r = M*.018;
-      s += '<path d="M' + x + ',' + (y-r) + ' L' + (x+r) + ',' + y + ' L' + x + ',' + (y+r) +
-           ' L' + (x-r) + ',' + y + ' Z" fill="' + tomFolha + '"' + lead + '/>';
-    });
-
-    return s + '</g>';
+  function vitTons(P){
+    return {
+      folha: mixCor(P.fundo, P.traco, Math.min(P.fillAlpha*1.8, .55)),
+      rosa:  mixCor(P.fundo, P.traco, Math.min(P.fillAlpha*2.6, .70)),
+      lead:  ' stroke="' + P.salpico + '" stroke-opacity=".8" stroke-width="' + PX_CHUMBO +
+             '" stroke-linejoin="round"' + NSC
+    };
   }
+  function vFolha(x, y, ang, len, w, tom, lead){
+    return '<g transform="translate(' + x + ',' + y + ') rotate(' + ang + ')">' +
+           '<path d="' + petala(len, w) + '" fill="' + tom + '"' + lead + '/></g>';
+  }
+  function vRosaDesenho(x, y, r, T){
+    var s = '';
+    for (var k=0; k<4; k++) s += vFolha(x, y, 45 + k*90, r*1.5, r*.42, T.folha, T.lead);
+    s += '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + T.rosa + '"' + T.lead + '/>';
+    s += '<circle cx="' + (x - r*.18) + '" cy="' + (y - r*.12) + '" r="' + (r*.52) +
+         '" fill="none"' + T.lead + '/>';
+    s += '<circle cx="' + (x + r*.08) + '" cy="' + (y + r*.06) + '" r="' + (r*.22) +
+         '" fill="none"' + T.lead + '/>';
+    return s;
+  }
+  function vRosa(P){
+    var T = vitTons(P);
+    var s = '<rect x="8" y="8" width="84" height="84" fill="none"' + T.lead + '/>';
+    s += '<rect x="17" y="17" width="66" height="66" fill="none"' + T.lead + '/>';
+    s += vRosaDesenho(50, 50, 16, T);
+    return s;
+  }
+  function vFestao(P){
+    var T = vitTons(P);
+    var A = [12,20], B = [50,86], C = [88,20];
+    function pq(t){ var u = 1-t;
+      return [u*u*A[0] + 2*t*u*B[0] + t*t*C[0], u*u*A[1] + 2*t*u*B[1] + t*t*C[1]]; }
+    function tg(t){ var u = 1-t;
+      var dx = 2*u*(B[0]-A[0]) + 2*t*(C[0]-B[0]), dy = 2*u*(B[1]-A[1]) + 2*t*(C[1]-B[1]);
+      return Math.atan2(dy, dx) * 180 / Math.PI; }
+    var s = '', alt = 1;
+    for (var i=0; i<=8; i++){
+      var t = .04 + .92*i/8, p = pq(t);
+      s += vFolha(p[0], p[1], tg(t) + 90 + alt*50, 16, 5, T.folha, T.lead);
+      alt = -alt;
+    }
+    [[12,12],[88,12]].forEach(function(d){
+      s += '<path d="M' + d[0] + ',' + (d[1]-6) + ' L' + (d[0]+6) + ',' + d[1] + ' L' + d[0] +
+           ',' + (d[1]+6) + ' L' + (d[0]-6) + ',' + d[1] + ' Z" fill="' + T.folha + '"' + T.lead + '/>';
+    });
+    var m = pq(.5);
+    s += vRosaDesenho(m[0], m[1] + 3, 11, T);
+    return s;
+  }
+  function vPendente(P){
+    var T = vitTons(P);
+    var s = '<path d="M50,6 V146" fill="none"' + T.lead + '/>';
+    var alt = 1;
+    for (var y=14; y<=136; y+=20){
+      s += vFolha(50, y, 180 + alt*26, 22, 7, T.folha, T.lead);
+      alt = -alt;
+    }
+    s += vRosaDesenho(50, 162, 16, T);
+    s += '<path d="M50,184 L56,190 L50,196 L44,190 Z" fill="' + T.folha + '"' + T.lead + '/>';
+    return s;
+  }
+  var VITRAIS = [
+    { id:'vrosa',     nome:'rosa emoldurada',  alto:1, fn:vRosa },
+    { id:'vfestao',   nome:'festão',           alto:1, fn:vFestao },
+    { id:'vpendente', nome:'pendente — 1×2',   alto:2, fn:vPendente }
+  ];
 
   /* ---------- render ---------- */
   function svgPainel(cols, rows, opts){
     var P = PALETAS[opts.paleta];
     var rnd = mulberry32(opts.seed);
-    var g = geraGrelha(cols, rows, opts.dens/100, opts.modo, opts.anc, rnd);
+    var g = geraGrelha(cols, rows, opts.dens/100, opts.modo, opts.anc, opts.vitral, rnd);
     var W = cols*100, H = rows*100;
     var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" ' +
             'aria-label="painel de azulejos, paleta ' + P.nome + '">';
@@ -671,6 +656,12 @@
     for (var r=0; r<rows; r++){
       for (var c=0; c<cols; c++){
         var cel = g[r][c];
+        if (cel.ref) continue; /* coberto pela peça dupla acima */
+        if (cel.vitral){
+          s += '<g transform="translate(' + (c*100) + ',' + (r*100) + ')">' +
+               VITRAIS[cel.tipo].fn(P) + '</g>';
+          continue;
+        }
         if (cel.antigo && cel.anc){
           s += '<svg x="' + (c*100) + '" y="' + (r*100) + '" width="100" height="100" ' +
                'viewBox="0 0 100 100">' +
@@ -692,7 +683,6 @@
       s += '<path d="' + linhas + '" stroke="' + P.junta + '" stroke-width="' + PX_LINHA +
            '" fill="none"' + NSC + '/>';
     }
-    if (opts.vitral) s += svgVitral(W, H, P, opts.seed);
     return s + '</svg>';
   }
 
@@ -728,6 +718,21 @@
     antHtml += '<div class="peca">' + svgPeca(quarto, P, 140, 'florão de canto, um quarto') +
                '<span>florão — canto (¼)</span></div>';
     $('vocabAnt').innerHTML = antHtml;
+    var vitHtml = '';
+    VITRAIS.forEach(function(v){
+      if (v.alto === 2){
+        vitHtml += '<div class="peca"><svg viewBox="0 0 100 200" width="140" height="280" ' +
+                   'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + v.nome + '">' +
+                   '<rect width="100" height="200" fill="' + P.fundo + '"/>' + v.fn(P) +
+                   '<line x1="0" y1="100" x2="100" y2="100" stroke="' + P.junta +
+                   '" stroke-width="' + PX_LINHA + '"' + NSC + '/></svg>' +
+                   '<span>' + v.nome + '</span></div>';
+      } else {
+        vitHtml += '<div class="peca">' + svgPeca(v.fn(P), P, 140, v.nome) +
+                   '<span>' + v.nome + '</span></div>';
+      }
+    });
+    $('vocabVit').innerHTML = vitHtml;
   }
 
   function renderMain(){
