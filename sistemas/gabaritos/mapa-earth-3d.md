@@ -88,8 +88,16 @@ A chave em uso é a `Maps API Key`, criada em 15/05/2024 e restrita por domínio
 em 30/08/2026. Restrição de API: só `Maps JavaScript API` — verificada por
 dentro, a `ElevationService` responde `REQUEST_DENIED` com ela.
 
-Teto de uso: cota diária na Maps JavaScript API mais alerta de orçamento. É o
-que torna a chave pública tranquila — se algo escapar, para sozinho.
+**Teto de uso, posto em 30/08/2026:** `3D Map loads per day` = **1.000**, em
+Quotas → Maps JavaScript API. Vinha `Unlimited`. É o que torna a chave em
+página pública tranquila: se vazar, para sozinho no dia seguinte em vez de
+rodar o mês na conta do Michel.
+
+Régua para julgar o número: uma tarde inteira de testes e verificação deu
+**nove** carregamentos. Mil por dia é folga de duas ordens de grandeza.
+
+Se a peça bater no teto, o mapa simplesmente não abre. Antes de subir o
+número, olhar **Metrics**: pode ser sucesso legítimo, pode ser vazamento.
 
 **Ensaio local roda na porta 8765**, que é a cadastrada: na pasta da peça,
 `npx --yes http-server -p 8765 -c-1`, e abrir `http://localhost:8765/`.

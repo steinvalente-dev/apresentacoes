@@ -33,6 +33,13 @@
    elevação, não faz rota. Se um gabarito novo precisar de outra, é
    decisão consciente — ampliar isto amplia a superfície.
 
+   TETO DE USO, posto em 30/08/2026: `3D Map loads per day` = 1.000, no
+   console em Quotas → Maps JavaScript API. Vinha "Unlimited". Régua para
+   julgar o número: uma tarde inteira de testes deu NOVE carregamentos.
+   Se um dia a peça bater no teto, o mapa para de abrir — e é para isso
+   que o teto serve. Nesse caso, checar Metrics antes de subir o número:
+   pode ser sucesso, pode ser vazamento.
+
    Trocar a chave: gerar nova no console, cadastrar os mesmos domínios e
    a mesma restrição de API, substituir a linha abaixo, publicar, e só
    então apagar a antiga. Nessa ordem — apagar antes derruba as peças no ar.
