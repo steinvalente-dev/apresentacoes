@@ -120,6 +120,7 @@ o registro é manual.**
 |---|---|
 | apresentação, peça de projeto, entrega | array `projetos`, aba Arquivo |
 | documento de método, regra, ferramenta | array `docs`, aba Sistema |
+| proposta, protótipo, revisão de peça — qualquer `.html` que não seja nem uma coisa nem outra | array `docs`, com `ver:` apontando para ele. **Este é o caso que escapa**: a sessão pensa "não é peça nem documento" e não registra nada |
 
 Grupo novo na aba Sistema é só escrever um `grupo` que ainda não existe.
 
@@ -288,6 +289,23 @@ apontando para o `index.html`: um link para entender, outro para usar.
 - abrir a página em Chromium headless e conferir que a linha nova aparece
 - abrir a peça ou a ferramenta e conferir console limpo
 - `git diff` antes do commit: o diff tem que ser só o que você mexeu
+- **rodar o detector de órfã no disco, antes do push** — o da página só
+  avisa depois que o arquivo já está no ar, e quem vê é o Michel:
+
+```
+python3 - <<'EOF'
+import re, pathlib
+s = open('index.html', encoding='utf-8').read()
+reg = set(re.findall(r'(?:href|ver)\s*:\s*"([^"?]+)"', s))
+IGN = ('index.html','sistemas/','modulos/','fundo/','ferramentas/','.git')
+orfas = sorted(str(p) for p in pathlib.Path('.').rglob('*.html')
+               if not str(p).startswith(IGN) and str(p) not in reg)
+print('\n'.join(orfas) if orfas else 'nenhuma órfã')
+EOF
+```
+
+  Tem de imprimir `nenhuma órfã`. Se imprimir caminho, a rodada não está
+  fechada — registrar e só então subir.
 
 ## Publicar
 

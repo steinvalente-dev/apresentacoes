@@ -33,6 +33,20 @@ arquivo próprio, ao lado: `MARCA-MICHEL-STEIN-CAPA.md`.
 
 O underscore é **parte do logotipo, não cursor**, e é sempre o acento.
 
+### As três assinaturas
+
+| | arranjo | onde |
+|---|---|---|
+| **principal** | nome **pequeno** com `arquiteto` ao lado, e o **slogan grande** embaixo | abertura de deck (`frase:true`), topo do site, qualquer peça de apresentação |
+| **alternativa** | nome grande, tagline pequena abaixo, na oliva | quando **o nome é a informação**: capa de proposta, ficha técnica, crédito de autoria |
+| **reduzida** | `michel stein_ arquiteto`, uma linha só | rodapé de peça, chrome de navegação, assinatura de e-mail |
+
+A principal e a reduzida compartilham a mesma primeira linha — a reduzida é
+essa linha sozinha. **O peso normal da marca está no slogan, não no nome:**
+inverter isso é o caso alternativo, não o padrão.
+
+Especificação do `arquiteto` ao lado e do respiro de 1,1em: ver §4, abertura.
+
 ---
 
 ## 2 · Cor — os quatro papéis

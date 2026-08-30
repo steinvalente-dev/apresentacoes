@@ -192,6 +192,19 @@
 #f02 .v-oliva{background:var(--oliva)}
 #f02 .v-oliva .g{color:var(--creme)}
 #f02 .vcap{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#211D1A99;padding:9px 12px;border-top:.5px solid var(--hair);text-align:center}
+#f02 .sig-hero{display:flex;flex-direction:column;align-items:flex-start;
+    gap:clamp(10px,1.6vw,18px);padding:clamp(8px,1.6vw,18px) 0 clamp(16px,2.6vw,26px)}
+#f02 .sig-mini{font-size:clamp(15px,2vw,20px);letter-spacing:-.05em;display:inline-flex;align-items:baseline;white-space:nowrap}
+#f02 .sig-mini em{font-family:var(--mono);font-weight:400;font-style:normal;font-size:.68em;
+    letter-spacing:.02em;text-transform:lowercase;color:#211D1A99;margin-left:1.1em}
+#f02 .sig-mini.s{font-size:clamp(13px,1.7vw,16px)}
+#f02 .sig-slogan{font-size:clamp(26px,5.6vw,58px);letter-spacing:-.02em;color:var(--oliva);line-height:1.05}
+#f02 .sig-alts{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,3vw,32px);
+    border-top:.5px solid var(--hair);padding-top:clamp(18px,3vw,28px);margin-top:clamp(18px,3vw,26px)}
+#f02 .sig-alt .acap{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#211D1A88;margin-bottom:20px}
+#f02 .sig-alt .note{margin-top:14px}
+#f02 .sig-red{padding:16px 0 4px}
+#f02 .note code{font-family:var(--mono);font-size:11px}
 #f02 .note{font-family:'Inter',sans-serif;font-size:12px;line-height:1.6;color:#211D1A99;margin-top:18px}
 #f02 .note b{font-weight:600;color:var(--tinta)}
 #f02 .footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
@@ -201,7 +214,8 @@
 @media (max-width:720px){#f02 .titleblock{grid-template-columns:1fr}
 #f02 .tb-meta{border-left:0;border-top:1px solid var(--tinta);grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
 #f02 .cell:nth-child(odd){border-right:.5px solid var(--hair)}
-#f02 .lockup{align-items:center;text-align:center;width:100%}}
+#f02 .lockup{align-items:center;text-align:center;width:100%}
+#f02 .sig-alts{grid-template-columns:1fr}}
 
 /* ── monograma ─────────────────────────── */
 #f03 /* mark = DM Mono 500 italic */
@@ -569,7 +583,7 @@ o <code>.md</code> é o mestre.</p>
     <div class="sec-label"><span class="no">02</span> Índice das Folhas</div>
     <div class="index">
       <span class="ix here"><span class="n mark">01<span class="tr">_</span></span><span class="t">capa &amp; conceito</span><span class="d">história e essência da marca</span></span>
-      <a class="ix" href="#f02"><span class="n mark">02<span class="tr">_</span></span><span class="t">logotipo &amp; assinatura</span><span class="d">marca, versões e lockup com tagline</span></a>
+      <a class="ix" href="#f02"><span class="n mark">02<span class="tr">_</span></span><span class="t">logotipo &amp; assinatura</span><span class="d">marca, as três assinaturas e as versões</span></a>
       <a class="ix" href="#f03"><span class="n mark">03<span class="tr">_</span></span><span class="t">monograma</span><span class="d">ms_ principal e m_ reduzido</span></a>
       <a class="ix" href="#f04"><span class="n mark">04<span class="tr">_</span></span><span class="t">sistema</span><span class="d">tipografia, cor, elementos gráficos e regras de uso</span></a>
       <a class="ix" href="#f05"><span class="n mark">05<span class="tr">_</span></span><span class="t">aplicações</span><span class="d">cartão, e-mail e papelaria</span></a>
@@ -601,7 +615,7 @@ o <code>.md</code> é o mestre.</p>
     <div class="tb-main">
       <div class="eyebrow">Identidade Visual · Marca Pessoal</div>
       <h1>logotipo<u>_</u></h1>
-      <p class="tb-sub">A marca, suas versões e o lockup com tagline. DM Mono Medium itálico, caixa-baixa, com tracking fechado em −.06em.</p>
+      <p class="tb-sub">A marca, as três assinaturas e as versões sobre fundo. DM Mono Medium itálico, caixa-baixa, com tracking fechado em −.06em.</p>
     </div>
     <div class="tb-meta">
       <div class="cell"><span class="k">Projeto</span><span class="v">Identidade Pessoal</span></div>
@@ -620,14 +634,31 @@ o <code>.md</code> é o mestre.</p>
     </div>
   </section>
 
-  <!-- 02 ASSINATURA COM TAGLINE -->
+  <!-- 02 ASSINATURAS -->
   <section>
-    <div class="sec-label"><span class="no">02</span> Assinatura com Tagline</div>
-    <div class="lockup">
-      <div class="lt mark">michel stein<span class="tr">_</span></div>
-      <div class="tag">a mão por trás do traço</div>
+    <div class="sec-label"><span class="no">02</span> Assinaturas</div>
+
+    <div class="sig-hero">
+      <div class="sig-mini mark">michel stein<span class="tr">_</span><em>arquiteto</em></div>
+      <div class="sig-slogan mark">a mão por trás do traço<span class="tr">_</span></div>
     </div>
-    <p class="note">A tagline acompanha o logotipo em DM Mono itálico regular, na oliva. Alinhada à esquerda, com respiro igual à altura do "m" entre as linhas.</p>
+    <p class="note"><b>Principal.</b> É a da abertura de deck e a do topo do site: o nome vai <b>pequeno</b> e quem carrega o peso é <b>o slogan</b>. Slogan em DM Mono 500 itálico caixa-baixa, na oliva, com o traço terracota no fim. O <code>arquiteto</code> ao lado do nome é DM Mono 400 <b>reto</b>, 0,68em, caixa-baixa, <code>+.02em</code>, em <code>--muted</code> — <b>nunca em terracota</b>, que disputaria com o traço. O respiro de 1,1em vai como <code>margin-left</code> no <code>&lt;em&gt;</code>, nunca como <code>gap</code> de flex: o gap entra também entre o nome e o traço e descola o underscore. Liga com <code>frase:true</code> no gabarito <code>marca</code>.</p>
+
+    <div class="sig-alts">
+      <div class="sig-alt">
+        <div class="acap">Alternativa · nome em primeiro plano</div>
+        <div class="lockup">
+          <div class="lt mark">michel stein<span class="tr">_</span></div>
+          <div class="tag">a mão por trás do traço</div>
+        </div>
+        <p class="note">Inverte a hierarquia: o nome grande, a tagline abaixo em DM Mono itálico regular, na oliva, com respiro igual à altura do "m". Para a peça em que <b>o nome é a informação</b> — capa de proposta, ficha técnica, crédito de autoria.</p>
+      </div>
+      <div class="sig-alt">
+        <div class="acap">Reduzida · uma linha</div>
+        <div class="sig-red"><span class="sig-mini mark s">michel stein<span class="tr">_</span><em>arquiteto</em></span></div>
+        <p class="note">A primeira linha da principal, sozinha. Rodapé de peça, chrome de navegação, assinatura de e-mail, e qualquer lugar de uma linha só. O <code>arquiteto</code> em texto corrido é <b>exceção consciente</b> à regra de label da folha 04, que pede caixa-alta e +.20em: aqui se quer a leitura do site, não a de metadado.</p>
+      </div>
+    </div>
   </section>
 
   <!-- 03 VERSÕES -->
