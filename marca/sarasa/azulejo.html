@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azulejo Sarasá</title>
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --cal:#F3EEE7; --ferro:#231F20; --vinho:#79242F;
+    --ferro-60:rgba(35,31,32,.64); --ferro-25:rgba(35,31,32,.25); --ferro-12:rgba(35,31,32,.12);
+    --arc:'Archivo', system-ui, sans-serif;
+    --pop:'Poppins', system-ui, -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--cal); color:var(--ferro);
+    font-family:var(--pop); font-size:14.5px; line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1060px; margin:0 auto; padding:56px 28px 96px}
+  header{margin-bottom:64px}
+  .eyebrow{
+    font-family:var(--arc); font-weight:600; text-transform:uppercase;
+    letter-spacing:.09em; font-size:11.5px; color:var(--ferro-60); margin-bottom:18px;
+  }
+  h1{
+    font-family:var(--arc); font-weight:700; letter-spacing:-.02em;
+    font-size:clamp(34px,6vw,54px); margin:0 0 14px; text-wrap:balance; line-height:1.1;
+  }
+  h1 .nome{color:var(--vinho)}
+  .lede{max-width:64ch; color:var(--ferro-60); margin:0}
+  .aviso{
+    display:inline-block; margin-top:22px; padding:7px 12px;
+    border:1px solid var(--ferro-25); font-family:var(--arc); font-weight:600;
+    font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:var(--ferro-60);
+  }
+  section{margin-top:72px}
+  h2{
+    font-family:var(--arc); font-weight:700; letter-spacing:-.01em;
+    font-size:24px; margin:0 0 8px;
+  }
+  .sec-note{max-width:64ch; color:var(--ferro-60); margin:0 0 28px}
+  .grupo-label{
+    font-family:var(--arc); font-weight:600; text-transform:uppercase;
+    letter-spacing:.09em; font-size:11px; color:var(--ferro-60); margin:26px 0 12px;
+  }
+  .fileira{display:flex; flex-wrap:wrap; gap:14px}
+  .peca{display:flex; flex-direction:column; gap:8px}
+  .peca > svg{display:block; border:1px solid var(--ferro-25)}
+  .peca span{
+    font-family:var(--arc); font-weight:600; font-size:10px; text-transform:uppercase;
+    letter-spacing:.08em; color:var(--ferro-60);
+  }
+  /* controles */
+  .controles{
+    display:flex; flex-wrap:wrap; align-items:flex-end; gap:26px;
+    padding:18px 0 22px; border-top:1px solid var(--ferro-25);
+  }
+  .campo{display:flex; flex-direction:column; gap:9px}
+  .campo>label{
+    font-family:var(--arc); font-weight:600; font-size:10.5px; text-transform:uppercase;
+    letter-spacing:.09em; color:var(--ferro-60);
+  }
+  .chips{display:flex; gap:8px; flex-wrap:wrap}
+  .chip{
+    font-family:var(--arc); font-weight:600; font-size:11px; text-transform:uppercase;
+    letter-spacing:.06em; padding:7px 13px; border:1px solid var(--ferro-25);
+    background:transparent; color:var(--ferro); cursor:pointer;
+  }
+  .chip[aria-pressed="true"]{background:var(--vinho); color:var(--cal); border-color:var(--vinho)}
+  .chip:focus-visible, .botao:focus-visible, input:focus-visible{outline:2px solid var(--vinho); outline-offset:2px}
+  input[type=range]{accent-color:var(--vinho); width:160px}
+  .valor{font-family:var(--arc); font-weight:600; font-size:12px; font-variant-numeric:tabular-nums}
+  .botao{
+    font-family:var(--arc); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    padding:8px 14px; background:var(--vinho); color:var(--cal);
+    border:1px solid var(--vinho); cursor:pointer;
+  }
+  .botao:hover{background:var(--ferro); border-color:var(--ferro)}
+  .toggle{display:flex; align-items:center; gap:8px; font-family:var(--arc); font-weight:600;
+    font-size:11px; text-transform:uppercase; letter-spacing:.06em; cursor:pointer; padding-bottom:6px}
+  .painel-moldura{border:1px solid var(--ferro); background:transparent}
+  .painel-moldura > svg{display:block; width:100%; height:auto}
+  .painel-legenda{
+    display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    font-family:var(--arc); font-weight:600; font-size:10.5px; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--ferro-60); margin-top:10px; font-variant-numeric:tabular-nums;
+  }
+  .trio{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:8px}
+  @media (max-width:560px){ .trio{grid-template-columns:1fr} }
+  .trio .peca > svg{width:100%; height:auto}
+  /* notas */
+  .notas{max-width:68ch}
+  .notas h3{
+    font-family:var(--arc); font-weight:600; font-size:12px;
+    text-transform:uppercase; letter-spacing:.09em; margin:34px 0 10px; color:var(--vinho);
+  }
+  .notas p{margin:0 0 12px}
+  .notas ul{margin:0 0 12px; padding-left:20px}
+  .notas li{margin-bottom:9px}
+  .notas .sug{color:var(--ferro-60)}
+  footer{
+    margin-top:88px; padding-top:18px; border-top:1px solid var(--ferro-25);
+    font-family:var(--arc); font-weight:600; font-size:10.5px; text-transform:uppercase;
+    letter-spacing:.08em; color:var(--ferro-60);
+  }
+  /* tela cheia */
+  #fsOverlay{position:fixed; inset:0; z-index:100}
+  #fsPattern{position:absolute; inset:0}
+  #fsPattern > svg{display:block; width:100%; height:100%}
+  .fs-texto{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    padding:6vh 6vw; pointer-events:none;
+  }
+  .fs-lockup{font-family:var(--arc); font-weight:700; font-size:clamp(18px,2vw,26px); letter-spacing:-.01em}
+  .fs-frase{
+    margin-top:auto; font-family:var(--arc); font-weight:700;
+    font-size:clamp(34px,6.4vw,104px); line-height:1.04; letter-spacing:-.025em;
+    max-width:12em; text-wrap:balance;
+  }
+  .fs-site{
+    margin-top:22px; font-family:var(--arc); font-weight:600; font-size:12px;
+    text-transform:uppercase; letter-spacing:.2em;
+  }
+  .fs-bar{position:absolute; top:20px; right:22px; display:flex; gap:8px}
+  .fs-btn{
+    font-family:var(--arc); font-weight:600; font-size:11px; text-transform:uppercase;
+    letter-spacing:.06em; padding:7px 13px; background:transparent; cursor:pointer;
+    border:1px solid currentColor; color:inherit; opacity:.75;
+  }
+  .fs-btn:hover, .fs-btn[aria-pressed="true"]{opacity:1}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Sarasá · núcleo de arquitetura — protótipo de grafismo · rodada 5 · 30 ago 2026</div>
+    <h1>azulejo <span class="nome">Sarasá</span></h1>
+    <p class="lede">Batizado. O Azulejo Sarasá é a grelha geométrica herdada da Lavrō com salpico de
+    peças de contorno português, nas três cores da marca. Nesta rodada: <b>tela cheia</b> — o uso
+    provável, como fundo de abertura, com o texto que ele deve receber — e a <b>ancoragem de
+    canto</b>: o centro da peça pousa no vértice do azulejo, cada célula mostra um quarto, e
+    vizinhos podem completar meia peça ou a peça inteira.</p>
+    <div class="aviso">marca própria Sarasá — levantamento fechado em 29.08 · vinho afirmável · papel Cal ainda não validado com os sócios</div>
+  </header>
+
+  <section>
+    <h2>vocabulário</h2>
+    <p class="sec-note">A textura geométrica em traço rebaixado e as peças figuradas por cima — agora
+    cada peça antiga em duas versões: cheia (a da rodada 1) e de contorno, no mesmo peso de linha
+    fina da grelha.</p>
+    <div class="grupo-label">geométricos — linguagem Lavrō · linha fina, média ou preenchida</div>
+    <div class="fileira" id="vocabGeo"></div>
+    <div class="grupo-label">antigos — cheio e contorno</div>
+    <div class="fileira" id="vocabAnt"></div>
+  </section>
+
+  <section>
+    <h2>composição</h2>
+    <p class="sec-note">Regras mantidas da rodada 1: nada de trinca idêntica, reta não encosta em reta,
+    peças antigas nunca vizinhas. Em modo misto, cada peça antiga sorteia entre cheia e contorno —
+    a mesma semente reproduz o mesmo sorteio.</p>
+    <div class="controles">
+      <div class="campo">
+        <label>paleta</label>
+        <div class="chips" id="chipsPaleta"></div>
+      </div>
+      <div class="campo">
+        <label>peças antigas</label>
+        <div class="chips" id="chipsModo"></div>
+      </div>
+      <div class="campo">
+        <label>grelha</label>
+        <div class="chips" id="chipsGrelha"></div>
+      </div>
+      <div class="campo">
+        <label>ancoragem</label>
+        <div class="chips" id="chipsAnc"></div>
+      </div>
+      <div class="campo">
+        <label>salpico <span class="valor" id="valDens"></span></label>
+        <input type="range" id="ctlDens" min="0" max="30" step="1">
+      </div>
+      <div class="campo">
+        <label>semente <span class="valor" id="valSeed"></span></label>
+        <button class="botao" id="btnSeed" type="button">nova semente</button>
+      </div>
+      <label class="toggle"><input type="checkbox" id="ctlFilete"> filete</label>
+      <label class="toggle"><input type="checkbox" id="ctlJuntas" checked> juntas</label>
+      <div class="campo">
+        <label>uso provável</label>
+        <button class="botao" id="btnFS" type="button">tela cheia</button>
+      </div>
+    </div>
+    <div class="painel-moldura" id="painelMain"></div>
+    <div class="painel-legenda">
+      <span>16 × 9 células</span>
+      <span id="legendaMain"></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>as paletas, mesma semente</h2>
+    <p class="sec-note">Os dois sentidos da cabaré lado a lado — linha vinho sobre Cal e campo vinho
+    com linhas Cal (o contraste do par é o mesmo, 8,64, em qualquer sentido) — mais ferro sobre Cal e
+    o exercício grafite. Duas ressalvas do levantamento: sobre fundo escuro o vinho some (1,63), por
+    isso grafite vive só de Cal; e a Sarasá é marca de fundo claro — sobre o campo cabaré o padrão
+    funciona, o lockup não entra.</p>
+    <div class="trio" id="trioPaletas"></div>
+  </section>
+
+  <section class="notas">
+    <h2>notas da rodada 5</h2>
+
+    <h3>o que mudou — a seu pedido</h3>
+    <ul>
+      <li><strong>Batizado: Azulejo Sarasá.</strong> O nome vale para o sistema inteiro — grelha,
+      peças e regras de composição.</li>
+      <li><strong>Tela cheia.</strong> Botão "tela cheia" nos controles: o padrão preenche a tela
+      inteira com os ajustes atuais, e por cima entra o texto no desenho da abertura — lockup no
+      alto à esquerda, "O Patrimônio Cultural vivo" grande embaixo (com "vivo" em cabaré nos fundos
+      claros), site em Archivo. É a mesma lógica prototipada na AMAZ: frase única, uma linha de
+      site, chamada discreta. A chave "texto" liga e desliga; Esc fecha.</li>
+      <li><strong>Ancoragem de canto.</strong> Novo controle "ancoragem": em "canto", o centro da
+      peça antiga pousa num vértice do azulejo e cada célula mostra só um quarto, assimétrico. O
+      sorteio decide se a peça fica sozinha (um quarto), encosta num vizinho (meia peça, na
+      horizontal ou vertical) ou completa nas quatro células (peça inteira no cruzamento das
+      juntas). "Mista" mistura peças centradas e de canto.</li>
+    </ul>
+
+    <h3>decisões de desenho do canto</h3>
+    <ul>
+      <li><strong>O quarto ocupa a célula inteira</strong> — a peça ancorada é desenhada em dobro de
+      escala, como nos padrões de canto clássicos da azulejaria, em que o motivo se completa no
+      cruzamento de quatro azulejos. Se você imaginava a peça no tamanho original (o quarto ocupando
+      só um quarto da célula), é um número a mudar.</li>
+      <li><strong>Espessuras compensadas:</strong> contorno e filete das peças de canto são
+      desenhados na metade, para que na escala dobrada fiquem no mesmo peso visual das demais.</li>
+      <li>Sobre fundo escuro o texto da tela cheia vai todo em Cal — o vinho some sobre Ferro, e a
+      regra da marca é fundo claro para o nome.</li>
+    </ul>
+
+    <h3>marcações de confiança</h3>
+    <ul>
+      <li><strong>Afirmável:</strong> vinho #79242F e Ferro #231F20 (fills do logotipo); o par
+      vinho×Cal dá 8,64 nos dois sentidos.</li>
+      <li><strong>Decisão de 29.08, não validada com o os sócios do Estúdio:</strong> o papel Cal #F3EEE7.</li>
+      <li><strong>Aberto com os sócios:</strong> "ter ou não ter grafismo" — este protótipo é insumo
+      dessa conversa, não regra. O texto da tela cheia usa Archivo como face provisória (a fonte do
+      logotipo ainda não foi identificada; o lockup real entra quando vier o AI/EPS).</li>
+    </ul>
+
+    <h3>o que você pediu × sugestão minha</h3>
+    <ul>
+      <li>Pedido: publicar no acervo, tela cheia como uso provável, batismo "Azulejo Sarasá", texto
+      por cima como na AMAZ, peças renderizadas em um quarto ancorado no vértice.</li>
+      <li class="sug">Sugestões minhas: o quarto em escala dobrada (padrão de canto clássico), o
+      sorteio de completamento (solo, meia, inteira), a opção "mista", e o texto da tela cheia já no
+      desenho da abertura da marca em vez de um texto qualquer.</li>
+    </ul>
+  </section>
+
+  <footer>azulejo sarasá · protótipo · rodada 5 · não é entrega final · mesmo par semente+paleta reproduz o desenho idêntico</footer>
+</div>
+
+<div id="fsOverlay" hidden>
+  <div id="fsPattern"></div>
+  <div class="fs-texto" id="fsTexto">
+    <div class="fs-lockup"><span id="fsEstudio">estúdio</span> <span id="fsNome">Sarasá</span></div>
+    <div class="fs-frase" id="fsFrase">O Patrimônio Cultural <span id="fsVivo">vivo</span></div>
+    <div class="fs-site" id="fsSite">estudiosarasa.com.br</div>
+  </div>
+  <div class="fs-bar">
+    <button class="fs-btn" id="btnFsTexto" type="button" aria-pressed="true">texto</button>
+    <button class="fs-btn" id="btnFsFechar" type="button">fechar</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- paletas — três cores da marca ---------- */
+  var PALETAS = {
+    cabare:    { nome:'cabaré',       claro:true,  fundo:'#F3EEE7', traco:'#79242F', alpha:.5,  fillAlpha:.20,
+                 salpico:'#79242F', acento:'#79242F', junta:'rgba(121,36,47,.14)' },
+    cabareInv: { nome:'campo cabaré', claro:false, fundo:'#79242F', traco:'#F3EEE7', alpha:.55, fillAlpha:.24,
+                 salpico:'#F3EEE7', acento:'#F3EEE7', junta:'rgba(243,238,231,.14)' },
+    ferro:     { nome:'ferro',        claro:true,  fundo:'#F3EEE7', traco:'#231F20', alpha:.42, fillAlpha:.15,
+                 salpico:'#231F20', acento:'#79242F', junta:'rgba(35,31,32,.12)' },
+    grafite:   { nome:'grafite',      claro:false, fundo:'#231F20', traco:'#F3EEE7', alpha:.4,  fillAlpha:.18,
+                 salpico:'#F3EEE7', acento:'#F3EEE7', junta:'rgba(243,238,231,.10)' }
+  };
+  var GRELHAS = { fina:2.4, media:7, preenchida:0 };
+
+  var estado = { paleta:'cabare', modo:'cheio', grelha:'preenchida', anc:'centro',
+                 dens:12, seed:20260829, juntas:true, filete:false };
+
+  /* ---------- prng ---------- */
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ---------- geometria: pétala-gota ---------- */
+  function petala(len, w){
+    return 'M0,0 C' + w + ',' + (-len*.3) + ' ' + w + ',' + (-len*.75) + ' 0,' + (-len) +
+           ' C' + (-w) + ',' + (-len*.75) + ' ' + (-w) + ',' + (-len*.3) + ' 0,0 Z';
+  }
+  function leque(cx, cy, ang, n, spread, len, w, off){
+    var s = '<g transform="translate(' + cx + ',' + cy + ') rotate(' + ang + ')">';
+    var start = -spread * (n-1) / 2;
+    for (var i=0; i<n; i++){
+      s += '<g transform="rotate(' + (start + i*spread) + ')">' +
+           '<path d="' + petala(len, w) + '" transform="translate(0,' + (-off) + ')"/></g>';
+    }
+    return s + '</g>';
+  }
+
+  /* ---------- azulejos antigos (100×100) — modo 'cheio' | 'contorno' ---------- */
+  var TRACO_FINO = 2.2, FILETE = 1.6;
+  function fileteAttrs(P, sk){
+    return ' stroke="' + P.traco + '" stroke-opacity="' + P.alpha +
+           '" stroke-width="' + (FILETE * sk) + '" stroke-linejoin="round"';
+  }
+  function abreGrupo(P, C, filete, sk){
+    if (C) return '<g fill="none" stroke="' + P.salpico + '" stroke-width="' + (TRACO_FINO * sk) +
+                  '" stroke-linejoin="round">';
+    return '<g fill="' + P.salpico + '" fill-opacity="' + P.fillAlpha + '"' +
+           (filete ? fileteAttrs(P, sk) : '') + '>';
+  }
+  function pontinho(cx, cy, r, P, C){
+    return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '"' +
+           (C ? ' fill="' + P.salpico + '" stroke="none"' : '') + '/>';
+  }
+
+  function tFlorao(P, modo, filete, sk){
+    sk = sk || 1;
+    var C = modo === 'contorno';
+    var s = abreGrupo(P, C, filete, sk);
+    for (var k=0; k<8; k++){
+      s += '<g transform="rotate(' + (k*45) + ' 50 50)">' +
+           '<path d="' + petala(26, 6.5) + '" transform="translate(50,42)"/></g>';
+    }
+    s += leque(0,0,135, 3,32, 16,4.2, 5);
+    s += leque(100,0,225, 3,32, 16,4.2, 5);
+    s += leque(100,100,315, 3,32, 16,4.2, 5);
+    s += leque(0,100,45, 3,32, 16,4.2, 5);
+    s += pontinho(50,8,2,P,C) + pontinho(92,50,2,P,C) +
+         pontinho(50,92,2,P,C) + pontinho(8,50,2,P,C);
+    s += '</g>';
+    s += C ? '<circle cx="50" cy="50" r="5" fill="none" stroke="' + P.acento +
+             '" stroke-width="' + (TRACO_FINO * sk) + '"/>'
+           : '<circle cx="50" cy="50" r="5" fill="' + P.acento + '" fill-opacity="' + P.fillAlpha +
+             '"' + (filete ? fileteAttrs(P, sk) : '') + '/>';
+    return s;
+  }
+  function tQuatrifolio(P, modo, filete, sk){
+    sk = sk || 1;
+    var C = modo === 'contorno';
+    var s = abreGrupo(P, C, filete, sk);
+    s += '<circle cx="50" cy="26" r="6"/><circle cx="74" cy="50" r="6"/>' +
+         '<circle cx="50" cy="74" r="6"/><circle cx="26" cy="50" r="6"/>';
+    s += '<path d="M50,29 L71,50 L50,71 L29,50 Z"/>';
+    for (var k=0; k<4; k++){
+      s += '<g transform="rotate(' + (k*90) + ' 50 50)">' +
+           '<path d="' + petala(11,4) + '" transform="translate(50,6) rotate(180)"/>' +
+           '<path d="' + petala(8,2.8) + '" transform="translate(41.5,7.5) rotate(155)"/>' +
+           '<path d="' + petala(8,2.8) + '" transform="translate(58.5,7.5) rotate(205)"/>' +
+           '</g>';
+    }
+    var cantos = [[0,0,135],[100,0,225],[100,100,315],[0,100,45]];
+    for (var i=0; i<cantos.length; i++){
+      s += leque(cantos[i][0], cantos[i][1], cantos[i][2], 2, 46, 13, 3.6, 4);
+      s += '<g transform="translate(' + cantos[i][0] + ',' + cantos[i][1] + ') rotate(' + cantos[i][2] + ')">' +
+           pontinho(0,-20,2.2,P,C) + '</g>';
+    }
+    s += '</g>';
+    if (C){
+      s += '<path d="M50,38 L62,50 L50,62 L38,50 Z" fill="none" stroke="' + P.salpico +
+           '" stroke-width="' + (TRACO_FINO * sk) + '"/>';
+      s += '<circle cx="50" cy="50" r="3.5" fill="' + P.acento + '"/>';
+    } else {
+      s += '<path d="M50,38 L62,50 L50,62 L38,50 Z" fill="' + P.fundo + '"' +
+           (filete ? fileteAttrs(P, sk) : '') + '/>';
+      s += '<circle cx="50" cy="50" r="3.5" fill="' + P.acento + '" fill-opacity="' +
+           P.fillAlpha + '"/>';
+    }
+    return s;
+  }
+  function tSemeada(P, modo, filete, sk){
+    sk = sk || 1;
+    var C = modo === 'contorno';
+    var s = abreGrupo(P, C, filete, sk);
+    for (var k=0; k<8; k++){
+      s += '<g transform="rotate(' + (k*45) + ' 50 50)">' +
+           '<path d="' + petala(13, 3.5) + '" transform="translate(50,45)"/></g>';
+    }
+    for (var d=0; d<4; d++){
+      s += '<g transform="rotate(' + (45 + d*90) + ' 50 50)">' +
+           pontinho(50,27,2.2,P,C) +
+           '<path d="' + petala(10,3) + '" transform="translate(50,23)"/>' +
+           pontinho(50,9.5,2.2,P,C) +
+           '</g>';
+    }
+    s += leque(0,0,135, 3,30, 13,3.5, 4);
+    s += leque(100,0,225, 3,30, 13,3.5, 4);
+    s += leque(100,100,315, 3,30, 13,3.5, 4);
+    s += leque(0,100,45, 3,30, 13,3.5, 4);
+    s += leque(50,0,180, 3,30, 11,3, 3);
+    s += leque(100,50,270, 3,30, 11,3, 3);
+    s += leque(50,100,0, 3,30, 11,3, 3);
+    s += leque(0,50,90, 3,30, 11,3, 3);
+    s += '</g>';
+    s += C ? '<circle cx="50" cy="50" r="2.8" fill="' + P.acento + '"/>'
+           : '<circle cx="50" cy="50" r="2.8" fill="' + P.acento + '" fill-opacity="' +
+             P.fillAlpha + '"/>';
+    return s;
+  }
+  var ANTIGOS = [
+    { id:'florao',      nome:'florão',           fn:tFlorao },
+    { id:'quatrifolio', nome:'quatrifólio',      fn:tQuatrifolio },
+    { id:'semeada',     nome:'diagonal semeada', fn:tSemeada }
+  ];
+
+  /* ---------- células geométricas (100×100, traço) ---------- */
+  var GEO = {
+    d1:  { nome:'diagonal ↘',  d:'M0,0 L100,100',
+           cheio:'M0,0 L100,100 L0,100 Z' },
+    d2:  { nome:'diagonal ↗',  d:'M0,100 L100,0',
+           cheio:'M0,100 L100,0 L100,100 Z' },
+    aTL: { nome:'arco no canto', d:'M100,0 A100,100 0 0 1 0,100',
+           cheio:'M0,0 L100,0 A100,100 0 0 1 0,100 Z' },
+    aTR: { nome:'arco no canto', d:'M0,0 A100,100 0 0 0 100,100',
+           cheio:'M100,0 L0,0 A100,100 0 0 0 100,100 Z' },
+    aBR: { nome:'arco no canto', d:'M100,0 A100,100 0 0 0 0,100',
+           cheio:'M100,100 L100,0 A100,100 0 0 0 0,100 Z' },
+    aBL: { nome:'arco no canto', d:'M0,0 A100,100 0 0 1 100,100',
+           cheio:'M0,100 L0,0 A100,100 0 0 1 100,100 Z' }
+  };
+  function geoCell(tipo, P, grelha, filete){
+    if (grelha === 'preenchida'){
+      var s = '<path d="' + GEO[tipo].cheio + '" fill="' + P.traco +
+              '" fill-opacity="' + P.fillAlpha + '" stroke="none"/>';
+      if (filete){
+        s += '<path d="' + GEO[tipo].d + '" fill="none" stroke="' + P.traco +
+             '" stroke-opacity="' + P.alpha + '" stroke-width="' + FILETE +
+             '" stroke-linecap="butt"/>';
+      }
+      return s;
+    }
+    return '<path d="' + GEO[tipo].d + '" fill="none" stroke="' + P.traco +
+           '" stroke-opacity="' + P.alpha + '" stroke-width="' + GRELHAS[grelha] +
+           '" stroke-linecap="butt"/>';
+  }
+  var GEO_KEYS = ['d1','d2','aTL','aTR','aBR','aBL'];
+  var ARC_KEYS = ['aTL','aTR','aBR','aBL'];
+
+  /* ---------- geração da grelha ---------- */
+  function geraGrelha(cols, rows, dens, modo, anc, rnd){
+    var g = [], r, c;
+    for (r=0; r<rows; r++){
+      g.push([]);
+      for (c=0; c<cols; c++) g[r].push(null);
+    }
+    function temAntigoPerto(rr, cc){
+      for (var dr=-1; dr<=1; dr++){
+        for (var dc=-1; dc<=1; dc++){
+          if (!dr && !dc) continue;
+          var r2 = rr+dr, c2 = cc+dc;
+          if (r2<0 || c2<0 || r2>=rows || c2>=cols) continue;
+          if (g[r2][c2] && g[r2][c2].antigo) return true;
+        }
+      }
+      return false;
+    }
+    function bit(){ return rnd() < .5 ? 0 : 100; }
+    for (r=0; r<rows; r++){
+      for (c=0; c<cols; c++){
+        if (g[r][c]) continue;
+        if (!temAntigoPerto(r, c) && rnd() < dens){
+          var tipo = Math.floor(rnd() * ANTIGOS.length);
+          var mv = rnd();
+          var m = (modo === 'misto') ? (mv < .5 ? 'cheio' : 'contorno') : modo;
+          var eCanto = anc === 'canto' || (anc === 'mista' && rnd() < .5);
+          if (!eCanto){
+            g[r][c] = { antigo:true, tipo:tipo, modo:m, anc:null };
+            continue;
+          }
+          var gv = rnd();
+          var podeDir   = c+1 < cols && !g[r][c+1] && !temAntigoPerto(r, c+1);
+          var podeBaixo = r+1 < rows && !temAntigoPerto(r+1, c);
+          var podeQuad  = podeDir && podeBaixo && !temAntigoPerto(r+1, c+1);
+          if (gv < .42 || (!podeDir && !podeBaixo)){
+            g[r][c] = { antigo:true, tipo:tipo, modo:m, anc:[bit(), bit()] };
+          } else if (gv < .64 && podeDir){
+            var vy = bit();
+            g[r][c]   = { antigo:true, tipo:tipo, modo:m, anc:[100, vy] };
+            g[r][c+1] = { antigo:true, tipo:tipo, modo:m, anc:[0, vy] };
+          } else if (gv < .86 && podeBaixo){
+            var vx = bit();
+            g[r][c]   = { antigo:true, tipo:tipo, modo:m, anc:[vx, 100] };
+            g[r+1][c] = { antigo:true, tipo:tipo, modo:m, anc:[vx, 0] };
+          } else if (podeQuad){
+            g[r][c]     = { antigo:true, tipo:tipo, modo:m, anc:[100, 100] };
+            g[r][c+1]   = { antigo:true, tipo:tipo, modo:m, anc:[0, 100] };
+            g[r+1][c]   = { antigo:true, tipo:tipo, modo:m, anc:[100, 0] };
+            g[r+1][c+1] = { antigo:true, tipo:tipo, modo:m, anc:[0, 0] };
+          } else {
+            g[r][c] = { antigo:true, tipo:tipo, modo:m, anc:[bit(), bit()] };
+          }
+          continue;
+        }
+        var viz = vizinhosAnteriores(g, r, c);
+        var temDiag = viz.some(function(v){ return v && !v.antigo && v.tipo.charAt(0) === 'd'; });
+        var pool = [];
+        for (var i=0; i<GEO_KEYS.length; i++){
+          var k = GEO_KEYS[i];
+          var isDiag = k.charAt(0) === 'd';
+          if (isDiag && temDiag) continue;
+          if (trinca(g, r, c, k)) continue;
+          var peso = isDiag ? 1 : 3;
+          for (var p=0; p<peso; p++) pool.push(k);
+        }
+        if (!pool.length) pool = ARC_KEYS.slice();
+        g[r][c] = { antigo:false, tipo: pool[Math.floor(rnd()*pool.length)] };
+      }
+    }
+    return g;
+  }
+  function vizinhosAnteriores(g, r, c){
+    var out = [];
+    if (r>0){
+      if (c>0) out.push(g[r-1][c-1]);
+      out.push(g[r-1][c]);
+      if (c+1 < g[r-1].length) out.push(g[r-1][c+1]);
+    }
+    if (c>0) out.push(g[r][c-1]);
+    return out;
+  }
+  function trinca(g, r, c, k){
+    var a = c>1 && !g[r][c-1].antigo && !g[r][c-2].antigo &&
+            g[r][c-1].tipo===k && g[r][c-2].tipo===k;
+    var b = r>1 && !g[r-1][c].antigo && !g[r-2][c].antigo &&
+            g[r-1][c].tipo===k && g[r-2][c].tipo===k;
+    return a || b;
+  }
+
+  /* ---------- render ---------- */
+  function svgPainel(cols, rows, opts){
+    var P = PALETAS[opts.paleta];
+    var rnd = mulberry32(opts.seed);
+    var g = geraGrelha(cols, rows, opts.dens/100, opts.modo, opts.anc, rnd);
+    var W = cols*100, H = rows*100;
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" ' +
+            'aria-label="painel de azulejos, paleta ' + P.nome + '">';
+    s += '<rect width="' + W + '" height="' + H + '" fill="' + P.fundo + '"/>';
+    for (var r=0; r<rows; r++){
+      for (var c=0; c<cols; c++){
+        var cel = g[r][c];
+        if (cel.antigo && cel.anc){
+          s += '<svg x="' + (c*100) + '" y="' + (r*100) + '" width="100" height="100" ' +
+               'viewBox="0 0 100 100">' +
+               '<g transform="translate(' + cel.anc[0] + ',' + cel.anc[1] +
+               ') scale(2) translate(-50,-50)">' +
+               ANTIGOS[cel.tipo].fn(P, cel.modo, opts.filete, .5) + '</g></svg>';
+          continue;
+        }
+        s += '<g transform="translate(' + (c*100) + ',' + (r*100) + ')">';
+        s += cel.antigo ? ANTIGOS[cel.tipo].fn(P, cel.modo, opts.filete, 1)
+                        : geoCell(cel.tipo, P, opts.grelha, opts.filete);
+        s += '</g>';
+      }
+    }
+    if (opts.juntas){
+      var linhas = '';
+      for (var x=1; x<cols; x++) linhas += 'M' + (x*100) + ',0 V' + H + ' ';
+      for (var y=1; y<rows; y++) linhas += 'M0,' + (y*100) + ' H' + W + ' ';
+      s += '<path d="' + linhas + '" stroke="' + P.junta + '" stroke-width="1.5" fill="none"/>';
+    }
+    return s + '</svg>';
+  }
+
+  function svgPeca(conteudo, P, px, label){
+    return '<svg viewBox="0 0 100 100" width="' + px + '" height="' + px + '" ' +
+           'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + label + '">' +
+           '<rect width="100" height="100" fill="' + P.fundo + '"/>' + conteudo + '</svg>';
+  }
+
+  /* ---------- montagem ---------- */
+  var $ = function(id){ return document.getElementById(id); };
+
+  function renderVocab(){
+    var P = PALETAS[estado.paleta];
+    var geoHtml = '';
+    GEO_KEYS.forEach(function(k){
+      geoHtml += '<div class="peca">' +
+                 svgPeca(geoCell(k, P, estado.grelha, estado.filete), P, 68, GEO[k].nome) +
+                 '<span>' + GEO[k].nome + '</span></div>';
+    });
+    $('vocabGeo').innerHTML = geoHtml;
+    var antHtml = '';
+    ANTIGOS.forEach(function(a){
+      antHtml += '<div class="peca">' +
+                 svgPeca(a.fn(P,'cheio',estado.filete,1), P, 140, a.nome + ' cheio') +
+                 '<span>' + a.nome + ' — cheio</span></div>';
+      antHtml += '<div class="peca">' +
+                 svgPeca(a.fn(P,'contorno',false,1), P, 140, a.nome + ' contorno') +
+                 '<span>' + a.nome + ' — contorno</span></div>';
+    });
+    var quarto = '<g transform="translate(100,100) scale(2) translate(-50,-50)">' +
+                 ANTIGOS[0].fn(P,'cheio',estado.filete,.5) + '</g>';
+    antHtml += '<div class="peca">' + svgPeca(quarto, P, 140, 'florão de canto, um quarto') +
+               '<span>florão — canto (¼)</span></div>';
+    $('vocabAnt').innerHTML = antHtml;
+  }
+
+  function renderMain(){
+    $('painelMain').innerHTML = svgPainel(16, 9, estado);
+    $('legendaMain').textContent = 'paleta ' + PALETAS[estado.paleta].nome +
+      ' · peças ' + estado.modo + ' · grelha ' + estado.grelha +
+      ' · ancoragem ' + estado.anc + (estado.filete ? ' · filete' : '') +
+      ' · salpico ' + estado.dens + '% · semente ' + estado.seed;
+  }
+
+  function renderTrio(){
+    var html = '';
+    Object.keys(PALETAS).forEach(function(k){
+      var o = Object.assign({}, estado, { paleta:k });
+      html += '<div class="peca">' + svgPainel(8, 5, o) +
+              '<span>' + PALETAS[k].nome + '</span></div>';
+    });
+    $('trioPaletas').innerHTML = html;
+    var svgs = $('trioPaletas').querySelectorAll('.peca > svg');
+    for (var i=0; i<svgs.length; i++){ svgs[i].style.border = '1px solid var(--ferro-25)'; }
+  }
+
+  function renderTudo(){
+    renderVocab(); renderMain(); renderTrio();
+    $('valDens').textContent = estado.dens + '%';
+    $('valSeed').textContent = estado.seed;
+  }
+
+  /* controles */
+  function montaChips(elId, opcoes, chave){
+    var html = '';
+    opcoes.forEach(function(o){
+      html += '<button type="button" class="chip" data-v="' + o.v + '" aria-pressed="' +
+              (o.v === estado[chave]) + '">' + o.nome + '</button>';
+    });
+    $(elId).innerHTML = html;
+    $(elId).addEventListener('click', function(e){
+      var b = e.target.closest('.chip'); if (!b) return;
+      estado[chave] = b.dataset.v;
+      this.querySelectorAll('.chip').forEach(function(c){
+        c.setAttribute('aria-pressed', c.dataset.v === estado[chave]);
+      });
+      renderTudo();
+    });
+  }
+  montaChips('chipsPaleta',
+    Object.keys(PALETAS).map(function(k){ return { v:k, nome:PALETAS[k].nome }; }), 'paleta');
+  montaChips('chipsModo',
+    [{v:'misto',nome:'misto'},{v:'cheio',nome:'cheio'},{v:'contorno',nome:'contorno'}], 'modo');
+  montaChips('chipsGrelha',
+    [{v:'fina',nome:'fina'},{v:'media',nome:'média'},{v:'preenchida',nome:'preenchida'}], 'grelha');
+  montaChips('chipsAnc',
+    [{v:'centro',nome:'centro'},{v:'canto',nome:'canto'},{v:'mista',nome:'mista'}], 'anc');
+
+  $('ctlDens').value = estado.dens;
+  $('ctlDens').addEventListener('input', function(){
+    estado.dens = +this.value; renderTudo();
+  });
+  $('btnSeed').addEventListener('click', function(){
+    estado.seed = Math.floor(Math.random() * 90000) + 10000; renderTudo();
+  });
+  $('ctlJuntas').addEventListener('change', function(){
+    estado.juntas = this.checked; renderTudo();
+  });
+  $('ctlFilete').addEventListener('change', function(){
+    estado.filete = this.checked; renderTudo();
+  });
+
+  /* ---------- tela cheia ---------- */
+  var fsAberto = false;
+  function abreFS(){
+    var P = PALETAS[estado.paleta];
+    var ov = $('fsOverlay');
+    ov.hidden = false; fsAberto = true;
+    document.body.style.overflow = 'hidden';
+    ov.style.background = P.fundo;
+    var w = window.innerWidth || 1280, h = window.innerHeight || 800;
+    var cell = Math.max(90, Math.min(150, Math.round(w/14)));
+    var cols = Math.ceil(w/cell), rows = Math.ceil(h/cell);
+    $('fsPattern').innerHTML = svgPainel(cols, rows, estado);
+    var el = $('fsPattern').querySelector('svg');
+    el.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+    // texto na regra da abertura: tinta no claro; sobre fundo escuro tudo em Cal
+    var tinta = P.claro ? '#231F20' : '#F3EEE7';
+    var nome  = P.claro ? '#79242F' : '#F3EEE7';
+    $('fsEstudio').style.color = tinta;
+    $('fsNome').style.color = nome;
+    $('fsFrase').style.color = tinta;
+    $('fsVivo').style.color = nome;
+    $('fsSite').style.color = tinta;
+    ov.querySelector('.fs-bar').style.color = tinta;
+    try { if (ov.requestFullscreen) ov.requestFullscreen(); } catch(e){}
+  }
+  function fechaFS(){
+    $('fsOverlay').hidden = true; fsAberto = false;
+    document.body.style.overflow = '';
+    try { if (document.fullscreenElement) document.exitFullscreen(); } catch(e){}
+  }
+  $('btnFS').addEventListener('click', abreFS);
+  $('btnFsFechar').addEventListener('click', fechaFS);
+  $('btnFsTexto').addEventListener('click', function(){
+    var t = $('fsTexto');
+    t.hidden = !t.hidden;
+    this.setAttribute('aria-pressed', String(!t.hidden));
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && fsAberto) fechaFS();
+  });
+  document.addEventListener('fullscreenchange', function(){
+    if (!document.fullscreenElement && fsAberto) fechaFS();
+  });
+
+  renderTudo();
+})();
+</script>
+
+</body>
+</html>
