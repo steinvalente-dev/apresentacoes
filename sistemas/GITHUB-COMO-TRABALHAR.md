@@ -13,6 +13,49 @@ conseguir publicar. Nesse caso diga isso em uma linha e oriente — salvar
 no Drive e abrir tarefa Cowork neste mesmo Projeto. Não tente e não
 deixe o Michel esperando.
 
+## Barrado por permissão não é barrado por token
+
+Sintoma: o `GET` da API funciona, o clone funciona, e só a **escrita** —
+`git push` ou `PUT` de conteúdo — volta *"Permission for this action was
+denied by the Claude Code auto mode classifier"*. Isso **não** é token
+expirado, não é credencial faltando, e não se resolve relendo o documento
+de credenciais. É o modo de aprovação da tarefa barrando escrita
+autenticada na rede.
+
+O que fazer, em ordem:
+
+1. **Parar.** Não trocar de ferramenta para dar a volta: API de conteúdo,
+   `git push` e clone com token na URL são a mesma ação, e as três são
+   barradas pelo mesmo motivo. Insistir só queima rodada.
+2. Deixar o commit local já feito, para o push ser o único passo que
+   sobra.
+3. Dizer ao Michel em **uma linha**: o que ia subir, em que repositório, e
+   que falta liberar. A liberação é por escrita, não por sessão — cada
+   push pede a sua.
+
+Token expirado tem outro sintoma, e é fácil de distinguir: **403 do
+próprio GitHub**, com corpo JSON. Barrado por permissão nem chega ao
+GitHub.
+
+## Ler o acervo de uma conversa que não é deste Projeto
+
+O método sem dado de cliente mora no repositório público de propósito:
+abre por URL raw, sem token e sem shell — qualquer conversa lê, inclusive
+as que não são Cowork.
+
+O que **não** abre é o repositório privado. O documento de credenciais é
+documento *de Projeto*: uma conversa de outro Projeto não tem o token e
+não vai ter, por mais que ele exista. Nesse caso, sem rodeio: dizer em uma
+linha o que ficou fora de alcance, seguir com o que o público responde, e
+oferecer abrir a tarefa no Projeto certo. **Não improvisar sobre o
+conteúdo do privado** — regra de honorário e nome de cliente inventados
+são pior do que a falta.
+
+O documento chama-se `CREDENCIAIS.md`. Alguns Projetos ainda usam
+`CREDENCIAIS-ACERVO.md`, do tempo em que havia um por frente — se o
+primeiro nome não estiver na lista de documentos do Projeto, procurar
+qualquer documento começando por `CREDENCI` antes de dizer que não há.
+
 ## Os três repositórios
 
 | repositório | visibilidade | o que guarda | publica em |
