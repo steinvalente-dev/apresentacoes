@@ -2873,12 +2873,23 @@ window.MSEarth=(function(){
   var TOTAL=DEGRAUS.length+2;      /* preparar + 4 degraus + assentar */
   var ANCORA=null;                 /* o enquadramento canonico, para o recentrar */
   /* ⚑ O GIRO E LENTO, E E REGRA — nao preferencia desta peca. Os numeros
-     sao os do modulo mestre modulos/mapa-earth-3d.html: VOLTA e o tempo de
-     uma volta completa, ROUNDS e alto para durar a reuniao. Mudar aqui sem
-     mudar la faz as duas coisas divergirem. */
-  var VOLTA=180000, ROUNDS=40;
+     vem do modulo mestre modulos/mapa-earth-3d.html; mudar aqui sem mudar
+     la faz as duas coisas divergirem.
+
+     ⚠⚠ A ARMADILHA JA PAGA. `durationMillis` e a duracao de UMA VOLTA —
+     MAS o campo `rounds`, que esta DEPRECATED, inverte esse sentido: com
+     ele a API encaixa N voltas DENTRO de `durationMillis`. Logo
+     `{durationMillis:180000, rounds:40}` nao e "3 min por volta" e sim
+     **4,5 segundos por volta**, 80°/s. Foi o que subiu em 02/09 e o Michel
+     viu como "absurdamente rapido, confuso, irritante" — nove vezes mais
+     rapido que os 42 s da versao original, que ja era rapida para ele.
+     `rounds` NAO ENTRA. O campo certo e `repeatCount`, que repete o ciclo
+     sem mexer na duracao dele.
+     A aceleracao suave do inicio e da propria API e o Michel gosta dela; o
+     que ele pediu foi a velocidade FINAL mais baixa, e e o que VOLTA faz. */
+  var VOLTA=180000, REPETE=20;   /* 3 min por volta (2°/s) · 20 voltas = 1 h */
   var promessa=null, gritou=null, montado=false;
-  var mapa=null, slide=null, orbitando=false, timerOrb=null;
+  var mapa=null, slide=null, orbitando=false, timerOrb=null, timerCiclo=null;
 
   (function espia(){                 /* chave ruim nao rejeita: ela grita */
     var orig=console.error;
@@ -3002,14 +3013,22 @@ window.MSEarth=(function(){
     if(!liga){
       if(mapa.stopCameraAnimation) mapa.stopCameraAnimation();
       if(timerOrb){ clearInterval(timerOrb); timerOrb=null; }
+      if(timerCiclo){ clearTimeout(timerCiclo); timerCiclo=null; }
       return;
     }
     if(mapa.flyCameraAround){
       mapa.flyCameraAround({camera:{center:mapa.center,tilt:mapa.tilt,
-        range:mapa.range,heading:mapa.heading},durationMillis:VOLTA,rounds:ROUNDS});
+        range:mapa.range,heading:mapa.heading},
+        /* UMA volta. Sem `rounds` — ver a armadilha documentada acima. */
+        durationMillis:VOLTA, repeatCount:REPETE});
+      /* rede de seguranca: ao fim do ciclo previsto, religa se ainda estiver
+         em orbita. Nao ha evento de conclusao neste preview. */
+      if(timerCiclo) clearTimeout(timerCiclo);
+      timerCiclo=setTimeout(function(){ if(orbitando) orbita(true); },VOLTA*REPETE+500);
       return;
     }
-    /* fallback com o MESMO passo angular: os dois caminhos giram igual */
+    /* fallback com o MESMO passo angular. Este caminho SEMPRE esteve certo;
+       era o nativo que estava rapido. */
     var passo=360/(VOLTA/1000)*0.04;
     timerOrb=setInterval(function(){ mapa.heading=((mapa.heading||0)+passo)%360; },40);
   }

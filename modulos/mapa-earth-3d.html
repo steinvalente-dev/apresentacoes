@@ -540,18 +540,31 @@
      faz o mesmo empurrando o heading — mais duro, mas não quebra.
 
      ⚑ O GIRO É LENTO, E ISSO É REGRA — não preferência de peça.
-     Decisão do Michel em 02/09/2026, depois de ver a primeira peça com o
-     visor: os 60 s por volta da versão anterior leem como câmera de drone
-     apressada e roubam a atenção de quem está falando. VOLTA é o tempo de
-     uma volta completa; ROUNDS é alto de propósito, para a órbita durar a
-     reunião inteira sem ninguém religar. Girar indefinidamente e devagar é
-     o comportamento padrão: o slide de localização entra já girando.
-     Mexer aqui muda TODA peça que usar o gabarito. Se um dia parecer
-     lento demais, medir contra a fala — a referência é conversa de
-     reunião, não vídeo de portfólio.                                   */
-  var VOLTA  = 180000;   /* ms por volta completa — 3 minutos           */
-  var ROUNDS = 40;       /* 40 voltas = 2 h de órbita antes de parar    */
-  var timerOrb = null;
+     Decisão do Michel em 02/09/2026: câmera apressada rouba a atenção de
+     quem está falando. O slide entra já girando, devagar, e o botão serve
+     para PARAR. Mexer aqui muda TODA peça que usar o gabarito.
+
+     ⚠⚠ A ARMADILHA QUE JÁ FOI PAGA — LER ANTES DE TOCAR NOS NÚMEROS.
+     `durationMillis` é a duração de UMA VOLTA. Mas o campo `rounds`, que
+     está DEPRECATED, muda esse sentido: com ele a API encaixa N voltas
+     DENTRO de `durationMillis`. Ou seja `{durationMillis:180000, rounds:40}`
+     não é "3 min por volta, 40 vezes" — é **4,5 segundos por volta**, 80°/s.
+     Foi exatamente isso que eu publiquei em 02/09 e o Michel viu como
+     "absurdamente rápido, confuso, irritante". Nove vezes mais rápido do
+     que os 42 s da versão original, que já era rápida demais para ele.
+
+     Por isso `rounds` NÃO ENTRA MAIS. O campo certo é `repeatCount`, que
+     repete o ciclo sem mexer na duração dele. Se um dia o runtime do beta
+     ignorar `repeatCount`, o sintoma é "gira uma volta e para" — visível,
+     e o remédio é um número. O sintoma de errar com `rounds` é uma câmera
+     descontrolada na frente do cliente, que é bem pior.
+
+     A aceleração suave do início é da própria API e o Michel gosta dela.
+     O que ele pediu é a velocidade FINAL mais baixa, e é o que VOLTA faz.
+     ═══════════════════════════════════════════════════════════════════ */
+  var VOLTA  = 180000;   /* ms de UMA volta completa — 3 min, ou 2°/s    */
+  var REPETE = 20;       /* 20 voltas = 1 h de órbita sem religar        */
+  var timerOrb = null, timerCiclo = null;
   function orbita(liga){
     if(!mapa) return;
     orbitando = liga;
@@ -561,18 +574,29 @@
     if(!liga){
       if(mapa.stopCameraAnimation) mapa.stopCameraAnimation();
       if(timerOrb){ clearInterval(timerOrb); timerOrb = null; }
+      if(timerCiclo){ clearTimeout(timerCiclo); timerCiclo = null; }
       return;
     }
     if(mapa.flyCameraAround){
       mapa.flyCameraAround({
         camera:{ center:mapa.center, tilt:mapa.tilt, range:mapa.range, heading:mapa.heading },
+        /* UMA volta. Sem `rounds` — ver a armadilha documentada acima. */
         durationMillis: VOLTA,
-        rounds: ROUNDS
+        repeatCount: REPETE
       });
+      /* rede de segurança: ao fim do ciclo previsto, religa se ainda estiver
+         em órbita. Cobre o caso de o `repeatCount` terminar no meio de uma
+         reunião longa, sem depender de evento de conclusão — que este
+         preview não dispara.                                              */
+      if(timerCiclo) clearTimeout(timerCiclo);
+      timerCiclo = setTimeout(function(){
+        if(orbitando) orbita(true);
+      }, VOLTA * REPETE + 500);
       return;
     }
     /* fallback: o mesmo passo angular, derivado de VOLTA — assim os dois
        caminhos giram na MESMA velocidade e ninguém percebe qual está em uso.
+       ⚑ Este caminho SEMPRE esteve certo; era o nativo que estava rápido.
        360° / (VOLTA/1000) graus por segundo, aplicado a cada 40 ms.       */
     var passo = 360 / (VOLTA / 1000) * 0.04;
     timerOrb = setInterval(function(){
