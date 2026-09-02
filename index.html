@@ -806,6 +806,10 @@ const ABAS = [
   montar([]);
   const chave = lerChave();
   if(chave){ carregarPrivado(chave); } else { pintaChave('sem'); }
+  /* link de ativação colado numa aba já aberta: o hash muda sem recarregar */
+  window.addEventListener('hashchange', function(){
+    const c = lerChave(); if(c) carregarPrivado(c);
+  });
 
   elProj.addEventListener('click', function(e){
     const b = e.target.closest('button[data-k]');
