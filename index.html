@@ -200,6 +200,12 @@
     padding:5px 0;display:block;white-space:nowrap}
   .doc-item .g.pub{border:1px solid var(--line);color:var(--muted)}
   .doc-item .g.priv{background:var(--cream);color:var(--fundo);font-weight:500}
+  /* peça de cliente, vinda do registro privado: só aparece com a chave */
+  .peca .priv{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--fundo);
+    background:var(--cream);border-radius:999px;padding:2px 7px;margin-right:8px;vertical-align:middle}
+  .chave{margin-top:34px;font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .chave button{background:none;border:0;padding:0;font:inherit;color:var(--muted);cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+  .chave button:hover,.chave button:focus-visible{color:var(--cream);outline:none}
   .doc-item .nm{font-family:var(--mono);font-style:italic;font-weight:500;
     text-transform:lowercase;letter-spacing:-.03em;font-size:clamp(16px,1.9vw,19px);display:block}
   .doc-item .ds{font-size:12px;color:var(--muted);margin-top:3px;display:block}
@@ -317,6 +323,7 @@
       <div>
         <p class="col-lbl">projetos</p>
         <ul class="projetos" id="lista-projetos"></ul>
+        <p class="chave" id="chave"></p>
       </div>
       <div>
         <p class="col-lbl">apresentação</p>
@@ -664,19 +671,82 @@ const ABAS = [
      ordenado sozinho, não importa onde for escrito no array. `sensitivity:base`
      ignora caixa e acento — sem isso `AMAZ` iria para o topo por ser maiúscula,
      não por ser primeira. */
-  const visiveis = projetos.filter(function(p){ return !p.oculto; })
-    .slice().sort(function(a, b){
-      return a.nome.localeCompare(b.nome, 'pt-BR', {sensitivity:'base'});
-    });
   const elProj = document.getElementById('lista-projetos');
   const elPec  = document.getElementById('lista-pecas');
+  const elChave = document.getElementById('chave');
+  let visiveis = [];
   let atual = 0;
 
-  elProj.innerHTML = visiveis.map(function(p, k){
-    const n = p.pecas.filter(function(x){ return !x.oculto; }).length;
-    return '<li><button data-k="' + k + '" aria-current="' + (k===0) + '">'
-      + p.nome + '<span class="qt">' + (n || '—') + '</span></button></li>';
-  }).join('');
+  /* ── a chave ──────────────────────────────────────────────────
+     Este arquivo é público e mostra só o que é público. As peças de cliente
+     moram na área de cliente do site e são listadas num registro privado,
+     que este acervo só busca quando o aparelho tem a chave. A chave entra
+     uma vez — por `#chave=…` na URL ou pelo botão abaixo — e fica no
+     localStorage deste navegador. Quem abre o acervo sem ela vê o acervo
+     de sempre. A URL do registro não está escrita aqui: nasce da chave. */
+  const REG_BASE = 'https://michel-stein.netlify.app/cliente/';
+  function lerChave(){
+    const m = location.hash.match(/chave=([0-9a-f]{16,})/i);
+    if(m){
+      try{ localStorage.setItem('ms.chave', m[1]); }catch(e){}
+      history.replaceState(null, '', location.pathname + location.search);
+      return m[1];
+    }
+    try{ return localStorage.getItem('ms.chave') || ''; }catch(e){ return ''; }
+  }
+  function pintaChave(estado){
+    if(estado === 'com'){
+      elChave.innerHTML = '<span>•• peças de cliente neste aparelho</span><button data-acao="esquecer">esquecer chave</button>';
+    }else if(estado === 'erro'){
+      elChave.innerHTML = '<span>chave não aceita</span><button data-acao="digitar">tentar outra</button><button data-acao="esquecer">esquecer</button>';
+    }else{
+      elChave.innerHTML = '<button data-acao="digitar">chave</button>';
+    }
+  }
+  elChave.addEventListener('click', function(e){
+    const b = e.target.closest('button[data-acao]');
+    if(!b) return;
+    if(b.dataset.acao === 'esquecer'){
+      try{ localStorage.removeItem('ms.chave'); }catch(e){}
+      montar([]); pintaChave('sem');
+    }else{
+      const v = (window.prompt('chave do acervo') || '').trim();
+      if(!v) return;
+      try{ localStorage.setItem('ms.chave', v); }catch(e){}
+      carregarPrivado(v);
+    }
+  });
+  function carregarPrivado(chave){
+    fetch(REG_BASE + chave + '/registro.json', {cache:'no-store'})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(reg){
+        const extra = (reg.projetos || []).map(function(p){
+          return { nome: p.nome, oculto: p.oculto,
+                   pecas: (p.pecas || []).map(function(x){ x.privado = true; return x; }) };
+        });
+        montar(extra); pintaChave('com');
+      })
+      .catch(function(){ montar([]); pintaChave('erro'); });
+  }
+
+  function montar(extra){
+    /* projeto que existe nos dois lados (peça pública e peça de cliente) funde as peças */
+    const porNome = {};
+    projetos.concat(extra || []).forEach(function(p){
+      const k = p.nome.toLowerCase();
+      if(!porNome[k]) porNome[k] = { nome: p.nome, oculto: p.oculto, pecas: [] };
+      porNome[k].pecas = porNome[k].pecas.concat(p.pecas);
+    });
+    visiveis = Object.values(porNome).filter(function(p){ return !p.oculto; })
+      .sort(function(a, b){ return a.nome.localeCompare(b.nome, 'pt-BR', {sensitivity:'base'}); });
+    if(atual >= visiveis.length) atual = 0;
+    elProj.innerHTML = visiveis.map(function(p, k){
+      const n = p.pecas.filter(function(x){ return !x.oculto; }).length;
+      return '<li><button data-k="' + k + '" aria-current="' + (k===atual) + '">'
+        + p.nome + '<span class="qt">' + (n || '—') + '</span></button></li>';
+    }).join('');
+    pinta();
+  }
 
   /* ficha da peça: pranchas · peso · data, nessa ordem, sempre.
      Peso acima de 8 MB ganha marca — passa do limite de anexo de e-mail. */
@@ -696,6 +766,7 @@ const ABAS = [
 
   function pinta(){
     const p = visiveis[atual];
+    if(!p){ elPec.innerHTML = ''; return; }
     const lista = p.pecas.filter(function(x){ return !x.oculto; });
     if(!lista.length){
       elPec.innerHTML = '<div class="vazio"><b>Nenhuma peça publicada ainda.</b><br>'
@@ -709,16 +780,16 @@ const ABAS = [
        A numeração é por bloco, mais recente em cima, como antes. */
     function cartao(x, i, n){
       const num = String(n - i).padStart(2, '0');
-      /* href absoluto (peça que mora fora deste repositório, como entrega em
-         repositório privado) vai inteiro; href relativo recebe o BASE. */
+      /* href absoluto (peça de cliente, no site) vai inteiro; href relativo recebe o BASE. */
       const url = /^https?:/i.test(x.href) ? x.href : BASE + x.href;
       return '<article class="peca">'
         + '<span class="n">' + num + '</span>'
-        + '<span><span class="nome">' + x.nome + '</span>'
+        + '<span>' + (x.privado ? '<span class="priv" title="peça de cliente — só neste aparelho">••</span>' : '')
+        + '<span class="nome">' + x.nome + '</span>'
         + '<span class="sub">' + ficha(x) + '</span></span>'
         + '<span class="acoes">'
         +   '<button class="copiar" data-url="' + url + '">copiar link</button>'
-        +   '<a class="abrir" href="' + x.href + '" target="_blank" rel="noopener">abrir ' + SETA + '</a>'
+        +   '<a class="abrir" href="' + url + '" target="_blank" rel="noopener">abrir ' + SETA + '</a>'
         + '</span></article>';
     }
     const blocos = [
@@ -731,7 +802,10 @@ const ABAS = [
         + bl.itens.map(function(x, i){ return cartao(x, i, bl.itens.length); }).join('');
     }).join('');
   }
-  pinta();
+
+  montar([]);
+  const chave = lerChave();
+  if(chave){ carregarPrivado(chave); } else { pintaChave('sem'); }
 
   elProj.addEventListener('click', function(e){
     const b = e.target.closest('button[data-k]');

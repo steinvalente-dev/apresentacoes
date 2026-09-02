@@ -34,6 +34,12 @@ endereço, honorário, valor de negócio, planta ou foto de obra de terceiro?
 | **sim** | `michel-stein-site/cliente/<slug>-<16 hex>/apresentacao.html` (Netlify) | `michel-stein-sistemas/site/AREA-CLIENTE.md` — **privado**. Nunca no `index.html` |
 | não | `apresentacoes/<slug>/apresentacao.html` | `index.html`, array `projetos` |
 
+**Como o Michel enxerga as peças de cliente no acervo:** o `index.html` lê um
+registro privado (`registro.json`, no site) quando o navegador tem a **chave**
+guardada no aparelho dele. Sem a chave, o acervo mostra só o público. A chave
+e a URL do registro estão no privado, em `site/AREA-CLIENTE.md`. Peça de
+cliente nova entra nesse `registro.json` — nunca no `projetos` daqui.
+
 O slug de cliente leva 16 caracteres hexadecimais aleatórios
 (`python3 -c "import secrets;print(secrets.token_hex(8))"`): sem eles a URL é
 adivinhável. A URL da área de cliente **nunca** aparece em arquivo do

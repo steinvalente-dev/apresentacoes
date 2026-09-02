@@ -12,3 +12,8 @@ amaz-r1/apresentacao.html:R$ 10
 
 # Telefone placeholder do manual da marca
 marca/michel-stein/manual.html:11 99999-0000
+
+# Cenário 2 (decisão do Michel, 02.09.2026): o acervo monta a URL do registro privado a partir
+# da chave guardada no aparelho. A constante abaixo é só o prefixo — sem token, sem slug.
+# Qualquer outra ocorrência de /cliente/ neste repositório continua barrada.
+index.html:michel-stein.netlify.app/cliente
