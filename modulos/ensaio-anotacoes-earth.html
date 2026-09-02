@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>ensaio · anotações no visor earth 3d</title>
+<link rel="preconnect" href="https://maps.googleapis.com" crossorigin>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   ENSAIO · anotações no visor earth 3d · 02/09/2026
+   Bancada de ajuste, não peça. Existe para responder três perguntas com
+   MEDIÇÃO, antes de escrever uma linha no módulo:
+
+   1 · quais classes e propriedades a `maps3d` REALMENTE expõe neste canal
+       beta — o painel de sonda imprime a superfície da API, em vez de eu
+       presumir a partir de documentação;
+   2 · como as anotações se comportam DURANTE A ÓRBITA: elas rodam, passam
+       atrás de prédio e colidem entre si. Captura estática engana;
+   3 · se o `HYBRID` resolve nome de rua a um preço aceitável.
+
+   ⚑ POR QUE É UMA BANCADA E NÃO EDIÇÃO DIRETA NO MÓDULO
+   A chave tem teto de 1.000 cargas 3D por dia, posto de propósito. Iterar
+   recarregando queima uma carga por tentativa. Aqui a camada de anotação é
+   uma FUNÇÃO reexecutável — `MSA.desenha(CFG)` — sobre um mapa já
+   carregado: uma carga serve uma hora de ajuste.
+
+   Dados levantados do OpenStreetMap (Overpass), 02/09/2026:
+     EMEI Presidente Dutra ....... -23.532271, -46.566628 · esquina da R. Santo Elias
+     Hosp. Mun. Dr. Cármino Caricchio -23.533119, -46.566394 · frente p/ Av. Celso Garcia
+     Rua Síria .................... -23.531960, -46.566169 · azimute 326°
+     Rua Santa Maria .............. -23.531979, -46.567132 · azimute 256°
+     Rua Santo Elias .............. -23.532135, -46.567222 · azimute 164°
+     Avenida Celso Garcia ......... -23.533773, -46.566128 · azimute 260°
+   ⚠ Nome de instituição vindo de base colaborativa. Confirmar antes de
+     pôr em peça de cliente.
+   ═══════════════════════════════════════════════════════════════════════ */
+  :root{
+    --cal:#F3EEE7; --ferro:#231F20; --vinho:#79242F;
+    --mono:ui-monospace,Menlo,monospace;
+    --sans:'Poppins',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--ferro);color:var(--cal);font-family:var(--sans);overflow:hidden}
+
+  .visor{position:absolute;inset:0}
+  gmp-map-3d{position:absolute;inset:0;width:100%;height:100%;
+    filter:saturate(.86) contrast(1.03)}
+
+  /* ── a anotação, desenhada por nós ────────────────────────────────────
+     Campo Vinho, texto Cal, tipografia da casa. NÃO se usa `PinElement`
+     puro: ele desenha a gota do Google Maps, que é a linguagem que o modo
+     SATELLITE existe para evitar. Se a API aceitar DOM arbitrário no
+     marcador, é este bloco que entra. */
+  .anot{display:flex;flex-direction:column;align-items:center;gap:0;
+    font-family:var(--sans);line-height:1;pointer-events:none;
+    filter:drop-shadow(0 2px 6px #231F2073)}
+  .anot .cx{background:var(--vinho);color:var(--cal);border-radius:3px;
+    padding:7px 11px 8px;white-space:nowrap;display:flex;flex-direction:column;
+    gap:3px;border:1px solid #F3EEE733}
+  .anot .rot{font-weight:600;font-size:13px;letter-spacing:-.01em}
+  .anot .sub{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:#F3EEE7a6}
+  /* a ponta da seta: é ela que aponta o edifício, e não um pino que flutua */
+  .anot .pt{width:0;height:0;border:7px solid transparent;
+    border-top-color:var(--vinho);margin-top:-1px}
+  .anot.rua .cx{background:#231F20d9;padding:5px 9px 6px;border-color:#F3EEE726}
+  .anot.rua .rot{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    font-weight:600;color:#F3EEE7d9}
+  .anot.rua .pt{display:none}
+
+  /* ── a bancada. Nada disto vai para peça. ─────────────────────────── */
+  #painel{position:absolute;top:0;left:0;right:0;z-index:9;
+    background:#12110Eec;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    border-bottom:1px solid #F3EEE71f;padding:10px 14px;
+    display:flex;flex-wrap:wrap;gap:7px;align-items:center;
+    font-family:var(--mono);font-size:11px}
+  #painel .tag{color:#E9A184;letter-spacing:.14em;text-transform:uppercase;
+    border:1px solid #79242F99;border-radius:999px;padding:4px 10px;white-space:nowrap}
+  #painel button{background:#231F20;color:var(--cal);border:1px solid #F3EEE730;
+    border-radius:3px;padding:6px 11px;cursor:pointer;font-family:var(--mono);
+    font-size:11px;letter-spacing:.06em}
+  #painel button:hover{border-color:#E9A184;color:#E9A184}
+  #painel button.on{background:var(--vinho);border-color:var(--vinho)}
+  #sonda{position:absolute;left:0;bottom:0;max-height:46vh;width:min(560px,52vw);
+    z-index:9;overflow:auto;background:#12110Ef2;border-top:1px solid #F3EEE71f;
+    border-right:1px solid #F3EEE71f;padding:12px 14px;font-family:var(--mono);
+    font-size:11px;line-height:1.6;white-space:pre-wrap;color:#F3EEE7cc}
+  #sonda b{color:#E9A184}
+  #sonda.off{display:none}
+</style>
+</head>
+<body>
+
+<div class="visor" id="visor"></div>
+
+<div id="painel">
+  <span class="tag">bancada · não é peça</span>
+  <button id="bt-orb" class="on" type="button">parar órbita</button>
+  <button id="bt-anot" class="on" type="button">anotações</button>
+  <button id="bt-ruas" class="on" type="button">nomes de rua</button>
+  <button id="bt-modo" type="button">modo: SATELLITE</button>
+  <button id="bt-oclu" class="on" type="button">visível atrás de prédio</button>
+  <button id="bt-haste" class="on" type="button">haste até o solo</button>
+  <button id="bt-sonda" class="on" type="button">sonda</button>
+  <button id="bt-topo" type="button">ir ao topo</button>
+</div>
+
+<pre id="sonda">sondando a API…</pre>
+
+<script src="ms-maps-chave.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   MSA — a camada de anotação, reexecutável.
+   `MSA.desenha()` apaga e redesenha tudo a partir de CFG. Chamável do
+   console sem recarregar a página, que é o ponto: uma carga 3D serve uma
+   hora de ajuste, e a cota da chave agradece.
+   ═══════════════════════════════════════════════════════════════════════ */
+window.MSA = (function(){
+  'use strict';
+
+  var CHAVE = (window.MS_MAPS && window.MS_MAPS.chave) || '';
+  var CANAL = (window.MS_MAPS && window.MS_MAPS.canal) || 'beta';
+
+  /* o enquadramento da casa, igual ao do módulo */
+  var CAM = {alt:760, range:600, tilt:58, heading:30, tiltEntrada:45};
+  var VOLTA = 140000, RAMPA = 700;
+
+  /* ── CFG · tudo que se ajusta vive aqui ────────────────────────────── */
+  var CFG = {
+    centro: {lat:-23.532191, lng:-46.566627},
+    pontos: [
+      {rot:'EMEI Presidente Dutra', sub:'o projeto',
+       lat:-23.532271, lng:-46.566628, alt:34},
+      {rot:'Hospital Municipal Dr. Cármino Caricchio', sub:'ao lado',
+       lat:-23.533119, lng:-46.566394, alt:44}
+    ],
+    ruas: [
+      {rot:'Rua Santo Elias',       lat:-23.532135, lng:-46.567222, alt:12},
+      {rot:'Rua Santa Maria',       lat:-23.531979, lng:-46.567132, alt:12},
+      {rot:'Rua Síria',             lat:-23.531960, lng:-46.566169, alt:12},
+      {rot:'Avenida Celso Garcia',  lat:-23.533773, lng:-46.566128, alt:14}
+    ],
+    /* interruptores do ensaio */
+    anot:true, ruas_on:true, ocluso:true, haste:true, modo:'SATELLITE'
+  };
+
+  var lib=null, mapa=null, marcas=[], orbitando=false, rafOrb=null;
+  var sonda = document.getElementById('sonda');
+  function diz(t){ sonda.textContent = t; }
+
+  /* ── a SONDA · imprime a superfície real da API ───────────────────────
+     Escrito porque presumir campo de API já custou uma peça publicada com
+     a câmera a 80°/s. O que este painel imprime é o que existe, não o que
+     a documentação diz existir. */
+  function sondaApi(){
+    var l = [];
+    l.push('CANAL v=' + CANAL);
+    l.push('');
+    l.push('CLASSES em importLibrary("maps3d"):');
+    Object.keys(lib).sort().forEach(function(k){ l.push('  ' + k); });
+    ['Marker3DElement','Marker3DInteractiveElement','Polyline3DElement',
+     'Polygon3DElement','Model3DElement','PopoverElement'].forEach(function(c){
+      if(!lib[c]) { l.push(''); l.push(c + ': NÃO EXISTE'); return; }
+      var p = [];
+      try{
+        var proto = lib[c].prototype;
+        p = Object.getOwnPropertyNames(proto)
+             .filter(function(n){ return n!=='constructor' && n[0]!=='_'; }).sort();
+      }catch(e){ p = ['(não inspecionável: ' + e.name + ')']; }
+      l.push('');
+      l.push(c + ' · ' + p.length + ' membros:');
+      l.push('  ' + p.join(' · '));
+    });
+    l.push('');
+    l.push('ENUMS úteis:');
+    ['AltitudeMode','MapMode','CollisionBehavior'].forEach(function(e){
+      l.push('  ' + e + ': ' + (lib[e] ? Object.keys(lib[e]).join(' | ') : 'ausente'));
+    });
+    l.push('');
+    l.push('ACEITA DOM ARBITRÁRIO NO MARCADOR? — testado abaixo, no desenha()');
+    diz(l.join('\n'));
+    /* e no console, para copiar */
+    console.log('%c[MSA] superfície da API maps3d', 'color:#E9A184', lib);
+  }
+
+  /* ── o marcador ───────────────────────────────────────────────────────
+     Duas rotas, e o ensaio tenta as duas na ordem:
+     A · `Marker3DElement` com DOM NOSSO dentro (caixa Vinho, seta). É o que
+         se quer: a anotação passa a ser da casa, não um pino do Google
+         repintado.
+     B · se a API recusar filho arbitrário, cai para `label` de texto puro.
+     O que der certo fica registrado no painel — é essa a medição. */
+  function marca(p, tipo){
+    var M = lib.Marker3DInteractiveElement || lib.Marker3DElement;
+    var o = {
+      position: {lat:p.lat, lng:p.lng, altitude:p.alt},
+      altitudeMode: (lib.AltitudeMode && lib.AltitudeMode.RELATIVE_TO_GROUND)
+                    || 'RELATIVE_TO_GROUND',
+      extruded: !!CFG.haste,        /* haste até o solo: é o que faz a
+                                       anotação POUSAR num lugar em tilt 58 */
+      sizePreserved: true,          /* sem isto ela encolhe e some no degrau largo */
+      drawsWhenOccluded: !!CFG.ocluso,  /* falso = pisca-pisca durante a órbita */
+      zIndex: tipo === 'rua' ? 1 : 10
+    };
+    if(lib.CollisionBehavior){
+      /* a órbita vai alinhar escola e hospital em algum ângulo: sem
+         prioridade, sai texto sobre texto */
+      o.collisionBehavior = lib.CollisionBehavior.REQUIRED_AND_HIDES_OPTIONAL;
+    }
+    var m = new M(o);
+    /* rota A — DOM nosso */
+    var cx = document.createElement('div');
+    cx.className = 'anot' + (tipo === 'rua' ? ' rua' : '');
+    cx.innerHTML = '<div class="cx"><span class="rot">' + p.rot + '</span>'
+      + (p.sub ? '<span class="sub">' + p.sub + '</span>' : '')
+      + '</div><div class="pt"></div>';
+    try{ m.append(cx); }catch(e){ /* rota B */ m.label = p.rot; }
+    return m;
+  }
+
+  /* ── desenha · apaga tudo e refaz a partir de CFG ─────────────────── */
+  function desenha(){
+    if(!mapa || !lib) return;
+    marcas.forEach(function(m){ if(m.parentNode) m.parentNode.removeChild(m); });
+    marcas = [];
+    if(CFG.anot) CFG.pontos.forEach(function(p){
+      var m = marca(p, 'ponto'); mapa.append(m); marcas.push(m); });
+    if(CFG.ruas_on) CFG.ruas.forEach(function(p){
+      var m = marca(p, 'rua'); mapa.append(m); marcas.push(m); });
+    /* mediu-se o que entrou: quantos filhos o mapa aceitou de verdade */
+    var vivos = marcas.filter(function(m){ return !!m.parentNode; }).length;
+    var comDom = marcas.filter(function(m){ return !!m.querySelector('.anot'); }).length;
+    console.log('%c[MSA] ' + vivos + '/' + marcas.length + ' marcas no DOM · '
+      + comDom + ' com DOM nosso (o resto caiu para `label` de texto)',
+      'color:#E9A184');
+    return {marcas:marcas.length, vivos:vivos, comDom:comDom};
+  }
+
+  /* ── órbita · a mesma do módulo, para julgar no ritmo real ─────────── */
+  function orbita(liga){
+    orbitando = liga;
+    document.getElementById('bt-orb').textContent = liga ? 'parar órbita' : 'orbitar';
+    document.getElementById('bt-orb').classList.toggle('on', liga);
+    if(!liga){
+      if(mapa && mapa.stopCameraAnimation) mapa.stopCameraAnimation();
+      if(rafOrb){ cancelAnimationFrame(rafOrb); rafOrb = null; }
+      return;
+    }
+    var alvo = 360/(VOLTA/1000), t0 = performance.now(), ult = t0;
+    rafOrb = requestAnimationFrame(function passo(now){
+      if(!orbitando || !mapa) return;
+      rafOrb = requestAnimationFrame(passo);
+      var dt = Math.min((now-ult)/1000, .05); ult = now;
+      var k = Math.min(1, (now-t0)/RAMPA);
+      mapa.heading = ((mapa.heading||0) + alvo*(1-Math.pow(1-k,3))*dt) % 360;
+    });
+  }
+
+  /* ── carga ────────────────────────────────────────────────────────── */
+  function api(){
+    return new Promise(function(ok, erro){
+      var s = document.createElement('script');
+      s.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(CHAVE)
+            + '&v=' + encodeURIComponent(CANAL) + '&libraries=maps3d&language=pt-BR&region=BR';
+      s.async = true; s.onload = ok; s.onerror = function(){ erro(new Error('rede')); };
+      document.head.appendChild(s);
+    });
+  }
+  function monta(){
+    if(!CHAVE){ diz('sem chave: ms-maps-chave.js não carregou'); return; }
+    diz('carregando a API…');
+    api().then(function(){ return google.maps.importLibrary('maps3d'); })
+      .then(function(m3d){
+        lib = m3d;
+        sondaApi();
+        if(mapa && mapa.parentNode) mapa.parentNode.removeChild(mapa);
+        mapa = new m3d.Map3DElement({
+          center: {lat:CFG.centro.lat, lng:CFG.centro.lng, altitude:CAM.alt},
+          range: 6000, tilt: CAM.tiltEntrada, heading: CAM.heading,
+          mode: (m3d.MapMode && m3d.MapMode[CFG.modo]) || CFG.modo
+        });
+        document.getElementById('visor').appendChild(mapa);
+        /* ⚠ a aproximação em degraus não é enfeite: nascer no range final
+           devolve tela azul lisa, sem erro no console. */
+        var passos = [6000,2500,1200,CAM.range], i = 0;
+        (function passo(){
+          if(!mapa) return;
+          mapa.center = {lat:CFG.centro.lat, lng:CFG.centro.lng, altitude:CAM.alt};
+          mapa.range = passos[i];
+          mapa.tilt = i === 0 ? CAM.tiltEntrada : CAM.tilt;
+          i++;
+          if(i < passos.length){ setTimeout(passo, 3000); return; }
+          setTimeout(function(){ desenha(); orbita(true); }, 3500);
+        })();
+      })['catch'](function(e){ diz('não carregou: ' + (e && e.message)); });
+  }
+
+  /* ── a bancada ────────────────────────────────────────────────────── */
+  function liga(id, campo, depois){
+    var b = document.getElementById(id);
+    b.addEventListener('click', function(){
+      CFG[campo] = !CFG[campo];
+      b.classList.toggle('on', CFG[campo]);
+      if(depois) depois();
+      desenha();
+    });
+  }
+  document.getElementById('bt-orb').addEventListener('click', function(){ orbita(!orbitando); });
+  liga('bt-anot','anot'); liga('bt-ruas','ruas_on');
+  liga('bt-oclu','ocluso'); liga('bt-haste','haste');
+  document.getElementById('bt-sonda').addEventListener('click', function(){
+    sonda.classList.toggle('off');
+    this.classList.toggle('on', !sonda.classList.contains('off'));
+  });
+  document.getElementById('bt-topo').addEventListener('click', function(){
+    if(!mapa) return; orbita(false);
+    mapa.tilt = 0; mapa.heading = 0; mapa.range = 700;
+  });
+  /* ⚑ trocar o modo EXIGE recriar o mapa: é uma carga 3D nova, e a cota
+     conta. Por isso é um botão à parte, e não um interruptor qualquer. */
+  document.getElementById('bt-modo').addEventListener('click', function(){
+    CFG.modo = CFG.modo === 'SATELLITE' ? 'HYBRID' : 'SATELLITE';
+    this.textContent = 'modo: ' + CFG.modo;
+    orbita(false); monta();
+  });
+
+  monta();
+  return {desenha:desenha, orbita:orbita, cfg:CFG,
+          mapa:function(){ return mapa; }, lib:function(){ return lib; }};
+})();
+</script>
+</body>
+</html>
