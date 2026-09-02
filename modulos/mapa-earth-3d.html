@@ -264,6 +264,27 @@
    · o clique do palco ignora '.g-earth .visor'
    · o carrega() entra no go(), ao chegar no slide: montar o 3d na carga
      baixa dezenas de MB de malha antes da primeira prancha
+
+   ⚑ AQUECIMENTO — o que fazer num deck, e não cabe aqui
+   Este arquivo é uma página de um slide só: não existe "slide anterior".
+   Num deck existe, e é onde se ganha tempo. Dois níveis, e a diferença
+   entre eles é grande:
+
+   NÍVEL 1, implementado na peça EMEI Pr. Dutra em 02/09/2026 e recomendado
+   como padrão: ao chegar no slide IMEDIATAMENTE ANTERIOR ao visor, disparar
+   o script da Maps API e o `importLibrary('maps3d')`. É rede e parse — nada
+   de WebGL, nada de malha, nenhum pixel. Memoizado, então ir e voltar no
+   deck não redispara. Compra os primeiros segundos.
+
+   NÍVEL 2, NÃO implementado: instanciar o `Map3DElement` já no slide
+   anterior, para ele baixar malha antes. Só funciona se o elemento ficar
+   COMPOSTO e EM TAMANHO REAL — com `display:none`, ou dentro de um slide em
+   `opacity:0`, o navegador estrangula o WebGL fora de tela e ele não baixa
+   nada; paga-se a complexidade por zero ganho. Feito certo, custa um
+   segundo contexto WebGL2 com dezenas de MB de VRAM rodando junto com o
+   morph do divisor, na máquina de quem assiste — e é aí que engasga, na
+   transição. Além disso o teto `3D Map loads per day` da chave passa a ser
+   consumido por quem nunca abre o slide do 3D.
    ─────────────────────────────────────────────────────────────────── */
 (function(){
   'use strict';

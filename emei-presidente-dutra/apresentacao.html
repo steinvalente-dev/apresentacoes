@@ -2929,6 +2929,45 @@ window.MSEarth=(function(){
     if(f) f.style.width=Math.round(Math.min(passo,TOTAL)/TOTAL*100)+'%';
     if(t) t.textContent=rotulo;
   }
+  /* ═══ NIVEL 1 · AQUECIMENTO ══════════════════════════════════════════
+     Pedido do Michel, 02/09: nao deixar quem assiste esperando a carga.
+     O que se adianta AQUI e so o barato: o script da Maps API e o
+     `importLibrary('maps3d')` — rede e parse, nada de WebGL, nada de malha,
+     nenhum pixel na tela. Compra os primeiros segundos dos dez a quinze.
+
+     O QUE NAO SE FAZ AQUI, e de proposito: instanciar o `Map3DElement`. E
+     ele que baixa a malha, e ele so baixa o que a camera ENXERGA — montado
+     escondido, o navegador estrangula o WebGL fora de tela e ele nao baixa
+     nada. Para valer teria de ficar composto, em tamanho real, atras do
+     divisor: um segundo contexto WebGL2 com dezenas de MB de VRAM rodando
+     junto com o morph, no notebook de quem assiste. Esse e o nivel 2, e o
+     Michel decidiu sentir o nivel 1 primeiro.
+
+     Cota: o teto da chave e `3D Map loads per day`, e o que conta um load e
+     a instanciacao do Map3DElement, nao o carregamento da biblioteca. Pela
+     leitura do nome, o aquecimento nao consome cota — CONFERIR no Metrics
+     do console depois de algumas rodadas, antes de afirmar.
+
+     Idempotente por memoizacao: voltar e avancar no deck nao redispara.
+     ═════════════════════════════════════════════════════════════════════ */
+  var libP=null, aquecido=false;
+  function lib3d(){
+    if(libP) return libP;
+    libP = api().then(function(){ return google.maps.importLibrary('maps3d'); });
+    return libP;
+  }
+  function aquece(){
+    /* a chave entra no fim do body, depois deste script: na primeira
+       chamada ela ainda nao existe. Sair SEM marcar `aquecido` deixa a
+       proxima passagem tentar de novo. */
+    if(aquecido || !chave() || location.protocol==='file:') return;
+    aquecido=true;
+    /* silencio no catch: quem reporta falha ao usuario e o monta(), com o
+       diagnostico traduzido. Aquecimento que falha nao vira tela de erro —
+       o slide ainda nao esta em cena. */
+    lib3d()['catch'](function(){ libP=null; aquecido=false; });
+  }
+
   function aproxima(p){
     ANCORA={lat:p.lat,lng:p.lng,alt:p.alt};
     /* ⚠ A APROXIMACAO NAO E ENFEITE. Criar o visor com o range final devolve
@@ -3009,8 +3048,10 @@ window.MSEarth=(function(){
       return;
     }
     gritou=null;
-    api().then(function(){ return google.maps.importLibrary('maps3d'); })
-      .then(function(m3d){
+    /* se o aquecimento ja rodou, esta promessa ja esta resolvida e o passo
+       "carregando a api" passa num piscar — o indicador salta direto para
+       "aproximando · 1 de 4". */
+    lib3d().then(function(m3d){
         if(mapa&&mapa.parentNode) mapa.parentNode.removeChild(mapa);
         mapa=new m3d.Map3DElement({
           center:{lat:p.lat,lng:p.lng,altitude:p.alt},
@@ -3040,9 +3081,16 @@ window.MSEarth=(function(){
     if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando');
       if(orbitando) orbita(false); }          /* quem pegou o mouse manda */
   });
+  /* indices de todo slide earth-3d do deck. Generico de proposito: se um dia
+     a peca tiver dois visores, os dois aquecem no slide que os antecede. */
+  var PROX=[];
+  DECK.forEach(function(s,i){ if(s.g==='earth-3d') PROX.push(i); });
+
   return {
     chegou:function(){
       var s=DECK[cur];
+      /* NIVEL 1 — aquece ao chegar no slide imediatamente anterior */
+      if(PROX.indexOf(cur+1)>=0) aquece();
       if(!s||s.g!=='earth-3d'){ desativa(); if(orbitando) orbita(false); return; }
       slide=document.querySelectorAll('#palco .slide')[cur];
       if(montado){ if(!orbitando&&mapa) orbita(true); return; }
