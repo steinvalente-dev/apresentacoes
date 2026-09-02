@@ -5,23 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>sonda · embed do SketchUp — DESCARTÁVEL</title>
-<!-- ═══════════════════════════════════════════════════════════════════════
-     SONDA DESCARTÁVEL · 02/09/2026
-     Existe para responder UMA pergunta que não se responde de outro jeito:
-     o viewer do SketchUp aceita ser embedado a partir de
-     `steinvalente-dev.github.io`?
-
-     Por que não dá para testar de outro lugar: o bloqueio é por cabeçalho
-     (`X-Frame-Options` / `Content-Security-Policy: frame-ancestors`), o
-     navegador só reclama no console, e o cabeçalho é servido em função da
-     ORIGEM que pede. Testar em localhost responde sobre localhost, não
-     sobre o domínio onde a peça vive.
-
-     APAGAR depois de ler o resultado. Não é módulo, não é peça, não entra
-     em índice.
-     ═══════════════════════════════════════════════════════════════════ */
 <style>
-  :root{--cal:#F3EEE7;--ferro:#231F20;--vinho:#79242F}
+/* ═══════════════════════════════════════════════════════════════════════
+   SONDA DESCARTÁVEL · 02/09/2026
+   Existe para responder UMA pergunta que não se responde de outro jeito:
+   o viewer do SketchUp aceita ser embedado a partir de
+   `steinvalente-dev.github.io`?
+
+   Por que não dá para testar de outro lugar: o bloqueio é por cabeçalho
+   (`X-Frame-Options` / `Content-Security-Policy: frame-ancestors`), o
+   navegador só reclama no console, e o cabeçalho é servido em função da
+   ORIGEM que pede. Testar em localhost responde sobre localhost, não
+   sobre o domínio onde a peça vive.
+
+   APAGAR depois de ler o resultado. Não é módulo, não é peça, não entra
+   em índice.
+   ═══════════════════════════════════════════════════════════════════ */
+  :root{--cal:#F3EEE7;--ferro:#231F20}
   *{box-sizing:border-box;margin:0}
   body{background:var(--ferro);color:var(--cal);
     font:14px/1.5 ui-monospace,Menlo,monospace;padding:20px}
@@ -30,16 +30,15 @@
   p.av{color:#E9A184;margin-bottom:18px;font-size:12px}
   .par{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
   .cx{border:1px solid #F3EEE730;border-radius:3px;overflow:hidden;
-    display:flex;flex-direction:column;min-height:52vh}
+    display:flex;flex-direction:column;min-height:50vh}
   .cx h2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;
     padding:9px 11px;background:#F3EEE712;color:#F3EEE7cc;font-weight:400}
   .cx code{display:block;padding:0 11px 9px;font-size:10.5px;color:#F3EEE773;
     word-break:break-all}
   .cx iframe{flex:1;width:100%;border:0;background:#0e0c0d}
   pre{background:#0e0c0d;border:1px solid #F3EEE726;border-radius:3px;
-    padding:13px;font-size:12px;line-height:1.7;white-space:pre-wrap;
+    padding:13px;font-size:12.5px;line-height:1.7;white-space:pre-wrap;
     color:#F3EEE7d9}
-  b{color:#E9A184}
 </style>
 </head>
 <body>
@@ -68,40 +67,36 @@
    a própria página de erro dentro dele. Então `load` não decide nada.
    O que decide: tentar tocar em `contentWindow.location.href`. Em quadro que
    carregou de verdade, cross-origin, isso lança SecurityError — e isso é
-   SUCESSO. Em quadro bloqueado o documento é `about:blank` da mesma origem,
+   SUCESSO. Em quadro bloqueado o documento fica na mesma origem (about:blank)
    e a leitura FUNCIONA — e isso é FALHA. A lógica é invertida de propósito,
-   e é a única leitura confiável sem ler cabeçalho.
-   O recado do bloqueio também sai no console do navegador; ler os dois. */
-const linhas = [];
+   e é a única leitura confiável sem acesso ao cabeçalho.
+   O recado do bloqueio também sai no console; ler os dois. */
+var linhas = [];
 function mede(id, rotulo){
-  const f = document.getElementById(id);
-  let veredito, detalhe = '';
+  var f = document.getElementById(id), veredito, detalhe;
   try{
-    const h = f.contentWindow.location.href;
-    /* consegui ler: mesma origem, ou seja NÃO carregou o site */
+    var h = f.contentWindow.location.href;
     veredito = (h === 'about:blank' || h === '' || h === location.href)
-      ? 'BLOQUEADO'
-      : 'inconclusivo';
+      ? 'BLOQUEADO' : 'inconclusivo';
     detalhe = 'contentWindow.location.href = ' + JSON.stringify(h);
   }catch(e){
     veredito = 'EMBEDA';
-    detalhe = 'leitura cross-origin barrada (' + e.name + ') — o quadro tem documento de outra origem, logo carregou';
+    detalhe = 'leitura cross-origin barrada (' + e.name + ') — o quadro tem '
+            + 'documento de outra origem, logo carregou';
   }
-  linhas.push(rotulo + '\n  → ' + veredito + '\n  ' + detalhe);
+  linhas.push(rotulo + '\n  -> ' + veredito + '\n  ' + detalhe);
 }
-addEventListener('load', () => {
-  /* 9 s: o viewer é pesado (40 MB) e o veredito só vale depois de o quadro
-     ter tido chance real de carregar ou de ser recusado. */
-  setTimeout(() => {
-    mede('fa', 'A · 3dwarehouse.sketchup.com/embed/');
-    mede('fb', 'B · app.sketchup.com/viewer/3dw');
-    document.getElementById('log').textContent =
-      'origem desta página: ' + location.origin + '\n\n' + linhas.join('\n\n') +
-      '\n\nConferir também o console: bloqueio por cabeçalho aparece lá como\n' +
-      '"Refused to display … in a frame because it set X-Frame-Options"\n' +
-      'ou violação de "frame-ancestors".';
-  }, 9000);
-});
+/* 9 s: o viewer é pesado (40 MB) e o veredito só vale depois de o quadro ter
+   tido chance real de carregar ou de ser recusado. */
+setTimeout(function(){
+  mede('fa', 'A · 3dwarehouse.sketchup.com/embed/');
+  mede('fb', 'B · app.sketchup.com/viewer/3dw');
+  document.getElementById('log').textContent =
+    'origem desta pagina: ' + location.origin + '\n\n' + linhas.join('\n\n')
+    + '\n\nConferir tambem o console: bloqueio por cabecalho aparece la como\n'
+    + '"Refused to display ... in a frame because it set X-Frame-Options"\n'
+    + 'ou violacao de "frame-ancestors".';
+}, 9000);
 </script>
 </body>
 </html>
