@@ -432,10 +432,13 @@
   function monta(chave, ponto){
     slide.classList.remove('falhou');
     slide.classList.add('esperando');
-    estado.querySelector('b').textContent = 'montando a malha 3d';
+    estado.querySelector('b').textContent = 'carregando a malha 3d';
     /* a nota longa sobre tempo de carregamento saiu: quem espera não lê
        parágrafo. Ficou uma linha, e o resto virou o indicador. */
-    estadoTxt.textContent = 'A câmera entra larga e fecha em degraus.';
+    /* nada de nota aqui — pedido do Michel, 02/09: quem espera quer saber
+       QUE está carregando, não COMO. O <span> fica no DOM porque é onde o
+       falha() escreve o diagnóstico traduzido. */
+    estadoTxt.textContent = '';
     progresso(1, 'carregando a api');
     gritou = null;
 
@@ -559,12 +562,24 @@
      e o remédio é um número. O sintoma de errar com `rounds` é uma câmera
      descontrolada na frente do cliente, que é bem pior.
 
-     A aceleração suave do início é da própria API e o Michel gosta dela.
-     O que ele pediu é a velocidade FINAL mais baixa, e é o que VOLTA faz.
+     ⚑ POR QUE O GIRO É CONDUZIDO AQUI, E NÃO PELO `flyCameraAround`.
+     Terceira rodada com o Michel, 02/09: ficou bom na velocidade certa, mas
+     *"a aceleração do zero até a velocidade final pode ser muito mais
+     curta; quero a sensação de cliquei e estou vendo o movimento"*.
+     Conferido na documentação da API: `FlyAroundAnimationOptions` tem
+     QUATRO campos — `camera`, `durationMillis`, `repeatCount` e o
+     `rounds` descontinuado. **Não existe easing, easingFunction,
+     interpolation nem timingFunction.** A rampa do `flyCameraAround` é
+     interna e proporcional ao ciclo: pedir volta lenta é pedir rampa longa,
+     e as duas coisas que ele quer andam em direções opostas.
+     Então a rotação passa a ser integrada por `requestAnimationFrame`:
+     RAMPA e VELOCIDADE ficam independentes, que é o que o pedido exige.
+     Se um dia a API expuser easing, vale revisitar — e aí o `rounds`
+     continua não entrando, pelo motivo acima.
      ═══════════════════════════════════════════════════════════════════ */
-  var VOLTA  = 180000;   /* ms de UMA volta completa — 3 min, ou 2°/s    */
-  var REPETE = 20;       /* 20 voltas = 1 h de órbita sem religar        */
-  var timerOrb = null, timerCiclo = null;
+  var VOLTA = 140000;   /* ms de UMA volta completa — 2,6°/s             */
+  var RAMPA = 700;      /* ms do zero à velocidade final — curto, de propósito */
+  var timerOrb = null, rafOrb = null;
   function orbita(liga){
     if(!mapa) return;
     orbitando = liga;
@@ -572,36 +587,32 @@
     orbBt.lastChild.textContent = liga ? 'parar' : 'orbitar';
 
     if(!liga){
+      /* para também a animação nativa: o RECENTRAR usa `flyCameraTo`, e se
+         ele estiver no ar a órbita e a viagem disputam a mesma câmera. */
       if(mapa.stopCameraAnimation) mapa.stopCameraAnimation();
+      if(rafOrb){ cancelAnimationFrame(rafOrb); rafOrb = null; }
       if(timerOrb){ clearInterval(timerOrb); timerOrb = null; }
-      if(timerCiclo){ clearTimeout(timerCiclo); timerCiclo = null; }
       return;
     }
-    if(mapa.flyCameraAround){
-      mapa.flyCameraAround({
-        camera:{ center:mapa.center, tilt:mapa.tilt, range:mapa.range, heading:mapa.heading },
-        /* UMA volta. Sem `rounds` — ver a armadilha documentada acima. */
-        durationMillis: VOLTA,
-        repeatCount: REPETE
-      });
-      /* rede de segurança: ao fim do ciclo previsto, religa se ainda estiver
-         em órbita. Cobre o caso de o `repeatCount` terminar no meio de uma
-         reunião longa, sem depender de evento de conclusão — que este
-         preview não dispara.                                              */
-      if(timerCiclo) clearTimeout(timerCiclo);
-      timerCiclo = setTimeout(function(){
-        if(orbitando) orbita(true);
-      }, VOLTA * REPETE + 500);
-      return;
-    }
-    /* fallback: o mesmo passo angular, derivado de VOLTA — assim os dois
-       caminhos giram na MESMA velocidade e ninguém percebe qual está em uso.
-       ⚑ Este caminho SEMPRE esteve certo; era o nativo que estava rápido.
-       360° / (VOLTA/1000) graus por segundo, aplicado a cada 40 ms.       */
-    var passo = 360 / (VOLTA / 1000) * 0.04;
-    timerOrb = setInterval(function(){
-      mapa.heading = ((mapa.heading || 0) + passo) % 360;
-    }, 40);
+
+    /* ── a rotação, integrada quadro a quadro ─────────────────────────────
+       `alvo` em graus por segundo, derivado de VOLTA. A rampa é easeOut
+       sobre a VELOCIDADE: sobe rápido e assenta — que é a sensação de
+       "cliquei e está acontecendo". Rampa linear dá partida mole; easeIn
+       dá exatamente o que o Michel não quer.
+       O `dt` é medido, não presumido: em quadro perdido a câmera não pula
+       nem trava, porque o avanço é velocidade × tempo real. Teto de 50 ms
+       para uma aba que voltou do segundo plano não dar um salto. */
+    var alvo = 360 / (VOLTA / 1000);
+    var t0 = performance.now(), ult = t0;
+    rafOrb = requestAnimationFrame(function passo(now){
+      if(!orbitando || !mapa) return;
+      rafOrb = requestAnimationFrame(passo);
+      var dt = Math.min((now - ult) / 1000, 0.05); ult = now;
+      var k = Math.min(1, (now - t0) / RAMPA);
+      var vel = alvo * (1 - Math.pow(1 - k, 3));
+      mapa.heading = ((mapa.heading || 0) + vel * dt) % 360;
+    });
   }
   orbBt.addEventListener('click', function(e){
     e.stopPropagation();

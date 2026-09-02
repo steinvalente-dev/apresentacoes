@@ -2446,8 +2446,11 @@ function tpl(s){
       +   `<div class="carga"><div class="anel"></div>`
       +   `<div class="barra"><i></i></div>`
       +   `<div class="passos">preparando</div></div>`
-      +   `<b>montando a malha 3d</b>`
-      +   `<span>A câmera entra larga e fecha em degraus.</span></div>`;
+      +   `<b>carregando a malha 3d</b>`
+      /* <span> vazio de proposito: e onde o falha() escreve o diagnostico.
+         Quem espera quer saber QUE esta carregando, nao COMO — pedido do
+         Michel, 02/09. */
+      +   `<span></span></div>`;
   }
   const tab=s.cols?`<div class="rev"><table class="tb"><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`+
     s.linhas.map((r,i)=>`<tr class="${s.hi===i?'hi':''}${s.fora===i?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`).join('')+`</tbody></table></div>`:'';
@@ -2872,24 +2875,28 @@ window.MSEarth=(function(){
      nao o valor, e `undefined.length` derruba o modulo inteiro na carga. */
   var TOTAL=DEGRAUS.length+2;      /* preparar + 4 degraus + assentar */
   var ANCORA=null;                 /* o enquadramento canonico, para o recentrar */
-  /* ⚑ O GIRO E LENTO, E E REGRA — nao preferencia desta peca. Os numeros
-     vem do modulo mestre modulos/mapa-earth-3d.html; mudar aqui sem mudar
-     la faz as duas coisas divergirem.
+  /* ⚑ O GIRO E CONDUZIDO AQUI, e nao pelo `flyCameraAround`. Os numeros vem
+     do modulo mestre modulos/mapa-earth-3d.html; mudar aqui sem mudar la faz
+     as duas coisas divergirem.
 
-     ⚠⚠ A ARMADILHA JA PAGA. `durationMillis` e a duracao de UMA VOLTA —
-     MAS o campo `rounds`, que esta DEPRECATED, inverte esse sentido: com
-     ele a API encaixa N voltas DENTRO de `durationMillis`. Logo
-     `{durationMillis:180000, rounds:40}` nao e "3 min por volta" e sim
-     **4,5 segundos por volta**, 80°/s. Foi o que subiu em 02/09 e o Michel
-     viu como "absurdamente rapido, confuso, irritante" — nove vezes mais
-     rapido que os 42 s da versao original, que ja era rapida para ele.
-     `rounds` NAO ENTRA. O campo certo e `repeatCount`, que repete o ciclo
-     sem mexer na duracao dele.
-     A aceleracao suave do inicio e da propria API e o Michel gosta dela; o
-     que ele pediu foi a velocidade FINAL mais baixa, e e o que VOLTA faz. */
-  var VOLTA=180000, REPETE=20;   /* 3 min por volta (2°/s) · 20 voltas = 1 h */
+     TRES RODADAS COM O MICHEL, 02/09, e cada uma ensinou uma coisa:
+     1 · `{durationMillis:180000, rounds:40}` parece "3 min por volta, 40
+          vezes" e e **4,5 segundos por volta** — o `rounds`, DEPRECATED,
+          encaixa N voltas DENTRO da duracao. Saiu "absurdamente rapido".
+     2 · trocado por `repeatCount`, a velocidade ficou certa (180 s/volta),
+          mas a RAMPA de aceleracao ficou longa demais.
+     3 · conferido na documentacao: `FlyAroundAnimationOptions` tem quatro
+          campos — camera, durationMillis, repeatCount e o rounds
+          descontinuado. **Nao existe easing.** A rampa e interna e
+          proporcional ao ciclo: volta lenta implica rampa longa, e os dois
+          pedidos do Michel andam em direcoes opostas.
+     Por isso a rotacao e integrada por requestAnimationFrame: RAMPA e
+     VELOCIDADE ficam independentes. `flyCameraTo` continua sendo nativo no
+     RECENTRAR, onde easing interno e justamente o que se quer. */
+  var VOLTA=140000;   /* ms de UMA volta — 2,6°/s                        */
+  var RAMPA=700;      /* ms do zero a velocidade final — curto, de proposito */
   var promessa=null, gritou=null, montado=false;
-  var mapa=null, slide=null, orbitando=false, timerOrb=null, timerCiclo=null;
+  var mapa=null, slide=null, orbitando=false, rafOrb=null;
 
   (function espia(){                 /* chave ruim nao rejeita: ela grita */
     var orig=console.error;
@@ -3011,26 +3018,30 @@ window.MSEarth=(function(){
     var bt=slide.querySelector('.orb');
     if(bt) bt.lastChild.textContent=liga?'parar':'orbitar';
     if(!liga){
+      /* para tambem a animacao nativa: o RECENTRAR usa `flyCameraTo`, e se
+         ele estiver no ar a orbita e a viagem disputam a mesma camera. */
       if(mapa.stopCameraAnimation) mapa.stopCameraAnimation();
-      if(timerOrb){ clearInterval(timerOrb); timerOrb=null; }
-      if(timerCiclo){ clearTimeout(timerCiclo); timerCiclo=null; }
+      if(rafOrb){ cancelAnimationFrame(rafOrb); rafOrb=null; }
       return;
     }
-    if(mapa.flyCameraAround){
-      mapa.flyCameraAround({camera:{center:mapa.center,tilt:mapa.tilt,
-        range:mapa.range,heading:mapa.heading},
-        /* UMA volta. Sem `rounds` — ver a armadilha documentada acima. */
-        durationMillis:VOLTA, repeatCount:REPETE});
-      /* rede de seguranca: ao fim do ciclo previsto, religa se ainda estiver
-         em orbita. Nao ha evento de conclusao neste preview. */
-      if(timerCiclo) clearTimeout(timerCiclo);
-      timerCiclo=setTimeout(function(){ if(orbitando) orbita(true); },VOLTA*REPETE+500);
-      return;
-    }
-    /* fallback com o MESMO passo angular. Este caminho SEMPRE esteve certo;
-       era o nativo que estava rapido. */
-    var passo=360/(VOLTA/1000)*0.04;
-    timerOrb=setInterval(function(){ mapa.heading=((mapa.heading||0)+passo)%360; },40);
+    /* ── a rotacao, integrada quadro a quadro ────────────────────────────
+       `alvo` em graus por segundo, derivado de VOLTA. A rampa e easeOut
+       sobre a VELOCIDADE: sobe rapido e assenta — a sensacao de "cliquei e
+       esta acontecendo". Rampa linear da partida mole; easeIn da exatamente
+       o que o Michel nao quer.
+       O `dt` e medido, nao presumido: em quadro perdido a camera nao pula
+       nem trava, porque o avanco e velocidade x tempo real. Teto de 50 ms
+       para aba que voltou do segundo plano nao dar um salto. */
+    var alvo=360/(VOLTA/1000);
+    var t0=performance.now(), ult=t0;
+    rafOrb=requestAnimationFrame(function passo(now){
+      if(!orbitando||!mapa) return;
+      rafOrb=requestAnimationFrame(passo);
+      var dt=Math.min((now-ult)/1000,0.05); ult=now;
+      var k=Math.min(1,(now-t0)/RAMPA);
+      var vel=alvo*(1-Math.pow(1-k,3));
+      mapa.heading=((mapa.heading||0)+vel*dt)%360;
+    });
   }
   /* ── RECENTRAR ─────────────────────────────────────────────────────────
      Volta ao enquadramento canonico. `flyCameraTo` e da propria API e faz a
