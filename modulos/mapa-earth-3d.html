@@ -93,30 +93,74 @@
   .g-earth .rotulo .cap{display:block;font-family:var(--mono);font-size:var(--fs-cap);
     letter-spacing:.1em;text-transform:uppercase;color:#EDE6DA8f;margin-top:.85em}
 
-  /* órbita — o único comando que o slide precisa expor numa reunião */
-  .g-earth .orb{position:absolute;right:var(--gut-in);
-    bottom:calc(var(--bot) + clamp(4px,1.4vh,22px));z-index:3;cursor:pointer;
+  /* ── os dois comandos que o slide expõe numa reunião ──────────────────
+     ÓRBITA e RECENTRAR, no mesmo canto, na mesma pastilha.
+     O recentrar existe porque navegar no 3d é fácil e voltar não: gira-se
+     para um lado, afasta-se, e o lote sai de quadro. Sem ele a saída é
+     recarregar a página na frente do cliente. Pedido do Michel, 02/09. */
+  .g-earth .cmd{position:absolute;right:var(--gut-in);
+    bottom:calc(var(--bot) + clamp(4px,1.4vh,22px));z-index:3;
+    display:flex;align-items:center;gap:clamp(6px,.6vw,11px)}
+  .g-earth .cmd button{cursor:pointer;
     font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.12em;
     text-transform:uppercase;color:var(--creme);background:#211D1A9e;
     -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
     border:1px solid #EDE6DA30;border-radius:999px;padding:.62em 1.2em;
     display:flex;align-items:center;gap:.55em;transition:border-color .2s,color .2s}
-  .g-earth .orb:hover{border-color:#B85C38;color:#F0B79B}
+  .g-earth .cmd button:hover{border-color:#B85C38;color:#F0B79B}
   .g-earth .orb i{display:block;width:7px;height:7px;border-radius:50%;
     background:var(--terra);opacity:.45;transition:opacity .2s}
   .g-earth.orbitando .orb i{opacity:1;animation:pulsa 1.9s ease-in-out infinite}
   @keyframes pulsa{50%{opacity:.3}}
+  /* o recentrar pisca uma vez ao ser usado: confirma sem escrever nada */
+  .g-earth .rec svg{display:block;width:1em;height:1em;opacity:.7}
+  .g-earth .rec.feito{border-color:#B85C38;color:#F0B79B}
 
   /* estado de erro / espera — degradação explícita, nunca tela preta muda */
   .g-earth .estado{position:absolute;inset:0;z-index:5;display:none;
-    place-content:center;text-align:center;padding:0 8vw;gap:.9em;
-    background:#12110Ef2}
+    place-content:center;justify-items:center;text-align:center;padding:0 8vw;
+    gap:.9em;background:#12110E}
   .g-earth.falhou .estado,.g-earth.esperando .estado{display:grid}
+  /* enquanto carrega não há o que navegar nem para onde recentrar: o convite
+     do véu e os dois comandos ficam fora de cena. Antes o fundo do estado
+     era translúcido e eles vazavam por baixo, o que dava uma tela suja
+     justamente no momento em que se pede paciência a quem assiste. */
+  .g-earth.esperando .veu,.g-earth.esperando .cmd,
+  .g-earth.falhou .veu,.g-earth.falhou .cmd{display:none}
   .estado b{font-family:var(--mono);font-weight:500;font-style:italic;
     font-size:var(--fs-item);color:var(--creme)}
   .estado span{font-size:var(--fs-lead);color:#EDE6DAa6;line-height:1.6;max-width:56ch;
     margin:0 auto}
   .estado code{font-family:var(--mono);font-size:.9em;color:#F0B79B}
+
+  /* ── O INDICADOR DE CARGA ─────────────────────────────────────────────
+     Pedido do Michel, 02/09: *"essa nota nem é tão importante; o mais
+     importante seria ter um ícone animado, fingindo que tem uma barra de
+     progresso, porque a barra de verdade seria custosa. O usuário vai
+     ficar menos aflito."*
+
+     Não finge. Os quatro degraus da aproximação são MEUS — eu sei em qual
+     deles estou —, então a barra mostra progresso real, em passos, e não
+     uma animação decorativa. O que ela não sabe é quanto falta baixar de
+     malha dentro de cada degrau; para isso serve o anel girando, que diz
+     "está acontecendo" sem prometer prazo.
+
+     A nota longa sobre tempo de carregamento saiu de cena: virou uma linha
+     curta. Quem espera não lê parágrafo. */
+  .g-earth .carga{display:flex;flex-direction:column;align-items:center;
+    gap:clamp(14px,2vh,24px)}
+  .g-earth.falhou .carga{display:none}
+  .g-earth .anel{width:clamp(30px,3.4vw,46px);height:clamp(30px,3.4vw,46px);
+    border-radius:50%;border:2px solid #EDE6DA26;border-top-color:var(--terra);
+    animation:gira3d .85s linear infinite}
+  @keyframes gira3d{to{transform:rotate(360deg)}}
+  .g-earth .barra{width:clamp(150px,17vw,240px);height:3px;border-radius:999px;
+    background:#EDE6DA1f;overflow:hidden;position:relative}
+  .g-earth .barra i{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;
+    background:var(--terra);transition:width .7s cubic-bezier(.3,.8,.3,1)}
+  .g-earth .passos{font-family:var(--mono);font-size:var(--fs-cap);
+    letter-spacing:.14em;text-transform:uppercase;color:#EDE6DA73}
+  @media (prefers-reduced-motion:reduce){ .g-earth .anel{animation:none} }
 
 /* ── painel: só do protótipo. NÃO se copia para um deck. ───────────── */
   .painel{position:absolute;top:0;left:0;right:0;z-index:9;
@@ -166,9 +210,22 @@
     <span class="cap">Protótipo · clique para navegar · o botão devolve o teclado ao slide.</span>
   </div>
 
-  <button class="orb" type="button" id="orb"><i></i>orbitar</button>
+  <div class="cmd">
+    <button class="rec" type="button" id="rec" title="voltar ao ponto central">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+           stroke-linecap="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/>
+        <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+      </svg>recentrar</button>
+    <button class="orb" type="button" id="orb"><i></i>orbitar</button>
+  </div>
 
   <div class="estado" id="estado">
+    <div class="carga" id="carga">
+      <div class="anel"></div>
+      <div class="barra"><i id="barraFill"></i></div>
+      <div class="passos" id="passos">preparando</div>
+    </div>
     <b>o visor 3d ainda não carregou</b>
     <span id="estadoTxt">Cole uma chave da Google Maps Platform no painel acima. Sem chave este
       módulo não desenha nada — é o comportamento esperado, não um defeito.</span>
@@ -241,6 +298,14 @@
      A Elevation API resolveria sozinha, mas está — corretamente — fora da
      restrição da chave. Por isso o valor é campo, não constante. */
   var CAM = { alt:760, range:600, tilt:58, heading:30, tiltEntrada:45 };
+
+  /* A APROXIMAÇÃO EM DEGRAUS — a nota longa que explica POR QUE está mais
+     abaixo, junto do `aproxima()`. Aqui só os números, porque o indicador
+     de carga precisa deles antes de o `monta()` ser definido.
+     ⚑ Declarar isto depois de `TOTAL` derruba o módulo inteiro na carga:
+     `var` iça o nome mas não o valor, e `undefined.length` estoura. */
+  var DEGRAUS = [6000, 2500, 1200];
+  var PAUSA   = 3000;
 
   var mapa = null, orbitando = false, lib = null;
 
@@ -330,11 +395,27 @@
     return 'O Google recusou a chave: <code>' + gritou.slice(0,140) + '</code>';
   }
 
+  /* ── o indicador de carga ──────────────────────────────────────────
+     `passo` vai de 0 ao total de degraus + 1. Progresso REAL, em passos:
+     cada degrau da aproximação é um marco que eu de fato atinjo. O que
+     não se sabe é quanto falta baixar dentro do degrau — daí o anel, que
+     diz "está acontecendo" sem prometer prazo.                         */
+  var TOTAL = DEGRAUS.length + 2;   /* preparar + 4 degraus + assentar */
+  function progresso(passo, rotulo){
+    var f = document.getElementById('barraFill');
+    var t = document.getElementById('passos');
+    if(f) f.style.width = Math.round(Math.min(passo, TOTAL) / TOTAL * 100) + '%';
+    if(t) t.textContent = rotulo;
+  }
+
   function monta(chave, ponto){
     slide.classList.remove('falhou');
     slide.classList.add('esperando');
-    estado.querySelector('b').textContent = 'montando a malha 3d…';
-    estadoTxt.textContent = 'A câmera entra larga e fecha em degraus — é assim que o motor consegue montar a malha do bairro. Num notebook em rede de escritório, uns dez segundos; em 4G de canteiro, bem mais.';
+    estado.querySelector('b').textContent = 'montando a malha 3d';
+    /* a nota longa sobre tempo de carregamento saiu: quem espera não lê
+       parágrafo. Ficou uma linha, e o resto virou o indicador. */
+    estadoTxt.textContent = 'A câmera entra larga e fecha em degraus.';
+    progresso(1, 'carregando a api');
     gritou = null;
 
     carregaApi(chave).then(function(){
@@ -392,10 +473,16 @@
      altitude, a chave e o file://. O sintoma dos quatro é o mesmo.
 
      De quebra, a chegada é bonita: a peça abre com um mergulho. */
-  var DEGRAUS = [6000, 2500, 1200];
-  var PAUSA   = 3000;
+  /* DEGRAUS e PAUSA subiram para o bloco de configuração, junto do CAM:
+     o `TOTAL` do indicador de carga os lê antes daqui, e com eles nesta
+     altura o módulo morria na carga com `undefined.length`. */
+
+  /* guardado para o RECENTRAR: é o enquadramento canônico do slide, e é
+     para cá que o botão traz a câmera de volta. */
+  var ANCORA = null;
 
   function aproxima(ponto){
+    ANCORA = { lat:ponto.lat, lng:ponto.lng, alt:CAM.alt };
     var passos = DEGRAUS.concat([CAM.range]);
     var i = 0;
     (function passo(){
@@ -405,7 +492,9 @@
       mapa.tilt    = (i === 0) ? CAM.tiltEntrada : CAM.tilt;
       mapa.heading = CAM.heading;
       i++;
+      progresso(1 + i, 'aproximando · ' + i + ' de ' + passos.length);
       if(i < passos.length){ setTimeout(passo, PAUSA); return; }
+      progresso(TOTAL - 1, 'assentando a malha');
       /* Último degrau dado. A espera extra aqui não é margem de segurança
          — é o tempo que a malha fina leva para chegar. Sem ela o slide se
          declara pronto mostrando geometria bruta, aqueles prismas cinza
@@ -413,6 +502,7 @@
          Não existe evento de "terminei": `gmp-steadychange` não dispara
          nesta versão do preview. Testado em 30/08. */
       setTimeout(function(){
+        progresso(TOTAL, 'pronto');
         slide.classList.remove('esperando');
         solta();
         /* entra girando — 02/09/2026. O slide de localização não espera
@@ -472,6 +562,36 @@
     e.stopPropagation();
     orbita(!orbitando);
   });
+
+  /* ── RECENTRAR ──────────────────────────────────────────────────────
+     Volta ao enquadramento canônico do slide. Pedido do Michel, 02/09:
+     navegar no 3d é fácil e voltar não — gira-se, afasta-se, e o lote sai
+     de quadro; sem este botão a saída é recarregar na frente do cliente.
+
+     `flyCameraTo` é da própria API e faz a volta com animação; se sumir do
+     beta, o fallback escreve center/range/tilt/heading direto, o que é um
+     corte em vez de um voo, mas cumpre a função. A órbita é interrompida
+     antes: duas animações de câmera ao mesmo tempo se atropelam. Ela volta
+     a girar sozinha quando a viagem termina, porque o slide entra girando
+     e é isso que se espera dele.                                        */
+  function recentra(){
+    if(!mapa || !ANCORA) return;
+    var girava = orbitando;
+    if(girava) orbita(false);
+    var alvo = { center:{ lat:ANCORA.lat, lng:ANCORA.lng, altitude:ANCORA.alt },
+                 range:CAM.range, tilt:CAM.tilt, heading:CAM.heading };
+    if(mapa.flyCameraTo){
+      mapa.flyCameraTo({ endCamera:alvo, durationMillis:2200 });
+    } else {
+      mapa.center = alvo.center; mapa.range = alvo.range;
+      mapa.tilt = alvo.tilt; mapa.heading = alvo.heading;
+    }
+    var bt = document.getElementById('rec');
+    if(bt){ bt.classList.add('feito'); setTimeout(function(){ bt.classList.remove('feito'); }, 900); }
+    if(girava) setTimeout(function(){ orbita(true); }, 2400);
+  }
+  var recBt = document.getElementById('rec');
+  if(recBt) recBt.addEventListener('click', function(e){ e.stopPropagation(); recentra(); });
 
   /* ── trava de teclado ───────────────────────────────────────────── */
   function desativa(){

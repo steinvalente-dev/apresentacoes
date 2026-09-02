@@ -1121,8 +1121,22 @@ body.esc .av2 .avc{color:#F3EEE7aa}
   background:linear-gradient(transparent,#231F2026 44%,#231F208f 100%);color:var(--creme)}
 /* sombra de leitura: invisível como forma, decisiva sobre céu claro. É ela
    que sustenta o chrome e a legenda agora que o véu é leve. */
-body.em-cheia .chrome,.g-cheia .ov h2,.g-cheia .ov .cap{
+body.em-imagem .chrome,.g-cheia .ov h2,.g-cheia .ov .cap{
   text-shadow:0 1px 3px #231F2073,0 2px 14px #231F2059}
+/* ⚑ SLIDE DE FUNDO EM IMAGEM: o chrome inverte e ganha véu próprio.
+   Medido em 02/09/2026 — sobre o céu branco de um render isométrico o
+   chrome em Cal dava 1,04:1, ou seja invisível; e sobre imagem de satélite
+   escura o chrome em tinta era igualmente ilegível. Voltar a chapar a
+   imagem estaria contra a decisão do mesmo dia (véu, não tarja), então o
+   véu é confinado à FAIXA DO CHROME: 116px no topo, contra os 20% de
+   altura que o gradiente da prancha cobria. Assim o canto fica legível
+   sobre qualquer imagem — céu branco, satélite, fachada colorida — e a
+   imagem segue limpa no meio, que é onde ela é vista. */
+body.em-imagem .chrome{color:#F3EEE7db}
+body.em-imagem .chrome.topo{
+  background:linear-gradient(#231F2094 0,#231F2059 46%,#231F2000 100%)}
+body.em-imagem .chrome.pe{
+  background:linear-gradient(#231F2000 0,#231F2040 60%,#231F2080 100%)}
 .g-cheia .ov h2{color:var(--creme);font-family:var(--mono);font-weight:500;
   font-style:italic;text-transform:lowercase;font-size:var(--fs-h);
   letter-spacing:-.022em;line-height:1}
@@ -1141,6 +1155,10 @@ body.em-cheia .chrome,.g-cheia .ov h2,.g-cheia .ov .cap{
 body.em-cheia.ocioso .chrome,
 body.em-cheia.ocioso .slide.ativo .ov,
 body.em-cheia.ocioso .slide.ativo .full:after{opacity:0}
+/* o visor 3d NÃO some com o ponteiro parado: ali o chrome carrega os botões
+   de órbita e de recentrar, e apagar controle enquanto a câmera gira deixa
+   quem apresenta sem volante. O `em-cheia` é que restringe o efeito à
+   prancha de imagem — por isso a regra acima não menciona `em-imagem`. */
 @media (prefers-reduced-motion: reduce){
   body.em-cheia.ocioso .chrome,
   body.em-cheia.ocioso .slide.ativo .ov,
@@ -1267,19 +1285,14 @@ body.esc .metas .mv{color:var(--creme)}
   display:block;width:clamp(132px,9.5cqw,180px);line-height:0;
   opacity:.9;transition:opacity .3s ease}
 .marca .marca-lk svg{display:block;width:100%;height:auto}
+/* ⚑ `em-imagem` cobre prancha `cheia` E visor `earth-3d`. Antes era
+   `em-cheia`, e por isso o logotipo saia COLORIDO sobre a imagem de
+   satelite — que foi o que o Michel viu em 02/09. Positivo so sobre campo
+   Cal; sobre imagem, campo Vinho ou Ferro, monocromatico em Cal (secao 2). */
 body.esc .marca .marca-lk,body.com-fundo .marca .marca-lk,
-body.em-cheia .marca .marca-lk{--tinta:#F3EEE7;--vinho:#F3EEE7}
-/* ⚑ O CASO DIFICIL: render de CEU BRANCO.
-   Medido nesta peca — o lockup em Cal sobre o ceu do render isometrico dava
-   1,04:1, ou seja invisivel. O logotipo nao pode depender da sorte do que
-   estiver atras dele. A solucao nao e voltar a chapar a imagem (a decisao de
-   02/09 e veu, nao tarja): e um vel proprio, confinado a FAIXA DO CHROME —
-   116px no topo, contra os 20% de altura que o gradiente da prancha cobria.
-   Assim o canto fica legivel em qualquer render, e a imagem segue limpa. */
-body.em-cheia .chrome.topo{
-  background:linear-gradient(#231F2094 0,#231F2059 46%,#231F2000 100%)}
-body.em-cheia .chrome.pe{
-  background:linear-gradient(#231F2000 0,#231F2040 60%,#231F2080 100%)}
+body.em-imagem .marca .marca-lk{--tinta:#F3EEE7;--vinho:#F3EEE7}
+/* o veu da faixa do chrome subiu para o esqueleto, sob `em-imagem`: e
+   comportamento de motor, nao de marca, e vale para toda frente. */
 /* na capa (momento A) e na contracapa o lockup grande JA e o assunto do
    slide — um segundo, minusculo, no canto, leria como repeticao. No momento
    B o lockup grande saiu de cena, e ai o logotipo do canto volta: a partir
@@ -1404,26 +1417,64 @@ body.na-marca .chrome{opacity:0;pointer-events:none}
 .g-earth-3d .rotulo .cap{display:block;font-family:var(--label);font-weight:600;
   font-size:var(--fs-cap);letter-spacing:.08em;text-transform:uppercase;
   color:#F3EEE78f;margin-top:.9em}
-.g-earth-3d .orb{position:absolute;right:var(--gut);
-  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:3;cursor:pointer;
+/* ── os dois comandos que o slide expoe numa reuniao ────────────────────
+   ORBITA e RECENTRAR. O recentrar existe porque navegar no 3d e facil e
+   voltar nao: gira-se, afasta-se, e o lote sai de quadro. Sem ele a saida
+   e recarregar a pagina na frente do cliente. Pedido do Michel, 02/09. */
+.g-earth-3d .cmd{position:absolute;right:var(--gut);
+  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:3;
+  display:flex;align-items:center;gap:clamp(6px,.6cqw,11px)}
+.g-earth-3d .cmd button{cursor:pointer;
   font-family:var(--label);font-weight:600;font-size:var(--fs-cap);letter-spacing:.12em;
   text-transform:uppercase;color:var(--creme);background:#231F209e;
   -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
   border:1px solid #F3EEE730;border-radius:999px;padding:.62em 1.2em;
   display:flex;align-items:center;gap:.55em;transition:border-color .2s,color .2s}
-.g-earth-3d .orb:hover{border-color:#F3EEE7;color:#fff}
+.g-earth-3d .cmd button:hover{border-color:#F3EEE7;color:#fff}
 .g-earth-3d .orb i{display:block;width:7px;height:7px;border-radius:50%;
   background:var(--creme);opacity:.4;transition:opacity .2s}
 .g-earth-3d.orbitando .orb i{opacity:1;animation:pulsa 1.9s ease-in-out infinite}
 @keyframes pulsa{50%{opacity:.3}}
+.g-earth-3d .rec svg{display:block;width:1em;height:1em;opacity:.7}
+.g-earth-3d .rec.feito{border-color:#F3EEE7;color:#fff}
 .g-earth-3d .estado{position:absolute;inset:0;z-index:5;display:none;
-  place-content:center;text-align:center;padding:0 8cqw;gap:.9em;background:#171314f2}
+  place-content:center;text-align:center;padding:0 8cqw;gap:.9em;background:#171314}
 .g-earth-3d.falhou .estado,.g-earth-3d.esperando .estado{display:grid}
+/* enquanto carrega nao ha o que navegar nem para onde recentrar: o convite
+   do veu e os dois comandos ficam fora de cena. Com o fundo do estado
+   translucido eles vazavam por baixo, e dava uma tela suja justamente no
+   momento em que se pede paciencia a quem assiste. */
+.g-earth-3d.esperando .veu,.g-earth-3d.esperando .cmd,
+.g-earth-3d.falhou .veu,.g-earth-3d.falhou .cmd{display:none}
 .g-earth-3d .estado b{font-family:var(--sans);font-weight:600;font-size:var(--fs-item);
   color:var(--creme);letter-spacing:-.02em}
 .g-earth-3d .estado span{font-size:var(--fs-body);color:#F3EEE7a6;line-height:1.6;
   max-width:56ch;margin:0 auto}
 .g-earth-3d .estado code{font-family:ui-monospace,monospace;font-size:.9em;color:#F3EEE7}
+
+/* ── O INDICADOR DE CARGA ─────────────────────────────────────────────────
+   Pedido do Michel, 02/09: a nota sobre tempo de carregamento nao e o que
+   importa; o que tira a afliçao de quem espera e ver que esta acontecendo.
+   Ele supos barra falsa por a de verdade ser custosa — nao precisa fingir:
+   os quatro degraus da aproximaçao sao nossos, sabemos em qual estamos, e a
+   barra mostra passo REAL. O que nao se sabe e quanto falta baixar dentro do
+   degrau; para isso serve o anel girando, que diz "esta acontecendo" sem
+   prometer prazo. */
+.g-earth-3d .estado{justify-items:center}
+.g-earth-3d .carga{display:flex;flex-direction:column;align-items:center;
+  gap:clamp(14px,2cqh,24px)}
+.g-earth-3d.falhou .carga{display:none}
+.g-earth-3d .anel{width:clamp(30px,3.4cqw,46px);height:clamp(30px,3.4cqw,46px);
+  border-radius:50%;border:2px solid #F3EEE726;border-top-color:var(--creme);
+  animation:gira3d .85s linear infinite}
+@keyframes gira3d{to{transform:rotate(360deg)}}
+.g-earth-3d .barra{width:clamp(150px,17cqw,240px);height:3px;border-radius:999px;
+  background:#F3EEE71f;overflow:hidden;position:relative}
+.g-earth-3d .barra i{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;
+  background:var(--creme);transition:width .7s cubic-bezier(.3,.8,.3,1)}
+.g-earth-3d .passos{font-family:var(--label);font-weight:600;font-size:var(--fs-cap);
+  letter-spacing:.14em;text-transform:uppercase;color:#F3EEE773}
+@media (prefers-reduced-motion:reduce){ .g-earth-3d .anel{animation:none} }
 
 </style></head><body>
 <!-- #moldura mede a ÁREA SEGURA da tela, nunca a tela bruta: é o que impede
@@ -2127,16 +2178,15 @@ const DECK=[
   dn:'01',dt:'onde está',
   ds:'A quadra, o gabarito dos vizinhos e a leitura da esquina.'},
 
-/* ⚠ COORDENADA A CONFIRMAR. O endereco veio de imprensa de bairro, nao de
-   documento oficial, e a coordenada e estimada: a chave da casa e restrita
-   a Maps JavaScript API e nao faz geocoding, de proposito. Para acertar:
-   botao DIREITO no ponto, no Google Maps, e a primeira linha do menu traz
-   `lat, lng`. Trocar as duas linhas abaixo, ou abrir a peca com
-   `?ll=-23.5396,-46.5754` para ensaiar sem republicar.
+/* COORDENADA CONFIRMADA pelo Michel em 02/09/2026 — botao direito no ponto,
+   no Google Maps. Nao e mais estimativa.
+   A chave da casa e restrita a Maps JavaScript API e NAO faz geocoding, de
+   proposito: coordenada entra a mao, ou vem do campo do Notion. Ensaio sem
+   republicar: `?ll=lat,lng` na URL.
    `alt` e altitude ACIMA DO NIVEL DO MAR, nao altura de voo: Sao Paulo ~760.
    Errar para baixo enterra a camera e a tela fica azul lisa, sem erro. */
 {g:'earth-3d',
-  lat:-23.5396, lng:-46.5754, alt:760,
+  lat:-23.532191487398407, lng:-46.566627242715214, alt:760,
   kick:'SÃO PAULO, SP · TATUAPÉ',
   h2:'a quadra e o entorno',
   lead:'Rua Santo Elias, 146 · Tatuapé.',
@@ -2379,11 +2429,21 @@ function tpl(s){
       + (s.lead?`<div class="lead">${s.lead}</div>`:'')
       + (s.cap?`<span class="cap">${s.cap}</span>`:'')
       + `</div>`
-      + `<button class="orb" type="button"><i></i>orbitar</button>`
-      + `<div class="estado"><b>montando a malha 3d…</b>`
-      + `<span>A camera entra larga e fecha em degraus — e assim que o motor `
-      + `consegue montar a malha do bairro. Em rede de escritorio, uns dez `
-      + `segundos; em 4G de canteiro, bem mais.</span></div>`;
+      + `<div class="cmd">`
+      +   `<button class="rec" type="button" title="voltar ao ponto central">`
+      +     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"`
+      +     ` stroke-linecap="round" aria-hidden="true">`
+      +     `<circle cx="12" cy="12" r="7"/>`
+      +     `<circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/>`
+      +     `<path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>recentrar</button>`
+      +   `<button class="orb" type="button"><i></i>orbitar</button>`
+      + `</div>`
+      + `<div class="estado">`
+      +   `<div class="carga"><div class="anel"></div>`
+      +   `<div class="barra"><i></i></div>`
+      +   `<div class="passos">preparando</div></div>`
+      +   `<b>montando a malha 3d</b>`
+      +   `<span>A câmera entra larga e fecha em degraus.</span></div>`;
   }
   const tab=s.cols?`<div class="rev"><table class="tb"><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`+
     s.linhas.map((r,i)=>`<tr class="${s.hi===i?'hi':''}${s.fora===i?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`).join('')+`</tbody></table></div>`:'';
@@ -2662,6 +2722,13 @@ function go(i,tudo){
   document.body.classList.toggle('com-fundo',marcaFundo||divFundo);
   document.body.classList.toggle('em-cheia', s.g==='cheia');
   document.body.classList.toggle('com-graf', !!s.graf);
+  /* `em-imagem` = o fundo do slide é imagem, não campo pintado — prancha
+     `cheia` ou visor `earth-3d`. É o que decide que o chrome inverte e ganha
+     véu próprio. Acrescentado em 02/09/2026: sem isto o chrome do slide de
+     localização saía em Ferro sobre imagem de satélite escura, e o logotipo
+     do canto saía COLORIDO onde tinha de sair em Cal. Gabarito novo cujo
+     fundo seja imagem entra nesta lista. */
+  document.body.classList.toggle('em-imagem', s.g==='cheia'||s.g==='earth-3d');
   document.body.classList.toggle('fundo-div',divFundo);
   document.body.classList.toggle('fundo-trama',trama);
   /* cada canvas tem o seu conjunto de imagens e a sua paleta, fixados no
@@ -2797,6 +2864,10 @@ window.MSEarth=(function(){
   function canal(){ return (window.MS_MAPS&&window.MS_MAPS.canal)||'beta'; }
   var CAM={range:600,tilt:58,heading:30,tiltEntrada:45};
   var DEGRAUS=[6000,2500,1200], PAUSA=3000;
+  /* ⚑ DEGRAUS tem de estar declarado ANTES do TOTAL: `var` iça o nome mas
+     nao o valor, e `undefined.length` derruba o modulo inteiro na carga. */
+  var TOTAL=DEGRAUS.length+2;      /* preparar + 4 degraus + assentar */
+  var ANCORA=null;                 /* o enquadramento canonico, para o recentrar */
   /* ⚑ O GIRO E LENTO, E E REGRA — nao preferencia desta peca. Os numeros
      sao os do modulo mestre modulos/mapa-earth-3d.html: VOLTA e o tempo de
      uma volta completa, ROUNDS e alto para durar a reuniao. Mudar aqui sem
@@ -2845,7 +2916,17 @@ window.MSEarth=(function(){
     });
     return promessa;
   }
+  /* progresso REAL, em passos. Cada degrau da aproximacao e um marco que de
+     fato se atinge; o anel girando cobre o que nao se sabe medir (quanto de
+     malha falta baixar dentro do degrau). */
+  function progresso(passo,rotulo){
+    if(!slide) return;
+    var f=slide.querySelector('.barra i'), t=slide.querySelector('.passos');
+    if(f) f.style.width=Math.round(Math.min(passo,TOTAL)/TOTAL*100)+'%';
+    if(t) t.textContent=rotulo;
+  }
   function aproxima(p){
+    ANCORA={lat:p.lat,lng:p.lng,alt:p.alt};
     /* ⚠ A APROXIMACAO NAO E ENFEITE. Criar o visor com o range final devolve
        tela azul lisa: o motor ainda nao tem a malha e a camera nasce dentro
        do chao. Nao existe evento de "terminei" — gmp-steadychange nao dispara
@@ -2858,9 +2939,12 @@ window.MSEarth=(function(){
       mapa.tilt=(i===0)?CAM.tiltEntrada:CAM.tilt;
       mapa.heading=CAM.heading;
       i++;
+      progresso(1+i,'aproximando · '+i+' de '+passos.length);
       if(i<passos.length){ setTimeout(passo,PAUSA); return; }
+      progresso(TOTAL-1,'assentando a malha');
       setTimeout(function(){
         var d=diagnostica(); if(d){ falha(d); return; }
+        progresso(TOTAL,'pronto');
         if(slide) slide.classList.remove('esperando');
         orbita(true);            /* entra girando, devagar */
       },4000);
@@ -2885,6 +2969,25 @@ window.MSEarth=(function(){
     /* fallback com o MESMO passo angular: os dois caminhos giram igual */
     var passo=360/(VOLTA/1000)*0.04;
     timerOrb=setInterval(function(){ mapa.heading=((mapa.heading||0)+passo)%360; },40);
+  }
+  /* ── RECENTRAR ─────────────────────────────────────────────────────────
+     Volta ao enquadramento canonico. `flyCameraTo` e da propria API e faz a
+     volta com animacao; sem ela, escreve-se center/range/tilt/heading direto
+     — corte em vez de voo, mas cumpre. A orbita para antes: duas animacoes
+     de camera se atropelam. E volta a girar quando a viagem termina, porque
+     e assim que o slide se comporta. */
+  function recentra(){
+    if(!mapa||!ANCORA) return;
+    var girava=orbitando;
+    if(girava) orbita(false);
+    var alvo={center:{lat:ANCORA.lat,lng:ANCORA.lng,altitude:ANCORA.alt},
+              range:CAM.range,tilt:CAM.tilt,heading:CAM.heading};
+    if(mapa.flyCameraTo){ mapa.flyCameraTo({endCamera:alvo,durationMillis:2200}); }
+    else { mapa.center=alvo.center; mapa.range=alvo.range;
+           mapa.tilt=alvo.tilt; mapa.heading=alvo.heading; }
+    var bt=slide&&slide.querySelector('.rec');
+    if(bt){ bt.classList.add('feito'); setTimeout(function(){ bt.classList.remove('feito'); },900); }
+    if(girava) setTimeout(function(){ orbita(true); },2400);
   }
   function monta(){
     var vis=slide.querySelector('.visor');
@@ -2928,6 +3031,7 @@ window.MSEarth=(function(){
   document.addEventListener('click',function(e){
     var sl=e.target.closest&&e.target.closest('.g-earth-3d'); if(!sl) return;
     if(e.target.closest('.orb')){ e.stopPropagation(); orbita(!orbitando); return; }
+    if(e.target.closest('.rec')){ e.stopPropagation(); recentra(); return; }
     if(e.target.closest('.sair')){ e.stopPropagation(); desativa(); document.body.focus(); return; }
     if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando');
       if(orbitando) orbita(false); }          /* quem pegou o mouse manda */
@@ -2938,7 +3042,8 @@ window.MSEarth=(function(){
       if(!s||s.g!=='earth-3d'){ desativa(); if(orbitando) orbita(false); return; }
       slide=document.querySelectorAll('#palco .slide')[cur];
       if(montado){ if(!orbitando&&mapa) orbita(true); return; }
-      montado=true; slide.classList.add('esperando'); monta();
+      montado=true; slide.classList.add('esperando');
+      progresso(1,'carregando a api'); monta();
     }
   };
 })();

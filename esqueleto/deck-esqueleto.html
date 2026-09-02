@@ -1104,8 +1104,22 @@ body.esc .av2 .avc{color:#EDE6DAaa}
   background:linear-gradient(transparent,#211D1A26 44%,#211D1A8f 100%);color:var(--creme)}
 /* sombra de leitura: invisível como forma, decisiva sobre céu claro. É ela
    que sustenta o chrome e a legenda agora que o véu é leve. */
-body.em-cheia .chrome,.g-cheia .ov h2,.g-cheia .ov .cap{
+body.em-imagem .chrome,.g-cheia .ov h2,.g-cheia .ov .cap{
   text-shadow:0 1px 3px #211D1A73,0 2px 14px #211D1A59}
+/* ⚑ SLIDE DE FUNDO EM IMAGEM: o chrome inverte e ganha véu próprio.
+   Medido em 02/09/2026 — sobre o céu branco de um render isométrico o
+   chrome em Cal dava 1,04:1, ou seja invisível; e sobre imagem de satélite
+   escura o chrome em tinta era igualmente ilegível. Voltar a chapar a
+   imagem estaria contra a decisão do mesmo dia (véu, não tarja), então o
+   véu é confinado à FAIXA DO CHROME: 116px no topo, contra os 20% de
+   altura que o gradiente da prancha cobria. Assim o canto fica legível
+   sobre qualquer imagem — céu branco, satélite, fachada colorida — e a
+   imagem segue limpa no meio, que é onde ela é vista. */
+body.em-imagem .chrome{color:#EDE6DAdb}
+body.em-imagem .chrome.topo{
+  background:linear-gradient(#211D1A94 0,#211D1A59 46%,#211D1A00 100%)}
+body.em-imagem .chrome.pe{
+  background:linear-gradient(#211D1A00 0,#211D1A40 60%,#211D1A80 100%)}
 .g-cheia .ov h2{color:var(--creme);font-family:var(--mono);font-weight:500;
   font-style:italic;text-transform:lowercase;font-size:var(--fs-h);
   letter-spacing:-.022em;line-height:1}
@@ -1124,6 +1138,10 @@ body.em-cheia .chrome,.g-cheia .ov h2,.g-cheia .ov .cap{
 body.em-cheia.ocioso .chrome,
 body.em-cheia.ocioso .slide.ativo .ov,
 body.em-cheia.ocioso .slide.ativo .full:after{opacity:0}
+/* o visor 3d NÃO some com o ponteiro parado: ali o chrome carrega os botões
+   de órbita e de recentrar, e apagar controle enquanto a câmera gira deixa
+   quem apresenta sem volante. O `em-cheia` é que restringe o efeito à
+   prancha de imagem — por isso a regra acima não menciona `em-imagem`. */
 @media (prefers-reduced-motion: reduce){
   body.em-cheia.ocioso .chrome,
   body.em-cheia.ocioso .slide.ativo .ov,
@@ -2243,6 +2261,13 @@ function go(i,tudo){
   const marcaFundo = !!((!!s.fundo && s.g!=='divisor') || trama);   /* idem */
   document.body.classList.toggle('com-fundo',marcaFundo||divFundo);
   document.body.classList.toggle('em-cheia', s.g==='cheia');
+  /* `em-imagem` = o fundo do slide é imagem, não campo pintado — prancha
+     `cheia` ou visor `earth-3d`. É o que decide que o chrome inverte e ganha
+     véu próprio. Acrescentado em 02/09/2026: sem isto o chrome do slide de
+     localização saía em Ferro sobre imagem de satélite escura, e o logotipo
+     do canto saía COLORIDO onde tinha de sair em Cal. Gabarito novo cujo
+     fundo seja imagem entra nesta lista. */
+  document.body.classList.toggle('em-imagem', s.g==='cheia'||s.g==='earth-3d');
   document.body.classList.toggle('fundo-div',divFundo);
   document.body.classList.toggle('fundo-trama',trama);
   /* cada canvas tem o seu conjunto de imagens e a sua paleta, fixados no
