@@ -10,7 +10,7 @@ em `../sistemas/DECK-MONTAR.md`, e não sabe de que marca é a peça.
 
 **Este arquivo não é o mestre.** O mestre é o
 `lavro/01-MARCA-normativo.md`, ao lado — o documento normativo da marca, v1.6
-de 02/08/2026, canônico em `[caminho interno removido]01_MARCA_Lavro.md` e
+de 02/08/2026, canônico no repositório da Lavrō (`01_MARCA_Lavro.md`) e
 versionado no git. Este aqui é o **recorte de deck** dele: o que o motor
 precisa, na ordem em que o motor pergunta. Divergiram, **o normativo ganha**.
 

@@ -124,7 +124,7 @@ marca não tem.
 Consagrar um default de WordPress como superfície de peça é o acidente que este
 arquivo existe para impedir. O Cal `#F3EEE7` é decisão do Michel em 29/08:
 quente a 5% de saturação, na família de cal e argamassa que é o assunto da
-frente, e mantém o Vinho em 8,64. **Não validado com o os sócios do Estúdio** — §8.
+frente, e mantém o Vinho em 8,64. **Não validado com os sócios do Estúdio** — §8.
 
 Apoio:
 
@@ -445,7 +445,7 @@ campo chapado.
 > **A capa da frente é a capa-morph, e ela não se remonta.** Decisão do
 > Michel, 02/09: mesmo em versão provisória, é ela o arquivo correto —
 > copia-se o template e troca-se o título. Sai de canônica para provisória
-> quando ele confirmar a aprovação com o Toninho.
+> quando ele confirmar a aprovação com os sócios.
 
 **Arquivo: `sarasa/grafismo-linha.svg` — agora é o vetor oficial.** Veio de
 `LOGOTIPO/desenho-forte.pdf`: **trinta caminhos, nenhuma imagem**, prancheta de
@@ -496,10 +496,10 @@ Contra o checklist do `MARCA-MICHEL-STEIN.md`:
 ### O Instituto Sarasá — fora de escopo, registrado para ninguém inventar
 
 O portfólio é assinado por **duas** entidades, lado a lado na capa e na
-contracapa: **Estúdio Sarasá Conservação e Restauração S/S Ltda** (CNPJ
-[cnpj removido], [cau removido], [endereço removido]) e **Instituto Sarasá de
-Arte, Cultura e Cidadania — ISACC** (CNPJ [cnpj removido], [endereço removido]
-1.099). Decisão do Michel em 29/08: **este arquivo cobre só o Estúdio.**
+contracapa: **Estúdio Sarasá Conservação e Restauração S/S Ltda** e **Instituto Sarasá de
+Arte, Cultura e Cidadania — ISACC**. (CNPJ, CAU e endereço das duas ficam no
+repositório privado, `sarasa/DADOS-ESTUDIO.md` — este arquivo é público.)
+Decisão do Michel em 29/08: **este arquivo cobre só o Estúdio.**
 
 **O Instituto tem manual; o Estúdio não.** `Instituto Sarasá/Manual01-17.pdf`,
 17 páginas, InDesign, setembro/2024 — "Guia básico de identidade visual". Dele,
@@ -528,7 +528,7 @@ nome grande embaixo — diferenciada por peso e caixa: o Instituto usa `sarasá`
 Levantar de verdade quando houver peça do Instituto. Até lá, **nada do Instituto
 entra em peça do Estúdio**, e vice-versa.
 
-### Aberto, e é decisão do Michel com o os sócios do Estúdio
+### Aberto, e é decisão do Michel com os sócios do Estúdio
 
 1. **Face do logotipo — continua desconhecida.** Todos os vetores da pasta
    `LOGOTIPO/` estão com o texto convertido em contorno: `pdffonts` não acusa

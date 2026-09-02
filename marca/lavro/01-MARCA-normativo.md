@@ -8,7 +8,7 @@
 > e pílulas ficam em `02_DESIGN-SYSTEM_Lavro.md`.
 >
 > **Versão 1.6 · 02.08.2026** · decisões das rodadas 1 a 10, mais a serifa do pacote (9.2) e o Azulejo (8.1b)
-> Local canônico: `[caminho interno removido]` — versionado no git.
+> Local canônico: o repositório da Lavrō — versionado no git.
 > O Google Drive guarda apenas cópia de leitura, que pode estar velha.
 
 ---

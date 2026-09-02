@@ -12,13 +12,3 @@ amaz-r1/apresentacao.html:R$ 10
 
 # Telefone placeholder do manual da marca
 marca/michel-stein/manual.html:11 99999-0000
-
-# DECISÃO PENDENTE (auditoria 02.09.2026): CNPJ e endereço do Estúdio e do Instituto Sarasá.
-# CNPJ é público por natureza, mas a regra da casa diz "não entra". Se o Michel mandar mover
-# para o privado, apagar estas linhas — a guarda volta a apontar.
-marca/MARCA-SARASA.md:[cnpj removido]
-marca/MARCA-SARASA.md:[cnpj removido]
-marca/MARCA-SARASA.md:[endereço removido] 1
-marca/sarasa/styleguide.html:[cnpj removido]
-marca/sarasa/styleguide.html:[cnpj removido]
-marca/sarasa/styleguide.html:[endereço removido] 1
