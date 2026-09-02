@@ -30,19 +30,53 @@
   --mono:'DM Mono',ui-monospace,monospace; --sans:'Inter',system-ui,sans-serif;
 
   /* ═══ ESCALA: É MOTOR, NÃO MARCA ════════════════════════════════════
-     Calibrada em 19/08/2026 e travada. Não recalibrar sem medir.
-     As unidades são cqw/cqh, do #quadro de 1600x900 — não vw/vh.
+     ⚑ ESTES NÚMEROS NÃO SE TOCAM, E O MOTIVO NÃO É "estão travados".
+     O motivo é que o Michel reconhece a proporção de longe: corpo de texto,
+     margem e botão de navegação têm de sair IGUAIS em toda peça, de toda
+     frente. Peça que muda a proporção é peça errada, não peça diferente.
+
+     Recalibrados em 02/09/2026 para os valores da `casa-ittb`, que é a peça
+     de referência da casa. A tabela de 19/08 tinha encolhido tudo para
+     caber num quadro de 1600 × 900 — corpo com teto de 17px onde a ITTB usa
+     20, seta de 30px onde a ITTB usa 56. Era isso que se via como "está
+     pouco diferente do que eu esperava".
+
+     Unidades em cqw/cqh, do #quadro — que agora tem o tamanho da tela.
+     1cqw = 1% da largura; num monitor de 1600 dá os mesmos 16px de sempre.
      ══════════════════════════════════════════════════════════════════ */
-  --gut:clamp(22px,4.2cqw,86px); --top:clamp(46px,5.4cqh,74px); --bot:clamp(46px,5.4cqh,74px);
-  --fs-mega:clamp(30px,5.6cqw,88px); --fs-big:clamp(24px,3.9cqw,62px); --fs-h:clamp(19px,2.3cqw,36px);
-  --fs-item:clamp(14px,1.32cqw,21px); --fs-body:clamp(13px,1.05cqw,17px);
-  --fs-cap:clamp(9.5px,.74cqw,12.5px); --fs-num:clamp(25px,3.15cqw,54px);
+  /* margem e faixas */
+  --gut:clamp(26px,4.75cqw,96px);        /* margem do chrome            */
+  --gut-in:clamp(38px,8cqw,190px);       /* margem interna — o respiro  */
+  --top:clamp(70px,9.4cqh,116px);        /* faixa do chrome alto        */
+  --bot:clamp(62px,8.2cqh,104px);        /* faixa do chrome baixo       */
+  --y-topo:clamp(17px,2.5cqh,38px);
+  --h-faixa:clamp(22px,1.9cqw,38px);
+  /* texto */
+  --fs-mega:clamp(38px,4.6cqw,92px);     /* ITTB --fs-h1                */
+  --fs-big:clamp(24px,2.65cqw,52px);     /* ITTB --fs-h2                */
+  --fs-h:clamp(19px,2.1cqw,40px);
+  --fs-item:clamp(17px,1.38cqw,28px);    /* ITTB --fs-item              */
+  --fs-lead:clamp(15px,1.25cqw,24px);
+  --fs-body:clamp(13.5px,1.03cqw,20px);  /* ITTB --fs-body              */
+  --fs-small:clamp(12px,.88cqw,17px);
+  --fs-kick:clamp(10.5px,.8cqw,15px);
+  --fs-cap:clamp(9.5px,.72cqw,14px);     /* ITTB --fs-cap               */
+  --fs-num:clamp(28px,3.15cqw,58px);
+  --fs-div:clamp(42px,6cqw,124px);       /* nome da seção no divisor    */
+  --fs-secao:clamp(15px,1.42cqw,29px);
+  --fs-marca:clamp(14px,1.28cqw,26px);   /* assinatura, alto direita    */
+  --fs-pe:clamp(13px,1.16cqw,23px);      /* projeto · cliente, pé       */
+  /* navegação */
+  --seta:clamp(38px,2.9cqw,56px);        /* ITTB — o tamanho do botão   */
+  --pt:clamp(6px,.44cqw,9px);            /* bolinha de seção            */
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
 /* o body deixou de ser o fundo da prancha e virou a MOLDURA: quem pinta o
-   tema agora é o #quadro. Sem isso as tarjas do letterbox mudavam de cor a
-   cada slide, e a peça parecia piscar por fora. */
+   tema é o #quadro. Nasceu no tempo do letterbox, em que as tarjas mudavam
+   de cor a cada slide e a peça piscava por fora. Sem tarja continua certo:
+   o #quadro é a superfície, e a moldura é o campo que sobra sob o `contain`
+   da prancha de imagem — o único lugar onde ela ainda aparece. */
 body{background:var(--moldura);color:var(--tinta);font-family:var(--sans);-webkit-font-smoothing:antialiased;
   transition:color .38s ease}
 #quadro{background:var(--creme);transition:background .38s ease}
@@ -139,8 +173,8 @@ body.esc .chrome{color:#EDE6DAb0}
 .chrome.topo{top:0}
 .secao{font-style:italic;position:relative;padding-left:26px;white-space:nowrap}
 .secao .sn{position:absolute;left:0;top:50%;transform:translateY(-50%);font-style:normal;opacity:.55}
-.dots{display:flex;gap:9px;pointer-events:auto}
-.sdot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.28;cursor:pointer;position:relative;transition:opacity .25s}
+.dots{display:flex;gap:clamp(9px,.8cqw,14px);pointer-events:auto}
+.sdot{width:var(--pt);height:var(--pt);border-radius:50%;background:currentColor;opacity:.28;cursor:pointer;position:relative;transition:opacity .25s}
 .sdot.on{opacity:1}
 .sdot span{position:absolute;bottom:150%;left:50%;transform:translateX(-50%);opacity:0;white-space:nowrap;font-style:italic;letter-spacing:.1em;transition:opacity .2s;pointer-events:none}
 .sdot:hover span{opacity:.9}
@@ -163,11 +197,14 @@ body.esc .chrome{color:#EDE6DAb0}
   box-shadow:0 1px 5px rgba(33,29,26,.16);
   color:var(--tinta)}
 .cont{font-variant-numeric:tabular-nums;letter-spacing:.1em;color:var(--tinta);opacity:.72}
-.seta{width:clamp(23px,2cqw,30px);height:clamp(23px,2cqw,30px);
+/* 02/09/2026 — a seta passa a ter o tamanho da casa ITTB (`--seta`, 38 a
+   56px). Vinha em 23–30px, e era isso que o Michel chamou de "botõezinho".
+   O glifo acompanha por proporção, não por px fixo. */
+.seta{width:var(--seta);height:var(--seta);
   border:1px solid rgba(33,29,26,.34);border-radius:50%;
   display:grid;place-items:center;cursor:pointer;opacity:.9;
   transition:opacity .2s,transform .1s,background .2s;
-  background:none;color:var(--tinta);font-size:11px}
+  background:none;color:var(--tinta);font-size:calc(var(--seta)*.31);line-height:1}
 .seta:hover{opacity:1;background:rgba(33,29,26,.08)}
 .seta:active{transform:scale(.94)}
 body.na-capa .chrome.pe .pj,body.na-capa .marca{opacity:0}
@@ -963,39 +1000,62 @@ body.esc .av2 .avc{color:#EDE6DAaa}
 
 
 /* ══════════════════════════════════════════════════════════════════════════
-   O QUADRO · letterbox de proporção fixa · 25/08/2026
+   O QUADRO · TELA CHEIA · revisto em 02/09/2026
    ──────────────────────────────────────────────────────────────────────────
-   A prancha é uma PRANCHA: tem proporção, como uma folha. Antes ela tentava
-   se acomodar a qualquer tela e, num celular, a escala em `vw` caía toda no
-   piso do clamp — texto no mínimo, layout no máximo, tudo brigando.
+   ⚑ O texto abaixo descreve uma decisão de 25/08 que foi REVERTIDA. Fica
+     aqui porque explica por que o esqueleto tinha ficado diferente das
+     peças de referência, e o que se perdeu no caminho.
 
-   Agora o deck vive num quadro de 1600 × 900 FIXO, em pixels, e o quadro
-   inteiro é escalado por `transform` até caber na tela — como um vídeo em
-   tela cheia. Consequências, todas desejadas:
+   ERA ASSIM (25/08 a 02/09): o deck vivia num quadro de 1600 × 900 FIXO,
+   em pixels, escalado por `transform` até caber na tela — como vídeo em
+   tela cheia. Vantagem real: nenhuma prancha transbordava, por construção.
+   **Preço, que ninguém tinha medido: tarja preta em cima e embaixo em toda
+   tela que não fosse 16:9 exato.** Isto é o letterbox, e é errado.
 
-   · a peça é IDÊNTICA em qualquer tela. Não há mais layout que se refaz,
-     fonte que cai no piso, nem coluna que empilha. O que se vê no notebook
-     é o que se vê no celular, menor.
-   · nenhuma prancha transborda, por construção: o quadro tem exatamente a
-     proporção para a qual ela foi desenhada.
-   · o notch e a Dynamic Island deixam de comer informação — o quadro é
-     medido contra a área segura, nunca contra a tela bruta.
-   · as `@media` de largura viraram código morto e foram retiradas: dentro
-     de um quadro de 1600 × 900 elas nunca disparam.
+   É ASSIM (02/09 em diante): o quadro PREENCHE a área segura. Tela cheia,
+   sem tarja, que é o que a `casa-ittb` e a `tokyo-centro` sempre fizeram —
+   e são elas o padrão da casa, não este arquivo.
 
-   As unidades de dentro são `cqw`/`cqh`, do CONTÊINER, não da janela. Com
-   `container-type:size` no quadro, 1cqw = 16px e 1cqh = 9px SEMPRE — os
-   mesmos valores que 1cqw e 1cqh entregavam num 1600 × 900. Por isso nenhuma
-   clamp precisou ser recalibrada.
+   O QUE VOLTA A SER RESPONSABILIDADE DE QUEM MONTA:
+   · **transbordo.** A garantia por construção morreu com o quadro fixo.
+     Em troca, o build de cada peça roda a varredura de transbordo em cinco
+     proporções (21:9, 16:9, 16:10, 3:2, 4:3) e falha antes de publicar.
+     A varredura não é opcional — é o que substitui a garantia.
+   · **as `@media` de largura retiradas em 25/08** ("viraram código morto
+     dentro do quadro fixo") voltam a poder disparar abaixo de ~1200px de
+     largura. Não foram restauradas: em uso real — monitor e projetor — os
+     limiares não são alcançados, e restaurar vinte regras às cegas é
+     trabalho especulativo. O que estava lá está em
+     `_R8/cel-responsivo.css.txt`, e a varredura é que aponta se falta.
+   · o notch e a Dynamic Island continuam cobertos: o quadro é medido
+     contra `#moldura`, que já é a área segura.
+
+   As unidades de dentro seguem em `cqw`/`cqh`, do CONTÊINER. Com
+   `container-type:size` no quadro, 1cqw = 1% da largura DO QUADRO — e o
+   quadro agora tem a largura da tela. Num monitor de 1600 isso dá os mesmos
+   16px de antes; num ultrawide dá mais, que é o que se quer. Foi por isso
+   que a troca do quadro fixo para tela cheia não exigiu reescrever as 275
+   clamps: a unidade continua a mesma, só o contêiner cresceu.
    ══════════════════════════════════════════════════════════════════════════ */
 #moldura{position:fixed;
   top:env(safe-area-inset-top,0px);right:env(safe-area-inset-right,0px);
   bottom:env(safe-area-inset-bottom,0px);left:env(safe-area-inset-left,0px);
   overflow:hidden}
-#quadro{position:absolute;left:50%;top:50%;width:1600px;height:900px;
-  transform-origin:50% 50%;transform:translate(-50%,-50%) scale(1);
-  container-type:size;container-name:q;overflow:hidden;
-  box-shadow:0 0 0 1px #EDE6DA1a}
+/* ⚑ TELA CHEIA — corrigido em 02/09/2026, e é a lei da casa.
+   O quadro PREENCHE a área segura. Não tem largura fixa, não tem
+   transform:scale, e por isso não produz tarja preta em cima nem embaixo,
+   em monitor nenhum. Foi o erro da peça EMEI Presidente Dutra: a versão de
+   19/08 travava 1600 × 900 e escalava, o que em qualquer tela que não fosse
+   16:9 exato devolvia letterbox. As peças de referência da casa —
+   `casa-ittb` e `tokyo-centro` — nunca fizeram isso: compõem contra a
+   viewport, e são elas o padrão.
+   O `container-type:size` FICA. É ele que mantém as clamps em `cqw`/`cqh`
+   funcionando: num quadro de 1600 de largura, 1cqw continua valendo 16px —
+   igual ao que valia antes. O que mudou é que agora o quadro tem a largura
+   da tela, não a de um retângulo desenhado. Nenhuma clamp precisou mudar
+   por causa disto. */
+#quadro{position:absolute;inset:0;width:100%;height:100%;
+  container-type:size;container-name:q;overflow:hidden}
 
 /* ─── retrato ────────────────────────────────────────────────────────────
    Num celular em pé, 16:9 dá 390 x 219 — a peça inteira, correta, pequena.
@@ -1021,15 +1081,31 @@ body.esc .av2 .avc{color:#EDE6DAaa}
    gabarito. Sem a segunda, o texto sumiria em todo slide.
    Receita: sistemas/gabaritos/render-cheia.md
    ═══════════════════════════════════════════════════════════════════ */
-.g-cheia{padding:0;background-image:none}
+/* ⚑ A EXCEÇÃO DA TELA CHEIA — 02/09/2026.
+   O slide preenche a tela; a IMAGEM não estoura. `contain` em vez de
+   `cover`: numa tela de proporção diferente da do render, sobra campo
+   neutro nas bordas e a imagem entra INTEIRA. Numa peça de arquitetura
+   isso não é detalhe — o que o `cover` cortava era desenho, e desenho
+   cortado é informação perdida. O campo que sobra é a moldura, nunca o
+   tema do slide: assim a borda lê como passe-partout e não como erro. */
+.g-cheia{padding:0;background-image:none;background:var(--moldura)}
 .g-cheia .full{position:absolute;inset:0}
 .g-cheia .full .ph{position:absolute;inset:0}
-.g-cheia .full .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.g-cheia .full .ph img{width:100%;height:100%;object-fit:contain;display:block}
+/* ⚑ GRADIENTES SUAVES — 02/09/2026. Vinham pesados (b8 no topo, E6 a 62%
+   no pé) e chapavam o render. Aqui é véu, não tarja: entra a um terço da
+   opacidade anterior e fecha mais curto. A legibilidade do chrome deixou
+   de depender do gradiente e passou a vir do `text-shadow` de baixo — que
+   é o que permite o véu ser leve sem o texto sumir sobre céu branco. */
 .g-cheia .full:after{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(#211D1Ab8 0,#211D1A00 22%)}
+  background:linear-gradient(#211D1A5c 0,#211D1A1f 8%,#211D1A00 20%)}
 .g-cheia .ov{position:absolute;inset:auto 0 0 0;
   padding:clamp(50px,8cqh,120px) calc(var(--gut) * 1.9) var(--bot) var(--gut);
-  background:linear-gradient(transparent,#211D1AE6 62%);color:var(--creme)}
+  background:linear-gradient(transparent,#211D1A26 44%,#211D1A8f 100%);color:var(--creme)}
+/* sombra de leitura: invisível como forma, decisiva sobre céu claro. É ela
+   que sustenta o chrome e a legenda agora que o véu é leve. */
+body.em-cheia .chrome,.g-cheia .ov h2,.g-cheia .ov .cap{
+  text-shadow:0 1px 3px #211D1A73,0 2px 14px #211D1A59}
 .g-cheia .ov h2{color:var(--creme);font-family:var(--mono);font-weight:500;
   font-style:italic;text-transform:lowercase;font-size:var(--fs-h);
   letter-spacing:-.022em;line-height:1}
@@ -1127,11 +1203,14 @@ body.em-cheia.ocioso .slide.ativo .full:after{opacity:0}
    um vídeo faz em tela cheia. Medido contra #moldura, que já é a área
    segura — por isso o recorte da câmera nunca entra na conta. */
 (function(){
-  var W=1600,H=900,m=document.getElementById('moldura'),q=document.getElementById('quadro');
+  var m=document.getElementById('moldura');
   function ajusta(){
-    var lw=m.clientWidth,lh=m.clientHeight,k=Math.min(lw/W,lh/H);
-    q.style.transform='translate(-50%,-50%) scale('+k+')';
-    document.documentElement.style.setProperty('--k',k);
+    /* 02/09/2026 — não há mais escala a calcular: o quadro preenche a área
+       segura e a composição respira em cqw/cqh. O que sobrou aqui é só
+       medir o regime (retrato ou paisagem) e publicar `--k` para quem
+       ainda o leia. Ver a nota de TELA CHEIA no CSS. */
+    var lw=m.clientWidth,lh=m.clientHeight;
+    document.documentElement.style.setProperty('--k',1);
     document.body.classList.toggle('retrato',lw < lh);
   }
   ajusta();
@@ -2149,13 +2228,19 @@ function go(i,tudo){
      num divisor nao carrega imagem nem ocupa VRAM. O custo e so o rAF
      enquanto o slide esta visivel, e a engine auto-pausa fora dele.
      `?semdivisor` na URL desliga, para comparar o ritmo lado a lado.    */
-  const divFundo = s.g==='divisor' && s.fundo && !location.search.includes('semdivisor');
+  /* ⚑ O `!!` NÃO É ENFEITE. `classList.toggle(nome, undefined)` IGNORA o
+     segundo argumento e ALTERNA — então num deck em que nenhum divisor traz
+     `fundo`, esta linha devolvia `undefined`, a classe `fundo-div` ligava
+     sozinha, o véu Cal a 60% entrava por cima e o campo do divisor saía
+     lavado. Achado na peça EMEI Presidente Dutra, 02/09/2026: passou dois
+     meses invisível porque todo deck anterior trazia `fundo:1` no divisor. */
+  const divFundo = !!(s.g==='divisor' && s.fundo && !location.search.includes('semdivisor'));
   /* "divisor só trama": slide verde de conteúdo roda o MESMO carrossel da
      marca, mas sob véu quase opaco. O que sobra é o pontilhado em movimento,
      sem imagem legível — que é o efeito pedido, e sem um terceiro contexto
      WebGL só para isso. */
   const trama = !!s.trama && !location.search.includes('semtrama');
-  const marcaFundo = (!!s.fundo && s.g!=='divisor') || trama;
+  const marcaFundo = !!((!!s.fundo && s.g!=='divisor') || trama);   /* idem */
   document.body.classList.toggle('com-fundo',marcaFundo||divFundo);
   document.body.classList.toggle('em-cheia', s.g==='cheia');
   document.body.classList.toggle('fundo-div',divFundo);

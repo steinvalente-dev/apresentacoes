@@ -426,6 +426,27 @@ dentro das letras · sobre fotografia · em peça pequena · animado.
 **Uma peça tem um mecanismo de superfície só:** fotografia, *ou* contorno, *ou*
 campo chapado.
 
+> ⚑ **Um por PRANCHA, não um por peça — ressalva de 02/09/2026.** A frase
+> acima foi lida como "a peça inteira escolhe um mecanismo", e com isso a
+> primeira peça da frente saiu com a abertura em campo chapado + contorno,
+> **ignorando a capa-morph que já existia**. Não era o que a regra queria
+> dizer. O que se proíbe é empilhar dois mecanismos na MESMA prancha —
+> fotografia sob contorno, ou contorno sobre campo com foto.
+>
+> Na peça publicada a distribuição é esta, e é o padrão da frente:
+>
+> | prancha | mecanismo |
+> |---|---|
+> | capa (`modulos/capa-morph-sarasa.html`) | **fotografia em trama**, sob campo Vinho |
+> | divisor de seção | **contorno** + campo chapado |
+> | contracapa | **contorno** + campo chapado |
+> | prancha de leitura | campo Cal, nenhum dos dois |
+>
+> **A capa da frente é a capa-morph, e ela não se remonta.** Decisão do
+> Michel, 02/09: mesmo em versão provisória, é ela o arquivo correto —
+> copia-se o template e troca-se o título. Sai de canônica para provisória
+> quando ele confirmar a aprovação com o Toninho.
+
 **Arquivo: `sarasa/grafismo-linha.svg` — agora é o vetor oficial.** Veio de
 `LOGOTIPO/desenho-forte.pdf`: **trinta caminhos, nenhuma imagem**, prancheta de
 8504 × 3402 pt, desenhado em Ferro. A vetorização derivada que eu tinha feito do
@@ -539,11 +560,22 @@ entra em peça do Estúdio**, e vice-versa.
 
 ## 9 · O vocabulário de gabaritos da Sarasá
 
-**Não há peça Sarasá publicada no acervo.** Este parágrafo é previsão de
-necessidade — a lista real sai da primeira peça montada, esta semana.
+**Atualizado em 02/09/2026: já há peça Sarasá publicada** —
+`emei-presidente-dutra`, 35 pranchas. O vocabulário abaixo deixou de ser
+previsão e passou a ser medição.
 
-Do esqueleto servem desde já: `marca`, `divisor`, `frase`, `lista`, `cheia`,
-`tabela`, `fim`.
+**Os gabaritos que a primeira peça usou, e como:**
+
+| gabarito | como entra nesta frente |
+|---|---|
+| `marca` | **dois momentos num slide.** A · capa institucional da capa-morph, parada na tela enquanto a sala se acomoda. B · o título da apresentação, que entra no clique em `começar`. Contracapa é o mesmo gabarito com `fim_:1` |
+| `divisor` | campo Vinho + contorno na base. **Sem underscore piscante** — é a assinatura da michel stein_ |
+| `sumario` | o roteiro em três blocos, texto curto. A frente não tolera prancha prolixa |
+| `tabela` | comparação de opções, com `prem` carregando o que falta confirmar |
+| `cheia` | o render, em `contain` e não `cover`: em peça de arquitetura o que o `cover` corta é desenho |
+| `earth-3d` | localização no visor fotorrealista, girando devagar. **Só funciona por link** |
+
+Do esqueleto servem também, ainda não usados: `frase`, `lista`, `fim`.
 
 Os que a frente vai pedir e **não existem**:
 

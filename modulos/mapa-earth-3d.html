@@ -415,6 +415,10 @@
       setTimeout(function(){
         slide.classList.remove('esperando');
         solta();
+        /* entra girando — 02/09/2026. O slide de localização não espera
+           ninguém achar o botão: a malha fica pronta e a câmera começa a
+           orbitar, devagar. O botão passa a servir para PARAR. */
+        orbita(true);
       }, 4000);
     })();
   }
@@ -422,7 +426,20 @@
   /* ── órbita ────────────────────────────────────────────────────────
      flyCameraAround é da própria API e é o movimento certo: mantém o
      alvo e gira em torno. Se sumir do beta, o fallback manual embaixo
-     faz o mesmo empurrando o heading — mais duro, mas não quebra.     */
+     faz o mesmo empurrando o heading — mais duro, mas não quebra.
+
+     ⚑ O GIRO É LENTO, E ISSO É REGRA — não preferência de peça.
+     Decisão do Michel em 02/09/2026, depois de ver a primeira peça com o
+     visor: os 60 s por volta da versão anterior leem como câmera de drone
+     apressada e roubam a atenção de quem está falando. VOLTA é o tempo de
+     uma volta completa; ROUNDS é alto de propósito, para a órbita durar a
+     reunião inteira sem ninguém religar. Girar indefinidamente e devagar é
+     o comportamento padrão: o slide de localização entra já girando.
+     Mexer aqui muda TODA peça que usar o gabarito. Se um dia parecer
+     lento demais, medir contra a fala — a referência é conversa de
+     reunião, não vídeo de portfólio.                                   */
+  var VOLTA  = 180000;   /* ms por volta completa — 3 minutos           */
+  var ROUNDS = 40;       /* 40 voltas = 2 h de órbita antes de parar    */
   var timerOrb = null;
   function orbita(liga){
     if(!mapa) return;
@@ -438,13 +455,17 @@
     if(mapa.flyCameraAround){
       mapa.flyCameraAround({
         camera:{ center:mapa.center, tilt:mapa.tilt, range:mapa.range, heading:mapa.heading },
-        durationMillis: 42000,
-        rounds: 1
+        durationMillis: VOLTA,
+        rounds: ROUNDS
       });
       return;
     }
+    /* fallback: o mesmo passo angular, derivado de VOLTA — assim os dois
+       caminhos giram na MESMA velocidade e ninguém percebe qual está em uso.
+       360° / (VOLTA/1000) graus por segundo, aplicado a cada 40 ms.       */
+    var passo = 360 / (VOLTA / 1000) * 0.04;
     timerOrb = setInterval(function(){
-      mapa.heading = ((mapa.heading || 0) + 0.28) % 360;
+      mapa.heading = ((mapa.heading || 0) + passo) % 360;
     }, 40);
   }
   orbBt.addEventListener('click', function(e){
