@@ -114,11 +114,11 @@
   <button id="bt-modo" type="button">modo: SATELLITE</button>
   <button id="bt-oclu" class="on" type="button">visível atrás de prédio</button>
   <button id="bt-haste" class="on" type="button">haste até o solo</button>
-  <button id="bt-sonda" class="on" type="button">sonda</button>
+  <button id="bt-sonda" type="button">sonda</button>
   <button id="bt-topo" type="button">ir ao topo</button>
 </div>
 
-<pre id="sonda">sondando a API…</pre>
+<pre id="sonda" class="off">sondando a API…</pre>
 
 <script src="ms-maps-chave.js"></script>
 <script>
@@ -135,7 +135,25 @@ window.MSA = (function(){
   var CANAL = (window.MS_MAPS && window.MS_MAPS.canal) || 'beta';
 
   /* o enquadramento da casa, igual ao do módulo */
-  var CAM = {alt:760, range:600, tilt:58, heading:30, tiltEntrada:45};
+  var CAM = {alt:760, range:430, tilt:58, heading:30, tiltEntrada:45};
+
+  /* ⚑ DESVIO DO LOOK-AT — medido, não deduzido.
+     Declarar `center` NÃO põe aquele ponto no centro da tela: com tilt 58
+     o ponto visado cai ~55 m ANTES do declarado, na direção da câmera. Sem
+     compensar, o assunto sobe para o terço superior do quadro; pior, o
+     desvio gira com o heading, então na órbita o lote BALANÇA.
+     A correção é deslocar o center 0,00050° no rumo do heading, a cada
+     quadro. Custa nada e o lote fica parado no centro a volta inteira. */
+  var DESVIO = 0.00050;
+  function enquadra(h){
+    if(!mapa) return;
+    var rad = h * Math.PI / 180;
+    mapa.center = {
+      lat: CFG.centro.lat + DESVIO * Math.cos(rad),
+      lng: CFG.centro.lng + DESVIO * Math.sin(rad) / Math.cos(CFG.centro.lat*Math.PI/180),
+      altitude: CAM.alt
+    };
+  }
   var VOLTA = 140000, RAMPA = 700;
 
   /* ── CFG · tudo que se ajusta vive aqui ────────────────────────────── */
@@ -184,7 +202,7 @@ window.MSA = (function(){
     ruas: [
       {rot:'Rua Santo Elias',   lat:-23.532290, lng:-46.567090, alt:14},
       {rot:'Rua Santa Maria',   lat:-23.531990, lng:-46.566980, alt:14},
-      {rot:'Rua Síria',         lat:-23.532000, lng:-46.566350, alt:14},
+      {rot:'Rua Síria',         lat:-23.531930, lng:-46.566250, alt:14},
       {rot:'Av. Celso Garcia',  lat:-23.533800, lng:-46.566300, alt:14}
     ],
     /* interruptores do ensaio */
@@ -318,7 +336,9 @@ window.MSA = (function(){
       rafOrb = requestAnimationFrame(passo);
       var dt = Math.min((now-ult)/1000, .05); ult = now;
       var k = Math.min(1, (now-t0)/RAMPA);
-      mapa.heading = ((mapa.heading||0) + alvo*(1-Math.pow(1-k,3))*dt) % 360;
+      var h = ((mapa.heading||0) + alvo*(1-Math.pow(1-k,3))*dt) % 360;
+      mapa.heading = h;
+      enquadra(h);          /* o lote fica no centro; sem isto, balança */
     });
   }
 
@@ -348,10 +368,10 @@ window.MSA = (function(){
         document.getElementById('visor').appendChild(mapa);
         /* ⚠ a aproximação em degraus não é enfeite: nascer no range final
            devolve tela azul lisa, sem erro no console. */
-        var passos = [6000,2500,1200,CAM.range], i = 0;
+        var passos = [6000,2500,1100,CAM.range], i = 0;
         (function passo(){
           if(!mapa) return;
-          mapa.center = {lat:CFG.centro.lat, lng:CFG.centro.lng, altitude:CAM.alt};
+          enquadra(i === 0 ? CAM.heading : (mapa.heading || CAM.heading));
           mapa.range = passos[i];
           mapa.tilt = i === 0 ? CAM.tiltEntrada : CAM.tilt;
           i++;
@@ -381,7 +401,8 @@ window.MSA = (function(){
   document.getElementById('bt-topo').addEventListener('click', function(){
     if(!mapa) return; orbita(false);
     mapa.center = {lat:CFG.centro.lat, lng:CFG.centro.lng, altitude:CAM.alt};
-    mapa.tilt = 26; mapa.heading = 12; mapa.range = 620;
+    mapa.tilt = 26; mapa.heading = 12; mapa.range = 620;   /* tilt baixo: o
+      desvio do look-at é desprezível, não se compensa */
   });
   /* ⚑ trocar o modo EXIGE recriar o mapa: é uma carga 3D nova, e a cota
      conta. Por isso é um botão à parte, e não um interruptor qualquer. */
@@ -392,7 +413,7 @@ window.MSA = (function(){
   });
 
   monta();
-  return {desenha:desenha, orbita:orbita, cfg:CFG,
+  return {desenha:desenha, orbita:orbita, cfg:CFG, enquadra:enquadra,
           mapa:function(){ return mapa; }, lib:function(){ return lib; }};
 })();
 </script>
