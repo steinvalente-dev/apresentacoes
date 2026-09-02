@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>protótipo · visor do modelo SketchUp — NÃO VIGENTE</title>
+
+<!-- preconexão: o análogo honesto do "nível 1" do earth-3d. Um iframe não
+     tem carga barata para adiantar — pôr o `src` JÁ É a carga inteira. O que
+     dá para adiantar é DNS, TCP e TLS, e é o que estas duas linhas fazem.
+     Num deck elas entram no <head> da peça, não aqui. -->
+<link rel="preconnect" href="https://app.sketchup.com" crossorigin>
+<link rel="dns-prefetch" href="https://app.sketchup.com">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════════
+   PROTÓTIPO · visor do modelo SketchUp     ⚠ NÃO VIGENTE — ver as três
+                                               condições abaixo
+
+   O que é: o slide em tela cheia com o MODELO DO PROJETO dentro, vivo —
+   cenas, órbita, sombras, projeções e elevações padrão —, servido pelo
+   SketchUp Viewer da própria Trimble. Irmão do `mapa-earth-3d.html`: um
+   mostra ONDE o projeto está, este mostra O QUE ele é.
+
+   ── MEDIDO EM 02/09/2026, NÃO SUPOSTO ────────────────────────────────
+   Sonda publicada no domínio real (`steinvalente-dev.github.io`), porque
+   bloqueio de embed é por cabeçalho e depende da ORIGEM que pede — medir
+   em localhost responde sobre localhost. Resultado:
+
+   | endereço | embeda? | o que aparece |
+   |---|---|---|
+   | `3dwarehouse.sketchup.com/embed/<id>` | sim | imagem estática + "Click for 3D Model Viewer" + barra do 3D Warehouse |
+   | `app.sketchup.com/viewer/3dw?WarehouseModelId=<id>` | **sim** | **o viewer vivo, direto, sem marca de terceiro** |
+
+   ⚑ USA-SE O SEGUNDO. O primeiro exige um clique a mais e estampa a marca
+   do 3D Warehouse em cima de peça de cliente.
+
+   Confirmado no modelo de teste (EMEI Pr. Dutra, 87.728 polígonos, 40 MB):
+   painel de CENAS com as cenas nomeadas do arquivo, SOMBRAS, projeção
+   (perspectiva / paralela / dois pontos), elevações padrão, vista de topo,
+   iso, e "reproduzir animação de cenas".
+
+   ── POR QUE AINDA NÃO É VIGENTE — três condições, e as três são do Michel
+   1. ⚑ O MODELO TEM DE ESTAR PÚBLICO no 3D Warehouse. Um deck publicado é
+      servido a visitante anônimo: modelo privado devolve 404 e o quadro
+      abre vazio. Publicar modelo de projeto de cliente num acervo público,
+      com download habilitado, é decisão dele — e da Sarasá, e da escola.
+   2. Depende de rede boa e de MUITA banda: 40 MB só de modelo, antes de
+      textura. Em 4G de canteiro a reunião assiste ao carregamento.
+   3. ⚑ AS CENAS APARECEM COM O NOME QUE TÊM NO ARQUIVO. No modelo de teste
+      elas se chamam `(LUMION)`, `(TRABALHO)`, `(SEM COBERTURA)`, `(TUDO)` —
+      nomes de trabalho, que o cliente vai ler na tela. Curar e renomear as
+      cenas no SketchUp faz parte de preparar a peça, não é detalhe.
+
+   ── A GARANTIA ───────────────────────────────────────────────────────
+   Pedido do Michel: as imagens salvas NO PRÓPRIO ARQUIVO, para o slide
+   sobreviver a rede ruim, rede corporativa que bloqueia iframe, ou viewer
+   fora do ar. Aqui elas entram como `RESERVA`.
+   ⚠ Não há como detectar iframe recusado por cabeçalho: `onerror` não
+   dispara e o documento é cross-origin. O que se detecta é AUSÊNCIA de
+   `load` dentro do prazo. Por isso a queda para as imagens tem três
+   gatilhos: relógio, `navigator.onLine === false`, e um botão discreto —
+   porque o caso "carregou uma página de erro" só quem vê é quem apresenta.
+
+   Vigente para modelo hoje: nada. Prancha `cheia` com render.
+   ═══════════════════════════════════════════════════════════════════════ */
+  :root{
+    --creme:#EDE6DA; --tinta:#211D1A; --terra:#B85C38;
+    --mono:'DM Mono',ui-monospace,monospace;
+    --sans:'Inter',system-ui,-apple-system,sans-serif;
+    --gut-in:clamp(24px,5vw,96px);
+    --bot:clamp(46px,7vh,74px);
+    --fs-h2:clamp(24px,3.4vw,48px);
+    --fs-lead:clamp(13px,1.15vw,17px);
+    --fs-cap:clamp(9.5px,.78vw,12.5px);
+    --fs-item:clamp(14px,1.35vw,21px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--tinta);color:var(--creme);font-family:var(--sans);overflow:hidden}
+
+/* ── O SLIDE. É isto que se copia. ──────────────────────────────────── */
+  .g-modelo{position:absolute;inset:0;padding:0;overflow:hidden;background:#12110E}
+  .g-modelo .visor{position:absolute;inset:0}
+  /* o iframe nasce sem `src` e sem receber ponteiro. `src` só na chegada:
+     são 40 MB, e montar na carga come a peça inteira antes da primeira
+     prancha. O ponteiro só depois do clique no véu, senão a roda do mouse
+     dá zoom no modelo enquanto se tenta rolar o deck. */
+  .g-modelo iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
+    pointer-events:none;opacity:0;transition:opacity .6s ease;background:#12110E}
+  .g-modelo.pronto iframe{opacity:1}
+  .g-modelo.girando iframe{pointer-events:auto}
+
+  /* scrim suave — véu, não tarja. Igual ao do earth-3d depois de 02/09. */
+  .g-modelo .scrim{position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,#211D1A99 0,#211D1A4d 9%,#211D1A00 24%,
+      #211D1A00 56%,#211D1A59 88%,#211D1A94 100%)}
+  .g-modelo.girando .scrim{opacity:0;transition:opacity .3s ease}
+
+  .g-modelo .veu{position:absolute;inset:0;display:grid;place-content:center;gap:.6em;
+    text-align:center;background:#211D1A3d;transition:opacity .3s ease;cursor:pointer;z-index:2}
+  .g-modelo.girando .veu{opacity:0;pointer-events:none}
+  .g-modelo .veu b{font-family:var(--mono);font-weight:500;font-style:italic;
+    font-size:var(--fs-item);color:var(--creme)}
+  .g-modelo .veu s{text-decoration:none;font-family:var(--mono);font-size:var(--fs-cap);
+    letter-spacing:.14em;text-transform:uppercase;color:#EDE6DAa6}
+
+  /* ⚑ o SAIR é a peça que salva a apresentação. Com o ponteiro dentro do
+     iframe o foco vai para o documento do SketchUp, e as setas do deck
+     param de responder — o evento nem chega aqui. Este botão vive FORA do
+     quadro e é o único caminho de volta que não depende do teclado. */
+  .g-modelo .sair{position:absolute;bottom:clamp(9px,1.2vh,18px);left:50%;
+    transform:translateX(-50%);display:none;align-items:center;gap:.5em;z-index:4;
+    cursor:pointer;font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.12em;
+    text-transform:uppercase;color:var(--creme);background:#211D1Ae6;
+    border:1px solid #EDE6DA3d;border-radius:999px;padding:.5em 1.1em}
+  .g-modelo.girando .sair{display:flex}
+
+  .g-modelo .rotulo{position:absolute;left:var(--gut-in);
+    bottom:calc(var(--bot) + clamp(4px,1.4vh,22px));z-index:3;pointer-events:none;
+    max-width:min(46ch,60vw);
+    padding:clamp(14px,1.9vh,30px) clamp(18px,1.9vw,38px);
+    background:#211D1A73;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    border:1px solid #EDE6DA1f;border-radius:3px;transition:opacity .3s ease}
+  .g-modelo.girando .rotulo{opacity:0}
+  .g-modelo .rotulo .kick{color:#F0B79Bdd;font-family:var(--mono);
+    font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase}
+  .g-modelo .rotulo h2{color:var(--creme);font-size:var(--fs-h2);line-height:1;
+    letter-spacing:-.022em;margin-top:.22em;font-family:var(--mono);
+    font-weight:500;font-style:italic;text-transform:lowercase}
+  .g-modelo .rotulo .lead{color:#EDE6DAd9;font-size:var(--fs-lead);margin-top:.5em;line-height:1.5}
+  .g-modelo .rotulo .cap{display:block;font-family:var(--mono);font-size:var(--fs-cap);
+    letter-spacing:.1em;text-transform:uppercase;color:#EDE6DA8f;margin-top:.85em}
+
+  /* ── os comandos ──────────────────────────────────────────────────────
+     RECOMEÇAR recarrega o quadro e devolve o modelo à cena inicial. É o
+     equivalente do RECENTRAR do earth-3d: navegar é fácil, voltar não, e
+     aqui a câmera é do viewer da Trimble — não há API para trazê-la de
+     volta. Recarregar é o único caminho, e por isso ele avisa que custa
+     uma nova carga.
+     IMAGENS troca o quadro pelas fotos de reserva, à mão. */
+  .g-modelo .cmd{position:absolute;right:var(--gut-in);
+    bottom:calc(var(--bot) + clamp(4px,1.4vh,22px));z-index:3;
+    display:flex;align-items:center;gap:clamp(6px,.6vw,11px);transition:opacity .3s ease}
+  .g-modelo.girando .cmd{opacity:.35}
+  .g-modelo.girando .cmd:hover{opacity:1}
+  .g-modelo .cmd button{cursor:pointer;
+    font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.12em;
+    text-transform:uppercase;color:var(--creme);background:#211D1A9e;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    border:1px solid #EDE6DA30;border-radius:999px;padding:.62em 1.2em;
+    display:flex;align-items:center;gap:.55em;transition:border-color .2s,color .2s}
+  .g-modelo .cmd button:hover{border-color:#B85C38;color:#F0B79B}
+  .g-modelo .cmd svg{display:block;width:1em;height:1em;opacity:.7}
+
+  /* ── estado de carga e de falha ──────────────────────────────────────
+     Mesma gramática do earth-3d depois de 02/09: anel girando, barra de
+     passos REAIS e um título curto. Sem nota explicando o processo — quem
+     espera quer saber QUE está carregando, não COMO. */
+  .g-modelo .estado{position:absolute;inset:0;z-index:5;display:none;
+    place-content:center;justify-items:center;text-align:center;padding:0 8vw;
+    gap:.9em;background:#12110E}
+  .g-modelo.esperando .estado,.g-modelo.falhou .estado{display:grid}
+  .g-modelo.esperando .veu,.g-modelo.esperando .cmd,.g-modelo.esperando .rotulo,
+  .g-modelo.falhou .veu{display:none}
+  .g-modelo .estado b{font-family:var(--mono);font-weight:500;font-style:italic;
+    font-size:var(--fs-item);color:var(--creme)}
+  .g-modelo .estado span{font-size:var(--fs-lead);color:#EDE6DAa6;line-height:1.6;
+    max-width:56ch;margin:0 auto}
+  .g-modelo .estado code{font-family:var(--mono);font-size:.9em;color:#F0B79B}
+  .g-modelo .carga{display:flex;flex-direction:column;align-items:center;
+    gap:clamp(14px,2vh,24px)}
+  .g-modelo.falhou .carga{display:none}
+  .g-modelo .anel{width:clamp(30px,3.4vw,46px);height:clamp(30px,3.4vw,46px);
+    border-radius:50%;border:2px solid #EDE6DA26;border-top-color:var(--terra);
+    animation:girasu .85s linear infinite}
+  @keyframes girasu{to{transform:rotate(360deg)}}
+  .g-modelo .barra{width:clamp(150px,17vw,240px);height:3px;border-radius:999px;
+    background:#EDE6DA1f;overflow:hidden;position:relative}
+  .g-modelo .barra i{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;
+    background:var(--terra);transition:width .7s cubic-bezier(.3,.8,.3,1)}
+  .g-modelo .passos{font-family:var(--mono);font-size:var(--fs-cap);
+    letter-spacing:.14em;text-transform:uppercase;color:#EDE6DA73}
+  @media (prefers-reduced-motion:reduce){ .g-modelo .anel{animation:none} }
+
+  /* ── A RESERVA — as imagens salvas no próprio arquivo ─────────────────
+     Só entra em cena quando o quadro não vem. Não é enfeite: é o que
+     permite chegar numa reunião sem rede e ainda ter o que mostrar. */
+  .g-modelo .reserva{position:absolute;inset:0;z-index:6;display:none;
+    background:#12110E}
+  .g-modelo.reserva-on .reserva{display:block}
+  .g-modelo.reserva-on .estado,.g-modelo.reserva-on .veu,
+  .g-modelo.reserva-on .sair{display:none}
+  .g-modelo .reserva .ph{position:absolute;inset:0}
+  /* `contain`, e não `cover`: em peça de arquitetura o que o `cover` corta
+     é desenho. Mesma decisão da prancha `cheia`, 02/09. */
+  .g-modelo .reserva img{position:absolute;inset:0;width:100%;height:100%;
+    object-fit:contain;opacity:0;transition:opacity .45s ease}
+  .g-modelo .reserva img.on{opacity:1}
+  .g-modelo .reserva .slot{position:absolute;inset:0;display:grid;
+    place-content:center;gap:.4em;text-align:center;padding:1em;
+    background:#2B2A22;border:1px dashed #EDE6DA2e}
+  .g-modelo .reserva .slot u{text-decoration:none;color:var(--terra);
+    font-family:var(--mono);font-weight:500;font-style:italic;font-size:1.5em}
+  .g-modelo .reserva .slot b{font-family:var(--mono);font-weight:500;
+    font-style:italic;text-transform:lowercase;font-size:var(--fs-cap);color:var(--creme)}
+  .g-modelo .reserva .slot s{text-decoration:none;font-family:var(--mono);
+    font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:#EDE6DA73}
+  /* as bolinhas de cena da reserva, no mesmo canto dos comandos */
+  .g-modelo .cenas{position:absolute;right:var(--gut-in);
+    bottom:calc(var(--bot) + clamp(4px,1.4vh,22px));z-index:7;
+    display:flex;align-items:center;gap:clamp(7px,.7vw,12px)}
+  .g-modelo .cenas button{width:9px;height:9px;border-radius:50%;padding:0;
+    border:0;background:var(--creme);opacity:.32;cursor:pointer;
+    transition:opacity .2s,transform .2s}
+  .g-modelo .cenas button.on{opacity:1;transform:scale(1.25)}
+  .g-modelo .rescap{position:absolute;left:var(--gut-in);
+    bottom:calc(var(--bot) + clamp(4px,1.4vh,22px));z-index:7;
+    font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.1em;
+    text-transform:uppercase;color:#EDE6DAa6;
+    text-shadow:0 1px 3px #211D1A73,0 2px 14px #211D1A59}
+</style>
+</head>
+<body>
+
+<div class="g-modelo esperando" id="slide">
+  <div class="visor" id="visor">
+    <!-- sem `src`: entra na chegada ao slide. Ver a nota no CSS. -->
+    <iframe id="quadro" title="Modelo 3D do projeto — SketchUp Viewer"
+            allow="fullscreen; xr-spatial-tracking"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="scrim"></div>
+    <div class="veu">
+      <b>clique para navegar no modelo</b>
+      <s>cenas, sombras e órbita ficam com você · o teclado passa a ser do modelo</s>
+    </div>
+    <button class="sair" type="button">devolver o teclado ao slide</button>
+  </div>
+
+  <div class="rotulo">
+    <span class="kick">cidade, uf · o modelo do projeto</span>
+    <h2>o projeto em três dimensões</h2>
+    <div class="lead">Cenas, sombras e órbita, no modelo de trabalho. O nome das cenas é o do arquivo.</div>
+    <span class="cap">Protótipo · clique para navegar · o botão devolve o teclado ao slide</span>
+  </div>
+
+  <div class="cmd">
+    <button class="rec" type="button" title="recarregar o modelo na cena inicial">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12a9 9 0 1 1-3.2-6.9"/><path d="M21 4v5h-5"/>
+      </svg>recomeçar</button>
+    <button class="img" type="button" title="não carregou? mostrar as imagens salvas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/>
+        <path d="M21 16l-5-5-6 6"/>
+      </svg>imagens</button>
+  </div>
+
+  <div class="estado" id="estado">
+    <div class="carga">
+      <div class="anel"></div>
+      <div class="barra"><i id="barraFill"></i></div>
+      <div class="passos" id="passos">preparando</div>
+    </div>
+    <b id="estadoTit">carregando o modelo 3d</b>
+    <span id="estadoTxt"></span>
+  </div>
+
+  <!-- A RESERVA. Num deck as imagens vêm embutidas ou ao lado; aqui os
+       slots ficam vazios de propósito, e slot vazio é recurso: mostra a
+       estrutura antes de a imagem existir. -->
+  <div class="reserva" id="reserva">
+    <div class="ph" id="ph"></div>
+    <span class="rescap" id="rescap"></span>
+  </div>
+  <div class="cenas" id="cenas" style="display:none"></div>
+</div>
+
+<script>
+/* ── A MECÂNICA ────────────────────────────────────────────────────────
+   Num deck, três coisas já existem na engine — não duplicar:
+   · o clique do palco tem de ignorar '.g-modelo .visor'
+   · desativa() varre '.g-modelo,.g-mapa,.g-earth-3d' e tira 'girando'
+   · o carrega() entra no go(), AO CHEGAR no slide. Nunca na carga: são
+     40 MB, e o iframe não tem carga barata para adiantar. O que se
+     adianta é a preconexão, no <head> da peça.
+   ─────────────────────────────────────────────────────────────────── */
+(function(){
+  'use strict';
+
+  var slide  = document.getElementById('slide');
+  var quadro = document.getElementById('quadro');
+  var estado = document.getElementById('estado');
+
+  /* ⚑ O ENDEREÇO DO VIEWER. Medido em 02/09: é este que embeda direto e
+     sem marca de terceiro. O `/embed/` do 3D Warehouse também embeda, mas
+     exige um clique a mais e estampa a barra deles. */
+  var BASE = 'https://app.sketchup.com/viewer/3dw?WarehouseModelId=';
+
+  /* modelo de teste: EMEI Pr. Dutra, público. Num deck o id vem do DECK. */
+  var MODELO = '77fa8a68-583e-4e52-8a24-7bf9bc698723';
+
+  /* as imagens de reserva. Num deck vêm do DECK; aqui ficam vazias e o
+     slot hachurado aparece, que é o comportamento correto para slot vazio. */
+  var RESERVA = [];   /* [{src:'…', cap:'cena · o que é'}] */
+
+  /* ── carga ──────────────────────────────────────────────────────────
+     Não existe evento de "o viewer terminou": `load` do iframe só diz que
+     o DOCUMENTO chegou, e o modelo continua baixando depois disso. Então o
+     progresso é honesto sobre o que sabe: PASSO 1 documento pedido, PASSO 2
+     documento chegou, PASSO 3 janela de assentamento. O anel cobre o
+     resto — dizer "está acontecendo" sem prometer prazo. */
+  var TOTAL = 3, montado = false, caiu = false;
+  function progresso(p, rotulo){
+    var f = document.getElementById('barraFill'), t = document.getElementById('passos');
+    if(f) f.style.width = Math.round(Math.min(p,TOTAL)/TOTAL*100) + '%';
+    if(t) t.textContent = rotulo;
+  }
+
+  /* ⚠ PRAZO. Um iframe recusado por cabeçalho NÃO dispara `onerror`, e o
+     documento é cross-origin: não há como inspecionar o que veio. O que se
+     detecta é a AUSÊNCIA de `load` no prazo. Daí este relógio ser a
+     primeira das três portas para a reserva. */
+  var PRAZO_DOC   = 25000;   /* documento não chegou: rede ou bloqueio    */
+  var PRAZO_MODELO = 12000;  /* documento chegou; janela até declarar pronto */
+  var tDoc = null, tModelo = null;
+
+  function falha(txt){
+    slide.classList.remove('esperando');
+    slide.classList.add('falhou');
+    document.getElementById('estadoTit').textContent = 'o modelo 3d não abriu';
+    document.getElementById('estadoTxt').innerHTML = txt +
+      '<br><br>As imagens salvas continuam valendo — botão <b>imagens</b>.';
+  }
+
+  function monta(){
+    if(montado) return;
+    montado = true;
+    slide.classList.add('esperando');
+    progresso(1, 'pedindo o modelo');
+
+    if(navigator.onLine === false){
+      /* sem rede não há o que esperar: cai direto para a reserva, que é
+         exatamente o cenário para o qual ela existe. */
+      reserva(true);
+      falha('Sem conexão de rede.');
+      return;
+    }
+
+    quadro.addEventListener('load', function(){
+      if(tDoc){ clearTimeout(tDoc); tDoc = null; }
+      progresso(2, 'montando a malha');
+      /* o documento chegou; o modelo ainda desce. A janela abaixo é tempo,
+         não medição — e está dito como tal. */
+      tModelo = setTimeout(function(){
+        progresso(TOTAL, 'pronto');
+        slide.classList.remove('esperando');
+        slide.classList.add('pronto');
+      }, PRAZO_MODELO);
+    });
+
+    tDoc = setTimeout(function(){
+      falha('O quadro do viewer não respondeu em ' + (PRAZO_DOC/1000) + ' s. '
+          + 'Pode ser a rede, pode ser rede corporativa que bloqueia quadro de '
+          + 'outro domínio, e pode ser o modelo não estar <b>público</b> no 3D '
+          + 'Warehouse — modelo privado devolve 404 para quem abre o link.');
+    }, PRAZO_DOC);
+
+    quadro.src = BASE + encodeURIComponent(MODELO);
+  }
+
+  /* ── a reserva ──────────────────────────────────────────────────────── */
+  function pintaReserva(){
+    var ph = document.getElementById('ph');
+    var cx = document.getElementById('cenas');
+    if(!RESERVA.length){
+      ph.innerHTML = '<div class="slot"><u>_</u><b>imagens de reserva</b>'
+        + '<s>exportar as cenas do SketchUp</s></div>';
+      return;
+    }
+    ph.innerHTML = RESERVA.map(function(r,i){
+      return '<img src="' + r.src + '" alt="' + (r.cap||'').replace(/"/g,'&quot;')
+           + '"' + (i===0 ? ' class="on"' : '') + '>';
+    }).join('');
+    cx.style.display = 'flex';
+    cx.innerHTML = RESERVA.map(function(r,i){
+      return '<button type="button" data-i="' + i + '"'
+           + (i===0 ? ' class="on"' : '') + ' title="' + (r.cap||'') + '"></button>';
+    }).join('');
+    document.getElementById('rescap').textContent = RESERVA[0].cap || '';
+  }
+  function vaiPara(i){
+    var imgs = document.querySelectorAll('#ph img');
+    var bts  = document.querySelectorAll('#cenas button');
+    if(!imgs.length) return;
+    i = (i + imgs.length) % imgs.length;
+    imgs.forEach(function(im,j){ im.classList.toggle('on', j===i); });
+    bts.forEach(function(b,j){ b.classList.toggle('on', j===i); });
+    document.getElementById('rescap').textContent = (RESERVA[i]||{}).cap || '';
+  }
+  function reserva(liga){
+    caiu = !!liga;
+    slide.classList.toggle('reserva-on', caiu);
+    if(caiu){ pintaReserva(); slide.classList.remove('girando'); }
+  }
+
+  /* ── cliques ───────────────────────────────────────────────────────── */
+  document.addEventListener('click', function(e){
+    var sl = e.target.closest && e.target.closest('.g-modelo');
+    if(!sl) return;
+    if(e.target.closest('.rec')){
+      e.stopPropagation();
+      /* recarregar é o único caminho de volta: a câmera é do viewer da
+         Trimble e não há API para trazê-la. Custa uma nova carga, e o
+         indicador volta a aparecer — o que é honesto. */
+      montado = false;
+      slide.classList.remove('pronto','girando','falhou');
+      quadro.src = 'about:blank';
+      reserva(false);
+      monta();
+      return;
+    }
+    if(e.target.closest('.img')){ e.stopPropagation(); reserva(!caiu); return; }
+    if(e.target.closest('#cenas button')){
+      e.stopPropagation();
+      vaiPara(parseInt(e.target.dataset.i, 10));
+      return;
+    }
+    if(e.target.closest('.sair')){
+      e.stopPropagation(); sl.classList.remove('girando'); document.body.focus(); return;
+    }
+    if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando'); }
+  });
+
+  /* setas nas imagens de reserva, quando ela está no ar */
+  addEventListener('keydown', function(e){
+    if(!caiu) return;
+    var imgs = document.querySelectorAll('#ph img.on');
+    if(!imgs.length) return;
+    var atual = [...document.querySelectorAll('#ph img')].indexOf(imgs[0]);
+    if(e.key === 'ArrowRight'){ e.preventDefault(); vaiPara(atual+1); }
+    if(e.key === 'ArrowLeft'){ e.preventDefault(); vaiPara(atual-1); }
+  });
+
+  /* neste protótipo o slide já está em cena: monta na carga. NUM DECK ISSO
+     NÃO SE FAZ — chama-se no go(), ao chegar. */
+  monta();
+})();
+</script>
+</body>
+</html>

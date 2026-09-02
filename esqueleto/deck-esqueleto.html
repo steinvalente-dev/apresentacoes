@@ -2261,13 +2261,17 @@ function go(i,tudo){
   const marcaFundo = !!((!!s.fundo && s.g!=='divisor') || trama);   /* idem */
   document.body.classList.toggle('com-fundo',marcaFundo||divFundo);
   document.body.classList.toggle('em-cheia', s.g==='cheia');
-  /* `em-imagem` = o fundo do slide é imagem, não campo pintado — prancha
-     `cheia` ou visor `earth-3d`. É o que decide que o chrome inverte e ganha
-     véu próprio. Acrescentado em 02/09/2026: sem isto o chrome do slide de
-     localização saía em Ferro sobre imagem de satélite escura, e o logotipo
-     do canto saía COLORIDO onde tinha de sair em Cal. Gabarito novo cujo
-     fundo seja imagem entra nesta lista. */
-  document.body.classList.toggle('em-imagem', s.g==='cheia'||s.g==='earth-3d');
+  /* `em-imagem` = o fundo do slide é imagem ou visor, não campo pintado. É
+     o que decide que o chrome inverte e ganha véu próprio. Acrescentado em
+     02/09/2026: sem isto o chrome do slide de localização saía em Ferro
+     sobre imagem de satélite escura, e o logotipo do canto saía COLORIDO
+     onde tinha de sair em Cal.
+     ⚑ GABARITO NOVO CUJO FUNDO SEJA IMAGEM OU VISOR ENTRA NESTA LISTA.
+     Esquecer disto é falha silenciosa: nada quebra, o chrome só fica
+     ilegível. Já aconteceu duas vezes no mesmo dia — com o `earth-3d` e
+     depois com o `modelo-3d`. */
+  document.body.classList.toggle('em-imagem',
+    s.g==='cheia' || s.g==='earth-3d' || s.g==='modelo-3d');
   document.body.classList.toggle('fundo-div',divFundo);
   document.body.classList.toggle('fundo-trama',trama);
   /* cada canvas tem o seu conjunto de imagens e a sua paleta, fixados no

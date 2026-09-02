@@ -5,6 +5,13 @@
      do dominio. A meta tag e a unica protecao. Regra do runbook, 22/08. -->
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>EMEI Presidente Dutra · quatro versões · Estúdio Sarasá</title>
+<!-- preconexao: o analogo honesto do "nivel 1" para um iframe. Um iframe
+     nao tem carga barata para adiantar — por o `src` JA E a carga inteira,
+     e sao 40 MB. O que da para adiantar e DNS, TCP e TLS, e e o que estas
+     linhas fazem. A do Google serve ao visor earth-3d. -->
+<link rel="preconnect" href="https://app.sketchup.com" crossorigin>
+<link rel="dns-prefetch" href="https://app.sketchup.com">
+<link rel="preconnect" href="https://maps.googleapis.com" crossorigin>
 <!-- Fontes embutidas em woff2/base64, subconjunto latino + pontuacao.
      Regra do PRANCHA-SISTEMA: nenhuma dependencia de CDN. O arquivo abre
      igual sem rede, e a tipografia da marca nunca cai para fallback. -->
@@ -1378,6 +1385,129 @@ body.na-marca .chrome{opacity:0;pointer-events:none}
 #msveu{background:linear-gradient(100deg,#79242Fd6 0%,#79242F8c 24%,
   #79242F2e 44%,#79242F00 60%)}
 
+/* 5b · VISOR DO MODELO SKETCHUP — portado de modulos/modelo-sketchup.html
+   Mesma gramatica do earth-3d: scrim suave, veu de ativacao, trava de
+   teclado, indicador de carga e degradacao explicita. O que muda e a
+   RESERVA — as imagens salvas na peca, que o earth nao tem porque satelite
+   sem rede nao tem substituto util, e modelo de projeto tem. */
+.slide.g-modelo-3d{padding:0;overflow:hidden;background:#171314}
+.g-modelo-3d .visor{position:absolute;inset:0}
+/* o iframe nasce SEM src e sem receber ponteiro. `src` so na chegada: sao
+   40 MB. O ponteiro so depois do clique no veu, senao a roda do mouse da
+   zoom no modelo enquanto se tenta passar o slide. */
+.g-modelo-3d iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
+  pointer-events:none;opacity:0;transition:opacity .6s ease;background:#171314}
+.g-modelo-3d.pronto iframe{opacity:1}
+.g-modelo-3d.girando iframe{pointer-events:auto}
+.g-modelo-3d .scrim{position:absolute;inset:0;pointer-events:none;
+  transition:opacity .3s ease;
+  background:linear-gradient(180deg,#231F2099 0,#231F204d 9%,#231F2000 24%,
+    #231F2000 56%,#231F2059 88%,#231F2094 100%)}
+.g-modelo-3d.girando .scrim{opacity:0}
+.g-modelo-3d .veu{position:absolute;inset:0;display:grid;place-content:center;
+  gap:.6em;text-align:center;background:#231F203d;cursor:pointer;z-index:2;
+  transition:opacity .3s ease}
+.g-modelo-3d.girando .veu{opacity:0;pointer-events:none}
+.g-modelo-3d .veu b{font-family:var(--sans);font-weight:600;font-size:var(--fs-item);
+  color:var(--creme);letter-spacing:-.02em}
+.g-modelo-3d .veu s{text-decoration:none;font-family:var(--label);font-weight:600;
+  font-size:var(--fs-cap);letter-spacing:.12em;text-transform:uppercase;color:#F3EEE7a6}
+/* ⚑ o SAIR salva a apresentacao. Com o ponteiro dentro do iframe o foco vai
+   para o documento do SketchUp e as setas do deck param de responder — o
+   evento nem chega ao nosso script. Este botao vive FORA do quadro e e o
+   unico caminho de volta que nao depende do teclado. */
+.g-modelo-3d .sair{position:absolute;bottom:clamp(9px,1.4cqh,20px);left:50%;
+  transform:translateX(-50%);display:none;align-items:center;z-index:4;cursor:pointer;
+  font-family:var(--label);font-weight:600;font-size:var(--fs-cap);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--creme);background:#231F20e6;
+  border:1px solid #F3EEE73d;border-radius:999px;padding:.55em 1.2em}
+.g-modelo-3d.girando .sair{display:flex}
+.g-modelo-3d .rotulo{position:absolute;left:var(--gut);
+  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:3;pointer-events:none;
+  max-width:min(46ch,60cqw);padding:clamp(14px,2cqh,30px) clamp(18px,1.9cqw,38px);
+  background:#231F2073;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid #F3EEE71f;border-radius:3px;transition:opacity .3s ease}
+.g-modelo-3d.girando .rotulo{opacity:0}
+.g-modelo-3d .rotulo .kick{display:block;color:#F3EEE7c4;margin:0;
+  font-size:var(--fs-cap);text-transform:uppercase}
+.g-modelo-3d .rotulo h2{color:var(--creme);font-size:var(--fs-h);line-height:1.04;margin-top:.24em}
+.g-modelo-3d .rotulo .lead{color:#F3EEE7d9;font-size:var(--fs-body);margin-top:.55em;line-height:1.5}
+.g-modelo-3d .rotulo .cap{display:block;font-family:var(--label);font-weight:600;
+  font-size:var(--fs-cap);letter-spacing:.08em;text-transform:uppercase;
+  color:#F3EEE78f;margin-top:.9em}
+/* RECOMECAR recarrega o quadro: a camera e do viewer da Trimble e nao ha API
+   para traze-la de volta. IMAGENS troca para a reserva, a mao. */
+.g-modelo-3d .cmd{position:absolute;right:var(--gut);
+  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:3;
+  display:flex;align-items:center;gap:clamp(6px,.6cqw,11px);transition:opacity .3s ease}
+.g-modelo-3d.girando .cmd{opacity:.35}
+.g-modelo-3d.girando .cmd:hover{opacity:1}
+.g-modelo-3d .cmd button{cursor:pointer;
+  font-family:var(--label);font-weight:600;font-size:var(--fs-cap);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--creme);background:#231F209e;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid #F3EEE730;border-radius:999px;padding:.62em 1.2em;
+  display:flex;align-items:center;gap:.55em;transition:border-color .2s,color .2s}
+.g-modelo-3d .cmd button:hover{border-color:#F3EEE7;color:#fff}
+.g-modelo-3d .cmd svg{display:block;width:1em;height:1em;opacity:.7}
+.g-modelo-3d .estado{position:absolute;inset:0;z-index:5;display:none;
+  place-content:center;justify-items:center;text-align:center;padding:0 8cqw;
+  gap:.9em;background:#171314}
+.g-modelo-3d.esperando .estado,.g-modelo-3d.falhou .estado{display:grid}
+.g-modelo-3d.esperando .veu,.g-modelo-3d.esperando .cmd,
+.g-modelo-3d.esperando .rotulo,.g-modelo-3d.falhou .veu{display:none}
+.g-modelo-3d .estado b{font-family:var(--sans);font-weight:600;font-size:var(--fs-item);
+  color:var(--creme);letter-spacing:-.02em}
+.g-modelo-3d .estado span{font-size:var(--fs-body);color:#F3EEE7a6;line-height:1.6;
+  max-width:56ch;margin:0 auto}
+.g-modelo-3d .estado code{font-family:ui-monospace,monospace;font-size:.9em;color:#F3EEE7}
+.g-modelo-3d .carga{display:flex;flex-direction:column;align-items:center;
+  gap:clamp(14px,2cqh,24px)}
+.g-modelo-3d.falhou .carga{display:none}
+.g-modelo-3d .anel{width:clamp(30px,3.4cqw,46px);height:clamp(30px,3.4cqw,46px);
+  border-radius:50%;border:2px solid #F3EEE726;border-top-color:var(--creme);
+  animation:gira3d .85s linear infinite}
+.g-modelo-3d .barra{width:clamp(150px,17cqw,240px);height:3px;border-radius:999px;
+  background:#F3EEE71f;overflow:hidden;position:relative}
+.g-modelo-3d .barra i{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;
+  background:var(--creme);transition:width .7s cubic-bezier(.3,.8,.3,1)}
+.g-modelo-3d .passos{font-family:var(--label);font-weight:600;font-size:var(--fs-cap);
+  letter-spacing:.14em;text-transform:uppercase;color:#F3EEE773}
+/* ── A RESERVA — as imagens salvas na peca. Nao e enfeite: e o que permite
+   chegar numa reuniao sem rede e ainda ter o que mostrar. */
+.g-modelo-3d .reserva{position:absolute;inset:0;z-index:6;display:none;background:#171314}
+.g-modelo-3d.reserva-on .reserva{display:block}
+.g-modelo-3d.reserva-on .estado,.g-modelo-3d.reserva-on .veu,
+.g-modelo-3d.reserva-on .sair{display:none}
+.g-modelo-3d .reserva .ph{position:absolute;inset:0}
+/* `contain`, nunca `cover`: em peca de arquitetura o que o cover corta e desenho */
+.g-modelo-3d .reserva img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;opacity:0;transition:opacity .45s ease}
+.g-modelo-3d .reserva img.on{opacity:1}
+.g-modelo-3d .reserva .slot{position:absolute;inset:0;display:grid;place-content:center;
+  gap:.4em;text-align:center;padding:1em;background:#2A2224;border:1px dashed #F3EEE72e}
+.g-modelo-3d .reserva .slot u{text-decoration:none;color:var(--terra);
+  font-family:var(--label);font-weight:600;font-size:1.5em}
+.g-modelo-3d .reserva .slot b{font-family:var(--sans);font-weight:600;
+  font-size:var(--fs-cap);color:var(--creme)}
+.g-modelo-3d .reserva .slot s{text-decoration:none;font-family:var(--label);
+  font-weight:600;font-size:var(--fs-cap);letter-spacing:.1em;
+  text-transform:uppercase;color:#F3EEE773}
+.g-modelo-3d .cenas{position:absolute;right:var(--gut);
+  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:7;
+  display:none;align-items:center;gap:clamp(7px,.7cqw,12px)}
+.g-modelo-3d.reserva-on .cenas{display:flex}
+.g-modelo-3d .cenas button{width:var(--pt);height:var(--pt);border-radius:50%;padding:0;
+  border:0;background:var(--creme);opacity:.32;cursor:pointer;
+  transition:opacity .2s,transform .2s}
+.g-modelo-3d .cenas button.on{opacity:1;transform:scale(1.25)}
+.g-modelo-3d .rescap{position:absolute;left:var(--gut);
+  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:7;display:none;
+  font-family:var(--label);font-weight:600;font-size:var(--fs-cap);letter-spacing:.1em;
+  text-transform:uppercase;color:#F3EEE7a6;
+  text-shadow:0 1px 3px #231F2073,0 2px 14px #231F2059}
+.g-modelo-3d.reserva-on .rescap{display:block}
+
 /* 5 · VISOR EARTH 3D — portado de modulos/mapa-earth-3d.html */
 .slide.g-earth-3d{padding:0;overflow:hidden;background:#171314}
 .g-earth-3d .visor{position:absolute;inset:0}
@@ -2170,8 +2300,8 @@ const DECK=[
   t:'o roteiro',
   itens:[
     ['01','onde está','A quadra e o entorno, no 3d.'],
-    ['02','o quadro','O que cada versão faz, em uma tabela.'],
-    ['03','as quatro versões','Seis vistas em cada, nos mesmos pontos de câmera.']]},
+    ['02','o modelo','O projeto para navegar ao vivo.'],
+    ['03','as quatro possibilidades','Seis vistas em cada, nos mesmos pontos de câmera.']]},
 
 /* ═══ 01 · localizacao ═══════════════════════════════════════════════════ */
 {g:'divisor',sec:'localização',esc:1,graf:1,
@@ -2192,9 +2322,32 @@ const DECK=[
   lead:'Rua Santo Elias, 146 · Tatuapé.',
   cap:'Órbita automática · clique para navegar · o botão devolve o teclado ao slide'},
 
-/* ═══ 02 · as quatro versoes ═════════════════════════════════════════════ */
+/* ═══ 02 · o modelo ══════════════════════════════════════════════════════
+   Secao nova, 02/09. O visor do SketchUp com o modelo do projeto, vivo:
+   cenas, sombras, orbita, projecoes. Medido com sonda no dominio real —
+   `app.sketchup.com/viewer/3dw` embeda direto e sem marca de terceiro.
+   ⚠ DEPENDE DE O MODELO ESTAR PUBLICO no 3D Warehouse: deck publicado e
+   servido a visitante anonimo, e modelo privado devolve 404.
+   ⚠ RESERVA VAZIA. O Michel pediu as imagens salvas na peca, e esta certo —
+   e o que faz o slide sobreviver a rede ruim ou a rede corporativa que
+   bloqueia quadro de outro dominio. Nao tenho as capturas: `res` fica vazio
+   e o slot aparece hachurado, que e o comportamento correto para slot vazio.
+   Preencher com 4 a 6 cenas exportadas do SketchUp. */
+{g:'divisor',sec:'o modelo',esc:1,graf:1,
+  dn:'02',dt:'o modelo',
+  ds:'O projeto inteiro em três dimensões, para navegar ao vivo.'},
+
+{g:'modelo-3d',
+  modelo:'77fa8a68-583e-4e52-8a24-7bf9bc698723',
+  kick:'EMEI PRESIDENTE DUTRA · MODELO DE TRABALHO',
+  h2:'o projeto em três dimensões',
+  lead:'Cenas, sombras e órbita, no modelo de trabalho.',
+  cap:'Clique para navegar · o botão devolve o teclado ao slide',
+  res:[]},
+
+/* ═══ 03 · as quatro versoes ═════════════════════════════════════════════ */
 {g:'divisor',sec:'versões',esc:1,graf:1,
-  dn:'02',dt:'quatro versões',
+  dn:'03',dt:'quatro versões',
   ds:'Mesma arcada de partida, mesmos seis pontos de câmera.'},
 
 {g:'tabela',
@@ -2416,6 +2569,57 @@ function tpl(s){
     const centra=s.ar||(s.items||[]).some(i=>i.ar||i.pilha);
     return `<div class="pbody">${topo}<div class="grade" style="grid-template-columns:repeat(${s.cols||3},1fr)`
       + (centra?';align-content:center;align-items:center':'')+`">${cels}</div></div>`;
+  }
+  if(s.g==='modelo-3d'){
+    /* O MODELO DO PROJETO, VIVO — modulos/modelo-sketchup.html
+       Medido em 02/09/2026, com sonda no dominio real: o
+       `app.sketchup.com/viewer/3dw?WarehouseModelId=<id>` EMBEDA, direto e
+       sem marca de terceiro, com painel de Cenas, Sombras, projecoes e
+       elevacoes padrao. O `/embed/` do 3D Warehouse tambem embeda, mas
+       exige um clique a mais e estampa a barra deles.
+       ⚑ O modelo TEM DE ESTAR PUBLICO: deck publicado e servido a visitante
+       anonimo, e modelo privado devolve 404.
+       ⚑ As cenas aparecem com o nome que tem no arquivo .skp.
+       `res` sao as imagens de reserva, salvas na peca — sem elas o slide
+       nao sobrevive a rede ruim, e slot vazio aparece hachurado. */
+    const cenas = (s.res||[]).map((r,i)=>
+      `<button type="button" data-i="${i}"${i?'':' class="on"'} title="${(r.cap||'').replace(/"/g,'&quot;')}"></button>`).join('');
+    const fotos = (s.res||[]).length
+      ? (s.res||[]).map((r,i)=>`<img loading="lazy" src="${r.src}" alt="${(r.cap||'').replace(/"/g,'&quot;')}"${i?'':' class="on"'}>`).join('')
+      : `<div class="slot"><u>_</u><b>imagens de reserva</b><s>exportar as cenas do SketchUp</s></div>`;
+    return `<div class="visor" data-modelo="${s.modelo}">`
+      + `<iframe title="Modelo 3D do projeto — SketchUp Viewer"`
+      + ` allow="fullscreen; xr-spatial-tracking"`
+      + ` referrerpolicy="no-referrer-when-downgrade"></iframe>`
+      + `<div class="scrim"></div>`
+      + `<div class="veu"><b>clique para navegar no modelo</b>`
+      + `<s>cenas, sombras e órbita ficam com você · o teclado passa a ser do modelo</s></div>`
+      + `<button class="sair" type="button">devolver o teclado ao slide</button></div>`
+      + `<div class="rotulo">`
+      + (s.kick?`<span class="kick">${s.kick}</span>`:'')
+      + (s.h2?`<h2>${s.h2}</h2>`:'')
+      + (s.lead?`<div class="lead">${s.lead}</div>`:'')
+      + (s.cap?`<span class="cap">${s.cap}</span>`:'')
+      + `</div>`
+      + `<div class="cmd">`
+      +   `<button class="rec" type="button" title="recarregar o modelo na cena inicial">`
+      +     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"`
+      +     ` stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">`
+      +     `<path d="M21 12a9 9 0 1 1-3.2-6.9"/><path d="M21 4v5h-5"/></svg>recomeçar</button>`
+      +   `<button class="img" type="button" title="não carregou? mostrar as imagens salvas">`
+      +     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"`
+      +     ` stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">`
+      +     `<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/>`
+      +     `<path d="M21 16l-5-5-6 6"/></svg>imagens</button>`
+      + `</div>`
+      + `<div class="estado">`
+      +   `<div class="carga"><div class="anel"></div>`
+      +   `<div class="barra"><i></i></div>`
+      +   `<div class="passos">preparando</div></div>`
+      +   `<b>carregando o modelo 3d</b><span></span></div>`
+      + `<div class="reserva"><div class="ph">${fotos}</div>`
+      +   `<span class="rescap">${((s.res||[])[0]||{}).cap||''}</span></div>`
+      + (cenas?`<div class="cenas">${cenas}</div>`:'');
   }
   if(s.g==='earth-3d'){
     /* visor fotorrealista do Google Earth — sistemas/gabaritos/mapa-earth-3d.md
@@ -2729,13 +2933,17 @@ function go(i,tudo){
   document.body.classList.toggle('com-fundo',marcaFundo||divFundo);
   document.body.classList.toggle('em-cheia', s.g==='cheia');
   document.body.classList.toggle('com-graf', !!s.graf);
-  /* `em-imagem` = o fundo do slide é imagem, não campo pintado — prancha
-     `cheia` ou visor `earth-3d`. É o que decide que o chrome inverte e ganha
-     véu próprio. Acrescentado em 02/09/2026: sem isto o chrome do slide de
-     localização saía em Ferro sobre imagem de satélite escura, e o logotipo
-     do canto saía COLORIDO onde tinha de sair em Cal. Gabarito novo cujo
-     fundo seja imagem entra nesta lista. */
-  document.body.classList.toggle('em-imagem', s.g==='cheia'||s.g==='earth-3d');
+  /* `em-imagem` = o fundo do slide é imagem ou visor, não campo pintado. É
+     o que decide que o chrome inverte e ganha véu próprio. Acrescentado em
+     02/09/2026: sem isto o chrome do slide de localização saía em Ferro
+     sobre imagem de satélite escura, e o logotipo do canto saía COLORIDO
+     onde tinha de sair em Cal.
+     ⚑ GABARITO NOVO CUJO FUNDO SEJA IMAGEM OU VISOR ENTRA NESTA LISTA.
+     Esquecer disto é falha silenciosa: nada quebra, o chrome só fica
+     ilegível. Já aconteceu duas vezes no mesmo dia — com o `earth-3d` e
+     depois com o `modelo-3d`. */
+  document.body.classList.toggle('em-imagem',
+    s.g==='cheia' || s.g==='earth-3d' || s.g==='modelo-3d');
   document.body.classList.toggle('fundo-div',divFundo);
   document.body.classList.toggle('fundo-trama',trama);
   /* cada canvas tem o seu conjunto de imagens e a sua paleta, fixados no
@@ -2767,12 +2975,12 @@ document.getElementById('ant').onclick=e=>{e.stopPropagation();recua()};
 addEventListener('keydown',e=>{
   /* visor 3d ativo rouba as setas: a navegacao do deck para ate o botao
      `devolver o teclado ao slide`. Mesma mecanica do mapa vigente. */
-  if(document.querySelector('.g-earth-3d.girando'))return;
+  if(document.querySelector('.g-earth-3d.girando,.g-modelo-3d.girando'))return;
   if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();avanca()}
   else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();recua()}
   else if(e.key==='ArrowDown'){e.preventDefault();go(cur+1,true)}
   else if(e.key==='ArrowUp'){e.preventDefault();go(cur-1,true)}});
-palco.addEventListener('click',e=>{if(e.target.closest('.ms-start')){avanca();return}  /* momento B da capa */if(e.target.closest('a,button,.pin,.lote,.g-earth-3d .visor'))return;avanca()});
+palco.addEventListener('click',e=>{if(e.target.closest('.ms-start')){avanca();return}  /* momento B da capa */if(e.target.closest('a,button,.pin,.lote,.g-earth-3d .visor,.g-modelo-3d .visor,.g-modelo-3d .cenas'))return;avanca()});
 let tx=0;
 addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
 addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>52){d<0?avanca():recua()}},{passive:true});
@@ -3130,13 +3338,147 @@ window.MSEarth=(function(){
   };
 })();
 
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VISOR DO MODELO SKETCHUP — portado de modulos/modelo-sketchup.html
+   Irmao do MSEarth: um mostra ONDE o projeto esta, este mostra O QUE ele e.
+
+   Medido em 02/09/2026 com sonda publicada no dominio real: o
+   `app.sketchup.com/viewer/3dw?WarehouseModelId=<id>` aceita ser embedado a
+   partir de steinvalente-dev.github.io, direto, com painel de Cenas,
+   Sombras, projecoes e elevacoes padrao, e sem marca de terceiro.
+
+   ⚑ TRES COISAS QUE NAO SAO DETALHE:
+   1. o iframe monta AO CHEGAR no slide, nunca na carga — 40 MB;
+   2. o modelo TEM DE ESTAR PUBLICO no 3D Warehouse: deck publicado e
+      servido a visitante anonimo, e modelo privado devolve 404;
+   3. nao ha como detectar iframe recusado por cabecalho — `onerror` nao
+      dispara e o documento e cross-origin. O que se detecta e a AUSENCIA
+      de `load` no prazo. Dai a reserva ter TRES portas: relogio,
+      `navigator.onLine === false`, e um botao — porque o caso "carregou
+      uma pagina de erro" so quem ve e quem apresenta.
+   ═════════════════════════════════════════════════════════════════════════ */
+window.MSModelo=(function(){
+  'use strict';
+  var BASE='https://app.sketchup.com/viewer/3dw?WarehouseModelId=';
+  var TOTAL=3;
+  var PRAZO_DOC=25000;      /* documento nao chegou: rede ou bloqueio      */
+  var PRAZO_MODELO=12000;   /* documento chegou; janela ate declarar pronto */
+  var montado=false, caiu=false, tDoc=null, tModelo=null, slide=null;
+
+  function el(sel){ return slide?slide.querySelector(sel):null; }
+  function progresso(p,rotulo){
+    var f=el('.barra i'), t=el('.passos');
+    if(f) f.style.width=Math.round(Math.min(p,TOTAL)/TOTAL*100)+'%';
+    if(t) t.textContent=rotulo;
+  }
+  function falha(txt){
+    if(!slide) return;
+    slide.classList.remove('esperando'); slide.classList.add('falhou');
+    var b=el('.estado b'), sp=el('.estado span');
+    if(b) b.textContent='o modelo 3d nao abriu';
+    if(sp) sp.innerHTML=txt+'<br><br>As imagens salvas continuam valendo — botao <b>imagens</b>.';
+  }
+  function reserva(liga){
+    caiu=!!liga;
+    if(slide){ slide.classList.toggle('reserva-on',caiu);
+               if(caiu) slide.classList.remove('girando'); }
+  }
+  function vaiPara(i){
+    var imgs=slide.querySelectorAll('.reserva .ph img');
+    var bts=slide.querySelectorAll('.cenas button');
+    if(!imgs.length) return;
+    i=(i+imgs.length)%imgs.length;
+    imgs.forEach(function(im,j){ im.classList.toggle('on',j===i); });
+    bts.forEach(function(b,j){ b.classList.toggle('on',j===i); });
+    var cap=imgs[i].getAttribute('alt')||'';
+    var rc=el('.rescap'); if(rc) rc.textContent=cap;
+  }
+  function monta(){
+    if(montado||!slide) return;
+    montado=true;
+    var q=el('iframe'), id=el('.visor').dataset.modelo;
+    slide.classList.add('esperando');
+    progresso(1,'pedindo o modelo');
+
+    if(navigator.onLine===false){
+      /* sem rede nao ha o que esperar: cai direto para a reserva, que e
+         exatamente o cenario para o qual ela existe. */
+      reserva(true); falha('Sem conexao de rede.'); return;
+    }
+    q.addEventListener('load',function(){
+      if(tDoc){ clearTimeout(tDoc); tDoc=null; }
+      progresso(2,'montando a malha');
+      /* o documento chegou; o modelo ainda desce. A janela abaixo e tempo,
+         nao medicao — e esta dito como tal, aqui e no modulo. */
+      tModelo=setTimeout(function(){
+        progresso(TOTAL,'pronto');
+        slide.classList.remove('esperando');
+        slide.classList.add('pronto');
+      },PRAZO_MODELO);
+    });
+    tDoc=setTimeout(function(){
+      falha('O quadro do viewer nao respondeu em '+(PRAZO_DOC/1000)+' s. '
+        +'Pode ser a rede, pode ser rede corporativa que bloqueia quadro de '
+        +'outro dominio, e pode ser o modelo nao estar <b>publico</b> no 3D '
+        +'Warehouse — modelo privado devolve 404 para quem abre o link.');
+    },PRAZO_DOC);
+    q.src=BASE+encodeURIComponent(id);
+  }
+  function recomeca(){
+    if(!slide) return;
+    /* recarregar e o unico caminho de volta: a camera e do viewer da Trimble
+       e nao ha API para traze-la. Custa uma nova carga, e o indicador volta
+       a aparecer — o que e honesto. */
+    if(tDoc) clearTimeout(tDoc);
+    if(tModelo) clearTimeout(tModelo);
+    montado=false;
+    slide.classList.remove('pronto','girando','falhou');
+    el('iframe').src='about:blank';
+    reserva(false);
+    monta();
+  }
+  document.addEventListener('click',function(e){
+    var sl=e.target.closest&&e.target.closest('.g-modelo-3d'); if(!sl) return;
+    slide=sl;
+    if(e.target.closest('.rec')){ e.stopPropagation(); recomeca(); return; }
+    if(e.target.closest('.img')){ e.stopPropagation(); reserva(!caiu); return; }
+    var bt=e.target.closest('.cenas button');
+    if(bt){ e.stopPropagation(); vaiPara(parseInt(bt.dataset.i,10)); return; }
+    if(e.target.closest('.sair')){ e.stopPropagation(); sl.classList.remove('girando');
+      document.body.focus(); return; }
+    if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando'); }
+  });
+  /* setas passeiam pelas imagens de reserva quando ela esta no ar */
+  addEventListener('keydown',function(e){
+    if(!caiu||!slide) return;
+    var imgs=[].slice.call(slide.querySelectorAll('.reserva .ph img'));
+    if(!imgs.length) return;
+    var atual=imgs.findIndex(function(i){ return i.classList.contains('on'); });
+    if(e.key==='ArrowRight'){ e.preventDefault(); vaiPara(atual+1); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); vaiPara(atual-1); }
+  });
+  return {
+    chegou:function(){
+      var s=DECK[cur];
+      if(!s||s.g!=='modelo-3d'){
+        document.querySelectorAll('.g-modelo-3d').forEach(function(sl){
+          sl.classList.remove('girando'); });
+        return;
+      }
+      slide=document.querySelectorAll('#palco .slide')[cur];
+      monta();
+    }
+  };
+})();
+
 /* liga as duas coisas ao go(), depois da cortina diagonal — a cortina adia a
    troca em 580 ms, por isso a espera aqui. */
 (function(){
   var _go=window.go;
   window.go=function(i,tudo){ _go(i,tudo); setTimeout(function(){
-    window.__msPuxa(); MSEarth.chegou(); },700); };
-  window.__msPuxa(); MSEarth.chegou();
+    window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); },700); };
+  window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou();
 })();
 
 </script>

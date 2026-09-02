@@ -66,7 +66,16 @@ cortina diagonal e entra no deck. Implementação: o momento B é um `.passo`, e
 a pílula chama `avanca()` em vez de `go(cur+1)`.
 
 **5 · O GIRO DO VISOR 3D É LENTO E INDEFINIDO.** Já vem assim do
-`modulos/mapa-earth-3d.html` (`VOLTA`/`ROUNDS`). Não é preferência de peça.
+`modulos/mapa-earth-3d.html` (`VOLTA` 140 s por volta, `RAMPA` 700 ms). Não é
+preferência de peça. ⚠ A rotação é integrada por `requestAnimationFrame` e
+**não** por `flyCameraAround`: a API não tem campo de easing, e o `rounds`
+dela — deprecated — encaixa N voltas dentro da duração, o que já produziu
+4,5 s por volta em peça publicada. Ler a nota no módulo antes de tocar.
+
+**6 · GABARITO NOVO CUJO FUNDO SEJA IMAGEM OU VISOR ENTRA NA LISTA DO
+`em-imagem`**, no `go()` do esqueleto. É o que inverte o chrome e lhe dá véu
+próprio. Esquecer é falha silenciosa: nada quebra, o chrome só fica
+ilegível sobre a imagem. Já custou duas correções no mesmo dia.
 
 **Sobre o logotipo no canto superior direito:** o padrão continua sendo
 **texto**. A peça EMEI Presidente Dutra é o teste com o logotipo pequeno,
@@ -144,6 +153,8 @@ Ver a nota sobre isso no fim.
 | `prancha` | grade de 2 a 4 imagens sobre um tema. **A proporção decide as colunas: retrato 3–4, deitada 2** | `top` `cols` `items` — ver `gabaritos/prancha-referencia.md` |
 | **⚠ `cols` no `prancha` é NÚMERO** | em `tabela` e `porte` é array de cabeçalhos | o `tpl()` trata `prancha` antes, por isso |
 | `cheia` | **o render em tela cheia. É o padrão para render** | `src` `h2` `cap` — ver `gabaritos/render-cheia.md` |
+| `earth-3d` | onde o projeto está: o globo do Google Earth, girando devagar. **Só por link** | `lat` `lng` `alt` `kick` `h2` `lead` `cap` — módulo em `modulos/mapa-earth-3d.html` |
+| `modelo-3d` | o que o projeto é: o modelo do SketchUp, vivo, com cenas e sombras. **Exige modelo PÚBLICO no 3D Warehouse** | `modelo` (id) `res` (imagens de reserva) `kick` `h2` `lead` `cap` — módulo em `modulos/modelo-sketchup.html` |
 | `mapa` · localização | onde o terreno está: satélite em sangria, endereço escrito | `src` `kick` `h2` `lead` `cap` `inv` — ver `gabaritos/mapa-localizacao.md` |
 | `mapa` · lotes | o cadastro desenhado, com hover por lote | `which` `sang` `leg` — ver `gabaritos/mapa-lotes.md` |
 
