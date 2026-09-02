@@ -20,7 +20,9 @@ Não passa pelo Netlify e **não consome crédito nenhum**. O site pessoal
 ## Publicar uma peça
 
 1. Escrever o HTML em `<slug>/apresentacao.html`. Slug em minúsculas, sem
-   acento, com hífen: `casa-ittb`, `toquio-centro`.
+   acento, com hífen: `emei-presidente-dutra`, `lavro-grafismo`. **Antes de criar a
+   pasta: a peça tem nome de cliente, endereço ou valor? Então não é aqui** — ver
+   GITHUB-COMO-TRABALHAR.md, "Público quer dizer aberto".
 2. Acrescentar UM objeto em `pecas` do projeto certo, no array `projetos`
    do `index.html`. Projeto que ainda não existe ganha um objeto novo:
 
@@ -29,7 +31,7 @@ Não passa pelo Netlify e **não consome crédito nenhum**. O site pessoal
   nome: "casa ITTB",
   pecas: [
     { nome: "estudo preliminar", pranchas: 29, peso: 11.9, data: "19.08.2026",
-      href: "casa-ittb/apresentacao.html" }
+      href: "<slug>/apresentacao.html" }
   ]
 }
 ```
@@ -218,6 +220,11 @@ a engine abaixo dele não se toca.
   com fundo terracota no sistema, e o arquivo passa a ser **agrupado por
   projeto**, com copiar link e abrir em cada peça. A área do cliente do site
   Netlify foi removida.
+- **02/09/2026** — auditoria: `casa-ittb`, `tokyo-centro` e `casa-tavares`
+  eram peças de cliente em repositório público. Voltaram para `/cliente/` do
+  site com slug tokenizado, o histórico foi reescrito, e a regra "Público
+  quer dizer aberto" mais a guarda `sistemas/guarda-publico.py` entraram no
+  GITHUB-COMO-TRABALHAR.md. A decisão de 22/08 abaixo ficou superada.
 - **22/08/2026** — repositório criado, Pages ligado, índice no ar.
   Publicadas `casa-ittb` (29 pranchas, R2 de 19/08) e `toquio-centro`
   (21 pranchas). A `casa-ittb` foi removida do repositório do site, onde

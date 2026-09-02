@@ -389,11 +389,10 @@
    ───────────────────────────────────────────────────────────── */
 const BASE = "https://steinvalente-dev.github.io/apresentacoes/";
 
-/* Entrega em PSD: link público na área do cliente do site, servida pelo Netlify.
-   Sem login e com Content-Disposition: attachment, então o toque baixa e o iOS
-   oferece "Abrir em..." — é assim que o arquivo chega ao Procreate.
-   O mestre versionado continua no privado, em entregas/fazenda-lageado/. */
-const RAW = "https://michel-stein.netlify.app/cliente/sarasa-fazenda-lageado/";
+/* Peça ou entrega com nome de cliente NÃO se registra aqui: este arquivo é
+   público. Mora em michel-stein-site/cliente/<slug-token>/ e o registro das
+   URLs fica no privado, em michel-stein-sistemas/site/AREA-CLIENTE.md.
+   Regra em sistemas/GITHUB-COMO-TRABALHAR.md, seção "Público quer dizer aberto". */
 
 const projetos = [
   {
@@ -402,27 +401,6 @@ const projetos = [
       { nome: "quatro versões · trecho a ser reconstruído", pranchas: 35, peso: 8.6,
         sub: "abre por link — o slide 3d não roda de arquivo",
         data: "02.09.2026", href: "emei-presidente-dutra/apresentacao.html" }
-    ]
-  },
-  {
-    nome: "fazenda lageado",
-    pecas: [
-      { nome: "base de campo · corte A-A", sub: "PSD · 109 camadas · 52 px/m",
-        peso: 5.28, data: "26.08.2026", href: RAW + "FL-TULHA_CORTE-A-A.psd" },
-      { nome: "base de campo · corte B-B", sub: "PSD · 109 camadas · 60 px/m",
-        peso: 5.81, data: "26.08.2026", href: RAW + "FL-TULHA_CORTE-B-B.psd" },
-      { nome: "base de campo · corte C-C", sub: "PSD · 109 camadas · 93 px/m",
-        peso: 2.7, data: "26.08.2026", href: RAW + "FL-TULHA_CORTE-C-C.psd" },
-      { nome: "base de campo · elevação B", sub: "PSD · 109 camadas · 55 px/m",
-        peso: 2.61, data: "26.08.2026", href: RAW + "FL-TULHA_ELEVACAO-B.psd" },
-      { nome: "base de campo · elevação C", sub: "PSD · 109 camadas · 34 px/m",
-        peso: 2.54, data: "26.08.2026", href: RAW + "FL-TULHA_ELEVACAO-C.psd" },
-      { nome: "base de campo · elevação D", sub: "PSD · 109 camadas · 63 px/m",
-        peso: 2.67, data: "26.08.2026", href: RAW + "FL-TULHA_ELEVACAO-D.psd" },
-      { nome: "manifesto · px/m e extensão em metros", tipo: "sistema", sub: "JSON · viaja junto com os PSD",
-        peso: 0.004, data: "26.08.2026", href: RAW + "FL-TULHA_manifesto.json" },
-      { nome: "página de download das seis bases", tipo: "sistema", sub: "área do cliente · sem login",
-        peso: 0.005, data: "26.08.2026", href: RAW }
     ]
   },
   {
@@ -443,30 +421,6 @@ const projetos = [
         data: "26.08.2026", href: "amaz-r1/apresentacao.html" },
       { nome: "apresentação institucional", pranchas: 37, peso: 0.16,
         data: "23.08.2026", href: "amaz/apresentacao.html" }
-    ]
-  },
-  {
-    nome: "tokyo · centro",
-    pecas: [
-      { nome: "estudo de posicionamento", pranchas: 35, peso: 2.7, data: "23.08.2026",
-        href: "tokyo-centro/apresentacao.html" },
-      { nome: "teste de escala em celular", pranchas: 35, peso: 2.8, data: "25.08.2026",
-        href: "tokyo-centro-teste/apresentacao.html" }
-    ]
-  },
-  {
-    nome: "casa Tavares",
-    pecas: [
-      { nome: "estudo preliminar + volumetria", pranchas: 13, unid: "telas",
-        sub: "formato anterior ao DECK · imagens ainda pendentes",
-        peso: 0.045, data: "11.07.2026", href: "casa-tavares/apresentacao.html" }
-    ]
-  },
-  {
-    nome: "casa ITTB",
-    pecas: [
-      { nome: "estudo preliminar", pranchas: 29, peso: 11.9, data: "19.08.2026",
-        href: "casa-ittb/apresentacao.html" }
     ]
   },
 ];
@@ -608,6 +562,9 @@ const docs = [
   { grupo:"operação", nome:"arquivamento de entregas",
     desc:"Onde cada arquivo vai parar no Drive, a árvore de pastas e as armadilhas",
     href: GH+"operacao/ARQUIVAMENTO-ENTREGAS.md" },
+  { grupo:"publicação", nome:"guarda do repositório público",
+    desc:"Este repositório é aberto a qualquer pessoa, com ou sem link do acervo. A guarda varre nome de cliente, endereço, CNPJ, valor, URL da área de cliente e segredo antes do push — tem de imprimir “guarda: limpo”. Peça de cliente mora na área de cliente do site; o registro dela é privado. Regra na seção “Público quer dizer aberto” do GitHub — como trabalhar",
+    arq:"sistemas/GITHUB-COMO-TRABALHAR.md", ver:"sistemas/guarda-publico.py" },
   { grupo:"publicação", nome:"levar para outra frente",
     desc:"O que uma conversa de Lavrō, AMAZ ou Sarasá precisa ler para usar o mesmo sistema, e o que muda nas instruções daquele Projeto",
     arq:"sistemas/LEVAR-PARA-OUTRA-FRENTE.md" },

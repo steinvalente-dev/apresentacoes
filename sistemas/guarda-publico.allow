@@ -1,0 +1,24 @@
+# Exceções da guarda do repositório público — uma por linha: <caminho>:<trecho literal>
+# Cada linha existe por decisão do Michel. Sem decisão, não se acrescenta linha: move-se o arquivo.
+
+# EMEI é equipamento público; endereço é público por natureza (decisão da auditoria de 02.09.2026)
+emei-presidente-dutra/apresentacao.html:Rua Santo Elias, 146
+
+# Peça institucional da AMAZ cita caso de mercado já publicado — não é honorário nem dado de cliente
+amaz/apresentacao.html:R$ 7,4
+amaz/apresentacao.html:R$ 10
+amaz-r1/apresentacao.html:R$ 7,4
+amaz-r1/apresentacao.html:R$ 10
+
+# Telefone placeholder do manual da marca
+marca/michel-stein/manual.html:11 99999-0000
+
+# DECISÃO PENDENTE (auditoria 02.09.2026): CNPJ e endereço do Estúdio e do Instituto Sarasá.
+# CNPJ é público por natureza, mas a regra da casa diz "não entra". Se o Michel mandar mover
+# para o privado, apagar estas linhas — a guarda volta a apontar.
+marca/MARCA-SARASA.md:[cnpj removido]
+marca/MARCA-SARASA.md:[cnpj removido]
+marca/MARCA-SARASA.md:[endereço removido] 1
+marca/sarasa/styleguide.html:[cnpj removido]
+marca/sarasa/styleguide.html:[cnpj removido]
+marca/sarasa/styleguide.html:[endereço removido] 1

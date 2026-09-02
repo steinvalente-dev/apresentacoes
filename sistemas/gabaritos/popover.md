@@ -19,7 +19,7 @@ informação da apresentação.
 ## No DECK
 
 ```html
-<mark class="pop" data-pop="custo">R$ 6.655/m²</mark>
+<mark class="pop" data-pop="custo">R$ 0.000/m²</mark>
 ```
 
 com o texto de apoio no dicionário de popovers do deck, na chave `custo`.

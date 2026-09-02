@@ -32,8 +32,12 @@ muito — a verificação já está feita."*
 
 **1 · TELA CHEIA. Sempre.** Sem tarja preta em cima nem embaixo, em monitor
 nenhum. O esqueleto já sai assim desde 02/09; se aparecer letterbox, é
-regressão, não escolha. As peças de referência são `casa-ittb` e
-`tokyo-centro` — **abrir uma das duas antes de montar** e comparar. Este
+regressão, não escolha. A peça de referência pública é
+`emei-presidente-dutra` — **abrir antes de montar** e comparar. (Até 02.09 as
+referências eram `casa-ittb` e `tokyo-centro`; são peças de cliente e saíram
+do público para a área de cliente do site — URLs no privado, em
+`site/AREA-CLIENTE.md`. A EMEI é, de qualquer forma, a peça com a engine mais
+recente.) Este
 arquivo não substitui olhar peça publicada; foi o que a versão anterior
 ("este arquivo, e mais nada") causou.
 
@@ -44,7 +48,7 @@ peça de arquitetura o que o `cover` cortava era desenho.
 
 **3 · A ESCALA DE TEXTO E DE NAVEGAÇÃO É CONSTANTE.** Corpo, margem, faixa de
 chrome e botão de seta saem iguais em toda peça, de toda frente. Os valores
-estão no `:root` do esqueleto, calibrados pelos da `casa-ittb`. **Não
+estão no `:root` do esqueleto, calibrados pelos da casa ITTB (a peça de origem). **Não
 recalibrar para caber conteúdo** — se não cabe, corta-se texto, não se
 encolhe a tipografia.
 

@@ -13,6 +13,55 @@ conseguir publicar. Nesse caso diga isso em uma linha e oriente — salvar
 no Drive e abrir tarefa Cowork neste mesmo Projeto. Não tente e não
 deixe o Michel esperando.
 
+## ⚑ Público quer dizer aberto — ler antes de criar qualquer pasta aqui
+
+`steinvalente-dev/apresentacoes` é **público**: qualquer pessoa, sem link do
+acervo e sem login, lista as pastas em `github.com`, abre qualquer arquivo e
+navega o histórico — inclusive o que já foi apagado. O `noindex` só tira do
+Google. O acervo (`index.html`) **não é proteção**: é uma vitrine em cima de
+arquivos que já estão abertos. Não existe "arquivo privado dentro de
+repositório público" — a visibilidade é do repositório inteiro.
+
+Em 02.09.2026 a auditoria encontrou aqui duas peças com nome de cliente,
+endereço do lote e, numa delas, VGV e tese de aquisição — em 190 commits.
+Foram movidas e o histórico foi reescrito. Para não repetir:
+
+**A pergunta, antes de criar a pasta da peça:** a peça tem nome de cliente,
+endereço, honorário, valor de negócio, planta ou foto de obra de terceiro?
+
+| resposta | destino | registro |
+|---|---|---|
+| **sim** | `michel-stein-site/cliente/<slug>-<16 hex>/apresentacao.html` (Netlify) | `michel-stein-sistemas/site/AREA-CLIENTE.md` — **privado**. Nunca no `index.html` |
+| não | `apresentacoes/<slug>/apresentacao.html` | `index.html`, array `projetos` |
+
+O slug de cliente leva 16 caracteres hexadecimais aleatórios
+(`python3 -c "import secrets;print(secrets.token_hex(8))"`): sem eles a URL é
+adivinhável. A URL da área de cliente **nunca** aparece em arquivo do
+público — nem como constante, nem em comentário. Entregar o link ao Michel
+pelo chat, e registrar no privado.
+
+**Trava mecânica, obrigatória antes de todo push neste repositório:**
+
+```
+python3 sistemas/guarda-publico.py      # tem de imprimir "guarda: limpo"
+```
+
+Varre cliente nomeado no `metas`, URL de `/cliente/`, endereço com número,
+CNPJ, CPF, telefone, `R$` em peça, token e chave. Achado = push não liberado:
+mover o arquivo, não contornar. Exceção deliberada só com decisão do Michel,
+em `sistemas/guarda-publico.allow`, com o motivo. A mesma guarda está pronta
+para rodar no GitHub a cada push, em `sistemas/guarda-workflow.yml` — **ainda
+não ativa**: o token de apresentações não tem permissão `Workflows`, então
+o arquivo não pôde entrar em `.github/workflows/`. Ativar é um passo do
+Michel: dar `Workflows: read and write` ao token (Settings → Developer
+settings → Fine-grained tokens) ou mover o arquivo pelo site do GitHub. Ativa,
+fica vermelha em achado — é o alarme, não o bloqueio: o Pages publica direto
+de `main`.
+
+Se mesmo assim algo sensível subir: **tirar o arquivo não basta**. É
+`git filter-repo --invert-paths --path <pasta>` mais force-push, e avisar o
+Michel — é o único caso em que force-push é permitido aqui.
+
 ## Barrado por permissão não é barrado por token
 
 Sintoma: o `GET` da API funciona, o clone funciona, e só a **escrita** —
@@ -81,7 +130,7 @@ por URL** e **contém dado que não pode ser público**.
 | documento de método, sem dado de cliente | `apresentacoes/sistemas/<NOME>.md` |
 | regra de trabalho com nome de cliente, endereço, caminho interno | `michel-stein-sistemas/<pasta>/<NOME>.md` |
 | script que roda em máquina, não em navegador | `apresentacoes/ferramentas/<slug>/`, junto com o `LEIA-ME.md` |
-| peça sensível de cliente | não vai para o público: `michel-stein-site`, em `cliente/` |
+| peça com nome de cliente, endereço ou valor | não vai para o público: `michel-stein-site`, em `cliente/<slug>-<16 hex>/`, registrada no privado em `site/AREA-CLIENTE.md` |
 | binário de trabalho de projeto (PSD, DXF, base de campo) | `michel-stein-sistemas/entregas/<projeto>/` |
 | arquivo que saiu de uso, guardado só como registro | `apresentacoes/superado/` — ver o `LEIA-ME.md` de lá |
 | proposta de substituição, ainda não aprovada | `proposta/`, ao lado do arquivo que ela quer substituir |
@@ -176,9 +225,10 @@ para quem estiver logado no GitHub naquele navegador, e no iPad em campo isso
 não se sustenta.
 
 Quando o arquivo precisa **baixar num toque e abrir em outro app**, o destino é
-`michel-stein-site/cliente/<slug>/`, servido pelo Netlify:
+`michel-stein-site/cliente/<slug>-<16 hex>/`, servido pelo Netlify:
 
-- sem login, `robots.txt` com `Disallow: /cliente/` e `X-Robots-Tag: noindex`
+- sem login; `X-Robots-Tag: noindex` pelo `netlify.toml`. O `robots.txt` **não**
+  lista `/cliente/` — listar anunciaria o caminho (corrigido em 02.09.2026)
 - regra no `netlify.toml` para `/cliente/*/*.psd` com
   `Content-Type: application/octet-stream` e `Content-Disposition: attachment` —
   é isso que faz o iOS oferecer "Abrir em..." em vez de tentar exibir
@@ -196,15 +246,12 @@ pública é distribuição, não arquivo.
 
 ### Peça que mora fora do repositório público
 
-Entrega em repositório privado — PSD, DXF, binário de trabalho — entra em
-`projetos` com **`href` absoluto**, a URL da pasta no GitHub. O `cartao()` já
-distingue: `href` começando com `http` vai inteiro para o botão de copiar link;
-`href` relativo recebe o `BASE`. Não montar URL à mão no array.
-
-Campos úteis nesse caso: `sub` para dizer o que é e onde mora (`"PSD · repositório
-privado"`), `pranchas` com `unid` para a contagem (`6` + `"vistas"`), `peso` em MB
-do conjunto. Acima de 8 MB a marca de peça pesada aparece sozinha — e nesse caso
-ela é informação verdadeira, não defeito.
+**Não se registra no `index.html`.** Até 02.09.2026 a regra era registrar com
+`href` absoluto; isso publicou a URL da área de cliente para qualquer visitante
+e anulou a proteção. O registro dessas peças e entregas é o
+`michel-stein-sistemas/site/AREA-CLIENTE.md`, privado. O `cartao()` continua
+aceitando `href` absoluto para link que possa ser público (repositório de
+terceiro, página institucional) — nunca para `/cliente/`.
 
 ### Binário de trabalho: `entregas/`
 
@@ -293,7 +340,7 @@ Cada projeto é `{ nome, pecas: [...] }`. Cada peça:
 
 ```
 { nome:"estudo preliminar", pranchas: 29, peso: 11.9, data:"19.08.2026",
-  href:"casa-ittb/apresentacao.html" }
+  href:"<slug>/apresentacao.html" }
 ```
 
 Mais recente em cima. **Não escrever número** — 01, 02, 03 saem da ordem
@@ -325,6 +372,8 @@ apontando para o `index.html`: um link para entender, outro para usar.
 
 ## Validar antes de subir
 
+- **`python3 sistemas/guarda-publico.py` → `guarda: limpo`.** Primeiro de
+  todos; achado = não sobe (seção "Público quer dizer aberto")
 - `node --check` em cada script inline do `index.html` — um erro de
   sintaxe apaga a lista inteira, e a página quebra sem aviso
 - simular o agrupamento fora do navegador: extrair o array e conferir a
