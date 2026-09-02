@@ -167,7 +167,16 @@ window.MSA = (function(){
      é o MESMO nos dois anéis. Os dois lotes são confinantes, dividem a
      linha. Confirma o que o Michel disse: o hospital é literalmente do lado.
      ⚠ Nome de instituição e traçado de lote vêm de base colaborativa.
-     Confirmar em GeoSampa/BDT antes de ir para peça de cliente. */
+     Confirmar em GeoSampa/BDT antes de ir para peça de cliente.
+
+   ⚑ COMO SABER SE O 3D CAIU POR COTA — 02/09/2026, aconteceu.
+     Sintoma: <gmp-map-3d> sem canvas, sem shadowRoot, `cameraPosition`
+     null, spinner eterno e ZERO erro no console. Igualzinho a bug nosso.
+     O teste que separa: montar um `google.maps.Map` 2D na MESMA página com
+     a MESMA chave. Se o 2D renderiza, a chave, o referrer e o faturamento
+     estão bons e o que acabou foi `3D Map loads per day` (teto 1.000, posto
+     em 30/08). Console → Quotas → Maps JavaScript API, e olhar Metrics
+     antes de subir o número: pode ser uso, pode ser vazamento. */
   var ANEL_EMEI = [
     {lat:-23.532685,lng:-46.566980},{lat:-23.532694,lng:-46.566977},
     {lat:-23.532494,lng:-46.566153},{lat:-23.532484,lng:-46.566107},
@@ -274,8 +283,10 @@ window.MSA = (function(){
   function haste(pos, altura, cor, largura){
     var pl = new lib.Polyline3DElement({
       altitudeMode: AM().RELATIVE_TO_GROUND,
-      coordinates: [{lat:pos.lat,lng:pos.lng,altitude:0},
-                    {lat:pos.lat,lng:pos.lng,altitude:altura}],
+      /* `coordinates` está DEPRECIADO (aviso no console em 02/09/2026):
+         o campo vigente é `path`. Mesma classe de armadilha que `rounds`. */
+      path: [{lat:pos.lat,lng:pos.lng,altitude:0},
+             {lat:pos.lat,lng:pos.lng,altitude:altura}],
       strokeColor: cor, strokeWidth: largura || 4,
       drawsOccludedSegments: !!CFG.ocluso, zIndex: 15
     });
@@ -290,7 +301,7 @@ window.MSA = (function(){
     function po(cor, fill, largura, z){
       var pg = new lib.Polygon3DElement({
         altitudeMode: AM().CLAMP_TO_GROUND,
-        outerCoordinates: anel,
+        path: anel,          /* `outerCoordinates` está DEPRECIADO */
         strokeColor: cor, strokeWidth: largura, fillColor: fill,
         drawsOccludedSegments: !!CFG.ocluso, zIndex: z
       });
