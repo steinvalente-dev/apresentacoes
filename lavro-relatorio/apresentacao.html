@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Lavrō · Relatório de período — anatomia da peça</title>
+<style>
+  @font-face{
+    font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;
+    src:url(data:font/woff2;base64,d09GMgABAAAAAAMEAA8AAAAABiQAAAKtAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGhYbIBwqBmA/U1RBVCoATBEICoIEgWcBNgIkAxQLDAAEIAWEJAcgG/YECJ6DceNcomblErSIgJrzy0et1Ufw/Fw57ydLl2tZIYJCUOyYFaDxPVcSqqwRZfd//PvdIH8RwXiBWDttTdjgqc1cm6sB/msf9j+nP/Hpbz5nWRf42AYBRzLGEgikTQEl1AX68GWFifWXfduZMvW9bD3OJBl7gEAjIAkhEwINOkjkMmOWLR285VAHCDTohcSV2xe4ewPSCNE04jhPCekESqRzrmuA+fueWIsTWICF/2fWfAD3LdCRvf5/S34ocEBAvEsPgS7chFAVaMsFHbge3FaNuACSgMhdTwASMrTlJtCWuzFAg6okWaBEq446ZL/fe9DVLgkAhKgzUAINKGExsAGAHBCSEGViEeTt5+HnHgArzz0/j6MvL4rCZfis4dxJh1UbDy+K808cKQpoOHcW4bu29WzV+ZcIBx040lRkflDcuqB+5FYqcoucIq/InnYyNmNKF/w0G7kcxzJwuSxdJkY01aH7yZDB7xv2EnYXrSGoSltKCg4TO5Cq0/H/nSJs/F5Txy18jYTtO9i9Py5u2awffaLQ7f7dZM0K1v3IWNi58/3UnuuhqEwc7gOBxKKJ68/XtZD9rWZuv/Dmdrcb6/LFTfVpyA7cnghlCQQ/dLJ/FPqWKxDgXUrZAqxLiTRJgxBzMCvhBHNByQoelnAXACCTULOHm8h9gEdkZOjlnEyqPpGZSf7I3JBgkSXtopgoGxA9IhfQGJu6e93Z6Zo069aqRpVqCBQOVoSjpKtWASVNsxJlyjZq1QRptqmDkpwjtXgZBK7WDlGtSas2KKRyGKJZGwkmpio1JLxdKYYyTRowVaq/Bdco0ahOiVZtfU4jsduGSOmqlpNH2rb3wBpN6pXjYGCFbSkDK2lN19pm02WGThvleaaKd/AaTTHKiPna6ywV6rsBuXqGAQ==) format('woff2');
+  }
+  :root{
+    --ink:#0E1116; --ink-2:#3D444D; --label:#6B7280;
+    --line:#E3E5E9; --line-2:#C9CDD4; --blue:#0123FF;
+    --paper:#FFFFFF; --bg:#F4F5F7; --escuro:#0B1533;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:0 24px}
+  header{background:var(--paper);border-bottom:3px solid var(--blue);padding:56px 0 40px;margin-bottom:40px}
+  .lavro{
+    font-family:'Space Grotesk',"Segoe UI",sans-serif;font-weight:700;
+    font-size:30px;letter-spacing:.015em;line-height:1;color:var(--ink);white-space:nowrap;
+  }
+  .lavro .lo{position:relative;display:inline-block;color:var(--blue)}
+  .lavro .lo i{position:absolute;left:7%;right:7%;top:.17em;height:.115em;background:currentColor;border-radius:1px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:26px 0 10px;font-weight:700}
+  .sub{font-size:18px;color:var(--ink-2);max-width:62ch}
+  .meta{margin-top:22px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--label)}
+  .aviso{
+    margin-top:26px;padding:14px 18px;background:#F7F8FA;border-left:4px solid var(--blue);
+    font-size:14px;color:var(--ink-2);
+  }
+  section{background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:32px 34px;margin-bottom:20px}
+  h2{
+    font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--blue);
+    font-weight:700;margin:0 0 18px;padding-bottom:10px;border-bottom:1px solid var(--line-2);
+  }
+  h3{font-size:18px;letter-spacing:-.008em;margin:26px 0 8px;font-weight:700}
+  h3:first-of-type{margin-top:0}
+  p{margin:0 0 14px;max-width:74ch}
+  p:last-child{margin-bottom:0}
+  ul,ol{margin:0 0 14px;padding-left:22px;max-width:74ch}
+  li{margin-bottom:7px}
+  code{
+    font-family:"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;font-size:.88em;
+    background:#F2F3F5;padding:1px 5px;border-radius:2px;
+  }
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px}
+  th{
+    text-align:left;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--label);font-weight:700;padding:0 10px 9px 0;border-bottom:1px solid var(--line-2);
+  }
+  td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.mono,th.mono{font-family:"Cascadia Mono",Consolas,monospace;font-size:13px;color:var(--ink-2);white-space:nowrap}
+  .g{width:100%;height:auto;display:block;margin:6px 0 4px}
+  figure{margin:0 0 22px}
+  figcaption{font-size:12.5px;color:var(--label);margin-top:6px}
+
+  /* mapa das páginas */
+  .mapa{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:6px}
+  .pg{border:1px solid var(--line-2);border-radius:2px;aspect-ratio:210/297;position:relative;
+      background:var(--paper);overflow:hidden;padding:8px}
+  .pg.escura{background:var(--escuro);border-color:var(--escuro)}
+  .pg .rot{position:absolute;bottom:6px;left:8px;right:8px;font-size:9.5px;letter-spacing:.1em;
+           text-transform:uppercase;color:var(--label);line-height:1.3}
+  .pg.escura .rot{color:rgba(255,255,255,.66)}
+  .pg .bar{height:3px;background:var(--blue);border-radius:2px;margin-bottom:6px;width:40%}
+  .pg .ln{height:3px;background:#E7E9ED;border-radius:2px;margin-bottom:4px}
+  .pg .ln.c{width:78%} .pg .ln.d{width:56%} .pg .ln.e{width:92%}
+  .pg.escura .ln{background:rgba(255,255,255,.20)}
+  .pg .bl{height:22px;background:#EDEFF3;border-radius:2px;margin:6px 0}
+  .pg.escura .bl{background:rgba(255,255,255,.13)}
+  .pg .ft{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:6px}
+  .pg .ft span{display:block;height:16px;background:#E0E3E8;border-radius:1px}
+  .pg.escura .ft span{background:rgba(255,255,255,.24)}
+
+  .cores{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:8px}
+  .cor .sw{height:52px;border-radius:2px;border:1px solid rgba(14,17,22,.12)}
+  .cor .nm{font-size:13px;font-weight:600;margin-top:7px}
+  .cor .hx{font-family:"Cascadia Mono",Consolas,monospace;font-size:12px;color:var(--label)}
+
+  .alerta{border-left:4px solid #A81F1F;background:#FDF6F6;padding:14px 18px;margin:14px 0;font-size:14.5px}
+  .alerta b{color:#8C1A1A}
+  footer{padding:36px 0 60px;font-size:12.5px;color:var(--label);text-align:center}
+  footer .lavro{font-size:17px;display:inline-block;vertical-align:-3px;margin:0 2px}
+  @media (max-width:720px){
+    /* gráfico de 720 unidades fica ilegível a 300px: rola dentro da figura */
+    figure{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .g{min-width:560px}
+    figcaption{min-width:0}
+    .mapa{grid-template-columns:1fr 1fr}
+    section{padding:24px 20px}
+    h1{font-size:27px}
+    table{font-size:13.5px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="lavro">Lavr<span class="lo">o<i></i></span></div>
+    <h1>Relatório de período — anatomia da peça</h1>
+    <p class="sub">Como um mês de Relatórios Diários de Obra vira um documento de oito
+      páginas que o cliente lê em dois minutos. Estrutura, escala, especificação dos
+      gráficos e as armadilhas de impressão que custaram uma rodada cada.</p>
+    <div class="meta">Documento técnico · versão 1.0 · 02.09.2026</div>
+    <div class="aviso">
+      <b>Todos os dados desta página são fictícios.</b> Obra “Ed. Fictício”, setembro de
+      2026, 24 RDOs inventados. A peça real é emitida por obra e fica fora deste
+      repositório.
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2>1 · O problema</h2>
+  <p>O RDO é um registro diário, denso e não editável: cada dia gera três páginas com
+    checklist, mão de obra, equipamentos, atividades por marco e fotos. Um mês de obra
+    passa de duzentas páginas. É a prova do que aconteceu — e é ilegível como prestação de
+    contas.</p>
+  <p>O relatório de período faz o caminho inverso: lê os RDOs emitidos no intervalo e
+    devolve <strong>uma leitura</strong>. Os números viram gráfico, as atividades viram
+    narrativa por frente de serviço, e o conjunto ganha uma página de síntese para quem
+    não vai ler o resto.</p>
+  <p>Duas restrições moldam tudo o que vem depois. A primeira: <strong>é entregável de
+    cliente</strong> — ocorrência e item não conforme ficam de fora, salvo quando existe
+    solução clara ao lado do problema. A segunda: <strong>nada é persistido</strong>. O
+    relatório é uma leitura calculada do período; corrigido o RDO, o relatório regerado
+    muda.</p>
+</section>
+
+<section>
+  <h2>2 · Anatomia — oito páginas</h2>
+  <div class="mapa">
+    <div class="pg escura">
+      <div class="bar" style="margin-top:52%"></div>
+      <div class="ln e"></div><div class="ln c"></div>
+      <div class="rot">Capa<br>sangrada</div>
+    </div>
+    <div class="pg">
+      <div class="ln e"></div><div class="bl"></div>
+      <div class="ln"></div><div class="ln c"></div><div class="bl" style="height:30px"></div>
+      <div class="ln d"></div><div class="bl" style="height:18px"></div>
+      <div class="rot">1 · Painel</div>
+    </div>
+    <div class="pg escura">
+      <div class="bar"></div>
+      <div class="ln e"></div><div class="ln e"></div><div class="ln c"></div>
+      <div class="ln e"></div><div class="ln d"></div>
+      <div class="ft"><span></span><span></span><span></span><span></span></div>
+      <div class="rot">2 · Síntese</div>
+    </div>
+    <div class="pg">
+      <div class="ln d"></div><div class="ln e"></div><div class="ln c"></div>
+      <div class="ft"><span style="height:34px"></span><span style="height:34px"></span>
+        <span style="height:34px"></span><span style="height:34px"></span></div>
+      <div class="rot">3 a 6 · Atividades<br>por marco</div>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th class="mono">pág.</th><th>conteúdo</th><th>tratamento</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">capa</td><td>Obra, período, marca do executante</td><td>Foto em duotone escuro, sangrada, texto em branco</td></tr>
+      <tr><td class="mono">1</td><td>Dados da obra · 4 indicadores · efetivo diário · frentes · efetivo por função · equipamentos</td><td>Painel: nenhum texto corrido</td></tr>
+      <tr><td class="mono">2</td><td>Síntese do período · 3 números âncora · 4 fotos</td><td>Página inteira sobre fundo escuro</td></tr>
+      <tr><td class="mono">3–6</td><td>Uma frente por bloco: código do marco, nome, fase, narrativa e 4 fotos</td><td>Herda o bloco de marco do próprio RDO</td></tr>
+      <tr><td class="mono">última</td><td>Testes, segurança, recebimentos, situação ao encerramento, assinatura</td><td>Assinatura única empilhada; nota de sistema no rodapé</td></tr>
+    </tbody>
+  </table>
+  <p>A ordem não é decorativa: <strong>número, síntese, detalhe.</strong> Quem tem dois
+    minutos lê a página 2; quem tem dez lê a 1 e a 2; quem vai auditar segue até o fim. A
+    página escura funciona como parada — o leitor sabe, sem instrução, que ali está o
+    resumo.</p>
+</section>
+
+<section>
+  <h2>3 · Os três gráficos</h2>
+
+  <h3>Efetivo diário</h3>
+  <p>Uma barra por RDO, na ordem da data. O trabalho da forma é magnitude ao longo do
+    tempo, e é por isso que são barras e não linha: os dias são discretos e faltam dias —
+    domingo não tem RDO, e ligar os pontos inventaria continuidade.</p>
+  <figure>
+    <svg class="g" viewBox="0 0 720 178" role="img" aria-label="Efetivo diário de 16/07 a 31/08/2026, de 3 a 14 profissionais por dia">
+<line x1="26" y1="140.0" x2="716" y2="140.0" stroke="#C9CDD4" stroke-width="1"/>
+<text x="20" y="144.0" text-anchor="end" font-size="12" fill="#6B7280">0</text>
+<line x1="26" y1="97.3" x2="716" y2="97.3" stroke="#E3E5E9" stroke-width="1"/>
+<text x="20" y="101.3" text-anchor="end" font-size="12" fill="#6B7280">5</text>
+<line x1="26" y1="54.7" x2="716" y2="54.7" stroke="#E3E5E9" stroke-width="1"/>
+<text x="20" y="58.7" text-anchor="end" font-size="12" fill="#6B7280">10</text>
+<line x1="26" y1="12.0" x2="716" y2="12.0" stroke="#E3E5E9" stroke-width="1"/>
+<text x="20" y="16.0" text-anchor="end" font-size="12" fill="#6B7280">15</text>
+<path d="M31.5 140.0 V91.8 Q31.5 88.8 34.5 88.8 H46.3 Q49.3 88.8 49.3 91.8 V140.0 Z" fill="#0123FF"/>
+<path d="M60.2 140.0 V91.8 Q60.2 88.8 63.2 88.8 H75.0 Q78.0 88.8 78.0 91.8 V140.0 Z" fill="#0123FF"/>
+<path d="M89.0 140.0 V83.3 Q89.0 80.3 92.0 80.3 H103.8 Q106.8 80.3 106.8 83.3 V140.0 Z" fill="#0123FF"/>
+<path d="M117.7 140.0 V108.9 Q117.7 105.9 120.7 105.9 H132.5 Q135.5 105.9 135.5 108.9 V140.0 Z" fill="#0123FF"/>
+<path d="M146.5 140.0 V74.7 Q146.5 71.7 149.5 71.7 H161.3 Q164.3 71.7 164.3 74.7 V140.0 Z" fill="#94A0F7"/>
+<path d="M175.2 140.0 V74.7 Q175.2 71.7 178.2 71.7 H190.0 Q193.0 71.7 193.0 74.7 V140.0 Z" fill="#0123FF"/>
+<path d="M204.0 140.0 V66.2 Q204.0 63.2 207.0 63.2 H218.8 Q221.8 63.2 221.8 66.2 V140.0 Z" fill="#0123FF"/>
+<path d="M232.7 140.0 V66.2 Q232.7 63.2 235.7 63.2 H247.5 Q250.5 63.2 250.5 66.2 V140.0 Z" fill="#0123FF"/>
+<path d="M261.5 140.0 V100.3 Q261.5 97.3 264.5 97.3 H276.3 Q279.3 97.3 279.3 100.3 V140.0 Z" fill="#0123FF"/>
+<path d="M290.2 140.0 V57.7 Q290.2 54.7 293.2 54.7 H305.0 Q308.0 54.7 308.0 57.7 V140.0 Z" fill="#0123FF"/>
+<path d="M319.0 140.0 V57.7 Q319.0 54.7 322.0 54.7 H333.8 Q336.8 54.7 336.8 57.7 V140.0 Z" fill="#94A0F7"/>
+<path d="M347.7 140.0 V49.1 Q347.7 46.1 350.7 46.1 H362.5 Q365.5 46.1 365.5 49.1 V140.0 Z" fill="#0123FF"/>
+<path d="M376.5 140.0 V49.1 Q376.5 46.1 379.5 46.1 H391.3 Q394.3 46.1 394.3 49.1 V140.0 Z" fill="#0123FF"/>
+<path d="M405.2 140.0 V40.6 Q405.2 37.6 408.2 37.6 H420.0 Q423.0 37.6 423.0 40.6 V140.0 Z" fill="#0123FF"/>
+<path d="M434.0 140.0 V91.8 Q434.0 88.8 437.0 88.8 H448.8 Q451.8 88.8 451.8 91.8 V140.0 Z" fill="#0123FF"/>
+<path d="M462.7 140.0 V49.1 Q462.7 46.1 465.7 46.1 H477.5 Q480.5 46.1 480.5 49.1 V140.0 Z" fill="#0123FF"/>
+<path d="M491.5 140.0 V57.7 Q491.5 54.7 494.5 54.7 H506.3 Q509.3 54.7 509.3 57.7 V140.0 Z" fill="#94A0F7"/>
+<path d="M520.2 140.0 V57.7 Q520.2 54.7 523.2 54.7 H535.0 Q538.0 54.7 538.0 57.7 V140.0 Z" fill="#0123FF"/>
+<rect x="549.0" y="122.9" width="17.8" height="17.1" rx="3" fill="none" stroke="#C9CDD4" stroke-width="1.5" stroke-dasharray="3 3"/>
+<path d="M577.7 140.0 V40.6 Q577.7 37.6 580.7 37.6 H592.5 Q595.5 37.6 595.5 40.6 V140.0 Z" fill="#0123FF"/>
+<path d="M606.5 140.0 V49.1 Q606.5 46.1 609.5 46.1 H621.3 Q624.3 46.1 624.3 49.1 V140.0 Z" fill="#0123FF"/>
+<path d="M635.2 140.0 V49.1 Q635.2 46.1 638.2 46.1 H650.0 Q653.0 46.1 653.0 49.1 V140.0 Z" fill="#0123FF"/>
+<path d="M664.0 140.0 V40.6 Q664.0 37.6 667.0 37.6 H678.8 Q681.8 37.6 681.8 40.6 V140.0 Z" fill="#94A0F7"/>
+<path d="M692.7 140.0 V66.2 Q692.7 63.2 695.7 63.2 H707.5 Q710.5 63.2 710.5 66.2 V140.0 Z" fill="#0123FF"/>
+<line x1="26" y1="56.4" x2="716" y2="56.4" stroke="#3D444D" stroke-width="1.2" stroke-dasharray="6 4"/>
+<text x="32" y="50.4" text-anchor="start" font-size="11.5" fill="#3D444D" letter-spacing="1.2">MÉDIA 9,0</text>
+<text x="1046.6" y="13.5" text-anchor="end" font-size="12.5" font-weight="700" fill="#0E1116">12</text>
+<text x="40.4" y="154.0" text-anchor="middle" font-size="11" fill="#6B7280">01/09</text>
+<text x="155.4" y="154.0" text-anchor="middle" font-size="11" fill="#6B7280">05/09</text>
+<text x="270.4" y="154.0" text-anchor="middle" font-size="11" fill="#6B7280">10/09</text>
+<text x="385.4" y="154.0" text-anchor="middle" font-size="11" fill="#6B7280">15/09</text>
+<text x="500.4" y="154.0" text-anchor="middle" font-size="11" fill="#6B7280">19/09</text>
+<text x="615.4" y="154.0" text-anchor="middle" font-size="11" fill="#6B7280">24/09</text>
+<text x="716.0" y="154.0" text-anchor="end" font-size="11" fill="#6B7280">28/09</text>
+<line x1="399.8" y1="6" x2="399.8" y2="140" stroke="#C9CDD4" stroke-width="1"/>
+<text x="393.8" y="11" text-anchor="end" font-size="10.5" fill="#6B7280" letter-spacing="1.6">JUL</text>
+<text x="405.8" y="11" text-anchor="start" font-size="10.5" fill="#6B7280" letter-spacing="1.6">AGO</text>
+<rect x="26" y="164" width="9" height="9" rx="2" fill="#0123FF"/>
+<text x="40" y="172" font-size="11" fill="#6B7280">dia útil</text>
+<rect x="136" y="164" width="9" height="9" rx="2" fill="#94A0F7"/>
+<text x="150" y="172" font-size="11" fill="#6B7280">sábado</text>
+<rect x="244" y="164" width="9" height="9" rx="2" fill="none" stroke="#C9CDD4" stroke-width="1.5" stroke-dasharray="3 3"/>
+<text x="258" y="172" font-size="11" fill="#6B7280">sem efetivo informado</text>
+</svg>
+    <figcaption>Sábado recebe um passo claro do mesmo matiz, com legenda. A média entra
+      como linha tracejada rotulada; só o pico ganha rótulo direto. Topo arredondado
+      ancorado na base, grade recessiva.</figcaption>
+  </figure>
+  <p>O dia vazado é a decisão mais útil do gráfico: <strong>RDO emitido com atividade
+    lançada e tabela de mão de obra vazia</strong> aparece como zero no banco. Zero cheio
+    diria que ninguém trabalhou — mentira. Ele entra vazado, fora da média, e vira aviso
+    para corrigir o registro.</p>
+
+  <h3>Frentes de serviço</h3>
+  <p>Uma barra por marco sobre o eixo do período, com a contagem de dias à direita. Mostra
+    o que tabela nenhuma mostra: quais frentes correram em paralelo e onde uma pegou a
+    outra.</p>
+  <figure>
+    <svg class="g" viewBox="0 0 720 152" role="img" aria-label="Períodos das quatro frentes de serviço">
+<line x1="246.0" y1="8" x2="246.0" y2="134" stroke="#E3E5E9" stroke-width="1"/>
+<text x="246.0" y="146" text-anchor="start" font-size="11" fill="#6B7280">16/07</text>
+<line x1="378.9" y1="8" x2="378.9" y2="134" stroke="#E3E5E9" stroke-width="1"/>
+<text x="378.9" y="146" text-anchor="middle" font-size="11" fill="#6B7280">01/08</text>
+<line x1="628.0" y1="8" x2="628.0" y2="134" stroke="#E3E5E9" stroke-width="1"/>
+<text x="628.0" y="146" text-anchor="end" font-size="11" fill="#6B7280">31/08</text>
+<text x="0" y="30.5" font-size="12" fill="#3D444D" letter-spacing="0.6" font-family="Consolas,monospace">M-01</text>
+<text x="40" y="30.5" font-size="12.5" fill="#0E1116">Frente A — subsolo</text>
+<rect x="636.3" y="23.5" width="91.3" height="10" rx="5" fill="#0123FF"/>
+<text x="720" y="30.5" text-anchor="end" font-size="12" fill="#3D444D">8 dias</text>
+<text x="0" y="59.5" font-size="12" fill="#3D444D" letter-spacing="0.6" font-family="Consolas,monospace">M-02</text>
+<text x="40" y="59.5" font-size="12.5" fill="#0E1116">Frente B — prumadas</text>
+<rect x="652.9" y="52.5" width="174.4" height="10" rx="5" fill="#0123FF"/>
+<text x="720" y="59.5" text-anchor="end" font-size="12" fill="#3D444D">11 dias</text>
+<text x="0" y="88.5" font-size="12" fill="#3D444D" letter-spacing="0.6" font-family="Consolas,monospace">M-04</text>
+<text x="40" y="88.5" font-size="12.5" fill="#0E1116">Frente C — 1º pavimento</text>
+<rect x="769.2" y="81.5" width="108.0" height="10" rx="5" fill="#0123FF"/>
+<text x="720" y="88.5" text-anchor="end" font-size="12" fill="#3D444D">7 dias</text>
+<text x="0" y="117.5" font-size="12" fill="#3D444D" letter-spacing="0.6" font-family="Consolas,monospace">M-05</text>
+<text x="40" y="117.5" font-size="12.5" fill="#0E1116">Frente D — 2º pavimento</text>
+<rect x="860.5" y="110.5" width="10.0" height="10" rx="5" fill="#0123FF"/>
+<text x="720" y="117.5" text-anchor="end" font-size="12" fill="#3D444D">1 dia</text>
+</svg>
+    <figcaption>Extremos da barra = primeiro e último RDO com aquele marco lançado. Um
+      único dia recebe largura mínima para continuar visível.</figcaption>
+  </figure>
+
+  <h3>Efetivo por função</h3>
+  <p>Homem-dia acumulado, ordenado por volume, com o pico simultâneo ao lado. Barra
+    horizontal porque o rótulo é texto de largura variável.</p>
+  <figure>
+    <svg class="g" viewBox="0 0 720 162" role="img" aria-label="Homem-dia acumulado por função">
+<text x="0" y="23.5" font-size="12.5" fill="#0E1116">Encanador</text>
+<rect x="150" y="15.5" width="442.0" height="10" rx="5" fill="#0123FF"/>
+<text x="601.0" y="23.5" font-size="12" font-weight="700" fill="#0E1116">96</text>
+<text x="720" y="23.5" text-anchor="end" font-size="11" fill="#6B7280">pico 12</text>
+<text x="0" y="48.5" font-size="12.5" fill="#0E1116">Ajudante</text>
+<rect x="150" y="40.5" width="331.5" height="10" rx="5" fill="#0123FF"/>
+<text x="490.5" y="48.5" font-size="12" font-weight="700" fill="#0E1116">72</text>
+<text x="720" y="48.5" text-anchor="end" font-size="11" fill="#6B7280">pico 4</text>
+<text x="0" y="73.5" font-size="12.5" fill="#0E1116">Auxiliar técnico</text>
+<rect x="150" y="65.5" width="110.5" height="10" rx="5" fill="#0123FF"/>
+<text x="269.5" y="73.5" font-size="12" font-weight="700" fill="#0E1116">24</text>
+<text x="720" y="73.5" text-anchor="end" font-size="11" fill="#6B7280">pico 2</text>
+<text x="0" y="98.5" font-size="12.5" fill="#0E1116">Encarregado</text>
+<rect x="150" y="90.5" width="110.5" height="10" rx="5" fill="#0123FF"/>
+<text x="269.5" y="98.5" font-size="12" font-weight="700" fill="#0E1116">24</text>
+<text x="720" y="98.5" text-anchor="end" font-size="11" fill="#6B7280">pico 1</text>
+<text x="0" y="123.5" font-size="12.5" fill="#0E1116">Almoxarife</text>
+<rect x="150" y="115.5" width="82.9" height="10" rx="5" fill="#0123FF"/>
+<text x="241.9" y="123.5" font-size="12" font-weight="700" fill="#0E1116">18</text>
+<text x="720" y="123.5" text-anchor="end" font-size="11" fill="#6B7280">pico 1</text>
+<text x="0" y="148.5" font-size="12.5" fill="#0E1116">Supervisão e apoio</text>
+<rect x="150" y="140.5" width="41.4" height="10" rx="5" fill="#0123FF"/>
+<text x="200.4" y="148.5" font-size="12" font-weight="700" fill="#0E1116">9</text>
+<text x="720" y="148.5" text-anchor="end" font-size="11" fill="#6B7280">pico 2</text>
+</svg>
+    <figcaption>Valor em rótulo direto no fim da barra; o pico fica em tom secundário,
+      para não competir.</figcaption>
+  </figure>
+
+  <p>Regras comuns aos três: uma escala só, marcas finas, grade e eixos recessivos,
+    rótulo direto seletivo em vez de número em cada marca, e o texto sempre em tinta de
+    texto — nunca na cor da série. Série única não leva legenda; o título nomeia.</p>
+</section>
+
+<section>
+  <h2>4 · Cor, tipografia e grid</h2>
+  <div class="cores">
+    <div class="cor"><div class="sw" style="background:#0123FF"></div><div class="nm">Elétrico</div><div class="hx">#0123FF</div></div>
+    <div class="cor"><div class="sw" style="background:#94A0F7"></div><div class="nm">Elétrico claro</div><div class="hx">#94A0F7</div></div>
+    <div class="cor"><div class="sw" style="background:#5B6BFF"></div><div class="nm">Sobre escuro</div><div class="hx">#5B6BFF</div></div>
+    <div class="cor"><div class="sw" style="background:#0B1533"></div><div class="nm">Fundo escuro</div><div class="hx">#0B1533</div></div>
+    <div class="cor"><div class="sw" style="background:#0E1116"></div><div class="nm">Tinta</div><div class="hx">#0E1116</div></div>
+    <div class="cor"><div class="sw" style="background:#F4F5F7"></div><div class="nm">Painel</div><div class="hx">#F4F5F7</div></div>
+  </div>
+  <p style="margin-top:20px">O elétrico marca título de seção e a marca dos gráficos.
+    <strong>Sobre fundo escuro ele não se usa em traço nem em texto</strong> — dá 2,4:1 e
+    fica encardido; ali vale o <code>#5B6BFF</code>. Preenchimento chapado e branco sobre
+    o elétrico continuam válidos.</p>
+  <table>
+    <thead><tr><th>uso</th><th class="mono">tamanho</th><th>tratamento</th></tr></thead>
+    <tbody>
+      <tr><td>Nome da obra, cabeçalho</td><td class="mono">17 pt</td><td>700, tracking −.014em</td></tr>
+      <tr><td>Nome do marco</td><td class="mono">11,4 pt</td><td>700</td></tr>
+      <tr><td>Corpo</td><td class="mono">9,6 pt</td><td>entrelinha 1,46, justificado</td></tr>
+      <tr><td>Síntese, página escura</td><td class="mono">12,9 pt</td><td>entrelinha 1,58, abertura em 15,4 pt</td></tr>
+      <tr><td>Rótulo de seção</td><td class="mono">5,8 pt</td><td>caixa alta, tracking .28em, elétrico</td></tr>
+      <tr><td>Legenda de foto</td><td class="mono">7,2 pt</td><td>identificação do RDO em mono, 5,8 pt</td></tr>
+    </tbody>
+  </table>
+  <p>Folha A4 com margens de 15 mm nas laterais, 11 mm no alto e 9 mm no pé — coluna útil
+    de <strong>180 mm</strong>. O bloco de marco recua 14 mm: o código fica numa coluna de
+    11 mm e nome, fase, texto e fotos compartilham a mesma margem esquerda. O rodapé é
+    ancorado no fundo de toda página, não no fim do texto.</p>
+</section>
+
+<section>
+  <h2>5 · Duotone das páginas escuras</h2>
+  <p>Capa e página de síntese usam foto da própria obra rebaixada a textura. A receita é
+    assada na imagem, não aplicada em CSS, para que impressão e leitores de PDF não
+    interpretem nada:</p>
+  <ol>
+    <li>Recorte central na proporção da página e conversão para cinza, com um leve ganho
+      de contraste.</li>
+    <li>Mapeamento do cinza numa rampa de dois pontos — sombra <code>#0B1533</code>,
+      luz <code>#96A1C9</code> — que é o elétrico dessaturado e escurecido.</li>
+    <li>Gravação como <strong>PNG de paleta de 256 cores</strong>. A rampa tem um matiz
+      só, então a paleta é praticamente sem perda, e no PDF a imagem entra como
+      <code>FlateDecode</code>.</li>
+    <li>Véu em gradiente por cima, mais fechado no alto e no pé, onde mora o texto.</li>
+  </ol>
+  <p>Alvo de contraste: <strong>branco a 12:1 ou mais</strong> nas faixas que recebem
+    texto, medido no PDF renderizado — não estimado.</p>
+</section>
+
+<section>
+  <h2>6 · Armadilhas de impressão</h2>
+  <p>Nenhuma destas aparece em validador de sintaxe. Todas apareceram executando, e cada
+    uma custou uma rodada.</p>
+
+  <div class="alerta">
+    <b>@page nomeada desarruma a paginação inteira.</b> Usar
+    <code>@page capa { margin: 0 }</code> para a capa sangrar joga o rodapé de
+    <em>todas</em> as folhas para uma página só dele — sete páginas viram treze, seis delas
+    quase vazias. A saída é <code>@page { margin: 0 }</code> global, com a margem do papel
+    virando <code>padding</code> da folha; a capa fica sem padding.
+  </div>
+
+  <div class="alerta">
+    <b>JPEG no PDF pode virar rosa.</b> O Chromium grava a imagem com
+    <code>/ColorTransform 0</code>, que declara os três canais como RGB quando o JPEG é
+    YCbCr. Leitor que obedece a chave não faz a conversão, e o azul escuro sai magenta —
+    certo no navegador, errado no visualizador. Imagem chapada entra como PNG; e o PDF
+    ainda passa por normalização, com <code>/DeviceRGB</code> e
+    <code>/ColorTransform 1</code> em todas as imagens.
+  </div>
+
+  <div class="alerta">
+    <b>Fundo absoluto pinta por cima de conteúdo estático.</b> Na largura de celular, o
+    conteúdo das páginas escuras precisa de <code>position: relative</code>: com
+    <code>static</code>, elemento posicionado pinta acima de elemento não posicionado e a
+    página aparece só com o fundo, sem texto. Zero sintoma no desktop.
+  </div>
+
+  <ul>
+    <li><strong>Medir na largura real da impressão.</strong> A emulação roda a 680 px — os
+      180 mm da coluna — com o meio <code>print</code>. A 1200 px o texto reflui diferente
+      e a medição mente.</li>
+    <li>A regra de tela estreita precisa ser <code>@media screen and (max-width:800px)</code>.
+      Sem o <code>screen</code>, ela vale na impressão e desmonta a paginação.</li>
+    <li><code>page-break-inside: avoid</code> num bloco mais alto que a página joga a
+      página inteira fora. Só em <code>figure</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>7 · Critérios de aprovação</h2>
+  <p>A peça não sai sem passar por execução. O medidor roda Chromium sem interface e
+    reporta, folha por folha, a altura do conteúdo em milímetros contra a área útil:</p>
+  <ul>
+    <li>toda folha dentro do limite — nenhuma estourando;</li>
+    <li>PDF com o número exato de páginas esperado. <strong>Página curta é rodapé
+      escapando</strong>, e é o sintoma que denuncia a armadilha da <code>@page</code>;</li>
+    <li>páginas sangradas em 210 × 297 mm, com os quatro cantos escuros no PDF;</li>
+    <li>zero imagem quebrada, zero erro de console, zero transbordo horizontal em 1100 e
+      390 px;</li>
+    <li>fonte da marca confirmada carregada, não presumida;</li>
+    <li>contraste do branco medido nas faixas de texto das páginas escuras.</li>
+  </ul>
+  <p>E depois disso, <strong>abrir as páginas renderizadas e olhar.</strong> Rótulo
+    colidindo com legenda, foto no marco errado e recorte que decepa o assunto da imagem
+    não aparecem em medição nenhuma.</p>
+</section>
+
+<section>
+  <h2>8 · O que ainda é humano</h2>
+  <p>Três coisas nesta peça não saem de consulta ao banco, e vale registrar antes que
+    pareçam automáticas:</p>
+  <ol>
+    <li><strong>A síntese.</strong> Os quatro parágrafos da página 2 são escritos a partir
+      da leitura de todos os RDOs do período. É a página mais lida do documento e a única
+      sem fonte de dados.</li>
+    <li><strong>A escolha das fotos.</strong> Um mês rende mais de cem imagens; a peça usa
+      dezoito. A seleção é por frente de serviço e por legibilidade do assunto.</li>
+    <li><strong>A situação ao encerramento.</strong> Depende de saber o estado de cada
+      frente no último dia, que é leitura de engenharia, não campo de formulário.</li>
+  </ol>
+  <p>Automatizar a peça começa por decidir quem responde por esses três — não por
+    desenhar tela.</p>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    Documento técnico · Relatório de período, versão 1.0 · 02.09.2026<br>
+    Dados fictícios · <div class="lavro">Lavr<span class="lo">o<i></i></span></div>
+  </div>
+</footer>
+
+</body>
+</html>
