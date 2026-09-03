@@ -5,7 +5,7 @@ O que mora aqui, e qual é o mestre de quê.
 | arquivo | o que é | papel |
 |---|---|---|
 | `../MARCA-AMAZ.md` | cor, tipografia, grafismo, o que falta decidir | **o mestre.** É o que as sessões leem e o deck consome |
-| `bloco.html` | o que se cola no esqueleto: cores, fontes, capa e contracapa | a forma executável do mestre |
+| `bloco.html` | o que se cola no esqueleto: as quatro fontes, os tokens por papel (`--papel --tinta --primaria --acento --escuro --acento-claro --f-display --f-corpo --f-mono`), as constantes da marca (`LOGO_CANTO LOCKUP GRAFISMO QR UNDERSCORE` — canto em texto, wordmark como `LOCKUP`, sem QR, sem underscore), abertura e contracapa | a forma executável do mestre |
 
 **Se o `.md` e o HTML divergirem, o `.md` ganha.**
 

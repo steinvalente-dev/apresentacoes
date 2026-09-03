@@ -42,10 +42,13 @@ Confundi-las é o que impedia trocar de marca.
 
 **Montar uma apresentação = motor + uma marca + um DECK.**
 
-Os dois arquivos que uma sessão lê para montar, e mais nada:
+O que uma sessão lê para montar (corrigido 02.09.2026 — antes dizia "este
+arquivo e mais nada", e foi isso que fez a primeira peça sair errada):
 
     .../apresentacoes/main/sistemas/DECK-MONTAR.md
     .../apresentacoes/main/marca/MARCA-<a sua>.md
+    o módulo de capa da frente, em modulos/
+    a peça de referência, ABERTA antes de montar: emei-presidente-dutra
 
 Gabarito com máquina própria — mapa, render em tela cheia, prancha de
 referência, visor 3D, popover, isométrico — tem arquivo próprio em
@@ -59,11 +62,17 @@ referência, visor 3D, popover, isométrico — tem arquivo próprio em
 
 1. Abrir `esqueleto/deck-esqueleto.html`. **Não partir do HTML de outra peça** —
    vem com a marca e o conteúdo dela junto.
-2. Colar as **seis `@font-face`** do bloco da marca.
-3. Trocar as **quatro cores** do `:root`. As linhas de escala não se tocam.
-4. Pôr a **capa e a contracapa** nas pontas do `DECK`.
+2. Colar as `@font-face` do bloco da marca — **seis** na michel stein_ e na
+   AMAZ, **quatro** na Sarasá (corrigido 02.09.2026).
+3. Trocar as cores do `:root` pelo bloco da marca, **e varrer os hexes escritos
+   à mão pelo CSS** — trocar o `:root` não basta. As linhas de escala não se
+   tocam.
+4. Pôr a **capa do módulo da frente** e a contracapa nas pontas do `DECK`. O
+   logotipo do canto superior direito vem configurado no bloco da marca: texto
+   nas outras frentes, logotipo na Sarasá.
 5. Escrever o miolo do `DECK`.
-6. Rodar o laço de verificação antes de entregar:
+6. Rodar o laço de verificação antes de entregar, e a varredura de transbordo em
+   sete proporções (`DECK-MONTAR.md`, "Antes de entregar"):
 
 ```js
 for(let i=0;i<DECK.length;i++){ try{ tpl(DECK[i]) }catch(e){ console.log(i, DECK[i].g, e.message) } }
@@ -77,10 +86,11 @@ for(let i=0;i<DECK.length;i++){ try{ tpl(DECK[i]) }catch(e){ console.log(i, DECK
 
 | frente | marca | o que falta |
 |---|---|---|
-| **michel stein_** | `marca/MARCA-MICHEL-STEIN.md` + bloco pronto | nada — é a referência |
-| **AMAZ** | `marca/MARCA-AMAZ.md` | levantada do que está publicado: paleta e tipografia completas. **Faltam abertura, contracapa, acervo do fundo, regras de logotipo e "o que é intocável"** |
-| **Lavrō** | não existe ainda | tokens levantados no `temas.md`; falta virar `MARCA-LAVRO.md` |
-| **Sarasá · Baraka** | não existem | **não inventar paleta.** Levantar a identidade antes |
+| **michel stein_** | `marca/MARCA-MICHEL-STEIN.md` + `michel-stein/bloco.html` | nada — é o padrão do esqueleto |
+| **AMAZ** | `marca/MARCA-AMAZ.md` + `amaz/bloco.html` | levantada do que está publicado: paleta e tipografia completas. **Faltam abertura, contracapa, acervo do fundo e "o que é intocável"** |
+| **Lavrō** | `marca/MARCA-LAVRO.md` + `lavro/bloco.html` | (corrigido 02.09.2026 — antes: "não existe ainda") ver as lacunas no próprio arquivo |
+| **Estúdio Sarasá** | `marca/MARCA-SARASA.md` + `sarasa/bloco.html`, peça publicada: `emei-presidente-dutra` | (corrigido 02.09.2026 — antes: "não existe, não inventar") lacunas nomeadas no §8 do arquivo |
+| **Baraka** | não existe | **não inventar paleta.** Levantar a identidade antes |
 
 O checklist de sete itens para criar um `MARCA-<nome>.md` está no fim do
 `marca/MARCA-MICHEL-STEIN.md`.

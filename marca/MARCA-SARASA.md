@@ -95,6 +95,15 @@ não derivação minha — §8.
 **Sem underscore piscante** — é a assinatura da michel stein_.
 **Sem barra de acento fora da caixa** — é a assinatura da AMAZ.
 
+### O canto superior direito do deck: o logotipo, não texto
+
+Decisão do Michel, 02.09.2026. **A Sarasá é a única frente que leva logotipo no
+canto** — as outras levam o nome em texto. É o lockup oficial (§4), pequeno,
+fixo, **trocando positivo/negativo pelo tema do slide**: dois fills sobre Cal,
+negativo monocromático sobre Vinho ou Ferro (§2). Testado na
+`emei-presidente-dutra`, aprovado, e configurado no bloco da marca
+(`sarasa/bloco.html`). Regra geral em `../sistemas/DECK-MONTAR.md`, item 7.
+
 ---
 
 ## 2 · Cor — os quatro papéis

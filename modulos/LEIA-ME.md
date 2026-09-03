@@ -17,6 +17,10 @@ do Git. Nunca criar `-R2` ao lado.
 | `prancha-referencia.html` | a grade de 2 a 4 imagens sobre um tema, com pilha e slot | receita em `../sistemas/gabaritos/prancha-referencia.md` |
 | `render-cheia.html` | o render em tela cheia, com o texto que sai de cena quando o ponteiro para | receita em `../sistemas/gabaritos/render-cheia.md` |
 | `ms-voltar.js` | o chip **voltar ao acervo** e a camada de toque, ~12 KB. Vale para toda peça publicada | `<script defer src="../modulos/ms-voltar.js">` no fim do `<body>` — e nada mais |
+| `mapa-earth-3d.html` | o visor fotorrealista do Google Earth (malha 3D, órbita, recentrar, carga em degraus); mestre do gabarito `earth-3d`. **Só funciona por link** — a Maps API recusa `file://`. O arquivo ainda traz o aviso "protótipo · NÃO VIGENTE" no título; a mecânica já está portada no esqueleto e foi usada na EMEI Presidente Dutra | receita em `../sistemas/gabaritos/mapa-earth-3d.md`; exige `ms-maps-chave.js` |
+| `modelo-sketchup.html` | o modelo do projeto vivo, no viewer do 3D Warehouse (iframe montado só na chegada ao slide, reserva de imagens para rede ruim); mestre do gabarito `modelo-3d`. **O modelo tem de estar público.** Mesmo aviso "NÃO VIGENTE" no título, mesma situação | receita em `../sistemas/gabaritos/modelo.md` |
+| `ms-maps-chave.js` | a chave da Google Maps Platform, uma só, restrita por referrer; ~3 KB. Domínio novo exige cadastro no console antes de a peça ir ao ar | `<script src="../modulos/ms-maps-chave.js">` no fim do `<body>`, antes do `ms-voltar.js` |
+| `capa-morph-sarasa.html` | a abertura da Sarasá em dois momentos (capa institucional com lockup → título da peça), sobre o morph; **1,4 MB, protótipo com fontes e imagens embutidas** | já portada para o esqueleto como `dois:1` no slide `marca`; o bloco da marca em `../marca/sarasa/bloco.html` |
 
 ## A engine, hoje
 

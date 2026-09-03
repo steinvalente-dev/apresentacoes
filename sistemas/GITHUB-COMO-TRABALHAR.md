@@ -5,6 +5,10 @@ vá para o GitHub: apresentação, documento de regra, ferramenta de
 navegador, rotina de automação. Credenciais no documento
 `CREDENCIAIS.md`, nos documentos do Projeto — nunca num repositório.
 
+**Este arquivo é o runbook único de publicação.** Em 02.09.2026 absorveu o
+`PUBLICAR-APRESENTACOES.md` (hoje em `superado/`). O que era regra lá está
+aqui; o que era história está na seção final.
+
 ## Pré-requisito que não é negociável
 
 Publicar exige shell, git e rede: uma tarefa **Cowork**, com container.
@@ -115,13 +119,21 @@ qualquer documento começando por `CREDENCI` antes de dizer que não há.
 
 | repositório | visibilidade | o que guarda | publica em |
 |---|---|---|---|
-| `steinvalente-dev/apresentacoes` | **público** | apresentações, módulos, ferramentas de navegador, docs sem dado de cliente | GitHub Pages — grátis |
+| `steinvalente-dev/apresentacoes` | **público** | apresentações, módulos, ferramentas de navegador, docs sem dado de cliente | GitHub Pages, `main` / raiz — grátis, sem crédito |
 | `steinvalente-dev/michel-stein-site` | privado | o site de portfólio e a área de cliente | Netlify — 15 créditos por push |
 | `steinvalente-dev/michel-stein-sistemas` | privado | as regras de trabalho, com nome de cliente e caminho interno | nada; é só leitura e escrita |
 
 Usuário em todos: `steinvalente-dev`. Branch: `main`. Tokens são
 fine-grained, um por repositório, `Contents: read and write`. Push
 voltando 403 é token expirado — pedir novo ao Michel.
+
+**Um acervo só.** Todas as frentes — michel stein_, Lavrō, AMAZ, Sarasá —
+publicam em `apresentacoes`, como projetos do mesmo array `projetos`. Não há
+repositório por frente. Consequência: **o token dá escrita em todas as peças,
+de todos os projetos** — uma sessão da Lavrō pode sobrescrever a peça de
+outra frente. Daí a regra de versão (abaixo) e a de duas sessões. Peça de
+outra frente segue a mesma sensibilidade: precificação, estratégia de
+produto, análise de concorrente e dado real de obra não vêm para o público.
 
 ## Onde cada coisa vai
 
@@ -140,6 +152,7 @@ por URL** e **contém dado que não pode ser público**.
 | binário de trabalho de projeto (PSD, DXF, base de campo) | `michel-stein-sistemas/entregas/<projeto>/` |
 | arquivo que saiu de uso, guardado só como registro | `apresentacoes/superado/` — ver o `LEIA-ME.md` de lá |
 | proposta de substituição, ainda não aprovada | `proposta/`, ao lado do arquivo que ela quer substituir |
+| versão anterior de peça que subiu de revisão | `<slug>/anteriores/apresentacao-R<n>.html`, `oculto:true` no índice — ver "Versão nova × revisão nova" |
 
 Documento **sem** dado de cliente vai para o público de propósito: URL
 raw abre sem token, então qualquer conversa lê o arquivo, inclusive as
@@ -149,9 +162,8 @@ não tem esse ganho — vai para o privado e abre no GitHub logado.
 ## ⚑ Duas sessões, um repositório — ler antes de todo push
 
 Frentes diferentes trabalham em Projetos diferentes, e **escrevem no mesmo
-repositório**. Em 29/08/2026 isso aconteceu três vezes num dia: o push da Lavrō
-apagou o registro da AMAZ, e depois um push apagou a reorganização do acervo.
-Nenhum dos dois deu erro — o Git aceita, e o trabalho some em silêncio.
+repositório**. O Git aceita um push que apaga o trabalho do outro, sem erro —
+já aconteceu mais de uma vez no mesmo dia (ver Histórico).
 
 **O arquivo em risco é sempre o mesmo: `index.html`.** É o único que toda frente
 edita. O resto — `marca/<nome>/`, `sistemas/gabaritos/`, a pasta da peça — cada
@@ -184,12 +196,10 @@ grep -c 'aba:"marca"' index.html      # as linhas que você acrescentou continua
 Se sumiu, **reaplicar por cima do trabalho do outro** — nunca restaurar a sua
 versão inteira, que apagaria a dele.
 
-### E quando o outro fez melhor
+### Duas soluções para o mesmo problema: fica uma
 
-Aconteceu no detector de peça órfã: duas sessões resolveram o mesmo problema, uma
-ignorando pastas e a outra fazendo o detector contar `docs[].ver`. **A segunda
-ataca a causa; a primeira, o sintoma.** Ficou a segunda. Ao encontrar duas
-soluções para a mesma coisa, escolher e apagar a outra — deixar as duas é como
+Ao encontrar duas soluções para a mesma coisa (aconteceu no detector de peça
+órfã), escolher a que ataca a causa e apagar a outra. Deixar as duas é como
 nasce a divergência silenciosa.
 
 ### O que a cópia local não sabe
@@ -200,6 +210,17 @@ Antes de republicar uma peça:
 ```
 diff <(curl -s <url da peça>) <build local>
 ```
+
+### A regra de ouro
+
+Editar **sempre no clone fresco, no lugar**. Nunca reescrever o
+`index.html` a partir de cópia local ou de memória: a reescrita apaga o
+registro que outra sessão acabou de acrescentar, e acontece entre um push
+e o seguinte na mesma tarde. Ler o arquivo vivo, alterar a linha, salvar.
+Clone fresco antes de cada rodada.
+
+Para conferir o estado real da origem independente de cache, query de
+cache-busting: `?nc=$RANDOM` na URL raw ou do Pages.
 
 ---
 ## Subir sem registrar não conta como subir
@@ -212,7 +233,8 @@ Arquivo no ar sem registro não dá sintoma nenhum: ele existe, funciona, e ning
 acha. O detector de peça órfã ajuda, mas só varre `.html` **deste** repositório —
 não vê `.md`, não vê binário, e não vê nada que esteja no privado. Ou seja: para
 tudo o que este documento manda guardar fora do público, **o detector não cobre e
-o registro é manual.**
+o registro é manual.** E o detector da página usa a API pública do GitHub, 60
+chamadas por hora por IP — estourou, silencia. Rede de segurança, não registro.
 
 | o que entrou | onde registrar |
 |---|---|
@@ -226,15 +248,14 @@ Grupo novo na aba Sistema é só escrever um `grupo` que ainda não existe.
 
 `github.com/.../raw/...` e `.../blob/...` num repositório **privado** devolvem
 **404 sem sessão de navegador** — não aceitam token no header, são rotas de
-navegador. Testado em 26.08.2026. Ou seja: link de repositório privado só abre
-para quem estiver logado no GitHub naquele navegador, e no iPad em campo isso
-não se sustenta.
+navegador. Link de repositório privado só abre para quem estiver logado no
+GitHub naquele navegador, e no iPad em campo isso não se sustenta.
 
 Quando o arquivo precisa **baixar num toque e abrir em outro app**, o destino é
 `michel-stein-site/cliente/<slug>-<16 hex>/`, servido pelo Netlify:
 
 - sem login; `X-Robots-Tag: noindex` pelo `netlify.toml`. O `robots.txt` **não**
-  lista `/cliente/` — listar anunciaria o caminho (corrigido em 02.09.2026)
+  lista `/cliente/` — listar anunciaria o caminho
 - regra no `netlify.toml` para `/cliente/*/*.psd` com
   `Content-Type: application/octet-stream` e `Content-Disposition: attachment` —
   é isso que faz o iOS oferecer "Abrir em..." em vez de tentar exibir
@@ -252,12 +273,12 @@ pública é distribuição, não arquivo.
 
 ### Peça que mora fora do repositório público
 
-**Não se registra no `index.html`.** Até 02.09.2026 a regra era registrar com
-`href` absoluto; isso publicou a URL da área de cliente para qualquer visitante
-e anulou a proteção. O registro dessas peças e entregas é o
-`michel-stein-sistemas/site/AREA-CLIENTE.md`, privado. O `cartao()` continua
-aceitando `href` absoluto para link que possa ser público (repositório de
-terceiro, página institucional) — nunca para `/cliente/`.
+**Não se registra no `index.html`.** Registrar com `href` absoluto publicava a
+URL da área de cliente para qualquer visitante e anulava a proteção. O registro
+dessas peças e entregas é o `michel-stein-sistemas/site/AREA-CLIENTE.md`,
+privado. O `cartao()` continua aceitando `href` absoluto para link que possa
+ser público (repositório de terceiro, página institucional) — nunca para
+`/cliente/`.
 
 ### Binário de trabalho: `entregas/`
 
@@ -286,18 +307,10 @@ git -c http.proxy= -c https.proxy= clone --depth 1 \
 cd repo
 ```
 
-## A regra de ouro
-
-Editar **sempre no clone fresco, no lugar**. Nunca reescrever o
-`index.html` a partir de cópia local ou de memória: várias sessões
-publicam no mesmo repositório e a reescrita apaga o registro que outra
-acabou de acrescentar. Ler o arquivo vivo, alterar a linha, salvar.
-
-Isso não é hipótese: já aconteceu, e acontece entre um push e o
-seguinte na mesma tarde. Clone fresco antes de cada rodada.
-
-Para conferir o estado real da origem independente de cache, query de
-cache-busting: `?nc=$RANDOM` na URL raw ou do Pages.
+Publicar é por `git push`. A API de conteúdos (`PUT .../contents/<caminho>`,
+com `sha`) funciona e vale para um arquivo avulso, mas não é o caminho
+principal: não dá `diff`, não dá `git status -sb`, e é onde o `index.html`
+já foi sobrescrito por cópia local.
 
 ## Ferramenta ou automação nova
 
@@ -311,10 +324,9 @@ Uma pasta por ferramenta, em `ferramentas/<slug>/`, com três coisas:
 
 Slug em minúsculas, com hífen, sem acento.
 
-Depois de criar, **acrescentar `'ferramentas/'` já está na lista `IGNORA`
-do detector de peça órfã** no `index.html` — então a ferramenta não
-aparece como órfã. Em troca, ela também não aparece em lugar nenhum se
-você não registrar: registrar sempre no array `docs`.
+`'ferramentas/'` já está na lista `IGNORA` do detector de peça órfã no
+`index.html` — a ferramenta não aparece como órfã. Em troca, ela também não
+aparece em lugar nenhum se você não registrar: registrar sempre no array `docs`.
 
 ### Chave de API não vai para o repositório
 
@@ -340,23 +352,61 @@ repositório público — nem como exemplo, nem em pasta chamada `teste`.
 Exemplo se monta com material anonimizado ou sintético. O caso real fica
 no Drive, no projeto dele.
 
+## Antes de montar a apresentação
+
+O sistema do deck — gabaritos, escala, marca, validação — **não está aqui**.
+Ler `DECK-MONTAR.md` e `../marca/MARCA-<nome>.md`, e abrir a peça de
+referência `emei-presidente-dutra` antes de montar. Trocar só o array `DECK`;
+a engine abaixo dele não se toca.
+
 ## Registrar apresentação — array `projetos`
 
-Cada projeto é `{ nome, pecas: [...] }`. Cada peça:
+Cada projeto é `{ nome, pecas: [...] }`. Projeto que ainda não existe ganha um
+objeto novo. Cada peça:
 
 ```
 { nome:"estudo preliminar", pranchas: 29, peso: 11.9, data:"19.08.2026",
   href:"<slug>/apresentacao.html" }
 ```
 
-Mais recente em cima. **Não escrever número** — 01, 02, 03 saem da ordem
-do array. `oculto: true` esconde sem apagar o registro.
-`tipo:"sistema"` joga a peça para o segundo bloco do projeto, embaixo do
-separador "sistema visual". `peso` acima de 8 recebe marca sozinho:
-passa do limite de anexo de e-mail.
+**Os quatro campos são obrigatórios**; a ficha do índice sai deles na ordem
+`pranchas · peso · data`. Slug em minúsculas, sem acento, com hífen:
+`emei-presidente-dutra`, `lavro-grafismo`.
 
-Versão nova de peça já publicada **substitui** o arquivo e muda só a
-data. Não cria linha nova.
+Mais recente em cima. **Não escrever número** — 01, 02, 03 saem da ordem
+do array, por bloco. `oculto: true` esconde sem apagar o registro.
+
+**Peça de sistema — o bloco de baixo.** Cada projeto tem dois blocos: as
+apresentações em cima e, embaixo do separador "sistema visual", os interativos
+e demais grafismos. Dois campos opcionais:
+
+| campo | efeito |
+|---|---|
+| `tipo: "sistema"` | manda a peça para o bloco de baixo |
+| `sub: "interativo"` | texto curto no lugar da contagem de pranchas, para peça que não é deck |
+
+**`peso` é o tamanho no disco, em MB**, não o transferido — o Pages comprime
+na entrega, e quem manda a peça por e-mail ou WhatsApp precisa do número do
+disco. Medir com `curl -s -I -L <url> | grep -i content-length` **sem**
+`Accept-Encoding`. Acima de 8 MB o índice marca sozinho: passa do limite de
+anexo de e-mail. Abaixo de 0,1 MB o índice mostra em kB. **Ao substituir uma
+peça, atualizar o `peso`** — é o campo que envelhece calado.
+
+## Versão nova × revisão nova
+
+Decisão do Michel, 02.09.2026. Substitui as duas regras que conviviam até
+aqui ("substitui" num arquivo, "nunca substitua, acrescente" no outro).
+
+- **Ideia em desenvolvimento → versão nova.** A peça nova **substitui** o
+  arquivo no mesmo caminho. No `index.html` mudam só `data` e `peso`. O Git
+  guarda o histórico; a interface mostra uma peça.
+- **Revisão nova (R2, R3…) só quando o Michel disser.** Aí sim é linha nova em
+  `pecas`. A versão anterior vai para `<slug>/anteriores/apresentacao-R<n>.html`
+  e entra no índice com `oculto:true` — estocada no GitHub, fora da interface.
+  Registrada, o detector de órfã não a acusa.
+- **A sessão pergunta.** Peça publicada há um ou dois dias, antes de
+  sobrescrever: *"esta peça já foi apresentada ao cliente? sobe de revisão?"*
+  Peça de horas não precisa da pergunta; peça de dias não se decide sozinha.
 
 ## Registrar documento ou ferramenta — array `docs`
 
@@ -380,6 +430,14 @@ apontando para o `index.html`: um link para entender, outro para usar.
 
 - **`python3 sistemas/guarda-publico.py` → `guarda: limpo`.** Primeiro de
   todos; achado = não sobe (seção "Público quer dizer aberto")
+- **toda peça leva, antes do `</body>`,**
+  `<script defer src="../modulos/ms-voltar.js"></script>` — sem ela a peça
+  abre sem saída (o índice abre em aba nova). O caminho é relativo e vale
+  porque toda peça mora a um nível da raiz; peça mais funda ajusta o `../`.
+  Comportamento e detalhes em `DECK-MOTOR.md`
+- **`noindex, nofollow, noarchive`** no índice e em toda peça. `robots.txt`
+  não funciona em Pages de projeto — o buscador só lê o da raiz do domínio,
+  que não é deste repositório. A meta tag é a única proteção contra buscador
 - `node --check` em cada script inline do `index.html` — um erro de
   sintaxe apaga a lista inteira, e a página quebra sem aviso
 - simular o agrupamento fora do navegador: extrair o array e conferir a
@@ -417,7 +475,8 @@ git -c http.proxy= -c https.proxy= push origin main 2>&1 \
 
 Pages e Netlify reconstroem sozinhos, em cerca de um minuto. Sem passo
 manual no painel. Confirmar depois no endereço público, com
-cache-busting — push aceito não é o mesmo que no ar.
+cache-busting — push aceito não é o mesmo que no ar: **código 200 e tamanho
+igual ao do arquivo de origem**, antes de devolver o link.
 
 O `sed` no fim não é enfeite: mensagem de erro de push devolve a URL
 inteira, com o token dentro.
@@ -437,9 +496,24 @@ https://steinvalente-dev.github.io/apresentacoes/ferramentas/<slug>/
 Avisar de refresh forte (Ctrl+Shift+R) se ele acabou de ver a versão
 anterior.
 
+**Peso do repositório.** Pages publica no máximo 1 GB, e o histórico do Git
+conta. Com peça de 12 MB em base64 e versões acumulando, isso aperta lá pela
+quadragésima. Quando incomodar: tirar as imagens do base64 e servir como
+`.webp` ao lado — o HTML cai para ~200 KB e as imagens passam a ser
+reaproveitadas entre versões.
+
 Tudo no repositório de apresentações tem `noindex, nofollow, noarchive`,
 mas **o repositório é público**: quem chegar nele navega os arquivos,
 o histórico e o que já foi apagado. Segredo que entrou no Git continua
 lá depois do commit que removeu — se vazou, o certo é rotacionar, não
 apagar. Peça ou ferramenta sensível não vai para lá, e isso se avisa
 **antes** de subir.
+
+## Histórico
+
+- **22/08/2026** — repositório criado, Pages ligado, índice no ar. Decidido: um acervo só para todas as frentes; `noindex` em tudo.
+- **23/08/2026** — três sessões colidiram no `index.html`: um push de cópia local apagou dois registros e regrediu uma contagem de pranchas. Recuperado pelo Git. Nasceram a regra "nunca reescrever de cópia local" e o detector de órfã na página. O arquivo ganhou o bloco "sistema visual" (`tipo`, `sub`).
+- **25/08/2026** — todas as peças ganharam `modulos/ms-voltar.js`.
+- **26/08/2026** — testado: `raw`/`blob` de repositório privado devolvem 404 sem sessão de navegador.
+- **29/08/2026** — duas frentes sobrescreveram trabalho uma da outra três vezes num dia. Nasceu "Duas sessões, um repositório".
+- **02/09/2026** — auditoria: `casa-ittb`, `tokyo-centro` e `casa-tavares` eram peças de cliente em repositório público; foram para `/cliente/` do site, histórico reescrito, guarda `guarda-publico.py` criada. `robots.txt` do site deixou de listar `/cliente/`. Peça fora do público deixou de ser registrada no `index.html`. Runbook `PUBLICAR-APRESENTACOES.md` fundido neste; regra de versão × revisão decidida.

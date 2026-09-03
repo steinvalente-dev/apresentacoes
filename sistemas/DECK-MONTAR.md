@@ -23,9 +23,9 @@ acontece toda vez.
 
 ## ⚑ O QUE NÃO É NEGOCIÁVEL — ler antes da receita
 
-Cinco coisas que o Michel reconhece de longe, e que **peça nenhuma decide por
+Sete coisas que o Michel reconhece de longe, e que **peça nenhuma decide por
 conta própria**. Foram escritas aqui em 02/09/2026, depois de a peça EMEI
-Presidente Dutra sair errada nas cinco. O objetivo é literal: *"diminuir a
+Presidente Dutra sair errada nas cinco primeiras. O objetivo é literal: *"diminuir a
 fricção da construção desses decks, que isso seja o mais automático possível.
 Você vai copiar certas informações, sem ter que criar, sem ter que verificar
 muito — a verificação já está feita."*
@@ -48,7 +48,8 @@ peça de arquitetura o que o `cover` cortava era desenho.
 
 **3 · A ESCALA DE TEXTO E DE NAVEGAÇÃO É CONSTANTE.** Corpo, margem, faixa de
 chrome e botão de seta saem iguais em toda peça, de toda frente. Os valores
-estão no `:root` do esqueleto, calibrados pelos da casa ITTB (a peça de origem). **Não
+estão no `:root` do esqueleto, calibrados na peça de origem (casa ITTB, 08/2026)
+e conferidos na EMEI. **Não
 recalibrar para caber conteúdo** — se não cabe, corta-se texto, não se
 encolhe a tipografia.
 
@@ -81,112 +82,111 @@ dela — deprecated — encaixa N voltas dentro da duração, o que já produziu
 próprio. Esquecer é falha silenciosa: nada quebra, o chrome só fica
 ilegível sobre a imagem. Já custou duas correções no mesmo dia.
 
-**Sobre o logotipo no canto superior direito:** o padrão continua sendo
-**texto**. A peça EMEI Presidente Dutra é o teste com o logotipo pequeno,
-fixo, trocando positivo/negativo pelo tema do slide. Se funcionar em reunião,
-sobe para o esqueleto — o Michel avalia. Até então, não generalizar.
+**7 · O LOGOTIPO NO CANTO SUPERIOR DIREITO É DECISÃO DA FRENTE, escrita no
+arquivo da marca** (decisão do Michel, 02.09.2026). Padrão = **texto**: `michel
+stein_`, `AMAZ`, `Lavrō`. **Estúdio Sarasá = logotipo pequeno**, trocando
+positivo/negativo pelo tema do slide. A sessão infere a frente pelo Projeto em
+que o chat começa e lê `../marca/MARCA-<nome>.md`; a escolha vem configurada
+no bloco da marca, na constante `LOGO_CANTO` (`{modo:'texto',html:'…'}` ou
+`{modo:'logo',svg:'…'}`). Não decidir por peça.
 
 ---
 
 ## A receita, em seis passos
 
+O bloco da marca (`marca/<nome>/bloco.html`) entrega **quatro trechos**, cada um
+com o lugar marcado no esqueleto: as `@font-face`, o `:root`, as **constantes
+da marca** e a abertura/contracapa do `DECK`. Colar os quatro é trocar a marca
+inteira — desde 03/09/2026 não há mais hex escrito à mão fora do `:root`.
+
 1. Abrir `esqueleto/deck-esqueleto.html`. **Não partir do HTML de outra
    peça** — vem com a marca e o conteúdo dela junto. Módulo de capa e módulo
    de gabarito são outra coisa: esses **são** para copiar (§4 acima).
-2. Colar as `@font-face` do bloco da marca no lugar marcado. **Quantas
-   depende da marca:** michel stein_ e AMAZ usam seis (reto e itálico);
-   **a Sarasá usa quatro** — não tem face itálica nem monoespaçada.
-3. Trocar as cores do `:root` pelo bloco da marca. **As linhas de escala não
-   se tocam** — ver o item 3 acima, que diz por quê.
-   ⚠ Trocar o `:root` **não basta**: o esqueleto carrega hexes escritos à mão
-   pelo CSS (e a pastilha da navegação em `rgba()`). Sem varrer esses, a peça
-   sai com a marca nova nos tokens e a michel stein_ nos detalhes.
-4. Pôr a **capa do módulo da frente** e a contracapa nas pontas do `DECK`.
-5. Apontar `CAPA_IMGS` para o acervo da marca; `DIV_IMGS` para as imagens
-   deste projeto, ou deixar vazio (o divisor só trama é o padrão).
+2. Colar as `@font-face` do bloco no lugar marcado. **Quantas depende da
+   marca:** michel stein_ seis, Sarasá quatro, AMAZ quatro, Lavrō oito.
+3. Colar o `:root` do bloco. São **nove tokens, com o mesmo nome nas quatro
+   marcas** — `--papel --tinta --primaria --acento --escuro --acento-claro
+   --f-display --f-corpo --f-mono`. **As linhas de escala não se tocam** —
+   ver o item 3 acima, que diz por quê.
+4. Colar as **constantes da marca** (logo abaixo do `DECK`, antes de
+   `const palco`): `LOGO_CANTO` (texto ou logotipo no canto — item 7),
+   `LOCKUP`, `GRAFISMO`, `QR`, `UNDERSCORE`. O bloco já traz os valores
+   certos da frente; não se edita.
+5. Pôr a **abertura e a contracapa do bloco** nas pontas do `DECK` (gabarito
+   `marca`; o bloco traz o trecho pronto), e apontar `CAPA_IMGS` para o
+   acervo da marca; `DIV_IMGS` para as imagens deste projeto, ou vazio.
 6. Escrever o miolo do `DECK`.
 
-**A engine abaixo do `DECK` não se toca.** Bloco da michel stein_:
-`../marca/michel-stein/bloco.html`.
+⚠ **O que os tokens não trocam:** a postura tipográfica (itálico, caixa-baixa
+nos títulos e no slogan) continua sendo a da michel stein_ no CSS do motor. A
+EMEI resolveu isso com um bloco de CSS próprio da Sarasá. Enquanto não houver
+decisão (tokens de postura ou um quinto trecho "CSS da marca" no bloco), peça
+Sarasá/AMAZ/Lavrō copia esse bloco da EMEI. Pendência registrada no
+DECK-REGISTRO (privado).
+
+**A engine abaixo do `DECK` não se toca.** Blocos:
+`../marca/michel-stein/bloco.html` · `../marca/sarasa/bloco.html` ·
+`../marca/amaz/bloco.html` · `../marca/lavro/bloco.html`.
+
+**O que o `tpl()` faz quando algo falta:** gabarito que não existe vira um
+slide hachurado "gabarito desconhecido: <nome>"; campo obrigatório ausente vira
+"gabarito X: falta Y". Os dois escrevem `console.error`. Nada quebra em
+silêncio — se o slide saiu hachurado, a mensagem diz o quê.
 
 ---
 
 ## Os gabaritos do esqueleto
 
-Dezenove, implementados e testados. **Não são "os quinze"** que o documento
-antigo listava — aquele conjunto é o da casa ITTB, e cada deck foi criando o seu.
-Ver a nota sobre isso no fim.
+Implementados e testados no esqueleto. Não existe conjunto fixo: cada tipo de
+argumento criou o seu, e a lista é a do código (histórico em `DECK-MOTOR.md`).
+
+Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto — não editar à mão; rodar o script.
+<!-- GABARITOS:INICIO -->
+Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto — não editar à mão; rodar o script. Campos em **negrito** são obrigatórios (`EXIGE`): sem eles o slide vira aviso. O número entre parênteses é a aridade de cada item (`itens:[[a,b]]` = 2). Campos gerais (`sec kick t sub esc terra trama fundo div cel nota sang fecho pre largo`) valem em todo gabarito e não se repetem aqui.
 
 **Estrutura**
 
 | gabarito | o que é | campos próprios |
 |---|---|---|
-| `marca` | abertura e contracapa. Vem da marca, não se inventa | `sigla` `papel` `slogan` `site` `comecar` `fim` |
-| `capa` | nome do projeto, endereço e três metas | `kick` `t` `sub` `metas` |
-| `divisor` | abre seção e ganha um ponto no chrome | `sec` `dn` `dt` `ds` |
-| `sumario` | o argumento inteiro em blocos, logo depois da capa | `itens` |
-| `fim` | próximos passos. É o que o cliente leva embora | `itens` |
+| `marca` | abertura e contracapa. Vêm do bloco da marca, não se inventam | `assinatura` · `credito` · `descritor` · `lockup` · `papel` · `pe` · `pisca` · `qr` · `sigla` · `site` · `slogan` |
+| `capa` | nome do projeto, endereço e três metas | `metas` |
+| `divisor` | abre seção e ganha um ponto no chrome | `dn` · `ds` · **`dt`** |
+| `fim` | próximos passos. É o que o cliente leva embora | **`itens` (2)** |
+| `sumario` | o argumento inteiro em blocos, logo depois da capa | **`itens` (3)** |
 
-**Texto e listas**
+**Texto**
 
 | gabarito | o que é | campos próprios |
 |---|---|---|
-| `frase` | uma ideia por tela, tipo grande | `t` `sub` |
-| `lista` | itens numerados, **entram por clique** | `itens` `pre` `largo` |
-| `trio` | três blocos curtos lado a lado | `itens` |
-| `jogadas` | duas ou três jogadas numeradas, com apoio longo | `itens` `etapas` |
-| `duasfrentes` | o pacote se fechando; caixa que cresce a cada item | `esq` `dir` `fora` |
+| `frase` | uma ideia por tela, tipo grande | — |
+| `jogadas` | duas ou três jogadas numeradas, com apoio longo | **`itens` (3)** |
+| `trio` | três blocos curtos lado a lado | **`itens` (2)** |
+| `lista` | itens numerados, entram por clique | **`itens` (2)** |
+| `duasfrentes` | o pacote se fechando; caixa que cresce a cada item | **`dir`** · `dirfora` · **`esq`** · `esqfora` |
 
 **Dado**
 
 | gabarito | o que é | campos próprios |
 |---|---|---|
-| `tabela` | comparação | `cols` **+ `linhas` obrigatório** |
-| `porte` | tabela de faixas | `cols` `linhas` |
-| `unit` | números-chave com apoio no ponteiro | `dados` `sub` |
-| `avulso` | preço por frente, dentro e fora do pacote | `grupos` |
-| `players` | atores do mesmo mercado, em faixas | **`casas`, não `cols`** |
-| `plug` | diagrama de encaixe | `itens` |
+| `unit` | números-chave com apoio no ponteiro | **`cards` (5)** |
+| `porte` | tabela de faixas | `alto` · **`cols`** · `iso` · **`linhas`** · `meia` · `nota2` · `troca` |
+| `tabela` | comparação | **`cols`** · **`linhas`** |
+| `plug` | diagrama de encaixe | **`ancoras`** · `rodape` |
+| `players` | atores do mesmo mercado, em faixas. `casas`, não `cols` | **`casas` (5)** |
+| `avulso` | preço por frente, dentro e fora do pacote | **`grupos`** |
 
 **Imagem**
 
 | gabarito | o que é | campos próprios |
 |---|---|---|
-| `duo` | duas imagens lado a lado | `figs` **+ `leg` obrigatório** · `ar` |
-| `fotos` | linha do tempo ilustrada | `itens` |
-| `prancha` | grade de 2 a 4 imagens sobre um tema. **A proporção decide as colunas: retrato 3–4, deitada 2** | `top` `cols` `items` — ver `gabaritos/prancha-referencia.md` |
-| **⚠ `cols` no `prancha` é NÚMERO** | em `tabela` e `porte` é array de cabeçalhos | o `tpl()` trata `prancha` antes, por isso |
-| `cheia` | **o render em tela cheia. É o padrão para render** | `src` `h2` `cap` — ver `gabaritos/render-cheia.md` |
-| `earth-3d` | onde o projeto está: o globo do Google Earth, girando devagar. **Só por link** | `lat` `lng` `alt` `kick` `h2` `lead` `cap` — módulo em `modulos/mapa-earth-3d.html` |
-| `modelo-3d` | o que o projeto é: o modelo do SketchUp, vivo, com cenas e sombras. **Exige modelo PÚBLICO no 3D Warehouse** | `modelo` (id) `res` (imagens de reserva) `kick` `h2` `lead` `cap` — módulo em `modulos/modelo-sketchup.html` |
-| `mapa` · localização | onde o terreno está: satélite em sangria, endereço escrito | `src` `kick` `h2` `lead` `cap` `inv` — ver `gabaritos/mapa-localizacao.md` |
-| `mapa` · lotes | o cadastro desenhado, com hover por lote | `which` `sang` `leg` — ver `gabaritos/mapa-lotes.md` |
-
----
-
-## O formato de cada campo composto
-
-Os nomes não bastam: **`itens` tem formato diferente em cada gabarito**, e errar a
-aridade escreve `undefined` na tela. Extraído do código, não de memória.
-
-| gabarito | campo | formato |
-|---|---|---|
-| `sumario` | `itens` | `[['01','título','o apoio']]` — **três** |
-| `jogadas` | `itens` | `[['01','título com <br>','o apoio']]` — **três** |
-| `lista` | `itens` | `[['rótulo','o texto']]` — **dois** |
-| `trio` | `itens` | `[['o número','o texto']]` — **dois** |
-| `fotos` | `itens` | `[['quando','o texto, aceita HTML']]` — **dois** |
-| `fim` | `itens` | `[['quando','<b>a ação.</b> O detalhe.']]` — **dois** |
-| `capa` | `metas` | `[['cliente','—'],['etapa','—'],['data','—']]` |
-| `tabela`, `porte` | `cols` + `linhas` | `cols:['','a','b']` · `linhas:[['rótulo','—','—']]` |
-| `players` | `casas` | uma faixa por ator. **`cols` aqui quebra o deck** |
-| `avulso` | `grupos` | `[['título','subtítulo',[['item','valor']]]]` |
-| `duo` | `figs` + `leg` | `figs:[['rótulo','src','legenda','classe']]` · **`leg` obrigatório** |
-| `prancha` | `items` | `[{src,ar,cap}]` ou `[{pilha:[{src}],ar,cap}]` |
-| `duasfrentes` | `esq` `dir` | mais `esqfora` e `dirfora`, o que **não** entra no pacote |
-| `unit` | `dados` | os números-chave, com `<mark class="pop">` para o apoio |
-| `plug` | `ancoras` `rodape` | |
-| `mapa` · lotes | `which` `sang` `leg` | mais `chave` e `hint` |
+| `cheia` | o render em tela cheia. É o padrão para render — ver `gabaritos/render-cheia.md` | `cap` · `h2` · `lbl` · `src` |
+| `duo` | duas imagens lado a lado | **`figs` (4)** · **`leg`** |
+| `fotos` | linha do tempo ilustrada | `cols` · **`itens`** |
+| `prancha` | grade de 2 a 4 imagens sobre um tema. Retrato 3–4 colunas, deitada 2. `cols` aqui é NÚMERO — ver `gabaritos/prancha-referencia.md` | `ar` · `cols` · `items` · `top` |
+| `modelo-3d` | o que o projeto é: o modelo do SketchUp, vivo. Exige modelo PÚBLICO no 3D Warehouse — `gabaritos/modelo.md` | `cap` · `h2` · `lead` · **`modelo`** · `res` |
+| `earth-3d` | onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md` | `alt` · `cap` · `h2` · **`lat`** · `lead` · **`lng`** |
+| `mapa` | o cadastro desenhado, com hover por lote. Exige o objeto `MAP` — `gabaritos/mapa-lotes.md` | `chave` · `hint` · `leg` (2) · `which` |
+<!-- GABARITOS:FIM -->
 
 **Campos de fecho e nota:** `sumario`, `tabela`, `players` e `porte` aceitam
 `fecho` — a linha que fecha o slide, abaixo do conteúdo. `avulso`, `tabela` e
@@ -341,56 +341,13 @@ A lista completa de validação, para quando algo quebrar, está no `DECK-MOTOR.
 
 ---
 
-## ⚠ Sobre "os quinze gabaritos"
+## A lição do teste de montagem
 
-O documento antigo falava em quinze, fixos. **A varredura de 29/08/2026 nas peças
-publicadas mostrou outra coisa:**
+Em 29/08/2026 um deck de dezesseis slides montado só por este arquivo quebrou
+em dois pontos — os dois eram erro de documentação, não de código (relato em
+`DECK-MOTOR.md`, "Histórico do método"). O que fica:
 
-| peça | gabaritos | quais |
-|---|---|---|
-| casa ITTB | 8 | capa, cheia, divisor, duo, mapa, marca, planta, prancha |
-| AMAZ R1 | 20 | camadas, casos, cheia, dado, divisor, donut, duas, fim, frase, grelha, janela, lista, logo, marca, meio, mosaico, pergunta, planilha, socio, tabela |
-| tokyo · centro | 19 | os deste esqueleto |
-
-**Só `marca` e `divisor` aparecem nas três.** Cada deck criou o vocabulário do
-seu tipo de argumento: a casa ITTB é arquitetura, a AMAZ é institucional, a tokyo
-é comercial. Não existe um conjunto único, e fingir que existe é o que fazia o
-documento antigo descrever um sistema que já não era o que estava no ar.
-
-**Estado em 29/08/2026, depois do teste de montagem:**
-
-| gabarito de arquitetura | no esqueleto? |
-|---|---|
-| `prancha` — grade de referência | ✅ portado |
-| `cheia` — render em tela cheia | ✅ portado |
-| `planta` — com lupa de 100 a 600% | ❌ falta a máquina da lupa |
-| `desenho` — planta com dados ao lado | ❌ idem |
-
-Enquanto `planta` e `desenho` não entram, planta e corte vão como `prancha` de
-uma coluna, **sem zoom**. É a limitação mais concreta hoje.
-
----
-
-## O que o teste de montagem mostrou
-
-Em 29/08/2026 montei um deck de dezesseis slides a partir de um briefing real,
-usando **só este arquivo** — sem abrir os decks publicados. Resultado:
-
-**Quebrou em dois pontos, e os dois eram erro de documentação, não de código.**
-
-1. **`prancha` estava listado aqui e não existia no esqueleto.** O `s.cols` caía
-   no `const tab` compartilhado, que espera array, e derrubava **o deck inteiro**
-   com `s.cols.map is not a function`. É a armadilha do campo reservado,
-   registrada em 23/08 e paga de novo. Corrigido: `prancha` foi portado, e o
-   `tpl()` o trata **antes** do `tab`.
-2. **`mapa` com o andaime vazio derrubava o deck.** Corrigido: vira estado vazio.
-
-**O que funcionou de primeira:** capa, divisor, lista, tabela com `fecho` e
-`nota`, fim, abertura e contracapa da marca, os passos por clique, o quadro
-fixo, a cortina e o retorno ao acervo. Zero transbordo, zero `undefined`.
-
-**A lição para quem montar:** rodar o laço de verificação **antes de entregar**,
-não depois —
+**Rodar o laço de verificação antes de entregar**, não depois —
 
 ```js
 for(let i=0;i<DECK.length;i++){ try{ tpl(DECK[i]) }catch(e){ console.log(i, DECK[i].g, e.message) } }

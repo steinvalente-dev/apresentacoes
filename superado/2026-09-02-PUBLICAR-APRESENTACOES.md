@@ -1,4 +1,11 @@
-# publicar apresentações — runbook
+# ⚠ SUPERADO — publicar apresentações, runbook (até 02/09/2026)
+
+> **Este arquivo está fora de uso desde 02/09/2026 e é mantido só como registro.**
+> O vigente é `sistemas/GITHUB-COMO-TRABALHAR.md`, que absorveu o que aqui era
+> regra: campos do registro, peça de sistema, peso, `ms-voltar.js`, `noindex`.
+> A regra "nunca substituir, acrescentar" está **revogada** — ver "Versão nova ×
+> revisão nova" no vigente. Não ler daqui, não citar daqui.
+
 
 Criado em 22/08/2026. **Este arquivo é a fonte.** Vive no próprio repositório
 que ele descreve, então não existe versão obsoleta noutro lugar.

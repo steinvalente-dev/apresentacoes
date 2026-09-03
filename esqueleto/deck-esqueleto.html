@@ -5,30 +5,85 @@
      do dominio. A meta tag e a unica protecao. Regra do runbook, 22/08. -->
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>deck · esqueleto</title>
+<!-- preconexão para os visores (earth-3d / modelo-3d): adianta DNS, TCP e
+     TLS, nada mais. Só vale a pena em peça que tenha esses gabaritos —
+     descomentar as três linhas nesse caso. Não é dependência: sem elas tudo
+     funciona igual, só começa uns milissegundos depois.
+<link rel="preconnect" href="https://app.sketchup.com" crossorigin>
+<link rel="dns-prefetch" href="https://app.sketchup.com">
+<link rel="preconnect" href="https://maps.googleapis.com" crossorigin>
+-->
 <!-- Fontes embutidas em woff2/base64, subconjunto latino + pontuacao.
      Regra do PRANCHA-SISTEMA: nenhuma dependencia de CDN. O arquivo abre
      igual sem rede, e a tipografia da marca nunca cai para fallback. -->
 <style>
 /* ═══ FONTES DA MARCA ═══════════════════════════════════════════════════
-   AQUI ENTRAM AS SEIS @font-face EM BASE64, do bloco da marca.
+   AQUI ENTRAM AS @font-face EM BASE64, do bloco da marca (quantas a marca
+   tiver: seis na michel stein_, quatro na Sarasá e na AMAZ, oito na Lavrō).
    Sem elas a peça cai na fonte do sistema num notebook de cliente —
    inclusive online, porque não há link para CDN nenhum. É a diferença
    entre a peça rodar sem internet e parecer outra coisa na reunião.
-   michel stein_ → marca/michel-stein/bloco.html · AMAZ → marca/amaz/bloco.html
+   michel stein_ → marca/michel-stein/bloco.html · Sarasá → marca/sarasa/bloco.html
+   AMAZ → marca/amaz/bloco.html · Lavrō → marca/lavro/bloco.html
    ═══════════════════════════════════════════════════════════════════ */
-:root{
-  /* ═══ CORES: VÊM DA MARCA ═══════════════════════════════════════════
-     Estas quatro linhas são a única coisa de marca que sobrou aqui, e
-     estão com os valores da michel stein_ para o esqueleto abrir pintado.
-     Trocar de marca = substituir este bloco pelo :root do bloco da marca.
-     Os nomes seguem por cor (--creme, --oliva…) porque toda peça publicada
-     usa assim; quando virarem papel (--papel, --primaria…), muda aqui.
-     ══════════════════════════════════════════════════════════════════ */
-  --creme:#EDE6DA; --tinta:#211D1A; --oliva:#6B6A4B; --terra:#B85C38;
-  --moldura:#1A1714;
-  --soft:#211D1A99; --hair:#211D1A26;
-  --mono:'DM Mono',ui-monospace,monospace; --sans:'Inter',system-ui,sans-serif;
 
+/* ═══ TOKENS DA MARCA — o ÚNICO bloco que se troca ═══════════════════════
+   Um nome por PAPEL, igual nos quatro blocos de marca (03/09/2026):
+     --papel     fundo claro; texto sobre campo escuro
+     --tinta     texto sobre papel; glifos do chrome; filetes
+     --primaria  a cor da marca: blocos, pílulas, kicker em barra
+     --acento    o destaque: um traço, uma palavra, o popover, o divisor
+     --escuro    fundo do tema escuro (`esc`). Se a marca não tiver, é a tinta
+     --acento-claro  o acento sobre campo escuro, onde o acento cheio some
+     --f-display  títulos, números grandes, rótulos-título
+     --f-corpo    texto corrido
+     --f-mono     kicker, chrome, legenda, metadado
+   Trocar de marca = substituir ESTE bloco pelo :root do bloco da marca.
+   Nada abaixo dele (derivados, escala) se toca. Está com os valores da
+   michel stein_ para o esqueleto abrir pintado.
+   ══════════════════════════════════════════════════════════════════════ */
+:root{
+  --papel:#EDE6DA;  --tinta:#211D1A;  --primaria:#6B6A4B;  --acento:#B85C38;
+  --escuro:#6B6A4B;         /* na michel stein_ o tema escuro é a oliva     */
+  --acento-claro:#E9A184;   /* terracota clareado, para ler sobre a oliva   */
+  --f-display:'DM Mono',ui-monospace,monospace;
+  --f-corpo:'Inter',system-ui,sans-serif;
+  --f-mono:'DM Mono',ui-monospace,monospace;
+}
+
+/* ═══ DERIVADOS — motor, calculados dos tokens acima. NÃO se colam ═══════
+   Todo hex que o CSS e os scripts usavam à mão saiu daqui: o papel e a
+   tinta em transparências (--papel-70 = papel a 70%), o acento em duas,
+   e os tons de apoio. Trocar a marca trocou tudo isto junto.
+   Aliases dos nomes antigos (--creme, --oliva, --terra, --mono, --sans…)
+   ficam para módulo externo que ainda os use. Não escrever código novo
+   com eles.
+   ══════════════════════════════════════════════════════════════════════ */
+:root{
+  --moldura:color-mix(in srgb,var(--tinta) 80%,#000);  /* a tarja: tinta puxada ao preto puro (#000 é semântico) */
+  --soft:var(--tinta-60); --hair:var(--tinta-15);
+  --papel-2:color-mix(in srgb,var(--papel) 95%,var(--tinta));       /* papel um tom abaixo (fundo de mapa) */
+  --slot-escuro:color-mix(in srgb,var(--moldura) 75%,var(--escuro)); /* slot vazio sobre a moldura */
+  /* categorias do mapa de lotes — cor de dado, não de marca; a marca pode sobrescrever */
+  --mapa-escuro:color-mix(in srgb,var(--primaria) 60%,var(--tinta));
+  --mapa-novo:color-mix(in srgb,var(--primaria) 70%,var(--papel));
+  --mapa-planta:#6E6486;   /* roxo de categoria: só existe para se distinguir dos outros */
+  /* transparências */
+  --papel-90:color-mix(in srgb,var(--papel) 90%,transparent); --papel-80:color-mix(in srgb,var(--papel) 80%,transparent); --papel-70:color-mix(in srgb,var(--papel) 70%,transparent); --papel-60:color-mix(in srgb,var(--papel) 60%,transparent); --papel-50:color-mix(in srgb,var(--papel) 50%,transparent);
+  --papel-45:color-mix(in srgb,var(--papel) 45%,transparent); --papel-40:color-mix(in srgb,var(--papel) 40%,transparent); --papel-35:color-mix(in srgb,var(--papel) 35%,transparent); --papel-25:color-mix(in srgb,var(--papel) 25%,transparent); --papel-20:color-mix(in srgb,var(--papel) 20%,transparent);
+  --papel-15:color-mix(in srgb,var(--papel) 15%,transparent); --papel-10:color-mix(in srgb,var(--papel) 10%,transparent); --papel-5:color-mix(in srgb,var(--papel) 5%,transparent); --papel-3:color-mix(in srgb,var(--papel) 3%,transparent);
+  --tinta-90:color-mix(in srgb,var(--tinta) 90%,transparent); --tinta-80:color-mix(in srgb,var(--tinta) 80%,transparent); --tinta-70:color-mix(in srgb,var(--tinta) 70%,transparent); --tinta-60:color-mix(in srgb,var(--tinta) 60%,transparent); --tinta-50:color-mix(in srgb,var(--tinta) 50%,transparent);
+  --tinta-45:color-mix(in srgb,var(--tinta) 45%,transparent); --tinta-40:color-mix(in srgb,var(--tinta) 40%,transparent); --tinta-35:color-mix(in srgb,var(--tinta) 35%,transparent); --tinta-25:color-mix(in srgb,var(--tinta) 25%,transparent); --tinta-20:color-mix(in srgb,var(--tinta) 20%,transparent);
+  --tinta-15:color-mix(in srgb,var(--tinta) 15%,transparent); --tinta-10:color-mix(in srgb,var(--tinta) 10%,transparent); --tinta-5:color-mix(in srgb,var(--tinta) 5%,transparent); --tinta-3:color-mix(in srgb,var(--tinta) 3%,transparent);
+  --acento-90:color-mix(in srgb,var(--acento) 90%,transparent); --acento-80:color-mix(in srgb,var(--acento) 80%,transparent); --acento-70:color-mix(in srgb,var(--acento) 70%,transparent); --acento-60:color-mix(in srgb,var(--acento) 60%,transparent); --acento-50:color-mix(in srgb,var(--acento) 50%,transparent);
+  --acento-45:color-mix(in srgb,var(--acento) 45%,transparent); --acento-40:color-mix(in srgb,var(--acento) 40%,transparent); --acento-35:color-mix(in srgb,var(--acento) 35%,transparent); --acento-25:color-mix(in srgb,var(--acento) 25%,transparent); --acento-20:color-mix(in srgb,var(--acento) 20%,transparent);
+  --acento-15:color-mix(in srgb,var(--acento) 15%,transparent); --acento-10:color-mix(in srgb,var(--acento) 10%,transparent); --acento-5:color-mix(in srgb,var(--acento) 5%,transparent); --acento-3:color-mix(in srgb,var(--acento) 3%,transparent);
+  /* aliases antigos */
+  --creme:var(--papel); --oliva:var(--primaria); --terra:var(--acento);
+  --mono:var(--f-mono); --sans:var(--f-corpo); --disp:var(--f-display); --label:var(--f-mono);
+  --vinho:var(--primaria); --escura:var(--escuro); --grafite:var(--tinta); --marca:var(--primaria);
+}
+:root{
   /* ═══ ESCALA: É MOTOR, NÃO MARCA ════════════════════════════════════
      ⚑ ESTES NÚMEROS NÃO SE TOCAM, E O MOTIVO NÃO É "estão travados".
      O motivo é que o Michel reconhece a proporção de longe: corpo de texto,
@@ -77,11 +132,11 @@ html,body{height:100%;overflow:hidden}
    de cor a cada slide e a peça piscava por fora. Sem tarja continua certo:
    o #quadro é a superfície, e a moldura é o campo que sobra sob o `contain`
    da prancha de imagem — o único lugar onde ela ainda aparece. */
-body{background:var(--moldura);color:var(--tinta);font-family:var(--sans);-webkit-font-smoothing:antialiased;
+body{background:var(--moldura);color:var(--tinta);font-family:var(--f-corpo);-webkit-font-smoothing:antialiased;
   transition:color .38s ease}
-#quadro{background:var(--creme);transition:background .38s ease}
-body.esc{color:var(--creme)}
-body.esc #quadro{background:var(--oliva)}
+#quadro{background:var(--papel);transition:background .38s ease}
+body.esc{color:var(--papel)}
+body.esc #quadro{background:var(--escuro)}
 #palco{position:absolute;inset:0}
 .slide{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;
   padding:calc(var(--top) + clamp(14px,2.4cqh,40px)) var(--gut) calc(var(--bot) + clamp(14px,2.4cqh,40px));
@@ -92,43 +147,43 @@ body.esc #quadro{background:var(--oliva)}
 .revelado .rev{opacity:1;transform:none;transition:opacity .5s ease,transform .5s ease;transition-delay:calc(var(--i,0)*42ms)}
 .passo{opacity:0;transform:translateY(14px);transition:opacity .34s,transform .34s}
 .passo.on{opacity:1;transform:none}
-h1,h2,h3{font-family:var(--mono);font-weight:500;font-style:italic;letter-spacing:-.045em;line-height:1.02;text-transform:lowercase}
-u{text-decoration:none;color:var(--terra)}
-.kick{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.24em;text-transform:uppercase;color:var(--soft);margin-bottom:clamp(14px,2cqh,28px)}
-body.esc .kick{color:#EDE6DAaa}
+h1,h2,h3{font-family:var(--f-display);font-weight:500;font-style:italic;letter-spacing:-.045em;line-height:1.02;text-transform:lowercase}
+u{text-decoration:none;color:var(--acento)}
+.kick{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.24em;text-transform:uppercase;color:var(--soft);margin-bottom:clamp(14px,2cqh,28px)}
+body.esc .kick{color:var(--papel-70)}
 .mega{font-size:var(--fs-mega);max-width:19ch}
 .big{font-size:var(--fs-big);max-width:22ch}
 .sub{font-size:var(--fs-body);line-height:1.62;max-width:58ch;color:var(--soft);margin-top:clamp(11px,1.8cqh,28px)}
-body.esc .sub{color:#EDE6DAcc}
-.prem{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.06em;line-height:1.7;color:var(--terra);
-  border-left:2px solid var(--terra);padding-left:13px;margin-top:clamp(14px,2cqh,26px);max-width:62ch}
-body.esc .prem{color:#E9A184;border-color:#E9A184}
+body.esc .sub{color:var(--papel-80)}
+.prem{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.06em;line-height:1.7;color:var(--acento);
+  border-left:2px solid var(--acento);padding-left:13px;margin-top:clamp(14px,2cqh,26px);max-width:62ch}
+body.esc .prem{color:var(--acento-claro);border-color:var(--acento-claro)}
 .dados{display:grid;gap:clamp(14px,2cqw,34px);margin-top:clamp(18px,3cqh,52px);
   grid-template-columns:repeat(auto-fit,minmax(clamp(150px,15cqw,230px),1fr))}
 .dado{border-top:1px solid var(--hair);padding-top:clamp(10px,1.4cqh,18px)}
-body.esc .dado{border-color:#EDE6DA3d}
-.dado .v{font-family:var(--mono);font-weight:500;font-size:var(--fs-num);letter-spacing:-.05em;line-height:1;display:block}
+body.esc .dado{border-color:var(--papel-25)}
+.dado .v{font-family:var(--f-display);font-weight:500;font-size:var(--fs-num);letter-spacing:-.05em;line-height:1;display:block}
 .dado .l{font-size:var(--fs-cap);letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-top:10px;display:block;line-height:1.5}
-body.esc .dado .l{color:#EDE6DAaa}
+body.esc .dado .l{color:var(--papel-70)}
 .dado .n{font-size:var(--fs-body);color:var(--soft);margin-top:8px;line-height:1.5;display:block}
-body.esc .dado .n{color:#EDE6DAbb}
+body.esc .dado .n{color:var(--papel-70)}
 ol.lista{list-style:none;margin-top:clamp(20px,3cqh,42px);display:grid;gap:clamp(10px,1.5cqh,20px)}
 ol.lista li{display:grid;grid-template-columns:clamp(46px,4.6cqw,78px) 1fr;gap:clamp(10px,1.4cqw,22px);
   align-items:baseline;border-top:1px solid var(--hair);padding-top:clamp(9px,1.2cqh,15px)}
-body.esc ol.lista li{border-color:#EDE6DA3d}
-ol.lista .q{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;color:var(--terra)}
+body.esc ol.lista li{border-color:var(--papel-25)}
+ol.lista .q{font-family:var(--f-display);font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;color:var(--acento)}
 ol.lista .t{font-size:var(--fs-item);line-height:1.5}
 ol.lista .t b{font-weight:600}
 table.tb{width:100%;border-collapse:collapse;margin-top:clamp(20px,3cqh,42px);font-size:var(--fs-item)}
-table.tb th{font-family:var(--mono);font-weight:400;font-size:var(--fs-cap);letter-spacing:.16em;text-transform:uppercase;
+table.tb th{font-family:var(--f-mono);font-weight:400;font-size:var(--fs-cap);letter-spacing:.16em;text-transform:uppercase;
   color:var(--soft);text-align:left;padding:0 0 12px;border-bottom:1px solid var(--tinta)}
-body.esc table.tb th{color:#EDE6DAaa;border-color:#EDE6DA}
+body.esc table.tb th{color:var(--papel-70);border-color:var(--papel)}
 table.tb td{padding:clamp(11px,1.5cqh,19px) 0;border-bottom:1px solid var(--hair);vertical-align:baseline;line-height:1.45}
-body.esc table.tb td{border-color:#EDE6DA30}
+body.esc table.tb td{border-color:var(--papel-20)}
 table.tb td+td,table.tb th+th{padding-left:clamp(14px,2cqw,40px);text-align:right}
-table.tb td.d{font-family:var(--mono);font-weight:500;font-size:clamp(15px,1.5cqw,25px);letter-spacing:-.03em;white-space:nowrap}
-table.tb tr.hi td{color:var(--terra)}
-body.esc table.tb tr.hi td{color:#E9A184}
+table.tb td.d{font-family:var(--f-display);font-weight:500;font-size:clamp(15px,1.5cqw,25px);letter-spacing:-.03em;white-space:nowrap}
+table.tb tr.hi td{color:var(--acento)}
+body.esc table.tb tr.hi td{color:var(--acento-claro)}
 /* mapa */
 .mcols{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(20px,3cqw,56px);align-items:center;width:100%}
 .mtxt{min-width:0}
@@ -137,38 +192,38 @@ body.esc table.tb tr.hi td{color:#E9A184}
 .mapa image{opacity:.92}
 .pin{cursor:pointer}
 .pin circle.hit{fill:transparent}
-.pin .anel{fill:none;stroke:var(--terra);stroke-width:0;opacity:0;transition:stroke-width .16s,opacity .16s}
+.pin .anel{fill:none;stroke:var(--acento);stroke-width:0;opacity:0;transition:stroke-width .16s,opacity .16s}
 .pin.on .anel{stroke-width:2.4;opacity:.9}
 .raio{transition:fill-opacity .16s,stroke-opacity .16s}
 .raio.on{fill-opacity:.3!important;stroke-opacity:.75!important}
 #minfo{margin-top:clamp(11px,1.6cqh,20px);border-top:1px solid var(--hair);padding-top:clamp(8px,1.1cqh,14px);min-height:clamp(70px,8.6cqh,102px)}
-#minfo .mn{font-family:var(--mono);font-style:italic;font-size:var(--fs-h);letter-spacing:-.03em;line-height:1.1;display:block}
-#minfo .mp{font-family:var(--mono);font-weight:500;font-size:var(--fs-cap);letter-spacing:.16em;text-transform:uppercase;color:var(--terra);margin-top:8px;display:block}
+#minfo .mn{font-family:var(--f-display);font-style:italic;font-size:var(--fs-h);letter-spacing:-.03em;line-height:1.1;display:block}
+#minfo .mp{font-family:var(--f-mono);font-weight:500;font-size:var(--fs-cap);letter-spacing:.16em;text-transform:uppercase;color:var(--acento);margin-top:8px;display:block}
 #minfo .md{font-size:var(--fs-body);color:var(--soft);line-height:1.55;margin-top:8px;display:block}
-#minfo.vazio .mn{color:var(--soft);font-size:var(--fs-body);font-style:normal;font-family:var(--sans)}
+#minfo.vazio .mn{color:var(--soft);font-size:var(--fs-body);font-style:normal;font-family:var(--f-corpo)}
 .leg{display:flex;flex-wrap:wrap;gap:clamp(11px,1.6cqw,26px);margin-top:clamp(9px,1.3cqh,16px);font-size:var(--fs-cap);
   letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
-body.esc .leg{color:#EDE6DAbb}
+body.esc .leg{color:var(--papel-70)}
 .leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:-1px}
-.leg i.ln{width:16px;height:0;border-top:1.5px dashed var(--terra);border-radius:0;vertical-align:3px}
-.pend{font-family:var(--mono);font-size:var(--fs-cap);color:var(--terra);border-left:2px dashed var(--terra);
+.leg i.ln{width:16px;height:0;border-top:1.5px dashed var(--acento);border-radius:0;vertical-align:3px}
+.pend{font-family:var(--f-mono);font-size:var(--fs-cap);color:var(--acento);border-left:2px dashed var(--acento);
   padding-left:12px;margin-top:clamp(12px,1.8cqh,22px);line-height:1.6;max-width:64ch}
-.credito{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#211D1A55;margin-top:10px}
+.credito{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-35);margin-top:10px}
 /* fotos */
 .fcols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:clamp(20px,3cqw,56px);align-items:center;width:100%}
-.fbox{position:relative;aspect-ratio:4/3;background:#211D1A0d;border:1px solid var(--hair);overflow:hidden;
+.fbox{position:relative;aspect-ratio:4/3;background:var(--tinta-5);border:1px solid var(--hair);overflow:hidden;
   display:flex;align-items:center;justify-content:center}
 .fbox img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .5s ease}
 .fbox img.on{opacity:1}
 .fbox .slot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;padding:clamp(14px,2cqw,26px);
-  font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.06em;line-height:1.6;color:var(--soft)}
-.fbox .slot b{color:var(--terra);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+  font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.06em;line-height:1.6;color:var(--soft)}
+.fbox .slot b{color:var(--acento);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
 .fcap{font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin-top:11px;line-height:1.6}
 /* chrome */
-.chrome{position:absolute;left:0;right:0;pointer-events:none;z-index:9;font-family:var(--mono);font-size:var(--fs-cap);
+.chrome{position:absolute;left:0;right:0;pointer-events:none;z-index:9;font-family:var(--f-mono);font-size:var(--fs-cap);
   letter-spacing:.16em;text-transform:lowercase;color:var(--soft);padding:0 var(--gut);
   display:flex;align-items:center;justify-content:space-between;height:var(--top)}
-body.esc .chrome{color:#EDE6DAb0}
+body.esc .chrome{color:var(--papel-70)}
 .chrome.pe{top:auto;bottom:0;height:var(--bot)}
 .chrome.topo{top:0}
 .secao{font-style:italic;position:relative;padding-left:26px;white-space:nowrap}
@@ -190,22 +245,22 @@ body.esc .chrome{color:#EDE6DAb0}
    `backdrop-filter` é reforço, não requisito: sem suporte, os 94% de
    opacidade já entregam o contraste sozinhos. ── */
 .nav{display:flex;align-items:center;gap:clamp(8px,.9cqw,14px);pointer-events:auto;
-  background:rgba(237,230,218,.94);
+  background:color-mix(in srgb,var(--papel) 94%,transparent);
   -webkit-backdrop-filter:blur(7px) saturate(1.1);backdrop-filter:blur(7px) saturate(1.1);
-  border:1px solid rgba(33,29,26,.22);border-radius:999px;
+  border:1px solid var(--tinta-20);border-radius:999px;
   padding:clamp(4px,.42cqw,6px) clamp(7px,.7cqw,11px) clamp(4px,.42cqw,6px) clamp(11px,1.05cqw,17px);
-  box-shadow:0 1px 5px rgba(33,29,26,.16);
+  box-shadow:0 1px 5px var(--tinta-15);
   color:var(--tinta)}
 .cont{font-variant-numeric:tabular-nums;letter-spacing:.1em;color:var(--tinta);opacity:.72}
 /* 02/09/2026 — a seta passa a ter o tamanho da casa ITTB (`--seta`, 38 a
    56px). Vinha em 23–30px, e era isso que o Michel chamou de "botõezinho".
    O glifo acompanha por proporção, não por px fixo. */
 .seta{width:var(--seta);height:var(--seta);
-  border:1px solid rgba(33,29,26,.34);border-radius:50%;
+  border:1px solid var(--tinta-35);border-radius:50%;
   display:grid;place-items:center;cursor:pointer;opacity:.9;
   transition:opacity .2s,transform .1s,background .2s;
   background:none;color:var(--tinta);font-size:calc(var(--seta)*.31);line-height:1}
-.seta:hover{opacity:1;background:rgba(33,29,26,.08)}
+.seta:hover{opacity:1;background:var(--tinta-10)}
 .seta:active{transform:scale(.94)}
 body.na-capa .chrome.pe .pj,body.na-capa .marca{opacity:0}
 /* [quadro 1600x900: nunca dispara — retirado] (max-height:780px) */
@@ -213,27 +268,27 @@ body.na-capa .chrome.pe .pj,body.na-capa .marca{opacity:0}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
 
 /* ===== v2 ===== */
-body.terra{color:#FBF3EA}
-body.terra #quadro{background:var(--terra)}
-body.terra .kick,body.terra .sub,body.terra .leg{color:#FBF3EAbb}
-body.terra .dado{border-color:#FBF3EA44}
-body.terra .dado .l,body.terra .dado .n{color:#FBF3EAc4}
-body.terra u{color:#FBF3EA}
-body.esc u{color:#D9C7A8}
+body.terra{color:var(--papel)}
+body.terra #quadro{background:var(--acento)}
+body.terra .kick,body.terra .sub,body.terra .leg{color:var(--papel-70)}
+body.terra .dado{border-color:var(--papel-25)}
+body.terra .dado .l,body.terra .dado .n{color:var(--papel-80)}
+body.terra u{color:var(--papel)}
+body.esc u{color:var(--acento-claro)}
 .wrap{max-width:min(100%,1180px)}
 .sub{max-width:52ch}
 .mega{max-width:16ch}
 /* divisor de ato */
 .divisor{justify-content:center}
-.divisor .dn{font-family:var(--mono);font-weight:500;font-size:clamp(54px,13cqw,190px);line-height:.82;letter-spacing:-.07em;opacity:.16;display:block}
-.divisor .dt{font-family:var(--mono);font-style:italic;font-weight:500;font-size:clamp(30px,6.6cqw,104px);letter-spacing:-.055em;line-height:1;text-transform:lowercase;margin-top:clamp(-30px,-3.4cqw,-14px)}
+.divisor .dn{font-family:var(--f-display);font-weight:500;font-size:clamp(54px,13cqw,190px);line-height:.82;letter-spacing:-.07em;opacity:.16;display:block}
+.divisor .dt{font-family:var(--f-display);font-style:italic;font-weight:500;font-size:clamp(30px,6.6cqw,104px);letter-spacing:-.055em;line-height:1;text-transform:lowercase;margin-top:clamp(-30px,-3.4cqw,-14px)}
 .divisor .ds{font-size:var(--fs-item);color:var(--soft);margin-top:clamp(16px,2.4cqh,32px);max-width:44ch;line-height:1.6}
-body.esc .divisor .ds,body.terra .divisor .ds{color:#EDE6DAc4}
+body.esc .divisor .ds,body.terra .divisor .ds{color:var(--papel-80)}
 /* duas jogadas */
 .jogadas{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4cqw,80px);margin-top:clamp(24px,4cqh,60px)}
 .jogada{border-top:1.5px solid currentColor;padding-top:clamp(12px,1.8cqh,22px)}
-.jogada .jn{font-family:var(--mono);font-weight:500;font-size:clamp(46px,8.4cqw,132px);line-height:.86;letter-spacing:-.07em;display:block;opacity:.9}
-.jogada .jt{font-family:var(--mono);font-style:italic;font-size:clamp(17px,2.1cqw,32px);letter-spacing:-.03em;line-height:1.12;margin-top:clamp(10px,1.5cqh,20px);display:block}
+.jogada .jn{font-family:var(--f-display);font-weight:500;font-size:clamp(46px,8.4cqw,132px);line-height:.86;letter-spacing:-.07em;display:block;opacity:.9}
+.jogada .jt{font-family:var(--f-display);font-style:italic;font-size:clamp(17px,2.1cqw,32px);letter-spacing:-.03em;line-height:1.12;margin-top:clamp(10px,1.5cqh,20px);display:block}
 .jogada .jd{font-size:var(--fs-body);line-height:1.55;margin-top:clamp(8px,1.2cqh,14px);display:block;opacity:.72;max-width:26ch}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
 
@@ -243,46 +298,46 @@ body.esc .divisor .ds,body.terra .divisor .ds{color:#EDE6DAc4}
 /* unitario por porte */
 .unit{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.6cqw,52px);margin-top:clamp(22px,3.4cqh,54px)}
 .uc{border-top:1.5px solid currentColor;padding-top:clamp(12px,1.7cqh,20px)}
-.uc .ut{font-family:var(--mono);font-style:italic;font-size:var(--fs-item);letter-spacing:-.02em;display:block}
+.uc .ut{font-family:var(--f-display);font-style:italic;font-size:var(--fs-item);letter-spacing:-.02em;display:block}
 .uc .ua{font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin-top:5px;display:block}
-.uc .ur{font-family:var(--mono);font-weight:500;font-size:clamp(24px,3.5cqw,58px);letter-spacing:-.05em;line-height:1;color:var(--terra);margin-top:clamp(12px,1.8cqh,22px);display:block}
-body.esc .uc .ur{color:#E9A184}
+.uc .ur{font-family:var(--f-display);font-weight:500;font-size:clamp(24px,3.5cqw,58px);letter-spacing:-.05em;line-height:1;color:var(--acento);margin-top:clamp(12px,1.8cqh,22px);display:block}
+body.esc .uc .ur{color:var(--acento-claro)}
 .uc .ul{font-size:var(--fs-cap);letter-spacing:.13em;text-transform:uppercase;color:var(--soft);margin-top:8px;display:block}
 .uc .um{font-size:var(--fs-body);color:var(--soft);margin-top:9px;line-height:1.55;display:block}
-body.esc .uc .ua,body.esc .uc .ul,body.esc .uc .um{color:#EDE6DAaa}
+body.esc .uc .ua,body.esc .uc .ul,body.esc .uc .um{color:var(--papel-70)}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
 
 /* barra de destaque no kicker */
-.kick.barra{display:inline-block;background:var(--terra);color:#FBF3EA;padding:7px 14px 6px;letter-spacing:.2em;margin-bottom:clamp(16px,2.3cqh,30px)}
+.kick.barra{display:inline-block;background:var(--acento);color:var(--papel);padding:7px 14px 6px;letter-spacing:.2em;margin-bottom:clamp(16px,2.3cqh,30px)}
 /* trio tempo/memoria/dominio */
 ol.trio{list-style:none;margin-top:clamp(22px,3.4cqh,52px);display:grid;gap:clamp(14px,2.2cqh,30px)}
 ol.trio li{display:grid;grid-template-columns:minmax(0,.46fr) minmax(0,1fr);gap:clamp(16px,2.6cqw,52px);
   align-items:baseline;border-top:1px solid var(--hair);padding-top:clamp(11px,1.6cqh,20px)}
-ol.trio .q{font-family:var(--mono);font-style:italic;font-weight:500;font-size:clamp(24px,3.6cqw,58px);letter-spacing:-.05em;line-height:1;color:var(--terra)}
+ol.trio .q{font-family:var(--f-display);font-style:italic;font-weight:500;font-size:clamp(24px,3.6cqw,58px);letter-spacing:-.05em;line-height:1;color:var(--acento)}
 ol.trio .t{font-size:var(--fs-body);line-height:1.6}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
 
 /* nota com numero grande */
 .notaN{display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,2cqw,28px);align-items:center;margin-top:clamp(18px,2.6cqh,40px);
   border-top:1px solid var(--hair);padding-top:clamp(12px,1.8cqh,22px)}
-.notaN .nn{font-family:var(--mono);font-weight:500;font-size:clamp(38px,6.4cqw,104px);letter-spacing:-.06em;line-height:.9;color:var(--terra)}
+.notaN .nn{font-family:var(--f-display);font-weight:500;font-size:clamp(38px,6.4cqw,104px);letter-spacing:-.06em;line-height:.9;color:var(--acento)}
 .notaN .nt{font-size:var(--fs-item);line-height:1.5;max-width:34ch;color:var(--soft)}
 /* foto full bleed */
-.fbleed{position:absolute;top:0;right:0;bottom:0;width:48cqw;overflow:hidden;background:#211D1A0e}
+.fbleed{position:absolute;top:0;right:0;bottom:0;width:48cqw;overflow:hidden;background:var(--tinta-5)}
 .fbleed img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .55s ease}
 .fbleed img.on{opacity:1}
 .fbleed .slot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:7px;
-  padding:clamp(18px,2.6cqw,42px);font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.06em;line-height:1.65;color:var(--soft)}
-.fbleed .slot b{color:var(--terra);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
-.fbleed .cred{position:absolute;left:clamp(18px,2.6cqw,42px);bottom:clamp(14px,2cqh,26px);font-family:var(--mono);
-  font-size:var(--fs-cap);letter-spacing:.1em;color:#EDE6DA;text-shadow:0 1px 6px #211D1Acc;opacity:0;transition:opacity .5s}
+  padding:clamp(18px,2.6cqw,42px);font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.06em;line-height:1.65;color:var(--soft)}
+.fbleed .slot b{color:var(--acento);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.fbleed .cred{position:absolute;left:clamp(18px,2.6cqw,42px);bottom:clamp(14px,2cqh,26px);font-family:var(--f-mono);
+  font-size:var(--fs-cap);letter-spacing:.1em;color:var(--papel);text-shadow:0 1px 6px var(--tinta-80);opacity:0;transition:opacity .5s}
 .fbleed .cred.on{opacity:.92}
 .slide.temfoto{padding-right:calc(48cqw + clamp(22px,3cqw,56px))}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
 
 /* moldura do mapa */
-.mapa{border:1.5px solid var(--terra);padding:0;background:#EDE6DA;position:relative}
-.mapa::after{content:"";position:absolute;inset:5px;border:.5px solid #B85C3855;pointer-events:none}
+.mapa{border:1.5px solid var(--acento);padding:0;background:var(--papel);position:relative}
+.mapa::after{content:"";position:absolute;inset:5px;border:.5px solid var(--acento-35);pointer-events:none}
 #minfo .mn,#minfo .mp,#minfo .md{transition:opacity .22s ease,transform .22s ease}
 #minfo.trocando .mn,#minfo.trocando .mp,#minfo.trocando .md{opacity:0;transform:translateY(5px)}
 .lote{cursor:pointer}
@@ -292,15 +347,15 @@ ol.trio .t{font-size:var(--fs-body);line-height:1.6}
 #msfundo{position:absolute;inset:0;z-index:0;display:block;width:100%;height:100%;opacity:0;
   transition:opacity .8s ease;pointer-events:none}
 #msveu{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .8s ease;
-  background:linear-gradient(180deg,#211D1A66 0%,transparent 30%,transparent 58%,#211D1A88 100%)}
+  background:linear-gradient(180deg,var(--tinta-40) 0%,transparent 30%,transparent 58%,var(--tinta-50) 100%)}
 body.com-fundo #msfundo,body.com-fundo #msveu{opacity:1}
 #palco{z-index:1}
 body.com-fundo .slide.ativo{background:transparent}
-body.com-fundo{color:var(--creme)}
-body.com-fundo #quadro{background:var(--oliva)}
-body.com-fundo .kick,body.com-fundo .sub{color:#EDE6DAcc}
+body.com-fundo{color:var(--papel)}
+body.com-fundo #quadro{background:var(--escuro)}
+body.com-fundo .kick,body.com-fundo .sub{color:var(--papel-80)}
 .ms-start{display:inline-flex;align-items:center;gap:11px;margin-top:clamp(22px,3.4cqh,44px);
-  background:var(--terra);color:#FBF3EA;border:0;cursor:pointer;font-family:var(--mono);font-style:italic;
+  background:var(--acento);color:var(--papel);border:0;cursor:pointer;font-family:var(--f-mono);font-style:italic;
   font-size:var(--fs-body);letter-spacing:.02em;padding:11px 22px 10px;border-radius:100px;
   animation:convite 2.6s ease-in-out infinite}
 .ms-start:hover{animation:none;filter:brightness(1.08)}
@@ -310,16 +365,16 @@ body.com-fundo .kick,body.com-fundo .sub{color:#EDE6DAcc}
 @keyframes pisca{50%{opacity:0}}
 /* antes e depois */
 .dcols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2cqw,34px);width:100%;align-items:stretch}
-.dfig{position:relative;min-height:clamp(220px,52cqh,620px);background:#211D1A0e;border:1px solid var(--hair);overflow:hidden}
+.dfig{position:relative;min-height:clamp(220px,52cqh,620px);background:var(--tinta-5);border:1px solid var(--hair);overflow:hidden}
 .dfig img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .dfig.pb img{filter:grayscale(1) contrast(1.06)}
 .dfig .slot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
-  padding:clamp(14px,2cqw,28px);font-family:var(--mono);font-size:var(--fs-cap);line-height:1.6;color:var(--soft)}
-.dfig .slot b{color:var(--terra);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
-.dfig .tag{position:absolute;top:0;left:0;background:var(--tinta);color:var(--creme);font-family:var(--mono);
+  padding:clamp(14px,2cqw,28px);font-family:var(--f-mono);font-size:var(--fs-cap);line-height:1.6;color:var(--soft)}
+.dfig .slot b{color:var(--acento);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.dfig .tag{position:absolute;top:0;left:0;background:var(--tinta);color:var(--papel);font-family:var(--f-display);
   font-style:italic;font-size:var(--fs-item);padding:7px 15px 6px;letter-spacing:-.02em}
-.dfig.pb .tag{background:#211D1A}
-.dfig.ag .tag{background:var(--terra)}
+.dfig.pb .tag{background:var(--tinta)}
+.dfig.ag .tag{background:var(--acento)}
 .dleg{font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin-top:10px}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
 
@@ -336,26 +391,26 @@ body.na-marca .chrome{opacity:0;pointer-events:none}
   gap:clamp(9px,1.35cqh,20px)}
 /* marca + papel: margem no <em>, NUNCA gap de flex — o gap descola o
    underscore do nome. Armadilha já paga duas vezes.                        */
-.g-marca .sigla-mini{font-family:var(--mono);font-weight:500;font-style:italic;
+.g-marca .sigla-mini{font-family:var(--f-display);font-weight:500;font-style:italic;
   font-size:clamp(11px,1.0cqw,20px);text-transform:lowercase;letter-spacing:-.01em;
-  line-height:1;color:#EDE6DAe6}
-.g-marca .sigla-mini i{font-style:normal;color:var(--terra)}
-.g-marca .sigla-mini em{font-family:var(--mono);font-style:normal;font-weight:400;
-  font-size:.68em;letter-spacing:.02em;text-transform:none;color:#EDE6DAa6;
+  line-height:1;color:var(--papel-90)}
+.g-marca .sigla-mini i{font-style:normal;color:var(--acento)}
+.g-marca .sigla-mini em{font-family:var(--f-display);font-style:normal;font-weight:400;
+  font-size:.68em;letter-spacing:.02em;text-transform:none;color:var(--papel-70);
   margin-left:1.1em;position:relative;top:-.04em}
-.g-marca .slogan{font-family:var(--mono);font-weight:500;font-style:italic;
+.g-marca .slogan{font-family:var(--f-display);font-weight:500;font-style:italic;
   font-size:clamp(22px,3.75cqw,82px);text-transform:lowercase;letter-spacing:-.028em;
-  line-height:1.04;color:var(--creme);white-space:nowrap}
-.g-marca .slogan i{font-style:normal;color:var(--terra)}
-.g-marca .site{font-family:var(--sans);font-weight:400;
-  font-size:clamp(10px,.78cqw,15px);letter-spacing:.14em;color:#EDE6DAa6;line-height:1}
+  line-height:1.04;color:var(--papel);white-space:nowrap}
+.g-marca .slogan i{font-style:normal;color:var(--acento)}
+.g-marca .site{font-family:var(--f-corpo);font-weight:400;
+  font-size:clamp(10px,.78cqw,15px);letter-spacing:.14em;color:var(--papel-70);line-height:1}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:620px) */
 
 
 /* cortina diagonal — a saída da abertura para o primeiro slide */
 #mscortina{position:absolute;top:-12%;bottom:-12%;left:0;width:132%;z-index:95;
-  pointer-events:none;background:var(--creme);
-  border-left:3px solid var(--terra);border-right:3px solid var(--terra);
+  pointer-events:none;background:var(--papel);
+  border-left:3px solid var(--acento);border-right:3px solid var(--acento);
   transform:translateX(-134%) skewX(-14deg);visibility:hidden}
 #mscortina.on{visibility:visible;transform:translateX(-2%) skewX(-14deg);
   transition:transform .60s cubic-bezier(.62,0,.30,1)}
@@ -365,12 +420,12 @@ body.na-marca .chrome{opacity:0;pointer-events:none}
 /* metas da capa de projeto — cliente · etapa · data */
 .metas{display:flex;flex-wrap:wrap;gap:clamp(18px,2.6cqw,44px);
   margin-top:clamp(20px,3cqh,40px);padding-top:clamp(12px,1.8cqh,22px);
-  border-top:1px solid #EDE6DA3d}
+  border-top:1px solid var(--papel-25)}
 .metas div{display:flex;flex-direction:column;gap:5px}
-.metas .ml{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.2em;
-  text-transform:uppercase;color:#EDE6DAa6}
-.metas .mv{font-family:var(--mono);font-style:italic;font-size:var(--fs-item);
-  letter-spacing:-.02em;color:var(--creme)}
+.metas .ml{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--papel-70)}
+.metas .mv{font-family:var(--f-mono);font-style:italic;font-size:var(--fs-item);
+  letter-spacing:-.02em;color:var(--papel)}
 @media(prefers-reduced-motion:reduce){#mscortina{display:none}}
 
 /* ═══ ajustes de 21/08/2026 ════════════════════════════════════════════════ */
@@ -383,21 +438,21 @@ body.na-marca .chrome{opacity:0;pointer-events:none}
 
 /* fechamento: QR acima da marca, mesmo eixo */
 .g-marca .qr{width:clamp(64px,7cqw,128px);line-height:0;border-radius:3px;
-  overflow:hidden;box-shadow:0 0 0 1px #EDE6DA26;margin-bottom:clamp(6px,1cqh,14px)}
+  overflow:hidden;box-shadow:0 0 0 1px var(--papel-15);margin-bottom:clamp(6px,1cqh,14px)}
 .g-marca .qr svg{display:block;width:100%;height:auto}
-.g-marca .assina{font-family:var(--mono);font-weight:500;font-style:italic;
+.g-marca .assina{font-family:var(--f-display);font-weight:500;font-style:italic;
   font-size:clamp(26px,4.2cqw,90px);text-transform:lowercase;letter-spacing:-.03em;
-  line-height:1;color:var(--creme)}
-.g-marca .assina i{font-style:normal;color:var(--terra)}
+  line-height:1;color:var(--papel)}
+.g-marca .assina i{font-style:normal;color:var(--acento)}
 
 /* divisor: o underscore piscante avisa que o assunto mudou.
    O terracota é EXCLUSIVO do divisor — nenhum outro slide usa. */
-.divisor .dt i{font-style:normal;color:#FBF3EA;opacity:.72;margin-left:.06em}
+.divisor .dt i{font-style:normal;color:var(--papel);opacity:.72;margin-left:.06em}
 
 /* chrome: as bolinhas e o rótulo de seção estavam apagados demais para ler */
-.chrome{color:#211D1Ac9}
-body.esc .chrome,body.com-fundo .chrome{color:#EDE6DAdb}
-body.terra .chrome{color:#FBF3EAdb}
+.chrome{color:var(--tinta-80)}
+body.esc .chrome,body.com-fundo .chrome{color:var(--papel-90)}
+body.terra .chrome{color:var(--papel-90)}
 .sdot{opacity:.42}
 .sdot:hover{opacity:.8}
 .sdot span{letter-spacing:.1em}
@@ -405,12 +460,12 @@ body.terra .chrome{color:#FBF3EAdb}
 .chrome .secao .sn{opacity:.7}
 
 /* grifo terracota — destaque dentro de célula de tabela ou de texto corrido */
-mark{background:var(--terra);color:#FBF3EA;padding:.12em .42em .16em;
+mark{background:var(--acento);color:var(--papel);padding:.12em .42em .16em;
   border-radius:2px;font-style:inherit;font-weight:500}
 table.tb th mark{letter-spacing:.16em}
 
 /* nota de ressalva: quando o número é leitura nossa, não dado declarado */
-.notaN .nn{font-family:var(--mono);font-weight:500;color:var(--terra)}
+.notaN .nn{font-family:var(--f-display);font-weight:500;color:var(--acento)}
 
 /* colisao de nome: `.seta` ja era o botao redondo de navegacao do chrome,
    e a seta da pilula saia dentro de um circulo. O markup segue igual ao do
@@ -423,14 +478,14 @@ table.tb th mark{letter-spacing:.16em}
 .dfig .slot{opacity:0;pointer-events:none}
 .dfig.semimg .slot{opacity:1}
 .dfig .dcap{position:absolute;left:0;right:0;bottom:0;padding:clamp(26px,4cqh,52px) clamp(12px,1.4cqw,20px) clamp(9px,1.2cqh,14px);
-  font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.1em;color:#EDE6DAd9;
-  background:linear-gradient(to top,#0e0f0bcc,#0e0f0b00)}
+  font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.1em;color:var(--papel-90);
+  background:linear-gradient(to top,var(--tinta-80),transparent)}
 .dfig.semimg .dcap{display:none}
 
 /* o terracota cheio ficou reservado ao divisor de secao. O kicker em barra
    passa para a oliva, para nao competir com a troca de assunto. */
-.kick.barra{background:var(--oliva);color:#EDE6DA}
-body.esc .kick.barra,body.com-fundo .kick.barra{background:#EDE6DA1f;color:#EDE6DA}
+.kick.barra{background:var(--primaria);color:var(--papel)}
+body.esc .kick.barra,body.com-fundo .kick.barra{background:var(--papel-10);color:var(--papel)}
 
 /* ═══ ajustes de 22/08/2026 ════════════════════════════════════════════════ */
 
@@ -455,7 +510,7 @@ ol.lista.largo .q{font-size:clamp(10px,.86cqw,14px);letter-spacing:.16em}
 /* a moldura dupla de terracota e do mapa emoldurado; na sangria ela sai */
 .mapa.sang::after{display:none}
 .mapa.sang{position:absolute;top:0;right:0;bottom:0;width:48cqw;border:0;
-  padding:0;background:#E4DCCE;display:block;overflow:hidden}
+  padding:0;background:var(--papel-2);display:block;overflow:hidden}
 .mapa.sang svg{width:100%;height:100%;max-height:none;display:block}
 .slide.temmapa{padding-right:calc(48cqw + clamp(22px,3cqw,56px))}
 /* legenda empilhada na vertical, debaixo do texto */
@@ -467,11 +522,11 @@ ol.lista.largo .q{font-size:clamp(10px,.86cqw,14px);letter-spacing:.16em}
 /* fotinha do empreendimento no painel de informação do mapa */
 #minfo{display:grid;grid-template-columns:1fr;gap:clamp(10px,1.4cqw,18px);align-items:start}
 #minfo:has(.mfoto){grid-template-columns:clamp(78px,7.4cqw,124px) 1fr}
-#minfo .mfoto{display:block;line-height:0;overflow:hidden;background:#211D1A12;
+#minfo .mfoto{display:block;line-height:0;overflow:hidden;background:var(--tinta-5);
   aspect-ratio:3/4;border:1px solid var(--hair)}
 #minfo .mfoto img{width:100%;height:100%;object-fit:cover;display:block}
 #minfo .mtx{display:block;min-width:0}
-body.esc #minfo .mfoto,body.terra #minfo .mfoto{border-color:#EDE6DA3d}
+body.esc #minfo .mfoto,body.terra #minfo .mfoto{border-color:var(--papel-25)}
 
 /* ─── revelação por clique: o fio varre da esquerda, o texto desce ───
    Rápido, mas com ênfase. Vale para as fichas de porte e para as jogadas. */
@@ -510,8 +565,8 @@ body:has(.slide.ativo.temmapa) .chrome.topo .marca{opacity:0}
 /* na foto de sangria a marca do alto-direita também cairia sobre a imagem */
 body:has(.slide.ativo.temfoto) .chrome.topo .marca{opacity:0}
 /* numeração da lista sobre a oliva: o terracota cheio some no fundo verde */
-body.esc ol.lista .q,body.com-fundo ol.lista .q{color:#E9A184}
-body.terra ol.lista .q{color:#FBF3EA}
+body.esc ol.lista .q,body.com-fundo ol.lista .q{color:var(--acento-claro)}
+body.terra ol.lista .q{color:var(--papel)}
 
 /* ═══ 22/08/2026 · o rótulo da linha é título, e título é grande ═══════════
    Vale para toda lista: "âncoras / regra / mix", os números 01–04, as datas
@@ -521,16 +576,16 @@ body.terra ol.lista .q{color:#FBF3EA}
    data de acontecimento e não cabeça de assunto.                          */
 ol.lista li{grid-template-columns:clamp(104px,10.6cqw,208px) 1fr;
   gap:clamp(14px,2cqw,34px);align-items:baseline}
-ol.lista .q{font-family:var(--mono);font-weight:500;font-style:italic;
+ol.lista .q{font-family:var(--f-display);font-weight:500;font-style:italic;
   font-size:clamp(19px,2.5cqw,42px);letter-spacing:-.045em;line-height:1.02;
-  text-transform:lowercase;color:var(--terra)}
+  text-transform:lowercase;color:var(--acento)}
 ol.lista.largo li{grid-template-columns:clamp(120px,12cqw,240px) 1fr}
 ol.lista.largo .q{font-size:clamp(21px,2.85cqw,50px);letter-spacing:-.05em}
 
 /* a linha do tempo da foto de sangria mantém a data pequena */
 .slide.temfoto ol.lista li{grid-template-columns:clamp(46px,4.6cqw,78px) 1fr;
   gap:clamp(10px,1.4cqw,22px)}
-.slide.temfoto ol.lista .q{font-family:var(--mono);font-weight:400;font-style:normal;
+.slide.temfoto ol.lista .q{font-family:var(--f-mono);font-weight:400;font-style:normal;
   font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;line-height:1.5}
 
 /* ═══ 22/08/2026 · segunda rodada ══════════════════════════════════════════ */
@@ -564,21 +619,21 @@ table.tb tr.fora td{opacity:.42}
 .frcols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,3.6cqw,72px);
   margin-top:clamp(20px,3cqh,44px);width:100%}
 .fr{min-width:0}
-.frt{font-family:var(--mono);font-style:italic;font-weight:500;
+.frt{font-family:var(--f-display);font-style:italic;font-weight:500;
   font-size:clamp(15px,1.62cqw,27px);letter-spacing:-.03em;line-height:1.1;
-  color:var(--terra);border-bottom:1.5px solid currentColor;
+  color:var(--acento);border-bottom:1.5px solid currentColor;
   padding-bottom:clamp(8px,1.1cqh,14px)}
-body.esc .frt{color:#E9A184}
+body.esc .frt{color:var(--acento-claro)}
 .frl{list-style:none;display:grid;gap:clamp(9px,1.3cqh,18px);
   margin-top:clamp(11px,1.6cqh,22px)}
 .frl li{display:grid;gap:4px;border-top:1px solid var(--hair);
   padding-top:clamp(7px,1cqh,13px)}
 .frl li:first-child{border-top:0;padding-top:0}
-body.esc .frl li{border-color:#EDE6DA3d}
-.frti{font-family:var(--mono);font-style:italic;font-size:var(--fs-item);
+body.esc .frl li{border-color:var(--papel-25)}
+.frti{font-family:var(--f-display);font-style:italic;font-size:var(--fs-item);
   letter-spacing:-.02em;line-height:1.2}
 .frd{font-size:var(--fs-body);line-height:1.5;color:var(--soft)}
-body.esc .frd{color:#EDE6DAbb}
+body.esc .frd{color:var(--papel-70)}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
 
 
@@ -587,23 +642,23 @@ body.esc .frd{color:#EDE6DAbb}
    engordar o slide com o que só é perguntado às vezes. */
 mark.pop{cursor:help;position:relative;transition:filter .2s}
 mark.pop:hover,mark.pop.aberto{filter:brightness(1.12)}
-.obs{font-family:var(--mono);font-size:.86em;letter-spacing:.1em;
-  text-transform:lowercase;color:var(--terra);cursor:help;
+.obs{font-family:var(--f-mono);font-size:.86em;letter-spacing:.1em;
+  text-transform:lowercase;color:var(--acento);cursor:help;
   border-bottom:1px dashed currentColor;padding-bottom:1px;margin-left:.35em}
-body.esc .obs,body.com-fundo .obs{color:#E9A184}
-body.terra .obs{color:#FBF3EA}
+body.esc .obs,body.com-fundo .obs{color:var(--acento-claro)}
+body.terra .obs{color:var(--papel)}
 .obs:hover,.obs.aberto{filter:brightness(1.15)}
 /* a caixa é terracota e nasce colada à linha do elemento que a abriu.
    Sem título dentro: ele já está na tela, logo acima. */
 .popbox{position:absolute;z-index:40;max-width:min(44ch,58cqw);
-  background:var(--terra);color:#FBF3EA;
+  background:var(--acento);color:var(--papel);
   padding:clamp(13px,1.8cqh,20px) clamp(15px,1.6cqw,24px);
-  box-shadow:0 14px 36px #211d1a26;
+  box-shadow:0 14px 36px var(--tinta-15);
   opacity:0;transform:translateY(-6px);pointer-events:none;
   transition:opacity .2s ease,transform .2s ease}
 .popbox.on{opacity:1;transform:none;pointer-events:auto}
-.popd{display:block;font-size:var(--fs-body);line-height:1.58;color:#FBF3EAe8}
-.popd b{font-weight:600;color:#FFF}
+.popd{display:block;font-size:var(--fs-body);line-height:1.58;color:var(--papel-90)}
+.popd b{font-weight:600;color:var(--papel)}   /* o negrito sobe de papel-90 para o papel cheio */
 
 /* ═══ 22/08/2026 · terceira rodada ═════════════════════════════════════════ */
 
@@ -625,7 +680,7 @@ body.terra .obs{color:#FBF3EA}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:620px) */
 
 .pg{display:flex;flex-direction:column;align-items:center;gap:clamp(9px,1.3cqh,17px)}
-.pgn{font-family:var(--mono);font-style:italic;font-size:clamp(11px,1.02cqw,17px);
+.pgn{font-family:var(--f-display);font-style:italic;font-size:clamp(11px,1.02cqw,17px);
   letter-spacing:-.02em;line-height:1.15;text-align:center;
   padding:clamp(7px,.9cqh,12px) clamp(9px,.9cqw,15px);border-radius:999px;
   border:1.5px solid currentColor;max-width:100%;
@@ -634,7 +689,7 @@ body.terra .obs{color:#FBF3EA}
 .pgo{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
   min-height:clamp(20px,2.4cqh,30px);align-content:flex-start}
 .pgo i{display:block;width:clamp(13px,1.24cqw,21px);height:clamp(13px,1.24cqw,21px);
-  border-radius:50%;background:var(--terra);
+  border-radius:50%;background:var(--acento);
   animation:pgpop .34s cubic-bezier(.3,1.5,.5,1) backwards}
 .pgo i:nth-child(2){animation-delay:.07s}
 .pgo i:nth-child(3){animation-delay:.14s}
@@ -643,7 +698,7 @@ body.terra .obs{color:#FBF3EA}
 .pg.vazia .pgn{opacity:.42}
 .pgr{margin-top:clamp(18px,2.6cqh,36px);font-size:var(--fs-cap);letter-spacing:.14em;
   text-transform:uppercase;color:var(--soft)}
-body.esc .pgr{color:#EDE6DAaa}
+body.esc .pgr{color:var(--papel-70)}
 @media(prefers-reduced-motion:reduce){.pgo i{animation:none}}
 
 /* ═══ fundo morph no divisor de seção · padrão travado em 22/08/2026 ═══════
@@ -655,10 +710,10 @@ body.esc .pgr{color:#EDE6DAaa}
 /* especificidade: body.com-fundo pinta o corpo de oliva e venceria o
    body.terra do divisor por vir depois na folha. Mesmo conflito que o
    .slide.ativo{background:transparent} resolveu na abertura. */
-body.com-fundo.terra #quadro{background:var(--terra)}
-body.com-fundo.terra .kick,body.com-fundo.terra .sub{color:#FBF3EAbb}
+body.com-fundo.terra #quadro{background:var(--acento)}
+body.com-fundo.terra .kick,body.com-fundo.terra .sub{color:var(--papel-70)}
 /* o chrome invertido do divisor tem de sobreviver ao com-fundo */
-body.com-fundo.terra .chrome{color:#FBF3EAdb}
+body.com-fundo.terra .chrome{color:var(--papel-90)}
 
 /* ═══ o segundo canvas: o fundo dos divisores ══════════════════════════════
    Mesma geometria do primeiro, empilhado atrás do palco. Só um dos dois
@@ -666,10 +721,10 @@ body.com-fundo.terra .chrome{color:#FBF3EAdb}
 #msfundo-d{position:absolute;inset:0;z-index:0;display:block;width:100%;height:100%;
   opacity:0;transition:opacity .8s ease;pointer-events:none}
 #msveu-d{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;
-  background:var(--terra);transition:opacity .3s ease}
+  background:var(--acento);transition:opacity .3s ease}
 #msveu-d::after{content:"";position:absolute;inset:0;opacity:.5;
-  background:linear-gradient(180deg,var(--terra) 0%,transparent 26%,
-                             transparent 74%,var(--terra) 100%)}
+  background:linear-gradient(180deg,var(--acento) 0%,transparent 26%,
+                             transparent 74%,var(--acento) 100%)}
 body.fundo-div #msfundo-d{opacity:1}
 body.fundo-div #msveu-d{opacity:.60}   /* travado em 22/08/2026 */
 /* no divisor o canvas e o véu da marca somem, e vice-versa */
@@ -679,10 +734,10 @@ body.fundo-div #msfundo,body.fundo-div #msveu{opacity:0}
 
 /* o terracota cheio sobre a oliva some. O `lista` já tinha o clareado; o
    `trio` e o `jogadas` não tinham, e é ali que o texto ficava ilegível. */
-body.esc ol.trio .q,body.com-fundo ol.trio .q{color:#E9A184}
-body.terra ol.trio .q{color:#FBF3EA}
-body.esc .jogada .jn,body.esc .jogada .jt{color:#F0E7DC}
-body.esc .frt{color:#E9A184}
+body.esc ol.trio .q,body.com-fundo ol.trio .q{color:var(--acento-claro)}
+body.terra ol.trio .q{color:var(--papel)}
+body.esc .jogada .jn,body.esc .jogada .jt{color:var(--papel)}
+body.esc .frt{color:var(--acento-claro)}
 
 /* ─── grifo — a faixa que destaca a frase ────────────────────────────────
    Trazido da apresentação da Lavro (mecânica de 22/08). Não é negrito: é
@@ -690,7 +745,7 @@ body.esc .frt{color:#E9A184}
    direita. Usa background-size animado em vez de pseudo-elemento absoluto,
    para acompanhar a quebra de linha com box-decoration-break: clone.     */
 .grifo{
-  background-image:linear-gradient(var(--grifo-cor,#B85C3833),var(--grifo-cor,#B85C3833));
+  background-image:linear-gradient(var(--grifo-cor,var(--acento-20)),var(--grifo-cor,var(--acento-20)));
   background-repeat:no-repeat;
   background-position:0 .14em;
   background-size:0% calc(100% - .22em);
@@ -700,8 +755,8 @@ body.esc .frt{color:#E9A184}
   animation-delay:var(--gd,760ms)}
 @keyframes ms-grifo{to{background-size:100% calc(100% - .22em)}}
 /* sobre oliva e terracota a marca inverte para o creme */
-body.esc .grifo,body.com-fundo .grifo{--grifo-cor:#EDE6DA2e}
-body.terra .grifo{--grifo-cor:#FBF3EA33}
+body.esc .grifo,body.com-fundo .grifo{--grifo-cor:var(--papel-20)}
+body.terra .grifo{--grifo-cor:var(--papel-20)}
 @media(prefers-reduced-motion:reduce){
   .grifo{background-size:100% calc(100% - .22em)!important;animation:none!important}}
 
@@ -718,16 +773,16 @@ table.tb tr.fora td{opacity:.38}
 /* o texto de apoio do dado vive no popover, não no slide */
 .dado .n{display:none}
 .dado.tem{cursor:help;position:relative;transition:border-color .22s}
-.dado.tem .l::after{content:"+";margin-left:.5em;font-family:var(--mono);
+.dado.tem .l::after{content:"+";margin-left:.5em;font-family:var(--f-mono);
   opacity:.5;transition:opacity .22s}
 /* no hover o dado inteiro assume o destaque: a linha, o número e o rótulo */
-.dado.tem:hover,.dado.tem.aberto{border-top-color:var(--terra)}
+.dado.tem:hover,.dado.tem.aberto{border-top-color:var(--acento)}
 .dado.tem:hover .v,.dado.tem.aberto .v,
-.dado.tem:hover .l,.dado.tem.aberto .l{color:var(--terra)}
+.dado.tem:hover .l,.dado.tem.aberto .l{color:var(--acento)}
 .dado.tem:hover .l::after,.dado.tem.aberto .l::after{opacity:1}
-body.esc .dado.tem:hover,body.esc .dado.tem.aberto{border-top-color:#E9A184}
+body.esc .dado.tem:hover,body.esc .dado.tem.aberto{border-top-color:var(--acento-claro)}
 body.esc .dado.tem:hover .v,body.esc .dado.tem.aberto .v,
-body.esc .dado.tem:hover .l,body.esc .dado.tem.aberto .l{color:#E9A184}
+body.esc .dado.tem:hover .l,body.esc .dado.tem.aberto .l{color:var(--acento-claro)}
 .dado .v,.dado .l{transition:color .22s ease}
 /* os dois slides da carteira: texto ancorado no topo, para o isométrico e o
    título ficarem parados na tela enquanto só o conteúdo da direita troca */
@@ -739,7 +794,7 @@ body.esc .dado.tem:hover .l,body.esc .dado.tem.aberto .l{color:#E9A184}
    Nos slides verdes de conteúdo o fundo não é imagem, é textura. O véu vai
    a 0,90 e troca o gradiente diagonal por oliva chapada: a foto some, o
    pontilhado continua respirando. Nenhum contexto WebGL novo.           */
-body.fundo-trama #msveu{background:var(--oliva);opacity:.90;
+body.fundo-trama #msveu{background:var(--escuro);opacity:.90;
   transition:opacity .45s ease,background-color .45s ease}
 body.fundo-trama #msfundo{opacity:1}
 body.fundo-trama .slide.ativo{background:transparent}
@@ -769,23 +824,23 @@ body.fundo-trama .slide.ativo{background:transparent}
 .frcab{display:flex;flex-direction:column;align-items:flex-start;
   gap:clamp(7px,1cqh,12px);padding-bottom:clamp(10px,1.4cqh,17px);
   border-bottom:1.5px solid currentColor}
-.frpil{font-family:var(--mono);font-style:italic;font-weight:500;
+.frpil{font-family:var(--f-display);font-style:italic;font-weight:500;
   font-size:clamp(14px,1.5cqw,25px);letter-spacing:-.03em;line-height:1;
-  text-transform:lowercase;color:#EDE6DA;background:var(--terra);
+  text-transform:lowercase;color:var(--papel);background:var(--acento);
   padding:clamp(6px,.8cqh,11px) clamp(11px,1.1cqw,18px);border-radius:999px}
 .frsub{font-size:var(--fs-cap);letter-spacing:.2em;text-transform:uppercase;
   color:var(--soft)}
-body.esc .frsub{color:#EDE6DAaa}
+body.esc .frsub{color:var(--papel-70)}
 .frl li{grid-template-columns:auto 1fr;gap:clamp(10px,1.2cqw,20px);align-items:baseline}
-.frn{font-family:var(--mono);font-weight:500;font-size:var(--fs-cap);
-  letter-spacing:.1em;color:var(--terra);line-height:1.6}
-body.esc .frn{color:#E9A184}
+.frn{font-family:var(--f-mono);font-weight:500;font-size:var(--fs-cap);
+  letter-spacing:.1em;color:var(--acento);line-height:1.6}
+body.esc .frn{color:var(--acento-claro)}
 .frtx{display:grid;gap:4px;min-width:0}
 
 /* ═══ 23/08 · destaque terracota dentro de título ═══════════════════════════ */
-.tt{color:var(--terra)}
-body.esc .tt,body.com-fundo .tt{color:#E9A184}
-body.terra .tt{color:#FBF3EA}
+.tt{color:var(--acento)}
+body.esc .tt,body.com-fundo .tt{color:var(--acento-claro)}
+body.terra .tt{color:var(--papel)}
 
 /* ═══ 23/08 · duas frentes: a caixa terracota que cresce ════════════════════
    Cada item revelado empurra a caixa para baixo — o pacote se fecha na frente
@@ -794,21 +849,21 @@ body.terra .tt{color:#FBF3EA}
 .frcols{align-items:start}
 .frcx{position:relative;padding:clamp(11px,1.5cqh,18px) clamp(12px,1.15cqw,19px);
   margin-top:clamp(9px,1.3cqh,16px)}
-.frbg{position:absolute;left:0;right:0;top:0;height:0;background:var(--terra);
+.frbg{position:absolute;left:0;right:0;top:0;height:0;background:var(--acento);
   transition:height .46s cubic-bezier(.62,0,.30,1);border-radius:3px}
 .frcx .frl{position:relative;z-index:1;margin-top:0}
-.frcx .frl li{border-color:#FBF3EA33}
-.frcx .frti{color:#FBF3EA}
-.frcx .frd{color:#FBF3EAc4}
-.frcx .frn,body.esc .frcx .frn{color:#FBF3EA;opacity:.62}
+.frcx .frl li{border-color:var(--papel-20)}
+.frcx .frti{color:var(--papel)}
+.frcx .frd{color:var(--papel-80)}
+.frcx .frn,body.esc .frcx .frn{color:var(--papel);opacity:.62}
 .frfora{margin-top:clamp(13px,1.9cqh,26px);display:grid;gap:6px;
-  border-top:1px dashed var(--terra);padding-top:clamp(9px,1.3cqh,15px)}
-body.esc .frfora{border-top-color:#E9A184}
-.ffl{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.2em;
-  text-transform:uppercase;color:var(--terra)}
-body.esc .ffl{color:#E9A184}
+  border-top:1px dashed var(--acento);padding-top:clamp(9px,1.3cqh,15px)}
+body.esc .frfora{border-top-color:var(--acento-claro)}
+.ffl{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--acento)}
+body.esc .ffl{color:var(--acento-claro)}
 .fft{font-size:var(--fs-body);line-height:1.55;color:var(--soft)}
-body.esc .fft{color:#EDE6DAbb}
+body.esc .fft{color:var(--papel-70)}
 @media(prefers-reduced-motion:reduce){.frbg{transition:none}}
 
 /* ═══ 23/08 · sumário: o argumento inteiro, seis blocos ═════════════════════ */
@@ -816,15 +871,15 @@ body.esc .fft{color:#EDE6DAbb}
   gap:clamp(16px,2.4cqw,44px) clamp(18px,2.8cqw,52px);
   margin-top:clamp(20px,3.2cqh,48px);width:100%}
 .sm{border-top:1.5px solid currentColor;padding-top:clamp(10px,1.5cqh,18px)}
-.smn{font-family:var(--mono);font-weight:500;font-size:var(--fs-cap);
-  letter-spacing:.16em;color:var(--terra);display:block}
-body.esc .smn{color:#E9A184}
-.smt{font-family:var(--mono);font-style:italic;font-size:clamp(15px,1.75cqw,29px);
+.smn{font-family:var(--f-mono);font-weight:500;font-size:var(--fs-cap);
+  letter-spacing:.16em;color:var(--acento);display:block}
+body.esc .smn{color:var(--acento-claro)}
+.smt{font-family:var(--f-display);font-style:italic;font-size:clamp(15px,1.75cqw,29px);
   letter-spacing:-.03em;line-height:1.1;text-transform:lowercase;
   margin-top:clamp(7px,1cqh,12px);display:block}
 .smd{font-size:var(--fs-body);line-height:1.55;color:var(--soft);
   margin-top:clamp(7px,1cqh,12px);display:block}
-body.esc .smd{color:#EDE6DAbb}
+body.esc .smd{color:var(--papel-70)}
 .smf{font-size:var(--fs-item);line-height:1.5;max-width:64ch;
   margin-top:clamp(18px,2.8cqh,42px)}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
@@ -836,28 +891,28 @@ body.esc .smd{color:#EDE6DAbb}
   width:100%;align-items:stretch}
 .pl{display:flex;flex-direction:column;min-width:0;
   border-left:1.5px solid var(--hair);padding-left:clamp(10px,1.1cqw,20px)}
-body.esc .pl{border-left-color:#EDE6DA3d}
+body.esc .pl{border-left-color:var(--papel-25)}
 .pl:first-child{border-left:0;padding-left:0}
-.plpil{align-self:flex-start;font-family:var(--mono);font-style:italic;font-weight:500;
+.plpil{align-self:flex-start;font-family:var(--f-display);font-style:italic;font-weight:500;
   font-size:clamp(13px,1.32cqw,22px);letter-spacing:-.03em;line-height:1;
-  text-transform:lowercase;color:#EDE6DA;background:var(--terra);
+  text-transform:lowercase;color:var(--papel);background:var(--acento);
   padding:clamp(5px,.7cqh,10px) clamp(9px,1cqw,16px);border-radius:999px}
 .plesc{font-size:var(--fs-cap);letter-spacing:.14em;text-transform:uppercase;
   color:var(--soft);margin-top:clamp(8px,1.2cqh,14px);line-height:1.6;display:block}
-body.esc .plesc{color:#EDE6DAaa}
-.plv{font-family:var(--mono);font-weight:500;font-size:clamp(22px,2.9cqw,50px);
+body.esc .plesc{color:var(--papel-70)}
+.plv{font-family:var(--f-display);font-weight:500;font-size:clamp(22px,2.9cqw,50px);
   letter-spacing:-.055em;line-height:1;margin-top:clamp(10px,1.6cqh,22px);display:block}
 .pll{font-size:var(--fs-cap);letter-spacing:.13em;text-transform:uppercase;
   color:var(--soft);margin-top:7px;display:block}
-body.esc .pll{color:#EDE6DAaa}
+body.esc .pll{color:var(--papel-70)}
 .plu{list-style:none;margin-top:clamp(11px,1.6cqh,20px);display:grid;
   gap:clamp(5px,.8cqh,10px)}
 .plu li{font-size:var(--fs-body);line-height:1.45;color:var(--soft);
   padding-left:.95em;position:relative}
-body.esc .plu li{color:#EDE6DAbb}
+body.esc .plu li{color:var(--papel-70)}
 .plu li::before{content:"";position:absolute;left:0;top:.55em;width:.34em;height:.34em;
-  border-radius:50%;background:var(--terra)}
-body.esc .plu li::before{background:#E9A184}
+  border-radius:50%;background:var(--acento)}
+body.esc .plu li::before{background:var(--acento-claro)}
 .plf{font-size:var(--fs-item);line-height:1.5;max-width:74ch;
   margin-top:clamp(16px,2.4cqh,36px)}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:1100px) */
@@ -867,34 +922,34 @@ body.esc .plu li::before{background:#E9A184}
 .avcols{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
   gap:clamp(20px,3.2cqw,64px);margin-top:clamp(18px,2.6cqh,40px);
   width:100%;align-items:start}
-.avcab{padding-bottom:clamp(9px,1.2cqh,15px);border-bottom:1.5px solid var(--terra);
+.avcab{padding-bottom:clamp(9px,1.2cqh,15px);border-bottom:1.5px solid var(--acento);
   display:flex;flex-direction:column;align-items:flex-start;gap:7px}
 .avfora .avcab{border-bottom-style:dashed}
-body.esc .avcab{border-bottom-color:#E9A184}
-.avpil{font-family:var(--mono);font-style:italic;font-weight:500;
+body.esc .avcab{border-bottom-color:var(--acento-claro)}
+.avpil{font-family:var(--f-display);font-style:italic;font-weight:500;
   font-size:clamp(13px,1.32cqw,22px);letter-spacing:-.03em;line-height:1;
-  text-transform:lowercase;color:#EDE6DA;background:var(--terra);
+  text-transform:lowercase;color:var(--papel);background:var(--acento);
   padding:clamp(5px,.7cqh,10px) clamp(10px,1.05cqw,17px);border-radius:999px}
-.avfora .avpil{background:transparent;color:var(--terra);
-  border:1.5px dashed var(--terra)}
-body.esc .avfora .avpil{color:#E9A184;border-color:#E9A184}
+.avfora .avpil{background:transparent;color:var(--acento);
+  border:1.5px dashed var(--acento)}
+body.esc .avfora .avpil{color:var(--acento-claro);border-color:var(--acento-claro)}
 .avsub{font-size:var(--fs-cap);letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
 .avl{list-style:none;margin-top:clamp(9px,1.3cqh,16px);display:grid;gap:clamp(6px,.9cqh,12px)}
 .avl li{display:grid;grid-template-columns:minmax(0,1fr) auto;
   gap:4px clamp(12px,1.4cqw,26px);align-items:baseline;
   border-top:1px solid var(--hair);padding-top:clamp(6px,.9cqh,11px)}
-body.esc .avl li{border-color:#EDE6DA3d}
+body.esc .avl li{border-color:var(--papel-25)}
 .avl li:first-child{border-top:0;padding-top:0}
-.ava{font-family:var(--mono);font-style:italic;font-size:var(--fs-item);
+.ava{font-family:var(--f-display);font-style:italic;font-size:var(--fs-item);
   letter-spacing:-.02em;line-height:1.2}
 .avb{grid-column:1;font-size:var(--fs-body);line-height:1.45;color:var(--soft)}
-body.esc .avb{color:#EDE6DAaa}
-.avc{grid-column:2;grid-row:1/3;font-family:var(--mono);font-weight:500;
-  font-size:var(--fs-item);letter-spacing:-.02em;color:var(--terra);
+body.esc .avb{color:var(--papel-70)}
+.avc{grid-column:2;grid-row:1/3;font-family:var(--f-display);font-weight:500;
+  font-size:var(--fs-item);letter-spacing:-.02em;color:var(--acento);
   white-space:nowrap;text-align:right}
-body.esc .avc{color:#E9A184}
+body.esc .avc{color:var(--acento-claro)}
 .avfora .avc{color:var(--soft);font-style:italic;font-weight:400}
-body.esc .avfora .avc{color:#EDE6DAaa}
+body.esc .avfora .avc{color:var(--papel-70)}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
 
 
@@ -956,15 +1011,15 @@ body.esc .avfora .avc{color:#EDE6DAaa}
    e 03. As três colunas tornam a separação visível de uma olhada. */
 .avcols.n3{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.2cqw,44px)}
 .av1 .avcab{border-bottom-style:solid}
-.av1 .avpil{background:transparent;color:var(--terra);border:1.5px dashed var(--terra)}
-body.esc .av1 .avpil{color:#E9A184;border-color:#E9A184}
+.av1 .avpil{background:transparent;color:var(--acento);border:1.5px dashed var(--acento)}
+body.esc .av1 .avpil{color:var(--acento-claro);border-color:var(--acento-claro)}
 .av2 .avcab{border-bottom-style:dashed;border-bottom-color:var(--hair)}
 .av2 .avpil{background:transparent;color:var(--soft);border:1.5px dashed var(--hair)}
-body.esc .av2 .avpil{color:#EDE6DAaa;border-color:#EDE6DA3d}
-.av1 .avc{color:var(--terra);font-style:italic}
-body.esc .av1 .avc{color:#E9A184}
+body.esc .av2 .avpil{color:var(--papel-70);border-color:var(--papel-25)}
+.av1 .avc{color:var(--acento);font-style:italic}
+body.esc .av1 .avc{color:var(--acento-claro)}
 .av2 .avc{color:var(--soft);font-style:italic;font-weight:400}
-body.esc .av2 .avc{color:#EDE6DAaa}
+body.esc .av2 .avc{color:var(--papel-70)}
 /* com três colunas o valor volta a ficar na direita da linha: empilhado,
    cada linha ganhava uma altura a mais e o slide estourava em 720p */
 .avcols.n3 .ava{font-size:clamp(11px,.93cqw,15px)}
@@ -1064,13 +1119,13 @@ body.esc .av2 .avc{color:#EDE6DAaa}
    fixa em retrato. Ter um aviso próprio aqui faria aparecerem dois.
    A classe `retrato` fica: é barata e diz em que regime o quadro está. */
 
-.leg i.lnv{border-top:2px dotted #6B6A4B}
-.leg i.anc{width:11px;height:11px;border-radius:50%;background:none;border:1.5px dashed #B85C38}
+.leg i.lnv{border-top:2px dotted var(--primaria)}
+.leg i.anc{width:11px;height:11px;border-radius:50%;background:none;border:1.5px dashed var(--acento)}
 .mtxt ol.chave{list-style:none;margin-top:clamp(12px,1.8cqh,24px);display:grid;gap:clamp(2px,.42cqh,6px)}
 .mtxt ol.chave li{display:grid;grid-template-columns:22px 1fr auto;gap:11px;align-items:baseline;font-size:var(--fs-body)}
-.mtxt ol.chave .ci{font-family:var(--mono);font-size:var(--fs-cap);color:#EDE6DA;background:var(--terra);border-radius:50%;width:19px;height:19px;display:grid;place-items:center;line-height:1}
+.mtxt ol.chave .ci{font-family:var(--f-mono);font-size:var(--fs-cap);color:var(--papel);background:var(--acento);border-radius:50%;width:19px;height:19px;display:grid;place-items:center;line-height:1}
 .mtxt ol.chave .cn{color:var(--soft)}
-.mtxt ol.chave .cp{font-family:var(--mono);font-weight:500;letter-spacing:-.02em}
+.mtxt ol.chave .cp{font-family:var(--f-mono);font-weight:500;letter-spacing:-.02em}
 .mtxt ol.chave li:nth-child(-n+3) .cn{color:var(--tinta)}
 
 /* ═══ cheia — o render em tela cheia ═══════════════════════════════════
@@ -1098,14 +1153,14 @@ body.esc .av2 .avc{color:#EDE6DAaa}
    de depender do gradiente e passou a vir do `text-shadow` de baixo — que
    é o que permite o véu ser leve sem o texto sumir sobre céu branco. */
 .g-cheia .full:after{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(#211D1A5c 0,#211D1A1f 8%,#211D1A00 20%)}
+  background:linear-gradient(var(--tinta-35) 0,var(--tinta-10) 8%,transparent 20%)}
 .g-cheia .ov{position:absolute;inset:auto 0 0 0;
   padding:clamp(50px,8cqh,120px) calc(var(--gut) * 1.9) var(--bot) var(--gut);
-  background:linear-gradient(transparent,#211D1A26 44%,#211D1A8f 100%);color:var(--creme)}
+  background:linear-gradient(transparent,var(--tinta-15) 44%,var(--tinta-60) 100%);color:var(--papel)}
 /* sombra de leitura: invisível como forma, decisiva sobre céu claro. É ela
    que sustenta o chrome e a legenda agora que o véu é leve. */
 body.em-imagem .chrome,.g-cheia .ov h2,.g-cheia .ov .cap{
-  text-shadow:0 1px 3px #211D1A73,0 2px 14px #211D1A59}
+  text-shadow:0 1px 3px var(--tinta-45),0 2px 14px var(--tinta-35)}
 /* ⚑ SLIDE DE FUNDO EM IMAGEM: o chrome inverte e ganha véu próprio.
    Medido em 02/09/2026 — sobre o céu branco de um render isométrico o
    chrome em Cal dava 1,04:1, ou seja invisível; e sobre imagem de satélite
@@ -1115,25 +1170,25 @@ body.em-imagem .chrome,.g-cheia .ov h2,.g-cheia .ov .cap{
    altura que o gradiente da prancha cobria. Assim o canto fica legível
    sobre qualquer imagem — céu branco, satélite, fachada colorida — e a
    imagem segue limpa no meio, que é onde ela é vista. */
-body.em-imagem .chrome{color:#EDE6DAdb}
+body.em-imagem .chrome{color:var(--papel-90)}
 body.em-imagem .chrome.topo{
-  background:linear-gradient(#211D1A94 0,#211D1A59 46%,#211D1A00 100%)}
+  background:linear-gradient(var(--tinta-60) 0,var(--tinta-35) 46%,transparent 100%)}
 body.em-imagem .chrome.pe{
-  background:linear-gradient(#211D1A00 0,#211D1A40 60%,#211D1A80 100%)}
-.g-cheia .ov h2{color:var(--creme);font-family:var(--mono);font-weight:500;
+  background:linear-gradient(transparent 0,var(--tinta-25) 60%,var(--tinta-50) 100%)}
+.g-cheia .ov h2{color:var(--papel);font-family:var(--f-display);font-weight:500;
   font-style:italic;text-transform:lowercase;font-size:var(--fs-h);
   letter-spacing:-.022em;line-height:1}
-.g-cheia .ov .cap{color:#EDE6DAaa;margin-top:.7em;max-width:70ch;
-  font-family:var(--mono);font-size:var(--fs-cap);line-height:1.45}
+.g-cheia .ov .cap{color:var(--papel-70);margin-top:.7em;max-width:70ch;
+  font-family:var(--f-mono);font-size:var(--fs-cap);line-height:1.45}
 .g-cheia .slot{position:absolute;inset:0;display:grid;place-content:center;
-  gap:.35em;text-align:center;padding:1em;background:#2B2A22;
-  border:1px dashed #EDE6DA2e}
-.g-cheia .slot u{text-decoration:none;color:var(--terra);font-family:var(--mono);
+  gap:.35em;text-align:center;padding:1em;background:var(--slot-escuro);
+  border:1px dashed var(--papel-20)}
+.g-cheia .slot u{text-decoration:none;color:var(--acento);font-family:var(--f-display);
   font-weight:500;font-style:italic;font-size:1.5em;line-height:1}
-.g-cheia .slot b{font-family:var(--mono);font-weight:500;font-style:italic;
-  text-transform:lowercase;font-size:var(--fs-cap);color:var(--creme)}
-.g-cheia .slot s{text-decoration:none;font-family:var(--mono);
-  font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:#EDE6DA73}
+.g-cheia .slot b{font-family:var(--f-display);font-weight:500;font-style:italic;
+  text-transform:lowercase;font-size:var(--fs-cap);color:var(--papel)}
+.g-cheia .slot s{text-decoration:none;font-family:var(--f-mono);
+  font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:var(--papel-45)}
 .chrome,.g-cheia .ov,.g-cheia .full:after{transition:opacity .55s cubic-bezier(.4,0,.2,1)}
 body.em-cheia.ocioso .chrome,
 body.em-cheia.ocioso .slide.ativo .ov,
@@ -1159,30 +1214,30 @@ body.em-cheia.ocioso .slide.ativo .full:after{opacity:0}
   gap:clamp(14px,2.4cqh,34px);min-height:0;height:100%}
 .g-prancha .ptop{display:flex;justify-content:space-between;align-items:flex-end;
   gap:clamp(20px,2.5cqw,52px);flex-wrap:wrap}
-.g-prancha .ptop h2{font-family:var(--mono);font-weight:500;font-style:italic;
+.g-prancha .ptop h2{font-family:var(--f-display);font-weight:500;font-style:italic;
   text-transform:lowercase;font-size:var(--fs-h);letter-spacing:-.022em;line-height:1}
 .g-prancha .plead{font-size:var(--fs-body);color:var(--soft);max-width:52ch;line-height:1.5}
 .g-prancha .grade{flex:1;min-height:0;display:grid;gap:clamp(8px,.9cqw,20px)}
 .g-prancha .grade .cel{display:flex;flex-direction:column;gap:.5em;min-height:0;
   justify-content:center}
 .g-prancha .grade .cel .ph{flex:1;max-height:100%;position:relative;overflow:hidden;
-  background:#00000008}
+  background:var(--tinta-3)}
 .g-prancha .grade .cel .ph img{width:100%;height:100%;object-fit:cover;display:block}
 .g-prancha .grade .cel.pilha{gap:clamp(6px,.65cqw,14px)}
 .g-prancha .grade .cel.pilha .ph{flex:1;background:transparent}
 .g-prancha .grade .cel.pilha .ph img{object-fit:contain}
-.g-prancha .pcap{font-family:var(--mono);font-size:var(--fs-cap);line-height:1.42;
+.g-prancha .pcap{font-family:var(--f-mono);font-size:var(--fs-cap);line-height:1.42;
   color:var(--soft);letter-spacing:.02em}
 .g-prancha .slot{position:absolute;inset:0;display:grid;place-content:center;gap:.35em;
   text-align:center;padding:1em;
-  background:repeating-linear-gradient(45deg,#211D1A08 0 6px,transparent 6px 12px);
-  border:1px dashed #211D1A2e}
-.g-prancha .slot u{text-decoration:none;color:var(--terra);font-family:var(--mono);
+  background:repeating-linear-gradient(45deg,var(--tinta-3) 0 6px,transparent 6px 12px);
+  border:1px dashed var(--tinta-20)}
+.g-prancha .slot u{text-decoration:none;color:var(--acento);font-family:var(--f-display);
   font-weight:500;font-style:italic;font-size:1.4em;line-height:1}
-.g-prancha .slot b{font-family:var(--mono);font-weight:500;font-style:italic;
+.g-prancha .slot b{font-family:var(--f-display);font-weight:500;font-style:italic;
   text-transform:lowercase;font-size:var(--fs-cap);color:var(--tinta)}
-.g-prancha .slot s{text-decoration:none;font-family:var(--mono);font-size:var(--fs-cap);
-  letter-spacing:.1em;text-transform:uppercase;color:#211D1A73}
+.g-prancha .slot s{text-decoration:none;font-family:var(--f-mono);font-size:var(--fs-cap);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-45)}
 
 /* ═══ vazio — o gabarito existe, o dado do projeto não ═════════════════
    Estado legítimo, como o slot de imagem: permite montar a estrutura
@@ -1191,28 +1246,263 @@ body.em-cheia.ocioso .slide.ativo .full:after{opacity:0}
    ═══════════════════════════════════════════════════════════════════ */
 .vazio{position:absolute;inset:var(--top) var(--gut) var(--bot);
   display:grid;place-content:center;justify-items:center;gap:.55em;text-align:center;
-  border:1px dashed #211D1A2e;
-  background:repeating-linear-gradient(45deg,#211D1A08 0 6px,transparent 6px 12px)}
-.vazio .vmarca{font-family:var(--mono);font-weight:500;font-style:italic;
-  color:var(--terra);font-size:clamp(20px,2.2cqw,34px);line-height:1}
-.vazio h2{font-family:var(--mono);font-weight:500;font-style:italic;
+  border:1px dashed var(--tinta-20);
+  background:repeating-linear-gradient(45deg,var(--tinta-3) 0 6px,transparent 6px 12px)}
+.vazio .vmarca{font-family:var(--f-display);font-weight:500;font-style:italic;
+  color:var(--acento);font-size:clamp(20px,2.2cqw,34px);line-height:1}
+.vazio h2{font-family:var(--f-display);font-weight:500;font-style:italic;
   text-transform:lowercase;font-size:var(--fs-h);letter-spacing:-.022em;line-height:1}
 .vazio .vsub{font-size:var(--fs-body);color:var(--soft);max-width:46ch}
-.vazio .vnota{font-family:var(--mono);font-size:var(--fs-cap);letter-spacing:.08em;
-  text-transform:uppercase;color:#211D1A73;max-width:52ch;margin-top:.4em}
+.vazio .vnota{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--tinta-45);max-width:52ch;margin-top:.4em}
 .vazio .vnota code{text-transform:none;letter-spacing:0}
+/* ═══ aviso — gabarito desconhecido ou campo obrigatório ausente ═════════
+   03/09/2026. O `return ''` do tpl() virou slide visível: antes um `g`
+   errado sumia em silêncio, e um `itens` faltando escrevia `undefined` na
+   tela ou derrubava o deck inteiro. Agora o slide aparece hachurado, diz o
+   que falta, e o console recebe o mesmo texto. Mesmo desenho do `vazio`.
+   ═══════════════════════════════════════════════════════════════════ */
+.vazio.aviso{border-color:var(--acento-45)}
+.vazio.aviso .vmarca{color:var(--acento)}
+.vazio.aviso code{font-family:var(--f-mono);background:var(--tinta-5);padding:.1em .4em;border-radius:2px}
+
+/* ═══ o canto superior direito — texto ou logotipo ═══════════════════════
+   Decisão do Michel, 03/09/2026: o padrão da casa é TEXTO (michel stein_,
+   AMAZ, Lavrō). A Sarasá leva o LOGOTIPO pequeno, fixo, trocando
+   positivo/negativo pelo tema do slide — testado na EMEI Presidente Dutra
+   em reunião e aprovado. Quem decide é a constante LOGO_CANTO do bloco da
+   marca; o script de marca troca `.marca-txt` por `.marca-lk`.
+   Tamanho do logotipo: 132 a 180 px — abaixo de ~130 px o lockup da
+   Sarasá perde a palavra `estúdio` (nível Micro do arquivo de marca).
+   A troca positivo/negativo é POR TOKEN: o SVG traz fill="var(--tinta)" e
+   fill="var(--primaria)"; sobre campo escuro, imagem ou visor os dois viram
+   papel e o lockup fica monocromático, como o negativo oficial. SVG
+   monocromático usa fill="currentColor" e recebe o mesmo tratamento.   */
+.marca{display:flex;align-items:center}
+.marca .marca-lk{display:block;width:var(--logo-canto-w,clamp(132px,9.5cqw,180px));
+  line-height:0;opacity:.9;transition:opacity .3s ease;color:var(--tinta)}
+.marca .marca-lk svg{display:block;width:100%;height:auto}
+/* o `hidden` do HTML tem de vencer o display:block acima */
+.marca .marca-lk[hidden],.marca .marca-txt[hidden]{display:none}
+body.esc .marca .marca-lk,body.terra .marca .marca-lk,body.com-fundo .marca .marca-lk,
+body.em-imagem .marca .marca-lk{--tinta:var(--papel);--primaria:var(--papel);--acento:var(--papel);color:var(--papel)}
+
+/* ═══ grafismo de marca na base — opcional, por `graf:1` ══════════════════
+   Portado da EMEI (Sarasá: contorno da Fortaleza da Barra Grande). Sempre
+   na base, sangrando nas laterais, numa cor só (papel). Nunca atrás de
+   texto corrido, tabela ou croqui: entra em divisor e contracapa. O SVG vem
+   da constante GRAFISMO do bloco da marca; sem ela, `graf:1` não faz nada. */
+#msgraf{position:absolute;left:-2%;right:-2%;bottom:0;z-index:0;
+  pointer-events:none;opacity:0;transition:opacity .7s ease;
+  color:var(--papel);line-height:0}
+#msgraf svg{display:block;width:104%;height:auto}
+body.com-graf #msgraf{opacity:.28}
+body.no-fim #msgraf{opacity:.18}
+
+/* ═══ marca: lockup em SVG e contracapa com crédito ══════════════════════
+   `lockup:1` no slide `marca` troca a sigla em texto pela constante LOCKUP
+   do bloco (SVG monocromático em currentColor, cor do papel). A contracapa
+   (`fim_:1`) aceita `credito` — a linha pequena de concepção e coordenação. */
+.g-marca .lock{width:var(--lk,clamp(200px,25cqw,470px));line-height:0;flex:0 0 auto;color:var(--papel)}
+.g-marca .lock svg{display:block;width:100%;height:auto}
+.g-marca .credito-peca{font-family:var(--f-mono);font-size:clamp(9px,.7cqw,12.5px);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--papel-70);
+  margin-top:clamp(14px,2.2cqh,30px);line-height:1.5}
+
+/* ═══ capa em dois momentos — opcional, por `dois:1` no slide `marca` ═════
+   Portado de modulos/capa-morph-sarasa.html pela EMEI em 03/09/2026.
+   Momento A: a capa institucional (lockup ou sigla, papel, descritor, site,
+   pílula), parada na tela enquanto a sala se acomoda. O clique em `começar`
+   chama avanca(): o `.cm-b` é um `.passo`, então entra o momento B — o
+   TÍTULO da apresentação (kick, t, sub, pe) no lugar do bloco institucional.
+   O clique seguinte corre a cortina e entra no deck. Os dois blocos se
+   sobrepõem em absoluto e trocam por opacidade; o `.cm-b` vem antes no DOM
+   só para o seletor `~` poder apagar o `.cm-a`.                            */
+.slide.g-marca.dois{padding:0;justify-content:center}
+.g-marca.dois{--lk:clamp(200px,25cqw,470px)}
+.g-marca.dois .cm-a,.g-marca.dois .cm-b{position:absolute;left:var(--gut-in);right:var(--gut-in);
+  top:50%;transform:translateY(-50%);display:flex;flex-direction:column;
+  align-items:flex-start;gap:clamp(11px,1.6cqh,24px);z-index:1;
+  transition:opacity .55s ease,transform .55s ease}
+.g-marca.dois .cm-b{opacity:0;transform:translateY(calc(-50% + 12px));pointer-events:none}
+.g-marca.dois .cm-b.on{opacity:1;transform:translateY(-50%)}
+.g-marca.dois .cm-b.on ~ .cm-a{opacity:0;transform:translateY(calc(-50% - 10px));pointer-events:none}
+/* o qualificador vai SOB o lockup, nunca ao lado: ao lado lê como segunda marca */
+.g-marca .lk-bloco{display:block}
+.g-marca .nucleo{font-family:var(--f-mono);font-size:calc(var(--lk,300px)*.033);
+  letter-spacing:.34em;text-transform:uppercase;color:var(--papel-80);line-height:1;
+  margin-top:calc(var(--lk,300px)*.034);padding-left:calc(var(--lk,300px)*.010)}
+.g-marca .descritor{font-family:var(--f-mono);font-size:clamp(10px,.82cqw,15px);
+  letter-spacing:.13em;text-transform:uppercase;color:var(--papel-60);line-height:1.6;
+  max-width:34ch;margin-top:calc(var(--lk,300px)*.012)}
+.g-marca.dois .cm-b .mega{max-width:26ch}
+.g-marca.dois .cm-b .sub{max-width:52ch}
+.g-marca .cm-pe{font-family:var(--f-mono);font-size:clamp(9px,.72cqw,13px);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--papel-60);margin-top:clamp(10px,1.6cqh,24px);line-height:1}
+
+/* ═══ visores — earth-3d e modelo-3d ═════════════════════════════════════
+   Portados da EMEI Presidente Dutra em 03/09/2026 (módulos mestres:
+   modulos/mapa-earth-3d.html e modulos/modelo-sketchup.html). Mesma
+   gramática nos dois: scrim suave (véu, não tarja), véu de ativação por
+   clique, trava de teclado enquanto o visor tem o ponteiro, indicador de
+   carga com passo REAL e degradação explícita. O que o modelo tem a mais é
+   a RESERVA — as imagens salvas na peça — porque modelo de projeto tem
+   substituto útil sem rede, e satélite não.
+   ⚑ Os dois estão na lista `em-imagem` do go(): é o que inverte o chrome.
+   ⚑ earth-3d SÓ FUNCIONA POR LINK (a Maps API recusa file://). A chave vem
+     de modulos/ms-maps-chave.js. Receita: sistemas/gabaritos/mapa-earth-3d.md
+   ⚑ modelo-3d exige modelo PÚBLICO no 3D Warehouse. Receita: gabaritos/modelo.md
+   ═══════════════════════════════════════════════════════════════════ */
+.slide.g-earth-3d,.slide.g-modelo-3d{padding:0;overflow:hidden;background:var(--moldura)}
+.g-earth-3d .visor,.g-modelo-3d .visor{position:absolute;inset:0}
+.g-earth-3d gmp-map-3d{position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;filter:saturate(.86) contrast(1.03)}
+.g-earth-3d.girando gmp-map-3d{pointer-events:auto}
+/* o iframe nasce SEM src e sem ponteiro: `src` só na chegada (são 40 MB);
+   ponteiro só depois do clique no véu, senão a roda do mouse dá zoom no
+   modelo enquanto se tenta passar o slide. */
+.g-modelo-3d iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
+  pointer-events:none;opacity:0;transition:opacity .6s ease;background:var(--moldura)}
+.g-modelo-3d.pronto iframe{opacity:1}
+.g-modelo-3d.girando iframe{pointer-events:auto}
+.g-earth-3d .scrim,.g-modelo-3d .scrim{position:absolute;inset:0;pointer-events:none;
+  transition:opacity .3s ease;
+  background:linear-gradient(180deg,var(--tinta-60) 0,var(--tinta-25) 9%,transparent 24%,
+    transparent 56%,var(--tinta-35) 88%,var(--tinta-60) 100%)}
+.g-modelo-3d.girando .scrim{opacity:0}
+.g-earth-3d .veu,.g-modelo-3d .veu{position:absolute;inset:0;display:grid;place-content:center;
+  gap:.6em;text-align:center;background:var(--tinta-25);cursor:pointer;z-index:2;
+  transition:opacity .3s ease}
+.g-earth-3d.girando .veu,.g-modelo-3d.girando .veu{opacity:0;pointer-events:none}
+.g-earth-3d .veu b,.g-modelo-3d .veu b{font-family:var(--f-display);font-weight:500;font-style:italic;
+  text-transform:lowercase;font-size:var(--fs-item);color:var(--papel);letter-spacing:-.02em}
+.g-earth-3d .veu s,.g-modelo-3d .veu s{text-decoration:none;font-family:var(--f-mono);
+  font-size:var(--fs-cap);letter-spacing:.12em;text-transform:uppercase;color:var(--papel-60)}
+/* ⚑ o SAIR salva a apresentação. Com o ponteiro dentro do visor o foco vai
+   para o mapa ou para o documento do SketchUp e as setas do deck param de
+   responder — o evento nem chega ao nosso script. Este botão é o único
+   caminho de volta que não depende do teclado. */
+.g-earth-3d .sair,.g-modelo-3d .sair{position:absolute;bottom:clamp(9px,1.4cqh,20px);left:50%;
+  transform:translateX(-50%);display:none;align-items:center;z-index:4;cursor:pointer;
+  font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--papel);background:var(--tinta-90);
+  border:1px solid var(--papel-25);border-radius:999px;padding:.55em 1.2em}
+.g-earth-3d.girando .sair,.g-modelo-3d.girando .sair{display:flex}
+.g-earth-3d .rotulo,.g-modelo-3d .rotulo{position:absolute;left:var(--gut);
+  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:3;pointer-events:none;
+  max-width:min(46ch,60cqw);padding:clamp(14px,2cqh,30px) clamp(18px,1.9cqw,38px);
+  background:var(--tinta-45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid var(--papel-10);border-radius:3px;transition:opacity .3s ease}
+.g-modelo-3d.girando .rotulo{opacity:0}
+.g-earth-3d .rotulo .kick,.g-modelo-3d .rotulo .kick{display:block;color:var(--papel-80);margin:0;
+  font-size:var(--fs-cap);text-transform:uppercase}
+.g-earth-3d .rotulo h2,.g-modelo-3d .rotulo h2{color:var(--papel);font-size:var(--fs-h);line-height:1.04;margin-top:.24em}
+.g-earth-3d .rotulo .lead,.g-modelo-3d .rotulo .lead{color:var(--papel-90);font-size:var(--fs-body);margin-top:.55em;line-height:1.5}
+.g-earth-3d .rotulo .cap,.g-modelo-3d .rotulo .cap{display:block;font-family:var(--f-mono);
+  font-size:var(--fs-cap);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--papel-60);margin-top:.9em}
+/* os comandos que o slide expõe numa reunião. earth: ÓRBITA e RECENTRAR —
+   navegar no 3d é fácil e voltar não; sem o recentrar a saída é recarregar
+   a página na frente do cliente. modelo: RECOMEÇAR (recarrega o quadro; a
+   câmera é do viewer da Trimble) e IMAGENS (a reserva, à mão). */
+.g-earth-3d .cmd,.g-modelo-3d .cmd{position:absolute;right:var(--gut);
+  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:3;
+  display:flex;align-items:center;gap:clamp(6px,.6cqw,11px);transition:opacity .3s ease}
+.g-modelo-3d.girando .cmd{opacity:.35}
+.g-modelo-3d.girando .cmd:hover{opacity:1}
+.g-earth-3d .cmd button,.g-modelo-3d .cmd button{cursor:pointer;
+  font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--papel);background:var(--tinta-60);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid var(--papel-20);border-radius:999px;padding:.62em 1.2em;
+  display:flex;align-items:center;gap:.55em;transition:border-color .2s,color .2s}
+.g-earth-3d .cmd button:hover,.g-modelo-3d .cmd button:hover{border-color:var(--papel);color:#fff} /* #fff: pico de luz do hover, não é cor de marca */
+.g-earth-3d .cmd svg,.g-modelo-3d .cmd svg{display:block;width:1em;height:1em;opacity:.7}
+.g-earth-3d .orb i{display:block;width:7px;height:7px;border-radius:50%;
+  background:var(--papel);opacity:.4;transition:opacity .2s}
+.g-earth-3d.orbitando .orb i{opacity:1;animation:pulsa 1.9s ease-in-out infinite}
+@keyframes pulsa{50%{opacity:.3}}
+.g-earth-3d .rec.feito{border-color:var(--papel);color:#fff} /* #fff: pico de luz do "feito", não é cor de marca */
+/* estado de carga e de falha. Enquanto carrega não há o que navegar: o
+   convite do véu e os comandos ficam fora de cena. */
+.g-earth-3d .estado,.g-modelo-3d .estado{position:absolute;inset:0;z-index:5;display:none;
+  place-content:center;justify-items:center;text-align:center;padding:0 8cqw;
+  gap:.9em;background:var(--moldura)}
+.g-earth-3d.esperando .estado,.g-earth-3d.falhou .estado,
+.g-modelo-3d.esperando .estado,.g-modelo-3d.falhou .estado{display:grid}
+.g-earth-3d.esperando .veu,.g-earth-3d.esperando .cmd,.g-earth-3d.falhou .veu,.g-earth-3d.falhou .cmd,
+.g-modelo-3d.esperando .veu,.g-modelo-3d.esperando .cmd,.g-modelo-3d.esperando .rotulo,
+.g-modelo-3d.falhou .veu{display:none}
+.g-earth-3d .estado b,.g-modelo-3d .estado b{font-family:var(--f-display);font-weight:500;font-style:italic;
+  text-transform:lowercase;font-size:var(--fs-item);color:var(--papel);letter-spacing:-.02em}
+.g-earth-3d .estado span,.g-modelo-3d .estado span{font-size:var(--fs-body);color:var(--papel-60);line-height:1.6;
+  max-width:56ch;margin:0 auto}
+.g-earth-3d .estado code,.g-modelo-3d .estado code{font-family:var(--f-mono);font-size:.9em;color:var(--papel)}
+/* o indicador de carga: barra com passo REAL (os degraus são nossos) e o
+   anel girando para o que não se sabe medir. Pedido do Michel, 02/09. */
+.g-earth-3d .carga,.g-modelo-3d .carga{display:flex;flex-direction:column;align-items:center;
+  gap:clamp(14px,2cqh,24px)}
+.g-earth-3d.falhou .carga,.g-modelo-3d.falhou .carga{display:none}
+.g-earth-3d .anel,.g-modelo-3d .anel{width:clamp(30px,3.4cqw,46px);height:clamp(30px,3.4cqw,46px);
+  border-radius:50%;border:2px solid var(--papel-15);border-top-color:var(--papel);
+  animation:gira3d .85s linear infinite}
+@keyframes gira3d{to{transform:rotate(360deg)}}
+.g-earth-3d .barra,.g-modelo-3d .barra{width:clamp(150px,17cqw,240px);height:3px;border-radius:999px;
+  background:var(--papel-10);overflow:hidden;position:relative}
+.g-earth-3d .barra i,.g-modelo-3d .barra i{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;
+  background:var(--papel);transition:width .7s cubic-bezier(.3,.8,.3,1)}
+.g-earth-3d .passos,.g-modelo-3d .passos{font-family:var(--f-mono);font-size:var(--fs-cap);
+  letter-spacing:.14em;text-transform:uppercase;color:var(--papel-45)}
+@media (prefers-reduced-motion:reduce){.g-earth-3d .anel,.g-modelo-3d .anel{animation:none}}
+/* ── a RESERVA do modelo — as imagens salvas na peça. É o que permite chegar
+   numa reunião sem rede e ainda ter o que mostrar. `contain`, nunca `cover`. */
+.g-modelo-3d .reserva{position:absolute;inset:0;z-index:6;display:none;background:var(--moldura)}
+.g-modelo-3d.reserva-on .reserva{display:block}
+.g-modelo-3d.reserva-on .estado,.g-modelo-3d.reserva-on .veu,.g-modelo-3d.reserva-on .sair{display:none}
+.g-modelo-3d .reserva .ph{position:absolute;inset:0}
+.g-modelo-3d .reserva img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;opacity:0;transition:opacity .45s ease}
+.g-modelo-3d .reserva img.on{opacity:1}
+.g-modelo-3d .reserva .slot{position:absolute;inset:0;display:grid;place-content:center;
+  gap:.4em;text-align:center;padding:1em;background:var(--slot-escuro);border:1px dashed var(--papel-20)}
+.g-modelo-3d .reserva .slot u{text-decoration:none;color:var(--acento);font-family:var(--f-display);
+  font-weight:500;font-style:italic;font-size:1.5em;line-height:1}
+.g-modelo-3d .reserva .slot b{font-family:var(--f-display);font-weight:500;font-style:italic;
+  text-transform:lowercase;font-size:var(--fs-cap);color:var(--papel)}
+.g-modelo-3d .reserva .slot s{text-decoration:none;font-family:var(--f-mono);font-size:var(--fs-cap);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--papel-45)}
+.g-modelo-3d .cenas{position:absolute;right:var(--gut);
+  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:7;
+  display:none;align-items:center;gap:clamp(7px,.7cqw,12px)}
+.g-modelo-3d.reserva-on .cenas{display:flex}
+.g-modelo-3d .cenas button{width:var(--pt);height:var(--pt);border-radius:50%;padding:0;
+  border:0;background:var(--papel);opacity:.32;cursor:pointer;transition:opacity .2s,transform .2s}
+.g-modelo-3d .cenas button.on{opacity:1;transform:scale(1.25)}
+.g-modelo-3d .rescap{position:absolute;left:var(--gut);
+  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:7;display:none;
+  font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--papel-60);
+  text-shadow:0 1px 3px var(--tinta-45),0 2px 14px var(--tinta-35)}
+.g-modelo-3d.reserva-on .rescap{display:block}
 </style></head><body>
 <!-- #moldura mede a ÁREA SEGURA da tela, nunca a tela bruta: é o que impede
      o notch e a Dynamic Island de comerem canto de prancha.
-     #quadro é a prancha em si — 1600x900 fixos, escalados por transform. -->
+     #quadro é a prancha em si — preenche a área segura (tela cheia, 02/09). -->
 <div id="moldura"><div id="quadro">
 <div id="mscortina"></div>
+<!-- grafismo de marca na base (opcional): recebe o SVG da constante GRAFISMO
+     do bloco da marca. Vazio na maioria das frentes. Liga por `graf:1`. -->
+<div id="msgraf" aria-hidden="true"></div>
 <!-- Os dois canvas e os dois véus ficam imediatamente ANTES do palco,
      nunca dentro: o deck indexa slides por palco.children[i]. -->
 <canvas id="msfundo"></canvas><div id="msveu"></div>
 <canvas id="msfundo-d"></canvas><div id="msveu-d"></div>
 <div id="palco"></div>
-<div class="chrome topo"><span class="secao"><span class="sn"></span><span class="sl"></span></span><span class="dots"></span><span class="marca">marca<u>_</u></span></div>
+<!-- canto superior direito: TEXTO por padrão (.marca-txt), ou LOGOTIPO
+     (.marca-lk) quando o bloco da marca traz LOGO_CANTO — decisão de 03/09:
+     michel stein_, AMAZ e Lavrō em texto; Sarasá em logotipo. O script de
+     marca, abaixo do DECK, preenche isto; não editar aqui. -->
+<div class="chrome topo"><span class="secao"><span class="sn"></span><span class="sl"></span></span><span class="dots"></span><span class="marca"><span class="marca-txt">marca<u>_</u></span><span class="marca-lk" hidden></span></span></div>
 <div class="chrome pe"><span class="pj">projeto · cliente</span><span class="nav"><span class="cont"></span><button class="seta" id="ant">&#9664;</button><button class="seta" id="pro">&#9654;</button></span></div>
 </div></div>
 <script>
@@ -1422,9 +1712,11 @@ function montar(cv, IMGS, OPT){
   const P={trans:2,cur:3,mode:0,fit:1,dot:4.5,angle:22,angle2:32,bleed:.42,contrast:.65,
     gamma:1.45,amp:.08,edge:1.0,speed:.30,zoom:.01,accent:0,grain:0,vig:.86,mforce:.46,mrad:240};
   const hex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16)/255);
+  /* padrão de fábrica da engine (preset "linha MS"), só para chamada sem
+     opções. O deck NUNCA cai aqui: subir() passa a paleta lida dos tokens. */
   const INK=hex(OPT.ink||'#0e0f0b'),PAPER=hex(OPT.paper||'#6B6A4B'),
         ACC=hex(OPT.acc||'#B85C38'),SCALE=OPT.scale||0.9;
-  /* paleta trocável em tempo real: MSFundo.montar(...).cor({paper:'#B85C38'}) */
+  /* paleta trocável em tempo real: MSFundo.montar(...).cor({paper:tok('--acento')}) */
   const COR={ink:INK.slice(),paper:PAPER.slice(),acc:ACC.slice()};
   const ALVO={ink:INK.slice(),paper:PAPER.slice(),acc:ACC.slice()};
   function prep(src){
@@ -1513,11 +1805,23 @@ return {montar:montar};
 
 </script>
 <script>
+/* ─── tokens lidos pelo JS ────────────────────────────────────────────────
+   O CSS já usa var(); o WebGL do fundo precisa de número. tok('--acento')
+   devolve o hex do token como o navegador o resolveu — inclusive quando o
+   token é um color-mix(). Medido num elemento vivo, nunca por regex no CSS. */
+function tok(nome){
+  const e=document.createElement('i'); e.style.color=`var(${nome})`;
+  document.body.appendChild(e);
+  const c=getComputedStyle(e).color; e.remove();
+  const n=(c.match(/[\d.]+/g)||[]).map(parseFloat);
+  const k=c.startsWith('color(')?255:1;          /* color(srgb r g b) vem em 0..1 */
+  return '#'+n.slice(0,3).map(v=>Math.round(v*k).toString(16).padStart(2,'0')).join('');
+}
 const MAP = {
   /* ═══ DADO DO PROJETO ═══════════════════════════════════════════════
      Andaime vazio, com o contrato à vista. O deck de origem trazia 107 KB
      de lotes reais — endereço, nome de operador, coordenada — e isso não
-     entra num arquivo público. Como montar o seu: sistemas/gabaritos/mapa.md
+     entra num arquivo público. Como montar o seu: sistemas/gabaritos/mapa-lotes.md
      ═══════════════════════════════════════════════════════════════════ */
   "base": {
     "rua":     {"img": "", "w": 1200, "h": 1500, "tex": ""},
@@ -1535,7 +1839,7 @@ const MAP = {
 } /* ← DADO DESTE DECK. O do estudo de posicionamento tinha 107 KB de lotes
        reais, com endereço e nome de operador: saiu daqui porque este arquivo é
        público. Ao montar um mapa, gerar o MAP do projeto — receita em
-       sistemas/gabaritos/mapa.md. */;
+       sistemas/gabaritos/mapa-lotes.md. */;
 /* imagens embutidas — carrossel da capa (capamorph_R6) e o par antes/depois */
 /* carrossel da abertura — nove peças de 640 px em WebP, com a
    auto-exposição já aplicada no arquivo. A engine sobe com prep:false:
@@ -1571,7 +1875,9 @@ const F_FOTO4=""; /* ← foto do deck. Slot vazio renderiza retângulo hachurado
 /* lote destacado no mapa da quadra -> foto do empreendimento */
 const FOTO_LOTE={0:F_FOTO1,1:F_FOTO2,2:F_FOTO3,3:F_FOTO4};
 
-const COR={toq:'#B85C38',ret:'#211D1A',obra:'#6B6A4B',novo:'#8C8A5E',planta:'#6E6486'};
+/* categorias de lote do mapa: cor por token, para a marca pintar o mapa junto com o resto.
+   `novo` e `planta` são cor de dado (derivados no :root), não papel de marca. */
+const COR={toq:'var(--acento)',ret:'var(--tinta)',obra:'var(--primaria)',novo:'var(--mapa-novo)',planta:'var(--mapa-planta)'};
 function wpx(lat,lon,z){const n=Math.pow(2,z)*256,la=lat*Math.PI/180;
   return [(lon+180)/360*n,(1-Math.log(Math.tan(la)+1/Math.cos(la))/Math.PI)/2*n];}
 function proj(m){const {z,ox,oy,esc,mpp,fw,fh}=m;
@@ -1586,7 +1892,7 @@ function proj(m){const {z,ox,oy,esc,mpp,fw,fh}=m;
 const via=(P,a)=>a.map(c=>`${P.X(c[0],c[1])},${P.Y(c[0],c[1])}`).join(' ');
 const vias=(P,arr,attr)=>arr.map(c=>`<polyline points="${via(P,c)}" ${attr}/>`).join('');
 function barra(P,m,x,y){const L=P.r(m);
-  return `<g transform="translate(${x},${y})"><line x1="0" y1="0" x2="${L}" y2="0" stroke="#211D1A" stroke-width="1.4"/><line x1="0" y1="-5" x2="0" y2="5" stroke="#211D1A" stroke-width="1.4"/><line x1="${L}" y1="-5" x2="${L}" y2="5" stroke="#211D1A" stroke-width="1.4"/><text x="${(L/2).toFixed(1)}" y="-10" text-anchor="middle" font-family="DM Mono,monospace" font-size="15" fill="#211D1A" opacity=".72">${m} m</text></g>`;}
+  return `<g transform="translate(${x},${y})"><line x1="0" y1="0" x2="${L}" y2="0" stroke="var(--tinta)" stroke-width="1.4"/><line x1="0" y1="-5" x2="0" y2="5" stroke="var(--tinta)" stroke-width="1.4"/><line x1="${L}" y1="-5" x2="${L}" y2="5" stroke="var(--tinta)" stroke-width="1.4"/><text x="${(L/2).toFixed(1)}" y="-10" text-anchor="middle" font-family="var(--f-mono)" font-size="15" fill="var(--tinta)" opacity=".72">${m} m</text></g>`;}
 
 
 /* ─── janela retrato para o mapa em sangria ───────────────────────────────
@@ -1622,28 +1928,26 @@ function mapaRua(sang){
   const vb=sang?janela(P,alvo):`0 0 ${P.w} ${P.h}`;
   let s=`<svg viewBox="${vb}" role="img" aria-label="mapa de lotes">`;
   s+=`<image href="${B.img}" x="0" y="0" width="${P.w}" height="${P.h}"/>`;
-  MAP.fundo.forEach(r=>{s+=`<polygon points="${via(P,r)}" fill="none" stroke="#211D1A" stroke-opacity=".16" stroke-width=".8"/>`;});
-  s+=vias(P,MAP.msrua,'fill="none" stroke="#B85C38" stroke-opacity=".15" stroke-width="'+P.r(12)+'" stroke-linecap="round"');
+  MAP.fundo.forEach(r=>{s+=`<polygon points="${via(P,r)}" fill="none" stroke="var(--tinta)" stroke-opacity=".16" stroke-width=".8"/>`;});
+  s+=vias(P,MAP.msrua,'fill="none" stroke="var(--acento)" stroke-opacity=".15" stroke-width="'+P.r(12)+'" stroke-linecap="round"');
   const fl=MAP.msrua.flat(); const r0=fl[Math.floor(fl.length*0.28)];
-  s+=`<text x="${P.X(r0[0],r0[1])}" y="${P.Y(r0[0],r0[1])-16}" text-anchor="middle" font-family="DM Mono,monospace" font-style="italic" font-size="17" fill="#B85C38" opacity=".95">${MAP.rotulo||''}</text>`;
+  s+=`<text x="${P.X(r0[0],r0[1])}" y="${P.Y(r0[0],r0[1])-16}" text-anchor="middle" font-family="var(--f-mono)" font-style="italic" font-size="17" fill="var(--acento)" opacity=".95">${MAP.rotulo||''}</text>`;
   MAP.lotes.forEach((l,i)=>{
     const c=COR[l.t];
     s+=`<g class="lote" data-l="${i}" tabindex="0"><path d="M${via(P,l.r).replace(/ /g,'L')}Z" fill="${c}" fill-opacity=".2" stroke="${c}" stroke-width="1.8" stroke-opacity=".85" stroke-dasharray="6 4"/></g>`;});
   MAP.lotes.forEach((l,i)=>{
     const X=P.X(l.lat,l.lon),Y=P.Y(l.lat,l.lon),o=rot[i]||[0,24,'middle'];
-    s+=`<text x="${X+o[0]}" y="${Y+o[1]}" text-anchor="${o[2]}" font-family="DM Mono,monospace" font-style="italic" font-size="17" fill="#211D1A" paint-order="stroke" stroke="#EDE6DA" stroke-width="4" pointer-events="none">${l.n}</text>`;});
+    s+=`<text x="${X+o[0]}" y="${Y+o[1]}" text-anchor="${o[2]}" font-family="var(--f-mono)" font-style="italic" font-size="17" fill="var(--tinta)" paint-order="stroke" stroke="var(--papel)" stroke-width="4" pointer-events="none">${l.n}</text>`;});
   s+=barra(P,50,44,P.h-20);
   return s+`</svg>`;
 }
 
-/* ─── locador: os dois perímetros da subvenção ────────────────────────────
-   O Requalifica Centro tem 6,4 km² e a AIU do Setor Central, 2.780 ha —
-   quatro vezes o recorte do mapa principal. Desenhar por cima só cruzaria
-   a tela com uma linha. Vai como locador no canto, com o retângulo do
-   recorte atual dentro.
-   A distinção importa em dinheiro: desde o Decreto 65.205 de 26/05/2026 a
-   AIU vale para HIS-1, HIS-2 e HMP; residencial de mercado (R2v) e não
-   residencial continuam restritos ao perímetro do Requalifica.          */
+/* ─── locador: os perímetros maiores que o recorte ───────────────────────
+   Quando o mapa tem perímetros muito maiores que o recorte principal,
+   desenhá-los por cima só cruzaria a tela com uma linha. Vão como locador
+   no canto, com o retângulo do recorte atual dentro.
+   Duas camadas: MAP.aiu (tracejada, primária) e MAP.req (cheia, acento).
+   Os rótulos vêm de MAP.aiuRotulo e MAP.reqRotulo; sem eles, não há texto. */
 function locador(P,vb,W){
   const A=[].concat(MAP.aiu||[],MAP.req||[]).flat();
   if(!A.length) return '';
@@ -1653,19 +1957,19 @@ function locador(P,vb,W){
   const kx=(W-2*pad)/(lo1-lo0), ky=(H-2*pad)/(la1-la0), k=Math.min(kx,ky);
   const cx=(lo0+lo1)/2, cy=(la0+la1)/2;
   const X=lo=>pad+(W-2*pad)/2+(lo-cx)*k, Y=la=>pad+(H-2*pad)/2-(la-cy)*k;
-  /* 1 vértice a cada N: a AIU tem 2.259 e o locador tem 190 px de largura */
+  /* 1 vértice a cada N: um perímetro oficial pode ter milhares de vértices e o locador tem 190 px de largura */
   const cam=(an,n)=>an.filter((_,i)=>i%n===0||i===an.length-1)
     .map(([la,lo])=>`${X(lo).toFixed(1)},${Y(la).toFixed(1)}`).join(' ');
-  let g=`<rect x="0" y="0" width="${W}" height="${H}" fill="#EFEAE0" stroke="#211D1A" stroke-opacity=".28" stroke-width="1"/>`;
-  (MAP.aiu||[]).forEach(an=>{g+=`<polygon points="${cam(an,9)}" fill="#6B6A4B" fill-opacity=".13" stroke="#6B6A4B" stroke-width="1" stroke-opacity=".7" stroke-dasharray="3 2.5"/>`;});
-  (MAP.req||[]).forEach(an=>{g+=`<polygon points="${cam(an,2)}" fill="#B85C38" fill-opacity=".16" stroke="#B85C38" stroke-width="1.3"/>`;});
+  let g=`<rect x="0" y="0" width="${W}" height="${H}" fill="var(--papel)" stroke="var(--tinta)" stroke-opacity=".28" stroke-width="1"/>`;
+  (MAP.aiu||[]).forEach(an=>{g+=`<polygon points="${cam(an,9)}" fill="var(--primaria)" fill-opacity=".13" stroke="var(--primaria)" stroke-width="1" stroke-opacity=".7" stroke-dasharray="3 2.5"/>`;});
+  (MAP.req||[]).forEach(an=>{g+=`<polygon points="${cam(an,2)}" fill="var(--acento)" fill-opacity=".16" stroke="var(--acento)" stroke-width="1.3"/>`;});
   /* o retângulo do recorte que está sendo mostrado ao lado */
   const v=vb.split(' ').map(Number);
   const cantos=[[v[0],v[1]],[v[0]+v[2],v[1]],[v[0]+v[2],v[1]+v[3]],[v[0],v[1]+v[3]]]
     .map(([x,y])=>{const la=P.la(y),lo=P.lo(x);return `${X(lo).toFixed(1)},${Y(la).toFixed(1)}`;}).join(' ');
-  g+=`<polygon points="${cantos}" fill="none" stroke="#211D1A" stroke-width="1.6"/>`;
-  g+=`<text x="${pad}" y="${H-19}" font-family="DM Mono,monospace" font-size="10.5" fill="#B85C38">requalifica · 6,4 km² · tudo</text>`;
-  g+=`<text x="${pad}" y="${H-6}" font-family="DM Mono,monospace" font-size="10.5" fill="#6B6A4B">aiu · 2.780 ha · só his</text>`;
+  g+=`<polygon points="${cantos}" fill="none" stroke="var(--tinta)" stroke-width="1.6"/>`;
+  if(MAP.reqRotulo) g+=`<text x="${pad}" y="${H-19}" font-family="var(--f-mono)" font-size="10.5" fill="var(--acento)">${MAP.reqRotulo}</text>`;
+  if(MAP.aiuRotulo) g+=`<text x="${pad}" y="${H-6}" font-family="var(--f-mono)" font-size="10.5" fill="var(--primaria)">${MAP.aiuRotulo}</text>`;
   return g;
 }
 function mapaCluster(sang){
@@ -1673,22 +1977,22 @@ function mapaCluster(sang){
   const alvo2=[];MAP.pts.forEach(q=>{const X=P.X(q.lat,q.lon),Y=P.Y(q.lat,q.lon);
     alvo2.push([X-r,Y-r],[X+r,Y+r]);});
   const vb2=sang?janela(P,alvo2):`0 0 ${P.w} ${P.h}`;
-  let s=`<svg viewBox="${vb2}" role="img" aria-label="Centro — raios de 200 m">`;
+  let s=`<svg viewBox="${vb2}" role="img" aria-label="mapa de cluster — raios de 200 m">`;
   s+=`<image href="${B.img}" x="0" y="0" width="${P.w}" height="${P.h}"/>`;
-  s+=vias(P,MAP.calc,'fill="none" stroke="#6B6A4B" stroke-width="11" stroke-opacity=".3" stroke-linecap="round"');
-  s+=vias(P,MAP.calc,'fill="none" stroke="#3F3E2C" stroke-width="2.4" stroke-dasharray="1.5 6" stroke-linecap="round" stroke-opacity="1"');
-  s+=vias(P,MAP.sj,'fill="none" stroke="#B85C38" stroke-width="16" stroke-opacity=".2" stroke-linecap="round"');
-  s+=vias(P,MAP.sj,'fill="none" stroke="#B85C38" stroke-width="2.6" stroke-dasharray="11 7" stroke-linecap="round" stroke-opacity=".95"');
+  s+=vias(P,MAP.calc,'fill="none" stroke="var(--primaria)" stroke-width="11" stroke-opacity=".3" stroke-linecap="round"');
+  s+=vias(P,MAP.calc,'fill="none" stroke="var(--mapa-escuro)" stroke-width="2.4" stroke-dasharray="1.5 6" stroke-linecap="round" stroke-opacity="1"');
+  s+=vias(P,MAP.sj,'fill="none" stroke="var(--acento)" stroke-width="16" stroke-opacity=".2" stroke-linecap="round"');
+  s+=vias(P,MAP.sj,'fill="none" stroke="var(--acento)" stroke-width="2.6" stroke-dasharray="11 7" stroke-linecap="round" stroke-opacity=".95"');
   const sjf=MAP.sj.flat(); const m0=sjf[Math.floor(sjf.length*0.5)];
-  if(m0) s+=`<text x="${P.X(m0[0],m0[1])+14}" y="${P.Y(m0[0],m0[1])-12}" font-family="DM Mono,monospace" font-style="italic" font-size="19" fill="#B85C38" paint-order="stroke" stroke="#EFEAE0" stroke-width="4">boulevard são joão</text>`;
+  if(m0&&MAP.sjRotulo) s+=`<text x="${P.X(m0[0],m0[1])+14}" y="${P.Y(m0[0],m0[1])-12}" font-family="var(--f-mono)" font-style="italic" font-size="19" fill="var(--acento)" paint-order="stroke" stroke="var(--papel)" stroke-width="4">${MAP.sjRotulo||''}</text>`;
   MAP.pts.forEach((p,i)=>{if(!p.cred)return;
-    s+=`<circle class="raio" data-i="${i}" cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="${r}" fill="#6B6A4B" fill-opacity=".11" stroke="#6B6A4B" stroke-opacity=".34" stroke-width="1"/>`;});
+    s+=`<circle class="raio" data-i="${i}" cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="${r}" fill="var(--primaria)" fill-opacity=".11" stroke="var(--primaria)" stroke-opacity=".34" stroke-width="1"/>`;});
   MAP.pts.forEach((p,i)=>{if(!p.cred)return;
-    s+=`<g class="pin" data-i="${i}" tabindex="0"><circle class="hit" cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="16"/><circle class="anel" cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="9"/><circle cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="4" fill="#4F4E38"/></g>`;});
+    s+=`<g class="pin" data-i="${i}" tabindex="0"><circle class="hit" cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="16"/><circle class="anel" cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="9"/><circle cx="${P.X(p.lat,p.lon)}" cy="${P.Y(p.lat,p.lon)}" r="4" fill="var(--mapa-escuro)"/></g>`;});
   MAP.pts.forEach((p,i)=>{if(!p.toq)return;
     const X=P.X(p.lat,p.lon),Y=P.Y(p.lat,p.lon);
-    if(p.anc) s+=`<circle cx="${X}" cy="${Y}" r="21" fill="none" stroke="#B85C38" stroke-width="1.6" stroke-dasharray="3 3" opacity=".85"/>`;
-    s+=`<g class="pin" data-i="${i}" tabindex="0"><circle class="hit" cx="${X}" cy="${Y}" r="24"/><circle class="anel" cx="${X}" cy="${Y}" r="18"/><circle cx="${X}" cy="${Y}" r="${p.anc?15:12}" fill="#B85C38" stroke="#EDE6DA" stroke-width="${p.anc?2.6:1.8}"/><text x="${X}" y="${Y+5}" text-anchor="middle" font-family="DM Mono,monospace" font-weight="500" font-size="15" fill="#EDE6DA">${p.k}</text></g>`;});
+    if(p.anc) s+=`<circle cx="${X}" cy="${Y}" r="21" fill="none" stroke="var(--acento)" stroke-width="1.6" stroke-dasharray="3 3" opacity=".85"/>`;
+    s+=`<g class="pin" data-i="${i}" tabindex="0"><circle class="hit" cx="${X}" cy="${Y}" r="24"/><circle class="anel" cx="${X}" cy="${Y}" r="18"/><circle cx="${X}" cy="${Y}" r="${p.anc?15:12}" fill="var(--acento)" stroke="var(--papel)" stroke-width="${p.anc?2.6:1.8}"/><text x="${X}" y="${Y+5}" text-anchor="middle" font-family="var(--f-mono)" font-weight="500" font-size="15" fill="var(--papel)">${p.k}</text></g>`;});
   s+=barra(P,200,48,P.h-20);
   if(sang){
     const v=vb2.split(' ').map(Number), W=Math.round(v[2]*0.30);
@@ -1735,7 +2039,7 @@ function ligaHover(root){
 }
 function isometrico(cena,esc){
   /* sobre a oliva a tinta some: o desenho troca de cor, nao de forma */
-  const TI = esc ? '#EDE6DA' : '#211D1A';
+  const TI = esc ? 'var(--papel)' : 'var(--tinta)';
   const W=620,H=660,ux=0.866,uy=0.5;
   /* o viewBox sai do proprio desenho. Escrito a mao, ele decepava os dois
      ultimos predios da carteira toda vez que o espacamento mudava. */
@@ -1757,7 +2061,7 @@ function isometrico(cena,esc){
        ficava vazada. Corrigido em 21/08/2026.                                */
     let g=`<polygon points="${P([A,D,D2,A2])}" fill="${TI}" fill-opacity="${(.17*o).toFixed(3)}" stroke="${TI}" stroke-width="1" stroke-opacity="${(.5*o).toFixed(2)}"/>`;
     g+=`<polygon points="${P([A,Bp,B2,A2])}" fill="${TI}" fill-opacity="${(.075*o).toFixed(3)}" stroke="${TI}" stroke-width="1" stroke-opacity="${(.5*o).toFixed(2)}"/>`;
-    g+=`<polygon points="${P([A2,B2,C2,D2])}" fill="#B85C38" fill-opacity="${(.26*o).toFixed(3)}" stroke="#B85C38" stroke-width="1.2" stroke-opacity="${o}"/>`;
+    g+=`<polygon points="${P([A2,B2,C2,D2])}" fill="var(--acento)" fill-opacity="${(.26*o).toFixed(3)}" stroke="var(--acento)" stroke-width="1.2" stroke-opacity="${o}"/>`;
     /* aresta vertical da frente, marcada: e ela que le a altura */
     g+=`<line x1="${A[0]}" y1="${A[1]}" x2="${A2[0]}" y2="${A2[1]}" stroke="${TI}" stroke-width="1.1" stroke-opacity="${(.55*o).toFixed(2)}"/>`;
     for(let i=1;i<pav;i++){const l=iso(cx,cy+d,i*alt),m=iso(cx,cy,i*alt),o=iso(cx+w,cy,i*alt);
@@ -1766,11 +2070,11 @@ function isometrico(cena,esc){
     const top=iso(cx+w/2,cy+d/2,h);
     if(rot){ const lw=rot.length*4.6; marca(top[0]-lw,top[1]-46); marca(top[0]+lw,top[1]-30); }
     /* 34 px acima da cumeeira: com 16 o rotulo encostava no telhado */
-    g+=`<text x="${top[0]}" y="${top[1]-34}" text-anchor="middle" font-family="DM Mono,monospace" font-style="italic" font-size="15" fill="${TI}" opacity="${pal?0.55:1}">${rot}</text>`;
+    g+=`<text x="${top[0]}" y="${top[1]-34}" text-anchor="middle" font-family="var(--f-mono)" font-style="italic" font-size="15" fill="${TI}" opacity="${pal?0.55:1}">${rot}</text>`;
     return g;
   }
   function arvore(x,y){const b=iso(x,y,0),t=iso(x,y,26);
-    return `<line x1="${b[0]}" y1="${b[1]}" x2="${t[0]}" y2="${t[1]}" stroke="#6B6A4B" stroke-width="1.6"/><circle cx="${t[0]}" cy="${t[1]}" r="9" fill="#6B6A4B" fill-opacity=".45" stroke="#6B6A4B" stroke-width="1"/>`;}
+    return `<line x1="${b[0]}" y1="${b[1]}" x2="${t[0]}" y2="${t[1]}" stroke="var(--primaria)" stroke-width="1.6"/><circle cx="${t[0]}" cy="${t[1]}" r="9" fill="var(--primaria)" fill-opacity=".45" stroke="var(--primaria)" stroke-width="1"/>`;}
   function carro(x,y){const a=iso(x,y,0),b=iso(x+16,y,0),c=iso(x+16,y+8,0),d=iso(x,y+8,0),
     a2=iso(x,y,9),b2=iso(x+16,y,9),c2=iso(x+16,y+8,9),d2=iso(x,y+8,9);
     return `<polygon points="${P([a,b,c,d])}" fill="${TI}" fill-opacity=".1"/><polygon points="${P([a2,b2,c2,d2])}" fill="${TI}" fill-opacity=".3" stroke="${TI}" stroke-width=".8"/><polygon points="${P([b,c,c2,b2])}" fill="${TI}" fill-opacity=".2" stroke="${TI}" stroke-width=".8"/>`;}
@@ -1796,7 +2100,7 @@ function isometrico(cena,esc){
     for(let v=-18;v<=x-30;v+=56) s+=arvore(v,66);
     const vb=janelaIso(26,22);
     const cy2=(by1+26);
-    s+=`<text x="${((bx0+bx1)/2).toFixed(1)}" y="${(cy2+16).toFixed(1)}" text-anchor="middle" font-family="DM Mono,monospace" font-size="13" fill="${TI}" opacity=".5">15.600 m² construídos · mesma escala do slide do porte</text>`;
+    s+=`<text x="${((bx0+bx1)/2).toFixed(1)}" y="${(cy2+16).toFixed(1)}" text-anchor="middle" font-family="var(--f-mono)" font-size="13" fill="${TI}" opacity=".5">15.600 m² construídos · mesma escala do slide do porte</text>`;
     marca(bx0,cy2+22);marca(bx1,cy2+22);
     return s.replace('viewBox="55 66 545 596"','viewBox="'+janelaIso(26,22)+'"')+`</svg>`;
   }
@@ -1805,7 +2109,7 @@ function isometrico(cena,esc){
   s+=caixa(238,96,72,56,24,10,'grande · 24 pav','pal');
   [ -18, 46, 100, 160, 216, 288 ].forEach(x=>{s+=arvore(x,66);});
   s+=carro(56,60); s+=carro(196,60);
-  s+=`<text x="${W/2}" y="${H-16}" text-anchor="middle" font-family="DM Mono,monospace" font-size="14" fill="${TI}" opacity=".55">escala comparativa · pé-direito de 3 m</text>`;
+  s+=`<text x="${W/2}" y="${H-16}" text-anchor="middle" font-family="var(--f-mono)" font-size="14" fill="${TI}" opacity=".55">escala comparativa · pé-direito de 3 m</text>`;
   return s+`</svg>`;
 }
 
@@ -1829,12 +2133,14 @@ const DECK=[
   t:'a frase que carrega<br>o argumento',
   sub:'O apoio, em uma ou duas linhas.'},
 
-/* ══ LISTA ══ itens numerados. Entram por clique, um a um. */
+/* ══ LISTA ══ itens numerados. Entram por clique, um a um.
+   Cada item é [rótulo, texto] — DOIS campos. Um terceiro é ignorado em
+   silêncio; o apoio vai dentro do texto, depois do <b>. */
 {g:'lista',largo:1,kick:'olho',t:'o título da lista',
   pre:'Uma linha antes dos itens.',
-  itens:[['01','primeiro item','O apoio do primeiro item.'],
-         ['02','segundo item','O apoio do segundo.'],
-         ['03','terceiro item','O apoio do terceiro.']]},
+  itens:[['01','<b>primeiro item.</b> O apoio do primeiro item.'],
+         ['02','<b>segundo item.</b> O apoio do segundo.'],
+         ['03','<b>terceiro item.</b> O apoio do terceiro.']]},
 
 /* ══ TABELA ══ comparação. `cols` é campo RESERVADO: exige `linhas` em seguida. */
 {g:'tabela',kick:'olho',t:'o título da tabela',
@@ -1872,14 +2178,47 @@ const DECK=[
   itens:[['primeiro','<b>O primeiro passo.</b> Com prazo.'],
          ['depois','<b>O segundo.</b>']]},
 
-/* ══ CONTRACAPA ══ QR, marca e site. Fecha a peça. */
-{g:'marca',fim:1,fundo:1,esc:1,sigla:'MARCA',site:'SITE'}
+/* ══ CONTRACAPA ══ QR, marca e site. Fecha a peça. `fim_:1` (com underscore)
+   é o que o go() lê; `fim:1` também é aceito e normalizado. */
+{g:'marca',fim_:1,fundo:1,esc:1,qr:1,sigla:'MARCA',site:'SITE'}
 ];
-/* a chave numerada vem do mapdata, calculada a partir da camada oficial —
-   escrita a mao ela ficou desatualizada e deu 0 ponto ao Martinelli */
+/* Gabaritos com máquina própria que NÃO estão no DECK-modelo, mas estão na
+   engine — copiar o exemplo do gabarito quando entrarem na peça:
+   {g:'earth-3d',lat:-23.55,lng:-46.63,alt:760,kick:'',h2:'',lead:'',cap:''}
+     → sistemas/gabaritos/mapa-earth-3d.md · só funciona por link
+   {g:'modelo-3d',modelo:'<id do 3D Warehouse>',res:[{src,cap}],kick:'',h2:'',lead:'',cap:''}
+     → sistemas/gabaritos/modelo.md · modelo PÚBLICO
+   Abertura em dois momentos (capa da frente com título dentro):
+   {g:'marca',dois:1,fundo:1,esc:1,lockup:1,papel:'',descritor:'',site:'',
+     kick:'',t:'',sub:'',pe:''}                                            */
+/* a chave numerada do mapa vem do MAP (MAP.chave), calculada a partir da
+   camada oficial — escrita à mão ela fica desatualizada */
 const CHAVE=(typeof MAP!=='undefined'&&MAP.chave)?MAP.chave:[];
 
-const QR='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29"><path fill="#ede6da" d="M0 0h29v29h-29z"/><path stroke="#211d1a" d="M2 2.5h7m1 0h2m4 0h3m1 0h7m-25 1h1m5 0h1m4 0h1m1 0h2m1 0h1m1 0h1m5 0h1m-25 1h1m1 0h3m1 0h1m2 0h2m1 0h1m1 0h2m2 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h4m1 0h1m1 0h3m1 0h1m-25 1h1m1 0h3m1 0h1m1 0h5m1 0h3m1 0h1m1 0h3m1 0h1m-25 1h1m5 0h1m1 0h1m3 0h1m5 0h1m5 0h1m-25 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-17 1h1m6 0h1m-16 1h1m3 0h1m1 0h6m2 0h1m1 0h6m2 0h1m-24 1h3m3 0h2m1 0h1m1 0h1m1 0h3m3 0h2m1 0h1m-24 1h2m1 0h1m1 0h3m2 0h1m2 0h3m1 0h3m1 0h2m-22 1h1m14 0h1m2 0h2m1 0h2m-22 1h1m3 0h2m2 0h3m3 0h4m1 0h4m-25 1h5m5 0h1m1 0h5m3 0h1m2 0h1m-20 1h4m1 0h1m1 0h1m1 0h1m1 0h3m1 0h4m-21 1h1m4 0h1m6 0h2m2 0h3m1 0h2m-24 1h2m1 0h1m2 0h1m3 0h1m4 0h8m-15 1h2m1 0h1m2 0h1m1 0h1m3 0h1m-21 1h7m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m1 0h1m-21 1h1m5 0h1m7 0h1m1 0h1m3 0h5m-25 1h1m1 0h3m1 0h1m1 0h2m2 0h1m3 0h7m-23 1h1m1 0h3m1 0h1m4 0h1m2 0h2m1 0h3m2 0h3m-25 1h1m1 0h3m1 0h1m4 0h1m2 0h1m1 0h3m2 0h1m1 0h1m-24 1h1m5 0h1m2 0h2m1 0h1m1 0h2m1 0h7m-24 1h7m1 0h1m1 0h3m1 0h2m2 0h1m3 0h3"/></svg>';
+/* ═══ O QUE VEM DO BLOCO DA MARCA, além do :root e das fontes ═════════════
+   Cinco constantes. Cada bloco de marca traz as suas; o esqueleto sai com
+   os valores da michel stein_ (texto no canto, sem lockup, sem grafismo,
+   sem QR, com underscore). Quem monta cola as do bloco por cima destas.
+   LOGO_CANTO — o canto superior direito do chrome:
+     {modo:'texto', html:'michel stein<u>_</u>'}   ← padrão da casa
+     {modo:'logo',  svg:'<svg …>', largura:'clamp(132px,9.5cqw,180px)'}
+       o SVG usa fill="var(--tinta)"/"var(--primaria)" (positivo) ou
+       fill="currentColor" (monocromático); o CSS troca para papel no escuro.
+   LOCKUP   — SVG monocromático (currentColor) para `lockup:1` no slide marca.
+   GRAFISMO — SVG monocromático (currentColor) para `graf:1`; vai no #msgraf.
+   QR       — SVG do QR da marca (fill="var(--papel)" no fundo, stroke=
+              "var(--tinta)" nos módulos) para `qr:1` na contracapa. Vazio =
+              `qr:1` não desenha nada. O QR é da MARCA (aponta para o site
+              dela), por isso não mora aqui: saiu do esqueleto em 03/09/2026.
+   UNDERSCORE — true/false. O `_` terracota depois da sigla, do slogan e do
+              nome do divisor é ASSINATURA da michel stein_; Sarasá, AMAZ e
+              Lavrō desligam (cada uma tem a sua: lockup, barra, mácron).
+   ═══════════════════════════════════════════════════════════════════ */
+const LOGO_CANTO={modo:'texto',html:'marca<u>_</u>'};
+const LOCKUP='';
+const GRAFISMO='';
+const QR='';
+const UNDERSCORE=true;
 const palco=document.getElementById('palco');
 /* as fotos moram em js_fotos.js como constantes; o DECK guarda o NOME delas.
    Assim o array de slides continua legivel e o base64 fica de fora.        */
@@ -1888,7 +2227,39 @@ const IMG={};
   try{ IMG[k]=eval(k); }catch(e){ IMG[k]=''; }
 });
 
+/* ─── aviso: o slide que diz o que está errado ────────────────────────────
+   03/09/2026. Gabarito desconhecido ou campo obrigatório ausente vira um
+   slide hachurado com o diagnóstico, e o mesmo texto vai ao console como
+   console.error (para o build barrar a peça). Antes,
+   o primeiro sumia em silêncio e o segundo escrevia `undefined` na tela ou
+   derrubava o deck inteiro (`cur is not defined`).                       */
+function aviso(s,titulo,nota){
+  const limpo=x=>String(x).replace(/<[^>]+>/g,'');
+  console.error('deck · '+limpo(titulo)+(nota?' — '+limpo(nota):''));
+  return `<div class="vazio aviso rev"><div class="vmarca">_</div>`
+    + `<h2>${titulo}</h2>`
+    + (s.t?`<p class="vsub">${s.t}</p>`:'')
+    + (nota?`<p class="vnota">${nota}</p>`:'')+`</div>`;
+}
+/* campos sem os quais o gabarito não renderiza. `cols` é reservado: quem o
+   traz como array tem de trazer `linhas` — a armadilha paga em 23/08 e 29/08. */
+const EXIGE={
+  duo:['figs','leg'], tabela:['cols','linhas'], porte:['cols','linhas'],
+  lista:['itens'], fim:['itens'], sumario:['itens'], trio:['itens'],
+  jogadas:['itens'], fotos:['itens'], unit:['cards'], players:['casas'],
+  avulso:['grupos'], plug:['ancoras'], duasfrentes:['esq','dir'],
+  divisor:['dt'], 'earth-3d':['lat','lng'], 'modelo-3d':['modelo']
+};
+/* bloco de marca antigo, sem a linha UNDERSCORE: vale o padrão da casa (ligado) */
+const US=(typeof UNDERSCORE==='undefined')?true:!!UNDERSCORE;
 function tpl(s){
+  const faltam=(EXIGE[s.g]||[]).filter(c=>s[c]==null);
+  if(faltam.length)
+    return aviso(s,'gabarito '+s.g+': falta '+faltam.map(c=>`<code>${c}</code>`).join(', '),
+      'formato de cada campo em sistemas/DECK-MONTAR.md');
+  if(s.g!=='prancha' && Array.isArray(s.cols) && !Array.isArray(s.linhas))
+    return aviso(s,'gabarito '+s.g+': <code>cols</code> sem <code>linhas</code>',
+      '`cols` é campo reservado da tabela; quem o usa traz `linhas` em seguida');
   const k=s.kick?`<div class="kick${s.barra?' barra':''} rev">${s.kick}</div>`:'';
   const et=s.etapas?' passo etapa':'';
   const grande=(s.g==='frase'||s.g==='capa'||s.g==='jogadas');
@@ -1911,18 +2282,45 @@ function tpl(s){
      sistema e o desenho saiu diferente do padrao — o R6 manda.          */
   const inicio=s.comecar?'<button class="ms-start">começar <span class="seta">&rarr;</span></button>':'';
   if(s.g==='marca'){
-    const u=s.pisca?'<i class="pisca">_</i>':'<i>_</i>';
+    const u=!US?'':s.pisca?'<i class="pisca">_</i>':'<i>_</i>';
+    /* a marca em si: sigla em texto (michel stein_) ou LOCKUP em SVG
+       (`lockup:1`, Sarasá/AMAZ). O papel (`arquiteto`, `núcleo de
+       arquitetura`) vai SOB a marca, nunca ao lado. */
+    const marca=(rev)=> (s.lockup&&LOCKUP)
+      ? `<div class="lk-bloco${rev}"><div class="lock">${LOCKUP}</div>${s.papel?`<div class="nucleo">${s.papel}</div>`:''}</div>`
+      : `<div class="sigla-mini${rev}">${s.sigla||''}${US?'<i>_</i>':''}${s.papel?`<em>${s.papel}</em>`:''}</div>`;
+    /* CONTRACAPA — QR, marca, assinatura, site e o crédito da peça */
+    if(s.fim_) return `<div class="frase">`
+      +((s.qr&&QR)?`<div class="qr rev">${QR}</div>`:'')
+      +marca(' rev')
+      +(s.assinatura?`<div class="assina rev">${s.assinatura}${s.lockup?'':u}</div>`:'')
+      +(s.site?`<div class="site rev">${s.site}</div>`:'')
+      +(s.credito?`<div class="credito-peca rev">${s.credito}</div>`:'')
+      +`</div>`;
+    /* ABERTURA EM DOIS MOMENTOS (`dois:1`) — a capa da frente e o título da
+       apresentação no mesmo slide; o `começar` chama avanca() e revela o B.
+       Ver a nota no CSS (.g-marca.dois). */
+    if(s.dois) return `<div class="cm-b passo">`
+      +(s.kick?`<div class="kick">${s.kick}</div>`:'')
+      +(s.t?`<h1 class="mega">${RS(s.t)}</h1>`:'')
+      +(s.sub?`<p class="sub">${s.sub}</p>`:'')
+      +(s.pe?`<div class="cm-pe">${s.pe}</div>`:'')
+      +`</div>`
+      +`<div class="cm-a">`+marca('')
+      +(s.descritor?`<div class="descritor">${s.descritor}</div>`:'')
+      +(s.site?`<div class="site">${s.site}</div>`:'')
+      +`<button class="ms-start">começar <span class="seta">&rarr;</span></button>`
+      +`</div>`;
+    /* ABERTURA PADRÃO — marca, papel, slogan e site empilhados */
     return `<div class="frase">`
-      +(s.qr?`<div class="qr rev">${QR}</div>`:'')
-      +`<div class="sigla-mini rev">${s.sigla}<i>_</i>${s.papel?`<em>${s.papel}</em>`:''}</div>`
+      +marca(' rev')
       +(s.slogan?`<div class="slogan rev">${s.slogan}${u}</div>`:'')
-      +(s.assinatura?`<div class="assina rev">${s.assinatura}${u}</div>`:'')
       +(s.site?`<div class="site rev">${s.site}</div>`:'')
       +inicio+`</div>`;
   }
   const met=s.metas?`<div class="metas rev">`+s.metas.map(([l,v])=>`<div><span class="ml">${l}</span><span class="mv">${v}</span></div>`).join('')+`</div>`:'';
   if(s.g==='capa') return `<div class="wrap">${k}${t}${sub}${met}${inicio}</div>`;
-  if(s.g==='divisor') return `<div class="divisor"><span class="dn rev">${s.dn}</span><h1 class="dt rev">${RS(s.dt)}<i class="pisca">_</i></h1><p class="ds rev">${s.ds}</p></div>`;
+  if(s.g==='divisor') return `<div class="divisor"><span class="dn rev">${s.dn||''}</span><h1 class="dt rev">${RS(s.dt)}${US?'<i class="pisca">_</i>':''}</h1>${s.ds?`<p class="ds rev">${s.ds}</p>`:''}</div>`;
   if(s.g==='frase') return `<div class="wrap">${k}${pre}${t}${sub}${prem}${dad}</div>`;
   if(s.g==='jogadas') return `<div class="wrap">${k}${t}<div class="jogadas rev">`+s.itens.map(([n,ti,d])=>`<div class="jogada${et}"><span class="jn">${n}</span><span class="jt">${ti}</span><span class="jd">${d}</span></div>`).join('')+`</div></div>`;
   if(s.g==='unit') return `<div class="wrap">${k}${t}${sub}<div class="unit rev">`+s.cards.map(([ti,a,r,l,m])=>`<div class="uc${et}"><span class="ut">${ti}</span><span class="ua">${a}</span><span class="ur">${RS(r)}</span><span class="ul">${l}</span><span class="um">${m}</span></div>`).join('')+`</div></div>`;
@@ -1931,7 +2329,9 @@ function tpl(s){
   if(s.g==='cheia'){
     /* render em sangria total. Ver sistemas/gabaritos/render-cheia.md */
     const img = s.src
-      ? `<img src="${s.src}" alt="${(s.cap||'').replace(/"/g,'&quot;')}">`
+      /* `data-src`, não `src`: o render entra quando o slide chega (e o
+         seguinte), pelo __msPuxa(). Vale para base64 e para arquivo ao lado. */
+      ? `<img decoding="async" data-src="${s.src}" alt="${(s.cap||'').replace(/"/g,'&quot;')}">`
       : `<div class="slot"><u>_</u><b>${s.lbl||'render'}</b><s>16:9 · sangria total</s></div>`;
     return `<div class="full"><div class="ph">${img}</div></div>`
       + `<div class="ov">${s.h2?`<h2 class="rev">${s.h2}</h2>`:''}`
@@ -1985,6 +2385,88 @@ function tpl(s){
     return `<div class="pbody">${topo}<div class="grade" style="grid-template-columns:repeat(${s.cols||3},1fr)`
       + (centra?';align-content:center;align-items:center':'')+`">${cels}</div></div>`;
   }
+  if(s.g==='modelo-3d'){
+    /* O MODELO DO PROJETO, VIVO — modulos/modelo-sketchup.html
+       `app.sketchup.com/viewer/3dw?WarehouseModelId=<id>` embeda direto, com
+       painel de cenas, sombras e projeções, sem marca de terceiro (medido em
+       02/09/2026 no domínio real). ⚑ O modelo TEM DE ESTAR PÚBLICO no 3D
+       Warehouse: modelo privado devolve 404 para quem abre o link.
+       `res` são as imagens de reserva — sem elas o slide não sobrevive a
+       rede ruim; slot vazio aparece hachurado. Receita: gabaritos/modelo.md */
+    const cenas = (s.res||[]).map((r,i)=>
+      `<button type="button" data-i="${i}"${i?'':' class="on"'} title="${(r.cap||'').replace(/"/g,'&quot;')}"></button>`).join('');
+    const fotos = (s.res||[]).length
+      ? (s.res||[]).map((r,i)=>`<img loading="lazy" src="${r.src}" alt="${(r.cap||'').replace(/"/g,'&quot;')}"${i?'':' class="on"'}>`).join('')
+      : `<div class="slot"><u>_</u><b>imagens de reserva</b><s>exportar as cenas do SketchUp</s></div>`;
+    return `<div class="visor" data-modelo="${s.modelo}">`
+      + `<iframe title="Modelo 3D do projeto — SketchUp Viewer"`
+      + ` allow="fullscreen; xr-spatial-tracking"`
+      + ` referrerpolicy="no-referrer-when-downgrade"></iframe>`
+      + `<div class="scrim"></div>`
+      + `<div class="veu"><b>clique para navegar no modelo</b>`
+      + `<s>cenas, sombras e órbita ficam com você · o teclado passa a ser do modelo</s></div>`
+      + `<button class="sair" type="button">devolver o teclado ao slide</button></div>`
+      + `<div class="rotulo">`
+      + (s.kick?`<span class="kick">${s.kick}</span>`:'')
+      + (s.h2?`<h2>${s.h2}</h2>`:'')
+      + (s.lead?`<div class="lead">${s.lead}</div>`:'')
+      + (s.cap?`<span class="cap">${s.cap}</span>`:'')
+      + `</div>`
+      + `<div class="cmd">`
+      +   `<button class="rec" type="button" title="recarregar o modelo na cena inicial">`
+      +     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"`
+      +     ` stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">`
+      +     `<path d="M21 12a9 9 0 1 1-3.2-6.9"/><path d="M21 4v5h-5"/></svg>recomeçar</button>`
+      +   `<button class="img" type="button" title="não carregou? mostrar as imagens salvas">`
+      +     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"`
+      +     ` stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">`
+      +     `<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/>`
+      +     `<path d="M21 16l-5-5-6 6"/></svg>imagens</button>`
+      + `</div>`
+      + `<div class="estado">`
+      +   `<div class="carga"><div class="anel"></div>`
+      +   `<div class="barra"><i></i></div>`
+      +   `<div class="passos">preparando</div></div>`
+      +   `<b>carregando o modelo 3d</b><span></span></div>`
+      + `<div class="reserva"><div class="ph">${fotos}</div>`
+      +   `<span class="rescap">${((s.res||[])[0]||{}).cap||''}</span></div>`
+      + (cenas?`<div class="cenas">${cenas}</div>`:'');
+  }
+  if(s.g==='earth-3d'){
+    /* visor fotorrealista do Google Earth — sistemas/gabaritos/mapa-earth-3d.md
+       ⚑ SÓ FUNCIONA POR LINK. A Maps JavaScript API recusa file://; peça com
+       este slide se entrega publicada, nunca como arquivo anexado. A chave
+       vem de modulos/ms-maps-chave.js, restrita por referrer.
+       `alt` é altitude ACIMA DO NÍVEL DO MAR (São Paulo ~760), não altura de
+       voo: errar para baixo enterra a câmera e a tela fica azul, sem erro. */
+    return `<div class="visor" data-lat="${s.lat}" data-lng="${s.lng}" data-alt="${s.alt||760}">`
+      + `<div class="scrim"></div>`
+      + `<div class="veu"><b>clique para navegar no 3d</b>`
+      + `<s>arrastar gira · ctrl + arrastar inclina · o teclado passa a ser do mapa</s></div>`
+      + `<button class="sair" type="button">devolver o teclado ao slide</button></div>`
+      + `<div class="rotulo">`
+      + (s.kick?`<span class="kick">${s.kick}</span>`:'')
+      + (s.h2?`<h2>${s.h2}</h2>`:'')
+      + (s.lead?`<div class="lead">${s.lead}</div>`:'')
+      + (s.cap?`<span class="cap">${s.cap}</span>`:'')
+      + `</div>`
+      + `<div class="cmd">`
+      +   `<button class="rec" type="button" title="voltar ao ponto central">`
+      +     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"`
+      +     ` stroke-linecap="round" aria-hidden="true">`
+      +     `<circle cx="12" cy="12" r="7"/>`
+      +     `<circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/>`
+      +     `<path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>recentrar</button>`
+      +   `<button class="orb" type="button"><i></i>orbitar</button>`
+      + `</div>`
+      + `<div class="estado">`
+      +   `<div class="carga"><div class="anel"></div>`
+      +   `<div class="barra"><i></i></div>`
+      +   `<div class="passos">preparando</div></div>`
+      +   `<b>carregando a malha 3d</b>`
+      /* <span> vazio de propósito: é onde o falha() escreve o diagnóstico */
+      +   `<span></span></div>`;
+  }
   const tab=s.cols?`<div class="rev"><table class="tb"><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`+
     s.linhas.map((r,i)=>`<tr class="${s.hi===i?'hi':''}${s.fora===i?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`).join('')+`</tbody></table></div>`:'';
   if(s.g==='porte'){
@@ -2007,10 +2489,10 @@ function tpl(s){
     return `<div class="wrap">${k}${t}${sub}${tab}${f}${nt}${prem}</div>`;
   }
   if(s.g==='plug'){
-    /* mapa-resumo da carteira: as sete âncoras do Epicentro em pílula, cada
-       uma com as oportunidades que saem do seu entorno. A distribuição se
-       redesenha sozinha porque ela é mesmo indefinida — o que se afirma é
-       estar plugado nas sete, não um número por âncora.                   */
+    /* mapa-resumo: as âncoras em pílula, cada uma com as oportunidades que
+       saem do seu entorno. A distribuição se redesenha sozinha porque ela é
+       mesmo indefinida — o que se afirma é estar plugado em todas, não um
+       número por âncora.                                                  */
     const A=s.ancoras.map((n,i)=>`<div class="pg" data-a="${i}">`
       +`<span class="pgn">${n}</span>`
       +`<span class="pgo" data-o="${i}"></span></div>`).join('');
@@ -2089,10 +2571,14 @@ function tpl(s){
        O texto e a legenda ficam empilhados a esquerda. Decidido em 21/08. */
     const cl=s.sang?' sang':'';
     const sv=s.sang?svg.replace('<svg ','<svg preserveAspectRatio="xMidYMid slice" '):svg;
-    return `<div class="mcols${cl}"><div class="mtxt">${k}${t}${sub}${ch}${inf}${lg}<p class="credito">base cartográfica © OpenStreetMap · CARTO — lotes: cadastro municipal / GeoSampa</p></div><div class="mapa${cl} rev">${sv}</div></div>`;
+    return `<div class="mcols${cl}"><div class="mtxt">${k}${t}${sub}${ch}${inf}${lg}${MAP.credito?`<p class="credito">${MAP.credito}</p>`:''}</div><div class="mapa${cl} rev">${sv}</div></div>`;
   }
-  return '';
+  /* nenhum gabarito respondeu: slide de aviso, não string vazia */
+  return aviso(s,'gabarito desconhecido: <code>'+s.g+'</code>',
+    'os gabaritos do esqueleto estão em sistemas/DECK-MONTAR.md');
 }
+/* `fim:1` e `fim_:1` valem o mesmo: o go() lê `fim_` */
+DECK.forEach(s=>{if(s.fim&&s.fim_==null)s.fim_=s.fim});
 let secs=[];DECK.forEach((s,i)=>{if(s.sec)secs.push({nome:s.sec,i})});
 let sa='';DECK.forEach(s=>{if(s.sec)sa=s.sec;s._sec=sa});
 let num=0;DECK.forEach(s=>{if(s.div){s._b=null;return}if(!s.sub_)num++;s._b=num});
@@ -2100,7 +2586,11 @@ const TOT=num;
 DECK.forEach(s=>{if(s._b===null){s._sub=0;return}const ir=DECK.filter(x=>x._b===s._b);s._sub=ir.length>1?ir.indexOf(s)+1:0});
 const dots=document.querySelector('.dots');
 secs.forEach((sc,i)=>{const d=document.createElement('span');d.className='sdot';d.innerHTML=`<span>${sc.nome}</span>`;d.onclick=e=>{e.stopPropagation();go(sc.i)};dots.appendChild(d)});
-palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}" data-i="${i}">${tpl(s)}</section>`).join('');
+/* um gabarito que lance exceção não derruba mais o deck: vira aviso no
+   próprio slide, e o console recebe a pilha. */
+const tplSeguro=s=>{try{return tpl(s)}catch(e){console.error('deck · '+s.g,e);
+  return aviso(s,'gabarito '+s.g+' quebrou','<code>'+String(e.message).replace(/</g,'&lt;')+'</code>')}};
+palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}${s.dois?' dois':''}" data-i="${i}">${tplSeguro(s)}</section>`).join('');
 const sl=[...document.querySelectorAll('.slide')];
 sl.forEach(el=>[...el.querySelectorAll('.rev')].forEach((r,j)=>r.style.setProperty('--i',Math.min(j,10))));
 sl.forEach((el,i)=>{if(DECK[i].g==='mapa')ligaHover(el)});
@@ -2192,6 +2682,17 @@ sl.forEach((el,i)=>{
   cx.addEventListener('mouseenter',()=>clearTimeout(t));
   cx.addEventListener('mouseleave',()=>fecha(null));
 });
+/* ─── o canto e o grafismo, a partir das constantes do bloco da marca ─── */
+(function(){
+  const txt=document.querySelector('.marca-txt'), lk=document.querySelector('.marca-lk');
+  const L=(typeof LOGO_CANTO==='object'&&LOGO_CANTO)||{};
+  if(L.modo==='logo'&&L.svg){
+    lk.innerHTML=L.svg; lk.hidden=false; txt.hidden=true;
+    if(L.largura) lk.style.setProperty('--logo-canto-w',L.largura);
+  }else if(L.html){ txt.innerHTML=L.html; }
+  const g=document.getElementById('msgraf');
+  if(g&&typeof GRAFISMO==='string'&&GRAFISMO) g.innerHTML=GRAFISMO;
+})();
 let cur=-1;
 const passos=i=>[...sl[i].querySelectorAll('.passo')];
 function foto(i){
@@ -2201,10 +2702,10 @@ function foto(i){
   let ok=false;
   el.querySelectorAll('.fbleed img').forEach(im=>{const v=+im.dataset.f===k&&!im.dataset.err;im.classList.toggle('on',v);if(v)ok=true});
   const it=k>=0?s.itens[k]:null;
-  el.querySelector('.scap').textContent=it?it[3]:'';
-  el.querySelector('.sfon').textContent=it?`fonte — ${it[4]}`:'';
+  el.querySelector('.scap').textContent=it?(it[3]||''):'';
+  el.querySelector('.sfon').textContent=(it&&it[4])?`fonte — ${it[4]}`:'';
   el.querySelector('.slot').style.opacity=ok?0:1;
-  const c=el.querySelector('.cred');c.textContent=it?it[3]:'';c.classList.toggle('on',ok);
+  const c=el.querySelector('.cred');c.textContent=it?(it[3]||''):'';c.classList.toggle('on',ok);
 }
 /* ─── a caixa terracota do `duasfrentes` ──────────────────────────────────
    A altura sai do LAYOUT (offsetTop), nao do getBoundingClientRect: o item
@@ -2261,6 +2762,8 @@ function go(i,tudo){
   const marcaFundo = !!((!!s.fundo && s.g!=='divisor') || trama);   /* idem */
   document.body.classList.toggle('com-fundo',marcaFundo||divFundo);
   document.body.classList.toggle('em-cheia', s.g==='cheia');
+  /* grafismo de marca na base (GRAFISMO do bloco), só onde o slide pedir */
+  document.body.classList.toggle('com-graf', !!(s.graf&&GRAFISMO));
   /* `em-imagem` = o fundo do slide é imagem ou visor, não campo pintado. É
      o que decide que o chrome inverte e ganha véu próprio. Acrescentado em
      02/09/2026: sem isto o chrome do slide de localização saía em Ferro
@@ -2301,11 +2804,17 @@ const recua=()=>go(cur>0?cur-1:0,true);
 document.getElementById('pro').onclick=e=>{e.stopPropagation();avanca()};
 document.getElementById('ant').onclick=e=>{e.stopPropagation();recua()};
 addEventListener('keydown',e=>{
+  /* visor 3d ativo rouba as setas: a navegação do deck para até o botão
+     `devolver o teclado ao slide`. */
+  if(document.querySelector('.g-earth-3d.girando,.g-modelo-3d.girando'))return;
   if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();avanca()}
   else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();recua()}
   else if(e.key==='ArrowDown'){e.preventDefault();go(cur+1,true)}
   else if(e.key==='ArrowUp'){e.preventDefault();go(cur-1,true)}});
-palco.addEventListener('click',e=>{if(e.target.closest('.ms-start')){go(cur+1);return}if(e.target.closest('a,button,.pin,.lote'))return;avanca()});
+/* a pílula chama avanca(), não go(cur+1): na capa em dois momentos o
+   primeiro clique revela o momento B (um .passo); sem passo, avança igual. */
+palco.addEventListener('click',e=>{if(e.target.closest('.ms-start')){avanca();return}
+  if(e.target.closest('a,button,.pin,.lote,.g-earth-3d .visor,.g-modelo-3d .visor,.g-modelo-3d .cenas'))return;avanca()});
 let tx=0;
 addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
 addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>52){d<0?avanca():recua()}},{passive:true});
@@ -2351,10 +2860,17 @@ if(!location.search.includes('semfundo')){
     catch(e){ console.warn('fundo morph indisponivel em #'+id,e); return null; }
   };
   const subir=()=>{
-    /* marca: oliva, com o terracota de acento — a paleta da casa */
-    window.MSF  = sobe('msfundo',   CAPA_IMGS, {paper:'#6B6A4B', acc:'#B85C38'});
-    /* divisor: terracota chapada, acento na tinta */
-    window.MSFD = sobe('msfundo-d', DIV_IMGS,  {paper:'#B85C38', acc:'#211D1A'});
+    /* a paleta do morph sai dos TOKENS, lida no navegador (tok, acima):
+       trocar o :root da marca troca o fundo junto, sem hex aqui. */
+    /* marca: o campo escuro da marca, trama correndo para a tinta, acento */
+    window.MSF  = sobe('msfundo',   CAPA_IMGS,
+                       {paper:tok('--escuro'), ink:tok('--tinta'), acc:tok('--acento')});
+    /* divisor: acompanha o tema dos divisores do DECK — `terra` pinta o
+       campo de acento (padrão da michel stein_), `esc` pinta de escuro */
+    const divTerra=DECK.some(x=>x.g==='divisor'&&x.terra);
+    window.MSFD = sobe('msfundo-d', DIV_IMGS,
+                       divTerra ? {paper:tok('--acento'), ink:tok('--tinta'), acc:tok('--tinta')}
+                                : {paper:tok('--escuro'), ink:tok('--tinta'), acc:tok('--acento-claro')});
     const b=document.body.classList;
     if(window.MSF ){ MSF .pausar(!b.contains('com-fundo')||b.contains('fundo-div'));
                      if(b.contains('com-fundo')&&!b.contains('fundo-div')) MSF.entrada(); }
@@ -2363,6 +2879,435 @@ if(!location.search.includes('semfundo')){
   };
   ('requestIdleCallback' in window) ? requestIdleCallback(subir,{timeout:1200}) : setTimeout(subir,300);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CARGA TARDIA DAS IMAGENS (`data-src`)
+   O `cheia` escreve `data-src`, não `src`: a imagem entra quando o slide
+   chega, mais o vizinho seguinte. Com base64 isso poupa a decodificação de
+   todas na abertura; com arquivo ao lado (`img/`, como na EMEI, 24 renders,
+   7 MB) é o que torna a peça abrível. ⚑ Peça com imagens em pasta precisa da
+   PASTA, não só do .html — entrega-se por link.
+   ═════════════════════════════════════════════════════════════════════════ */
+(function(){
+  function puxa(i){
+    const sl=document.querySelectorAll('#palco .slide')[i]; if(!sl) return;
+    sl.querySelectorAll('img[data-src]').forEach(function(im){
+      im.src=im.dataset.src; delete im.dataset.src;
+    });
+  }
+  window.__msPuxa=function(){ puxa(cur); puxa(cur+1); };
+  window.__msPuxa();
+})();
+
+window.MSEarth=(function(){
+  'use strict';
+  /* a chave e lida TARDE: o ms-maps-chave.js entra no fim do body, depois
+     deste script. Ler na carga devolvia string vazia. */
+  function chave(){ return (window.MS_MAPS&&window.MS_MAPS.chave)||''; }
+  function canal(){ return (window.MS_MAPS&&window.MS_MAPS.canal)||'beta'; }
+  var CAM={range:600,tilt:58,heading:30,tiltEntrada:45};
+  var DEGRAUS=[6000,2500,1200], PAUSA=3000;
+  /* ⚑ DEGRAUS tem de estar declarado ANTES do TOTAL: `var` iça o nome mas
+     nao o valor, e `undefined.length` derruba o modulo inteiro na carga. */
+  var TOTAL=DEGRAUS.length+2;      /* preparar + 4 degraus + assentar */
+  var ANCORA=null;                 /* o enquadramento canonico, para o recentrar */
+  /* ⚑ O GIRO E CONDUZIDO AQUI, e nao pelo `flyCameraAround`. Os numeros vem
+     do modulo mestre modulos/mapa-earth-3d.html; mudar aqui sem mudar la faz
+     as duas coisas divergirem.
+
+     TRES RODADAS COM O MICHEL, 02/09, e cada uma ensinou uma coisa:
+     1 · `{durationMillis:180000, rounds:40}` parece "3 min por volta, 40
+          vezes" e e **4,5 segundos por volta** — o `rounds`, DEPRECATED,
+          encaixa N voltas DENTRO da duracao. Saiu "absurdamente rapido".
+     2 · trocado por `repeatCount`, a velocidade ficou certa (180 s/volta),
+          mas a RAMPA de aceleracao ficou longa demais.
+     3 · conferido na documentacao: `FlyAroundAnimationOptions` tem quatro
+          campos — camera, durationMillis, repeatCount e o rounds
+          descontinuado. **Nao existe easing.** A rampa e interna e
+          proporcional ao ciclo: volta lenta implica rampa longa, e os dois
+          pedidos do Michel andam em direcoes opostas.
+     Por isso a rotacao e integrada por requestAnimationFrame: RAMPA e
+     VELOCIDADE ficam independentes. `flyCameraTo` continua sendo nativo no
+     RECENTRAR, onde easing interno e justamente o que se quer. */
+  var VOLTA=140000;   /* ms de UMA volta — 2,6°/s                        */
+  var RAMPA=700;      /* ms do zero a velocidade final — curto, de proposito */
+  var promessa=null, gritou=null, montado=false;
+  var mapa=null, slide=null, orbitando=false, rafOrb=null;
+
+  (function espia(){                 /* chave ruim nao rejeita: ela grita */
+    var orig=console.error;
+    console.error=function(){
+      var t=Array.prototype.join.call(arguments,' ');
+      if(/ApiNotActivated|InvalidKey|BillingNotEnabled|RefererNotAllowed|ApiTargetBlocked/i.test(t)) gritou=t;
+      return orig.apply(console,arguments);
+    };
+  })();
+
+  function diagnostica(){
+    if(!gritou) return null;
+    if(/BillingNotEnabled/i.test(gritou)) return 'A chave existe, mas o <code>billing</code> nao esta ativo no projeto do Google Cloud.';
+    if(/ApiNotActivated|ApiTargetBlocked/i.test(gritou)) return 'Falta ativar a <code>Maps JavaScript API</code> no projeto do Google Cloud, ou a chave esta restrita a outras APIs.';
+    if(/RefererNotAllowed/i.test(gritou)) return 'A chave e restrita por referrer e <code>'+location.origin+'</code> nao esta na lista. Cadastrar no console do Google antes de apresentar.';
+    if(/InvalidKey/i.test(gritou)) return 'Chave invalida.';
+    if(/reading .keys./i.test(gritou)) return 'A API do Google entrou duas vezes na pagina. Recarregue com <code>F5</code>.';
+    return 'O Google recusou a chave: <code>'+gritou.slice(0,140)+'</code>';
+  }
+  function falha(txt){
+    if(!slide) return;
+    slide.classList.remove('esperando'); slide.classList.add('falhou');
+    slide.querySelector('.estado b').textContent='o visor 3d nao abriu';
+    slide.querySelector('.estado span').innerHTML=txt;
+  }
+  function api(){
+    var k=chave();
+    if(window.google&&google.maps&&google.maps.importLibrary) return Promise.resolve();
+    if(promessa) return promessa;   /* MEMOIZADA — o loader do Google so pode
+       entrar uma vez na pagina; duas vezes quebra por dentro com
+       `Cannot read properties of undefined (reading 'keys')`. */
+    promessa=new Promise(function(ok,erro){
+      var s=document.createElement('script');
+      s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(k)
+           +'&v='+encodeURIComponent(canal())+'&libraries=maps3d&language=pt-BR&region=BR';
+      s.async=true; s.onload=ok;
+      s.onerror=function(){ promessa=null; erro(new Error('rede')); };
+      document.head.appendChild(s);
+    });
+    return promessa;
+  }
+  /* progresso REAL, em passos. Cada degrau da aproximacao e um marco que de
+     fato se atinge; o anel girando cobre o que nao se sabe medir (quanto de
+     malha falta baixar dentro do degrau). */
+  function progresso(passo,rotulo){
+    if(!slide) return;
+    var f=slide.querySelector('.barra i'), t=slide.querySelector('.passos');
+    if(f) f.style.width=Math.round(Math.min(passo,TOTAL)/TOTAL*100)+'%';
+    if(t) t.textContent=rotulo;
+  }
+  /* ═══ NIVEL 1 · AQUECIMENTO ══════════════════════════════════════════
+     Pedido do Michel, 02/09: nao deixar quem assiste esperando a carga.
+     O que se adianta AQUI e so o barato: o script da Maps API e o
+     `importLibrary('maps3d')` — rede e parse, nada de WebGL, nada de malha,
+     nenhum pixel na tela. Compra os primeiros segundos dos dez a quinze.
+
+     O QUE NAO SE FAZ AQUI, e de proposito: instanciar o `Map3DElement`. E
+     ele que baixa a malha, e ele so baixa o que a camera ENXERGA — montado
+     escondido, o navegador estrangula o WebGL fora de tela e ele nao baixa
+     nada. Para valer teria de ficar composto, em tamanho real, atras do
+     divisor: um segundo contexto WebGL2 com dezenas de MB de VRAM rodando
+     junto com o morph, no notebook de quem assiste. Esse e o nivel 2, e o
+     Michel decidiu sentir o nivel 1 primeiro.
+
+     Cota: o teto da chave e `3D Map loads per day`, e o que conta um load e
+     a instanciacao do Map3DElement, nao o carregamento da biblioteca. Pela
+     leitura do nome, o aquecimento nao consome cota — CONFERIR no Metrics
+     do console depois de algumas rodadas, antes de afirmar.
+
+     Idempotente por memoizacao: voltar e avancar no deck nao redispara.
+     ═════════════════════════════════════════════════════════════════════ */
+  var libP=null, aquecido=false;
+  function lib3d(){
+    if(libP) return libP;
+    libP = api().then(function(){ return google.maps.importLibrary('maps3d'); });
+    return libP;
+  }
+  function aquece(){
+    /* a chave entra no fim do body, depois deste script: na primeira
+       chamada ela ainda nao existe. Sair SEM marcar `aquecido` deixa a
+       proxima passagem tentar de novo. */
+    if(aquecido || !chave() || location.protocol==='file:') return;
+    aquecido=true;
+    /* silencio no catch: quem reporta falha ao usuario e o monta(), com o
+       diagnostico traduzido. Aquecimento que falha nao vira tela de erro —
+       o slide ainda nao esta em cena. */
+    lib3d()['catch'](function(){ libP=null; aquecido=false; });
+  }
+
+  function aproxima(p){
+    ANCORA={lat:p.lat,lng:p.lng,alt:p.alt};
+    /* ⚠ A APROXIMACAO NAO E ENFEITE. Criar o visor com o range final devolve
+       tela azul lisa: o motor ainda nao tem a malha e a camera nasce dentro
+       do chao. Nao existe evento de "terminei" — gmp-steadychange nao dispara
+       neste preview —, por isso a espera e por relogio, e generosa. */
+    var passos=DEGRAUS.concat([CAM.range]), i=0;
+    (function passo(){
+      if(!mapa) return;
+      mapa.center={lat:p.lat,lng:p.lng,altitude:p.alt};
+      mapa.range=passos[i];
+      mapa.tilt=(i===0)?CAM.tiltEntrada:CAM.tilt;
+      mapa.heading=CAM.heading;
+      i++;
+      progresso(1+i,'aproximando · '+i+' de '+passos.length);
+      if(i<passos.length){ setTimeout(passo,PAUSA); return; }
+      progresso(TOTAL-1,'assentando a malha');
+      setTimeout(function(){
+        var d=diagnostica(); if(d){ falha(d); return; }
+        progresso(TOTAL,'pronto');
+        if(slide) slide.classList.remove('esperando');
+        orbita(true);            /* entra girando, devagar */
+      },4000);
+    })();
+  }
+  function orbita(liga){
+    if(!mapa||!slide) return;
+    orbitando=liga;
+    slide.classList.toggle('orbitando',liga);
+    var bt=slide.querySelector('.orb');
+    if(bt) bt.lastChild.textContent=liga?'parar':'orbitar';
+    if(!liga){
+      /* para tambem a animacao nativa: o RECENTRAR usa `flyCameraTo`, e se
+         ele estiver no ar a orbita e a viagem disputam a mesma camera. */
+      if(mapa.stopCameraAnimation) mapa.stopCameraAnimation();
+      if(rafOrb){ cancelAnimationFrame(rafOrb); rafOrb=null; }
+      return;
+    }
+    /* ── a rotacao, integrada quadro a quadro ────────────────────────────
+       `alvo` em graus por segundo, derivado de VOLTA. A rampa e easeOut
+       sobre a VELOCIDADE: sobe rapido e assenta — a sensacao de "cliquei e
+       esta acontecendo". Rampa linear da partida mole; easeIn da exatamente
+       o que o Michel nao quer.
+       O `dt` e medido, nao presumido: em quadro perdido a camera nao pula
+       nem trava, porque o avanco e velocidade x tempo real. Teto de 50 ms
+       para aba que voltou do segundo plano nao dar um salto. */
+    var alvo=360/(VOLTA/1000);
+    var t0=performance.now(), ult=t0;
+    rafOrb=requestAnimationFrame(function passo(now){
+      if(!orbitando||!mapa) return;
+      rafOrb=requestAnimationFrame(passo);
+      var dt=Math.min((now-ult)/1000,0.05); ult=now;
+      var k=Math.min(1,(now-t0)/RAMPA);
+      var vel=alvo*(1-Math.pow(1-k,3));
+      mapa.heading=((mapa.heading||0)+vel*dt)%360;
+    });
+  }
+  /* ── RECENTRAR ─────────────────────────────────────────────────────────
+     Volta ao enquadramento canonico. `flyCameraTo` e da propria API e faz a
+     volta com animacao; sem ela, escreve-se center/range/tilt/heading direto
+     — corte em vez de voo, mas cumpre. A orbita para antes: duas animacoes
+     de camera se atropelam. E volta a girar quando a viagem termina, porque
+     e assim que o slide se comporta. */
+  function recentra(){
+    if(!mapa||!ANCORA) return;
+    var girava=orbitando;
+    if(girava) orbita(false);
+    var alvo={center:{lat:ANCORA.lat,lng:ANCORA.lng,altitude:ANCORA.alt},
+              range:CAM.range,tilt:CAM.tilt,heading:CAM.heading};
+    if(mapa.flyCameraTo){ mapa.flyCameraTo({endCamera:alvo,durationMillis:2200}); }
+    else { mapa.center=alvo.center; mapa.range=alvo.range;
+           mapa.tilt=alvo.tilt; mapa.heading=alvo.heading; }
+    var bt=slide&&slide.querySelector('.rec');
+    if(bt){ bt.classList.add('feito'); setTimeout(function(){ bt.classList.remove('feito'); },900); }
+    if(girava) setTimeout(function(){ orbita(true); },2400);
+  }
+  function monta(){
+    var vis=slide.querySelector('.visor');
+    var p={lat:parseFloat(vis.dataset.lat),lng:parseFloat(vis.dataset.lng),
+           alt:parseFloat(vis.dataset.alt)||760};
+    /* ensaio sem republicar: ?ll=lat,lng troca o ponto; ?alt=760 a altitude */
+    var q=new URLSearchParams(location.search);
+    var ll=(q.get('ll')||'').match(/(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)/);
+    if(ll){ p.lat=parseFloat(ll[1]); p.lng=parseFloat(ll[2]); }
+    if(q.get('alt')) p.alt=parseFloat(q.get('alt'))||p.alt;
+
+    if(!chave()){ falha('Sem chave da Maps Platform nao ha o que desenhar. Ela mora em <code>modulos/ms-maps-chave.js</code>.'); return; }
+    if(location.protocol==='file:'){
+      falha('Esta pagina esta aberta como arquivo (<code>file://</code>) e a Maps JavaScript API recusa essa origem. Este slide so funciona pelo link publicado — e por isso que a peca se entrega por endereco, nunca como anexo.');
+      return;
+    }
+    gritou=null;
+    /* se o aquecimento ja rodou, esta promessa ja esta resolvida e o passo
+       "carregando a api" passa num piscar — o indicador salta direto para
+       "aproximando · 1 de 4". */
+    lib3d().then(function(m3d){
+        if(mapa&&mapa.parentNode) mapa.parentNode.removeChild(mapa);
+        mapa=new m3d.Map3DElement({
+          center:{lat:p.lat,lng:p.lng,altitude:p.alt},
+          range:CAM.range,tilt:CAM.tiltEntrada,heading:CAM.heading,
+          /* MapMode, nao Map3DMode. SATELLITE e nao HYBRID: o hibrido cobre
+             a cidade de pinos de restaurante e rotulo de rua. */
+          mode:m3d.MapMode?m3d.MapMode.SATELLITE:'SATELLITE'});
+        vis.insertBefore(mapa,vis.firstChild);
+        setTimeout(function(){
+          var d=diagnostica(); if(d){ falha(d); return; }
+          aproxima(p);
+        },1400);
+      })['catch'](function(e){
+        var d=diagnostica();
+        falha(d||'Nao deu para carregar a API do Google (<code>'+((e&&e.message)||'erro')
+          +'</code>). Este slide nao funciona offline.');
+      });
+  }
+  function desativa(){
+    document.querySelectorAll('.g-earth-3d').forEach(function(sl){ sl.classList.remove('girando'); });
+  }
+  document.addEventListener('click',function(e){
+    var sl=e.target.closest&&e.target.closest('.g-earth-3d'); if(!sl) return;
+    if(e.target.closest('.orb')){ e.stopPropagation(); orbita(!orbitando); return; }
+    if(e.target.closest('.rec')){ e.stopPropagation(); recentra(); return; }
+    if(e.target.closest('.sair')){ e.stopPropagation(); desativa(); document.body.focus(); return; }
+    if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando');
+      if(orbitando) orbita(false); }          /* quem pegou o mouse manda */
+  });
+  /* indices de todo slide earth-3d do deck. Generico de proposito: se um dia
+     a peca tiver dois visores, os dois aquecem no slide que os antecede. */
+  var PROX=[];
+  DECK.forEach(function(s,i){ if(s.g==='earth-3d') PROX.push(i); });
+
+  return {
+    chegou:function(){
+      var s=DECK[cur];
+      /* NIVEL 1 — aquece ao chegar no slide imediatamente anterior */
+      if(PROX.indexOf(cur+1)>=0) aquece();
+      if(!s||s.g!=='earth-3d'){ desativa(); if(orbitando) orbita(false); return; }
+      slide=document.querySelectorAll('#palco .slide')[cur];
+      if(montado){ if(!orbitando&&mapa) orbita(true); return; }
+      montado=true; slide.classList.add('esperando');
+      progresso(1,'carregando a api'); monta();
+    }
+  };
+})();
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VISOR DO MODELO SKETCHUP — portado de modulos/modelo-sketchup.html
+   Irmao do MSEarth: um mostra ONDE o projeto esta, este mostra O QUE ele e.
+
+   Medido em 02/09/2026 com sonda publicada no dominio real: o
+   `app.sketchup.com/viewer/3dw?WarehouseModelId=<id>` aceita ser embedado a
+   partir de steinvalente-dev.github.io, direto, com painel de Cenas,
+   Sombras, projecoes e elevacoes padrao, e sem marca de terceiro.
+
+   ⚑ TRES COISAS QUE NAO SAO DETALHE:
+   1. o iframe monta AO CHEGAR no slide, nunca na carga — 40 MB;
+   2. o modelo TEM DE ESTAR PUBLICO no 3D Warehouse: deck publicado e
+      servido a visitante anonimo, e modelo privado devolve 404;
+   3. nao ha como detectar iframe recusado por cabecalho — `onerror` nao
+      dispara e o documento e cross-origin. O que se detecta e a AUSENCIA
+      de `load` no prazo. Dai a reserva ter TRES portas: relogio,
+      `navigator.onLine === false`, e um botao — porque o caso "carregou
+      uma pagina de erro" so quem ve e quem apresenta.
+   ═════════════════════════════════════════════════════════════════════════ */
+window.MSModelo=(function(){
+  'use strict';
+  var BASE='https://app.sketchup.com/viewer/3dw?WarehouseModelId=';
+  var TOTAL=3;
+  var PRAZO_DOC=25000;      /* documento nao chegou: rede ou bloqueio      */
+  var PRAZO_MODELO=12000;   /* documento chegou; janela ate declarar pronto */
+  var montado=false, caiu=false, tDoc=null, tModelo=null, slide=null;
+
+  function el(sel){ return slide?slide.querySelector(sel):null; }
+  function progresso(p,rotulo){
+    var f=el('.barra i'), t=el('.passos');
+    if(f) f.style.width=Math.round(Math.min(p,TOTAL)/TOTAL*100)+'%';
+    if(t) t.textContent=rotulo;
+  }
+  function falha(txt){
+    if(!slide) return;
+    slide.classList.remove('esperando'); slide.classList.add('falhou');
+    var b=el('.estado b'), sp=el('.estado span');
+    if(b) b.textContent='o modelo 3d nao abriu';
+    if(sp) sp.innerHTML=txt+'<br><br>As imagens salvas continuam valendo — botao <b>imagens</b>.';
+  }
+  function reserva(liga){
+    caiu=!!liga;
+    if(slide){ slide.classList.toggle('reserva-on',caiu);
+               if(caiu) slide.classList.remove('girando'); }
+  }
+  function vaiPara(i){
+    var imgs=slide.querySelectorAll('.reserva .ph img');
+    var bts=slide.querySelectorAll('.cenas button');
+    if(!imgs.length) return;
+    i=(i+imgs.length)%imgs.length;
+    imgs.forEach(function(im,j){ im.classList.toggle('on',j===i); });
+    bts.forEach(function(b,j){ b.classList.toggle('on',j===i); });
+    var cap=imgs[i].getAttribute('alt')||'';
+    var rc=el('.rescap'); if(rc) rc.textContent=cap;
+  }
+  function monta(){
+    if(montado||!slide) return;
+    montado=true;
+    var q=el('iframe'), id=el('.visor').dataset.modelo;
+    slide.classList.add('esperando');
+    progresso(1,'pedindo o modelo');
+
+    if(navigator.onLine===false){
+      /* sem rede nao ha o que esperar: cai direto para a reserva, que e
+         exatamente o cenario para o qual ela existe. */
+      reserva(true); falha('Sem conexao de rede.'); return;
+    }
+    q.addEventListener('load',function(){
+      if(tDoc){ clearTimeout(tDoc); tDoc=null; }
+      progresso(2,'montando a malha');
+      /* o documento chegou; o modelo ainda desce. A janela abaixo e tempo,
+         nao medicao — e esta dito como tal, aqui e no modulo. */
+      tModelo=setTimeout(function(){
+        progresso(TOTAL,'pronto');
+        slide.classList.remove('esperando');
+        slide.classList.add('pronto');
+      },PRAZO_MODELO);
+    });
+    tDoc=setTimeout(function(){
+      falha('O quadro do viewer nao respondeu em '+(PRAZO_DOC/1000)+' s. '
+        +'Pode ser a rede, pode ser rede corporativa que bloqueia quadro de '
+        +'outro dominio, e pode ser o modelo nao estar <b>publico</b> no 3D '
+        +'Warehouse — modelo privado devolve 404 para quem abre o link.');
+    },PRAZO_DOC);
+    q.src=BASE+encodeURIComponent(id);
+  }
+  function recomeca(){
+    if(!slide) return;
+    /* recarregar e o unico caminho de volta: a camera e do viewer da Trimble
+       e nao ha API para traze-la. Custa uma nova carga, e o indicador volta
+       a aparecer — o que e honesto. */
+    if(tDoc) clearTimeout(tDoc);
+    if(tModelo) clearTimeout(tModelo);
+    montado=false;
+    slide.classList.remove('pronto','girando','falhou');
+    el('iframe').src='about:blank';
+    reserva(false);
+    monta();
+  }
+  document.addEventListener('click',function(e){
+    var sl=e.target.closest&&e.target.closest('.g-modelo-3d'); if(!sl) return;
+    slide=sl;
+    if(e.target.closest('.rec')){ e.stopPropagation(); recomeca(); return; }
+    if(e.target.closest('.img')){ e.stopPropagation(); reserva(!caiu); return; }
+    var bt=e.target.closest('.cenas button');
+    if(bt){ e.stopPropagation(); vaiPara(parseInt(bt.dataset.i,10)); return; }
+    if(e.target.closest('.sair')){ e.stopPropagation(); sl.classList.remove('girando');
+      document.body.focus(); return; }
+    if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando'); }
+  });
+  /* setas passeiam pelas imagens de reserva quando ela esta no ar */
+  addEventListener('keydown',function(e){
+    if(!caiu||!slide) return;
+    var imgs=[].slice.call(slide.querySelectorAll('.reserva .ph img'));
+    if(!imgs.length) return;
+    var atual=imgs.findIndex(function(i){ return i.classList.contains('on'); });
+    if(e.key==='ArrowRight'){ e.preventDefault(); vaiPara(atual+1); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); vaiPara(atual-1); }
+  });
+  return {
+    chegou:function(){
+      var s=DECK[cur];
+      if(!s||s.g!=='modelo-3d'){
+        document.querySelectorAll('.g-modelo-3d').forEach(function(sl){
+          sl.classList.remove('girando'); });
+        return;
+      }
+      slide=document.querySelectorAll('#palco .slide')[cur];
+      monta();
+    }
+  };
+})();
+
+/* liga as duas coisas ao go(), depois da cortina diagonal — a cortina adia a
+   troca em 580 ms, por isso a espera aqui. */
+(function(){
+  var _go=window.go;
+  window.go=function(i,tudo){ _go(i,tudo); setTimeout(function(){
+    window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); },700); };
+  window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou();
+})();
 
 </script>
 <!-- retorno ao acervo + camada de toque. Comportamento em modulos/ms-voltar.js.
@@ -2386,5 +3331,9 @@ if(!location.search.includes('semfundo')){
   window.__msAcorda();
 })();
 </script>
+<!-- a chave da Maps Platform (gabarito earth-3d) mora num arquivo só, restrita
+     por referrer. Ler modulos/ms-maps-chave.js antes de mexer em qualquer
+     coisa de chave. Não é CDN: é módulo local do acervo. -->
+<script src="../modulos/ms-maps-chave.js"></script>
 <script defer src="../modulos/ms-voltar.js"></script>
 </body></html>

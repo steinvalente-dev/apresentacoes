@@ -426,8 +426,8 @@ const projetos = [
         data: "25.08.2026", href: "amaz-convergencia/apresentacao.html" },
       { nome: "apresentação institucional · R1", pranchas: 56, peso: 6.1,
         data: "26.08.2026", href: "amaz-r1/apresentacao.html" },
-      { nome: "apresentação institucional", pranchas: 37, peso: 0.16,
-        data: "23.08.2026", href: "amaz/apresentacao.html" }
+      { nome: "apresentação institucional · versão de 23.08", pranchas: 37, peso: 6.1, oculto: true,
+        data: "23.08.2026", href: "superado/2026-09-02-amaz-apresentacao.html" }
     ]
   },
 ];
@@ -569,15 +569,15 @@ const docs = [
   { grupo:"operação", nome:"arquivamento de entregas",
     desc:"Onde cada arquivo vai parar no Drive, a árvore de pastas e as armadilhas",
     href: GH+"operacao/ARQUIVAMENTO-ENTREGAS.md" },
+  { grupo:"montar", nome:"tabela de gabaritos gerada do código",
+    desc:"A tabela de gabaritos e campos do deck — montar não é redigida: sai do tpl() do esqueleto por este script, com os campos obrigatórios em negrito e a aridade de cada item. Rodar depois de mexer no tpl()",
+    arq:"sistemas/DECK-MONTAR.md", ver:"sistemas/gerar-gabaritos.py" },
   { grupo:"publicação", nome:"guarda do repositório público",
     desc:"Este repositório é aberto a qualquer pessoa, com ou sem link do acervo. A guarda varre nome de cliente, endereço, CNPJ, valor, URL da área de cliente e segredo antes do push — tem de imprimir “guarda: limpo”. Peça de cliente mora na área de cliente do site; o registro dela é privado. Regra na seção “Público quer dizer aberto” do GitHub — como trabalhar",
     arq:"sistemas/GITHUB-COMO-TRABALHAR.md", ver:"sistemas/guarda-publico.py" },
   { grupo:"publicação", nome:"levar para outra frente",
     desc:"O que uma conversa de Lavrō, AMAZ ou Sarasá precisa ler para usar o mesmo sistema, e o que muda nas instruções daquele Projeto",
     arq:"sistemas/LEVAR-PARA-OUTRA-FRENTE.md" },
-  { grupo:"publicação", nome:"publicar apresentações",
-    desc:"Como uma peça entra no ar, o índice, os limites e o que não vem para cá",
-    arq:"sistemas/PUBLICAR-APRESENTACOES.md" },
   { grupo:"contexto", nome:"frentes de trabalho",
     desc:"As cinco frentes, sociedade, posicionamento e o que cada uma exige",
     href: GH+"contexto/CONTEXTO-FRENTES.md" },

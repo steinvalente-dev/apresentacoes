@@ -63,3 +63,5 @@ função.
 |---|---|---|---|
 | `2026-08-30-manual-marca-michel-stein.html` | o manual de marca em cinco folhas, antes da revisão gráfica | 30/08/2026 | `marca/michel-stein/manual.html` |
 | `2026-08-30-MARCA-MICHEL-STEIN.md` | o mestre da marca, antes do grifo e da escala de números | 30/08/2026 | `marca/MARCA-MICHEL-STEIN.md` |
+| `2026-09-02-amaz-apresentacao.html` | a peça institucional da AMAZ de 23.08 — na prática uma quase-cópia da R1 (6 MB), com metadado errado no índice | 02/09/2026 | `amaz-r1/apresentacao.html` |
+| `2026-09-02-PUBLICAR-APRESENTACOES.md` | o runbook de publicação de peças, paralelo ao GITHUB-COMO-TRABALHAR e contraditório com ele na regra de revisão | 02/09/2026 | `sistemas/GITHUB-COMO-TRABALHAR.md` |

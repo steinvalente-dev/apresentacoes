@@ -46,7 +46,7 @@ Registros de rodada com nome de cliente ficam no repositório privado, em
 ### Uma palavra, três trabalhos — resolvido em 29/08/2026
 
 O sistema chamava-se **prancha**, e a palavra fazia três trabalhos ao mesmo
-tempo: o sistema, um dos quinze gabaritos e a unidade de contagem do acervo.
+tempo: o sistema, um dos gabaritos e a unidade de contagem do acervo.
 Confundia, e "prancha" já é palavra carregada em arquitetura.
 
 **O sistema passou a se chamar `deck`** — nome que já era o do array de conteúdo
@@ -141,9 +141,12 @@ O que se paga: no celular **em pé** o quadro cabe pela largura, 390 × 219. A
 peça inteira, correta, e pequena. Girar resolve, e quem avisa é o módulo
 `ms-voltar.js`, não a peça.
 
-**Estado da adoção, 29/08/2026:** aplicado numa peça de teste. **As nove peças
-publicadas seguem em v2.** Migrar uma peça é conversão de unidades mais as três
-armadilhas abaixo — não é reescrita.
+**Estado da adoção** (corrigido 02.09.2026): o esqueleto sai em **tela cheia,
+sem tarja**, desde 02/09 — o quadro fixo descrito aqui é a base, e a moldura
+deixou de aparecer; regras em `DECK-MONTAR.md`, "O que não é negociável", itens
+1, 2 e 7. A peça de referência é `emei-presidente-dutra`. **Peças antigas ficam
+como estão, em formato antigo** — decisão do Michel: a última peça é a mais
+completa e os módulos se alinham a ela. Não se migra peça publicada.
 
 ### Três armadilhas do quadro fixo, já pagas
 
@@ -173,17 +176,13 @@ fazer o passe.**
 
 ## Gabaritos
 
-**Os quinze do esqueleto:** `marca` `capa` `divisor` `topicos` `etapas`
-`prancha` `cheia` `duo` `meio` `texto` `desenho` `planta` `modelo` `mapa` `fim`.
-
-**Quatro nascidos em deck comercial, ainda não no esqueleto:**
-
-| gabarito | o que é | cuidado |
-|---|---|---|
-| `sumario` | o argumento inteiro em blocos, um por seção; vem logo depois da capa | grade 3 × 2 |
-| `players` | atores do mesmo mercado, em faixas verticais | o campo é **`casas`**, não `cols` |
-| `avulso` | preço de cada frente, dentro e fora do pacote | `grupos:[[titulo, subtitulo, linhas]]` |
-| `duasfrentes` | o pacote se fechando: caixa que cresce a cada item revelado | ver mecânica abaixo |
+**A lista dos gabaritos é a tabela do `DECK-MONTAR.md`**, gerada do `tpl()` do
+esqueleto por `sistemas/gerar-gabaritos.py` — não se repete aqui. (Corrigido
+02.09.2026: este trecho listava "os quinze do esqueleto", com `topicos`,
+`etapas`, `meio`, `texto`, `desenho`, `planta` e `modelo`; era o vocabulário da
+casa ITTB, e esses sete **não existem no esqueleto**. `sumario`, `players`,
+`avulso` e `duasfrentes`, dados como "ainda não no esqueleto", estão nele.
+Histórico no fim deste arquivo.)
 
 ⚠ **`cols` é campo reservado.** O `const tab` compartilhado do `tpl()` dispara
 com `s.cols` e exige `s.linhas` logo em seguida. Um gabarito novo que use `cols`
@@ -221,7 +220,7 @@ Sob o quadro fixo (v3) os mesmos clamps valem, com `cqw` no lugar de `vw`.
 | **render horizontal** (ar ≈ 1,7–1,8) | `cheia` | sangria total, impacto máximo, quase sem corte |
 | **render quadrado, detalhe ou peça menor** | `duo` ou `prancha` | em sangria total perderia teto ou piso |
 | **referência de repertório** (imagem pequena, fundo claro) | `prancha` | a composição em grade é o valor |
-| **croqui, planta, corte** | `planta` ou `desenho` | `contain` — desenho técnico nunca se corta |
+| **croqui, planta, corte** | `prancha` de uma coluna | `contain` — desenho técnico nunca se corta. (`planta` e `desenho`, com lupa, não estão no esqueleto — corrigido 02.09.2026) |
 
 `cheia` usa `object-fit:cover`: imagem de proporção diferente de 16:9 **vai**
 perder borda. Conferir a proporção antes de mandar para lá.
@@ -266,7 +265,8 @@ pular de posição e mata a leitura da sobreposição.
 ## Passo a passo — item numerado entra por clique
 
 **Regra do deck, não opção.** A apresentação é por voz, e o que está na tela na
-hora da fala é controlado. Vale para `topicos`, `fim` e `duasfrentes`.
+hora da fala é controlado. Vale para `lista`, `fim` e `duasfrentes` (`lista` é o
+nome no esqueleto; `topicos` era o da casa ITTB — corrigido 02.09.2026).
 
 - O item recebe classe `passo`, **não** `rev`. A cascata (`rev`) revela tudo de
   uma vez; aqui o ponto é o oposto.
@@ -453,7 +453,7 @@ nível da raiz (`<slug>/arquivo.html`). Peça mais funda ajusta o `../`.
 tela cheia se sobrepõem no canto superior esquerdo. É do módulo e vale para
 todas as peças.
 
-Runbook e tabela de campos: `PUBLICAR-APRESENTACOES.md`, ao lado deste arquivo.
+Runbook e tabela de campos: `GITHUB-COMO-TRABALHAR.md`, ao lado deste arquivo.
 
 ---
 
@@ -627,8 +627,11 @@ recorrente.
 
 ## Multimarca — como o motor recebe uma marca
 
-Um único bloco de tema no topo do `<style>`, mais a constante `MARCA` no
-`<script>`. Trocar marca não reescreve gabarito.
+Um único bloco de tema no topo do `<style>` — as `@font-face` e o `:root` —
+mais os objetos de abertura e contracapa no `DECK` e o `CAPA_IMGS`. Tudo isso
+vem do **bloco da marca**, `../marca/<nome>/bloco.html`, que se cola no
+esqueleto. (Corrigido 02.09.2026: não há constante `MARCA` no `<script>`.)
+Trocar marca não reescreve gabarito.
 
 O bloco de tema declara quatro papéis:
 
@@ -642,31 +645,33 @@ O bloco de tema declara quatro papéis:
 Mais dois auxiliares: **filete** (tinta a ~13%) e **moldura** (a tarja do
 letterbox, na v3).
 
-**Marcas registradas até 29/08/2026:**
+**Marcas registradas** (corrigido 02.09.2026 — a tabela anterior dizia que
+Lavrō e Sarasá não tinham arquivo de marca; têm):
 
 | marca | estado | onde |
 |---|---|---|
-| michel stein_ | implementada, é o padrão | `../marca/MARCA-MICHEL-STEIN.md` |
-| AMAZ | tokens levantados de peça publicada, faltam abertura, contracapa, fundo e regras de logotipo | `../marca/MARCA-AMAZ.md` |
-| Lavrō | tokens levantados, bloco pronto, ainda não virou arquivo de marca | `temas.md` · azul `#0123FF` só como preenchimento; traço fino elétrico no escuro reprova, usar `#7C8BFF`; uma só superfície azul por tela; status verde/âmbar/vermelho não é tematizável |
-| Baraka · Sarasá | **sem sistema visual documentado** | **não inventar paleta** — levantar a identidade antes e escrever o `MARCA-<nome>.md` |
+| michel stein_ | implementada, é o padrão. Logotipo do canto: texto | `../marca/MARCA-MICHEL-STEIN.md` · `michel-stein/bloco.html` |
+| AMAZ | levantada de peça publicada. Logotipo do canto: texto | `../marca/MARCA-AMAZ.md` · `amaz/bloco.html` |
+| Lavrō | arquivo de marca e bloco prontos. Logotipo do canto: texto | `../marca/MARCA-LAVRO.md` · `lavro/bloco.html` |
+| Estúdio Sarasá | arquivo de marca e bloco prontos; peça publicada (`emei-presidente-dutra`). Logotipo do canto: **o logotipo**, positivo/negativo pelo tema | `../marca/MARCA-SARASA.md` · `sarasa/bloco.html` |
+| Baraka | sem sistema visual documentado | **não inventar paleta** — levantar antes e escrever o `MARCA-<nome>.md` |
+
+A escolha texto × logotipo no canto superior direito é **por frente, escrita no
+arquivo da marca** e configurada no bloco da marca — decisão do Michel,
+02.09.2026. Regra em `DECK-MONTAR.md`, item 7.
 
 ### O que ainda não está separado
 
-Hoje os hex e as faces estão escritos **à mão dentro de cada deck**, com nomes
-de variável que são da marca padrão (`--creme`, `--tinta`, `--oliva`,
-`--terra`), e a capa é um HTML com a marca soldada. **Enquanto for assim, trocar
-de marca é edição manual peça a peça, não substituição de camada.**
-
-O caminho, quando for a hora: renomear as variáveis para os papéis
-(`--papel`, `--tinta`, `--primaria`, `--acento`) no esqueleto, e o
-`MARCA-<nome>.md` passa a ser literalmente o bloco `:root` que se cola. Renomear
-em peça publicada não vale a pena — vale a partir do esqueleto.
-
-⚠ **O `deck-esqueleto.html` ainda não existe em repositório nenhum.** Está
-listado como pendência desde 19/08/2026. Sem ele, "partir do esqueleto" significa
-na prática partir do HTML da revisão anterior de outra peça — que traz junto a
-marca e o conteúdo dela.
+O `deck-esqueleto.html` **existe** desde 29/08/2026, em
+`esqueleto/deck-esqueleto.html`, e cada marca tem o seu `bloco.html` — a
+afirmação anterior deste trecho, de que o esqueleto "não existe em repositório
+nenhum", está corrigida (02.09.2026). Em 03/09/2026 o `:root` foi renomeado
+para os papéis — `--papel --tinta --primaria --acento --escuro --acento-claro
+--f-display --f-corpo --f-mono`, iguais nos quatro blocos — e todo hex escrito à
+mão no CSS e nos scripts virou `var()`/derivado. Os nomes antigos (`--creme`,
+`--oliva`, `--terra`, `--mono`, `--sans`…) sobrevivem como aliases no bloco
+DERIVADOS, para peça antiga. Vale a partir do esqueleto; peça publicada não se
+reabre para isso.
 
 ---
 
@@ -685,9 +690,10 @@ marca e o conteúdo dela.
 5. **Aviso de orientação** em contexto móvel (`is_mobile`, `has_touch`): abre no
    retrato → toque dispensa sem trocar slide → navega normal → paisagem esconde →
    voltar ao retrato mostra de novo → desktop não dispara.
-6. **Percorrer os passos por teclado** num `topicos` e num `fim`.
+6. **Percorrer os passos por teclado** num `lista` e num `fim`.
 7. Capturar `pageerror` e **olhar as imagens** num tamanho grande e num pequeno.
-8. **Conferir que as seis faces em base64 estão no arquivo.**
+8. **Conferir que as faces em base64 estão no arquivo** — seis (michel stein_,
+   AMAZ) ou quatro (Sarasá), conforme a marca.
 9. **Gabarito de rede não é validável no sandbox** — os domínios de mapa estão
    bloqueados. Verificar só composição, véu e rótulo, e pedir a conferência na
    máquina dele.
@@ -713,12 +719,14 @@ exige confirmação oficial (BDT, GeoSampa, certidão, levantamento) do que pode
 afirmado como fato.
 
 **Toda apresentação a cliente abre com slide "pontos a discutir"**, gabarito
-`topicos`, depois da capa.
+`sumario` ou `lista` (`topicos`, o nome antigo, não existe no esqueleto), depois
+da capa.
 
 **Lupa em desenho técnico.** `.ph[data-lupa]` abre a imagem num visor de zoom
 próprio (100–600%, arraste, esc fecha). Nunca `<embed>` de PDF: o visor do
-navegador rouba o foco e as setas param de trocar slide. No `duo`, `lupa:true`
-liga o recurso; `planta` já vem com lupa.
+navegador rouba o foco e as setas param de trocar slide. A máquina da lupa é da
+casa ITTB e **não está no esqueleto** — `planta` e `desenho` dependem dela
+(corrigido 02.09.2026).
 
 **Proporção no `duo`.** Sem `ar`, a coluna estica e o `object-fit:cover` come o
 desenho. Declarar `ar:'1.705'` (ou o que for). Sem `ar` só quando as duas imagens
@@ -767,6 +775,67 @@ têm proporções diferentes e o corte é aceitável.
 
 ---
 
+## Histórico do método
+
+Movido do `DECK-MONTAR.md` em 02/09/2026 — lá fica só a lição prática (o laço
+de verificação). Aqui, o relato.
+
+### Sobre "os quinze gabaritos" — 29/08/2026
+
+O documento antigo falava em quinze, fixos. **A varredura de 29/08/2026 nas peças
+publicadas mostrou outra coisa:**
+
+| peça | gabaritos | quais |
+|---|---|---|
+| casa ITTB | 8 | capa, cheia, divisor, duo, mapa, marca, planta, prancha |
+| AMAZ R1 | 20 | camadas, casos, cheia, dado, divisor, donut, duas, fim, frase, grelha, janela, lista, logo, marca, meio, mosaico, pergunta, planilha, socio, tabela |
+| tokyo · centro | 19 | os deste esqueleto |
+
+**Só `marca` e `divisor` aparecem nas três.** Cada deck criou o vocabulário do
+seu tipo de argumento: a casa ITTB é arquitetura, a AMAZ é institucional, a tokyo
+é comercial. Não existe um conjunto único, e fingir que existe é o que fazia o
+documento antigo descrever um sistema que já não era o que estava no ar.
+
+**Estado em 29/08/2026, depois do teste de montagem (ainda válido em 02/09):**
+
+| gabarito de arquitetura | no esqueleto? |
+|---|---|
+| `prancha` — grade de referência | ✅ portado |
+| `cheia` — render em tela cheia | ✅ portado |
+| `planta` — com lupa de 100 a 600% | ❌ falta a máquina da lupa |
+| `desenho` — planta com dados ao lado | ❌ idem |
+
+Enquanto `planta` e `desenho` não entram, planta e corte vão como `prancha` de
+uma coluna, **sem zoom**. É a limitação mais concreta hoje.
+
+### O que o teste de montagem mostrou — 29/08/2026
+
+Em 29/08/2026 uma sessão montou um deck de dezesseis slides a partir de um briefing real,
+usando **só o `DECK-MONTAR.md`** — sem abrir os decks publicados. Resultado:
+
+**Quebrou em dois pontos, e os dois eram erro de documentação, não de código.**
+
+1. **`prancha` estava listado no `DECK-MONTAR.md` e não existia no esqueleto.** O `s.cols` caía
+   no `const tab` compartilhado, que espera array, e derrubava **o deck inteiro**
+   com `s.cols.map is not a function`. É a armadilha do campo reservado,
+   registrada em 23/08 e paga de novo. Corrigido: `prancha` foi portado, e o
+   `tpl()` o trata **antes** do `tab`.
+2. **`mapa` com o andaime vazio derrubava o deck.** Corrigido: vira estado vazio.
+
+**O que funcionou de primeira:** capa, divisor, lista, tabela com `fecho` e
+`nota`, fim, abertura e contracapa da marca, os passos por clique, o quadro
+fixo, a cortina e o retorno ao acervo. Zero transbordo, zero `undefined`.
+
+### 02/09/2026 — auditoria
+
+A EMEI Presidente Dutra passa a ser a peça de referência; `casa-ittb` e
+`tokyo-centro` saíram do público (peças de cliente, na área de cliente do site).
+Peças antigas ficam como estão. O esqueleto sai em tela cheia, sem tarja. Lavrō e
+Sarasá têm arquivo de marca e bloco. Logotipo do canto decidido por frente.
+Regra de versão × revisão em `GITHUB-COMO-TRABALHAR.md`.
+
+---
+
 ## O que este arquivo não cobre
 
 | assunto | onde |
@@ -774,5 +843,5 @@ têm proporções diferentes e o corte é aceitável.
 | cor, tipografia, logotipo, capa, acervo do fundo | `../marca/MARCA-<nome>.md` |
 | o shader do fundo, preset a preset | `michel-stein-sistemas/deck/FUNDO-MORPH-PONTILHADO.md` |
 | a capa padrão da michel stein_, receita de extração | `../marca/MARCA-MICHEL-STEIN-CAPA.md` |
-| como publicar, registrar e validar no ar | `PUBLICAR-APRESENTACOES.md` e `GITHUB-COMO-TRABALHAR.md`, ao lado |
+| como publicar, registrar e validar no ar | `GITHUB-COMO-TRABALHAR.md`, ao lado |
 | rodadas com nome de cliente, histórico por projeto | `michel-stein-sistemas/deck/` |

@@ -42,6 +42,12 @@ inverter isso é o caso alternativo, não o padrão.
 
 Especificação do `arquiteto` ao lado e do respiro de 1,1em: ver §4, abertura.
 
+**Canto superior direito do deck: texto.** É a assinatura reduzida, `michel
+stein_ arquiteto`, em todo slide — não o monograma, não logotipo desenhado. A
+escolha é por frente e vem configurada no bloco da marca
+(`michel-stein/bloco.html`); a Sarasá é a única que leva logotipo ali. Decisão
+do Michel, 02.09.2026 — regra geral em `../sistemas/DECK-MONTAR.md`, item 7.
+
 ---
 
 ## 2 · Cor — os quatro papéis
@@ -238,9 +244,11 @@ Uma marca nova é este arquivo preenchido de novo. O mínimo:
 clique, a estrutura do chrome, a pastilha da navegação, o retorno ao acervo e a
 lista de validação. Isso é o motor.
 
-⚠ **O bloqueio prático, hoje:** os hex e as faces estão escritos à mão dentro de
-cada deck, com nomes de variável que são desta marca (`--creme`, `--oliva`,
-`--terra`), e a capa é um HTML de 561 KB com a marca soldada. **Enquanto for
-assim, trocar de marca é edição peça a peça, não substituição de camada.** O
-caminho está descrito no fim do `DECK-MOTOR.md`, e passa por o
-`deck-esqueleto.html` existir — coisa que ainda não acontece.
+**O esqueleto multimarca existe** (corrigido 02.09.2026 — este parágrafo dizia
+que "ainda não acontece"): `esqueleto/deck-esqueleto.html` desde 29/08, e cada
+marca tem o seu bloco em `marca/<nome>/bloco.html` — michel stein_, AMAZ, Lavrō
+e Sarasá. Desde 03/09/2026 o `:root` usa nomes por papel (`--papel --tinta
+--primaria --acento …`), iguais nas quatro marcas, e não há mais hex à mão no
+CSS: trocar de marca é colar os quatro trechos do bloco. Os nomes desta marca
+(`--creme`, `--oliva`, `--terra`) seguem como aliases. Detalhe em
+`DECK-MOTOR.md`, "Multimarca".
