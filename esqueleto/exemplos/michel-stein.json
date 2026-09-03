@@ -1,0 +1,170 @@
+{
+ "projeto": "Casa Exemplo",
+ "titulo": "casa<br>exemplo",
+ "sub": "Residência unifamiliar num lote de esquina, com o jardim no centro.",
+ "kick": "BAIRRO · SÃO PAULO",
+ "metas": [
+  [
+   "cliente",
+   "—"
+  ],
+  [
+   "etapa",
+   "estudo preliminar"
+  ],
+  [
+   "data",
+   "—"
+  ]
+ ],
+ "div_imgs": [],
+ "deck": [
+  {
+   "g": "capa"
+  },
+  {
+   "g": "sumario",
+   "kick": "o argumento",
+   "t": "o que esta peça mostra",
+   "itens": [
+    [
+     "01",
+     "o lote",
+     "O ponto de partida: o que existe e o que pede resposta."
+    ],
+    [
+     "02",
+     "o projeto",
+     "A proposta, em desenho e em números."
+    ],
+    [
+     "03",
+     "encaminhamento",
+     "O que decidir agora e o que vem depois."
+    ]
+   ]
+  },
+  {
+   "g": "divisor",
+   "div": 1,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "o lote",
+   "dn": "01",
+   "dt": "o lote",
+   "ds": "Ler o lugar antes de desenhar."
+  },
+  {
+   "g": "frase",
+   "esc": 1,
+   "trama": 1,
+   "kick": "a ideia",
+   "t": "a casa se organiza<br>em volta do jardim",
+   "sub": "Dois volumes, um pátio, e a sombra que ele faz."
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "as decisões",
+   "t": "três decisões de partido",
+   "pre": "Três decisões, e o que cada uma resolve.",
+   "itens": [
+    [
+     "01",
+     "<b>o jardim no meio.</b> Os ambientes de estar abrem para o pátio, não para a rua."
+    ],
+    [
+     "02",
+     "<b>dois pavimentos, dois usos.</b> Convívio embaixo, descanso em cima."
+    ],
+    [
+     "03",
+     "<b>estrutura aparente.</b> Concreto e madeira sem revestimento, para envelhecer bem."
+    ]
+   ]
+  },
+  {
+   "g": "divisor",
+   "div": 1,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "o projeto",
+   "dn": "02",
+   "dt": "o projeto",
+   "ds": "O desenho, e como se lê."
+  },
+  {
+   "g": "cheia",
+   "src": "",
+   "lbl": "render do projeto",
+   "h2": "a sala vista do jardim",
+   "cap": "O pátio é a sala de fora: a mesma laje cobre os dois."
+  },
+  {
+   "g": "duo",
+   "kick": "antes e depois",
+   "t": "o lote hoje e o lote com a casa",
+   "sub": "Mesmo recorte, mesma escala.",
+   "figs": [
+    [
+     "hoje",
+     "",
+     "O terreno como está: murado, sem árvore.",
+     ""
+    ],
+    [
+     "proposta",
+     "",
+     "O pátio abre o miolo do lote.",
+     ""
+    ]
+   ],
+   "leg": "Levantamento e implantação no mesmo recorte, escala 1:200.",
+   "ar": "1.5"
+  },
+  {
+   "g": "tabela",
+   "kick": "em números",
+   "t": "áreas do estudo",
+   "cols": [
+    "",
+    "térreo",
+    "superior"
+   ],
+   "linhas": [
+    [
+     "área construída",
+     "180 m²",
+     "120 m²"
+    ],
+    [
+     "pé-direito",
+     "3,20 m",
+     "2,80 m"
+    ],
+    [
+     "aberturas",
+     "pátio",
+     "fachada norte"
+    ]
+   ],
+   "fecho": "Números de estudo preliminar, a confirmar no anteprojeto."
+  },
+  {
+   "g": "fim",
+   "kick": "encaminhamento",
+   "t": "próximos passos",
+   "sub": "Começar pelo que tem prazo.",
+   "itens": [
+    [
+     "primeiro",
+     "<b>Aprovar o partido.</b> Reunião com prazo."
+    ],
+    [
+     "depois",
+     "<b>Anteprojeto.</b> Plantas, cortes e a primeira estimativa."
+    ]
+   ]
+  }
+ ]
+}

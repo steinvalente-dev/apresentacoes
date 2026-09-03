@@ -1,0 +1,170 @@
+{
+ "projeto": "Casa Exemplo AMAZ",
+ "titulo": "casa<br>exemplo",
+ "sub": "Casa térrea de madeira engenheirada, numa clareira.",
+ "kick": "INTERIOR · SÃO PAULO",
+ "metas": [
+  [
+   "cliente",
+   "—"
+  ],
+  [
+   "etapa",
+   "estudo preliminar"
+  ],
+  [
+   "data",
+   "—"
+  ]
+ ],
+ "div_imgs": [],
+ "deck": [
+  {
+   "g": "capa"
+  },
+  {
+   "g": "sumario",
+   "kick": "o argumento",
+   "t": "o que esta peça mostra",
+   "itens": [
+    [
+     "01",
+     "o sítio",
+     "O ponto de partida: o que existe e o que pede resposta."
+    ],
+    [
+     "02",
+     "a casa",
+     "A proposta, em desenho e em números."
+    ],
+    [
+     "03",
+     "encaminhamento",
+     "O que decidir agora e o que vem depois."
+    ]
+   ]
+  },
+  {
+   "g": "divisor",
+   "div": 1,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "o sítio",
+   "dn": "01",
+   "dt": "o sítio",
+   "ds": "Ler o lugar antes de desenhar."
+  },
+  {
+   "g": "frase",
+   "esc": 1,
+   "trama": 1,
+   "kick": "a ideia",
+   "t": "a casa toca o chão<br>em quatro pontos",
+   "sub": "Elevada do solo: a água passa, o ar circula, a mata fica."
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "as decisões",
+   "t": "três decisões construtivas",
+   "pre": "Três decisões, e o que cada uma resolve.",
+   "itens": [
+    [
+     "01",
+     "<b>madeira engenheirada.</b> Pilares e vigas em MLC, montagem em semanas."
+    ],
+    [
+     "02",
+     "<b>planta aberta.</b> Um só ambiente de estar, com as áreas íntimas nas pontas."
+    ],
+    [
+     "03",
+     "<b>varanda contínua.</b> Sombra nas quatro faces, sem ar-condicionado."
+    ]
+   ]
+  },
+  {
+   "g": "divisor",
+   "div": 1,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "a casa",
+   "dn": "02",
+   "dt": "a casa",
+   "ds": "O desenho, e como se lê."
+  },
+  {
+   "g": "cheia",
+   "src": "",
+   "lbl": "render do projeto",
+   "h2": "a casa vista da clareira",
+   "cap": "O volume flutua sobre o terreno; a mata continua embaixo."
+  },
+  {
+   "g": "duo",
+   "kick": "antes e depois",
+   "t": "a clareira hoje e com a casa",
+   "sub": "Mesmo recorte, mesma escala.",
+   "figs": [
+    [
+     "hoje",
+     "",
+     "A clareira existente, sem intervenção.",
+     ""
+    ],
+    [
+     "proposta",
+     "",
+     "A casa implantada, sem corte de árvore.",
+     ""
+    ]
+   ],
+   "leg": "Mesmo ponto de vista, escala 1:500.",
+   "ar": "1.5"
+  },
+  {
+   "g": "tabela",
+   "kick": "em números",
+   "t": "quadro do estudo",
+   "cols": [
+    "",
+    "casa",
+    "varanda"
+   ],
+   "linhas": [
+    [
+     "área",
+     "140 m²",
+     "60 m²"
+    ],
+    [
+     "pé-direito",
+     "3,00 m",
+     "2,70 m"
+    ],
+    [
+     "fechamento",
+     "vidro e madeira",
+     "aberta"
+    ]
+   ],
+   "fecho": "Números de estudo preliminar, a confirmar no anteprojeto."
+  },
+  {
+   "g": "fim",
+   "kick": "encaminhamento",
+   "t": "próximos passos",
+   "sub": "Começar pelo que tem prazo.",
+   "itens": [
+    [
+     "primeiro",
+     "<b>Confirmar a implantação.</b> Visita com topografia em mãos."
+    ],
+    [
+     "depois",
+     "<b>Anteprojeto e orçamento preliminar.</b>"
+    ]
+   ]
+  }
+ ]
+}

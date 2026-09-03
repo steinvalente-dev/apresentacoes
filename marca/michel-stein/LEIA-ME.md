@@ -24,6 +24,8 @@ Desde 03/09/2026 os nomes de token são **por papel**, iguais nos quatro blocos
 contracapa saiu do esqueleto: mora aqui, na constante `QR`, porque aponta para
 o site desta marca. `UNDERSCORE=true` é só desta marca — as outras desligam.
 
+**Marcadores para máquina (03/09/2026):** o `bloco.html` traz `/* TRECHO:fontes */`, `/* TRECHO:root */`, `<!-- TRECHO:constantes -->`, `<!-- TRECHO:abertura -->` e `<!-- TRECHO:contracapa -->` (e `capa_imgs`), cada um fechado por `/TRECHO` — é o que `sistemas/montar.py` lê para colar nos `COLAR:x` do esqueleto. Invisíveis na página; não mudam o que se copia à mão.
+
 ## Ao criar a pasta de outra marca
 
 `marca/<nome>/` com o mesmo desenho: um `bloco.html` que roda sozinho, e o

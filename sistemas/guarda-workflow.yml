@@ -23,13 +23,8 @@ jobs:
               if r.returncode: print(r.stderr); sys.exit(1)
           print('index.html: scripts ok')
           PY
-      - name: peça órfã (html sem registro no index)
-        run: |
-          python3 - <<'PY'
-          import re, pathlib, sys
-          s = open('index.html', encoding='utf-8').read()
-          reg = set(re.findall(r'(?:href|ver)\s*:\s*"([^"?]+)"', s))
-          IGN = ('index.html','sistemas/','modulos/','fundo/','ferramentas/','superado/','.git', '.github')
-          orfas = sorted(str(p) for p in pathlib.Path('.').rglob('*.html') if not str(p).startswith(IGN) and str(p) not in reg)
-          print('\n'.join(orfas) if orfas else 'nenhuma órfã'); sys.exit(1 if orfas else 0)
-          PY
+      - name: dados.json em dia? (e peça órfã — html sem meta.json nem registro)
+        # montar-indice.py --check refaz dados.json em memória a partir de */meta.json e
+        # registro/*.json e compara com o commitado. Diverge, ou há órfã → vermelho.
+        # Quem publica por sistemas/publicar.sh nunca cai aqui: ele regenera antes do commit.
+        run: python3 sistemas/montar-indice.py --check

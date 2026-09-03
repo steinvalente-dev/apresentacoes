@@ -26,6 +26,7 @@
    michel stein_ → marca/michel-stein/bloco.html · Sarasá → marca/sarasa/bloco.html
    AMAZ → marca/amaz/bloco.html · Lavrō → marca/lavro/bloco.html
    ═══════════════════════════════════════════════════════════════════ */
+/* COLAR:fontes */
 
 /* ═══ TOKENS DA MARCA — o ÚNICO bloco que se troca ═══════════════════════
    Um nome por PAPEL, igual nos quatro blocos de marca (03/09/2026):
@@ -42,6 +43,7 @@
    Nada abaixo dele (derivados, escala) se toca. Está com os valores da
    michel stein_ para o esqueleto abrir pintado.
    ══════════════════════════════════════════════════════════════════════ */
+/* COLAR:root */
 :root{
   --papel:#EDE6DA;  --tinta:#211D1A;  --primaria:#6B6A4B;  --acento:#B85C38;
   --escuro:#6B6A4B;         /* na michel stein_ o tema escuro é a oliva     */
@@ -50,6 +52,7 @@
   --f-corpo:'Inter',system-ui,sans-serif;
   --f-mono:'DM Mono',ui-monospace,monospace;
 }
+/* /COLAR */
 
 /* ═══ DERIVADOS — motor, calculados dos tokens acima. NÃO se colam ═══════
    Todo hex que o CSS e os scripts usavam à mão saiu daqui: o papel e a
@@ -1817,6 +1820,7 @@ function tok(nome){
   const k=c.startsWith('color(')?255:1;          /* color(srgb r g b) vem em 0..1 */
   return '#'+n.slice(0,3).map(v=>Math.round(v*k).toString(16).padStart(2,'0')).join('');
 }
+/* COLAR:map */
 const MAP = {
   /* ═══ DADO DO PROJETO ═══════════════════════════════════════════════
      Andaime vazio, com o contrato à vista. O deck de origem trazia 107 KB
@@ -1840,6 +1844,7 @@ const MAP = {
        reais, com endereço e nome de operador: saiu daqui porque este arquivo é
        público. Ao montar um mapa, gerar o MAP do projeto — receita em
        sistemas/gabaritos/mapa-lotes.md. */;
+/* /COLAR */
 /* imagens embutidas — carrossel da capa (capamorph_R6) e o par antes/depois */
 /* carrossel da abertura — nove peças de 640 px em WebP, com a
    auto-exposição já aplicada no arquivo. A engine sobe com prep:false:
@@ -1864,8 +1869,12 @@ const MAP = {
    Todas a 640 px em WebP, com a auto-exposição da engine JÁ APLICADA no
    arquivo — por isso as duas chamadas sobem com prep:false. A gama de cada
    uma saiu de log(0,50)/log(média), piso 0,42, igual ao prep() da engine. */
+/* COLAR:capa_imgs */
 const CAPA_IMGS=[] /* ← acervo da MARCA. Vem do bloco da marca. Vazio = fundo chapado, que é estado aceitável. */;
+/* /COLAR */
+/* COLAR:div_imgs */
 const DIV_IMGS=[] /* ← imagens DESTE deck para o divisor. Vazio = divisor só trama, que é o padrão. */;
+/* /COLAR */
 const F_ANTES=""; /* ← foto do deck. Slot vazio renderiza retângulo hachurado. */
 const F_DEPOIS=""; /* ← foto do deck. Slot vazio renderiza retângulo hachurado. */
 const F_FOTO1=""; /* ← foto do deck. Slot vazio renderiza retângulo hachurado. */
@@ -2113,6 +2122,7 @@ function isometrico(cena,esc){
   return s+`</svg>`;
 }
 
+/* COLAR:deck */
 const DECK=[
 /* ══ ABERTURA ══ a capa da marca. Vem do bloco de marca, não se inventa. */
 {g:'marca',capa:1,div:1,fundo:1,esc:1,comecar:1,pisca:1,
@@ -2182,6 +2192,7 @@ const DECK=[
    é o que o go() lê; `fim:1` também é aceito e normalizado. */
 {g:'marca',fim_:1,fundo:1,esc:1,qr:1,sigla:'MARCA',site:'SITE'}
 ];
+/* /COLAR */
 /* Gabaritos com máquina própria que NÃO estão no DECK-modelo, mas estão na
    engine — copiar o exemplo do gabarito quando entrarem na peça:
    {g:'earth-3d',lat:-23.55,lng:-46.63,alt:760,kick:'',h2:'',lead:'',cap:''}
@@ -2214,11 +2225,13 @@ const CHAVE=(typeof MAP!=='undefined'&&MAP.chave)?MAP.chave:[];
               nome do divisor é ASSINATURA da michel stein_; Sarasá, AMAZ e
               Lavrō desligam (cada uma tem a sua: lockup, barra, mácron).
    ═══════════════════════════════════════════════════════════════════ */
+/* COLAR:constantes */
 const LOGO_CANTO={modo:'texto',html:'marca<u>_</u>'};
 const LOCKUP='';
 const GRAFISMO='';
 const QR='';
 const UNDERSCORE=true;
+/* /COLAR */
 const palco=document.getElementById('palco');
 /* as fotos moram em js_fotos.js como constantes; o DECK guarda o NOME delas.
    Assim o array de slides continua legivel e o base64 fica de fora.        */

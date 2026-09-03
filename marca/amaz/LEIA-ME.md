@@ -9,6 +9,8 @@ O que mora aqui, e qual é o mestre de quê.
 
 **Se o `.md` e o HTML divergirem, o `.md` ganha.**
 
+**Marcadores para máquina (03/09/2026):** o `bloco.html` traz `/* TRECHO:fontes */`, `/* TRECHO:root */`, `<!-- TRECHO:constantes -->`, `<!-- TRECHO:abertura -->` e `<!-- TRECHO:contracapa -->`, cada um fechado por `/TRECHO` — é o que `sistemas/montar.py` lê para colar nos `COLAR:x` do esqueleto. Invisíveis na página; não mudam o que se copia à mão.
+
 ## As peças de marca já publicadas
 
 Material de identidade que existe no acervo desde 23/08/2026, e de onde a marca

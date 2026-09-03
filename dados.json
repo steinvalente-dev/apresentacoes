@@ -1,0 +1,552 @@
+{
+ "projetos": [
+  {
+   "nome": "AMAZ",
+   "pecas": [
+    {
+     "nome": "apresentação institucional · R1",
+     "pranchas": 56,
+     "peso": 6.1,
+     "data": "26.08.2026",
+     "href": "amaz-r1/apresentacao.html",
+     "frente": "amaz"
+    },
+    {
+     "nome": "protótipo · convergência dos sócios",
+     "pranchas": 2,
+     "peso": 2.4,
+     "data": "25.08.2026",
+     "href": "amaz-convergencia/apresentacao.html",
+     "frente": "amaz"
+    },
+    {
+     "nome": "protótipo · os três pilares do produto",
+     "pranchas": 2,
+     "peso": 1.9,
+     "data": "25.08.2026",
+     "href": "amaz-pilares/apresentacao.html",
+     "frente": "amaz"
+    },
+    {
+     "nome": "apresentação institucional · versão de 23.08",
+     "pranchas": 37,
+     "peso": 6.1,
+     "data": "23.08.2026",
+     "oculto": true,
+     "href": "superado/2026-09-02-amaz-apresentacao.html"
+    }
+   ]
+  },
+  {
+   "nome": "EMEI Presidente Dutra",
+   "pecas": [
+    {
+     "nome": "quatro versões · trecho a ser reconstruído",
+     "pranchas": 35,
+     "peso": 8.6,
+     "data": "02.09.2026",
+     "href": "emei-presidente-dutra/apresentacao.html",
+     "frente": "sarasa",
+     "sub": "abre por link — o slide 3d não roda de arquivo"
+    }
+   ]
+  },
+  {
+   "nome": "lavrō",
+   "pecas": [
+    {
+     "nome": "apresentação institucional",
+     "pranchas": 15,
+     "peso": 0.36,
+     "data": "23.08.2026",
+     "href": "lavro/apresentacao.html",
+     "frente": "lavro",
+     "unid": "telas"
+    }
+   ]
+  }
+ ],
+ "docs": [
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "deck.json · a ficha",
+   "desc": "Montar uma peça é preencher um JSON e rodar dois comandos: montar.py gera a peça e o meta.json a partir do esqueleto e do bloco da marca; validar.mjs confere sintaxe, gabaritos, undefined, console, fontes, voltar, em-imagem, hex e sete proporções em ~7 s. É o que se lê no dia a dia; o deck · montar é o método por trás",
+   "arq": "sistemas/DECK-JSON.md",
+   "ver": "sistemas/montar.py"
+  },
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "validador da peça",
+   "desc": "node sistemas/validar.mjs <slug>/apresentacao.html — onze checks, falha alto, nada passa em silêncio. FALHA em qualquer um = não publica",
+   "arq": "sistemas/DECK-JSON.md",
+   "ver": "sistemas/validar.mjs"
+  },
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "deck · montar",
+   "desc": "O arquivo curto: a receita em seis passos, os gabaritos e as armadilhas. É o que se lê para montar",
+   "arq": "sistemas/DECK-MONTAR.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "esqueleto",
+   "desc": "A base de partida. Abre, cola o bloco da marca, troca o DECK. A engine não se toca",
+   "arq": "sistemas/DECK-MONTAR.md",
+   "ver": "esqueleto/deck-esqueleto.html"
+  },
+  {
+   "grupo": "site",
+   "nome": "site de portfólio",
+   "desc": "Estado técnico, vitrine, otimização de imagem e área de cliente",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/site/SITE-PORTFOLIO-ESTADO.md"
+  },
+  {
+   "grupo": "site",
+   "nome": "vitrine · esteira",
+   "desc": "As 1.020 imagens da esteira, o pipeline de conversão e os comandos",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/site/VITRINE-ESTEIRA.md"
+  },
+  {
+   "grupo": "site",
+   "nome": "publicar no site",
+   "desc": "Runbook do Netlify e da área de cliente: receita, custo por deploy e cuidados",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/site/PUBLICAR-NO-SITE.md"
+  },
+  {
+   "aba": "marca",
+   "grupo": "michel stein_",
+   "nome": "marca · michel stein_",
+   "desc": "Cor, tipografia, as três assinaturas, o grifo, a escala de números, abertura e contracapa. Trocar de marca é trocar este arquivo. Ver artefato abre o manual em desenho — as cinco folhas numa página, revisão de 30.08.2026",
+   "arq": "marca/MARCA-MICHEL-STEIN.md",
+   "ver": "marca/michel-stein/manual.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "michel stein_",
+   "nome": "bloco de marca",
+   "desc": "As quatro coisas que se colam no esqueleto: cores, as seis fontes, a capa e a contracapa",
+   "arq": "marca/MARCA-MICHEL-STEIN-CAPA.md",
+   "ver": "marca/michel-stein/bloco.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "michel stein_",
+   "nome": "marca · a capa",
+   "desc": "O slide de abertura: a regra, a receita de extração, a especificação e as armadilhas já pagas",
+   "arq": "marca/MARCA-MICHEL-STEIN-CAPA.md",
+   "ver": "modulos/capa-morph.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "render em tela cheia",
+   "desc": "O padrão para render: sangria total e o texto que sai de cena com o ponteiro parado",
+   "arq": "sistemas/gabaritos/render-cheia.md",
+   "ver": "modulos/render-cheia.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "prancha de referência",
+   "desc": "A grade de 2 a 4 imagens sobre um tema: o cabeçalho em duas pontas, a pilha e o slot vazio",
+   "arq": "sistemas/gabaritos/prancha-referencia.md",
+   "ver": "modulos/prancha-referencia.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "mapa · localização",
+   "desc": "Onde o terreno está: satélite em sangria, scrim denso nas pontas, endereço escrito e a trava de teclado",
+   "arq": "sistemas/gabaritos/mapa-localizacao.md",
+   "ver": "modulos/mapa-localizacao.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "mapa · earth 3d ⚠ protótipo",
+   "desc": "NÃO VIGENTE. O mesmo slide com a malha fotorrealista do Google Earth no lugar do satélite chapado. Fica em preview do Google, exige chave com billing e não vai para peça de cliente enquanto estiver assim",
+   "arq": "sistemas/gabaritos/mapa-earth-3d.md",
+   "ver": "modulos/mapa-earth-3d.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "mapa · lotes",
+   "desc": "O cadastro desenhado: o contrato do objeto MAP, os dois desenhos e por que o dado real não vem junto",
+   "arq": "sistemas/gabaritos/mapa-lotes.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "modelo · visor 3D",
+   "desc": "Sem título e sem legenda: o slide é o visor. A trava de teclado e a dependência de rede",
+   "arq": "sistemas/gabaritos/modelo.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "popover",
+   "desc": "O apoio que sai da tela e volta no ponteiro. Inclui a divisão por k, que o quadro fixo exige",
+   "arq": "sistemas/gabaritos/popover.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "isométrico",
+   "desc": "Nunca escrever o viewBox à mão. Calcular de getBBox com 3,5% de folga",
+   "arq": "sistemas/gabaritos/isometrico.md"
+  },
+  {
+   "grupo": "operação",
+   "nome": "arquivamento de entregas",
+   "desc": "Onde cada arquivo vai parar no Drive, a árvore de pastas e as armadilhas",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/operacao/ARQUIVAMENTO-ENTREGAS.md"
+  },
+  {
+   "aba": "marca",
+   "grupo": "AMAZ",
+   "nome": "marca · amaz",
+   "desc": "A identidade visual da AMAZ: a marca, cor, tipografia, fotografia, grafismo, aplicações e movimento. Ler abre o mestre escrito; ver artefato abre a identidade",
+   "arq": "marca/MARCA-AMAZ.md",
+   "ver": "amaz-identidade/apresentacao.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "AMAZ",
+   "nome": "bloco de marca",
+   "desc": "O que se cola no esqueleto: as quatro cores, as quatro fontes embutidas, a abertura e a contracapa",
+   "arq": "marca/MARCA-AMAZ.md",
+   "ver": "marca/amaz/bloco.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "AMAZ",
+   "nome": "marchetaria · o documento",
+   "desc": "O mestre escrito do grafismo, em nove seções: gramática, as seis regras, escala da matéria, cor, configuração fechada, custo medido e o que está em aberto",
+   "arq": "marca/amaz/LEIA-ME.md",
+   "ver": "amaz-marchetaria/apresentacao.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "AMAZ",
+   "nome": "marchetaria · laboratório",
+   "desc": "O gerador, interativo: corte, veio da tábua, densidade, módulo e os quatro pares. Serve para calibrar antes de aplicar",
+   "arq": "marca/amaz/LEIA-ME.md",
+   "ver": "amaz-marchetaria/laboratorio.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "consulta",
+   "nome": "deck · motor",
+   "desc": "A referência de fundo: as três arquiteturas, as armadilhas já pagas e a validação completa. Não é o que se lê para montar",
+   "arq": "sistemas/DECK-MOTOR.md"
+  },
+  {
+   "grupo": "montar",
+   "nome": "tabela de gabaritos gerada do código",
+   "desc": "A tabela de gabaritos e campos do deck — montar não é redigida: sai do tpl() do esqueleto por este script, com os campos obrigatórios em negrito e a aridade de cada item. Rodar depois de mexer no tpl()",
+   "arq": "sistemas/DECK-MONTAR.md",
+   "ver": "sistemas/gerar-gabaritos.py"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Lavrō",
+   "nome": "marca · Lavrō",
+   "desc": "Cor, tipografia, abertura, contracapa e o que é intocável. Recorte de deck do normativo, que está ao lado",
+   "arq": "marca/MARCA-LAVRO.md",
+   "ver": "marca/lavro/manual.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Lavrō",
+   "nome": "bloco de marca",
+   "desc": "O que se cola no esqueleto: as oito faces em base64, as cores e o wordmark. Abre sozinho, sem internet",
+   "arq": "marca/MARCA-LAVRO.md",
+   "ver": "marca/lavro/bloco.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Lavrō",
+   "nome": "normativo da marca · v1.6",
+   "desc": "O mestre. Conceito, wordmark, símbolo, cor, régua, gradiente, Azulejo e as proibições. Canônico no repositório do app",
+   "arq": "marca/lavro/01-MARCA-normativo.md",
+   "ver": "marca/lavro/wordmark.svg"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Lavrō",
+   "nome": "design system",
+   "desc": "A camada de interface: tokens, componentes, densidade e movimento. O styleguide vivo nunca vence este arquivo",
+   "arq": "marca/lavro/02-DESIGN-SYSTEM.md",
+   "ver": "marca/lavro/03-styleguide.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Lavrō",
+   "nome": "grafismo · Azulejo",
+   "desc": "O documento técnico da padronagem: gramática, as cinco regras, escala, os três pares de cor, auditoria e custo medidos em 29.08.2026",
+   "arq": "marca/lavro/01-MARCA-normativo.md",
+   "ver": "lavro-grafismo/apresentacao.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Lavrō",
+   "nome": "Azulejo · laboratório",
+   "desc": "O campo, interativo: clique sorteia, 1–3 troca o par, C abre o vocabulário das seis peças e a auditoria roda ao vivo",
+   "arq": "marca/lavro/01-MARCA-normativo.md",
+   "ver": "lavro-azulejo/campo.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Lavrō",
+   "nome": "relatório de período · anatomia",
+   "desc": "Como um mês de RDOs vira um documento de oito páginas: estrutura, escala, especificação dos três gráficos, receita do duotone e as armadilhas de impressão que custaram uma rodada cada. Dados fictícios",
+   "arq": "marca/lavro/01-MARCA-normativo.md",
+   "ver": "lavro-relatorio/apresentacao.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
+   "nome": "fundo morph pontilhado",
+   "desc": "O shader da abertura: preset, transições, cursor e desempenho medido",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/deck/FUNDO-MORPH-PONTILHADO.md",
+   "ver": "modulos/fundo-morph-pontilhado.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
+   "nome": "divisor · com imagem",
+   "desc": "O divisor com o carrossel de peças atrás, em terracota. Véu 0.60",
+   "arq": "sistemas/DECK-MOTOR.md",
+   "ver": "modulos/divisor-morph.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
+   "nome": "divisor · só trama",
+   "desc": "Divisor sem assunto: nenhuma imagem, só o retículo trocando de grelha. Véu 0.55. É o padrão",
+   "arq": "sistemas/DECK-MOTOR.md",
+   "ver": "modulos/divisor-trama.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
+   "nome": "módulos",
+   "desc": "Capa, engine, laboratório e o chip de voltar. Sem revisão: o arquivo é o vigente",
+   "arq": "modulos/LEIA-ME.md"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "guarda do repositório público",
+   "desc": "Este repositório é aberto a qualquer pessoa, com ou sem link do acervo. A guarda varre nome de cliente, endereço, CNPJ, valor, URL da área de cliente e segredo antes do push — tem de imprimir “guarda: limpo”. Peça de cliente mora na área de cliente do site; o registro dela é privado. Regra na seção “Público quer dizer aberto” do GitHub — como trabalhar",
+   "arq": "sistemas/GITHUB-COMO-TRABALHAR.md",
+   "ver": "sistemas/guarda-publico.py"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "levar para outra frente",
+   "desc": "O que uma conversa de Lavrō, AMAZ ou Sarasá precisa ler para usar o mesmo sistema, e o que muda nas instruções daquele Projeto",
+   "arq": "sistemas/LEVAR-PARA-OUTRA-FRENTE.md"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "github · como trabalhar",
+   "desc": "Onde cada coisa vai, clonar, registrar, validar e publicar. Vale para apresentação, documento e ferramenta",
+   "arq": "sistemas/GITHUB-COMO-TRABALHAR.md"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "publicar.sh · a rodada inteira",
+   "desc": "GH=<token> sistemas/publicar.sh \"mensagem\" [slug] — pull, índice gerado, guarda, tabela de gabaritos, sintaxe, validador da peça, commit, rebase se alguém publicou no meio, push sem force, conferência no ar. É o único jeito de publicar",
+   "arq": "sistemas/GITHUB-COMO-TRABALHAR.md",
+   "ver": "sistemas/publicar.sh"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "registro por frente e índice gerado",
+   "desc": "Peça se registra pelo <slug>/meta.json; documento se registra em registro/<frente>.json; dados.json é gerado por montar-indice.py e o index.html só lê. Três frentes deixam de editar o mesmo arquivo",
+   "arq": "registro/LEIA-ME.md",
+   "ver": "sistemas/montar-indice.py"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "superado · o que saiu de uso",
+   "desc": "A pasta de registro: como um arquivo sai de circulação sem ser apagado, a faixa de aviso e o que não vem para cá",
+   "arq": "superado/LEIA-ME.md"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Sarasá",
+   "nome": "marca · Sarasá",
+   "desc": "Cor, tipografia, lockup medido, grafismo, abertura e contracapa. Levantado do SVG oficial, do CSS do site e do portfólio 2026 — não há manual de marca, e cada valor carrega a sua origem",
+   "arq": "marca/MARCA-SARASA.md",
+   "ver": "marca/sarasa/styleguide.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Sarasá",
+   "nome": "bloco de marca",
+   "desc": "O que se cola no esqueleto: as quatro faces em base64, os tokens e o lockup. Abre sozinho, sem internet",
+   "arq": "marca/MARCA-SARASA.md",
+   "ver": "marca/sarasa/bloco.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Sarasá",
+   "nome": "grafismo · o contorno",
+   "desc": "O contorno da Fortaleza da Barra Grande, que corre na base da capa e se corta nos cinco quadrados de disciplina. Vetor oficial, dos originais da Sarasá",
+   "arq": "marca/MARCA-SARASA.md",
+   "ver": "marca/sarasa/grafismo-linha.svg"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Sarasá",
+   "nome": "semente",
+   "desc": "O acento agudo do á, isolado como peça própria nos originais. O nome é deles. Candidato a marcador e vinheta — assinar sozinha é decisão deles, não derivação",
+   "arq": "marca/MARCA-SARASA.md",
+   "ver": "marca/sarasa/semente.svg"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Sarasá",
+   "nome": "lockup oficial",
+   "desc": "O SVG do logotipo com os dois fills ligados aos tokens. A face não foi identificada — o lockup entra como desenho, nunca como texto",
+   "arq": "marca/MARCA-SARASA.md",
+   "ver": "marca/sarasa/lockup.svg"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Sarasá",
+   "nome": "Azulejo Sarasá · protótipo",
+   "desc": "O grafismo em estudo, interativo: a grelha da Lavrō com salpico de peças de contorno português — paletas nos dois sentidos da cabaré, ancoragem de canto e tela cheia com o texto da abertura. Em rodadas; não é regra de marca",
+   "arq": "marca/MARCA-SARASA.md",
+   "ver": "marca/sarasa/azulejo.html"
+  },
+  {
+   "aba": "marca",
+   "grupo": "Sarasá",
+   "nome": "capa morph · protótipo",
+   "desc": "A abertura em campo Vinho: carrossel morph com sete obras — cinco do portfólio 2026 e três do site —, trama correndo para o Ferro e lockup negativo. Toggles de grafismo, de trama e das duas assinaturas do núcleo de arquitetura. Protótipo de desenvolvimento, em rodadas — não é a capa final e não é regra de marca",
+   "arq": "marca/MARCA-SARASA.md",
+   "ver": "modulos/capa-morph-sarasa.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "precisa de uma marca",
+   "nome": "a camada de marca",
+   "desc": "O motor sozinho não monta peça nenhuma. Cor, tipografia e capa estão na aba marca",
+   "arq": "marca/MARCA-MICHEL-STEIN.md"
+  },
+  {
+   "grupo": "contexto",
+   "nome": "frentes de trabalho",
+   "desc": "As cinco frentes, sociedade, posicionamento e o que cada uma exige",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/contexto/CONTEXTO-FRENTES.md"
+  },
+  {
+   "aba": "marca",
+   "grupo": "a levantar",
+   "nome": "Baraka",
+   "desc": "Não tem sistema visual escrito — não inventar paleta. Levantar a identidade antes",
+   "arq": "sistemas/DECK-MOTOR.md"
+  },
+  {
+   "grupo": "proposta",
+   "nome": "processo de proposta",
+   "desc": "Só prática própria. Os três estágios: bloco de perguntas, texto de WhatsApp com valor, documento formal",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/proposta/PROCESSO-PROPOSTA.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "rodadas",
+   "nome": "tokyo · grafia e mecânicas de slide",
+   "desc": "A grafia TOKYO, o popover, o grifo animado, os gabaritos novos e o campo reservado cols",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/deck/rodadas/TOKYO-GRAFIA-E-MECANICAS.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "rodadas",
+   "nome": "tokyo · pastilha de chrome e três camadas",
+   "desc": "A pastilha de navegação, a pendência do topo e a varredura de nove viewports",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/deck/rodadas/TOKYO-CHROME-E-CAMADAS.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "registro",
+   "nome": "deck · registro",
+   "desc": "Onde cada camada foi parar, o histórico por projeto e as pendências abertas",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/deck/DECK-REGISTRO.md"
+  },
+  {
+   "grupo": "notion",
+   "nome": "diário de bordo",
+   "desc": "A base de registro, como lançar, o limite de confidencialidade e as armadilhas",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/notion/DIARIO-DE-BORDO.md"
+  },
+  {
+   "grupo": "notion",
+   "nome": "bancos de consulta · Baraka",
+   "desc": "Consultas técnicas e normativas: IDs, schema, templates e manhas do Notion",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/notion/CONSULTAS-BARAKA.md"
+  },
+  {
+   "grupo": "sarasá · banco de referência",
+   "nome": "estratégia do banco e do gerador de memoriais",
+   "desc": "As três camadas, onde mora cada arquivo, por que a estrutura é base e não texto, e as armadilhas já mapeadas",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/sarasa/BANCO-REFERENCIA-ESTRATEGIA.md"
+  },
+  {
+   "grupo": "sarasá · banco de referência",
+   "nome": "anatomia dos documentos técnicos",
+   "desc": "Os três arquétipos, a ordem dos cinco blocos, a fôrma da prescrição e as armadilhas achadas em quatro memoriais reais",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/sarasa/memorial/ANATOMIA.md"
+  },
+  {
+   "grupo": "sarasá · banco de referência",
+   "nome": "voz e terminologia",
+   "desc": "Como o Estúdio Sarasá escreve: registro, hierarquia da ordem, fraseologia recorrente, vocabulário e convenções gráficas",
+   "arq": "sistemas/SARASA-VOZ-E-TERMINOLOGIA.md"
+  },
+  {
+   "grupo": "sarasá · banco de referência",
+   "nome": "template de memorial · v1",
+   "desc": "A especificação do gabarito .docx — estilos nomeados, página, legendas e os três blocos que o acervo não tinha. O mestre mora no Drive",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/sarasa/memorial/TEMPLATE.md"
+  },
+  {
+   "grupo": "sarasá · banco de referência",
+   "nome": "gerador do template",
+   "desc": "O build determinístico do .docx: roda e regrava o gabarito do zero. Regerar, nunca editar o mestre à mão",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/sarasa/memorial/gerador/"
+  },
+  {
+   "grupo": "sarasá · mapeamento de danos",
+   "nome": "o sistema, do DXF ao croqui",
+   "desc": "Pipeline de sete passos, a arquitetura de cor e substrato, as regras de vetorização e as armadilhas já pagas",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/sarasa/MAPEAMENTO-DANOS.md"
+  },
+  {
+   "grupo": "sarasá · mapeamento de danos",
+   "nome": "catálogo mestre e geradores",
+   "desc": "Fonte única das 25 patologias e 11 substratos, o gerador do template e o montador de vista por projeto",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/sarasa/mapeamento-danos/"
+  },
+  {
+   "grupo": "sarasá · mapeamento de danos",
+   "nome": "template de base de campo · v1",
+   "desc": "PSD com 188 layers PAT e a paleta pronta, mais o JSON de contrato. Regerar, nunca editar à mão",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/sarasa/mapeamento-danos/SARASA_BASE-CAMPO_TEMPLATE_v1.json"
+  },
+  {
+   "grupo": "levantamento 3D",
+   "nome": "nuvem de pontos → malha, ortofoto e deck",
+   "desc": "Pipeline de sete passos do LAZ ao GLB: grelha regular em vez de Poisson, ortofoto como subproduto, o que o SketchUp importa de verdade, e o orçamento de máquina medido",
+   "arq": "sistemas/NUVEM-PARA-MALHA.md"
+  }
+ ],
+ "gerado": "2026-09-03T17:21:32+00:00"
+}

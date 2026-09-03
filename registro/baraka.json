@@ -1,0 +1,12 @@
+{
+  "projetos": [],
+  "docs": [
+    {
+      "aba": "marca",
+      "grupo": "a levantar",
+      "nome": "Baraka",
+      "desc": "Não tem sistema visual escrito — não inventar paleta. Levantar a identidade antes",
+      "arq": "sistemas/DECK-MOTOR.md"
+    }
+  ]
+}

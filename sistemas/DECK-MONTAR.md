@@ -9,9 +9,16 @@ misturava três ocasiões de leitura num arquivo só de 9.300 tokens: montar,
 consultar um gabarito específico, e entender quando algo quebra. Só a primeira
 acontece toda vez.
 
+**A máquina (03/09/2026):** montar uma peça é preencher um `deck.json` e rodar
+dois comandos — `python3 sistemas/montar.py <slug> --marca <marca> --deck <deck.json>`
+e `node sistemas/validar.mjs <slug>/apresentacao.html`. A ficha curta, com o
+formato do JSON e o que fazer em cada falha, é **`DECK-JSON.md`** — para o
+dia a dia é o que se lê, não este arquivo. Este arquivo é o método por trás:
+o que não é negociável, de onde vêm as imagens, as armadilhas.
+
 | você quer | leia |
 |---|---|
-| **montar uma peça** | este arquivo, **mais o módulo de capa da frente** (§capa) |
+| **montar uma peça** | `DECK-JSON.md` (a ficha) + este arquivo quando algo sair do comum |
 | um gabarito com máquina própria | `gabaritos/<nome>.md` — só o que entrar na peça |
 | um mapa de localização | `gabaritos/mapa-localizacao.md` · módulo em `modulos/mapa-localizacao.html` |
 | uma prancha de referência | `gabaritos/prancha-referencia.md` · módulo em `modulos/prancha-referencia.html` |
@@ -299,47 +306,23 @@ histórico. Já vem no esqueleto.
 
 ## Antes de entregar
 
-1. `node --check` no script extraído. Erro de sintaxe derruba o arquivo em silêncio.
-2. Rodar o laço do `tpl()` (código no fim deste arquivo) e conferir que nenhum
-   gabarito quebra. Um quebrado derruba o deck inteiro.
-3. Percorrer todos os slides e conferir que nenhum escreve `undefined`.
-4. Percorrer os passos por teclado num `lista` e num `fim`.
-5. Conferir que as faces em base64 estão no arquivo — quatro ou seis, conforme
-   a marca.
-6. Conferir a linha do `ms-voltar.js`.
-7. **VARREDURA DE TRANSBORDO E DE LETTERBOX, em sete proporções.** Obrigatória.
+```
+node sistemas/validar.mjs <slug>/apresentacao.html        # tem de imprimir tudo "ok"
+```
 
-### ⚑ Sobre o item 7, que é novo e não é opcional
+O validador faz, em ~7 segundos, o que esta lista pedia à mão: `sintaxe`
+(node --check), `gabaritos` (laço do `tpl()`, nenhum aviso de gabarito
+desconhecido ou campo faltando), `undefined`, `console` (zero erro),
+`fontes` (≥ 4 faces em base64), `voltar` (linha do `ms-voltar.js`; ausente
+com `--cliente`), `em-imagem`, `hex` (nenhuma cor à mão fora do `:root`),
+`proporcoes` (uma página redimensionada em sete tamanhos — 21:9, 16:9 ×2,
+16:10, 3:2, 4:3 ×2 — todos os passos revelados, transbordo e letterbox
+medidos), `peso` (aviso acima de 8 MB) e `chave-maps` (aviso: peça com
+`earth-3d` se entrega por link). FALHA em qualquer um = não publica. O que
+fazer em cada falha está na tabela do `DECK-JSON.md`.
 
-A versão anterior deste arquivo dizia: *"sob o quadro fixo, transbordo não
-acontece por construção — a varredura de nove tamanhos virou desnecessária."*
-Era verdade, e era o preço errado: o quadro fixo comprava essa garantia com
-tarja preta em toda tela que não fosse 16:9. **Com tela cheia a garantia
-morreu, e transbordo volta a ser responsabilidade de quem monta.**
-
-Responsabilidade sem medição é torcida. Então a varredura entra no build e
-**falha antes de publicar**: uma página, redimensionada em 21:9, 16:9 (dois
-tamanhos), 16:10, 3:2 e 4:3 (dois tamanhos), com todos os passos revelados,
-medindo `scrollHeight − clientHeight` por slide e conferindo que o `#quadro`
-ocupa a tela inteira.
-
-Duas armadilhas de quem escrever essa varredura:
-
-- **abrir uma página por proporção derruba o Chromium.** Cada carga monta um
-  contexto WebGL2 com as texturas da capa; sete contextos estouram a memória.
-  Redimensionar UMA página resolve.
-- **abrir a peça com `?semfundo`.** Desliga os dois canvas do morph, não muda
-  layout nenhum, e é a diferença entre a varredura rodar em 40 s ou morrer.
-
-As `@media` de largura que o esqueleto tinha foram retiradas em 25/08, com a
-justificativa de que dentro do quadro fixo nunca disparavam. Elas voltam a
-poder disparar abaixo de ~1200px e **não foram restauradas**: em monitor e
-projetor os limiares não são alcançados. O que estava lá está em
-`_R8/cel-responsivo.css.txt`, e é a varredura que aponta se faltar.
-
-A lista completa de validação, para quando algo quebrar, está no `DECK-MOTOR.md`.
-
----
+Peça antiga (anterior a 03/09) não passa no `hex` — tem cor à mão. Não se
+reabre peça publicada para isso; o validador é para peça nova.
 
 ## A lição do teste de montagem
 

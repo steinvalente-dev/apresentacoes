@@ -1,0 +1,170 @@
+{
+ "projeto": "Casarão Exemplo",
+ "titulo": "casarão<br>exemplo",
+ "sub": "Requalificação de um edifício tombado para uso cultural.",
+ "kick": "CENTRO · SÃO PAULO",
+ "metas": [
+  [
+   "cliente",
+   "—"
+  ],
+  [
+   "etapa",
+   "estudo preliminar"
+  ],
+  [
+   "data",
+   "—"
+  ]
+ ],
+ "div_imgs": [],
+ "deck": [
+  {
+   "g": "capa"
+  },
+  {
+   "g": "sumario",
+   "kick": "o argumento",
+   "t": "o que esta peça mostra",
+   "itens": [
+    [
+     "01",
+     "o edifício",
+     "O ponto de partida: o que existe e o que pede resposta."
+    ],
+    [
+     "02",
+     "a requalificação",
+     "A proposta, em desenho e em números."
+    ],
+    [
+     "03",
+     "encaminhamento",
+     "O que decidir agora e o que vem depois."
+    ]
+   ]
+  },
+  {
+   "g": "divisor",
+   "div": 1,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "o edifício",
+   "dn": "01",
+   "dt": "o edifício",
+   "ds": "Ler o lugar antes de desenhar."
+  },
+  {
+   "g": "frase",
+   "esc": 1,
+   "trama": 1,
+   "kick": "a ideia",
+   "t": "conservar é manter<br>o uso vivo",
+   "sub": "O prédio se preserva funcionando, não fechado."
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "as decisões",
+   "t": "três decisões de restauro",
+   "pre": "Três decisões, e o que cada uma resolve.",
+   "itens": [
+    [
+     "01",
+     "<b>fachada restaurada.</b> Argamassa e esquadrias recuperadas com a técnica de origem."
+    ],
+    [
+     "02",
+     "<b>miolo novo, reversível.</b> Estrutura metálica independente, sem tocar as paredes históricas."
+    ],
+    [
+     "03",
+     "<b>acesso universal.</b> Elevador e rampa no anexo, fora do volume protegido."
+    ]
+   ]
+  },
+  {
+   "g": "divisor",
+   "div": 1,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "a requalificação",
+   "dn": "02",
+   "dt": "a requalificação",
+   "ds": "O desenho, e como se lê."
+  },
+  {
+   "g": "cheia",
+   "src": "",
+   "lbl": "render do projeto",
+   "h2": "o salão principal recuperado",
+   "cap": "O forro e o piso originais voltam; a luz entra pelas esquadrias abertas."
+  },
+  {
+   "g": "duo",
+   "kick": "antes e depois",
+   "t": "a fachada hoje e restaurada",
+   "sub": "Mesmo recorte, mesma escala.",
+   "figs": [
+    [
+     "hoje",
+     "",
+     "Fachada com perdas de argamassa e esquadrias fechadas.",
+     ""
+    ],
+    [
+     "proposta",
+     "",
+     "Fachada recuperada, esquadrias abertas.",
+     ""
+    ]
+   ],
+   "leg": "Mesmo ponto de vista, mesma hora do dia.",
+   "ar": "1.5"
+  },
+  {
+   "g": "tabela",
+   "kick": "em números",
+   "t": "quadro de áreas",
+   "cols": [
+    "",
+    "existente",
+    "proposto"
+   ],
+   "linhas": [
+    [
+     "área útil",
+     "640 m²",
+     "720 m²"
+    ],
+    [
+     "pavimentos",
+     "2",
+     "3"
+    ],
+    [
+     "uso",
+     "vazio",
+     "cultural"
+    ]
+   ],
+   "fecho": "Números de estudo preliminar, a confirmar no anteprojeto."
+  },
+  {
+   "g": "fim",
+   "kick": "encaminhamento",
+   "t": "próximos passos",
+   "sub": "Começar pelo que tem prazo.",
+   "itens": [
+    [
+     "primeiro",
+     "<b>Parecer do órgão de patrimônio.</b> Protocolar o estudo preliminar."
+    ],
+    [
+     "depois",
+     "<b>Projeto executivo de restauro.</b> Prospecções e cadernos de encargos."
+    ]
+   ]
+  }
+ ]
+}

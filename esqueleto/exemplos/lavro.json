@@ -1,0 +1,170 @@
+{
+ "projeto": "Obra Exemplo",
+ "titulo": "obra<br>exemplo",
+ "sub": "Relatório de período: o que a obra fez, com o dado por trás.",
+ "kick": "OBRA · PERÍODO 01",
+ "metas": [
+  [
+   "cliente",
+   "—"
+  ],
+  [
+   "etapa",
+   "estudo preliminar"
+  ],
+  [
+   "data",
+   "—"
+  ]
+ ],
+ "div_imgs": [],
+ "deck": [
+  {
+   "g": "capa"
+  },
+  {
+   "g": "sumario",
+   "kick": "o argumento",
+   "t": "o que esta peça mostra",
+   "itens": [
+    [
+     "01",
+     "o período",
+     "O ponto de partida: o que existe e o que pede resposta."
+    ],
+    [
+     "02",
+     "o avanço",
+     "A proposta, em desenho e em números."
+    ],
+    [
+     "03",
+     "encaminhamento",
+     "O que decidir agora e o que vem depois."
+    ]
+   ]
+  },
+  {
+   "g": "divisor",
+   "div": 1,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "o período",
+   "dn": "01",
+   "dt": "o período",
+   "ds": "Ler o lugar antes de desenhar."
+  },
+  {
+   "g": "frase",
+   "esc": 1,
+   "trama": 1,
+   "kick": "a ideia",
+   "t": "o dado é a prova<br>do que se decidiu",
+   "sub": "Cada frente com o registro do dia, não a lembrança da semana."
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "as decisões",
+   "t": "três leituras do período",
+   "pre": "Três decisões, e o que cada uma resolve.",
+   "itens": [
+    [
+     "01",
+     "<b>estrutura no prazo.</b> Concretagem do segundo pavimento concluída."
+    ],
+    [
+     "02",
+     "<b>alvenaria adiantada.</b> Frente aberta antes do previsto."
+    ],
+    [
+     "03",
+     "<b>instalações em espera.</b> Aguarda definição de projeto."
+    ]
+   ]
+  },
+  {
+   "g": "divisor",
+   "div": 1,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "o avanço",
+   "dn": "02",
+   "dt": "o avanço",
+   "ds": "O desenho, e como se lê."
+  },
+  {
+   "g": "cheia",
+   "src": "",
+   "lbl": "render do projeto",
+   "h2": "a laje do segundo pavimento",
+   "cap": "Registro do dia da concretagem, com a equipe em campo."
+  },
+  {
+   "g": "duo",
+   "kick": "antes e depois",
+   "t": "início e fim do período",
+   "sub": "Mesmo recorte, mesma escala.",
+   "figs": [
+    [
+     "início",
+     "",
+     "A frente de estrutura no primeiro dia do período.",
+     ""
+    ],
+    [
+     "fim",
+     "",
+     "A mesma frente no último dia.",
+     ""
+    ]
+   ],
+   "leg": "Mesma câmera, mesmo enquadramento.",
+   "ar": "1.5"
+  },
+  {
+   "g": "tabela",
+   "kick": "em números",
+   "t": "avanço por frente",
+   "cols": [
+    "",
+    "previsto",
+    "realizado"
+   ],
+   "linhas": [
+    [
+     "estrutura",
+     "40%",
+     "42%"
+    ],
+    [
+     "alvenaria",
+     "10%",
+     "14%"
+    ],
+    [
+     "instalações",
+     "5%",
+     "2%"
+    ]
+   ],
+   "fecho": "Números de estudo preliminar, a confirmar no anteprojeto."
+  },
+  {
+   "g": "fim",
+   "kick": "encaminhamento",
+   "t": "próximos passos",
+   "sub": "Começar pelo que tem prazo.",
+   "itens": [
+    [
+     "primeiro",
+     "<b>Decidir o projeto de instalações.</b> Frente parada."
+    ],
+    [
+     "depois",
+     "<b>Próximo relatório.</b> No fechamento do período."
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,51 @@
+{
+  "projetos": [
+    {
+      "nome": "AMAZ",
+      "pecas": [
+        {
+          "nome": "apresentação institucional · versão de 23.08",
+          "pranchas": 37,
+          "peso": 6.1,
+          "data": "23.08.2026",
+          "oculto": true,
+          "href": "superado/2026-09-02-amaz-apresentacao.html"
+        }
+      ]
+    }
+  ],
+  "docs": [
+    {
+      "aba": "marca",
+      "grupo": "AMAZ",
+      "nome": "marca · amaz",
+      "desc": "A identidade visual da AMAZ: a marca, cor, tipografia, fotografia, grafismo, aplicações e movimento. Ler abre o mestre escrito; ver artefato abre a identidade",
+      "arq": "marca/MARCA-AMAZ.md",
+      "ver": "amaz-identidade/apresentacao.html"
+    },
+    {
+      "aba": "marca",
+      "grupo": "AMAZ",
+      "nome": "bloco de marca",
+      "desc": "O que se cola no esqueleto: as quatro cores, as quatro fontes embutidas, a abertura e a contracapa",
+      "arq": "marca/MARCA-AMAZ.md",
+      "ver": "marca/amaz/bloco.html"
+    },
+    {
+      "aba": "marca",
+      "grupo": "AMAZ",
+      "nome": "marchetaria · o documento",
+      "desc": "O mestre escrito do grafismo, em nove seções: gramática, as seis regras, escala da matéria, cor, configuração fechada, custo medido e o que está em aberto",
+      "arq": "marca/amaz/LEIA-ME.md",
+      "ver": "amaz-marchetaria/apresentacao.html"
+    },
+    {
+      "aba": "marca",
+      "grupo": "AMAZ",
+      "nome": "marchetaria · laboratório",
+      "desc": "O gerador, interativo: corte, veio da tábua, densidade, módulo e os quatro pares. Serve para calibrar antes de aplicar",
+      "arq": "marca/amaz/LEIA-ME.md",
+      "ver": "amaz-marchetaria/laboratorio.html"
+    }
+  ]
+}

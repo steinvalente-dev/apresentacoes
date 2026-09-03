@@ -36,7 +36,7 @@ endereço, honorário, valor de negócio, planta ou foto de obra de terceiro?
 | resposta | destino | registro |
 |---|---|---|
 | **sim** | `michel-stein-site/cliente/<slug>-<16 hex>/apresentacao.html` (Netlify) | `michel-stein-sistemas/site/AREA-CLIENTE.md` — **privado**. Nunca no `index.html` |
-| não | `apresentacoes/<slug>/apresentacao.html` | `index.html`, array `projetos` |
+| não | `apresentacoes/<slug>/apresentacao.html` | `<slug>/meta.json` (o índice é gerado dele) |
 
 **Como o Michel enxerga as peças de cliente no acervo:** o `index.html` lê um
 registro privado (`registro.json`, no site) quando o navegador tem a **chave**
@@ -359,22 +359,30 @@ Ler `DECK-MONTAR.md` e `../marca/MARCA-<nome>.md`, e abrir a peça de
 referência `emei-presidente-dutra` antes de montar. Trocar só o array `DECK`;
 a engine abaixo dele não se toca.
 
-## Registrar apresentação — array `projetos`
+## Registrar apresentação — `<slug>/meta.json`
 
-Cada projeto é `{ nome, pecas: [...] }`. Projeto que ainda não existe ganha um
-objeto novo. Cada peça:
+O `index.html` **não tem mais lista escrita dentro**. Ele lê `dados.json`, que é
+gerado por `python3 sistemas/montar-indice.py`. Ninguém edita o `index.html`
+para registrar nada — era o único arquivo que toda frente editava, e foi assim
+que três rodadas apagaram trabalho alheio.
 
+Uma peça se registra sozinha por um `meta.json` na própria pasta. O
+`sistemas/montar.py` escreve esse arquivo ao montar a peça; à mão, é isto:
+
+```json
+{ "projeto": "casa X", "nome": "estudo preliminar", "pranchas": 29, "peso": 11.9,
+  "data": "19.08.2026", "frente": "michel-stein" }
 ```
-{ nome:"estudo preliminar", pranchas: 29, peso: 11.9, data:"19.08.2026",
-  href:"<slug>/apresentacao.html" }
-```
 
-**Os quatro campos são obrigatórios**; a ficha do índice sai deles na ordem
-`pranchas · peso · data`. Slug em minúsculas, sem acento, com hífen:
-`emei-presidente-dutra`, `lavro-grafismo`.
+**Os seis campos são obrigatórios**; `href` não se escreve — é sempre
+`<slug>/apresentacao.html`. Opcionais: `sub`, `tipo:"sistema"`, `unid`,
+`oculto:true`. `cliente:true` **barra o build** — peça de cliente não entra no
+público. Tabela completa em `registro/LEIA-ME.md`. Slug em minúsculas, sem
+acento, com hífen: `emei-presidente-dutra`, `lavro-grafismo`.
 
-Mais recente em cima. **Não escrever número** — 01, 02, 03 saem da ordem
-do array, por bloco. `oculto: true` esconde sem apagar o registro.
+Peças com o mesmo `projeto` (caixa e acento ignorados) ficam juntas; dentro do
+projeto a ordem é pela `data`, mais recente em cima. **Não escrever número no
+nome** — 01, 02, 03 saem da ordem.
 
 **Peça de sistema — o bloco de baixo.** Cada projeto tem dois blocos: as
 apresentações em cima e, embaixo do separador "sistema visual", os interativos
@@ -383,14 +391,18 @@ e demais grafismos. Dois campos opcionais:
 | campo | efeito |
 |---|---|
 | `tipo: "sistema"` | manda a peça para o bloco de baixo |
-| `sub: "interativo"` | texto curto no lugar da contagem de pranchas, para peça que não é deck |
+| `sub: "interativo"` | texto curto antes da contagem de pranchas, para peça que não é deck |
 
-**`peso` é o tamanho no disco, em MB**, não o transferido — o Pages comprime
-na entrega, e quem manda a peça por e-mail ou WhatsApp precisa do número do
-disco. Medir com `curl -s -I -L <url> | grep -i content-length` **sem**
-`Accept-Encoding`. Acima de 8 MB o índice marca sozinho: passa do limite de
-anexo de e-mail. Abaixo de 0,1 MB o índice mostra em kB. **Ao substituir uma
-peça, atualizar o `peso`** — é o campo que envelhece calado.
+**`peso` é o tamanho no disco, em MB** — a pasta inteira, com `img/` —, não o
+transferido: o Pages comprime na entrega, e quem manda a peça por e-mail ou
+WhatsApp precisa do número do disco. O `montar-indice.py` mede a pasta e
+**avisa se o meta divergir mais de 5%**; acima de 8 MB o índice marca sozinho.
+Ao substituir uma peça, atualizar `peso` e `data` no meta.
+
+**Peça fora do padrão** — entrega que mora em outro repositório (href
+absoluto) ou versão oculta em `superado/` — não tem pasta com meta: entra à mão
+em `projetos` do `registro/<frente>.json`, no mesmo formato de sempre, com
+`href` explícito.
 
 ## Versão nova × revisão nova
 
@@ -408,78 +420,77 @@ aqui ("substitui" num arquivo, "nunca substitua, acrescente" no outro).
   sobrescrever: *"esta peça já foi apresentada ao cliente? sobe de revisão?"*
   Peça de horas não precisa da pergunta; peça de dias não se decide sozinha.
 
-## Registrar documento ou ferramenta — array `docs`
+## Registrar documento ou ferramenta — `registro/<frente>.json`
 
-A aba Sistema agrupa pelo campo `grupo`, na ordem em que os grupos
-aparecem no array. Grupo novo é só escrever um `grupo` que ainda não
-existe — a aba passa a exibir o separador sozinha.
+Cada frente tem o seu arquivo em `registro/`, e edita **só o seu**:
+`michel-stein.json`, `sarasa.json`, `amaz.json`, `lavro.json`, `baraka.json`.
+O que é do sistema e não é de nenhuma marca (montar, gabaritos, publicação,
+notion, proposta, site…) fica em `_geral.json`. Dentro, `"docs": [...]` com os
+mesmos campos de sempre:
 
-Três campos decidem o comportamento:
-
-- `href: GH+"pasta/ARQUIVO.md"` — mora no repositório privado, abre no
-  GitHub com a conta logada, recebe a marca `••`
-- `arq: "sistemas/ARQUIVO.md"` — mora neste repositório, abre no leitor
-  de markdown da própria página, recebe a marca `md`
-- `ver: "ferramentas/<slug>/index.html"` — acrescenta o link "ver
-  artefato", que abre a coisa funcionando
+- `href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/pasta/ARQUIVO.md"`
+  — mora no repositório privado, abre no GitHub com a conta logada, marca **privado**
+  (URL inteira: não existe mais o prefixo `GH+` do JavaScript)
+- `arq: "sistemas/ARQUIVO.md"` — mora neste repositório, abre no leitor de
+  markdown da própria página, marca **público**
+- `ver: "ferramentas/<slug>/index.html"` — acrescenta o link "ver artefato",
+  que abre a coisa funcionando. Peça apontada por `ver` conta como registrada
+- `aba: "deck"` ou `"marca"` — sem o campo, a linha vai para a aba sistema
+- `grupo` — o separador. A ordem dos grupos em cada aba está fixada em
+  `ORDEM_GRUPOS`, no `montar-indice.py`; grupo novo entra lá também, senão sai
+  no fim da aba
 
 Ferramenta se registra com `arq` apontando para o `LEIA-ME.md` e `ver`
 apontando para o `index.html`: um link para entender, outro para usar.
 
-## Validar antes de subir
+Depois de editar: `python3 sistemas/montar-indice.py` regrava `dados.json`.
+**`dados.json` nunca se edita à mão** — o próximo build sobrescreve. Formato
+completo e exemplos em `registro/LEIA-ME.md`.
 
-- **`python3 sistemas/guarda-publico.py` → `guarda: limpo`.** Primeiro de
-  todos; achado = não sobe (seção "Público quer dizer aberto")
+## Validar e publicar — `sistemas/publicar.sh`
+
+Um comando faz a rodada inteira, na ordem certa, e para na primeira falha:
+
+```
+GH=<token> sistemas/publicar.sh "<mensagem do commit>" [<slug-da-peça>]
+```
+
+Os dez passos, cada um imprimindo `ok` ou `FALHA`:
+
+1. `git fetch` + `git pull --ff-only` — trabalho alheio entra antes do seu
+2. `montar-indice.py` — regenera `dados.json`; **órfã** (pasta com
+   `apresentacao.html` sem `meta.json` e sem `href` em `registro/`) ou
+   `cliente:true` param aqui
+3. `guarda-publico.py` → tem de imprimir `guarda: limpo`
+4. `gerar-gabaritos.py --check` — a tabela do DECK-MONTAR bate com o `tpl()`
+5. `node --check` nos scripts inline do `index.html`
+6. se houver slug: `node sistemas/validar.mjs <slug>/apresentacao.html`
+7. `git add -A && git commit`
+8. `git fetch` de novo; se o remoto avançou: `rebase`, regenerar `dados.json`,
+   `commit --amend`, guarda de novo. **Nunca `--force`**
+9. push com o token na URL e a saída filtrada pelo `sed` (token nunca aparece).
+   *"denied by the Claude Code auto mode classifier"* → sai com código 2 e a
+   mensagem da seção "Barrado por permissão": o commit está pronto, falta
+   liberar a escrita
+10. espera 60 s e confere no Pages, com `?nc=`, que `dados.json` traz o
+    `gerado` novo e que a peça responde 200; imprime a URL da **peça**
+
+`--seco` roda só até o passo 6, sem commit; `--ate <n>` para depois do passo
+`n`. Servem para conferir a rodada antes de ter o token na mão.
+
+O que continua sendo obrigação da peça, e que o script não confere sozinho:
+
 - **toda peça leva, antes do `</body>`,**
   `<script defer src="../modulos/ms-voltar.js"></script>` — sem ela a peça
-  abre sem saída (o índice abre em aba nova). O caminho é relativo e vale
-  porque toda peça mora a um nível da raiz; peça mais funda ajusta o `../`.
-  Comportamento e detalhes em `DECK-MOTOR.md`
+  abre sem saída (o índice abre em aba nova). Detalhes em `DECK-MOTOR.md`
 - **`noindex, nofollow, noarchive`** no índice e em toda peça. `robots.txt`
-  não funciona em Pages de projeto — o buscador só lê o da raiz do domínio,
-  que não é deste repositório. A meta tag é a única proteção contra buscador
-- `node --check` em cada script inline do `index.html` — um erro de
-  sintaxe apaga a lista inteira, e a página quebra sem aviso
-- simular o agrupamento fora do navegador: extrair o array e conferir a
-  ordem dos grupos e se o `arq` referenciado existe no disco
-- abrir a página em Chromium headless e conferir que a linha nova aparece
-- abrir a peça ou a ferramenta e conferir console limpo
-- `git diff` antes do commit: o diff tem que ser só o que você mexeu
-- **rodar o detector de órfã no disco, antes do push** — o da página só
-  avisa depois que o arquivo já está no ar, e quem vê é o Michel:
+  não funciona em Pages de projeto — a meta tag é a única proteção
+- abrir a peça e conferir console limpo
+- `git diff` antes do `publicar.sh`: o diff tem que ser só o que você mexeu
 
-```
-python3 - <<'EOF'
-import re, pathlib
-s = open('index.html', encoding='utf-8').read()
-reg = set(re.findall(r'(?:href|ver)\s*:\s*"([^"?]+)"', s))
-IGN = ('index.html','sistemas/','modulos/','fundo/','ferramentas/','superado/','.git')
-orfas = sorted(str(p) for p in pathlib.Path('.').rglob('*.html')
-               if not str(p).startswith(IGN) and str(p) not in reg)
-print('\n'.join(orfas) if orfas else 'nenhuma órfã')
-EOF
-```
-
-  Tem de imprimir `nenhuma órfã`. Se imprimir caminho, a rodada não está
-  fechada — registrar e só então subir.
-
-## Publicar
-
-Agrupar a rodada num commit só.
-
-```
-git add -A && git commit -m "..."
-git -c http.proxy= -c https.proxy= push origin main 2>&1 \
-  | sed -E 's/(github_pat_|gh[pous]_)[A-Za-z0-9_]+/***/g'
-```
-
-Pages e Netlify reconstroem sozinhos, em cerca de um minuto. Sem passo
-manual no painel. Confirmar depois no endereço público, com
-cache-busting — push aceito não é o mesmo que no ar: **código 200 e tamanho
-igual ao do arquivo de origem**, antes de devolver o link.
-
-O `sed` no fim não é enfeite: mensagem de erro de push devolve a URL
-inteira, com o token dentro.
+Pages e Netlify reconstroem sozinhos, em cerca de um minuto. Push aceito não é
+o mesmo que no ar: o passo 10 espera e confere. Avisar de refresh forte
+(Ctrl+Shift+R) se ele acabou de ver a versão anterior.
 
 ## Cuidados
 
