@@ -370,7 +370,10 @@ duas marcas.
 
 **Contracapa** — campo Vinho, `assina:'obrigado'` no lugar da frase, sem pílula:
 
-- **QR** em módulos Cal sobre Vinho, apontando para **`estudiosarasa.com.br`**.
+- **QR** em módulos Cal sobre Vinho, apontando para **`estudiosarasa.com.br`** —
+  **em toda peça desta frente, sem exceção** (decisão do Michel, 03.09.2026; a EMEI
+  saiu com o QR errado e foi corrigida). O SVG certo é a constante `QR` do
+  `marca/sarasa/bloco.html`; nunca reaproveitar o QR de outra marca.
 - **Crédito**, linha pequena ao pé: `CONCEPÇÃO E COORDENAÇÃO · MICHEL STEIN_`,
   Archivo 600, caixa alta, +.08em, em Cal a 70%. Não disputa a assinatura;
   registra a autoria na peça que circula.
