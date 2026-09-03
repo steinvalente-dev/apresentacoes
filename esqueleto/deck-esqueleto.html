@@ -1275,16 +1275,42 @@ body.em-cheia.ocioso .slide.ativo .full:after{opacity:0}
    positivo/negativo pelo tema do slide — testado na EMEI Presidente Dutra
    em reunião e aprovado. Quem decide é a constante LOGO_CANTO do bloco da
    marca; o script de marca troca `.marca-txt` por `.marca-lk`.
-   Tamanho do logotipo: 132 a 180 px — abaixo de ~130 px o lockup da
-   Sarasá perde a palavra `estúdio` (nível Micro do arquivo de marca).
+   Tamanho do logotipo: 120 a 148 px no PADRÃO — reduzido de 132–180 em
+   03/09/2026 a pedido do Michel ("pode ficar menor em todos os casos").
+   Medido antes de mudar: a 1600 px de largura o antigo dava 152 px, e num
+   celular deitado (852 px) a base fixa de 132 px o inflava para 15,5% da
+   largura da tela contra 9,5% no desktop. Era isso que o incomodava.
    A troca positivo/negativo é POR TOKEN: o SVG traz fill="var(--tinta)" e
    fill="var(--primaria)"; sobre campo escuro, imagem ou visor os dois viram
    papel e o lockup fica monocromático, como o negativo oficial. SVG
    monocromático usa fill="currentColor" e recebe o mesmo tratamento.   */
 .marca{display:flex;align-items:center}
-.marca .marca-lk{display:block;width:var(--logo-canto-w,clamp(132px,9.5cqw,180px));
+.marca .marca-lk{display:block;width:var(--logo-canto-w,clamp(120px,8.6cqw,148px));
   line-height:0;opacity:.9;transition:opacity .3s ease;color:var(--tinta)}
 .marca .marca-lk svg{display:block;width:100%;height:auto}
+
+/* ⚑ NÍVEL MICRO EM TELA DE CELULAR — regra do arquivo de marca, não gosto.
+   MARCA-SARASA §4, "Quatro níveis de escala": abaixo de 130 px o lockup
+   entra no nível **Micro**, e nele `estúdio` NÃO encolhe — **sai**. É o
+   nível de marca d'água, que é exatamente o papel do canto do chrome.
+   Então em tela estreita ou baixa o logotipo diminui de verdade E perde
+   `estúdio`, em vez de virar um lockup de 84 px ilegível — o que violaria
+   a §4 e é o erro que estava para acontecer.
+   O corte é por FILL, e isso só funciona porque o SVG oficial separa as
+   duas palavras em dois tokens: `estúdio` em --tinta, `Sarasá` em
+   --primaria. Medido no lockup-pos.svg: sete paths de cada.
+   A caixa não muda de proporção ao esconder `estúdio`: o `S` é o único
+   glifo de corpo inteiro (y 0→77) e é ele que define a altura do viewBox.
+   Verificado no arquivo de marca, tabela de medidas da §4.
+   Limiares: 900 px de largura pega celular deitado e tablet em pé; 520 px
+   de altura pega celular deitado em tela curta, onde a largura sozinha não
+   denuncia. */
+@media (max-width:900px),(max-height:520px){
+  .marca .marca-lk{--logo-canto-w:clamp(70px,10cqw,100px);opacity:.82}
+  /* o seletor casa a STRING do atributo, não o valor computado: continua
+     valendo quando o tema troca --tinta por --papel sobre campo escuro. */
+  .marca .marca-lk svg path[fill="var(--tinta)"]{display:none}
+}
 /* o `hidden` do HTML tem de vencer o display:block acima */
 .marca .marca-lk[hidden],.marca .marca-txt[hidden]{display:none}
 body.esc .marca .marca-lk,body.terra .marca .marca-lk,body.com-fundo .marca .marca-lk,
@@ -1397,6 +1423,31 @@ body.no-fim #msgraf{opacity:.18}
   background:var(--tinta-45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
   border:1px solid var(--papel-10);border-radius:3px;transition:opacity .3s ease}
 .g-modelo-3d.girando .rotulo{opacity:0}
+
+/* ⚑ O RÓTULO DO VISOR EM CELULAR — 03/09/2026, pedido do Michel:
+   *"na versão móbile precisamos subir com essa caixa de texto, ou reduzir
+   drasticamente a informação"*.
+   MEDIDO num celular deitado antes de mexer: a caixa saía com 462 × 131 px,
+   ou 36% da altura da tela a 800 × 360, e o teste automático confirmou que
+   ela CRUZAVA o centro vertical — isto é, cobria justamente o lote de que
+   o slide fala. No desktop a mesma caixa ocupa 23% e sobra tela.
+   A escolha é a segunda que ele ofereceu, reduzir a informação, e não a
+   primeira: subir a caixa só troca o que ela cobre — em vez do lote,
+   cobriria as ruas do topo. Então em tela baixa sai o `lead` (a frase
+   longa; o `h2` continua dizendo do que se trata), a caixa encolhe e se
+   cola na faixa de baixo, liberando o centro.
+   O `cap` FICA: em toque é ele que diz que o visor é interativo, e sem
+   teclado ninguém descobre isso sozinho. */
+@media (max-height:520px),(max-width:760px){
+  .g-earth-3d .rotulo,.g-modelo-3d .rotulo,.g-mapa-2d .rotulo{
+    bottom:calc(var(--bot) - clamp(10px,3cqh,26px));
+    max-width:min(34ch,66cqw);
+    padding:clamp(8px,1.4cqh,14px) clamp(11px,1.5cqw,18px)}
+  .g-earth-3d .rotulo .lead,.g-modelo-3d .rotulo .lead,.g-mapa-2d .rotulo .lead{
+    display:none}
+  .g-earth-3d .rotulo h2,.g-modelo-3d .rotulo h2,.g-mapa-2d .rotulo h2{
+    font-size:clamp(15px,4.2cqh,22px);margin-top:.16em}
+}
 .g-earth-3d .rotulo .kick,.g-modelo-3d .rotulo .kick{display:block;color:var(--papel-80);margin:0;
   font-size:var(--fs-cap);text-transform:uppercase}
 .g-earth-3d .rotulo h2,.g-modelo-3d .rotulo h2{color:var(--papel);font-size:var(--fs-h);line-height:1.04;margin-top:.24em}
@@ -2819,15 +2870,43 @@ document.getElementById('ant').onclick=e=>{e.stopPropagation();recua()};
 addEventListener('keydown',e=>{
   /* visor 3d ativo rouba as setas: a navegação do deck para até o botão
      `devolver o teclado ao slide`. */
-  if(document.querySelector('.g-earth-3d.girando,.g-modelo-3d.girando'))return;
+  if(document.querySelector('.g-earth-3d.girando,.g-modelo-3d.girando,.g-mapa-2d.girando'))return;
   if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();avanca()}
   else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();recua()}
   else if(e.key==='ArrowDown'){e.preventDefault();go(cur+1,true)}
   else if(e.key==='ArrowUp'){e.preventDefault();go(cur-1,true)}});
 /* a pílula chama avanca(), não go(cur+1): na capa em dois momentos o
    primeiro clique revela o momento B (um .passo); sem passo, avança igual. */
+/* ══ TOQUE: DIREITA AVANÇA, FAIXA DA ESQUERDA VOLTA ══════════════════════
+   Pedido do Michel em 03/09/2026, e o desenho é o dele: *"o lado direito
+   ele deve ser maior e mais sensível, é mais comum a gente avançar; um
+   toque bem próximo do limite esquerdo volta um slide, e não pode ser
+   muito estreita essa faixa"*.
+
+   A faixa é `clamp(78px, 16vw, 230px)` — 16% da largura, com piso de 78 px
+   para o polegar acertar sem mira num celular, e teto de 230 px para não
+   comer meia tela num projetor ultrawide. Os outros ~84% avançam.
+
+   `vw` e não `cqw` de propósito: a faixa é do DEDO, não da composição. O
+   polegar tem o mesmo tamanho em qualquer proporção de tela, e as clamps
+   em `cqw` do resto da peça existem para escalar desenho, não gesto.
+
+   TRÊS COISAS QUE A FAIXA NÃO PODE ATROPELAR, e por isso vêm antes:
+   1 · a pílula `começar` da capa — ela chama avanca() em qualquer ponto,
+       inclusive dentro da faixa, senão o primeiro toque da apresentação
+       volta para lugar nenhum;
+   2 · botão, link, pino e visor — o guarda que já existia;
+   3 · o `.nav` e o `.dots`, que ficam FORA do #palco e têm o seu próprio
+       handler com stopPropagation.
+
+   Não há afordância desenhada, de propósito: o gesto se descobre no
+   primeiro toque errado e um rótulo permanente na tela seria ruído em
+   peça de cliente. Se ele pedir, entra como dica que aparece uma vez.  */
 palco.addEventListener('click',e=>{if(e.target.closest('.ms-start')){avanca();return}
-  if(e.target.closest('a,button,.pin,.lote,.g-earth-3d .visor,.g-modelo-3d .visor,.g-modelo-3d .cenas'))return;avanca()});
+  if(e.target.closest('a,button,.pin,.lote,.g-earth-3d .visor,.g-modelo-3d .visor,.g-modelo-3d .cenas,.g-mapa-2d .visor'))return;
+  const faixa=Math.min(Math.max(78,innerWidth*0.16),230);
+  if(e.clientX<=faixa){recua();return}
+  avanca()});
 let tx=0;
 addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
 addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>52){d<0?avanca():recua()}},{passive:true});

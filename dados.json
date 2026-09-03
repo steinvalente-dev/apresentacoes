@@ -43,7 +43,7 @@
     {
      "nome": "quatro versões · light",
      "pranchas": 35,
-     "peso": 8.4,
+     "peso": 8.3,
      "data": "03.09.2026",
      "href": "emei-presidente-dutra-light/apresentacao.html",
      "frente": "sarasa",
@@ -51,7 +51,7 @@
     },
     {
      "nome": "quatro versões · trecho a ser reconstruído",
-     "pranchas": 35,
+     "pranchas": 37,
      "peso": 8.6,
      "data": "02.09.2026",
      "href": "emei-presidente-dutra/apresentacao.html",
@@ -314,5 +314,5 @@
    "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/sarasa/mapeamento-danos/SARASA_BASE-CAMPO_TEMPLATE_v1.json"
   }
  ],
- "gerado": "2026-09-03T20:00:23+00:00"
+ "gerado": "2026-09-03T23:18:07+00:00"
 }
