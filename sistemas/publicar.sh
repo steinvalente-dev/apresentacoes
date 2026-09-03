@@ -107,7 +107,9 @@ if git diff --cached --quiet; then
   if [[ -z "$(git log --oneline origin/main..HEAD)" ]]; then echo '  e nada local por subir. Fim.'; exit 0; fi
   aviso 'há commit local por subir; seguindo sem commit novo'
 else
-  git commit -q -m "$MSG" || falha 'commit'
+  # autor fixo da casa: o container não tem git config, e "Claude <noreply>" no histórico não diz de quem é o acervo
+  git -c user.name=steinvalente-dev -c user.email=michel@michelstein.com.br \
+    commit -q -m "$MSG" -m "Publicado por sistemas/publicar.sh" || falha 'commit'
   ok "$(git log --oneline -1 | sed -E "$FILTRO")"
 fi
 parar_se
@@ -120,7 +122,7 @@ if [[ -n "$(git log --oneline HEAD..origin/main)" ]]; then
   git rebase origin/main 2>&1 | sed -E "$FILTRO" || { git rebase --abort 2>/dev/null || true; falha 'conflito no rebase — resolver à mão, NUNCA --force'; }
   python3 sistemas/montar-indice.py || falha 'montar-indice depois do rebase'
   if ! git diff --quiet -- dados.json; then
-    git add dados.json && git commit --amend --no-edit -q
+    git add dados.json && git -c user.name=steinvalente-dev -c user.email=michel@michelstein.com.br commit --amend --no-edit -q
   fi
   guarda || falha 'achado depois do rebase — o que veio do outro lado não está limpo'
 fi
