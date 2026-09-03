@@ -2,7 +2,9 @@
 # Cada linha existe por decisão do Michel. Sem decisão, não se acrescenta linha: move-se o arquivo.
 
 # EMEI é equipamento público; endereço é público por natureza (decisão da auditoria de 02.09.2026)
+# A versão light é a MESMA peça, com o mesmo texto: a decisão de 02.09 já a cobre.
 emei-presidente-dutra/apresentacao.html:Rua Santo Elias, 146
+emei-presidente-dutra-light/apresentacao.html:Rua Santo Elias, 146
 
 # Peça institucional da AMAZ cita caso de mercado já publicado — não é honorário nem dado de cliente
 amaz/apresentacao.html:R$ 7,4
