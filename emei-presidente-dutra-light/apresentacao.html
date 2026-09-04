@@ -1218,6 +1218,124 @@ body.em-cheia.ocioso .slide.ativo .full:after{opacity:0}
   body.em-cheia.ocioso .slide.ativo .full:after{opacity:1}
 }
 
+/* ═══ ESCOLHA — a bifurcação ════════════════════════════════════════════
+   Uma página com pílulas onde quem apresenta decide o caminho. Pedido do
+   Michel em 04/09: antes de entrar no 3d, escolher entre o modelo
+   interativo e as imagens.
+
+   ⚑ O DESTINO É POR GABARITO, NÃO POR ÍNDICE. Cada pílula declara `para`
+   com o NOME de um gabarito, e o motor procura o próximo slide daquele
+   gabarito. Índice chumbado já quebrou um teste nesta peça quando uma
+   seção entrou no meio; numa bifurcação quebraria na frente do cliente.
+
+   A pílula é a mesma do `começar` da capa — é a linguagem da casa para
+   "clique aqui e algo acontece", e não se inventa uma segunda. */
+.g-escolha .opcoes{display:flex;flex-wrap:wrap;gap:clamp(10px,1.5cqw,22px);
+  margin-top:clamp(20px,3.4cqh,48px)}
+.g-escolha .pill{display:flex;flex-direction:column;align-items:flex-start;
+  gap:.34em;cursor:pointer;text-align:left;
+  background:var(--papel);color:var(--tinta);border:1px solid var(--papel);
+  border-radius:999px;padding:clamp(12px,1.7cqh,20px) clamp(20px,2.1cqw,34px);
+  transition:transform .25s ease,background .25s ease,color .25s ease}
+.g-escolha .pill b{font-family:var(--f-corpo);font-weight:600;
+  font-size:var(--fs-item);letter-spacing:-.01em;line-height:1.1}
+.g-escolha .pill s{text-decoration:none;font-family:var(--f-mono);font-weight:500;
+  font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--tinta-60)}
+.g-escolha .pill:hover{transform:translateY(-2px)}
+.g-escolha .pill:focus-visible{outline:2px solid var(--acento);outline-offset:3px}
+/* sobre campo escuro a pílula já é o claro da tela: inverte o hover para não
+   piscar branco em branco */
+body.esc .g-escolha .pill:hover,body.com-fundo .g-escolha .pill:hover{
+  background:var(--acento-claro)}
+
+/* ═══ GALERIA — mosaico, e a lupa em tela cheia ══════════════════════════
+   Pedido do Michel em 04/09: cada proposta abre como mosaico; clicar numa
+   imagem a expande em tela cheia.
+
+   ⚑ `contain` TAMBÉM NA MINIATURA, e é decisão, não descuido. `cover` é o
+   normal em mosaico, e aqui está proibido pela regra 2 do DECK-MONTAR: o
+   que o cover corta, em peça de arquitetura, é desenho. Como os seis
+   renders saem dos mesmos pontos de câmera e têm a mesma proporção, o
+   `contain` fica visualmente idêntico ao `cover` e não corre risco.
+
+   ⚑ A LUPA É CAMADA, NÃO SLIDE. Decisão do Michel: as setas passeiam pelas
+   vistas daquela versão e o deck só avança quando a lupa fecha. É o que
+   permite ficar numa imagem enquanto o cliente fala.
+   O `X` é grande de propósito (44 px de alvo, mínimo de toque) e some com
+   o ponteiro parado, voltando a qualquer gesto — mesma mecânica do overlay
+   descritivo da prancha `cheia`, e o `ocioso` que a comanda já é genérico
+   no body. A IMAGEM nunca some; só o controle. */
+.g-galeria{padding:calc(var(--top) + clamp(10px,1.8cqh,26px)) var(--gut) calc(var(--bot) + clamp(10px,1.8cqh,26px));
+  background:var(--moldura)}
+.g-galeria .galtopo{flex:0 0 auto;margin-bottom:clamp(12px,2cqh,26px)}
+.g-galeria .mosaico{flex:1 1 auto;display:grid;gap:clamp(6px,.8cqw,14px);
+  grid-template-columns:repeat(auto-fill,minmax(clamp(132px,19cqw,330px),1fr));
+  align-content:center;min-height:0}
+.g-galeria .tijolo{position:relative;display:block;padding:0;cursor:pointer;
+  background:var(--slot-escuro);border:1px solid var(--papel-10);border-radius:3px;
+  overflow:hidden;aspect-ratio:16/9;
+  transition:border-color .25s ease,transform .25s ease}
+.g-galeria .tijolo img{width:100%;height:100%;object-fit:contain;display:block}
+.g-galeria .tijolo .tlbl{position:absolute;inset:auto 0 0 0;
+  padding:.5em .62em;font-family:var(--f-mono);font-weight:500;
+  font-size:clamp(8px,.62cqw,10.5px);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--papel-90);text-align:left;
+  background:linear-gradient(transparent,var(--tinta-70));
+  text-shadow:0 1px 3px var(--tinta-60)}
+.g-galeria .tijolo:hover{border-color:var(--papel);transform:translateY(-2px)}
+.g-galeria .tijolo:focus-visible{outline:2px solid var(--papel);outline-offset:2px}
+
+.g-galeria .lupa{position:absolute;inset:0;z-index:6;display:none;
+  background:var(--moldura)}
+.g-galeria.lupando .lupa{display:block}
+.g-galeria .lupa .lph{position:absolute;inset:0}
+.g-galeria .lupa img{width:100%;height:100%;object-fit:contain;display:block}
+.g-galeria .lupa .lupaov{position:absolute;inset:auto 0 0 0;
+  padding:clamp(40px,7cqh,100px) calc(var(--gut) * 1.9) var(--bot) var(--gut);
+  background:linear-gradient(transparent,var(--tinta-15) 44%,var(--tinta-60) 100%);
+  color:var(--papel);pointer-events:none}
+.g-galeria .lupa .lupaov h3{font-family:var(--f-display);font-weight:500;
+  font-style:italic;text-transform:lowercase;font-size:var(--fs-h);
+  text-shadow:0 1px 3px var(--tinta-45),0 2px 14px var(--tinta-35)}
+.g-galeria .lupa .lupaov span{display:block;margin-top:.4em;font-size:var(--fs-body);
+  color:var(--papel-90);max-width:52ch;
+  text-shadow:0 1px 3px var(--tinta-45),0 2px 14px var(--tinta-35)}
+/* o X: alvo de 44 px, o mínimo de toque, e contraste próprio para não
+   depender do que houver atrás */
+.g-galeria .lupa .fechar{position:absolute;top:clamp(10px,1.6cqh,22px);
+  right:clamp(10px,1.4cqw,24px);width:clamp(38px,3.1cqw,50px);height:clamp(38px,3.1cqw,50px);
+  display:grid;place-items:center;cursor:pointer;border-radius:50%;
+  background:var(--tinta-70);color:var(--papel);border:1px solid var(--papel-25);
+  font-size:calc(var(--seta) * .34);line-height:1}
+.g-galeria .lupa .fechar:hover{background:var(--tinta);border-color:var(--papel)}
+.g-galeria .lupa .lseta{position:absolute;top:50%;transform:translateY(-50%);
+  width:var(--seta);height:var(--seta);display:grid;place-items:center;cursor:pointer;
+  border-radius:50%;background:var(--tinta-50);color:var(--papel);
+  border:1px solid var(--papel-20);font-size:calc(var(--seta) * .34);line-height:1}
+.g-galeria .lupa .lseta:hover{background:var(--tinta-80);border-color:var(--papel)}
+.g-galeria .lupa .lant{left:clamp(8px,1.2cqw,20px)}
+.g-galeria .lupa .lpro{right:clamp(8px,1.2cqw,20px)}
+.g-galeria .lupa .lconta{position:absolute;top:clamp(14px,2.2cqh,28px);
+  left:var(--gut);font-family:var(--f-mono);font-weight:500;font-size:var(--fs-cap);
+  letter-spacing:.14em;color:var(--papel-70);
+  text-shadow:0 1px 3px var(--tinta-60)}
+/* ⚑ O CONTROLE SOME, A IMAGEM NÃO. Ponteiro parado 1,8 s e o body ganha
+   `ocioso` (mecanismo genérico, no fim do arquivo); qualquer gesto tira. */
+.g-galeria .lupa .fechar,.g-galeria .lupa .lseta,
+.g-galeria .lupa .lupaov,.g-galeria .lupa .lconta{
+  transition:opacity .55s cubic-bezier(.4,0,.2,1)}
+body.ocioso .g-galeria.lupando .fechar,
+body.ocioso .g-galeria.lupando .lseta,
+body.ocioso .g-galeria.lupando .lupaov,
+body.ocioso .g-galeria.lupando .lconta{opacity:0}
+@media (prefers-reduced-motion: reduce){
+  body.ocioso .g-galeria.lupando .fechar,
+  body.ocioso .g-galeria.lupando .lseta,
+  body.ocioso .g-galeria.lupando .lupaov,
+  body.ocioso .g-galeria.lupando .lconta{opacity:1}
+}
+
 /* ═══ prancha — a grade de referência ══════════════════════════════════
    Portada da casa ITTB em 29/08/2026. Nomes próprios (.pbody, .ptop,
    .plead, .pcap) porque .body, .top e .cap já existem em outros gabaritos.
@@ -2612,7 +2730,7 @@ const DECK=[
   itens:[
 
     ['01','onde está','A quadra e o entorno, no mapa.'],
-    ['02','as quatro possibilidades','Seis vistas em cada, nos mesmos pontos de câmera.']]},
+    ['02','as quatro propostas','Comparadas na tabela, e depois em galeria ou no modelo.']]},
 
 /* ═══ 01 · localizacao ═══════════════════════════════════════════════════ */
 {g:'divisor',sec:'localização',esc:1,graf:1,
@@ -2650,73 +2768,77 @@ const DECK=[
    material, secao e sistema de cobertura de cada versao foram lidos dos
    renders, nao de memorial. */
 
-/* ─── versao 01 · telhado ─── */
-{g:'divisor',sec:'01 · telhado',esc:1,graf:1,
-  dn:'01',dt:'telhado',
-  ds:'Arcada reconstruída em concreto aparente, sem ornato, e telhado novo sobre o percurso inteiro.'},
-{g:'cheia',esc:1,src:'img/v1-iso.jpg',lbl:'telhado · iso',
-  h2:'telhado',cap:'isométrica · o conjunto e o pátio'},
-{g:'cheia',esc:1,src:'img/v1-1.jpg',lbl:'telhado · 1',
-  h2:'telhado',cap:'vista 01 · sob a arcada existente, para o percurso'},
-{g:'cheia',esc:1,src:'img/v1-2.jpg',lbl:'telhado · 2',
-  h2:'telhado',cap:'vista 02 · o eixo do percurso, do pátio para o portal'},
-{g:'cheia',esc:1,src:'img/v1-3.jpg',lbl:'telhado · 3',
-  h2:'telhado',cap:'vista 03 · a esquina, com o pátio'},
-{g:'cheia',esc:1,src:'img/v1-4.jpg',lbl:'telhado · 4',
-  h2:'telhado',cap:'vista 04 · sob a arcada, sentido oposto'},
-{g:'cheia',esc:1,src:'img/v1-5.jpg',lbl:'telhado · 5',
-  h2:'telhado',cap:'vista 05 · o percurso, na direção do pátio'},
+/* ─── versao 01 · telhado ───────────────────────────────────────────────────
+   Cada proposta abre como GALERIA: mosaico das seis vistas, e clicar numa
+   abre a lupa em tela cheia, onde as setas passeiam pelas vistas daquela
+   versao. Pedido do Michel em 04/09, e ele substituiu as seis pranchas
+   `cheia` que vinham em sequencia — de sete slides por versao para um.
+   O `sec` fica na galeria: o ponto no chrome nao depende de divisor. */
+{g:'galeria',sec:'01 · telhado',esc:1,
+  kick:'PROPOSTA 01',
+  t:'telhado',
+  sub:'Arcada reconstruída em concreto aparente, sem ornato, e telhado novo sobre o percurso inteiro.',
+  fotos:[
+    {src:'img/v1-iso.jpg', rot:'isométrica', cap:'O conjunto e o pátio, vistos de cima.'},
+    {src:'img/v1-1.jpg', rot:'vista 01', cap:'Sob a arcada existente, olhando para o percurso.'},
+    {src:'img/v1-2.jpg', rot:'vista 02', cap:'O eixo do percurso, do pátio para o portal.'},
+    {src:'img/v1-3.jpg', rot:'vista 03', cap:'A esquina, com o pátio.'},
+    {src:'img/v1-4.jpg', rot:'vista 04', cap:'Sob a arcada, no sentido oposto.'},
+    {src:'img/v1-5.jpg', rot:'vista 05', cap:'O percurso, na direção do pátio.'}]},
 
-/* ─── versao 02 · pergolado ─── */
-{g:'divisor',sec:'02 · pergolado',esc:1,graf:1,
-  dn:'02',dt:'pergolado',
-  ds:'A mesma arcada, com pergolado metálico plano no lugar do telhado. O céu fica visível entre as barras.'},
-{g:'cheia',esc:1,src:'img/v2-iso.jpg',lbl:'pergolado · iso',
-  h2:'pergolado',cap:'isométrica · o conjunto e o pátio'},
-{g:'cheia',esc:1,src:'img/v2-1.jpg',lbl:'pergolado · 1',
-  h2:'pergolado',cap:'vista 01 · sob a arcada existente, para o percurso'},
-{g:'cheia',esc:1,src:'img/v2-2.jpg',lbl:'pergolado · 2',
-  h2:'pergolado',cap:'vista 02 · o eixo do percurso, do pátio para o portal'},
-{g:'cheia',esc:1,src:'img/v2-3.jpg',lbl:'pergolado · 3',
-  h2:'pergolado',cap:'vista 03 · a esquina, com o pátio'},
-{g:'cheia',esc:1,src:'img/v2-4.jpg',lbl:'pergolado · 4',
-  h2:'pergolado',cap:'vista 04 · sob a arcada, sentido oposto'},
-{g:'cheia',esc:1,src:'img/v2-5.jpg',lbl:'pergolado · 5',
-  h2:'pergolado',cap:'vista 05 · o percurso, na direção do pátio'},
+/* ─── versao 02 · pergolado ───────────────────────────────────────────────────
+   Cada proposta abre como GALERIA: mosaico das seis vistas, e clicar numa
+   abre a lupa em tela cheia, onde as setas passeiam pelas vistas daquela
+   versao. Pedido do Michel em 04/09, e ele substituiu as seis pranchas
+   `cheia` que vinham em sequencia — de sete slides por versao para um.
+   O `sec` fica na galeria: o ponto no chrome nao depende de divisor. */
+{g:'galeria',sec:'02 · pergolado',esc:1,
+  kick:'PROPOSTA 02',
+  t:'pergolado',
+  sub:'A mesma arcada, com pergolado metálico plano no lugar do telhado. O céu fica visível entre as barras.',
+  fotos:[
+    {src:'img/v2-iso.jpg', rot:'isométrica', cap:'O conjunto e o pátio, vistos de cima.'},
+    {src:'img/v2-1.jpg', rot:'vista 01', cap:'Sob a arcada existente, olhando para o percurso.'},
+    {src:'img/v2-2.jpg', rot:'vista 02', cap:'O eixo do percurso, do pátio para o portal.'},
+    {src:'img/v2-3.jpg', rot:'vista 03', cap:'A esquina, com o pátio.'},
+    {src:'img/v2-4.jpg', rot:'vista 04', cap:'Sob a arcada, no sentido oposto.'},
+    {src:'img/v2-5.jpg', rot:'vista 05', cap:'O percurso, na direção do pátio.'}]},
 
-/* ─── versao 03 · mínimo ─── */
-{g:'divisor',sec:'03 · mínimo',esc:1,graf:1,
-  dn:'03',dt:'mínimo',
-  ds:'Nenhuma arcada nova: só o arco de transição. O percurso segue a céu aberto e o piso registra a implantação.'},
-{g:'cheia',esc:1,src:'img/v3-iso.jpg',lbl:'mínimo · iso',
-  h2:'mínimo',cap:'isométrica · o conjunto e o pátio'},
-{g:'cheia',esc:1,src:'img/v3-1.jpg',lbl:'mínimo · 1',
-  h2:'mínimo',cap:'vista 01 · sob a arcada existente, para o percurso'},
-{g:'cheia',esc:1,src:'img/v3-2.jpg',lbl:'mínimo · 2',
-  h2:'mínimo',cap:'vista 02 · o eixo do percurso, do pátio para o portal'},
-{g:'cheia',esc:1,src:'img/v3-3.jpg',lbl:'mínimo · 3',
-  h2:'mínimo',cap:'vista 03 · a esquina, com o pátio'},
-{g:'cheia',esc:1,src:'img/v3-4.jpg',lbl:'mínimo · 4',
-  h2:'mínimo',cap:'vista 04 · sob a arcada, sentido oposto'},
-{g:'cheia',esc:1,src:'img/v3-5.jpg',lbl:'mínimo · 5',
-  h2:'mínimo',cap:'vista 05 · o percurso, na direção do pátio'},
+/* ─── versao 03 · mínimo ───────────────────────────────────────────────────
+   Cada proposta abre como GALERIA: mosaico das seis vistas, e clicar numa
+   abre a lupa em tela cheia, onde as setas passeiam pelas vistas daquela
+   versao. Pedido do Michel em 04/09, e ele substituiu as seis pranchas
+   `cheia` que vinham em sequencia — de sete slides por versao para um.
+   O `sec` fica na galeria: o ponto no chrome nao depende de divisor. */
+{g:'galeria',sec:'03 · mínimo',esc:1,
+  kick:'PROPOSTA 03',
+  t:'mínimo',
+  sub:'Nenhuma arcada nova: só o arco de transição. O percurso segue a céu aberto e o piso registra a implantação.',
+  fotos:[
+    {src:'img/v3-iso.jpg', rot:'isométrica', cap:'O conjunto e o pátio, vistos de cima.'},
+    {src:'img/v3-1.jpg', rot:'vista 01', cap:'Sob a arcada existente, olhando para o percurso.'},
+    {src:'img/v3-2.jpg', rot:'vista 02', cap:'O eixo do percurso, do pátio para o portal.'},
+    {src:'img/v3-3.jpg', rot:'vista 03', cap:'A esquina, com o pátio.'},
+    {src:'img/v3-4.jpg', rot:'vista 04', cap:'Sob a arcada, no sentido oposto.'},
+    {src:'img/v3-5.jpg', rot:'vista 05', cap:'O percurso, na direção do pátio.'}]},
 
-/* ─── versao 04 · arcos metálicos ─── */
-{g:'divisor',sec:'04 · arcos metálicos',esc:1,graf:1,
-  dn:'04',dt:'arcos metálicos',
-  ds:'Arcos de seção esbelta, sem ornato. Abre a chance de um trabalho paisagístico — plantas ao longo do percurso, para o ambiente continuar integrado ao jardim da escola, logo ao lado.'},
-{g:'cheia',esc:1,src:'img/v4-iso.jpg',lbl:'arcos metálicos · iso',
-  h2:'arcos metálicos',cap:'isométrica · o conjunto e o pátio'},
-{g:'cheia',esc:1,src:'img/v4-1.jpg',lbl:'arcos metálicos · 1',
-  h2:'arcos metálicos',cap:'vista 01 · sob a arcada existente, para o percurso'},
-{g:'cheia',esc:1,src:'img/v4-2.jpg',lbl:'arcos metálicos · 2',
-  h2:'arcos metálicos',cap:'vista 02 · o eixo do percurso, do pátio para o portal'},
-{g:'cheia',esc:1,src:'img/v4-3.jpg',lbl:'arcos metálicos · 3',
-  h2:'arcos metálicos',cap:'vista 03 · a esquina, com o pátio'},
-{g:'cheia',esc:1,src:'img/v4-4.jpg',lbl:'arcos metálicos · 4',
-  h2:'arcos metálicos',cap:'vista 04 · sob a arcada, sentido oposto'},
-{g:'cheia',esc:1,src:'img/v4-5.jpg',lbl:'arcos metálicos · 5',
-  h2:'arcos metálicos',cap:'vista 05 · o percurso, na direção do pátio'},
+/* ─── versao 04 · arcos metálicos ───────────────────────────────────────────────────
+   Cada proposta abre como GALERIA: mosaico das seis vistas, e clicar numa
+   abre a lupa em tela cheia, onde as setas passeiam pelas vistas daquela
+   versao. Pedido do Michel em 04/09, e ele substituiu as seis pranchas
+   `cheia` que vinham em sequencia — de sete slides por versao para um.
+   O `sec` fica na galeria: o ponto no chrome nao depende de divisor. */
+{g:'galeria',sec:'04 · arcos metálicos',esc:1,
+  kick:'PROPOSTA 04',
+  t:'arcos metálicos',
+  sub:'Arcos de seção esbelta, sem ornato. Abre a chance de um trabalho paisagístico — plantas ao longo do percurso, para o ambiente continuar integrado ao jardim da escola, logo ao lado.',
+  fotos:[
+    {src:'img/v4-iso.jpg', rot:'isométrica', cap:'O conjunto e o pátio, vistos de cima.'},
+    {src:'img/v4-1.jpg', rot:'vista 01', cap:'Sob a arcada existente, olhando para o percurso.'},
+    {src:'img/v4-2.jpg', rot:'vista 02', cap:'O eixo do percurso, do pátio para o portal.'},
+    {src:'img/v4-3.jpg', rot:'vista 03', cap:'A esquina, com o pátio.'},
+    {src:'img/v4-4.jpg', rot:'vista 04', cap:'Sob a arcada, no sentido oposto.'},
+    {src:'img/v4-5.jpg', rot:'vista 05', cap:'O percurso, na direção do pátio.'}]},
 
 /* ═══ CONTRACAPA — MARCA-SARASA.md secao 5 ═══════════════════════════════
    O slide de proximas acoes saiu a pedido do Michel, 02/09. A peca fecha
@@ -2863,6 +2985,41 @@ function tpl(s){
   if(s.g==='unit') return `<div class="wrap">${k}${t}${sub}<div class="unit rev">`+s.cards.map(([ti,a,r,l,m])=>`<div class="uc${et}"><span class="ut">${ti}</span><span class="ua">${a}</span><span class="ur">${RS(r)}</span><span class="ul">${l}</span><span class="um">${m}</span></div>`).join('')+`</div></div>`;
   if(s.g==='trio') return `<div class="wrap">${k}${t}${sub}<ol class="trio">`+s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')+`</ol></div>`;
   if(s.g==='lista'||s.g==='fim') return `<div class="wrap${s.largo?' largo':''}">${k}${pre}${t}${sub}<ol class="lista${s.largo?' largo':''}">`+s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')+`</ol></div>`;
+  if(s.g==='escolha'){
+    /* A BIFURCAÇÃO. Cada opção declara `para` com o NOME de um gabarito, e
+       o motor procura o próximo slide daquele gabarito — nunca índice. */
+    const o=(s.opcoes||[]).map(op=>
+      `<button class="pill" type="button" data-para="${op.para||''}"`
+      + (op.ir!=null?` data-ir="${op.ir}"`:'') + `>`
+      + `<b>${op.rot||''}</b>`
+      + (op.sub?`<s>${op.sub}</s>`:'') + `</button>`).join('');
+    return `<div class="wrap">${k}${t}${sub}<div class="opcoes rev">${o}</div></div>`;
+  }
+  if(s.g==='galeria'){
+    /* MOSAICO + LUPA. `fotos:[{src,rot,cap}]`.
+       `data-src`: as miniaturas entram quando o slide chega, pelo
+       __msPuxa() — seis por galeria, e sem isto as vinte e quatro entrariam
+       na carga. A lupa recebe o `src` no clique, da miniatura já baixada:
+       é o mesmo arquivo, então não há segunda carga. */
+    const F=s.fotos||[];
+    const tij=F.map((f,i)=>
+      `<button class="tijolo" type="button" data-i="${i}" data-cap="${(f.cap||'').replace(/"/g,'&quot;')}" data-rot="${(f.rot||'').replace(/"/g,'&quot;')}">`
+      + (f.src
+          ? `<img decoding="async" data-src="${f.src}" alt="${(f.rot||f.cap||'').replace(/"/g,'&quot;')}">`
+          : `<div class="slot"><u>_</u><b>${f.rot||'vista'}</b></div>`)
+      + (f.rot?`<span class="tlbl">${f.rot}</span>`:'')
+      + `</button>`).join('');
+    return `<div class="galtopo">${k}${t}${sub}</div>`
+      + `<div class="mosaico rev">${tij}</div>`
+      + `<div class="lupa">`
+      +   `<div class="lph"><img alt=""></div>`
+      +   `<div class="lconta"></div>`
+      +   `<div class="lupaov"><h3></h3><span></span></div>`
+      +   `<button class="lseta lant" type="button" aria-label="vista anterior">&#8249;</button>`
+      +   `<button class="lseta lpro" type="button" aria-label="próxima vista">&#8250;</button>`
+      +   `<button class="fechar" type="button" aria-label="fechar a imagem">&#10005;</button>`
+      + `</div>`;
+  }
   if(s.g==='cheia'){
     /* render em sangria total. Ver sistemas/gabaritos/render-cheia.md */
     const img = s.src
@@ -3309,7 +3466,18 @@ function rola(i){
 }
 addEventListener('resize',()=>{if(cur>=0)rola(cur)});
 function go(i,tudo){
-  i=Math.max(0,Math.min(DECK.length-1,i));if(i===cur)return;
+  /* trocar de slide fecha a lupa da galeria: voltar depois e encontra-la
+     aberta, sobre a imagem de antes, e desnorteante. */
+  if(window.__msLupaFecha) window.__msLupaFecha();
+  /* ⚑ O CLAMP NAO DEFENDIA DE NaN, e NaN chega facil: `acha()` de um
+     gabarito que nao existe mais devolve undefined, e Math.min(n,undefined)
+     e NaN. NaN passa pelo `i===cur`, `sl[NaN]` e undefined e a linha
+     seguinte estoura em `.offsetWidth` — foi o que aconteceu em 04/09
+     quando as pranchas `cheia` viraram galeria e o teste navegou por um
+     gabarito extinto. Numa bifurcacao, `parseInt` de atributo ausente
+     produz o mesmo NaN na frente do cliente. */
+  i=Number(i); if(!Number.isFinite(i)) return;
+  i=Math.max(0,Math.min(DECK.length-1,Math.round(i)));if(i===cur)return;
   const ant=cur;cur=i;
   sl.forEach((el,j)=>el.classList.toggle('ativo',j===i));
   if(ant>=0)sl[ant].classList.remove('revelado');
@@ -3385,6 +3553,10 @@ addEventListener('keydown',e=>{
   /* visor 3d ativo rouba as setas: a navegação do deck para até o botão
      `devolver o teclado ao slide`. */
   if(document.querySelector('.g-earth-3d.girando,.g-modelo-3d.girando,.g-mapa-2d.girando'))return;
+  /* lupa aberta: as setas passeiam pelas vistas, nao pelos slides. O
+     handler dela roda na captura e ja para o evento; esta linha e o
+     cinto de seguranca para o caso de a ordem mudar. */
+  if(document.querySelector('.g-galeria.lupando'))return;
   if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();avanca()}
   else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();recua()}
   else if(e.key==='ArrowDown'){e.preventDefault();go(cur+1,true)}
@@ -3417,7 +3589,7 @@ addEventListener('keydown',e=>{
    primeiro toque errado e um rótulo permanente na tela seria ruído em
    peça de cliente. Se ele pedir, entra como dica que aparece uma vez.  */
 palco.addEventListener('click',e=>{if(e.target.closest('.ms-start')){avanca();return}
-  if(e.target.closest('a,button,.pin,.lote,.g-earth-3d .visor,.g-modelo-3d .visor,.g-modelo-3d .cenas,.g-mapa-2d .visor'))return;
+  if(e.target.closest('a,button,.pin,.lote,.g-earth-3d .visor,.g-modelo-3d .visor,.g-modelo-3d .cenas,.g-mapa-2d .visor,.g-galeria .lupa'))return;
   const faixa=Math.min(Math.max(78,innerWidth*0.16),230);
   if(e.clientX<=faixa){recua();return}
   avanca()});
@@ -3668,6 +3840,108 @@ window.MSMapa=(function(){
      Reposto em 25/08: veio de outra sessão, no commit e8bf561, e o build local
      não sabia dele. Toda peça do acervo carrega esta linha. -->
 <script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   ESCOLHA E GALERIA — o motor das duas
+   Pedidos do Michel em 04/09/2026. Ficam AQUI, no esqueleto, e não na peça:
+   bifurcação e mosaico não são assunto da EMEI, são gabarito da casa.
+   ═════════════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  /* ── A BIFURCAÇÃO ────────────────────────────────────────────────────
+     `para` é o NOME de um gabarito, e o destino é o PRÓXIMO slide daquele
+     gabarito. Nunca índice: quando uma seção entra no meio do DECK, índice
+     chumbado aponta para o slide errado — já quebrou um teste nesta peça, e
+     numa bifurcação quebraria na frente do cliente.
+     `ir` aceita índice absoluto, para o caso raro de destino que não é
+     gabarito próprio. Se nenhum dos dois resolve, a pílula AVANÇA — nunca
+     fica morta na tela. */
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('.g-escolha .pill');
+    if(!b) return;
+    e.stopPropagation();
+    var i=-1;
+    if(b.dataset.ir!=null && b.dataset.ir!=='') i=parseInt(b.dataset.ir,10);
+    if(i<0 && b.dataset.para){
+      for(var j=cur+1;j<DECK.length;j++){ if(DECK[j].g===b.dataset.para){ i=j; break; } }
+    }
+    go(i>=0?i:cur+1,true);
+  });
+
+  /* ── A GALERIA E A LUPA ──────────────────────────────────────────────
+     A lupa é CAMADA sobre o slide, não slide. Decisão do Michel: as setas
+     passeiam pelas vistas daquela versão e o deck só anda quando ela fecha.
+     É o que permite ficar numa imagem enquanto o cliente fala.
+
+     ⚑ A MINIATURA JÁ BAIXOU A IMAGEM. A lupa copia o `src` da miniatura em
+     vez de montar um caminho: mesmo arquivo, cache do navegador, zero
+     segunda carga. Se a miniatura ainda não chegou (o __msPuxa entra no
+     slide), cai no `data-src`.
+
+     ⚑ `em-imagem` ENTRA COM A LUPA. A galeria fechada é mosaico sobre a
+     moldura e o logotipo do canto lê em positivo; aberta, ele fica sobre um
+     render e tem de virar monocromático em Cal. Falha silenciosa clássica —
+     é a regra 6 do DECK-MONTAR, e já custou duas rodadas em 02/09. */
+  var atual=-1;
+
+  function galeria(){ return document.querySelector('#palco .slide.ativo.g-galeria'); }
+  function fotos(sl){ return [].slice.call(sl.querySelectorAll('.tijolo')); }
+
+  function abre(sl,i){
+    var t=fotos(sl); if(!t.length) return;
+    atual=(i+t.length)%t.length;
+    var tij=t[atual], im=tij.querySelector('img');
+    var alvo=sl.querySelector('.lupa img');
+    if(im) alvo.src=im.currentSrc||im.src||im.dataset.src||'';
+    alvo.alt=tij.dataset.rot||'';
+    sl.querySelector('.lupa .lupaov h3').textContent=tij.dataset.rot||'';
+    sl.querySelector('.lupa .lupaov span').textContent=tij.dataset.cap||'';
+    sl.querySelector('.lupa .lconta').textContent=(atual+1)+' / '+t.length;
+    var so=t.length<2;
+    sl.querySelector('.lupa .lant').hidden=so;
+    sl.querySelector('.lupa .lpro').hidden=so;
+    sl.classList.add('lupando');
+    document.body.classList.add('em-imagem');
+    if(window.__msAcorda) window.__msAcorda();   /* o X aparece ao abrir */
+  }
+  function fecha(sl){
+    if(!sl) return;
+    sl.classList.remove('lupando');
+    atual=-1;
+    /* devolve o chrome ao estado do SLIDE, que o go() calcula: a galeria
+       fechada não é fundo de imagem. */
+    document.body.classList.toggle('em-imagem',
+      !!(DECK[cur] && (DECK[cur].g==='cheia'||DECK[cur].g==='earth-3d'
+                       ||DECK[cur].g==='modelo-3d'||DECK[cur].g==='mapa-2d')));
+  }
+  window.__msLupaFecha=function(){ fecha(galeria()); };
+
+  document.addEventListener('click',function(e){
+    var sl=e.target.closest&&e.target.closest('.g-galeria');
+    if(!sl) return;
+    var tij=e.target.closest('.tijolo');
+    if(tij){ e.stopPropagation(); abre(sl,parseInt(tij.dataset.i,10)); return; }
+    if(!sl.classList.contains('lupando')) return;
+    e.stopPropagation();                       /* lupa aberta: o deck não anda */
+    if(e.target.closest('.fechar')){ fecha(sl); return; }
+    if(e.target.closest('.lant')){ abre(sl,atual-1); return; }
+    if(e.target.closest('.lpro')){ abre(sl,atual+1); return; }
+    /* clique no fundo da lupa fecha: é o gesto que todo mundo tenta */
+    fecha(sl);
+  });
+
+  /* teclado da lupa. Registrado na FASE DE CAPTURA para chegar antes do
+     handler do deck — sem isso a seta avançaria o slide E a vista. */
+  addEventListener('keydown',function(e){
+    var sl=galeria(); if(!sl||!sl.classList.contains('lupando')) return;
+    if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); fecha(sl); return; }
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){
+      e.preventDefault(); e.stopPropagation(); abre(sl,atual+1); return; }
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){
+      e.preventDefault(); e.stopPropagation(); abre(sl,atual-1); return; }
+  },true);
+})();
+
 /* ─── ociosidade do ponteiro ───────────────────────────────────────────
    1,8 s parado e o body ganha `ocioso`. Qualquer gesto tira. Genérico de
    propósito: quem decide ONDE o efeito acontece é a classe `em-cheia`.

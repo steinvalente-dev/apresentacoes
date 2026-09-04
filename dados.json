@@ -42,7 +42,7 @@
    "pecas": [
     {
      "nome": "quatro versões · light",
-     "pranchas": 35,
+     "pranchas": 11,
      "peso": 8.3,
      "data": "03.09.2026",
      "href": "emei-presidente-dutra-light/apresentacao.html",
@@ -51,7 +51,7 @@
     },
     {
      "nome": "quatro versões · trecho a ser reconstruído",
-     "pranchas": 37,
+     "pranchas": 13,
      "peso": 8.7,
      "data": "02.09.2026",
      "href": "emei-presidente-dutra/apresentacao.html",
@@ -584,5 +584,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-09-04T15:10:37+00:00"
+ "gerado": "2026-09-04T16:17:32+00:00"
 }
