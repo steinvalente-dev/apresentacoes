@@ -1510,6 +1510,39 @@ body.no-fim #msgraf{opacity:.18}
 .g-earth-3d .passos,.g-modelo-3d .passos{font-family:var(--f-mono);font-size:var(--fs-cap);
   letter-spacing:.14em;text-transform:uppercase;color:var(--papel-45)}
 @media (prefers-reduced-motion:reduce){.g-earth-3d .anel,.g-modelo-3d .anel{animation:none}}
+
+/* ══ A ANOTAÇÃO DENTRO DO VISOR 3D ═══════════════════════════════════════
+   Rótulo de lote e nome de rua desenhados DENTRO da malha, não por cima
+   dela. Medido em 02/09/2026 na bancada `modulos/ensaio-anotacoes-earth.html`,
+   que continua publicada e é onde se ajusta sem republicar a peça.
+
+   ⚑ A ROTA, e as três que não funcionam. A API `maps3d` não aceita DOM
+   arbitrário num marcador: `Marker3DElement.append(<div>)` é RECUSADO
+   ("The slotted content is not of type HTMLTemplateElement or PinElement")
+   e a armadilha é que o nó FICA no DOM — dá para contá-lo e concluir que
+   funcionou, sem nada desenhado. `<template>` é aceito e desenha nada.
+   `PinElement` sai vermelho #EA4335 do Google mesmo declarando a nossa cor.
+   O que funciona é `PopoverElement` com `positionAnchor` numa COORDENADA
+   literal, sem marcador nenhum: aceita DOM arbitrário e desenha na cor da
+   casa. Daí estas classes existirem — elas são o conteúdo do popover.
+
+   ⚑ SEM `backdrop-filter` (regra 2 do DECK-MOTOR): sobre mapa que repinta a
+   cada quadro o navegador recalcula o blur da região a cada quadro. Fundo
+   opaco e sombra dão a mesma leitura por nada.
+
+   Três pesos, e a hierarquia é o assunto: o lote do projeto manda, o
+   vizinho é contexto, a rua é quase infraestrutura. */
+.g-earth-3d .anot{font-family:var(--f-corpo);line-height:1.15;pointer-events:none;
+  white-space:nowrap;border-radius:2px}
+.g-earth-3d .anot.obra{background:var(--primaria);color:var(--papel);font-weight:600;
+  font-size:clamp(12px,1.05cqw,16px);letter-spacing:-.01em;padding:.5em .9em;
+  box-shadow:0 2px 14px var(--tinta-60);border:1px solid var(--papel-15)}
+.g-earth-3d .anot.ctx{background:var(--papel-90);color:var(--tinta);font-weight:600;
+  font-size:clamp(10.5px,.88cqw,13.5px);padding:.45em .8em;
+  box-shadow:0 2px 10px var(--tinta-50)}
+.g-earth-3d .anot.rua{background:var(--tinta-70);color:var(--papel-90);
+  font-family:var(--f-mono);font-weight:500;font-size:clamp(9px,.72cqw,11.5px);
+  letter-spacing:.08em;text-transform:uppercase;padding:.35em .62em}
 /* ── a RESERVA do modelo — as imagens salvas na peça. É o que permite chegar
    numa reunião sem rede e ainda ter o que mostrar. `contain`, nunca `cover`. */
 .g-modelo-3d .reserva{position:absolute;inset:0;z-index:6;display:none;background:var(--moldura)}
@@ -3042,6 +3075,9 @@ window.MSEarth=(function(){
   var RAMPA=700;      /* ms do zero a velocidade final — curto, de proposito */
   var promessa=null, gritou=null, montado=false;
   var mapa=null, slide=null, orbitando=false, rafOrb=null;
+  /* a biblioteca fica guardada: a camada de anotacao e desenhada DEPOIS
+     da aproximacao, fora do `then` que a recebeu. */
+  var lib=null;
 
   (function espia(){                 /* chave ruim nao rejeita: ela grita */
     var orig=console.error;
@@ -3131,6 +3167,139 @@ window.MSEarth=(function(){
     lib3d()['catch'](function(){ libP=null; aquecido=false; });
   }
 
+  /* ═══ A CAMADA DE ANOTAÇÃO ══════════════════════════════════════════════
+     Opcional, e dirigida por campo do slide — `anot` (lotes) e `ruas`.
+     Slide sem os campos não desenha nada e não paga nada.
+
+     A rota e as três que não funcionam estão no CSS, junto das classes.
+     Aqui ficam as três primitivas que a API aceita:
+       caixa  · PopoverElement ancorado em coordenada literal, sem marcador
+       haste  · Polyline3DElement vertical — é ela que faz a caixa POUSAR
+                num lugar em tilt 58; sem haste a anotação flutua
+       pegada · Polygon3DElement com o contorno do lote, e HALO por baixo:
+                traço sozinho desaparece sobre telhado claro (medido a
+                heading 255)
+
+     ⚑ `path`, não `coordinates`/`outerCoordinates`: os dois estão
+     DEPRECIADOS e avisam no console. Mesma classe de armadilha que o
+     `rounds` da órbita — funcionam hoje e somem depois.
+
+     ⚑ As cores vão por `tok()`: o WebGL precisa de número, não de `var()`.
+     Trocar o :root da marca troca a anotação junto. */
+  var posto=[], tAnot=null;
+
+  function limpaAnot(){
+    posto.forEach(function(n){ if(n.parentNode) n.parentNode.removeChild(n); });
+    posto=[];
+    if(tAnot){ clearInterval(tAnot); tAnot=null; }
+  }
+  function caixa(m3d,txt,pos,tipo){
+    var pop=new m3d.PopoverElement({
+      open:true,
+      /* sem isto um clique no mapa fecha a anotação — e ela não volta */
+      lightDismissDisabled:true,
+      altitudeMode:m3d.AltitudeMode.RELATIVE_TO_GROUND});
+    var d=document.createElement('div');
+    d.className='anot '+tipo; d.textContent=txt;
+    pop.append(d);
+    pop.positionAnchor=pos;          /* literal, não elemento */
+    mapa.append(pop);
+    pop._tipo=tipo; pop._el=d;
+    posto.push(pop); return pop;
+  }
+  function haste(m3d,pos,altura,cor,larg){
+    var pl=new m3d.Polyline3DElement({
+      altitudeMode:m3d.AltitudeMode.RELATIVE_TO_GROUND,
+      path:[{lat:pos.lat,lng:pos.lng,altitude:0},
+            {lat:pos.lat,lng:pos.lng,altitude:altura}],
+      strokeColor:cor,strokeWidth:larg||4,
+      drawsOccludedSegments:true,zIndex:15});
+    mapa.append(pl); posto.push(pl); return pl;
+  }
+  function area(m3d,anel,traco,fill,esp){
+    function po(cor,f,w,z){
+      var pg=new m3d.Polygon3DElement({
+        altitudeMode:m3d.AltitudeMode.CLAMP_TO_GROUND,
+        path:anel,strokeColor:cor,strokeWidth:w,fillColor:f,
+        drawsOccludedSegments:true,zIndex:z});
+      mapa.append(pg); posto.push(pg);
+    }
+    po(tok('--papel')+'d9','#00000000',(esp||3)+3,9);   /* halo */
+    po(traco,fill,esp||3,10);
+  }
+
+  /* ── PRIORIDADE ENTRE AS CAMADAS ─────────────────────────────────────
+     `CollisionBehavior` NÃO existe em `maps3d` — está na biblioteca
+     `marker`, que este gabarito não carrega. Logo o desempate é nosso, e
+     sem ele o nome de rua atravessa o rótulo do lote em algum ângulo da
+     órbita. Pedido do Michel em 04/09: *"faça com que o nome da rua não se
+     sobreponha às anotações de projeto, que são mais importantes"*.
+
+     A regra é hierárquica e fixa: lote e contexto sempre aparecem; rua
+     cede. Depois as ruas cedem entre si, na ordem em que foram declaradas
+     — numa volta de 140 s elas cruzam umas às outras também.
+
+     `visibility`, não `display`: escondido com `display:none` o retângulo
+     vira zero, o teste seguinte diz "não colide" e o rótulo pisca a cada
+     passada. Com `visibility` a caixa continua medindo. As duas escritas
+     de estilo acontecem no mesmo turno de JS, então só o estado final
+     pinta — não há tremida.
+
+     Por relógio e não por evento: `gmp-steadychange` não dispara neste
+     preview (é o mesmo motivo por que a aproximação espera por relógio), e
+     um rAF próprio sobre visor vivo é exatamente o que a regra 1 do
+     DECK-MOTOR mandou tirar. 140 ms lê ~10 retângulos pequenos: sete vezes
+     por segundo, contra os 60 de um rAF. */
+  var FOLGA=6;
+  function resolveColisao(){
+    var proj=[], ruas=[];
+    posto.forEach(function(n){
+      if(!n._el) return;
+      (n._tipo==='rua'?ruas:proj).push(n._el);
+    });
+    if(!ruas.length) return;
+    var fixos=proj.map(function(e){ return e.getBoundingClientRect(); })
+                  .filter(function(r){ return r.width>0; });
+    var bate=function(r,c){
+      return !(r.right<c.left-FOLGA||r.left>c.right+FOLGA||
+               r.bottom<c.top-FOLGA||r.top>c.bottom+FOLGA); };
+    ruas.forEach(function(e){
+      e.style.visibility='visible';               /* mede sempre visível */
+      var r=e.getBoundingClientRect();
+      if(!r.width) return;
+      var cede=fixos.some(function(c){ return bate(r,c); });
+      if(!cede) fixos.push(r);                    /* rua que fica vira obstáculo */
+      e.style.visibility=cede?'hidden':'visible';
+    });
+  }
+
+  function desenhaAnot(){
+    limpaAnot();
+    var s=DECK[cur]; if(!s||!mapa||!lib) return;
+    var m3d=lib;
+    if(!m3d.PopoverElement) return;    /* preview sem popover: sai calado */
+    var VINHO=tok('--primaria'), FERRO=tok('--tinta');
+    (s.anot||[]).forEach(function(a){
+      var cor=a.tipo==='ctx'?FERRO:VINHO;
+      if(a.anel&&a.anel.length){
+        var anel=a.anel.map(function(q){ return {lat:q[0],lng:q[1]}; });
+        area(m3d,anel,cor+(a.tipo==='ctx'?'e6':'ff'),
+             cor+(a.tipo==='ctx'?'1a':'38'), a.tipo==='ctx'?2.5:4.5);
+      }
+      var pos={lat:a.lat,lng:a.lng};
+      var h=a.h||(a.tipo==='ctx'?62:52);
+      haste(m3d,pos,h,cor+(a.tipo==='ctx'?'cc':'ff'),a.tipo==='ctx'?3:5);
+      caixa(m3d,a.rot,{lat:a.lat,lng:a.lng,altitude:h},a.tipo==='ctx'?'ctx':'obra');
+    });
+    (s.ruas||[]).forEach(function(r){
+      caixa(m3d,r.rot,{lat:r.lat,lng:r.lng,altitude:r.h||14},'rua');
+    });
+    if(posto.length){
+      resolveColisao();
+      tAnot=setInterval(resolveColisao,140);
+    }
+  }
+
   function aproxima(p){
     ANCORA={lat:p.lat,lng:p.lng,alt:p.alt};
     /* ⚠ A APROXIMACAO NAO E ENFEITE. Criar o visor com o range final devolve
@@ -3152,6 +3321,9 @@ window.MSEarth=(function(){
         var d=diagnostica(); if(d){ falha(d); return; }
         progresso(TOTAL,'pronto');
         if(slide) slide.classList.remove('esperando');
+        /* a anotacao entra com a malha assentada, nunca antes: a caixa
+           ancorada em coordenada precisa do terreno para saber onde pousar. */
+        desenhaAnot();
         orbita(true);            /* entra girando, devagar */
       },4000);
     })();
@@ -3227,6 +3399,7 @@ window.MSEarth=(function(){
        "carregando a api" passa num piscar — o indicador salta direto para
        "aproximando · 1 de 4". */
     lib3d().then(function(m3d){
+        lib=m3d;
         if(mapa&&mapa.parentNode) mapa.parentNode.removeChild(mapa);
         mapa=new m3d.Map3DElement({
           center:{lat:p.lat,lng:p.lng,altitude:p.alt},
@@ -3271,6 +3444,9 @@ window.MSEarth=(function(){
         /* DESMONTA ao sair: o Map3DElement e um contexto WebGL vivo que ficava
            atras de todos os slides seguintes (04/09/2026). Na volta remonta —
            a API ja esta carregada e o indicador de carga e honesto. */
+        /* a anotacao vai com o mapa: os popovers sao filhos dele, e o
+           relogio do resolvedor de colisao tem de parar. */
+        limpaAnot();
         if(mapa){ if(mapa.parentNode) mapa.parentNode.removeChild(mapa); mapa=null; }
         if(montado){ montado=false;
           document.querySelectorAll('.g-earth-3d').forEach(function(sl){ sl.classList.remove('esperando','pronto','girando','falhou'); }); }
@@ -3280,7 +3456,17 @@ window.MSEarth=(function(){
       if(montado){ if(!orbitando&&mapa) orbita(true); return; }
       montado=true; slide.classList.add('esperando');
       progresso(1,'carregando a api'); monta();
-    }
+    },
+
+    /* ── COSTURAS DE TESTE ────────────────────────────────────────────────
+       Só o gate `colisao.js` chama. Existem porque a Maps API não sai do
+       container de build: o visor nunca monta, a anotação nunca desenharia,
+       e a prioridade entre as camadas — que é lógica NOSSA e regride sem
+       ninguém ver — ficaria sem cobertura. Com estas duas o gate injeta um
+       dublê da `maps3d` e exercita o desenho e o resolvedor de verdade.
+       Não fazem nada em apresentação: ninguém as chama. */
+    __teste:function(o){ lib=o.lib; mapa=o.mapa; desenhaAnot(); },
+    __resolve:resolveColisao
   };
 })();
 
