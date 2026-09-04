@@ -636,12 +636,15 @@ docs = dados.docs || [];
    dados.json lista, e o que sobra aparece como aviso.
    A API pública limita a 60 chamadas por hora por IP — se falhar, silencia. */
 (function(){
-  /* 'superado/' entra aqui de propósito: arquivo tirado de uso não é peça e
-     não ganha meta.json — o registro dele é a tabela do próprio
-     superado/LEIA-ME.md (e, se for versão oculta, uma entrada em registro/).
-     Sem esta linha, todo arquivo arquivado apareceria como órfã e o aviso
-     voltaria a dar falso positivo. */
-  const IGNORA = ['index.html', 'sistemas/', 'modulos/', 'fundo/', 'ferramentas/', 'superado/'];
+  /* A lista de pastas que nunca são peça vem do dados.json (`ignora`), gerada
+     pelo montar-indice.py — uma lista só, para este detector e para o build.
+     Havia duas listas divergentes até 04/09/2026, e a divergência deu falso
+     positivo. O fallback só vale se o dados.json for de antes disso.
+     Este detector é o segundo alarme: o primeiro é o build, que barra órfã,
+     documento .md sem registro e arquivo engolido pelo .gitignore. */
+  const IGNORA = ['index.html'].concat(
+    (Array.isArray(dados.ignora) ? dados.ignora : ['sistemas', 'modulos', 'fundo', 'ferramentas', 'superado'])
+      .map(function(x){ return x.replace(/\/$/, '') + '/'; }));
   const listados = new Set();
   projetos.forEach(function(p){
     p.pecas.forEach(function(x){ listados.add(x.href.split('?')[0]); });

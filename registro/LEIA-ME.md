@@ -19,7 +19,7 @@ um `meta.json` ou em um `registro/<frente>.json`. Só.
 
 | arquivo | quem edita | o que vai nele |
 |---|---|---|
-| `_geral.json` | qualquer frente, com cuidado | o sistema: montar, gabaritos, peças de montar, consulta, registro, publicação, contexto, operação, notion, proposta, levantamento 3D, site — tudo que não é de uma marca |
+| `geral.json` | qualquer frente, com cuidado | o sistema: montar, gabaritos, peças de montar, consulta, registro, publicação, contexto, operação, notion, proposta, levantamento 3D, site — tudo que não é de uma marca |
 | `michel-stein.json` | prática própria | marca michel stein_, rodadas do deck |
 | `sarasa.json` | Sarasá | marca Sarasá, banco de referência, mapeamento de danos |
 | `amaz.json` | AMAZ | marca AMAZ, marchetaria; a versão oculta em `superado/` |
@@ -27,16 +27,29 @@ um `meta.json` ou em um `registro/<frente>.json`. Só.
 | `baraka.json` | Baraka | identidade "a levantar" |
 
 Cada frente edita o **seu** arquivo. Duas frentes no mesmo arquivo é o problema
-que este desenho existe para acabar. Doc de sistema (`_geral.json`) é a exceção:
+que este desenho existe para acabar. Doc de sistema (`geral.json`) é a exceção:
 puxar antes de editar, e o `publicar.sh` já faz `pull --ff-only` no passo 1.
 
-**O `_` do `_geral.json` tem uma armadilha, e ela já disparou.** O `.gitignore`
-tem `_*`, para rascunho de sessão nunca subir — e engoliu o `_geral.json` calado
-na fase 2: o arquivo existia no disco de quem o escreveu, o build passava, e o
-repositório nunca o recebeu. Resultado: de 03 a 04/09/2026 as abas **deck** e
-**sistema** ficaram com 2 linhas em vez de 33, sem sintoma nenhum. Hoje o
-`.gitignore` tem `!registro/_geral.json` e o `montar-indice.py` para o build se
-o arquivo faltar ou estiver ignorado pelo git. Não tirar nenhuma das duas.
+**Nada que o sistema lê começa por `_`.** O `.gitignore` tem `_*`, para
+rascunho de sessão nunca subir — e em 03/09/2026 engoliu calado o então
+`registro/_geral.json`: existia no disco de quem o escreveu, o build passava,
+e o repositório nunca o recebeu. De 03 a 04/09 as abas **deck** e **sistema**
+ficaram com 2 linhas em vez de 33, sem sintoma. O arquivo hoje chama-se
+`geral.json`, sem exceção no `.gitignore` (exceção esconde a regra; renomear
+resolve). Três guardas ficaram, e nenhuma se tira:
+
+- `montar-indice.py` para o build se qualquer arquivo que ele lê ou grava
+  (`registro/*.json`, `*/meta.json`, `dados.json`, todo `arq`/`ver`) estiver
+  ignorado pelo git, e se `geral.json` faltar;
+- `montar-indice.py` confere **cobertura**: todo `.md` e `.html` rastreado tem
+  de estar registrado, ou em pasta de peça com `meta.json`, ou em pasta cujo
+  `LEIA-ME.md` está registrado. Documento que sai do índice passa a derrubar o
+  build — antes sumia em silêncio, porque o detector só via `.html`;
+- `publicar.sh` imprime, antes do commit, tudo que o `.gitignore` está deixando
+  de fora, e para se for arquivo do sistema.
+
+A lista de pastas que nunca são peça sai no `dados.json` (`ignora`) e o
+detector do `index.html` lê de lá — uma lista só, para o build e para a página.
 
 ## Formato de `registro/<frente>.json`
 

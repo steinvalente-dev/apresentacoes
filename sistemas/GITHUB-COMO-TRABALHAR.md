@@ -425,7 +425,7 @@ aqui ("substitui" num arquivo, "nunca substitua, acrescente" no outro).
 Cada frente tem o seu arquivo em `registro/`, e edita **só o seu**:
 `michel-stein.json`, `sarasa.json`, `amaz.json`, `lavro.json`, `baraka.json`.
 O que é do sistema e não é de nenhuma marca (montar, gabaritos, publicação,
-notion, proposta, site…) fica em `_geral.json`. Dentro, `"docs": [...]` com os
+notion, proposta, site…) fica em `geral.json`. Dentro, `"docs": [...]` com os
 mesmos campos de sempre:
 
 - `href: "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/pasta/ARQUIVO.md"`
@@ -528,4 +528,4 @@ apagar. Peça ou ferramenta sensível não vai para lá, e isso se avisa
 - **26/08/2026** — testado: `raw`/`blob` de repositório privado devolvem 404 sem sessão de navegador.
 - **29/08/2026** — duas frentes sobrescreveram trabalho uma da outra três vezes num dia. Nasceu "Duas sessões, um repositório".
 - **02/09/2026** — auditoria: `casa-ittb`, `tokyo-centro` e `casa-tavares` eram peças de cliente em repositório público; foram para `/cliente/` do site, histórico reescrito, guarda `guarda-publico.py` criada. `robots.txt` do site deixou de listar `/cliente/`. Peça fora do público deixou de ser registrada no `index.html`. Runbook `PUBLICAR-APRESENTACOES.md` fundido neste; regra de versão × revisão decidida.
-- **04/09/2026** — o detector da página acusou `esqueleto/deck-esqueleto.html` como órfã. A causa era outra e maior: `registro/_geral.json` nunca chegou ao repositório — o `_*` do `.gitignore` o engoliu calado na fase 2, e as abas **deck** e **sistema** ficaram com 2 dos 33 documentos desde 03/09, sem dar sintoma. Restaurados os 31 do índice anterior; `.gitignore` ganhou `!registro/_geral.json` e o `montar-indice.py` passou a barrar o build se o arquivo faltar ou estiver ignorado pelo git.
+- **04/09/2026** — o detector da página acusou `esqueleto/deck-esqueleto.html` como órfã. A causa era outra e maior: `registro/geral.json` nunca chegou ao repositório — o `_*` do `.gitignore` o engoliu calado na fase 2, e as abas **deck** e **sistema** ficaram com 2 dos 33 documentos desde 03/09, sem dar sintoma. Restaurados os 31 do índice anterior e os 4 da fase 2 que a primeira restauração não tinha. O arquivo virou `registro/geral.json` (sem `_`, sem exceção no `.gitignore`); o `montar-indice.py` barra o build se qualquer arquivo que ele lê estiver ignorado pelo git e confere a cobertura de todo `.md`/`.html` rastreado; o `publicar.sh` mostra o que o `.gitignore` engole; a lista `ignora` sai no `dados.json` e o detector da página lê de lá. Regra: **nada que o sistema lê começa por `_`**.

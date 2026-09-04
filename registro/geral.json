@@ -1,0 +1,256 @@
+{
+ "projetos": [],
+ "docs": [
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "deck.json · a ficha",
+   "desc": "Montar uma peça é preencher um JSON e rodar dois comandos: montar.py gera a peça e o meta.json a partir do esqueleto e do bloco da marca; validar.mjs confere sintaxe, gabaritos, undefined, console, fontes, voltar, em-imagem, hex e sete proporções em ~7 s. É o que se lê no dia a dia; o deck · montar é o método por trás",
+   "arq": "sistemas/DECK-JSON.md",
+   "ver": "sistemas/montar.py"
+  },
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "validador da peça",
+   "desc": "node sistemas/validar.mjs <slug>/apresentacao.html — onze checks, falha alto, nada passa em silêncio. FALHA em qualquer um = não publica",
+   "arq": "sistemas/DECK-JSON.md",
+   "ver": "sistemas/validar.mjs"
+  },
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "exemplos por marca",
+   "desc": "Um deck.json mínimo de arquitetura por marca — michel stein_, Sarasá, AMAZ, Lavrō — para montar a primeira peça copiando, não criando",
+   "arq": "esqueleto/exemplos/LEIA-ME.md",
+   "ver": "esqueleto/exemplos/sarasa.json"
+  },
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "deck · montar",
+   "desc": "O arquivo curto: a receita em seis passos, os gabaritos e as armadilhas. É o que se lê para montar",
+   "arq": "sistemas/DECK-MONTAR.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "esqueleto",
+   "desc": "A base de partida. Abre, cola o bloco da marca, troca o DECK. A engine não se toca",
+   "arq": "sistemas/DECK-MONTAR.md",
+   "ver": "esqueleto/deck-esqueleto.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "render em tela cheia",
+   "desc": "O padrão para render: sangria total e o texto que sai de cena com o ponteiro parado",
+   "arq": "sistemas/gabaritos/render-cheia.md",
+   "ver": "modulos/render-cheia.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "prancha de referência",
+   "desc": "A grade de 2 a 4 imagens sobre um tema: o cabeçalho em duas pontas, a pilha e o slot vazio",
+   "arq": "sistemas/gabaritos/prancha-referencia.md",
+   "ver": "modulos/prancha-referencia.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "mapa · localização",
+   "desc": "Onde o terreno está: satélite em sangria, scrim denso nas pontas, endereço escrito e a trava de teclado",
+   "arq": "sistemas/gabaritos/mapa-localizacao.md",
+   "ver": "modulos/mapa-localizacao.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "mapa · earth 3d ⚠ protótipo",
+   "desc": "NÃO VIGENTE. O mesmo slide com a malha fotorrealista do Google Earth no lugar do satélite chapado. Fica em preview do Google, exige chave com billing e não vai para peça de cliente enquanto estiver assim",
+   "arq": "sistemas/gabaritos/mapa-earth-3d.md",
+   "ver": "modulos/mapa-earth-3d.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "mapa · lotes",
+   "desc": "O cadastro desenhado: o contrato do objeto MAP, os dois desenhos e por que o dado real não vem junto",
+   "arq": "sistemas/gabaritos/mapa-lotes.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "modelo · visor 3D",
+   "desc": "Sem título e sem legenda: o slide é o visor. A trava de teclado e a dependência de rede",
+   "arq": "sistemas/gabaritos/modelo.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "popover",
+   "desc": "O apoio que sai da tela e volta no ponteiro. Inclui a divisão por k, que o quadro fixo exige",
+   "arq": "sistemas/gabaritos/popover.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "gabaritos",
+   "nome": "isométrico",
+   "desc": "Nunca escrever o viewBox à mão. Calcular de getBBox com 3,5% de folga",
+   "arq": "sistemas/gabaritos/isometrico.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "consulta",
+   "nome": "deck · motor",
+   "desc": "A referência de fundo: as três arquiteturas, as armadilhas já pagas e a validação completa. Não é o que se lê para montar",
+   "arq": "sistemas/DECK-MOTOR.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
+   "nome": "fundo morph pontilhado",
+   "desc": "O shader da abertura: preset, transições, cursor e desempenho medido",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/deck/FUNDO-MORPH-PONTILHADO.md",
+   "ver": "modulos/fundo-morph-pontilhado.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
+   "nome": "divisor · com imagem",
+   "desc": "O divisor com o carrossel de peças atrás, em terracota. Véu 0.60",
+   "arq": "sistemas/DECK-MOTOR.md",
+   "ver": "modulos/divisor-morph.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
+   "nome": "divisor · só trama",
+   "desc": "Divisor sem assunto: nenhuma imagem, só o retículo trocando de grelha. Véu 0.55. É o padrão",
+   "arq": "sistemas/DECK-MOTOR.md",
+   "ver": "modulos/divisor-trama.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "precisa de uma marca",
+   "nome": "a camada de marca",
+   "desc": "O motor sozinho não monta peça nenhuma. Cor, tipografia e capa estão na aba marca",
+   "arq": "marca/MARCA-MICHEL-STEIN.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
+   "nome": "módulos",
+   "desc": "Capa, engine, laboratório e o chip de voltar. Sem revisão: o arquivo é o vigente",
+   "arq": "modulos/LEIA-ME.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "registro",
+   "nome": "deck · registro",
+   "desc": "Onde cada camada foi parar, o histórico por projeto e as pendências abertas",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/deck/DECK-REGISTRO.md"
+  },
+  {
+   "grupo": "site",
+   "nome": "site de portfólio",
+   "desc": "Estado técnico, vitrine, otimização de imagem e área de cliente",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/site/SITE-PORTFOLIO-ESTADO.md"
+  },
+  {
+   "grupo": "site",
+   "nome": "vitrine · esteira",
+   "desc": "As 1.020 imagens da esteira, o pipeline de conversão e os comandos",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/site/VITRINE-ESTEIRA.md"
+  },
+  {
+   "grupo": "site",
+   "nome": "publicar no site",
+   "desc": "Runbook do Netlify e da área de cliente: receita, custo por deploy e cuidados",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/site/PUBLICAR-NO-SITE.md"
+  },
+  {
+   "grupo": "operação",
+   "nome": "arquivamento de entregas",
+   "desc": "Onde cada arquivo vai parar no Drive, a árvore de pastas e as armadilhas",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/operacao/ARQUIVAMENTO-ENTREGAS.md"
+  },
+  {
+   "grupo": "montar",
+   "nome": "tabela de gabaritos gerada do código",
+   "desc": "A tabela de gabaritos e campos do deck — montar não é redigida: sai do tpl() do esqueleto por este script, com os campos obrigatórios em negrito e a aridade de cada item. Rodar depois de mexer no tpl()",
+   "arq": "sistemas/DECK-MONTAR.md",
+   "ver": "sistemas/gerar-gabaritos.py"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "guarda do repositório público",
+   "desc": "Este repositório é aberto a qualquer pessoa, com ou sem link do acervo. A guarda varre nome de cliente, endereço, CNPJ, valor, URL da área de cliente e segredo antes do push — tem de imprimir “guarda: limpo”. Peça de cliente mora na área de cliente do site; o registro dela é privado. Regra na seção “Público quer dizer aberto” do GitHub — como trabalhar",
+   "arq": "sistemas/GITHUB-COMO-TRABALHAR.md",
+   "ver": "sistemas/guarda-publico.py"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "levar para outra frente",
+   "desc": "O que uma conversa de Lavrō, AMAZ ou Sarasá precisa ler para usar o mesmo sistema, e o que muda nas instruções daquele Projeto",
+   "arq": "sistemas/LEVAR-PARA-OUTRA-FRENTE.md"
+  },
+  {
+   "grupo": "contexto",
+   "nome": "frentes de trabalho",
+   "desc": "As cinco frentes, sociedade, posicionamento e o que cada uma exige",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/contexto/CONTEXTO-FRENTES.md"
+  },
+  {
+   "grupo": "proposta",
+   "nome": "processo de proposta",
+   "desc": "Só prática própria. Os três estágios: bloco de perguntas, texto de WhatsApp com valor, documento formal",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/proposta/PROCESSO-PROPOSTA.md"
+  },
+  {
+   "grupo": "notion",
+   "nome": "diário de bordo",
+   "desc": "A base de registro, como lançar, o limite de confidencialidade e as armadilhas",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/notion/DIARIO-DE-BORDO.md"
+  },
+  {
+   "grupo": "notion",
+   "nome": "bancos de consulta · Baraka",
+   "desc": "Consultas técnicas e normativas: IDs, schema, templates e manhas do Notion",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/notion/CONSULTAS-BARAKA.md"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "github · como trabalhar",
+   "desc": "Onde cada coisa vai, clonar, registrar, validar e publicar. Vale para apresentação, documento e ferramenta",
+   "arq": "sistemas/GITHUB-COMO-TRABALHAR.md"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "publicar.sh · a rodada inteira",
+   "desc": "GH=<token> sistemas/publicar.sh \"mensagem\" [slug] — pull, índice gerado, guarda, tabela de gabaritos, sintaxe, validador da peça, commit, rebase se alguém publicou no meio, push sem force, conferência no ar. É o único jeito de publicar",
+   "arq": "sistemas/GITHUB-COMO-TRABALHAR.md",
+   "ver": "sistemas/publicar.sh"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "registro por frente e índice gerado",
+   "desc": "Peça se registra pelo <slug>/meta.json; documento se registra em registro/<frente>.json; dados.json é gerado por montar-indice.py e o index.html só lê. O build barra órfã, documento sem registro e arquivo que o .gitignore engoliria",
+   "arq": "registro/LEIA-ME.md",
+   "ver": "sistemas/montar-indice.py"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "superado · o que saiu de uso",
+   "desc": "A pasta de registro: como um arquivo sai de circulação sem ser apagado, a faixa de aviso e o que não vem para cá",
+   "arq": "superado/LEIA-ME.md"
+  },
+  {
+   "grupo": "levantamento 3D",
+   "nome": "nuvem de pontos → malha, ortofoto e deck",
+   "desc": "Pipeline de sete passos do LAZ ao GLB: grelha regular em vez de Poisson, ortofoto como subproduto, o que o SketchUp importa de verdade, e o orçamento de máquina medido",
+   "arq": "sistemas/NUVEM-PARA-MALHA.md"
+  }
+ ]
+}

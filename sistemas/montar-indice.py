@@ -24,7 +24,16 @@ Guardas, todas param o build (sai 1):
   - meta com `cliente:true` nunca entra — peça de cliente mora na área de cliente do site.
   - órfã: pasta com apresentacao.html sem meta.json e sem href/ver em registro algum.
   - meta sem os campos obrigatórios, data fora de DD.MM.AAAA, registro com JSON inválido.
-  - registro/_geral.json faltando, ou ignorado pelo git (o `_*` do .gitignore já o engoliu uma vez).
+  - registro/geral.json faltando (é a frente do sistema: sem ela as abas deck e sistema saem vazias).
+  - qualquer arquivo que este build lê ou grava — registro/*.json, */meta.json, dados.json, e todo
+    arq/ver relativo — IGNORADO pelo .gitignore. Existe no disco, o build passa, e nunca sobe: foi o
+    que aconteceu de 03 a 04/09/2026 com o antigo registro/_geral.json e a regra `_*`.
+  - cobertura: todo .md e .html rastreado pelo git tem de estar registrado (arq/ver/href), ou numa
+    pasta de peça com meta.json, ou numa pasta cujo LEIA-ME.md está registrado (modulos/, superado/,
+    esqueleto/exemplos/, registro/, marca/<x>/), ou na lista INFRA. O detector antigo só via .html —
+    documento .md que saía do índice sumia em silêncio.
+Saída inclui "ignora": a lista de pastas que nunca são peça — o detector de órfã do index.html lê
+daqui, para não haver duas listas divergentes.
 Aviso, não para: `peso` do meta divergindo > 5% do que está no disco (pasta inteira, em MiB,
 sem meta.json e sem anteriores/). O peso do meta é preservado; o aviso é para atualizar o meta.
 """
@@ -34,8 +43,8 @@ from datetime import datetime, timezone
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 REGISTRO = RAIZ / 'registro'
 SAIDA = RAIZ / 'dados.json'
-ORDEM_FRENTES = ['_geral', 'michel-stein', 'sarasa', 'amaz', 'lavro', 'baraka']
-FRENTES = set(ORDEM_FRENTES) - {'_geral'}
+ORDEM_FRENTES = ['geral', 'michel-stein', 'sarasa', 'amaz', 'lavro', 'baraka']
+FRENTES = set(ORDEM_FRENTES) - {'geral'}
 # sequência dos grupos em cada aba, como o acervo sempre mostrou. aba None = aba sistema
 ORDEM_GRUPOS = {
     'deck':  ['montar', 'gabaritos', 'consulta', 'as peças de montar', 'precisa de uma marca', 'rodadas', 'registro'],
@@ -45,6 +54,8 @@ ORDEM_GRUPOS = {
 }
 # pastas que nunca são peça: não entram no índice nem contam como órfã
 IGNORA = {'superado', 'sistemas', 'modulos', 'esqueleto', 'ferramentas', 'registro', 'fundo', 'marca', 'entregas', '.git', '.github'}
+# arquivos de infraestrutura: existem por si, não se registram
+INFRA = {'index.html', 'README.md', 'dados.json', '.gitignore', '.nojekyll', 'sistemas/index.html'}
 OBRIGATORIOS = ('projeto', 'nome', 'pranchas', 'peso', 'data', 'frente')
 RX_DATA = re.compile(r'^\d{2}\.\d{2}\.\d{4}$')
 
@@ -148,21 +159,9 @@ def le_registros():
     # sem nenhum registro/*.json algo está muito errado: o acervo sairia vazio de documentos
     if not any((REGISTRO / f'{f}.json').exists() for f in ORDEM_FRENTES):
         erros.append('registro/: nenhum <frente>.json encontrado')
-    # _geral é a frente do sistema: sem ela as abas deck e sistema saem quase vazias, e isso não
-    # dá sintoma nenhum — foi o que aconteceu de 03 a 04/09/2026, quando o `_*` do .gitignore
-    # engoliu o arquivo calado. Falta, ou arquivo ignorado pelo git, param o build.
-    geral = REGISTRO / '_geral.json'
+    geral = REGISTRO / 'geral.json'
     if not geral.exists():
-        erros.append('registro/_geral.json: não existe — as abas deck e sistema sairiam quase vazias')
-    else:
-        try:
-            ignorado = subprocess.run(['git', '-C', str(RAIZ), 'check-ignore', '-q', str(geral)],
-                                      capture_output=True).returncode == 0
-        except Exception:
-            ignorado = False
-        if ignorado:
-            erros.append('registro/_geral.json: ignorado pelo .gitignore — existe no disco e nunca vai '
-                         'para o repositório. Acrescentar "!registro/_geral.json" ao .gitignore')
+        erros.append('registro/geral.json: não existe — as abas deck e sistema sairiam vazias')
     return pecas, docs, registrados
 
 
@@ -203,12 +202,86 @@ def orfas(registrados):
     return achadas
 
 
+def git(*args):
+    r = subprocess.run(['git', '-C', str(RAIZ), *args], capture_output=True, text=True)
+    return r.returncode, r.stdout
+
+
+def ignorados_pelo_git(caminhos):
+    """Dos caminhos dados (relativos à raiz), os que o .gitignore engole. Vazio se não houver git."""
+    if not caminhos:
+        return []
+    rc, out = git('check-ignore', '--stdin')
+    try:
+        r = subprocess.run(['git', '-C', str(RAIZ), 'check-ignore', '--stdin'], input='\n'.join(caminhos),
+                           capture_output=True, text=True)
+        return [x for x in r.stdout.split('\n') if x]
+    except Exception:
+        return []
+
+
+def referencias(docs, pecas):
+    """Todo caminho relativo citado em arq/ver/href de docs e peças."""
+    refs = set()
+    for d in docs:
+        for k in ('arq', 'ver', 'href'):
+            v = d.get(k)
+            if v and not v.startswith('http'):
+                refs.add(v.split('?')[0].split('#')[0])
+    for _, x in pecas:
+        v = x.get('href', '')
+        if v and not v.startswith('http'):
+            refs.add(v.split('?')[0])
+    return refs
+
+
+def cobertura(refs):
+    """Arquivos .md/.html rastreados pelo git que ninguém registra. Regras no docstring do módulo."""
+    rc, out = git('ls-files')
+    if rc != 0:
+        return []
+    rastreados = [x for x in out.split('\n') if x]
+    pastas_peca = {m.parent.relative_to(RAIZ).as_posix() for m in RAIZ.glob('*/meta.json')}
+    # pasta coberta por LEIA-ME: a pasta tem LEIA-ME.md e algum arquivo dela está registrado
+    pastas_leiame = set()
+    for f in rastreados:
+        if f.endswith('LEIA-ME.md'):
+            pasta = f.rsplit('/', 1)[0] if '/' in f else ''
+            if any(r == f or (pasta and r.startswith(pasta + '/')) for r in refs):
+                pastas_leiame.add(pasta)
+    sem = []
+    for f in rastreados:
+        if not f.endswith(('.md', '.html')) or f in INFRA or f in refs:
+            continue
+        topo = f.split('/')[0]
+        if topo in pastas_peca or f.rsplit('/', 1)[0] in pastas_peca:
+            continue
+        if any(f.startswith(p + '/') for p in pastas_leiame if p):
+            continue
+        if topo.startswith(('_', '.')) or topo == '.github':
+            continue
+        sem.append(f)
+    return sem
+
+
 def monta():
     metas = le_metas()
     manuais, docs, registrados = le_registros()
     for slug_html in orfas(registrados):
         erros.append(f'órfã: {slug_html} — sem meta.json e sem href em registro/*.json. Está no ar e ninguém acha')
-    return {'projetos': agrupa(metas + manuais), 'docs': ordena_docs(docs)}
+    refs = referencias(docs, metas + manuais)
+    for f in cobertura(refs):
+        erros.append(f'sem registro: {f} — rastreado pelo git e não aparece em nenhum arq/ver/href, nem em pasta de peça '
+                     f'ou de LEIA-ME registrado. Registrar em registro/<frente>.json, ou mover para superado/')
+    # o que o build lê ou grava não pode estar no .gitignore — existe no disco, passa, e nunca sobe
+    lidos = [f'registro/{f}.json' for f in ORDEM_FRENTES if (REGISTRO / f'{f}.json').exists()]
+    lidos += [m.relative_to(RAIZ).as_posix() for m in RAIZ.glob('*/meta.json')]
+    lidos += ['dados.json'] + sorted(r for r in refs if (RAIZ / r).exists())
+    for f in ignorados_pelo_git(lidos):
+        erros.append(f'ignorado pelo .gitignore: {f} — o build lê este arquivo, mas ele nunca vai para o repositório. '
+                     f'Renomear o arquivo ou estreitar a regra do .gitignore; não acrescentar exceção "!"')
+    return {'projetos': agrupa(metas + manuais), 'docs': ordena_docs(docs),
+            'ignora': sorted(IGNORA - {'.git', '.github'})}
 
 
 def sem_gerado(d):

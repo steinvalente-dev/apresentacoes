@@ -79,6 +79,30 @@
   {
    "aba": "deck",
    "grupo": "montar",
+   "nome": "deck.json · a ficha",
+   "desc": "Montar uma peça é preencher um JSON e rodar dois comandos: montar.py gera a peça e o meta.json a partir do esqueleto e do bloco da marca; validar.mjs confere sintaxe, gabaritos, undefined, console, fontes, voltar, em-imagem, hex e sete proporções em ~7 s. É o que se lê no dia a dia; o deck · montar é o método por trás",
+   "arq": "sistemas/DECK-JSON.md",
+   "ver": "sistemas/montar.py"
+  },
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "validador da peça",
+   "desc": "node sistemas/validar.mjs <slug>/apresentacao.html — onze checks, falha alto, nada passa em silêncio. FALHA em qualquer um = não publica",
+   "arq": "sistemas/DECK-JSON.md",
+   "ver": "sistemas/validar.mjs"
+  },
+  {
+   "aba": "deck",
+   "grupo": "montar",
+   "nome": "exemplos por marca",
+   "desc": "Um deck.json mínimo de arquitetura por marca — michel stein_, Sarasá, AMAZ, Lavrō — para montar a primeira peça copiando, não criando",
+   "arq": "esqueleto/exemplos/LEIA-ME.md",
+   "ver": "esqueleto/exemplos/sarasa.json"
+  },
+  {
+   "aba": "deck",
+   "grupo": "montar",
    "nome": "deck · montar",
    "desc": "O arquivo curto: a receita em seis passos, os gabaritos e as armadilhas. É o que se lê para montar",
    "arq": "sistemas/DECK-MONTAR.md"
@@ -353,6 +377,20 @@
   },
   {
    "grupo": "publicação",
+   "nome": "publicar.sh · a rodada inteira",
+   "desc": "GH=<token> sistemas/publicar.sh \"mensagem\" [slug] — pull, índice gerado, guarda, tabela de gabaritos, sintaxe, validador da peça, commit, rebase se alguém publicou no meio, push sem force, conferência no ar. É o único jeito de publicar",
+   "arq": "sistemas/GITHUB-COMO-TRABALHAR.md",
+   "ver": "sistemas/publicar.sh"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "registro por frente e índice gerado",
+   "desc": "Peça se registra pelo <slug>/meta.json; documento se registra em registro/<frente>.json; dados.json é gerado por montar-indice.py e o index.html só lê. O build barra órfã, documento sem registro e arquivo que o .gitignore engoliria",
+   "arq": "registro/LEIA-ME.md",
+   "ver": "sistemas/montar-indice.py"
+  },
+  {
+   "grupo": "publicação",
    "nome": "superado · o que saiu de uso",
    "desc": "A pasta de registro: como um arquivo sai de circulação sem ser apagado, a faixa de aviso e o que não vem para cá",
    "arq": "superado/LEIA-ME.md"
@@ -527,5 +565,16 @@
    "arq": "sistemas/NUVEM-PARA-MALHA.md"
   }
  ],
- "gerado": "2026-09-04T12:26:10+00:00"
+ "ignora": [
+  "entregas",
+  "esqueleto",
+  "ferramentas",
+  "fundo",
+  "marca",
+  "modulos",
+  "registro",
+  "sistemas",
+  "superado"
+ ],
+ "gerado": "2026-09-04T12:42:10+00:00"
 }

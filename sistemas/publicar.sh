@@ -102,6 +102,14 @@ parar_se
 # ── 7 · commit ──────────────────────────────────────────────────────────────
 passo 7 'git add -A && git commit'
 git add -A
+# o que o .gitignore está engolindo — visível, para ninguém descobrir dias depois (caso registro/_geral.json, 03–04/09)
+ENGOLIDOS="$(git ls-files --others --ignored --exclude-standard | grep -v -E '^(node_modules/|\.)' || true)"
+if [[ -n "$ENGOLIDOS" ]]; then
+  echo "  aviso  o .gitignore está deixando de fora (não vão subir):"; echo "$ENGOLIDOS" | sed 's/^/           /'
+  if echo "$ENGOLIDOS" | grep -q -E '(^|/)(meta\.json|apresentacao\.html|registro/|sistemas/|marca/|modulos/|esqueleto/)'; then
+    falha 'arquivo do sistema ignorado pelo .gitignore — renomear (nada que o sistema lê começa por _) ou estreitar a regra'
+  fi
+fi
 if git diff --cached --quiet; then
   echo '  nada para commitar — a árvore está igual ao HEAD.'
   if [[ -z "$(git log --oneline origin/main..HEAD)" ]]; then echo '  e nada local por subir. Fim.'; exit 0; fi
