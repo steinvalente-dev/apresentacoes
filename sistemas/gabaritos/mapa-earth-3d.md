@@ -175,6 +175,16 @@ sem padrão claro e sem nada no console. É instabilidade de produto em preview,
 **O modo é `SATELLITE`, não `HYBRID`.** O híbrido cobre a cidade de pinos de
 restaurante e rótulos de rua — numa peça de arquitetura, só atrapalham.
 
+## A copy da tela de carga
+
+O `<b>` diz **`carregando localização`**, não `carregando a malha 3d` — regra
+de motor desde 04/09/2026, em `DECK-MOTOR.md`, e a mesma na variante 2D. A
+espera é longa neste gabarito; a frase que a acompanha tem de ser da língua da
+sala. O rótulo de passo abaixo (`aproximando · 2 de 4`, `assentando a malha`)
+descreve o degrau real e fica como está.
+
+---
+
 ## A trava de teclado
 
 Mesma mecânica do mapa vigente e do visor 3D: o visor rouba as setas e a

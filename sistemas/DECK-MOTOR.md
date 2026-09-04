@@ -518,6 +518,24 @@ partir de `data-src`.
 **Sem internet os dois abrem em branco.** Não colocar mapa ou visor num slide que
 carregue informação crítica sozinho.
 
+### A copy da tela de estado — fixa, e não é jargão
+
+O `<b>` da tela de carga diz **o que** está carregando, na língua de quem
+assiste. Decisão do Michel, 04/09/2026, e vale para toda peça de agora em
+diante:
+
+| visor | `<b>` |
+|---|---|
+| localização — `earth-3d` e `mapa-2d` | `carregando localização` |
+| o projeto — `modelo-3d` | `carregando o modelo 3d` |
+
+Era `carregando a malha 3d` no visor de localização, e `carregando o mapa` na
+variante 2D. **Malha** é palavra de quem monta a peça, não de quem está na
+reunião — e as duas variantes do mesmo slide diziam coisas diferentes para a
+mesma espera. O `<span>` ao lado continua vazio de propósito: é onde o
+`falha()` escreve o diagnóstico, e só aparece quando há erro. O rótulo de
+passo (`.passos`) é outra coisa e continua descrevendo o degrau real.
+
 ---
 
 ## Encerramento — `fim`

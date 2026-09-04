@@ -2966,7 +2966,7 @@ function tpl(s){
       +   `<div class="carga"><div class="anel"></div>`
       +   `<div class="barra"><i></i></div>`
       +   `<div class="passos">preparando</div></div>`
-      +   `<b>carregando a malha 3d</b>`
+      +   `<b>carregando localização</b>`
       /* <span> vazio de propósito: é onde o falha() escreve o diagnóstico */
       +   `<span></span></div>`;
   }
@@ -3008,7 +3008,7 @@ function tpl(s){
       +   `<div class="carga"><div class="anel"></div>`
       +   `<div class="barra"><i></i></div>`
       +   `<div class="passos">preparando</div></div>`
-      +   `<b>carregando o mapa</b><span></span></div>`;
+      +   `<b>carregando localização</b><span></span></div>`;
   }
   const tab=s.cols?`<div class="rev"><table class="tb"><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`+
     s.linhas.map((r,i)=>`<tr class="${s.hi===i?'hi':''}${s.fora===i?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`).join('')+`</tbody></table></div>`:'';
