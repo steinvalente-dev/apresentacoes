@@ -11,8 +11,8 @@ DECK.** O bloco que se cola no esqueleto é o `sarasa/bloco.html`, ao lado.
 > novas edificações. Não é a identidade da Sarasá inteira, que abrange muito
 > mais. Decisão do Michel em 29/08/2026, a refinar em rodada própria.
 >
-> **A peça sai com assinatura Sarasá**, não michel stein_ emprestada. A
-> concepção e a coordenação entram como **crédito discreto na contracapa** (§5).
+> **A peça sai com assinatura Sarasá**, não michel stein_ emprestada — e **sem
+> crédito de concepção e coordenação**, em nenhuma peça desta frente (§5).
 >
 > Para todo o resto **o `.md` é o mestre**: divergiu o desenho de uma peça nova,
 > o `.md` ganha.
@@ -58,7 +58,7 @@ carrega a sua:
 | frase de posicionamento | **O Patrimônio Cultural vivo** |
 | site | `estudiosarasa.com.br` |
 | a frente | núcleo de arquitetura: conservação, restauro e novas edificações |
-| crédito da peça | `CONCEPÇÃO E COORDENAÇÃO · MICHEL STEIN_`, contracapa (§5) |
+| crédito da peça | **não existe** — a peça não credita concepção nem coordenação (§5) |
 
 **O dispositivo da marca é a inversão do acento.** Na michel stein_ o acento é
 reserva de 2% — o underscore terracota. Na AMAZ é a barra Cobre, um filete. Na
@@ -374,9 +374,11 @@ duas marcas.
   **em toda peça desta frente, sem exceção** (decisão do Michel, 03.09.2026; a EMEI
   saiu com o QR errado e foi corrigida). O SVG certo é a constante `QR` do
   `marca/sarasa/bloco.html`; nunca reaproveitar o QR de outra marca.
-- **Crédito**, linha pequena ao pé: `CONCEPÇÃO E COORDENAÇÃO · MICHEL STEIN_`,
-  Archivo 600, caixa alta, +.08em, em Cal a 70%. Não disputa a assinatura;
-  registra a autoria na peça que circula.
+- **Sem crédito de concepção e coordenação.** A contracapa fecha em assinatura,
+  site e QR — nada mais. Decisão do Michel, 04.09.2026: **padrão de toda peça
+  desta frente**, e não exceção da EMEI. A peça sai como Sarasá; a autoria se
+  registra na relação, não no rodapé. O campo `credito` do gabarito `marca`
+  continua na engine (serve às outras frentes) — nesta frente **não se declara**.
 
 Os dois objetos do `DECK` estão no `sarasa/bloco.html`.
 
