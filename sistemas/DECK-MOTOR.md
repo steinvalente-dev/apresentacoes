@@ -565,10 +565,37 @@ função global de `<script>` clássico. Só dispara com `cur===0` e `i>cur`, e
 respeita `prefers-reduced-motion`.
 
 **Peso e desempenho.** Três imagens a 1024 px em base64 custam ~0,4 MB. Carga
-progressiva: começa a animar com duas texturas prontas. Auto-pausa por
-`visibilitychange` e `IntersectionObserver` — só o slide visível gasta GPU.
-Escala de render em 0,9: o halftone destrói detalhe de qualquer forma. **Três a
-cinco imagens por deck, não dez** — cada uma de 1024 px custa ~3,7 MB de VRAM.
+progressiva: começa a animar com duas texturas prontas. Escala de render em
+0,9: o halftone destrói detalhe de qualquer forma. **Três a cinco imagens por
+deck, não dez** — cada uma de 1024 px custa ~3,7 MB de VRAM.
+
+⚑ **O laço só roda em slide com fundo (corrigido 04/09/2026).** Até então
+`pausar(true)` congelava o relógio e o `drawArrays` continuava a 60 fps em
+todos os slides, com o canvas invisível — inclusive sob o globo e o mapa, que
+também são WebGL. O `IntersectionObserver` não protegia: `opacity:0`
+continua intersectando. Medido em Chromium com WebGL em software
+(SwiftShader), que é o cenário de notebook cuja aceleração caiu: o fundo
+sozinho derrubava um slide de texto de 38 para 2,5 fps, e o slide do globo
+de 58 para 31 fps antes de o Maps sequer carregar. Agora pausado desenha um
+último quadro e sai do `requestAnimationFrame`; `pausar(false)`/`entrada()`
+religam. Zero `drawArrays` fora do fundo, medido.
+
+**Três regras que saíram do mesmo incidente (peça EMEI, 03–04/09):**
+1. **Visor vivo desmonta ao sair do slide.** `Map3DElement`, mapa 2D vetorial e
+   iframe do SketchUp são contextos WebGL (o viewer, ~40 MB) que ficavam vivos
+   atrás de todos os slides seguintes. `MSEarth`, `MSMapa` e `MSModelo` agora
+   removem o elemento ao sair e remontam na volta — a API fica em cache e o
+   indicador de carga é honesto.
+2. **Nada de `backdrop-filter` sobre visor vivo.** Sobre slide estático o blur
+   é calculado uma vez; sobre mapa que repinta a cada quadro, o navegador
+   recalcula o blur da região a cada quadro (medido: −15% de fps em software).
+   Rótulo e botões dos visores usam fundo com opacidade; a `.nav` perde o blur
+   em `body.em-imagem`.
+3. **Se travar mesmo assim, o suspeito é a máquina, não a peça:** `chrome://gpu`
+   → linha "WebGL". "Software only" quer dizer que a aceleração caiu (driver,
+   atualização do Chrome) e tudo o que é WebGL vai rastejar — inclusive a
+   abertura com fundo, que em software roda a ~3 fps. A peça não tem como
+   consertar isso; o `?semfundo` na URL isola a contribuição do shader.
 
 ---
 

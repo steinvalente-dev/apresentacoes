@@ -250,6 +250,8 @@ body.esc .chrome{color:var(--papel-70)}
 .nav{display:flex;align-items:center;gap:clamp(8px,.9cqw,14px);pointer-events:auto;
   background:color-mix(in srgb,var(--papel) 94%,transparent);
   -webkit-backdrop-filter:blur(7px) saturate(1.1);backdrop-filter:blur(7px) saturate(1.1);
+  /* sobre visor vivo (mapa, globo, modelo) o blur é recalculado a cada quadro do mapa;
+     os 94% de opacidade bastam. Regra em body.em-imagem .nav, abaixo. */
   border:1px solid var(--tinta-20);border-radius:999px;
   padding:clamp(4px,.42cqw,6px) clamp(7px,.7cqw,11px) clamp(4px,.42cqw,6px) clamp(11px,1.05cqw,17px);
   box-shadow:0 1px 5px var(--tinta-15);
@@ -1420,7 +1422,7 @@ body.no-fim #msgraf{opacity:.18}
 .g-earth-3d .rotulo,.g-modelo-3d .rotulo{position:absolute;left:var(--gut);
   bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px));z-index:3;pointer-events:none;
   max-width:min(46ch,60cqw);padding:clamp(14px,2cqh,30px) clamp(18px,1.9cqw,38px);
-  background:var(--tinta-45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  background:var(--tinta-45);/* sem backdrop-filter: sobre mapa vivo o blur é recalculado a cada quadro (04/09/2026) */
   border:1px solid var(--papel-10);border-radius:3px;transition:opacity .3s ease}
 .g-modelo-3d.girando .rotulo{opacity:0}
 
@@ -1467,7 +1469,7 @@ body.no-fim #msgraf{opacity:.18}
 .g-earth-3d .cmd button,.g-modelo-3d .cmd button{cursor:pointer;
   font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.12em;
   text-transform:uppercase;color:var(--papel);background:var(--tinta-60);
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  /* sem backdrop-filter: sobre mapa vivo o blur é recalculado a cada quadro (04/09/2026) */
   border:1px solid var(--papel-20);border-radius:999px;padding:.62em 1.2em;
   display:flex;align-items:center;gap:.55em;transition:border-color .2s,color .2s}
 .g-earth-3d .cmd button:hover,.g-modelo-3d .cmd button:hover{border-color:var(--papel);color:#fff} /* #fff: pico de luz do hover, não é cor de marca */
@@ -1538,6 +1540,8 @@ body.no-fim #msgraf{opacity:.18}
   text-transform:uppercase;color:var(--papel-60);
   text-shadow:0 1px 3px var(--tinta-45),0 2px 14px var(--tinta-35)}
 .g-modelo-3d.reserva-on .rescap{display:block}
+/* visor vivo: nada de backdrop-filter em cima dele — 04/09/2026 */
+body.em-imagem .nav{-webkit-backdrop-filter:none;backdrop-filter:none}
 </style></head><body>
 <!-- #moldura mede a ÁREA SEGURA da tela, nunca a tela bruta: é o que impede
      o notch e a Dynamic Island de comerem canto de prancha.
@@ -1809,9 +1813,9 @@ function montar(cv, IMGS, OPT){
     tmx=e.clientX*k;tmy=cv.height-e.clientY*k;
     if(mAmt<0.02){mx=tmx;my=tmy;}mOn=true;});
   addEventListener('pointerleave',()=>mOn=false);
-  document.addEventListener('visibilitychange',()=>visible=!document.hidden);
+  document.addEventListener('visibilitychange',()=>{visible=!document.hidden; if(visible) acorda();});
   if('IntersectionObserver' in window)
-    new IntersectionObserver(e=>{visible=e[0].isIntersecting&&!document.hidden;},{threshold:.01}).observe(cv);
+    new IntersectionObserver(e=>{visible=e[0].isIntersecting&&!document.hidden; if(visible) acorda();},{threshold:.01}).observe(cv);
   if(matchMedia('(prefers-reduced-motion: reduce)').matches) paused=true;
   let FILA=IMGS.slice();
   if(OPT.sortear){ for(let j=FILA.length-1;j>0;j--){
@@ -1821,9 +1825,21 @@ function montar(cv, IMGS, OPT){
     if(im) S.push(mkTex(im)); if(S.length===2) ready=true;
     await new Promise(r=>setTimeout(r,0));
   } if(S.length) ready=true; })();
+  /* ⚑ O laço PARA quando pausado. Até 04/09/2026 `pausar(true)` só congelava
+     o relógio: o rAF e o gl.drawArrays continuavam a 60 fps em TODO slide,
+     inclusive sob o mapa e o globo — um shader de 2× fbm por pixel em tela
+     cheia, invisível (canvas em opacity 0), disputando a GPU com o Maps.
+     Medido em Chromium com WebGL em software (SwiftShader): o fundo sozinho
+     derrubava um slide de texto de 38 para 2,5 fps. Em GPU de verdade é
+     barato; quando a aceleração cai (driver, atualização do Chrome), é o
+     que trava a peça. Agora: pausado desenha UM último quadro e sai do laço;
+     `pausar(false)`/`entrada()` religam. `visible` (aba oculta) idem. */
+  let rafId=null;
+  function acorda(){ if(rafId===null) rafId=requestAnimationFrame(frame); }
   function frame(now){
-    requestAnimationFrame(frame);
-    if(!visible||!ready){last=now;return;}
+    rafId=null;
+    if(!visible){ last=now; return; }                       /* aba oculta: dorme até o visibilitychange */
+    if(!ready){ last=now; rafId=requestAnimationFrame(frame); return; }  /* texturas a caminho: espera sem desenhar */
     const dt=Math.min((now-last)/1000,.05);last=now;
     if(!paused){clock+=dt;t+=dt*P.speed*0.5;if(t>=1){t=0;i=(i+1)%S.length;}}
     const A=S[i],B=S[(i+1)%S.length],k=cv.width/(cv.clientWidth||innerWidth);
@@ -1848,9 +1864,10 @@ function montar(cv, IMGS, OPT){
     gl.uniform1f(U.uCur,P.cur);gl.uniform1f(U.uMAmt,mAmt*P.mforce);gl.uniform1f(U.uMRad,P.mrad*k);
     gl.uniform3fv(U.uInk,COR.ink);gl.uniform3fv(U.uPaper,COR.paper);gl.uniform3fv(U.uAccent,COR.acc);
     gl.drawArrays(gl.TRIANGLES,0,3);
+    if(!paused) rafId=requestAnimationFrame(frame);          /* pausado: este foi o último quadro */
   }
-  requestAnimationFrame(frame);
-  return {entrada(){enter=0;enterT=0;}, pausar(v){paused=!!v;}, P:P,
+  acorda();
+  return {entrada(){enter=0;enterT=0;acorda();}, pausar(v){paused=!!v; if(!paused) acorda();}, P:P,
     cor(o){ if(o.ink)ALVO.ink=hex(o.ink); if(o.paper)ALVO.paper=hex(o.paper);
             if(o.acc)ALVO.acc=hex(o.acc); }};
 }
@@ -3249,7 +3266,16 @@ window.MSEarth=(function(){
       var s=DECK[cur];
       /* NIVEL 1 — aquece ao chegar no slide imediatamente anterior */
       if(PROX.indexOf(cur+1)>=0) aquece();
-      if(!s||s.g!=='earth-3d'){ desativa(); if(orbitando) orbita(false); return; }
+      if(!s||s.g!=='earth-3d'){
+        desativa(); if(orbitando) orbita(false);
+        /* DESMONTA ao sair: o Map3DElement e um contexto WebGL vivo que ficava
+           atras de todos os slides seguintes (04/09/2026). Na volta remonta —
+           a API ja esta carregada e o indicador de carga e honesto. */
+        if(mapa){ if(mapa.parentNode) mapa.parentNode.removeChild(mapa); mapa=null; }
+        if(montado){ montado=false;
+          document.querySelectorAll('.g-earth-3d').forEach(function(sl){ sl.classList.remove('esperando','pronto','girando','falhou'); }); }
+        return;
+      }
       slide=document.querySelectorAll('#palco .slide')[cur];
       if(montado){ if(!orbitando&&mapa) orbita(true); return; }
       montado=true; slide.classList.add('esperando');
@@ -3382,8 +3408,15 @@ window.MSModelo=(function(){
     chegou:function(){
       var s=DECK[cur];
       if(!s||s.g!=='modelo-3d'){
+        /* DESMONTA ao sair: o viewer do SketchUp (~40 MB, WebGL) ficava vivo
+           atras dos slides seguintes (04/09/2026). src vazio libera; na volta
+           monta() recarrega, com o indicador de carga. A reserva fica. */
+        if(tDoc){ clearTimeout(tDoc); tDoc=null; }
+        if(tModelo){ clearTimeout(tModelo); tModelo=null; }
         document.querySelectorAll('.g-modelo-3d').forEach(function(sl){
-          sl.classList.remove('girando'); });
+          sl.classList.remove('girando','esperando','pronto','falhou');
+          var q=sl.querySelector('iframe'); if(q&&q.src&&q.src!=='about:blank') q.src='about:blank'; });
+        montado=false;
         return;
       }
       slide=document.querySelectorAll('#palco .slide')[cur];
