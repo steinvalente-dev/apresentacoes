@@ -30,6 +30,14 @@ Cada frente edita o **seu** arquivo. Duas frentes no mesmo arquivo é o problema
 que este desenho existe para acabar. Doc de sistema (`_geral.json`) é a exceção:
 puxar antes de editar, e o `publicar.sh` já faz `pull --ff-only` no passo 1.
 
+**O `_` do `_geral.json` tem uma armadilha, e ela já disparou.** O `.gitignore`
+tem `_*`, para rascunho de sessão nunca subir — e engoliu o `_geral.json` calado
+na fase 2: o arquivo existia no disco de quem o escreveu, o build passava, e o
+repositório nunca o recebeu. Resultado: de 03 a 04/09/2026 as abas **deck** e
+**sistema** ficaram com 2 linhas em vez de 33, sem sintoma nenhum. Hoje o
+`.gitignore` tem `!registro/_geral.json` e o `montar-indice.py` para o build se
+o arquivo faltar ou estiver ignorado pelo git. Não tirar nenhuma das duas.
+
 ## Formato de `registro/<frente>.json`
 
 ```json

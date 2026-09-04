@@ -1,3 +1,9 @@
 # rascunho de sessão: arquivo que começa com _ nunca entra no repositório.
 # Existe porque isto já aconteceu duas vezes em 29/08/2026.
 _*
+
+# Exceção: o registro da frente "_geral" (o que é do sistema e não é de marca
+# nenhuma) nasce com _ por decisão do montar-indice.py, e a linha de cima o
+# engoliu calado na fase 2 — 31 documentos das abas deck e sistema ficaram fora
+# do acervo de 03.09 a 04.09.2026 sem dar um sintoma sequer. 04/09/2026.
+!registro/_geral.json

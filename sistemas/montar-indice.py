@@ -24,10 +24,11 @@ Guardas, todas param o build (sai 1):
   - meta com `cliente:true` nunca entra — peça de cliente mora na área de cliente do site.
   - órfã: pasta com apresentacao.html sem meta.json e sem href/ver em registro algum.
   - meta sem os campos obrigatórios, data fora de DD.MM.AAAA, registro com JSON inválido.
+  - registro/_geral.json faltando, ou ignorado pelo git (o `_*` do .gitignore já o engoliu uma vez).
 Aviso, não para: `peso` do meta divergindo > 5% do que está no disco (pasta inteira, em MiB,
 sem meta.json e sem anteriores/). O peso do meta é preservado; o aviso é para atualizar o meta.
 """
-import json, pathlib, re, sys
+import json, pathlib, re, subprocess, sys
 from datetime import datetime, timezone
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
@@ -147,6 +148,21 @@ def le_registros():
     # sem nenhum registro/*.json algo está muito errado: o acervo sairia vazio de documentos
     if not any((REGISTRO / f'{f}.json').exists() for f in ORDEM_FRENTES):
         erros.append('registro/: nenhum <frente>.json encontrado')
+    # _geral é a frente do sistema: sem ela as abas deck e sistema saem quase vazias, e isso não
+    # dá sintoma nenhum — foi o que aconteceu de 03 a 04/09/2026, quando o `_*` do .gitignore
+    # engoliu o arquivo calado. Falta, ou arquivo ignorado pelo git, param o build.
+    geral = REGISTRO / '_geral.json'
+    if not geral.exists():
+        erros.append('registro/_geral.json: não existe — as abas deck e sistema sairiam quase vazias')
+    else:
+        try:
+            ignorado = subprocess.run(['git', '-C', str(RAIZ), 'check-ignore', '-q', str(geral)],
+                                      capture_output=True).returncode == 0
+        except Exception:
+            ignorado = False
+        if ignorado:
+            erros.append('registro/_geral.json: ignorado pelo .gitignore — existe no disco e nunca vai '
+                         'para o repositório. Acrescentar "!registro/_geral.json" ao .gitignore')
     return pecas, docs, registrados
 
 
