@@ -158,8 +158,12 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
     return jobs
 
 
-def processa_imagens(jobs, pasta_img, saida):
-    """→ (bytes em base64, modo, imagens que faltaram)"""
+def processa_imagens(jobs, pasta_img, saida, extras=()):
+    """→ (bytes em base64, modo, imagens que faltaram)
+
+    `extras` são pastas de reserva, procuradas quando o nome não está em
+    `pasta_img`. É por elas que o acervo de capa da marca (marca/<nome>/capa/)
+    entra sozinho, sem a peça precisar carregar as imagens da frente."""
     if not jobs:
         return 0, 'nenhuma', []
     try:
@@ -171,6 +175,10 @@ def processa_imagens(jobs, pasta_img, saida):
         if (v, perfil) in cache:
             continue
         arq = pasta_img / v
+        if not arq.is_file():
+            for base in extras:                     # acervo da marca, por último
+                if (base / v).is_file():
+                    arq = base / v; break
         if not arq.is_file():
             faltam.append(v); cache[(v, perfil)] = None; continue
         larg, q = RESIZE[perfil]
@@ -347,20 +355,24 @@ def main():
                 avisos.append(f'slide {i} · gabarito {g}: falta {c}'); marcados.add(i)
 
     # ── imagens: redimensiona e decide o modo ──
+    # O acervo da capa vem do bloco da marca quando o deck.json não o troca.
+    # As entradas do trecho passam pelo mesmo caminho das outras imagens: nome
+    # simples é arquivo (procurado em --img e em marca/<nome>/capa/) e vira
+    # base64; caminho relativo, URL ou data: atravessa intacto — é o que
+    # preserva o acervo servido da michel stein_.
     capa_imgs = dj.get('capa_imgs')
     if capa_imgs is None:
-        ci = trechos.get('capa_imgs')
-        m = re.search(r'\[.*\]', ci or '', re.S)
-        capa_imgs_js = m.group(0) if m else '[]'
-        capa_imgs = []
-    else:
-        capa_imgs_js = None
+        ci = trechos.get('capa_imgs') or ''
+        m = re.search(r'\[(.*)\]', ci, re.S)
+        capa_imgs = re.findall(r'''['"]([^'"]+)['"]''', m.group(1)) if m else []
+    capa_imgs_js = None
     div_imgs = list(dj.get('div_imgs') or [])
     jobs = coleta_imagens(dj['deck'], capa_imgs, div_imgs)
     saida.mkdir(parents=True, exist_ok=True)
     if a.sobrescrever and (saida / 'img').is_dir():
         shutil.rmtree(saida / 'img')          # img/ é saída do montar: a rodada nova decide o que fica
-    total_img, modo, faltam = processa_imagens(jobs, pasta_img, saida)
+    total_img, modo, faltam = processa_imagens(
+        jobs, pasta_img, saida, extras=(raiz / 'marca' / a.marca / 'capa',))
     for v in faltam:
         avisos.append(f'imagem não encontrada em {pasta_img}: {v} — conferir o nome ou passar --img')
     if capa_imgs_js is None:

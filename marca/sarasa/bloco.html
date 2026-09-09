@@ -189,6 +189,28 @@ const UNDERSCORE=false;   /* o underscore e assinatura da michel stein_ */<!-- /
      Sem <span class="lab" style="text-transform:none;color:var(--tinta)">pisca</span>:
      o underscore &eacute; da michel stein_.</p>
 
+  <h2>3b &middot; <b>o acervo da capa</b></h2>
+  <p>As sete obras que o morph da capa atravessa &mdash; cinco do
+     PORTFOLIO_SARASA_2026 e tr&ecirc;s do site (Catedral de Bras&iacute;lia,
+     Gin&aacute;sio Amazonense Pedro II e Fortaleza de Santo Amaro). Vivem em
+     <span class="lab" style="text-transform:none;color:var(--tinta)">marca/sarasa/capa/</span>
+     e o <span class="lab" style="text-transform:none;color:var(--tinta)">montar.py</span> as
+     acha l&aacute; sozinho: a pe&ccedil;a <b>n&atilde;o</b> precisa carreg&aacute;-las na
+     pasta de imagens dela, e n&atilde;o precisa declarar
+     <span class="lab" style="text-transform:none;color:var(--tinta)">capa_imgs</span> no deck.json.
+     Guardadas em cinza porque o shader converte para lumin&acirc;ncia e trama &mdash;
+     a cor n&atilde;o sobrevive, o desenho sim.</p>
+<pre><!-- TRECHO:capa_imgs -->const CAPA_IMGS = ['01.jpg','02.jpg','03.jpg','04.jpg',
+                   '05.jpg','06.jpg','07.jpg'];<!-- /TRECHO --></pre>
+  <p class="nota"><b>Embutidas em base64</b>, ao contr&aacute;rio da michel stein_, que serve o
+     acervo dela por caminho relativo. Aqui pesam pouco &mdash; o
+     <span class="lab" style="text-transform:none;color:var(--tinta)">montar.py</span> reduz o
+     perfil <span class="lab" style="text-transform:none;color:var(--tinta)">fundo</span> a 640&nbsp;px
+     WEBP &mdash; e caminho relativo quebraria justamente onde a pe&ccedil;a mais roda: solta por
+     e-mail e na &aacute;rea de cliente, que fica fora deste reposit&oacute;rio. Sem rede ou sem
+     as imagens, a capa cai em campo Vinho chapado, que a especifica&ccedil;&atilde;o j&aacute; d&aacute;
+     como estado aceit&aacute;vel.</p>
+
   <h2>4 &middot; <b>o que este bloco não tem</b></h2>
 <pre>sem underscore piscante  &mdash; assinatura da michel stein_ (UNDERSCORE=false)
 sem barra de acento      &mdash; assinatura da AMAZ

@@ -54,7 +54,10 @@ Publicar só com o validar em **passou**.
   slide = resolução nativa) e embutidas em base64. `src:""` = slot hachurado, que é recurso, não erro.
   URL `http…` fica como está. Acima de 8 MB de imagem o montar grava em `<slug>/img/` e avisa: a
   peça passa a exigir a PASTA e se entrega por link.
-- `capa_imgs` só se quiser trocar o acervo da marca (raro); `map` só para o gabarito `mapa` de lotes.
+- `capa_imgs` só se quiser trocar o acervo da marca (raro): **por padrão ele vem do bloco**, e os
+  nomes simples que o bloco declarar são procurados em `--img` e em `marca/<marca>/capa/`, entrando
+  em base64 como qualquer imagem. Caminho relativo (`../fundo/…`), URL e `data:` atravessam intactos.
+  `map` só para o gabarito `mapa` de lotes.
 
 ## Gabaritos
 

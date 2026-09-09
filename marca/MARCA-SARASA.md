@@ -391,8 +391,36 @@ terceiros, e — específico desta frente — **nunca obra da michel stein_**. N
 michel stein_ o fundo mostra os projetos dele, e mostrar isso na abertura é o
 ponto; aqui a assinatura é outra e o gesto mudaria de sentido.
 
-Formato do sistema, o mesmo das outras frentes: **nove peças, 1024 px, JPEG q68**.
+Formato do sistema, o mesmo das outras frentes: **1024 px, JPEG**.
 Preset: `{paper:'#F3EEE7', ink:'#231F20', acc:'#79242F'}`.
+
+### Onde o acervo mora, e por que ele entra sozinho (09/09/2026)
+
+**`marca/sarasa/capa/01.jpg` … `07.jpg`** — sete obras, as mesmas que o
+`modulos/capa-morph-sarasa.html` já trazia embutidas: cinco do
+PORTFOLIO_SARASA_2026 e três do site (Catedral de Brasília, Ginásio Amazonense
+Pedro II, Fortaleza de Santo Amaro). Guardadas **em cinza**, porque o shader
+converte para luminância e trama — a cor original não sobrevive, o desenho sim.
+
+O bloco declara o acervo no `TRECHO:capa_imgs`, por **nome simples**, e o
+`montar.py` procura os arquivos em `--img` e, não achando, em
+`marca/<marca>/capa/`. Consequência, que é o ponto: **peça nova da Sarasá sai com
+a capa-morph funcionando sem escrever nada** — sem `capa_imgs` no deck.json, sem
+copiar imagem para a pasta da peça. O perfil `fundo` do montar reduz a 640 px
+WEBP; as sete custam ~170 KB embutidas.
+
+**Base64, e não caminho servido.** A michel stein_ serve o acervo dela por
+`../fundo/`, que é mais leve, mas depende de a peça viver dentro do repositório
+público. Peça da Sarasá roda solta por e-mail e na área de cliente, que fica
+fora dele — caminho relativo quebraria justo aí. Sem as imagens, a capa cai em
+campo Vinho chapado, estado que a especificação já aceita.
+
+> **O que essa correção conserta.** Até 09/09/2026 o bloco da Sarasá não tinha
+> `TRECHO:capa_imgs`. O `montar.py` caía em `CAPA_IMGS=[]`, o morph nunca
+> carregava textura, `ready` nunca virava `true` e **toda** peça da frente saía
+> com a capa institucional parada — parecendo capa provisória, quando era o
+> arquivo certo sem as imagens. Passou despercebido porque nada quebra: o campo
+> Vinho chapado é um estado válido.
 
 **Estado: acervo provisório.** As peças montadas hoje usam obra publicada e
 fotografada da Sarasá — vitral do Salão do Pregão da Bolsa do Café, casarões da
