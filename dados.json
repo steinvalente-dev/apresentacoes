@@ -61,6 +61,29 @@
    ]
   },
   {
+   "nome": "esqueleto de referência",
+   "pecas": [
+    {
+     "nome": "Estúdio Sarasá",
+     "pranchas": 8,
+     "peso": 0.87,
+     "data": "09.09.2026",
+     "href": "esqueleto-sarasa/apresentacao.html",
+     "frente": "sarasa",
+     "sub": "Peça de referência, dados fictícios. Mostra o que a frente traz sozinha: capa-morph com as imagens do módulo, tokens, chrome, divisor, frase, lista e fecho."
+    },
+    {
+     "nome": "michel stein_",
+     "pranchas": 8,
+     "peso": 0.78,
+     "data": "09.09.2026",
+     "href": "esqueleto-michel-stein/apresentacao.html",
+     "frente": "michel-stein",
+     "sub": "Peça de referência, dados fictícios. Mostra o que a frente traz sozinha: capa-morph com as imagens do módulo, tokens, chrome, divisor, frase, lista e fecho."
+    }
+   ]
+  },
+  {
    "nome": "lavrō",
    "pecas": [
     {
@@ -584,5 +607,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-09-04T16:17:32+00:00"
+ "gerado": "2026-09-09T21:11:20+00:00"
 }

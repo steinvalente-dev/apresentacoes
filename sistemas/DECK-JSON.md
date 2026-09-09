@@ -54,10 +54,11 @@ Publicar só com o validar em **passou**.
   slide = resolução nativa) e embutidas em base64. `src:""` = slot hachurado, que é recurso, não erro.
   URL `http…` fica como está. Acima de 8 MB de imagem o montar grava em `<slug>/img/` e avisa: a
   peça passa a exigir a PASTA e se entrega por link.
-- `capa_imgs` só se quiser trocar o acervo da marca (raro): **por padrão ele vem do bloco**, e os
-  nomes simples que o bloco declarar são procurados em `--img` e em `marca/<marca>/capa/`, entrando
-  em base64 como qualquer imagem. Caminho relativo (`../fundo/…`), URL e `data:` atravessam intactos.
-  `map` só para o gabarito `mapa` de lotes.
+- **`capa_imgs` não se escreve.** As imagens do morph da capa vêm do módulo de capa da frente
+  (`modulos/capa-morph-<marca>.html`, ou `capa-morph.html`), que já as traz embutidas; o montar as
+  lê de lá e embute pelo perfil `fundo` (640 px WEBP). O campo existe só para TROCAR o acervo numa
+  peça, o que é raro — e trocar a capa da frente é trocar o módulo, não a peça. O montar imprime de
+  onde a capa veio. `map` só para o gabarito `mapa` de lotes.
 
 ## Gabaritos
 

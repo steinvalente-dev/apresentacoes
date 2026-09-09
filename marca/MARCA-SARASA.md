@@ -394,33 +394,39 @@ ponto; aqui a assinatura é outra e o gesto mudaria de sentido.
 Formato do sistema, o mesmo das outras frentes: **1024 px, JPEG**.
 Preset: `{paper:'#F3EEE7', ink:'#231F20', acc:'#79242F'}`.
 
-### Onde o acervo mora, e por que ele entra sozinho (09/09/2026)
+### As imagens da capa saem do módulo, e ninguém escolhe nada (09/09/2026)
 
-**`marca/sarasa/capa/01.jpg` … `07.jpg`** — sete obras, as mesmas que o
-`modulos/capa-morph-sarasa.html` já trazia embutidas: cinco do
-PORTFOLIO_SARASA_2026 e três do site (Catedral de Brasília, Ginásio Amazonense
-Pedro II, Fortaleza de Santo Amaro). Guardadas **em cinza**, porque o shader
-converte para luminância e trama — a cor original não sobrevive, o desenho sim.
+**A regra, agora, é uma só e vale para toda frente:** as imagens do morph da capa
+vêm do **módulo de capa da frente** — aqui, `modulos/capa-morph-sarasa.html`, que
+já as traz embutidas. O `montar.py` lê o módulo, embute as imagens reduzidas pelo
+perfil `fundo` (640 px WEBP) e pronto. **Nenhum bloco declara acervo de capa,
+nenhum deck.json declara `capa_imgs`, e nenhuma sessão escolhe imagem.**
 
-O bloco declara o acervo no `TRECHO:capa_imgs`, por **nome simples**, e o
-`montar.py` procura os arquivos em `--img` e, não achando, em
-`marca/<marca>/capa/`. Consequência, que é o ponto: **peça nova da Sarasá sai com
-a capa-morph funcionando sem escrever nada** — sem `capa_imgs` no deck.json, sem
-copiar imagem para a pasta da peça. O perfil `fundo` do montar reduz a 640 px
-WEBP; as sete custam ~170 KB embutidas.
+São sete obras: cinco do PORTFOLIO_SARASA_2026 e três do site — Catedral de
+Brasília, Ginásio Amazonense Pedro II, Fortaleza de Santo Amaro. Custo medido:
+~0,54 MB por peça.
 
-**Base64, e não caminho servido.** A michel stein_ serve o acervo dela por
-`../fundo/`, que é mais leve, mas depende de a peça viver dentro do repositório
-público. Peça da Sarasá roda solta por e-mail e na área de cliente, que fica
-fora dele — caminho relativo quebraria justo aí. Sem as imagens, a capa cai em
-campo Vinho chapado, estado que a especificação já aceita.
+Trocar as obras da capa é **trocar o módulo**, num lugar só; toda peça da frente
+acompanha na próxima montagem. Frente nova = módulo de capa novo, e o resto anda
+sozinho.
 
-> **O que essa correção conserta.** Até 09/09/2026 o bloco da Sarasá não tinha
-> `TRECHO:capa_imgs`. O `montar.py` caía em `CAPA_IMGS=[]`, o morph nunca
-> carregava textura, `ready` nunca virava `true` e **toda** peça da frente saía
-> com a capa institucional parada — parecendo capa provisória, quando era o
-> arquivo certo sem as imagens. Passou despercebido porque nada quebra: o campo
-> Vinho chapado é um estado válido.
+> **Os dois defeitos que essa regra conserta.**
+>
+> **1 · A Sarasá não tinha acervo declarado.** O bloco não trazia
+> `TRECHO:capa_imgs`, o `montar.py` caía em `CAPA_IMGS=[]`, o morph nunca
+> carregava textura e **toda** peça da frente saía com a capa institucional
+> parada — parecendo capa provisória, quando era o arquivo certo sem as imagens.
+>
+> **2 · A michel stein_ tinha acervo, e ele só funcionava servido.** O bloco dela
+> apontava `../fundo/*.webp`, servidas em vez de embutidas. Em `file://` o WebGL
+> recusa a textura com `SecurityError: texImage2D … cross-origin data`: a capa
+> caía em oliva chapado em toda peça aberta do disco — anexo de e-mail, download,
+> conferência local — e em toda peça fora do repositório público, como a área de
+> cliente. Medido em 09/09/2026.
+>
+> Os dois passaram despercebidos pelo mesmo motivo: **nada quebra**. Campo
+> chapado é estado válido na especificação, e o validador não tem como saber que
+> ali deveria haver fotografia.
 
 **Estado: acervo provisório.** As peças montadas hoje usam obra publicada e
 fotografada da Sarasá — vitral do Salão do Pregão da Bolsa do Café, casarões da

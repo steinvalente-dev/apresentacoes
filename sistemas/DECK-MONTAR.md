@@ -71,6 +71,21 @@ protótipo, atalhos de tecla) fica fora: o próprio módulo diz isso.
 | Estúdio Sarasá | `modulos/capa-morph-sarasa.html` — dois momentos, ver abaixo |
 | michel stein_ | `modulos/capa-morph.html` |
 
+**E as imagens do morph também vêm do módulo — não se escolhem (09/09/2026).** O
+`montar.py` lê o array de imagens do módulo da frente e embute pelo perfil
+`fundo` (640 px WEBP). Nenhum bloco declara acervo de capa, nenhum `deck.json`
+declara `capa_imgs`, nenhuma sessão escolhe imagem: **frente nova = módulo de
+capa novo, e o resto anda sozinho.** Trocar as obras da capa é trocar o módulo,
+num lugar só. O montar imprime a linha `capa — N imagem(ns), de <origem>`;
+conferir que a origem é o módulo da frente é parte de olhar a saída.
+
+⚠ **Por que embutidas, e não servidas.** Até 09/09 a michel stein_ apontava
+`../fundo/*.webp`. Em `file://` o WebGL recusa a textura
+(`SecurityError: texImage2D … cross-origin data`) e a capa caía em campo chapado
+em toda peça aberta do disco — anexo de e-mail, download, conferência local — e
+em toda peça fora do repositório público, como a área de cliente. Custo do
+embutido, medido: ~0,45 MB (michel stein_, nove) e ~0,54 MB (Sarasá, sete).
+
 **A capa da Sarasá tem dois momentos, num slide só:** o momento A fica parado
 na tela enquanto a sala se acomoda; o clique em `começar` traz o **título da
 apresentação** no lugar do bloco institucional; o clique seguinte corre a

@@ -154,16 +154,41 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
                     add(it, 2, perfil)
     for lst in (capa_imgs, div_imgs):
         for i in range(len(lst)):
-            add(lst, i, 'fundo')
+            # a capa vem do módulo já em data-URI: entra no mesmo moinho, para
+            # não embutir imagem de tela cheia onde o perfil `fundo` basta
+            if isinstance(lst[i], str) and lst[i].startswith('data:image/'):
+                jobs.append((lst, i, lst[i], 'fundo'))
+            else:
+                add(lst, i, 'fundo')
     return jobs
 
 
-def processa_imagens(jobs, pasta_img, saida, extras=()):
-    """→ (bytes em base64, modo, imagens que faltaram)
+def capa_do_modulo(raiz, marca):
+    """As imagens da capa saem do MÓDULO DE CAPA DA FRENTE — ele é o template.
 
-    `extras` são pastas de reserva, procuradas quando o nome não está em
-    `pasta_img`. É por elas que o acervo de capa da marca (marca/<nome>/capa/)
-    entra sozinho, sem a peça precisar carregar as imagens da frente."""
+    Nenhuma peça escolhe imagem de capa, e nenhuma frente precisa declarar
+    acervo: `modulos/capa-morph-<marca>.html` (ou `capa-morph.html`, o da
+    michel stein_) já traz as imagens embutidas, e é de lá que elas vêm.
+    Frente nova = módulo de capa novo, e o resto anda sozinho.
+    → (lista de data-URI, nome do módulo)"""
+    for nome in (f'capa-morph-{marca}.html', 'capa-morph.html'):
+        p = raiz / 'modulos' / nome
+        if not p.is_file():
+            continue
+        txt = p.read_text(encoding='utf-8')
+        # duas formas no acervo: `const IMGS = [...]` e o array literal
+        # passado direto em `MSFundo.montar(canvas, [...])`
+        m = (re.search(r'const\s+IMGS\s*=\s*\[(.*?)\]\s*;', txt, re.S)
+             or re.search(r'\.montar\(\s*[^,]+,\s*\[(.*?)\]', txt, re.S))
+        if m:
+            uris = re.findall(r'''['"](data:image/[^'"]+)['"]''', m.group(1))
+            if uris:
+                return uris, nome
+    return [], None
+
+
+def processa_imagens(jobs, pasta_img, saida):
+    """→ (bytes em base64, modo, imagens que faltaram)"""
     if not jobs:
         return 0, 'nenhuma', []
     try:
@@ -174,15 +199,14 @@ def processa_imagens(jobs, pasta_img, saida, extras=()):
     for cont, chave, v, perfil in jobs:
         if (v, perfil) in cache:
             continue
-        arq = pasta_img / v
-        if not arq.is_file():
-            for base in extras:                     # acervo da marca, por último
-                if (base / v).is_file():
-                    arq = base / v; break
-        if not arq.is_file():
-            faltam.append(v); cache[(v, perfil)] = None; continue
         larg, q = RESIZE[perfil]
         fmt = 'WEBP' if perfil == 'fundo' else 'JPEG'
+        if v.startswith('data:image/'):
+            arq = io.BytesIO(base64.b64decode(v.split(',', 1)[1]))
+        else:
+            arq = pasta_img / v
+            if not arq.is_file():
+                faltam.append(v); cache[(v, perfil)] = None; continue
         dados = redimensiona(arq, larg, q, fmt)
         cache[(v, perfil)] = (dados, fmt)
         total += (len(dados) + 2) // 3 * 4      # o que a imagem vai pesar em base64
@@ -355,24 +379,28 @@ def main():
                 avisos.append(f'slide {i} · gabarito {g}: falta {c}'); marcados.add(i)
 
     # ── imagens: redimensiona e decide o modo ──
-    # O acervo da capa vem do bloco da marca quando o deck.json não o troca.
-    # As entradas do trecho passam pelo mesmo caminho das outras imagens: nome
-    # simples é arquivo (procurado em --img e em marca/<nome>/capa/) e vira
-    # base64; caminho relativo, URL ou data: atravessa intacto — é o que
-    # preserva o acervo servido da michel stein_.
-    capa_imgs = dj.get('capa_imgs')
+    # ── a capa da frente, sem ninguém escolher nada ──
+    # Ordem: o deck.json só se quiser TROCAR o acervo (raro); depois o
+    # TRECHO:capa_imgs do bloco, que existe para a frente servir as mesmas
+    # imagens por caminho relativo em vez de embutir; e, por último e por
+    # padrão, o MÓDULO DE CAPA da frente, que é o template.
+    capa_imgs, capa_fonte = dj.get('capa_imgs'), 'deck.json'
     if capa_imgs is None:
         ci = trechos.get('capa_imgs') or ''
         m = re.search(r'\[(.*)\]', ci, re.S)
-        capa_imgs = re.findall(r'''['"]([^'"]+)['"]''', m.group(1)) if m else []
+        if m:
+            capa_imgs = re.findall(r'''['"]([^'"]+)['"]''', m.group(1))
+            capa_fonte = 'bloco da marca'
+    if capa_imgs is None:
+        capa_imgs, mod = capa_do_modulo(raiz, a.marca)
+        capa_fonte = f'modulos/{mod}' if mod else 'nenhuma'
     capa_imgs_js = None
     div_imgs = list(dj.get('div_imgs') or [])
     jobs = coleta_imagens(dj['deck'], capa_imgs, div_imgs)
     saida.mkdir(parents=True, exist_ok=True)
     if a.sobrescrever and (saida / 'img').is_dir():
         shutil.rmtree(saida / 'img')          # img/ é saída do montar: a rodada nova decide o que fica
-    total_img, modo, faltam = processa_imagens(
-        jobs, pasta_img, saida, extras=(raiz / 'marca' / a.marca / 'capa',))
+    total_img, modo, faltam = processa_imagens(jobs, pasta_img, saida)
     for v in faltam:
         avisos.append(f'imagem não encontrada em {pasta_img}: {v} — conferir o nome ou passar --img')
     if capa_imgs_js is None:
@@ -428,6 +456,7 @@ def main():
     print(f'montar: {rel} — {n_slides} slides (abertura e contracapa inclusas), {peso:.2f} MB na pasta, marca {a.marca}'
           + (', peça de CLIENTE (sem ms-voltar.js)' if a.cliente else ''))
     print(f'montar: imagens — {len(jobs)} referência(s), {total_img / 1024 / 1024:.2f} MB em base64, modo {modo}')
+    print(f'montar: capa — {len(capa_imgs)} imagem(ns), de {capa_fonte}')
     if modo == 'arquivo':
         print(f'montar: ⚠ ACIMA DE 8 MB DE IMAGEM → arquivo ao lado em {a.slug}/img/. '
               f'A peça EXIGE A PASTA {a.slug}/ inteira; entrega por LINK, não por anexo.')

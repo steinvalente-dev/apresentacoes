@@ -189,27 +189,21 @@ const UNDERSCORE=false;   /* o underscore e assinatura da michel stein_ */<!-- /
      Sem <span class="lab" style="text-transform:none;color:var(--tinta)">pisca</span>:
      o underscore &eacute; da michel stein_.</p>
 
-  <h2>3b &middot; <b>o acervo da capa</b></h2>
-  <p>As sete obras que o morph da capa atravessa &mdash; cinco do
-     PORTFOLIO_SARASA_2026 e tr&ecirc;s do site (Catedral de Bras&iacute;lia,
-     Gin&aacute;sio Amazonense Pedro II e Fortaleza de Santo Amaro). Vivem em
-     <span class="lab" style="text-transform:none;color:var(--tinta)">marca/sarasa/capa/</span>
-     e o <span class="lab" style="text-transform:none;color:var(--tinta)">montar.py</span> as
-     acha l&aacute; sozinho: a pe&ccedil;a <b>n&atilde;o</b> precisa carreg&aacute;-las na
-     pasta de imagens dela, e n&atilde;o precisa declarar
+  <h2>3b &middot; <b>as imagens da capa &mdash; n&atilde;o est&atilde;o aqui, e &eacute; de prop&oacute;sito</b></h2>
+  <p><b>Este bloco n&atilde;o declara acervo de capa.</b> As imagens saem do m&oacute;dulo
+     <span class="lab" style="text-transform:none;color:var(--tinta)">modulos/capa-morph-sarasa.html</span>,
+     que &eacute; o template da capa desta frente e j&aacute; as traz embutidas: sete obras
+     &mdash; cinco do PORTFOLIO_SARASA_2026 e tr&ecirc;s do site (Catedral de Bras&iacute;lia,
+     Gin&aacute;sio Amazonense Pedro II, Fortaleza de Santo Amaro). O
+     <span class="lab" style="text-transform:none;color:var(--tinta)">montar.py</span> l&ecirc; o
+     m&oacute;dulo e as embute, reduzidas pelo perfil
+     <span class="lab" style="text-transform:none;color:var(--tinta)">fundo</span> a 640&nbsp;px WEBP.</p>
+  <p class="nota">Consequ&ecirc;ncia, que &eacute; o ponto: <b>pe&ccedil;a nova da Sarasá sai com a
+     capa certa sem ningu&eacute;m escolher nada</b> &mdash; nem imagem, nem cor, nem
      <span class="lab" style="text-transform:none;color:var(--tinta)">capa_imgs</span> no deck.json.
-     Guardadas em cinza porque o shader converte para lumin&acirc;ncia e trama &mdash;
-     a cor n&atilde;o sobrevive, o desenho sim.</p>
-<pre><!-- TRECHO:capa_imgs -->const CAPA_IMGS = ['01.jpg','02.jpg','03.jpg','04.jpg',
-                   '05.jpg','06.jpg','07.jpg'];<!-- /TRECHO --></pre>
-  <p class="nota"><b>Embutidas em base64</b>, ao contr&aacute;rio da michel stein_, que serve o
-     acervo dela por caminho relativo. Aqui pesam pouco &mdash; o
-     <span class="lab" style="text-transform:none;color:var(--tinta)">montar.py</span> reduz o
-     perfil <span class="lab" style="text-transform:none;color:var(--tinta)">fundo</span> a 640&nbsp;px
-     WEBP &mdash; e caminho relativo quebraria justamente onde a pe&ccedil;a mais roda: solta por
-     e-mail e na &aacute;rea de cliente, que fica fora deste reposit&oacute;rio. Sem rede ou sem
-     as imagens, a capa cai em campo Vinho chapado, que a especifica&ccedil;&atilde;o j&aacute; d&aacute;
-     como estado aceit&aacute;vel.</p>
+     Trocar as obras da capa &eacute; trocar o m&oacute;dulo, num lugar s&oacute;, e toda pe&ccedil;a da
+     frente acompanha. Sem as imagens, a capa cai em campo Vinho chapado, estado que a
+     especifica&ccedil;&atilde;o j&aacute; aceita.</p>
 
   <h2>4 &middot; <b>o que este bloco não tem</b></h2>
 <pre>sem underscore piscante  &mdash; assinatura da michel stein_ (UNDERSCORE=false)

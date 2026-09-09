@@ -188,15 +188,18 @@ const QR='&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29"&gt;&lt;
   <p class="nota">As nove peças que o carrossel morph roda atrás da capa e da contracapa.
     <b>São os projetos dele — é a assinatura, não decoração.</b> Não trocar pelas imagens
     do projeto que está sendo apresentado.</p>
-<pre><!-- TRECHO:capa_imgs -->const CAPA_IMGS = ['../fundo/01.webp','../fundo/02.webp','../fundo/03.webp',
-                   '../fundo/04.webp','../fundo/05.webp','../fundo/06.webp',
-                   '../fundo/07.webp','../fundo/08.webp','../fundo/09.webp'];<!-- /TRECHO --></pre>
-  <p class="nota">O caminho vale para peça publicada em <code>&lt;slug&gt;/apresentacao.html</code>,
-    que fica a um nível da raiz. <b>Servidas, e não em base64</b>, porque nove imagens
-    embutidas custam ~1,2 MB e o fundo é decoração: sem rede ele cai em oliva chapado,
-    que a especificação já dá como estado aceitável. Para uma peça que precise do fundo
-    animado <i>offline</i>, embutir — a receita está em
-    <code>../MARCA-MICHEL-STEIN-CAPA.md</code>.</p>
+  <p class="nota"><b>Este bloco não declara mais o acervo (09/09/2026).</b> As nove peças
+    saem do módulo <code>modulos/capa-morph.html</code>, que é o template da capa e já as
+    traz embutidas; o <code>montar.py</code> as lê de lá e embute, reduzidas pelo perfil
+    <code>fundo</code> a 640&nbsp;px WEBP. Os arquivos de <code>fundo/</code> continuam
+    sendo as mesmas nove imagens, byte a byte, e seguem servindo o site.</p>
+  <p class="nota">Havia aqui um <code>TRECHO:capa_imgs</code> com
+    <code>'../fundo/01.webp'</code>… — servidas em vez de embutidas, para poupar ~1,2&nbsp;MB.
+    <b>Foi removido porque não funcionava fora do servidor:</b> em <code>file://</code> o
+    WebGL recusa a textura com <code>SecurityError: texImage2D … cross-origin data</code>,
+    e a capa caía em oliva chapado em toda peça aberta do disco — anexo de e-mail, download,
+    conferência local — e em toda peça fora deste repositório, como a área de cliente.
+    O custo real do embutido, depois do perfil <code>fundo</code>, é ~0,45&nbsp;MB, e não 1,2.</p>
 
   <h2>a ordem</h2>
   <p class="nota"><b>1.</b> abrir <code>esqueleto/deck-esqueleto.html</code> ·
