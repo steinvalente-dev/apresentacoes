@@ -1219,6 +1219,14 @@ body.em-imagem.claro .chrome,
   text-shadow:0 1px 3px var(--papel-70),0 2px 14px var(--papel-45)}
 body.em-imagem.claro .marca .marca-lk{
   --tinta:initial;--primaria:initial;--acento:initial;color:var(--tinta)}
+/* o slot vazio também é claro: montar a estrutura antes das imagens é o modo
+   normal de trabalho, e uma sequência de retângulos escuros no meio de slides
+   claros lê como peça quebrada, não como andaime. */
+.g-cheia.claro .slot{
+  background:repeating-linear-gradient(45deg,var(--tinta-3) 0 6px,transparent 6px 12px);
+  border:1px dashed var(--tinta-20)}
+.g-cheia.claro .slot b{color:var(--tinta)}
+.g-cheia.claro .slot s{color:var(--tinta-45)}
 
 .chrome,.g-cheia .ov,.g-cheia .full:after{transition:opacity .55s cubic-bezier(.4,0,.2,1)}
 body.em-cheia.ocioso .chrome,
