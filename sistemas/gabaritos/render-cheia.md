@@ -30,6 +30,7 @@ Módulo que roda sozinho: `../../modulos/render-cheia.html`.
 | `h2` | o título, sobre a imagem, no pé |
 | `cap` | a legenda. **Explica a decisão, não descreve a foto** |
 | `lbl` | o nome do slot, quando a imagem ainda não existe |
+| `claro` | `1` troca a moldura escura por campo Cal e devolve o chrome ao escuro. **É o modo do desenho de traço** — planta, corte, fachada, mosaico de pranchas —, sempre com imagem de fundo transparente. Ver *desenho de traço* no `../DECK-MONTAR.md` |
 
 Sem `h2` e sem `cap` o slide é só a imagem — e isso é legítimo no meio de uma
 sequência, para não repetir o mesmo rótulo quatro vezes seguidas.

@@ -1201,6 +1201,32 @@ body.em-imagem .chrome.pe{
   text-transform:lowercase;font-size:var(--fs-cap);color:var(--papel)}
 .g-cheia .slot s{text-decoration:none;font-family:var(--f-mono);
   font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:var(--papel-45)}
+/* ═══ cheia CLARO — desenho de fundo branco pede slide branco ══════════
+   Regra do Michel, 10/09/2026, montando a Fazenda Lageado: planta, corte,
+   fachada e mosaico de pranchas são traço preto sobre papel; postos sobre
+   a moldura escura do `cheia` liam como negativo. `claro:1` no slide troca
+   o campo por Cal e desfaz, só ali, tudo o que o `em-imagem` inverteu — o
+   véu do pé, o gradiente do topo, o chrome e o logotipo do canto.
+   Antes disto a saída era escurecer o pé do próprio arquivo de imagem, o
+   que resolvia na tela e sujava o acervo de desenho.                     */
+.g-cheia.claro{background:var(--papel)}
+.g-cheia.claro .full:after{
+  background:linear-gradient(var(--papel-90) 0,var(--papel-45) 8%,transparent 20%)}
+.g-cheia.claro .ov{
+  background:linear-gradient(transparent,var(--papel-60) 44%,var(--papel-90) 100%)}
+.g-cheia.claro .ov h2{color:var(--tinta)}
+.g-cheia.claro .ov .cap{color:var(--tinta-70)}
+body.em-imagem.claro .chrome{color:var(--tinta-80)}
+body.em-imagem.claro .chrome.topo{
+  background:linear-gradient(var(--papel-90) 0,var(--papel-50) 46%,transparent 100%)}
+body.em-imagem.claro .chrome.pe{
+  background:linear-gradient(transparent 0,var(--papel-40) 60%,var(--papel-80) 100%)}
+body.em-imagem.claro .chrome,
+.g-cheia.claro .ov h2,.g-cheia.claro .ov .cap{
+  text-shadow:0 1px 3px var(--papel-70),0 2px 14px var(--papel-45)}
+body.em-imagem.claro .marca .marca-lk{
+  --tinta:initial;--primaria:initial;--acento:initial;color:var(--tinta)}
+
 .chrome,.g-cheia .ov,.g-cheia .full:after{transition:opacity .55s cubic-bezier(.4,0,.2,1)}
 body.em-cheia.ocioso .chrome,
 body.em-cheia.ocioso .slide.ativo .ov,
@@ -2816,7 +2842,7 @@ secs.forEach((sc,i)=>{const d=document.createElement('span');d.className='sdot';
    próprio slide, e o console recebe a pilha. */
 const tplSeguro=s=>{try{return tpl(s)}catch(e){console.error('deck · '+s.g,e);
   return aviso(s,'gabarito '+s.g+' quebrou','<code>'+String(e.message).replace(/</g,'&lt;')+'</code>')}};
-palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}${s.dois?' dois':''}" data-i="${i}">${tplSeguro(s)}</section>`).join('');
+palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}${s.dois?' dois':''}${s.claro?' claro':''}" data-i="${i}">${tplSeguro(s)}</section>`).join('');
 const sl=[...document.querySelectorAll('.slide')];
 sl.forEach(el=>[...el.querySelectorAll('.rev')].forEach((r,j)=>r.style.setProperty('--i',Math.min(j,10))));
 sl.forEach((el,i)=>{if(DECK[i].g==='mapa')ligaHover(el)});
@@ -3012,6 +3038,11 @@ function go(i,tudo){
      depois com o `modelo-3d`. */
   document.body.classList.toggle('em-imagem',
     s.g==='cheia' || s.g==='earth-3d' || s.g==='modelo-3d');
+  /* `claro` = a imagem tem fundo branco, então o slide também. Regra do
+     Michel, 10/09/2026: desenho de traço sobre campo escuro é leitura
+     errada — planta, corte e fachada pedem campo claro. Inverte de volta o
+     que o `em-imagem` inverteu: chrome, véus e logotipo do canto. */
+  document.body.classList.toggle('claro', !!s.claro);
   document.body.classList.toggle('fundo-div',divFundo);
   document.body.classList.toggle('fundo-trama',trama);
   /* cada canvas tem o seu conjunto de imagens e a sua paleta, fixados no

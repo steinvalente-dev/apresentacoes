@@ -62,10 +62,11 @@ restrição vale para o *endereço da página*, não para quem está na frente d
 Decisão do Michel, 10/09/2026. **A sessão não inventa coordenada e não pede o
 que já está registrado.** Antes de escrever o slide, nesta ordem:
 
-1. **Procurar no Notion.** O projeto tem a coordenada na própria página, na base
-   *Projetos — <frente>*: campo de endereço, que guarda
-   `place:Endereço:latitude` e `place:Endereço:longitude` junto do endereço por
-   extenso. Uma consulta, e normalmente acaba aqui.
+1. **Procurar no Notion.** Na página do projeto, base *Projetos — <frente>*, e
+   **nesta ordem**: o campo **`Coordenada`**, que o Michel preenche com o ponto
+   que a peça deve mostrar (`lat, lng` em texto), e só depois o campo de
+   endereço (`place:Endereço:latitude` / `longitude`), que é a localização
+   postal. Uma consulta, e normalmente acaba aqui.
 2. **Não achou? Perguntar ao Michel.** Uma linha, direta, dizendo que a página
    do projeto no Notion não tem o endereço preenchido.
 3. **Ele não respondeu? Deduzir do material que existe** — KML do levantamento,

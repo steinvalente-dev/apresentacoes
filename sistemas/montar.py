@@ -104,12 +104,29 @@ def eh_arquivo(v):
     return isinstance(v, str) and v and not v.startswith(('http://', 'https://', 'data:', '../', '/'))
 
 
+def tem_alfa(caminho):
+    """Imagem com transparência não pode virar JPEG: o fundo vira preto.
+    Desenho de traço e ortofoto recortada chegam assim de propósito — é o
+    slide que põe o campo, não o arquivo (regra do Michel, 10/09/2026)."""
+    from PIL import Image
+    try:
+        with Image.open(caminho) as im:
+            return im.mode in ('RGBA', 'LA', 'PA') or 'transparency' in im.info
+    except Exception:
+        return False
+    finally:
+        if hasattr(caminho, 'seek'):
+            caminho.seek(0)
+
+
 def redimensiona(caminho, largura, q, fmt='JPEG'):
     from PIL import Image, ImageOps
     im = Image.open(caminho)
     im = ImageOps.exif_transpose(im)
     if fmt == 'JPEG' and im.mode not in ('RGB', 'L'):
         im = im.convert('RGB')
+    if fmt == 'WEBP' and im.mode not in ('RGB', 'RGBA'):
+        im = im.convert('RGBA' if im.mode in ('LA', 'PA') else 'RGB')
     if largura and im.width > largura:
         im = im.resize((largura, round(im.height * largura / im.width)), Image.LANCZOS)
     b = io.BytesIO()
@@ -200,13 +217,14 @@ def processa_imagens(jobs, pasta_img, saida):
         if (v, perfil) in cache:
             continue
         larg, q = RESIZE[perfil]
-        fmt = 'WEBP' if perfil == 'fundo' else 'JPEG'
         if v.startswith('data:image/'):
             arq = io.BytesIO(base64.b64decode(v.split(',', 1)[1]))
         else:
             arq = pasta_img / v
             if not arq.is_file():
                 faltam.append(v); cache[(v, perfil)] = None; continue
+        # transparência sobrevive: WEBP. Sem ela, JPEG, que é mais leve.
+        fmt = 'WEBP' if (perfil == 'fundo' or tem_alfa(arq)) else 'JPEG'
         dados = redimensiona(arq, larg, q, fmt)
         cache[(v, perfil)] = (dados, fmt)
         total += (len(dados) + 2) // 3 * 4      # o que a imagem vai pesar em base64

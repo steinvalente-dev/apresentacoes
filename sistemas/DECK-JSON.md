@@ -66,7 +66,10 @@ Tabela completa (campos, obrigatórios, aridade dos itens) em `DECK-MONTAR.md`, 
 `<!-- GABARITOS:INICIO -->` e `<!-- GABARITOS:FIM -->`. Os do dia a dia: `capa sumario(itens 3)
 divisor(dt) frase lista(itens 2) trio(itens 2) tabela(cols+linhas) cheia(src) duo(figs 4 + leg)
 prancha(cols é NÚMERO) fim(itens 2)`. Com máquina própria, ler `gabaritos/<nome>.md` antes:
-`earth-3d modelo-3d mapa prancha`. Gerais: `sec kick t sub esc terra trama fundo div nota fecho pre largo`.
+`earth-3d modelo-3d mapa prancha`. Gerais: `sec kick t sub esc terra trama fundo div nota fecho pre largo`, mais `claro` (só em `cheia`).
+- **Desenho de traço** (planta, corte, fachada, mosaico): `{"g":"cheia","claro":1}` + imagem **com alfa**, sem
+  papel branco embutido e com margem transparente. O montar grava WEBP quando a imagem tem transparência.
+  Receita e a armadilha do traço que some: `DECK-MONTAR.md`, seção *desenho de traço*.
 
 ## meta.json
 

@@ -261,6 +261,37 @@ senão as plantas não se registram de um slide para o outro. Método no
 
 ---
 
+## ⚑ DESENHO DE TRAÇO: fundo transparente, slide claro (10/09/2026)
+
+Regra do Michel, dada montando a Fazenda Lageado. Planta, corte, fachada,
+implantação e mosaico de pranchas são **traço escuro sobre papel**. Três coisas,
+e as três juntas:
+
+**1 · O campo claro é do slide, não do arquivo.** `{g:'cheia', claro:1}` — o
+slide vira campo Cal e o chrome volta a ser escuro. Antes disso a saída era
+escurecer o pé do próprio arquivo de imagem para a legenda aparecer: resolvia na
+tela e sujava o acervo de desenho com um degradê que não é do desenho.
+
+**2 · A imagem entra com alfa, não com papel branco.** Só a tinta viaja; o campo
+vem do slide. Papel branco embutido desenha um retângulo branco sobre o Cal, que
+aparece. O `montar.py` detecta transparência e grava **WEBP** em vez de JPEG —
+JPEG não tem alfa e o fundo sairia preto. Vale igual para foto recortada, como
+uma ortofoto com máscara.
+
+**3 · Linha fina não pode sumir.** Reduzir um A1 de 400 dpi para 2200 px apaga
+hairline: em 10/09 uma parede inteira da casa sede desapareceu do render, e foi o
+Michel que viu. O antídoto é **filtro de mínimo (raio 1) na resolução alta antes
+de reduzir** — engrossa o traço escuro em 1 px onde ele ainda existe — e, ao
+converter papel em alfa, uma **gama de ~0,7** no canal alfa, que levanta o cinza
+fraco. Conferir sempre em zoom antes de entregar: o erro é silencioso e some no
+tamanho da tela.
+
+**A margem também é transparente.** Para o desenho não encostar na borda nem
+sumir sob a legenda, a folga entra como pixel transparente no próprio arquivo
+(~5,5% nas laterais e no topo, ~15% no pé). Campo pintado nenhum.
+
+---
+
 ## Campos que valem em qualquer gabarito
 
 | campo | efeito |
@@ -270,6 +301,7 @@ senão as plantas não se registram de um slide para o outro. Método no
 | `t` | o título. Aceita `<br>` e `<mark>` |
 | `sub` | a linha de apoio |
 | `esc` | tema escuro neste slide |
+| `claro:1` | **só em `cheia`**: campo Cal em vez da moldura escura, e o chrome volta a ser escuro. É o par da imagem com fundo transparente — ver abaixo |
 | `terra` | tema acento neste slide |
 | `trama` | trama de fundo |
 | `fundo:true` | liga o morph neste slide |

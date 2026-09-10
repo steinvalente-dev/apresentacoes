@@ -1,10 +1,10 @@
 {
- "projeto": "esqueleto de referência",
- "nome": "michel stein_",
- "pranchas": 8,
- "peso": 0.78,
- "data": "09.09.2026",
- "frente": "michel-stein",
- "cliente": false,
- "sub": "Peça de referência, dados fictícios. Mostra o que a frente traz sozinha: capa-morph com as imagens do módulo, tokens, chrome, divisor, frase, lista e fecho."
+  "projeto": "esqueleto de referência",
+  "nome": "michel stein_",
+  "pranchas": 8,
+  "peso": 0.78,
+  "data": "10.09.2026",
+  "frente": "michel-stein",
+  "cliente": false,
+  "sub": "Peça de referência, dados fictícios. Mostra o que a frente traz sozinha: capa-morph com as imagens do módulo, tokens, chrome, divisor, frase, lista e fecho."
 }
