@@ -19,7 +19,9 @@
    ── DOMÍNIOS CADASTRADOS NA CHAVE ────────────────────────────────────
    https://steinvalente-dev.github.io/*
    https://michel-stein.netlify.app/*
-   http://localhost:8765/*          ← ensaio local, via `npx http-server`
+   http://localhost:8765/*          ← ensaio local. Na máquina do Michel
+                                      não há Node nem Python: usar
+                                      ferramentas/servir-local/servir.ps1
 
    ⚑ DOMÍNIO NOVO EXIGE CADASTRO ANTES DE A PEÇA IR AO AR.
    Um repositório da Sarasá, ou de qualquer frente nova, precisa entrar
@@ -43,6 +45,13 @@
    Trocar a chave: gerar nova no console, cadastrar os mesmos domínios e
    a mesma restrição de API, substituir a linha abaixo, publicar, e só
    então apagar a antiga. Nessa ordem — apagar antes derruba as peças no ar.
+   ── FORA DO ACERVO A CHAVE VAI EMBUTIDA ──────────────────────────────
+   Peça publicada em outro domínio não alcança este arquivo por caminho
+   relativo. O `montar.py` insere o conteúdo daqui no lugar da tag
+   <script src="../modulos/ms-maps-chave.js">. Consequência: a chave
+   aparece em texto claro no HTML publicado, e a varredura de segredos do
+   Netlify barra o build com "Exposed secrets detected". É falso positivo
+   — a isenção está no netlify.toml do site. Nada a esconder: ver acima.
    ═══════════════════════════════════════════════════════════════════════ */
 window.MS_MAPS = {
   chave: 'AIzaSyD4wz67qgTlOGVDOuDxcTPSnHT30UjJXg0',

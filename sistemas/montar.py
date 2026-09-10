@@ -436,20 +436,28 @@ def main():
         esq = colar(esq, 'map', f'const MAP = {js(dj["map"])};')
     titulo = html.escape(re.sub(r'<[^>]+>', ' ', dj.get('titulo') or dj['projeto']).strip())
     esq = re.sub(r'<title>.*?</title>', f'<title>{titulo}</title>', esq, count=1, flags=re.S)
-    # ── a chave da Maps entra EMBUTIDA, não por caminho relativo ──
-    # `../modulos/ms-maps-chave.js` só resolve para peça que mora dentro deste
-    # repositório. Na área de cliente, no Netlify, o caminho não existe e o
-    # slide 3D morria com "sem chave da Maps Platform" — mesmo defeito de
-    # classe da capa servida por caminho. A chave é restrita por referrer:
-    # embutir não a expõe mais do que servi-la. (Michel, 10/09/2026.)
-    m_chave = re.search(r'[ \t]*<script src="\.\./modulos/ms-maps-chave\.js"></script>\n?', esq)
-    if m_chave:
-        p_chave = raiz / 'modulos' / 'ms-maps-chave.js'
-        if p_chave.is_file():
-            esq = esq.replace(m_chave.group(0),
-                              '<script>\n' + p_chave.read_text(encoding='utf-8') + '\n</script>\n')
-        else:
-            avisos.append('modulos/ms-maps-chave.js não encontrado — slide 3D vai abrir sem chave')
+    # ── a chave da Maps: por caminho aqui dentro, EMBUTIDA lá fora ──
+    # `../modulos/ms-maps-chave.js` resolve para peça que mora neste
+    # repositório, e é assim que tem de ser: trocar a chave um dia é editar um
+    # arquivo, não vinte decks. Na área de cliente, no Netlify, o caminho não
+    # existe — o slide 3D morria com "sem chave da Maps Platform", mesmo
+    # defeito de classe da capa servida por caminho. Só nesse caso a chave vai
+    # embutida. Ela é restrita por referrer: embutir não a expõe mais do que
+    # servi-la. (Michel, 10/09/2026.)
+    #
+    # ⚑ Embutir DENTRO do acervo é erro duplo: duplica a chave e faz a
+    # guarda do repositório público barrar o push, com razão. Foi o que
+    # aconteceu com os dois esqueletos de 09/09, publicados pela API sem
+    # passar pela guarda.
+    if a.cliente:
+        m_chave = re.search(r'[ \t]*<script src="\.\./modulos/ms-maps-chave\.js"></script>\n?', esq)
+        if m_chave:
+            p_chave = raiz / 'modulos' / 'ms-maps-chave.js'
+            if p_chave.is_file():
+                esq = esq.replace(m_chave.group(0),
+                                  '<script>\n' + p_chave.read_text(encoding='utf-8') + '\n</script>\n')
+            else:
+                avisos.append('modulos/ms-maps-chave.js não encontrado — slide 3D vai abrir sem chave')
 
     if a.cliente:
         if LINHA_VOLTAR not in esq:

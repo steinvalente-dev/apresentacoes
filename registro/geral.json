@@ -67,16 +67,16 @@
   {
    "aba": "deck",
    "grupo": "gabaritos",
-   "nome": "mapa · earth 3d ⚠ protótipo",
-   "desc": "NÃO VIGENTE. O mesmo slide com a malha fotorrealista do Google Earth no lugar do satélite chapado. Fica em preview do Google, exige chave com billing e não vai para peça de cliente enquanto estiver assim",
+   "nome": "mapa · earth 3d ⚠ em prova",
+   "desc": "NÃO VIGENTE, mas saiu da gaveta: usado em peça de cliente pela primeira vez em 10/09/2026, ainda sem conferência do Michel. Segue em preview do Google e exige chave com billing. Fora do acervo a chave vai embutida na peça, e isso faz a varredura de segredos do Netlify barrar o build — falso positivo, isenção já posta no netlify.toml do site",
    "arq": "sistemas/gabaritos/mapa-earth-3d.md",
    "ver": "modulos/mapa-earth-3d.html"
   },
   {
    "aba": "deck",
    "grupo": "gabaritos",
-   "nome": "\u2691 bancada \u00b7 anota\u00e7\u00e3o no earth 3d",
-   "desc": "N\u00c3O \u00c9 PE\u00c7A. Bancada de laborat\u00f3rio: prova que a anota\u00e7\u00e3o da casa \u2014 caixa Vinho, haste e pegada do lote \u2014 desenha dentro do visor 3d, e qual rota da API aceita DOM nosso: Marker3DElement recusa, PopoverElement ancorado em coordenada aceita. Abre j\u00e1 desenhada, com bot\u00f5es para ligar e desligar cada camada e uma sonda que imprime a superf\u00edcie real da maps3d. Uma carga 3D serve uma hora de ajuste, porque a camada \u00e9 fun\u00e7\u00e3o reexecut\u00e1vel",
+   "nome": "⚑ bancada · anotação no earth 3d",
+   "desc": "NÃO É PEÇA. Bancada de laboratório: prova que a anotação da casa — caixa Vinho, haste e pegada do lote — desenha dentro do visor 3d, e qual rota da API aceita DOM nosso: Marker3DElement recusa, PopoverElement ancorado em coordenada aceita. Abre já desenhada, com botões para ligar e desligar cada camada e uma sonda que imprime a superfície real da maps3d. Uma carga 3D serve uma hora de ajuste, porque a camada é função reexecutável",
    "arq": "sistemas/gabaritos/mapa-earth-3d.md",
    "ver": "modulos/ensaio-anotacoes-earth.html"
   },
@@ -240,6 +240,13 @@
    "desc": "GH=<token> sistemas/publicar.sh \"mensagem\" [slug] — pull, índice gerado, guarda, tabela de gabaritos, sintaxe, validador da peça, commit, rebase se alguém publicou no meio, push sem force, conferência no ar. É o único jeito de publicar",
    "arq": "sistemas/GITHUB-COMO-TRABALHAR.md",
    "ver": "sistemas/publicar.sh"
+  },
+  {
+   "grupo": "publicação",
+   "nome": "servir-local · ensaiar a peça num endereço",
+   "desc": "A Maps API recusa página aberta do disco: peça com slide 3D só desenha vindo de http, na porta 8765 que é a cadastrada na chave. A máquina do Michel não tem Node nem Python — `npx` e `python -m http.server` não rodam lá. Este é PowerShell puro, copiado para a pasta da peça. Regra maior: nada que se peça a ele rodar na máquina dele pode pressupor gerenciador de pacote",
+   "arq": "ferramentas/servir-local/LEIA-ME.md",
+   "ver": "ferramentas/servir-local/servir.ps1"
   },
   {
    "grupo": "publicação",

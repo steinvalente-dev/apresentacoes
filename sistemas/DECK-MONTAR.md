@@ -174,6 +174,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 | `capa` | nome do projeto, endereço e três metas | `metas` |
 | `divisor` | abre seção e ganha um ponto no chrome | `dn` · `ds` · **`dt`** |
 | `fim` | próximos passos. É o que o cliente leva embora | **`itens` (2)** |
+| `escolha` | a bifurcação: dois ou três botões que saltam para outro trecho. Cada opção declara `para` com o NOME de um gabarito e o motor procura o próximo slide daquele gabarito — nunca índice | `opcoes` |
 | `sumario` | o argumento inteiro em blocos, logo depois da capa | **`itens` (3)** |
 
 **Texto**
@@ -201,6 +202,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 
 | gabarito | o que é | campos próprios |
 |---|---|---|
+| `galeria` | mosaico de miniaturas com lupa: clique abre a vista grande, com setas e contador. As miniaturas entram quando o slide chega, não na carga | `fotos` |
 | `cheia` | o render em tela cheia. É o padrão para render — ver `gabaritos/render-cheia.md` | `cap` · `h2` · `lbl` · `src` |
 | `duo` | duas imagens lado a lado | **`figs` (4)** · **`leg`** |
 | `fotos` | linha do tempo ilustrada | `cols` · **`itens`** |
@@ -254,6 +256,20 @@ precisar da PASTA, não só do `.html`, e se entrega por link. Feito assim na
 EMEI Presidente Dutra: 24 renders, 7 MB de imagem, HTML em 266 KB.
 Peça com slide `earth-3d` já se entrega por link de qualquer forma — a Maps
 API recusa `file://`. Nesse caso a escolha é livre.
+
+**A chave da Maps segue o `--cliente`, e o validador cobra (10/09/2026).**
+Peça deste repositório carrega a chave pela tag
+`<script src="../modulos/ms-maps-chave.js">` — trocar a chave um dia é editar
+um arquivo, não vinte decks. Peça de cliente mora fora daqui, o caminho
+relativo não resolve, e o `montar.py` embute o conteúdo do módulo no lugar da
+tag. Os dois defeitos, ambos vistos no mesmo dia: sem embutir, o slide abriu
+com "Sem chave da Maps Platform" na área de cliente; embutindo aqui dentro, a
+guarda do repositório público barrou o push, com razão. O check `chave-maps`
+agora FALHA nos dois casos, em vez de só avisar.
+
+⚑ **Ensaio local:** `file://` não serve. Na porta 8765, que é a cadastrada —
+aqui `npx --yes http-server -p 8765 -c-1`; **na máquina do Michel não há Node
+nem Python**, e o caminho é `ferramentas/servir-local/servir.ps1`.
 
 **Croqui: recortar todos com o mesmo retângulo**, nunca cada um no seu limite —
 senão as plantas não se registram de um slide para o outro. Método no
@@ -364,8 +380,9 @@ desconhecido ou campo faltando), `undefined`, `console` (zero erro),
 com `--cliente`), `em-imagem`, `hex` (nenhuma cor à mão fora do `:root`),
 `proporcoes` (uma página redimensionada em sete tamanhos — 21:9, 16:9 ×2,
 16:10, 3:2, 4:3 ×2 — todos os passos revelados, transbordo e letterbox
-medidos), `peso` (aviso acima de 8 MB) e `chave-maps` (aviso: peça com
-`earth-3d` se entrega por link). FALHA em qualquer um = não publica. O que
+medidos), `peso` (aviso acima de 8 MB) e `chave-maps` (peça com `earth-3d`: FALHA se a
+chave não chegar pela via certa — tag aqui dentro, embutida com `--cliente`).
+FALHA em qualquer um = não publica. O que
 fazer em cada falha está na tabela do `DECK-JSON.md`.
 
 Peça antiga (anterior a 03/09) não passa no `hex` — tem cor à mão. Não se

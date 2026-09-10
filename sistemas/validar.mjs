@@ -198,9 +198,28 @@ try {
     falhaOuOk('proporcoes', probs, `${VIEWPORTS.length} tamanhos, todos os slides e passos, sem transbordo nem letterbox`);
   }
 
+  /* A chave da Maps tem de chegar ao slide, e por uma via só. Peça de cliente
+     mora fora deste repositório: `../modulos/ms-maps-chave.js` não resolve lá,
+     e o slide abria com "sem chave da Maps Platform" — a chave vai embutida.
+     Peça daqui é o contrário: embutir duplica a chave e faz a guarda do
+     repositório público barrar o push, com razão. Os dois defeitos são de
+     10/09/2026; este check existe para nenhum dos dois voltar. */
   const temEarth = await page.evaluate(() => DECK.some(s => s.g === 'earth-3d'));
-  if (temEarth) marca('chave-maps', 'aviso', 'slide earth-3d: entrega por link; o domínio precisa estar na chave da Maps Platform (modulos/ms-maps-chave.js)');
-  else marca('chave-maps', 'ok', 'sem earth-3d');
+  if (!temEarth) marca('chave-maps', 'ok', 'sem earth-3d');
+  else {
+    const porTag = /<script src="\.\.\/modulos\/ms-maps-chave\.js"><\/script>/.test(html);
+    const embutida = /window\.MS_MAPS\s*=/.test(html);
+    if (cliente && !embutida)
+      marca('chave-maps', 'FALHA', 'peça de cliente com earth-3d e sem a chave embutida: o caminho relativo não resolve fora deste repositório — montar com --cliente');
+    else if (cliente && porTag)
+      marca('chave-maps', 'FALHA', 'peça de cliente ainda com a tag ../modulos/ms-maps-chave.js — o caminho não existe no destino');
+    else if (!cliente && embutida)
+      marca('chave-maps', 'FALHA', 'peça deste repositório com a chave embutida: duplica a chave e a guarda do público barra o push — usar a tag ../modulos/ms-maps-chave.js');
+    else if (!cliente && !porTag)
+      marca('chave-maps', 'FALHA', 'slide earth-3d sem nenhuma via para a chave — falta a tag ../modulos/ms-maps-chave.js');
+    else
+      marca('chave-maps', 'aviso', `earth-3d, chave ${cliente ? 'embutida' : 'por caminho'} — o domínio de destino precisa estar cadastrado na chave (modulos/ms-maps-chave.js)`);
+  }
 
   await page.waitForTimeout(300);
   falhaOuOk('console', [...new Set(consoleErros)].slice(0, 12), 'zero pageerror, zero console.error');

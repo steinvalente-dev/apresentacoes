@@ -280,6 +280,47 @@ privado. O `cartao()` continua aceitando `href` absoluto para link que possa
 ser público (repositório de terceiro, página institucional) — nunca para
 `/cliente/`.
 
+### ⚑ O Netlify barra o build por "segredo exposto"
+
+Deploy que falha com **`Exposed secrets detected`** e
+*"Failed during stage 'building site': Build script returned non-zero exit
+code: 2"* não é crédito acabado nem fila: é a varredura de segredos do
+Netlify, que lê o que vai ao ar e reconhece padrão de chave de API. Ela é
+ligada por padrão e **não avisa antes** — o push é aceito, o arquivo entra no
+repositório, e o site continua servindo a versão anterior calado. Foi assim
+que se perdeu meia manhã em 10/09/2026.
+
+Onde se enxerga: painel do Netlify → o projeto → aba **Deploys**. A primeira
+linha traz o status e o motivo; clicar abre o log. A caixa de cima mostra
+qual commit está *publicado* — se ela está atrás do último commit, há build
+que não completou.
+
+O caso conhecido é a **chave da Maps Platform**: peça com o gabarito
+`earth-3d` fora do acervo carrega a chave embutida (o `montar.py` insere o
+conteúdo de `modulos/ms-maps-chave.js` no lugar da tag, porque o caminho
+relativo não resolve fora daqui), e o `AIza…` em texto claro dispara a
+varredura. **É falso positivo** — chave de Maps é pública por natureza,
+protegida por restrição de referrer, e a justificativa inteira está no
+cabeçalho do próprio `ms-maps-chave.js`.
+
+A isenção está posta no `netlify.toml` do site, com o comentário do porquê:
+
+```toml
+[build.environment]
+  SECRETS_SCAN_OMIT_PATHS = "cliente/**"
+```
+
+Só a área de cliente sai da varredura; o portfólio continua varrido.
+⚑ **Em compensação, segredo de verdade dentro de `cliente/` passa batido.**
+Peça de cliente é bundle estático servido na internet aberta — chave de
+servidor, token e credencial nunca deviam estar lá de qualquer forma, e
+agora nada avisa se estiverem.
+
+Se um dia o motivo for outro, a ordem de conferência é: **Deploys** (build
+falhado ou na fila) → **Builds**, na barra lateral (fila da conta e minutos)
+→ **Usage & billing** (crédito e limite do plano; plano esgotado para os
+deploys sem erro aparente).
+
 ### Binário de trabalho: `entregas/`
 
 `michel-stein-sistemas/entregas/<projeto>/` é a exceção deliberada ao "este
@@ -528,4 +569,5 @@ apagar. Peça ou ferramenta sensível não vai para lá, e isso se avisa
 - **26/08/2026** — testado: `raw`/`blob` de repositório privado devolvem 404 sem sessão de navegador.
 - **29/08/2026** — duas frentes sobrescreveram trabalho uma da outra três vezes num dia. Nasceu "Duas sessões, um repositório".
 - **02/09/2026** — auditoria: `casa-ittb`, `tokyo-centro` e `casa-tavares` eram peças de cliente em repositório público; foram para `/cliente/` do site, histórico reescrito, guarda `guarda-publico.py` criada. `robots.txt` do site deixou de listar `/cliente/`. Peça fora do público deixou de ser registrada no `index.html`. Runbook `PUBLICAR-APRESENTACOES.md` fundido neste; regra de versão × revisão decidida.
+- **10/09/2026** — o Netlify parou de publicar duas vezes seguidas sem dar sintoma: `Exposed secrets detected` na chave da Maps embutida numa peça da área de cliente. Falso positivo; isenção `SECRETS_SCAN_OMIT_PATHS = "cliente/**"` no `netlify.toml`, com o porquê no comentário. Nasceu a seção "O Netlify barra o build por segredo exposto" e a ordem Deploys → Builds → Usage & billing. No mesmo dia descobriu-se que a máquina do Michel **não tem Node** (a ausência de Python já estava registrada): `npx` não roda lá, e o ensaio local de peça com slide 3D passou a ser `ferramentas/servir-local/servir.ps1`, PowerShell puro. Regra que fica: nada que se peça ao Michel rodar na máquina dele pode pressupor gerenciador de pacote.
 - **04/09/2026** — o detector da página acusou `esqueleto/deck-esqueleto.html` como órfã. A causa era outra e maior: `registro/geral.json` nunca chegou ao repositório — o `_*` do `.gitignore` o engoliu calado na fase 2, e as abas **deck** e **sistema** ficaram com 2 dos 33 documentos desde 03/09, sem dar sintoma. Restaurados os 31 do índice anterior e os 4 da fase 2 que a primeira restauração não tinha. O arquivo virou `registro/geral.json` (sem `_`, sem exceção no `.gitignore`); o `montar-indice.py` barra o build se qualquer arquivo que ele lê estiver ignorado pelo git e confere a cobertura de todo `.md`/`.html` rastreado; o `publicar.sh` mostra o que o `.gitignore` engole; a lista `ignora` sai no `dados.json` e o detector da página lê de lá. Regra: **nada que o sistema lê começa por `_`**.

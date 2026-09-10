@@ -1,8 +1,24 @@
-# gabarito `earth-3d` · visor fotorrealista — ⚠ PROTÓTIPO, NÃO VIGENTE
+# gabarito `earth-3d` · visor fotorrealista — ⚠ EM PROVA, NÃO VIGENTE
 
-**Não usar em peça de cliente.** Este arquivo existe para registrar um ensaio
-de 30/08/2026 e o que ele custa. O vigente para localização continua sendo
+**Status mudou em 10/09/2026.** Até então era protótipo de gaveta, com a nota
+"não usar em peça de cliente". Foi usado numa peça de cliente pela primeira
+vez nessa data, por decisão do Michel, e **ainda não voltou conferido por
+ele** — enquanto não voltar, não é vigente e não se propõe sozinho: quem
+quiser usar pergunta antes. O vigente para localização continua sendo
 `mapa-localizacao.md`, ao lado.
+
+Duas coisas quebraram nessa primeira vez, e as duas estão resolvidas no
+sistema. Quem for repetir precisa das duas — detalhe na seção "A chave",
+adiante:
+
+1. **a chave tem de ficar embutida na peça.** O `<script src="../modulos/
+   ms-maps-chave.js">` do esqueleto não resolve fora do acervo; o `montar.py`
+   passou a inserir o conteúdo do módulo no lugar da tag. Sem isso o slide
+   abre com "Sem chave da Maps Platform"
+2. **a varredura de segredos do Netlify barra o build.** Ela reconhece o
+   padrão `AIza…` no que vai ao ar e sai com código 2, sem publicar. É falso
+   positivo — chave de Maps é pública por natureza —, e a isenção está posta
+   no `netlify.toml` do site
 
 Módulo que roda sozinho: `../../modulos/mapa-earth-3d.html`.
 
@@ -131,9 +147,19 @@ Régua para julgar o número: uma tarde inteira de testes e verificação deu
 Se a peça bater no teto, o mapa simplesmente não abre. Antes de subir o
 número, olhar **Metrics**: pode ser sucesso legítimo, pode ser vazamento.
 
-**Ensaio local roda na porta 8765**, que é a cadastrada: na pasta da peça,
-`npx --yes http-server -p 8765 -c-1`, e abrir `http://localhost:8765/`.
-Outra porta exige cadastrar outra porta. A máquina do Michel não tem Python.
+**Ensaio local roda na porta 8765**, que é a cadastrada. Outra porta exige
+cadastrar outra porta no console.
+
+Aqui, no contêiner, `npx --yes http-server -p 8765 -c-1` na pasta da peça.
+
+**Na máquina do Michel, não.** Ela não tem Node *nem* Python — confirmado em
+10/09/2026, quando `npx` voltou "não é reconhecido". Lá o ensaio é
+`ferramentas/servir-local/servir.ps1`, PowerShell puro, copiado para a pasta
+da peça:
+
+```
+powershell -ExecutionPolicy Bypass -File servir.ps1
+```
 
 **A localização continua fora do repositório de método.** Coordenada de
 projeto entra na peça do projeto, não no módulo nem no gabarito.

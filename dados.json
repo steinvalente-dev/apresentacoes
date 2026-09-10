@@ -66,8 +66,8 @@
     {
      "nome": "Estúdio Sarasá",
      "pranchas": 8,
-     "peso": 0.87,
-     "data": "09.09.2026",
+     "peso": 0.88,
+     "data": "10.09.2026",
      "href": "esqueleto-sarasa/apresentacao.html",
      "frente": "sarasa",
      "sub": "Peça de referência, dados fictícios. Mostra o que a frente traz sozinha: capa-morph com as imagens do módulo, tokens, chrome, divisor, frase, lista e fecho."
@@ -76,7 +76,7 @@
      "nome": "michel stein_",
      "pranchas": 8,
      "peso": 0.78,
-     "data": "09.09.2026",
+     "data": "10.09.2026",
      "href": "esqueleto-michel-stein/apresentacao.html",
      "frente": "michel-stein",
      "sub": "Peça de referência, dados fictícios. Mostra o que a frente traz sozinha: capa-morph com as imagens do módulo, tokens, chrome, divisor, frase, lista e fecho."
@@ -207,8 +207,8 @@
   {
    "aba": "deck",
    "grupo": "gabaritos",
-   "nome": "mapa · earth 3d ⚠ protótipo",
-   "desc": "NÃO VIGENTE. O mesmo slide com a malha fotorrealista do Google Earth no lugar do satélite chapado. Fica em preview do Google, exige chave com billing e não vai para peça de cliente enquanto estiver assim",
+   "nome": "mapa · earth 3d ⚠ em prova",
+   "desc": "NÃO VIGENTE, mas saiu da gaveta: usado em peça de cliente pela primeira vez em 10/09/2026, ainda sem conferência do Michel. Segue em preview do Google e exige chave com billing. Fora do acervo a chave vai embutida na peça, e isso faz a varredura de segredos do Netlify barrar o build — falso positivo, isenção já posta no netlify.toml do site",
    "arq": "sistemas/gabaritos/mapa-earth-3d.md",
    "ver": "modulos/mapa-earth-3d.html"
   },
@@ -415,6 +415,13 @@
   },
   {
    "grupo": "publicação",
+   "nome": "servir-local · ensaiar a peça num endereço",
+   "desc": "A Maps API recusa página aberta do disco: peça com slide 3D só desenha vindo de http, na porta 8765 que é a cadastrada na chave. A máquina do Michel não tem Node nem Python — `npx` e `python -m http.server` não rodam lá. Este é PowerShell puro, copiado para a pasta da peça. Regra maior: nada que se peça a ele rodar na máquina dele pode pressupor gerenciador de pacote",
+   "arq": "ferramentas/servir-local/LEIA-ME.md",
+   "ver": "ferramentas/servir-local/servir.ps1"
+  },
+  {
+   "grupo": "publicação",
    "nome": "registro por frente e índice gerado",
    "desc": "Peça se registra pelo <slug>/meta.json; documento se registra em registro/<frente>.json; dados.json é gerado por montar-indice.py e o index.html só lê. O build barra órfã, documento sem registro e arquivo que o .gitignore engoliria",
    "arq": "registro/LEIA-ME.md",
@@ -607,5 +614,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-09-09T21:11:20+00:00"
+ "gerado": "2026-09-10T19:05:20+00:00"
 }
