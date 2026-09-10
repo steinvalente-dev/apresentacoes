@@ -57,6 +57,37 @@ restrição vale para o *endereço da página*, não para quem está na frente d
 
 ---
 
+## De onde saem `lat` e `lng` — a ordem, e ela não se pula
+
+Decisão do Michel, 10/09/2026. **A sessão não inventa coordenada e não pede o
+que já está registrado.** Antes de escrever o slide, nesta ordem:
+
+1. **Procurar no Notion.** O projeto tem a coordenada na própria página, na base
+   *Projetos — <frente>*: campo de endereço, que guarda
+   `place:Endereço:latitude` e `place:Endereço:longitude` junto do endereço por
+   extenso. Uma consulta, e normalmente acaba aqui.
+2. **Não achou? Perguntar ao Michel.** Uma linha, direta, dizendo que a página
+   do projeto no Notion não tem o endereço preenchido.
+3. **Ele não respondeu? Deduzir do material que existe** — KML do levantamento,
+   GeoTIFF georreferenciado, matrícula, endereço escrito em documento do
+   projeto — e **dizer de onde veio e com que precisão**. Coordenada deduzida
+   entra marcada, nunca como fato confirmado.
+4. Achando a coordenada fora do Notion, **gravar no Notion**: da próxima vez o
+   passo 1 resolve.
+
+⚑ **A coordenada do endereço não é a coordenada do slide.** O campo de endereço
+do Notion costuma cair na portaria, no acesso ou no centro do CEP — e o visor
+3D tem de abrir sobre o que está sendo apresentado. Na Fazenda Lageado a
+diferença medida foi de ~1,6 km: o endereço registrado é
+−22,8587 / −48,4351 (portaria do câmpus) e o núcleo histórico, pelo KML da
+ortofoto, está em −22,8441 / −48,4271.
+
+**A regra que resolve isso:** `lat`/`lng` recebem o **centroide do que a peça
+mostra** — quando houver levantamento georreferenciado, o dele; o `lead` recebe
+o **endereço por extenso do Notion**. Os dois campos, as duas fontes, cada uma
+no seu lugar. Sem levantamento, a coordenada do Notion serve, e o orbital é
+conferido antes de publicar.
+
 ## A chave
 
 **Decisão de 30/08/2026, tomada pelo Michel, que muda a regra do acervo.**
