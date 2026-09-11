@@ -198,6 +198,45 @@ powershell -ExecutionPolicy Bypass -File servir.ps1
 **A localização continua fora do repositório de método.** Coordenada de
 projeto entra na peça do projeto, não no módulo nem no gabarito.
 
+## A camada de nomes: o botão e a transparência
+
+Duas coisas de 11/09/2026, as duas pedido do Michel depois de ver nove
+anotações na mesma tela.
+
+**Botão `nomes`, ao lado de RECENTRAR e ORBITAR.** Aparece sozinho quando o
+slide declara `anot` ou `ruas`, e some quando não declara — não há campo para
+ligar. Desligar **apaga a camada inteira** (caixas, hastes e pegadas) e para o
+relógio do resolvedor de colisão; ligar redesenha. Não custa carga 3D: os
+popovers são DOM e as polilinhas são objetos da malha já carregada.
+
+O estado é de sessão e **sobrevive à desmontagem do visor**: quem desligou os
+nomes no slide, foi adiante e voltou, não os vê reaparecer. Por isso
+`anotLiga` mora no módulo, não no slide.
+
+O indicador acende quando os nomes estão NA TELA — mesma leitura do orbitar.
+Numa reunião a pergunta é "estão ligados?", não "o que este botão faz?".
+
+**Fundo translúcido.** As caixas eram opacas. Com nove anotações num núcleo de
+200 m elas encostam em algum ângulo da órbita, e o amontoado vira parede.
+Agora: `obra` a **82%** da primária, `ctx` a **78%** do papel, `rua` a **62%**
+da tinta. O telhado atravessa e o olho separa uma caixa da outra.
+
+⚑ **A borda compensa o que a opacidade perdeu.** Caixa translúcida sem contorno
+some sobre telhado claro — foi por isso que a borda subiu (`--papel-25` na
+obra, `--tinta-20` no contexto) e a sombra desceu. Sombra forte é o que mais
+suja quando as caixas se tocam; ela existia para separar caixa de malha, e a
+borda faz isso melhor sem espalhar.
+
+⚑ **Não descer de ~78%.** Abaixo disso o texto começa a disputar com a textura
+da malha, e o pino existe para ser lido do fundo de uma sala.
+
+**O que ainda NÃO existe:** desempate entre as anotações de projeto. O
+resolvedor de colisão só faz rua ceder para lote e contexto; duas caixas de
+obra sobrepostas continuam sobrepostas. O anteparo hoje é manual — alturas de
+haste diferentes, declaradas em `h`, escalonadas para as caixas não pousarem
+na mesma faixa da tela. Escondar nome automaticamente no meio de uma
+apresentação é decisão do Michel, não do gabarito.
+
 ## `compacto` — quando o endereço sai da tela
 
 Campo booleano do slide, 11/09/2026, pedido do Michel: *"elimine o endereço.

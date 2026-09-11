@@ -1645,6 +1645,13 @@ body.no-fim #msgraf{opacity:.18}
 .g-earth-3d .orb i{display:block;width:7px;height:7px;border-radius:50%;
   background:var(--papel);opacity:.4;transition:opacity .2s}
 .g-earth-3d.orbitando .orb i{opacity:1;animation:pulsa 1.9s ease-in-out infinite}
+/* ── LIGAR E DESLIGAR OS NOMES — 11/09/2026, pedido do Michel.
+   Mesmo indicador do orbitar, e ACESO quando os nomes estão na tela: numa
+   reunião a pergunta é "estão ligados?", não "o que este botão faz?". O
+   botão só existe no slide que declara `anot` ou `ruas`. */
+.g-earth-3d .pin i{display:block;width:7px;height:7px;border-radius:50%;
+  background:currentColor;opacity:.28;transition:opacity .2s ease}
+.g-earth-3d.com-anot .pin i{opacity:1}
 @keyframes pulsa{50%{opacity:.3}}
 .g-earth-3d .rec.feito{border-color:var(--papel);color:#fff} /* #fff: pico de luz do "feito", não é cor de marca */
 /* estado de carga e de falha. Enquanto carrega não há o que navegar: o
@@ -1702,13 +1709,27 @@ body.no-fim #msgraf{opacity:.18}
    vizinho é contexto, a rua é quase infraestrutura. */
 .g-earth-3d .anot{font-family:var(--f-corpo);line-height:1.15;pointer-events:none;
   white-space:nowrap;border-radius:2px}
-.g-earth-3d .anot.obra{background:var(--primaria);color:var(--papel);font-weight:600;
+/* ⚑ FUNDO LEVEMENTE TRANSPARENTE — 11/09/2026, pedido do Michel: *"seria
+   possível deixar o fundo dos pinos levemente transparente? eles ficam um
+   pouquinho poluídos quando estão próximos um do outro"*.
+   Uma peça com nove anotações num núcleo de 200 m tem caixas encostando em
+   algum ângulo da órbita. Opaco, o amontoado vira parede; a 80% o telhado
+   atravessa e o olho separa uma caixa da outra.
+   O contorno COMPENSA o que a opacidade perdeu: sobre telhado claro uma
+   caixa translúcida sem borda some. Daí a borda subir, e a sombra descer —
+   sombra forte é o que mais suja quando as caixas se tocam.
+   Não se vai abaixo de ~78%: o texto começa a disputar com a textura da
+   malha, e o pino existe para ser lido de longe, numa sala. */
+.g-earth-3d .anot.obra{background:color-mix(in srgb,var(--primaria) 82%,transparent);
+  color:var(--papel);font-weight:600;
   font-size:clamp(12px,1.05cqw,16px);letter-spacing:-.01em;padding:.5em .9em;
-  box-shadow:0 2px 14px var(--tinta-60);border:1px solid var(--papel-15)}
-.g-earth-3d .anot.ctx{background:var(--papel-90);color:var(--tinta);font-weight:600;
+  box-shadow:0 1px 9px var(--tinta-45);border:1px solid var(--papel-25)}
+.g-earth-3d .anot.ctx{background:color-mix(in srgb,var(--papel) 78%,transparent);
+  color:var(--tinta);font-weight:600;
   font-size:clamp(10.5px,.88cqw,13.5px);padding:.45em .8em;
-  box-shadow:0 2px 10px var(--tinta-50)}
-.g-earth-3d .anot.rua{background:var(--tinta-70);color:var(--papel-90);
+  box-shadow:0 1px 7px var(--tinta-35);border:1px solid var(--tinta-20)}
+.g-earth-3d .anot.rua{background:color-mix(in srgb,var(--tinta) 62%,transparent);
+  color:var(--papel-90);
   font-family:var(--f-mono);font-weight:500;font-size:clamp(9px,.72cqw,11.5px);
   letter-spacing:.08em;text-transform:uppercase;padding:.35em .62em}
 /* ── a RESERVA do modelo — as imagens salvas na peça. É o que permite chegar
@@ -2775,6 +2796,8 @@ function tpl(s){
       +     `<circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/>`
       +     `<path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>recentrar</button>`
       +   `<button class="orb" type="button"><i></i>orbitar</button>`
+      +   ((s.anot&&s.anot.length)||(s.ruas&&s.ruas.length)
+            ? `<button class="pin" type="button"><i></i>nomes</button>` : '')
       + `</div>`
       + `<div class="estado">`
       +   `<div class="carga"><div class="anel"></div>`
@@ -3410,6 +3433,10 @@ window.MSEarth=(function(){
      ⚑ As cores vão por `tok()`: o WebGL precisa de número, não de `var()`.
      Trocar o :root da marca troca a anotação junto. */
   var posto=[], tAnot=null;
+  /* Estado da camada, de sessão: quem desligou os nomes no slide 3 não quer
+     vê-los de volta ao voltar para ele depois. Sobrevive à desmontagem do
+     visor porque mora aqui fora, não no slide. */
+  var anotLiga=true;
 
   function limpaAnot(){
     posto.forEach(function(n){ if(n.parentNode) n.parentNode.removeChild(n); });
@@ -3496,9 +3523,19 @@ window.MSEarth=(function(){
     });
   }
 
+  function selo(){
+    /* a classe vive no slide: é ela que acende o indicador do botão */
+    var sl=document.querySelectorAll('#palco .slide')[cur];
+    if(sl&&sl.classList.contains('g-earth-3d')) sl.classList.toggle('com-anot',anotLiga);
+  }
+  function alternaAnot(liga){
+    anotLiga=!!liga;
+    if(anotLiga) desenhaAnot(); else { limpaAnot(); selo(); }
+  }
   function desenhaAnot(){
     limpaAnot();
-    var s=DECK[cur]; if(!s||!mapa||!lib) return;
+    selo();
+    var s=DECK[cur]; if(!s||!mapa||!lib||!anotLiga) return;
     var m3d=lib;
     if(!m3d.PopoverElement) return;    /* preview sem popover: sai calado */
     var VINHO=tok('--primaria'), FERRO=tok('--tinta');
@@ -3646,6 +3683,7 @@ window.MSEarth=(function(){
   }
   document.addEventListener('click',function(e){
     var sl=e.target.closest&&e.target.closest('.g-earth-3d'); if(!sl) return;
+    if(e.target.closest('.pin')){ e.stopPropagation(); alternaAnot(!anotLiga); return; }
     if(e.target.closest('.orb')){ e.stopPropagation(); orbita(!orbitando); return; }
     if(e.target.closest('.rec')){ e.stopPropagation(); recentra(); return; }
     if(e.target.closest('.sair')){ e.stopPropagation(); desativa(); document.body.focus(); return; }
@@ -3688,7 +3726,8 @@ window.MSEarth=(function(){
        ninguém ver — ficaria sem cobertura. Com estas duas o gate injeta um
        dublê da `maps3d` e exercita o desenho e o resolvedor de verdade.
        Não fazem nada em apresentação: ninguém as chama. */
-    __teste:function(o){ lib=o.lib; mapa=o.mapa; desenhaAnot(); },
+    __teste:function(o){ lib=o.lib; mapa=o.mapa; anotLiga=true; desenhaAnot(); },
+    __alterna:function(l){ alternaAnot(l); },
     __resolve:resolveColisao
   };
 })();
