@@ -1578,6 +1578,22 @@ body.no-fim #msgraf{opacity:.18}
   border:1px solid var(--papel-10);border-radius:3px;transition:opacity .3s ease}
 .g-modelo-3d.girando .rotulo{opacity:0}
 
+/* ⚑ RÓTULO COMPACTO — 11/09/2026, pedido do Michel no slide da localização:
+   *"elimine o endereço. Vamos deixar onde a fazenda está. Embaixo você pode
+   deixar aquele texto pequeno... essa caixa toda fica um pouco mais compacta
+   no canto esquerdo inferior"*.
+   Tirar o `lead` do deck.json já encolhe a caixa; isto aperta o resto —
+   largura, respiro e corpo do h2 — para a caixa virar etiqueta e o visor
+   ficar com a tela. Campo do slide, não padrão: peça que precise do
+   endereço na tela continua sem declarar `compacto`. */
+.g-earth-3d .rotulo.compacto,.g-modelo-3d .rotulo.compacto{
+  max-width:min(32ch,42cqw);
+  padding:clamp(10px,1.5cqh,20px) clamp(13px,1.4cqw,26px)}
+.g-earth-3d .rotulo.compacto h2,.g-modelo-3d .rotulo.compacto h2{
+  font-size:clamp(17px,2.6cqh,30px);line-height:1.06}
+.g-earth-3d .rotulo.compacto .cap,.g-modelo-3d .rotulo.compacto .cap{
+  margin-top:.7em;white-space:normal}
+
 /* ⚑ O RÓTULO DO VISOR EM CELULAR — 03/09/2026, pedido do Michel:
    *"na versão móbile precisamos subir com essa caixa de texto, ou reduzir
    drasticamente a informação"*.
@@ -2707,7 +2723,7 @@ function tpl(s){
       + `<div class="veu"><b>clique para navegar no modelo</b>`
       + `<s>cenas, sombras e órbita ficam com você · o teclado passa a ser do modelo</s></div>`
       + `<button class="sair" type="button">devolver o teclado ao slide</button></div>`
-      + `<div class="rotulo">`
+      + `<div class="rotulo${s.compacto?' compacto':''}">`
       + (s.kick?`<span class="kick">${s.kick}</span>`:'')
       + (s.h2?`<h2>${s.h2}</h2>`:'')
       + (s.lead?`<div class="lead">${s.lead}</div>`:'')
@@ -2745,7 +2761,7 @@ function tpl(s){
       + `<div class="veu"><b>clique para navegar no 3d</b>`
       + `<s>arrastar gira · ctrl + arrastar inclina · o teclado passa a ser do mapa</s></div>`
       + `<button class="sair" type="button">devolver o teclado ao slide</button></div>`
-      + `<div class="rotulo">`
+      + `<div class="rotulo${s.compacto?' compacto':''}">`
       + (s.kick?`<span class="kick">${s.kick}</span>`:'')
       + (s.h2?`<h2>${s.h2}</h2>`:'')
       + (s.lead?`<div class="lead">${s.lead}</div>`:'')

@@ -105,6 +105,40 @@ o **endereço por extenso do Notion**. Os dois campos, as duas fontes, cada uma
 no seu lugar. Sem levantamento, a coordenada do Notion serve, e o orbital é
 conferido antes de publicar.
 
+## Coordenada de CADA edificação — a prancha planialtimétrica resolve
+
+Para o pino de um lote só, a coordenada do Notion basta. Para **um pino por
+edificação** — o que o gabarito permite pelo campo `anot` — é preciso uma
+coordenada por prédio, e ninguém tem isso digitado em lugar nenhum.
+
+A rota que funcionou em 11/09/2026, e leva minutos:
+
+1. **Pegar a prancha planialtimétrica cadastral em PDF vetorial.** Todo
+   levantamento topográfico entrega uma. Ela traz **malha de coordenadas
+   rotulada** nas bordas (`E=…`, `N=…`) e a nota do sistema — tipicamente
+   *SIRGAS 2000 / UTM*.
+2. **Rasterizar** (`pdftoppm -r 100` para achar as linhas, `-r 400` para ler os
+   rótulos) e **detectar a malha**: linhas que atravessam a folha inteira.
+   `numpy`: fração de tinta por coluna e por linha acima de ~0,75.
+3. **Ler dois rótulos por eixo** — recorte ampliado, o texto é vertical
+   (`rotate(-90)`). Dois, não um: o segundo confere o espaçamento. Numa folha
+   A1 a 1:500 a célula costuma dar 50 m.
+4. **Montar a transformação** pixel → E,N e converter com `pyproj`.
+5. **Marcar e conferir por iteração**: desenhar uma cruz na coordenada
+   estimada sobre a própria prancha, olhar, corrigir. Duas rodadas bastam para
+   cravar cada prédio dentro da sua pegada.
+
+⚑ **A zona UTM é onde se erra, e o erro é silencioso.** Trocar 22S por 23S
+desloca 6° em longitude — a latitude continua certinha, o que dá uma falsa
+sensação de acerto. **A prova é cruzada:** o centroide dos pontos convertidos
+tem de bater com a coordenada que o Michel gravou no Notion. Bateu na sexta
+casa de latitude e a longitude ficou 6° fora: era a zona.
+
+⚑ **Nome de edificação vem do Notion, não da prancha** — base *Lista de
+desenhos* da página do projeto, que tem a numeração e o nome. Os croquis de
+nomenclatura do levantamento (quando existem, no acervo da topografia) mostram
+a subdivisão sobre satélite e são o que amarra número a prédio.
+
 ## A chave
 
 **Decisão de 30/08/2026, tomada pelo Michel, que muda a regra do acervo.**
@@ -163,6 +197,20 @@ powershell -ExecutionPolicy Bypass -File servir.ps1
 
 **A localização continua fora do repositório de método.** Coordenada de
 projeto entra na peça do projeto, não no módulo nem no gabarito.
+
+## `compacto` — quando o endereço sai da tela
+
+Campo booleano do slide, 11/09/2026, pedido do Michel: *"elimine o endereço.
+Vamos deixar onde a fazenda está. Embaixo você pode deixar aquele texto
+pequeno… essa caixa toda fica um pouco mais compacta no canto esquerdo
+inferior"*.
+
+Duas coisas, e são independentes: **tirar o `lead` do deck.json** apaga o
+endereço; **`compacto:true`** aperta largura, respiro e corpo do `h2`, e a
+caixa vira etiqueta. Com anotação dentro da malha o endereço na caixa vira
+repetição — os nomes já estão sobre os telhados.
+
+Vale também no `modelo-3d`, que divide o CSS do rótulo.
 
 ## No DECK, se um dia virar vigente
 
