@@ -211,7 +211,9 @@ def ignorados_pelo_git(caminhos):
     """Dos caminhos dados (relativos à raiz), os que o .gitignore engole. Vazio se não houver git."""
     if not caminhos:
         return []
-    rc, out = git('check-ignore', '--stdin')
+    # (13.09.2026) havia aqui uma chamada a git('check-ignore', '--stdin') sem
+    # input: o git ficava esperando stdin para sempre e o montar-indice travava.
+    # A chamada correta, com input, é a de baixo.
     try:
         r = subprocess.run(['git', '-C', str(RAIZ), 'check-ignore', '--stdin'], input='\n'.join(caminhos),
                            capture_output=True, text=True)

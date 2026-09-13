@@ -556,6 +556,12 @@
   },
   {
    "grupo": "sarasá · banco de referência",
+   "nome": "corpus · índice dos documentos de referência",
+   "desc": "Os sete memoriais e projetos que sustentam o método, com estado de leitura de cada um, o que cada documento contribuiu e as armadilhas confirmadas nele. Lido: Rua Piauí, Martinelli e EMEI Dutra",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/sarasa/memorial/CORPUS.md"
+  },
+  {
+   "grupo": "sarasá · banco de referência",
    "nome": "anatomia dos documentos técnicos",
    "desc": "Os três arquétipos, a ordem dos cinco blocos, a fôrma da prescrição e as armadilhas achadas em quatro memoriais reais",
    "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/sarasa/memorial/ANATOMIA.md"
@@ -614,5 +620,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-09-11T21:24:58+00:00"
+ "gerado": "2026-09-13T23:35:27+00:00"
 }
