@@ -172,7 +172,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 |---|---|---|
 | `marca` | abertura e contracapa. Vêm do bloco da marca, não se inventam | `assinatura` · `credito` · `descritor` · `lockup` · `papel` · `pe` · `pisca` · `qr` · `sigla` · `site` · `slogan` |
 | `capa` | nome do projeto, endereço e três metas | `metas` |
-| `divisor` | abre seção e ganha um ponto no chrome | `dn` · `ds` · **`dt`** |
+| `divisor` | abre seção e ganha um ponto no chrome | `dn` · `ds` · **`dt`** · `subdiv` |
 | `fim` | próximos passos. É o que o cliente leva embora | **`itens` (2)** |
 | `escolha` | a bifurcação: dois ou três botões que saltam para outro trecho. Cada opção declara `para` com o NOME de um gabarito e o motor procura o próximo slide daquele gabarito — nunca índice | `opcoes` |
 | `sumario` | o argumento inteiro em blocos, logo depois da capa | **`itens` (3)** |
@@ -204,6 +204,8 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 |---|---|---|
 | `galeria` | mosaico de miniaturas com lupa: clique abre a vista grande, com setas e contador. As miniaturas entram quando o slide chega, não na carga | `fotos` |
 | `cheia` | o render em tela cheia. É o padrão para render — ver `gabaritos/render-cheia.md` | `cap` · `h2` · `lbl` · `src` |
+| `video` | vídeo em sangria total: mudo, em laço e com botão de pausa. `vsrc` entra como data-URI pelo montar.py, com teto de 3 MB — comprimir antes | `cap` · `h2` · `lbl` · `vsrc` |
+| `carrossel` | uma pilha de desenhos passando em cross-fade, com o texto por cima. Para mostrar VOLUME de trabalho, não para ler desenho | `cap` · `h2` · `imgs` · `lbl` |
 | `duo` | duas imagens lado a lado | **`figs` (4)** · **`leg`** |
 | `fotos` | linha do tempo ilustrada | `cols` · **`itens`** |
 | `prancha` | grade de 2 a 4 imagens sobre um tema. Retrato 3–4 colunas, deitada 2. `cols` aqui é NÚMERO — ver `gabaritos/prancha-referencia.md` | `ar` · `cols` · `items` · `top` |

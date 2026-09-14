@@ -42,6 +42,8 @@ DESCRICAO = {
     'fotos':       ('imagem', 'linha do tempo ilustrada'),
     'prancha':     ('imagem', 'grade de 2 a 4 imagens sobre um tema. Retrato 3–4 colunas, deitada 2. `cols` aqui é NÚMERO — ver `gabaritos/prancha-referencia.md`'),
     'galeria':     ('imagem', 'mosaico de miniaturas com lupa: clique abre a vista grande, com setas e contador. As miniaturas entram quando o slide chega, não na carga'),
+    'video':       ('imagem', 'vídeo em sangria total: mudo, em laço e com botão de pausa. `vsrc` entra como data-URI pelo montar.py, com teto de 3 MB — comprimir antes'),
+    'carrossel':   ('imagem', 'uma pilha de desenhos passando em cross-fade, com o texto por cima. Para mostrar VOLUME de trabalho, não para ler desenho'),
     'cheia':       ('imagem', 'o render em tela cheia. É o padrão para render — ver `gabaritos/render-cheia.md`'),
     'earth-3d':    ('imagem', 'onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md`'),
     'modelo-3d':   ('imagem', 'o que o projeto é: o modelo do SketchUp, vivo. Exige modelo PÚBLICO no 3D Warehouse — `gabaritos/modelo.md`'),

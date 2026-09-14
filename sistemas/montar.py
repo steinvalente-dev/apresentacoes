@@ -155,6 +155,10 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
         for f in s.get('figs') or []:
             if isinstance(f, list) and len(f) > 1:
                 add(f, 1, perfil)
+        # `imgs`: lista simples de caminhos. Hoje e o carrossel; qualquer
+        # gabarito novo que precise de uma pilha de imagens ganha o campo de graca
+        for i in range(len(s.get('imgs') or [])):
+            add(s['imgs'], i, perfil)
         for it in s.get('items') or []:
             if isinstance(it, dict):
                 if 'src' in it:
@@ -178,6 +182,66 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
             else:
                 add(lst, i, 'fundo')
     return jobs
+
+
+TETO_VIDEO = 3 * 1024 * 1024          # bytes do arquivo, antes do base64
+
+def embute_videos(deck, pasta, avisos):
+    """Poe o mp4 do campo `vsrc` dentro da peca, como data-URI.
+
+    Video nao passa pelo moinho de imagem: nao ha o que redimensionar aqui, e
+    recomprimir video e trabalho de ffmpeg, fora do montar. O que o montar faz
+    e recusar arquivo grande demais - base64 infla ~33%, e uma peca que passa
+    dos 8 MB deixa de abrir bem no celular do cliente. Comprimir ANTES:
+
+        ffmpeg -i entrada.mp4 -an -vf scale=1600:-2 -c:v libx264 -crf 28 \
+               -preset slow -movflags +faststart -pix_fmt yuv420p saida.mp4
+
+    `-an` nao e detalhe: o gabarito toca mudo de qualquer jeito (autoplay so
+    passa mudo), entao a trilha seria peso morto no arquivo.
+
+    DOIS FORMATOS, e nao e excesso de zelo: `vsrc` aceita uma lista, e o certo
+    e mandar MP4/H.264 **e** WebM/VP9. H.264 e o unico que o Safari do iPad
+    toca; VP9 e o unico que um Chromium sem codec proprietario toca - e e
+    exatamente esse o navegador do container, o que significa que so com o
+    WebM o slide de video da para CONFERIR aqui antes de ir ao cliente. O
+    <video> escolhe sozinho a primeira fonte que sabe tocar.
+
+        ffmpeg -i entrada.mp4 -an -vf scale=1600:-2 -c:v libvpx-vp9 -crf 36 \
+               -b:v 0 -row-mt 1 -speed 2 saida.webm
+    """
+    n = 0
+    bytes_tot = 0
+    for s in deck:
+        v = s.get('vsrc')
+        if v is None:
+            continue
+        # uma string ou uma lista: MP4 primeiro, WebM depois. Os dois formatos
+        # existem porque nenhum cobre tudo sozinho — ver o comentario acima.
+        lista = [v] if isinstance(v, str) else list(v)
+        saiu = []
+        for item in lista:
+            if not eh_arquivo(item):
+                saiu.append(item)        # ja e data-URI ou URL: passa reto
+                continue
+            arq = pasta / item
+            if not arq.is_file():
+                avisos.append(f'video nao encontrado em {pasta}: {item} — conferir o nome ou passar --img')
+                continue
+            dados = arq.read_bytes()
+            if len(dados) > TETO_VIDEO:
+                avisos.append(f'video {item} tem {len(dados)/1048576:.1f} MB — acima do teto de '
+                              f'{TETO_VIDEO/1048576:.0f} MB. Comprimir antes (ver embute_videos no montar.py)')
+                continue
+            mime = 'video/mp4' if arq.suffix.lower() in ('.mp4', '.m4v') else 'video/webm'
+            saiu.append(f'data:{mime};base64,' + base64.b64encode(dados).decode())
+            n += 1
+            bytes_tot += len(dados)
+        if saiu:
+            s['vsrc'] = saiu
+        else:
+            s.pop('vsrc', None)          # sem o campo o gabarito mostra o slot, e nao um 404
+    return n, bytes_tot
 
 
 def capa_do_modulo(raiz, marca):
@@ -415,10 +479,13 @@ def main():
     capa_imgs_js = None
     div_imgs = list(dj.get('div_imgs') or [])
     jobs = coleta_imagens(dj['deck'], capa_imgs, div_imgs)
+    n_vid, bytes_vid = embute_videos(dj['deck'], pasta_img, avisos)
     saida.mkdir(parents=True, exist_ok=True)
     if a.sobrescrever and (saida / 'img').is_dir():
         shutil.rmtree(saida / 'img')          # img/ é saída do montar: a rodada nova decide o que fica
     total_img, modo, faltam = processa_imagens(jobs, pasta_img, saida)
+    if n_vid:
+        print(f'montar: video — {n_vid} arquivo(s), {bytes_vid/1048576:.2f} MB em base64')
     for v in faltam:
         avisos.append(f'imagem não encontrada em {pasta_img}: {v} — conferir o nome ou passar --img')
     if capa_imgs_js is None:

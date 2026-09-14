@@ -1228,6 +1228,131 @@ body.em-imagem.claro .marca .marca-lk{
 .g-cheia.claro .slot b{color:var(--tinta)}
 .g-cheia.claro .slot s{color:var(--tinta-45)}
 
+
+/* == GABARITO `video` - sangria total =====================================
+   14/09/2026, pedido do Michel para a projecao mapeada sobre a maquete:
+   *"o video, eu queria que ele aparecesse em tela cheia"*.
+
+   Irmao do `cheia`, e de proposito: mesmo campo, mesmo overlay, mesma
+   tipografia. So o conteudo e que se move.
+
+   `contain`, nunca `cover`: projecao mapeada e enquadramento estudado -
+   cortar a maquete para preencher a tela estragaria o assunto.
+
+   MUDO E EM LACO, por tres razoes: autoplay so passa mudo em qualquer
+   navegador; numa reuniao som que comeca sozinho e acidente; e em laco o
+   slide aguenta o tempo que a conversa levar, sem ninguem reapertar play.
+   `playsinline` e o que impede o iOS de abrir o video em tela cheia
+   propria e engolir a apresentacao. */
+.g-video{padding:0;background-image:none;background:var(--moldura)}
+.g-video .full{position:absolute;inset:0}
+.g-video video{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;display:block;background:var(--moldura)}
+.g-video .full:after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(var(--tinta-90) 0,var(--tinta-45) 8%,transparent 20%)}
+.g-video .ov{position:absolute;inset:auto 0 0 0;z-index:2;pointer-events:none;
+  padding:0 var(--gut) calc(var(--bot) + clamp(10px,2cqh,30px));
+  background:linear-gradient(transparent,var(--tinta-60) 44%,var(--tinta-90) 100%)}
+.g-video .ov h2{color:var(--papel);font-family:var(--f-display);font-weight:500;
+  font-size:var(--fs-h);line-height:1.04;max-width:26ch}
+.g-video .ov .cap{display:block;color:var(--papel-70);margin-top:.7em;max-width:70ch;
+  font-size:var(--fs-body);line-height:1.5}
+.g-video .vcmd{position:absolute;right:var(--gut);
+  bottom:calc(var(--bot) + clamp(10px,2cqh,30px));z-index:3;display:flex;gap:8px}
+.g-video .vcmd button{cursor:pointer;display:flex;align-items:center;gap:.5em;
+  font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--papel-80);background:var(--tinta-45);
+  border:1px solid var(--papel-25);border-radius:2px;
+  padding:.5em .9em;transition:border-color .2s ease,color .2s ease}
+.g-video .vcmd button:hover{border-color:var(--papel);color:#fff} /* #fff: pico de luz do hover, nao e cor de marca */
+.g-video .vcmd i{display:block;width:7px;height:7px;border-radius:50%;
+  background:currentColor;opacity:.3;transition:opacity .2s ease}
+.g-video.tocando .vcmd i{opacity:1}
+.g-video .slot{position:absolute;inset:0;display:grid;place-content:center;
+  text-align:center;gap:.35em;background:repeating-linear-gradient(45deg,
+  var(--papel-3) 0 6px,transparent 6px 12px)}
+.g-video .slot b{font-family:var(--f-display);font-weight:500;font-style:italic;
+  color:var(--papel-80);font-size:clamp(13px,1.15cqw,18px)}
+.g-video .slot s{text-decoration:none;font-family:var(--f-mono);
+  font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:var(--papel-45)}
+
+/* == GABARITO `carrossel` - os desenhos passando, o numero em cima ========
+   14/09/2026. O slide do cadastro mostrava a implantacao grande e um mosaico
+   de miniaturas ao lado. O Michel, vendo pronto: *"as imagens pequenas nao
+   estao com um peso grafico muito bom, isso nao funciona muito bem. A
+   implantacao em tela cheia, e o proximo slide talvez um carrossel de
+   imagens, uns seis desenhos, eles ficam se alternando, e em cima disso a
+   gente deixa o texto do numero total de desenhos"*.
+
+   O DIAGNOSTICO POR TRAS: miniatura de prancha nao se le - vira textura
+   cinza. E o assunto do slide nunca foi ler desenho nenhum, foi mostrar
+   VOLUME de trabalho. Um desenho por vez, grande, passando, conta isso
+   melhor do que doze ilegiveis, e o numero no canto fecha o argumento.
+
+   Uma imagem por vez, `contain` e cross-fade. Sem escala, sem deslize: o
+   assunto e o desenho, e movimento sobre desenho de traco cansa a vista
+   em projecao.
+
+   As imagens ficam TODAS no DOM desde o inicio, so com opacidade zero - sao
+   base64, ja estao no arquivo, e trocar `src` daria um piscar branco no
+   primeiro ciclo. */
+.g-carrossel{padding:0;background-image:none;background:var(--moldura)}
+.g-carrossel .full{position:absolute;inset:0}
+.g-carrossel .full img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;display:block;opacity:0;transition:opacity .9s ease}
+.g-carrossel .full img.on{opacity:1}
+.g-carrossel .full:after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(var(--tinta-90) 0,var(--tinta-45) 8%,transparent 20%)}
+.g-carrossel .ov{position:absolute;inset:auto 0 0 0;z-index:2;pointer-events:none;
+  padding:0 var(--gut) calc(var(--bot) + clamp(10px,2cqh,30px));
+  background:linear-gradient(transparent,var(--tinta-60) 44%,var(--tinta-90) 100%)}
+.g-carrossel .ov h2{color:var(--papel);font-family:var(--f-display);font-weight:500;
+  font-size:var(--fs-h);line-height:1.04;max-width:26ch}
+.g-carrossel .ov .cap{display:block;color:var(--papel-70);margin-top:.7em;max-width:70ch;
+  font-size:var(--fs-body);line-height:1.5}
+/* o contador: quantos ja passaram de quantos. Fica do lado oposto do texto,
+   pequeno, e e o unico cronometro visivel - ninguem precisa adivinhar se a
+   coisa esta rodando. */
+.g-carrossel .cont-c{position:absolute;right:var(--gut);
+  bottom:calc(var(--bot) + clamp(10px,2cqh,30px));z-index:3;
+  font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.1em;
+  color:var(--papel-60);display:flex;gap:6px;align-items:center}
+.g-carrossel .cont-c u{text-decoration:none;display:block;width:5px;height:5px;
+  border-radius:50%;background:var(--papel-25);transition:background .3s ease}
+.g-carrossel .cont-c u.on{background:var(--papel-80)}
+/* == variante clara: desenho de traco pede campo de papel (regra de 10/09) */
+.g-carrossel.claro{background:var(--papel)}
+.g-carrossel.claro .full:after{
+  background:linear-gradient(var(--papel-90) 0,var(--papel-45) 8%,transparent 20%)}
+.g-carrossel.claro .ov{
+  background:linear-gradient(transparent,var(--papel-60) 44%,var(--papel-90) 100%)}
+.g-carrossel.claro .ov h2{color:var(--tinta)}
+.g-carrossel.claro .ov .cap{color:var(--tinta-70)}
+.g-carrossel.claro .cont-c{color:var(--tinta-60)}
+.g-carrossel.claro .cont-c u{background:var(--tinta-20)}
+.g-carrossel.claro .cont-c u.on{background:var(--tinta-80)}
+.g-carrossel .slot{position:absolute;inset:0;display:grid;place-content:center;
+  text-align:center;gap:.35em;background:repeating-linear-gradient(45deg,
+  var(--papel-3) 0 6px,transparent 6px 12px)}
+.g-carrossel .slot b{font-family:var(--f-display);font-weight:500;font-style:italic;
+  color:var(--papel-80);font-size:clamp(13px,1.15cqw,18px)}
+.g-carrossel.claro .slot{background:repeating-linear-gradient(45deg,
+  var(--tinta-3) 0 6px,transparent 6px 12px)}
+.g-carrossel.claro .slot b{color:var(--tinta)}
+
+/* == SUBDIVISOR: separa sem abrir secao ==================================
+   14/09/2026. O Michel quis danos e estrutura numa secao so - *"so para
+   deixar mais didatico, principalmente o indice, eu quero ter menos topicos
+   para nao deixar tao cansativa a apresentacao"* - mas sem perder a virada
+   de assunto no meio: *"a gente tem tipo um subdivisor no meio do caminho"*.
+
+   O que abre secao no motor nao e o gabarito `divisor`, e o campo `sec`.
+   Entao subdivisor e um divisor SEM `sec`: ele respira a tela inteira e
+   anuncia a virada, mas nao ganha ponto no chrome nem linha no indice.
+   `subdiv:1` so trata a tipografia - menor que um divisor de secao, para a
+   hierarquia ficar visivel na propria pagina, e sem numero. */
+.divisor.menor .dt{font-size:clamp(26px,5.2cqh,58px);max-width:18ch}
+.divisor.menor .ds{margin-top:.8em;max-width:46ch}
 .chrome,.g-cheia .ov,.g-cheia .full:after{transition:opacity .55s cubic-bezier(.4,0,.2,1)}
 body.em-cheia.ocioso .chrome,
 body.em-cheia.ocioso .slide.ativo .ov,
@@ -2623,7 +2748,7 @@ function tpl(s){
   }
   const met=s.metas?`<div class="metas rev">`+s.metas.map(([l,v])=>`<div><span class="ml">${l}</span><span class="mv">${v}</span></div>`).join('')+`</div>`:'';
   if(s.g==='capa') return `<div class="wrap">${k}${t}${sub}${met}${inicio}</div>`;
-  if(s.g==='divisor') return `<div class="divisor"><span class="dn rev">${s.dn||''}</span><h1 class="dt rev">${RS(s.dt)}${US?'<i class="pisca">_</i>':''}</h1>${s.ds?`<p class="ds rev">${s.ds}</p>`:''}</div>`;
+  if(s.g==='divisor') return `<div class="divisor${s.subdiv?' menor':''}"><span class="dn rev">${s.dn||''}</span><h1 class="dt rev">${RS(s.dt)}${US?'<i class="pisca">_</i>':''}</h1>${s.ds?`<p class="ds rev">${s.ds}</p>`:''}</div>`;
   if(s.g==='frase') return `<div class="wrap">${k}${pre}${t}${sub}${prem}${dad}</div>`;
   if(s.g==='jogadas') return `<div class="wrap">${k}${t}<div class="jogadas rev">`+s.itens.map(([n,ti,d])=>`<div class="jogada${et}"><span class="jn">${n}</span><span class="jt">${ti}</span><span class="jd">${d}</span></div>`).join('')+`</div></div>`;
   if(s.g==='unit') return `<div class="wrap">${k}${t}${sub}<div class="unit rev">`+s.cards.map(([ti,a,r,l,m])=>`<div class="uc${et}"><span class="ut">${ti}</span><span class="ua">${a}</span><span class="ur">${RS(r)}</span><span class="ul">${l}</span><span class="um">${m}</span></div>`).join('')+`</div></div>`;
@@ -2672,6 +2797,31 @@ function tpl(s){
       ? `<img decoding="async" data-src="${s.src}" alt="${(s.cap||'').replace(/"/g,'&quot;')}">`
       : `<div class="slot"><u>_</u><b>${s.lbl||'render'}</b><s>16:9 · sangria total</s></div>`;
     return `<div class="full"><div class="ph">${img}</div></div>`
+      + `<div class="ov">${s.h2?`<h2 class="rev">${s.h2}</h2>`:''}`
+      + (s.cap?`<div class="cap rev">${s.cap}</div>`:'') + `</div>`;
+  }
+  if(s.g==='video'){
+    /* `vsrc` chega como data-URI de video, posto pelo montar.py. Sem ele o
+       slide mostra o slot, como qualquer gabarito de imagem. */
+    const F = s.vsrc ? (Array.isArray(s.vsrc)?s.vsrc:[s.vsrc]) : [];
+    const tipo = u => u.slice(5, u.indexOf(';')) || 'video/mp4';
+    const v = F.length
+      ? `<video class="vid" playsinline muted loop preload="none">`
+        + F.map(u=>`<source src="${u}" type="${tipo(u)}">`).join('') + `</video>`
+      : `<div class="slot"><b>${s.lbl||'video'}</b><s>16:9 - sangria total</s></div>`;
+    return `<div class="full">${v}</div>`
+      + (F.length?`<div class="vcmd"><button class="vpp" type="button"><i></i>pausar</button></div>`:'')
+      + `<div class="ov">${s.h2?`<h2 class="rev">${s.h2}</h2>`:''}`
+      + (s.cap?`<div class="cap rev">${s.cap}</div>`:'') + `</div>`;
+  }
+  if(s.g==='carrossel'){
+    const L = s.imgs||[];
+    const im = L.length
+      ? L.map((src,i)=>`<img decoding="async" class="${i===0?'on':''}" src="${src}" alt="">`).join('')
+      : `<div class="slot"><b>${s.lbl||'desenhos'}</b></div>`;
+    const pts = L.map((_,i)=>`<u class="${i===0?'on':''}"></u>`).join('');
+    return `<div class="full">${im}</div>`
+      + (L.length>1?`<div class="cont-c">${pts}</div>`:'')
       + `<div class="ov">${s.h2?`<h2 class="rev">${s.h2}</h2>`:''}`
       + (s.cap?`<div class="cap rev">${s.cap}</div>`:'') + `</div>`;
   }
@@ -3125,7 +3275,8 @@ function go(i,tudo){
      ilegível. Já aconteceu duas vezes no mesmo dia — com o `earth-3d` e
      depois com o `modelo-3d`. */
   document.body.classList.toggle('em-imagem',
-    s.g==='cheia' || s.g==='earth-3d' || s.g==='modelo-3d');
+    s.g==='cheia' || s.g==='earth-3d' || s.g==='modelo-3d'
+    || s.g==='video' || s.g==='carrossel');
   /* `claro` = a imagem tem fundo branco, então o slide também. Regra do
      Michel, 10/09/2026: desenho de traço sobre campo escuro é leitura
      errada — planta, corte e fachada pedem campo claro. Inverte de volta o
@@ -3198,15 +3349,138 @@ addEventListener('keydown',e=>{
    Não há afordância desenhada, de propósito: o gesto se descobre no
    primeiro toque errado e um rótulo permanente na tela seria ruído em
    peça de cliente. Se ele pedir, entra como dica que aparece uma vez.  */
+/* ⚑ SLIDE TRAVADO: O GESTO NÃO PASSA DE TELA ────────────────────────────
+   14/09/2026, pedido do Michel depois de apresentar no iPad: *"toda vez que
+   eu interajo com a tela eu acabo movendo de slide. Esse slide precisa ser
+   menos sensível à passagem. Eu preciso deixar ele amarrado ao botão da
+   tela, aquelas duas setinhas, ou ao teclado. E dessa maneira eu vou poder
+   interagir livremente, sem me preocupar de sair do slide certo"*.
+
+   Num slide que se manipula — girar um globo, abrir uma vista, arrastar
+   sobre uma planta — o dedo está conversando com o CONTEÚDO, e o mesmo
+   gesto avançava a apresentação. Em mouse isso quase não aparecia porque o
+   guarda de `click` já excluía os visores; o swipe, não: ele era global e
+   nem olhava onde o dedo tinha encostado.
+
+   Travado = nem clique nem swipe mudam de slide. Restam a pílula, as duas
+   setas do chrome, os pontinhos e o teclado — que é exatamente o controle
+   que ele pediu.
+
+   Automático por gabarito (o autor não declara nada), e `trava:1` no slide
+   força a mesma coisa em qualquer outro — a porta para a camada interativa
+   sobre a ortofoto. */
+const G_TRAVA=['earth-3d','modelo-3d','mapa','galeria'];
+const travado=i=>{const s=DECK[i]; return !!s&&(s.trava===1||s.trava===true||G_TRAVA.indexOf(s.g)>=0);};
+const INTERATIVO='a,button,.pin,.lote,.g-earth-3d .visor,.g-modelo-3d .visor,'
+  +'.g-modelo-3d .cenas,.g-mapa-2d .visor,.g-galeria .lupa,.g-galeria .mosaico,'
+  +'.g-escolha .opcoes,.g-video .vcmd,gmp-map-3d,iframe';
 palco.addEventListener('click',e=>{if(e.target.closest('.ms-start')){avanca();return}
-  if(e.target.closest('a,button,.pin,.lote,.g-earth-3d .visor,.g-modelo-3d .visor,.g-modelo-3d .cenas,.g-mapa-2d .visor,.g-galeria .lupa'))return;
+  if(e.target.closest(INTERATIVO))return;
+  if(travado(cur))return;
   const faixa=Math.min(Math.max(78,innerWidth*0.16),230);
   if(e.clientX<=faixa){recua();return}
   avanca()});
-let tx=0;
-addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
-addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>52){d<0?avanca():recua()}},{passive:true});
+/* ── O SWIPE, com três guardas que ele não tinha ──────────────────────────
+   1 · slide travado não aceita swipe;
+   2 · gesto que COMEÇOU num elemento interativo não conta — arrastar o
+       globo é arrastar o globo;
+   3 · o gesto tem de ser horizontal e franco: 90 px (era 52, que um
+       arrasto curto de mapa cruza sem querer) e mais horizontal do que
+       vertical, senão rolar a tela troca de slide.
+   O limiar é em px de dedo, não em vw, pela mesma razão da faixa de toque. */
+let tx=0, ty=0, tvale=false;
+addEventListener('touchstart',e=>{
+  const t0=e.touches[0]; tx=t0.clientX; ty=t0.clientY;
+  tvale = !travado(cur) && !(t0.target.closest&&t0.target.closest(INTERATIVO));
+},{passive:true});
+addEventListener('touchend',e=>{
+  if(!tvale) return;
+  const t1=e.changedTouches[0], dx=t1.clientX-tx, dy=t1.clientY-ty;
+  if(Math.abs(dx)>90 && Math.abs(dx)>Math.abs(dy)*1.5){ dx<0?avanca():recua(); }
+},{passive:true});
 go(Math.max(0,(parseInt(location.hash.slice(1))||1)-1));
+
+
+/* ══ VÍDEO EM SANGRIA TOTAL ═══════════════════════════════════════════════
+   Toca ao chegar no slide, PARA ao sair, e volta ao início. Parar importa:
+   um <video> em laço fora de cena continua decodificando quadro a quadro
+   atrás de tudo — é o mesmo defeito do contexto WebGL que fez o visor 3d
+   desmontar em 04/09, e aqui custa bateria de iPad no meio da reunião.
+
+   `play()` devolve uma promessa que o navegador REJEITA quando a política
+   de autoplay barra; sem o catch isso vira `Unhandled rejection` no
+   console e o validador reprova a peça. Barrado, o slide fica no primeiro
+   quadro e o botão continua servindo — é o comportamento certo, não um
+   erro a esconder.
+
+   `currentTime=0` ao sair: voltar ao slide recomeça a projeção, que é o
+   que a sala espera de uma animação curta em laço. */
+/* == O RELOGIO DO CARROSSEL ==============================================
+   Um `setInterval` por slide em cena, e so enquanto ele esta em cena: fora
+   dele o relogio e parado e o carrossel volta ao primeiro desenho, para
+   quem retorna ao slide ver a sequencia do comeco.
+
+   PASSO de 3,2 s: medido contra leitura em projecao - abaixo de ~3 s o olho
+   ainda esta reconhecendo a planta quando ela troca, e acima de ~4 s a
+   sequencia parece travada. O cross-fade de 0,9 s esta no CSS.
+
+   `prefers-reduced-motion` para tudo: quem pediu menos movimento no sistema
+   ve o primeiro desenho, parado. O slide continua dizendo o que precisa -
+   o numero esta no texto, nao na animacao. */
+window.MSCarrossel=(function(){
+  var PASSO=3200, timer=null;
+  function para(){ if(timer){ clearInterval(timer); timer=null; } }
+  function zera(sl){
+    var im=sl.querySelectorAll('.full img'), pt=sl.querySelectorAll('.cont-c u');
+    im.forEach(function(e,i){ e.classList.toggle('on',i===0); });
+    pt.forEach(function(e,i){ e.classList.toggle('on',i===0); });
+  }
+  return { chegou:function(){
+    para();
+    var todos=document.querySelectorAll('#palco .slide.g-carrossel');
+    var atual=document.querySelectorAll('#palco .slide')[cur];
+    todos.forEach(function(sl){ if(sl!==atual) zera(sl); });
+    if(!atual||!atual.classList.contains('g-carrossel')) return;
+    var im=atual.querySelectorAll('.full img');
+    if(im.length<2) return;
+    zera(atual);
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var i=0, pt=atual.querySelectorAll('.cont-c u');
+    timer=setInterval(function(){
+      im[i].classList.remove('on'); if(pt[i]) pt[i].classList.remove('on');
+      i=(i+1)%im.length;
+      im[i].classList.add('on');    if(pt[i]) pt[i].classList.add('on');
+    },PASSO);
+  } };
+})();
+
+
+window.MSVideo=(function(){
+  function todos(){ return document.querySelectorAll('#palco .slide video.vid'); }
+  function selo(v,tocando){
+    var sl=v.closest('.g-video'); if(sl) sl.classList.toggle('tocando',tocando);
+    var b=sl&&sl.querySelector('.vpp');
+    if(b) b.lastChild.textContent=tocando?'pausar':'tocar';
+  }
+  function toca(v){
+    var pr=v.play();
+    if(pr&&pr['catch']) pr['catch'](function(){ selo(v,false); });
+    selo(v,true);
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('.g-video .vpp'); if(!b) return;
+    e.stopPropagation();
+    var v=b.closest('.g-video').querySelector('video.vid'); if(!v) return;
+    if(v.paused) toca(v); else { v.pause(); selo(v,false); }
+  });
+  return { chegou:function(){
+    var atual=document.querySelectorAll('#palco .slide')[cur];
+    todos().forEach(function(v){
+      if(atual&&atual.contains(v)){ toca(v); }
+      else if(!v.paused||v.currentTime){ v.pause(); v.currentTime=0; selo(v,false); }
+    });
+  } };
+})();
 
 
 /* ─── cortina diagonal: intercepta a primeira saída da abertura, venha de onde
@@ -3687,9 +3961,48 @@ window.MSEarth=(function(){
     if(e.target.closest('.orb')){ e.stopPropagation(); orbita(!orbitando); return; }
     if(e.target.closest('.rec')){ e.stopPropagation(); recentra(); return; }
     if(e.target.closest('.sair')){ e.stopPropagation(); desativa(); document.body.focus(); return; }
-    if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando');
-      if(orbitando) orbita(false); }          /* quem pegou o mouse manda */
+    /* ⚑ O VÉU SÓ DESTRAVA — NÃO PARA A ÓRBITA (14/09/2026, pedido do Michel:
+       *"eu queria clicar, tirar esse overlay da tela, e a órbita continua.
+       Se eu interagir com o conteúdo, clicar e arrastar, aí sim ela é
+       pausada"*).
+       Antes o clique no véu fazia as duas coisas de uma vez, e o slide
+       entrava parado justamente no momento em que a sala olha para ele.
+       Agora destravar e assumir a câmera são dois gestos separados. */
+    if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando'); }
   });
+
+  /* ── QUEM PEGA A CÂMERA PARA A ÓRBITA — mas só quem pega de verdade ──────
+     O sinal é ARRASTO, não toque: `pointerdown` sozinho inclui o clique que
+     acabou de tirar o véu, e um clique seco no mapa não é intenção de
+     navegar. Espera-se deslocamento acima de LIMIAR antes de parar.
+     `wheel` conta na hora: zoom já é comando de câmera.
+     No `pointerup` a escuta se desfaz — sem rastro de listener por arrasto. */
+  var LIMIAR=7;
+  document.addEventListener('pointerdown',function(e){
+    var sl=e.target.closest&&e.target.closest('.g-earth-3d'); if(!sl) return;
+    if(!e.target.closest('.visor')) return;      /* chrome e botões não contam */
+    if(e.target.closest('.veu,.cmd,.sair')) return;
+    if(!orbitando) return;
+    var x0=e.clientX, y0=e.clientY, parou=false;
+    function move(ev){
+      if(parou) return;
+      if(Math.abs(ev.clientX-x0)>LIMIAR||Math.abs(ev.clientY-y0)>LIMIAR){
+        parou=true; orbita(false); solta();
+      }
+    }
+    function solta(){
+      document.removeEventListener('pointermove',move,true);
+      document.removeEventListener('pointerup',solta,true);
+      document.removeEventListener('pointercancel',solta,true);
+    }
+    document.addEventListener('pointermove',move,true);
+    document.addEventListener('pointerup',solta,true);
+    document.addEventListener('pointercancel',solta,true);
+  },true);
+  document.addEventListener('wheel',function(e){
+    var sl=e.target.closest&&e.target.closest('.g-earth-3d .visor');
+    if(sl&&orbitando) orbita(false);
+  },{capture:true,passive:true});
   /* indices de todo slide earth-3d do deck. Generico de proposito: se um dia
      a peca tiver dois visores, os dois aquecem no slide que os antecede. */
   var PROX=[];
@@ -3878,8 +4191,8 @@ window.MSModelo=(function(){
 (function(){
   var _go=window.go;
   window.go=function(i,tudo){ _go(i,tudo); setTimeout(function(){
-    window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); },700); };
-  window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou();
+    window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); MSVideo.chegou(); MSCarrossel.chegou(); },700); };
+  window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); MSVideo.chegou(); MSCarrossel.chegou();
 })();
 
 </script>
@@ -3959,7 +4272,8 @@ window.MSModelo=(function(){
        fechada não é fundo de imagem. */
     document.body.classList.toggle('em-imagem',
       !!(DECK[cur] && (DECK[cur].g==='cheia'||DECK[cur].g==='earth-3d'
-                       ||DECK[cur].g==='modelo-3d'||DECK[cur].g==='mapa-2d')));
+                       ||DECK[cur].g==='modelo-3d'||DECK[cur].g==='mapa-2d'
+                       ||DECK[cur].g==='video'||DECK[cur].g==='carrossel')));
   }
   window.__msLupaFecha=function(){ fecha(galeria()); };
 
