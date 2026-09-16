@@ -194,8 +194,34 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
 
 TETO_VIDEO = 3 * 1024 * 1024          # bytes do arquivo, antes do base64
 
-def embute_videos(deck, pasta, avisos):
-    """Poe o mp4 do campo `vsrc` dentro da peca, como data-URI.
+def pesa_videos(deck, pasta):
+    """Quanto o `vsrc` pesaria em base64 — so para a decisao de modo.
+
+    Nao abre nem decodifica nada: e' o tamanho do arquivo mais os 33% do
+    base64. Roda ANTES de processa_imagens porque e' ela quem escolhe entre
+    embutir tudo e escrever ao lado, e video e' peso como qualquer outro.
+    """
+    tot = 0
+    for s in deck:
+        v = s.get('vsrc')
+        if v is None:
+            continue
+        for item in ([v] if isinstance(v, str) else list(v)):
+            if not eh_arquivo(item):
+                continue
+            arq = pasta / item
+            if arq.is_file():
+                tot += (arq.stat().st_size + 2) // 3 * 4
+    return tot
+
+
+def coloca_videos(deck, pasta, modo, saida, avisos):
+    """Poe o mp4 do campo `vsrc` na peca — data-URI, ou arquivo ao lado.
+
+    16/09/2026: o video passou a seguir o MODO decidido por processa_imagens.
+    Em `arquivo` ele vai para `img/` junto com as imagens: nao infla 33%, nao
+    tem teto, e a pasta ja era obrigatoria. Em `base64` tudo segue como era,
+    teto incluso.
 
     Video nao passa pelo moinho de imagem: nao ha o que redimensionar aqui, e
     recomprimir video e trabalho de ffmpeg, fora do montar. O que o montar faz
@@ -220,6 +246,9 @@ def embute_videos(deck, pasta, avisos):
     """
     n = 0
     bytes_tot = 0
+    usados = set()
+    if modo == 'arquivo':
+        (saida / 'img').mkdir(parents=True, exist_ok=True)
     for s in deck:
         v = s.get('vsrc')
         if v is None:
@@ -237,9 +266,21 @@ def embute_videos(deck, pasta, avisos):
                 avisos.append(f'video nao encontrado em {pasta}: {item} — conferir o nome ou passar --img')
                 continue
             dados = arq.read_bytes()
+            if modo == 'arquivo':
+                nome, k = arq.name, 1
+                while nome in usados:
+                    k += 1
+                    nome = f'{arq.stem}-{k}{arq.suffix}'
+                usados.add(nome)
+                (saida / 'img' / nome).write_bytes(dados)
+                saiu.append('img/' + nome)
+                n += 1
+                bytes_tot += len(dados)
+                continue
             if len(dados) > TETO_VIDEO:
                 avisos.append(f'video {item} tem {len(dados)/1048576:.1f} MB — acima do teto de '
-                              f'{TETO_VIDEO/1048576:.0f} MB. Comprimir antes (ver embute_videos no montar.py)')
+                              f'{TETO_VIDEO/1048576:.0f} MB para peca embutida. Comprimir antes '
+                              f'(ver coloca_videos no montar.py)')
                 continue
             mime = 'video/mp4' if arq.suffix.lower() in ('.mp4', '.m4v') else 'video/webm'
             saiu.append(f'data:{mime};base64,' + base64.b64encode(dados).decode())
@@ -315,10 +356,14 @@ def capa_do_modulo(raiz, marca):
     return [], None
 
 
-def processa_imagens(jobs, pasta_img, saida):
-    """→ (bytes em base64, modo, imagens que faltaram)"""
+def processa_imagens(jobs, pasta_img, saida, peso_vid=0):
+    """→ (bytes em base64, modo, imagens que faltaram)
+
+    `peso_vid` entra SO na escolha do modo: o que decide entre embutir e
+    escrever ao lado e' o peso do HTML final, e video pesa nele igual.
+    """
     if not jobs:
-        return 0, 'nenhuma', []
+        return 0, ('arquivo' if peso_vid > LIMITE_BASE64 else 'nenhuma'), []
     try:
         import PIL  # noqa
     except ImportError:
@@ -339,7 +384,7 @@ def processa_imagens(jobs, pasta_img, saida):
         dados = redimensiona(arq, larg, q, fmt)
         cache[(v, perfil)] = (dados, fmt)
         total += (len(dados) + 2) // 3 * 4      # o que a imagem vai pesar em base64
-    modo = 'base64' if total <= LIMITE_BASE64 else 'arquivo'
+    modo = 'base64' if total + peso_vid <= LIMITE_BASE64 else 'arquivo'
     nomes, usados = {}, set()
     if modo == 'arquivo':
         (saida / 'img').mkdir(parents=True, exist_ok=True)
@@ -526,13 +571,18 @@ def main():
     capa_imgs_js = None
     div_imgs = list(dj.get('div_imgs') or [])
     jobs = coleta_imagens(dj['deck'], capa_imgs, div_imgs)
-    n_vid, bytes_vid = embute_videos(dj['deck'], pasta_img, avisos)
     saida.mkdir(parents=True, exist_ok=True)
     if a.sobrescrever and (saida / 'img').is_dir():
         shutil.rmtree(saida / 'img')          # img/ é saída do montar: a rodada nova decide o que fica
-    total_img, modo, faltam = processa_imagens(jobs, pasta_img, saida)
+    # ⚑ a ordem importa: processa_imagens é quem escolhe o modo, e o vídeo
+    #   segue esse modo. Por isso o peso do vídeo entra antes, e a gravação
+    #   do vídeo vem depois — e depois do rmtree, ou seria apagado.
+    total_img, modo, faltam = processa_imagens(jobs, pasta_img, saida,
+                                               pesa_videos(dj['deck'], pasta_img))
+    n_vid, bytes_vid = coloca_videos(dj['deck'], pasta_img, modo, saida, avisos)
     if n_vid:
-        print(f'montar: video — {n_vid} arquivo(s), {bytes_vid/1048576:.2f} MB em base64')
+        onde = 'ao lado, em img/' if modo == 'arquivo' else 'em base64'
+        print(f'montar: video — {n_vid} arquivo(s), {bytes_vid/1048576:.2f} MB {onde}')
     for v in faltam:
         avisos.append(f'imagem não encontrada em {pasta_img}: {v} — conferir o nome ou passar --img')
     if capa_imgs_js is None:

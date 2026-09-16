@@ -1461,8 +1461,13 @@ body.em-imagem.claro .marca .marca-lk{
   background:var(--m-acento,var(--acento))}
 /* a varredura. `overflow:hidden` no invólucro para o clip nao vazar sombra */
 .g-logo .lock{overflow:hidden;width:clamp(240px,46cqw,720px);max-width:100%}
+/* 16/09/2026 — a varredura passa de 1,05 s para 1,95 s a pedido do Michel:
+   *"a entrada do novo logo deve ser mais lenta"*. Entrada de marca nao e'
+   transicao de interface; e' o tempo que a sala leva para parar e olhar.
+   A curva tambem abriu (.18/.5 -> .14/.46 no comeco): segura a velocidade
+   por mais tempo antes de assentar, em vez de frear cedo. */
 .g-logo .lock img{display:block;width:100%;height:auto;
-  clip-path:inset(0 100% 0 0);transition:clip-path 1.05s cubic-bezier(.22,.61,.36,1) .18s}
+  clip-path:inset(0 100% 0 0);transition:clip-path 1.95s cubic-bezier(.14,.46,.22,1) .32s}
 .g-logo.revelado .lock img{clip-path:inset(0 0 0 0)}
 .g-logo .dep{font-size:var(--fs-body);line-height:1.6;max-width:46ch;
   color:var(--m-apoio,var(--papel-80))}
@@ -2923,7 +2928,12 @@ function tpl(s){
     /* `vsrc` chega como data-URI de video, posto pelo montar.py. Sem ele o
        slide mostra o slot, como qualquer gabarito de imagem. */
     const F = s.vsrc ? (Array.isArray(s.vsrc)?s.vsrc:[s.vsrc]) : [];
-    const tipo = u => u.slice(5, u.indexOf(';')) || 'video/mp4';
+    /* ⚑ 16/09/2026: `vsrc` pode chegar como data-URI (peca embutida) OU como
+       caminho `img/x.webm` (peca em modo pasta — o montar passou a escrever
+       video ao lado). O slice do data-URI devolvia lixo no caminho, e
+       `type` errado faz o navegador descartar a fonte sem nem tentar. */
+    const tipo = u => u.startsWith('data:') ? (u.slice(5, u.indexOf(';')) || 'video/mp4')
+                    : (/\.webm$/i.test(u) ? 'video/webm' : 'video/mp4');
     const v = F.length
       ? `<video class="vid" playsinline muted loop preload="none">`
         + F.map(u=>`<source src="${u}" type="${tipo(u)}">`).join('') + `</video>`
@@ -2948,7 +2958,12 @@ function tpl(s){
     /* o video usa a MESMA classe `vid` do gabarito `video`: assim o MSVideo
        cuida de tocar ao chegar e parar ao sair, sem um segundo relogio. */
     const F = s.vsrc ? (Array.isArray(s.vsrc)?s.vsrc:[s.vsrc]) : [];
-    const tipo = u => u.slice(5, u.indexOf(';')) || 'video/mp4';
+    /* ⚑ 16/09/2026: `vsrc` pode chegar como data-URI (peca embutida) OU como
+       caminho `img/x.webm` (peca em modo pasta — o montar passou a escrever
+       video ao lado). O slice do data-URI devolvia lixo no caminho, e
+       `type` errado faz o navegador descartar a fonte sem nem tentar. */
+    const tipo = u => u.startsWith('data:') ? (u.slice(5, u.indexOf(';')) || 'video/mp4')
+                    : (/\.webm$/i.test(u) ? 'video/webm' : 'video/mp4');
     const fundo = F.length
       ? `<video class="vid" playsinline muted loop preload="none">`
         + F.map(u=>`<source src="${u}" type="${tipo(u)}">`).join('') + `</video>`
