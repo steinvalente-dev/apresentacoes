@@ -149,6 +149,14 @@
   {
    "aba": "deck",
    "grupo": "as peças de montar",
+   "nome": "planta interativa ⚑ módulo",
+   "desc": "A prancha em tela cheia que o cliente percorre: zoom até 720% sem borrar, pan, pontos de mídia que ligam e desligam, e anotação ao vivo — traço, reta, seta, borracha — colada no desenho. A planta entra como SVG vetorial convertido do PDF com mutool: no mesmo arquivo, o pdftocairo gera 27 MB e estoura a memória onde o mutool resolve em 2,3 MB. Ainda não é gabarito do esqueleto; é o módulo, com a mecânica medida e as armadilhas pagas",
+   "arq": "sistemas/gabaritos/planta-interativa.md",
+   "ver": "modulos/planta-interativa.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
    "nome": "módulos",
    "desc": "Capa, engine, laboratório e o chip de voltar. Sem revisão: o arquivo é o vigente",
    "arq": "modulos/LEIA-ME.md"
