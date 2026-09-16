@@ -172,7 +172,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 |---|---|---|
 | `marca` | abertura e contracapa. Vêm do bloco da marca, não se inventam | `assinatura` · `credito` · `descritor` · `lockup` · `papel` · `pe` · `pisca` · `qr` · `sigla` · `site` · `slogan` |
 | `capa` | nome do projeto, endereço e três metas | `metas` |
-| `divisor` | abre seção e ganha um ponto no chrome | `dn` · `ds` · **`dt`** · `subdiv` |
+| `divisor` | abre seção e ganha um ponto no chrome | `_dn` · `dn` · `ds` · **`dt`** · `subdiv` |
 | `fim` | próximos passos. É o que o cliente leva embora | **`itens` (2)** |
 | `escolha` | a bifurcação: dois ou três botões que saltam para outro trecho. Cada opção declara `para` com o NOME de um gabarito e o motor procura o próximo slide daquele gabarito — nunca índice | `opcoes` |
 | `logo` | a entrada da marca: vídeo em sangria total, véu na cor da sub-marca e o lockup revelado por varredura. Portado da AMAZ — `marca`, `vsrc`, `ante`, `dep` | `alt` · `ante` · `dep` · `marca` · `marcasvg` · `vsrc` |

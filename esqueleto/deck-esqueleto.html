@@ -2944,7 +2944,7 @@ function tpl(s){
   }
   const met=s.metas?`<div class="metas rev">`+s.metas.map(([l,v])=>`<div><span class="ml">${l}</span><span class="mv">${v}</span></div>`).join('')+`</div>`:'';
   if(s.g==='capa') return `<div class="wrap">${k}${t}${sub}${met}${inicio}</div>`;
-  if(s.g==='divisor') return `<div class="divisor${s.subdiv?' menor':''}"><span class="dn rev">${s.dn||''}</span><h1 class="dt rev">${RS(s.dt)}${US?'<i class="pisca">_</i>':''}</h1>${s.ds?`<p class="ds rev">${s.ds}</p>`:''}</div>`;
+  if(s.g==='divisor') return `<div class="divisor${s.subdiv?' menor':''}"><span class="dn rev">${s.dn||s._dn||''}</span><h1 class="dt rev">${RS(s.dt)}${US?'<i class="pisca">_</i>':''}</h1>${s.ds?`<p class="ds rev">${s.ds}</p>`:''}</div>`;
   if(s.g==='frase') return `<div class="wrap">${k}${pre}${t}${sub}${prem}${dad}</div>`;
   if(s.g==='jogadas') return `<div class="wrap">${k}${t}<div class="jogadas rev">`+s.itens.map(([n,ti,d])=>`<div class="jogada${et}"><span class="jn">${n}</span><span class="jt">${ti}</span><span class="jd">${d}</span></div>`).join('')+`</div></div>`;
   if(s.g==='unit') return `<div class="wrap">${k}${t}${sub}<div class="unit rev">`+s.cards.map(([ti,a,r,l,m])=>`<div class="uc${et}"><span class="ut">${ti}</span><span class="ua">${a}</span><span class="ur">${RS(r)}</span><span class="ul">${l}</span><span class="um">${m}</span></div>`).join('')+`</div></div>`;
@@ -3317,6 +3317,17 @@ DECK.forEach(s=>{if(s.fim&&s.fim_==null)s.fim_=s.fim});
 let secs=[];DECK.forEach((s,i)=>{if(s.sec)secs.push({nome:s.sec,i,num:(s.secn===0||s.secn===false)?0:-1})});
 (function(){let c=0;secs.forEach(x=>{if(x.num===-1){c++;x.num=c}})})();
 let sa='';DECK.forEach(s=>{if(s.sec)sa=s.sec;s._sec=sa});
+/* ⚑ 16/09/2026 — O NUMERO DO CAPITULO TEM UMA FONTE SO.
+   O `dn` do divisor era escrito a mao no deck.json, e ficou para tras assim
+   que o Michel tirou tres secoes do indice: os divisores diziam 02, 03, 04,
+   06, 07 enquanto o chrome ja dizia 01, 02, 03 e nada. Numero de capitulo em
+   dois lugares vira numero errado em um deles, sempre.
+   Agora o divisor herda o numero calculado da secao que ele abre. `dn` a mao
+   continua valendo quando existe — para quem quiser um rotulo que nao seja o
+   numero —, e secao sem numero (`secn:0`) nao imprime nada. */
+DECK.forEach(s=>{if(s.g!=='divisor'||!s.sec)return;
+  const x=secs.find(y=>y.nome===s.sec);
+  if(x&&x.num>0)s._dn=String(x.num).padStart(2,'0');});
 /* o selo vale ate a proxima secao: quem declara `selo` num divisor cobre
    a secao inteira sem repetir o campo slide a slide. `selo:0` corta. */
 let se='';DECK.forEach(s=>{if(s.sec&&!('selo' in s))se='';if('selo' in s)se=s.selo||'';s._selo=se});
