@@ -463,6 +463,46 @@ body.terra .chrome{color:var(--papel-90)}
 .sdot span{letter-spacing:.1em}
 .sdot:hover span{opacity:1}
 .chrome .secao .sn{opacity:.7}
+/* == SELO DE SUB-MARCA no canto superior esquerdo ========================
+   16/09/2026, pedido do Michel para a secao do museu: *"esse logo destacado,
+   eu quero que ele apareca no canto superior esquerdo dos slides. Entao os
+   slides do museu especificamente vao fugir um pouquinho a regra"*.
+
+   O canto superior esquerdo ja era ocupado pelo indicador de secao (`03
+   danos e estrutura`). Os dois nao cabem, e nao deveriam: dentro da secao do
+   museu o proprio logo diz onde se esta, e o numero continua nos pontinhos
+   do centro. Entao o selo SUBSTITUI o indicador enquanto vale, e o indicador
+   volta sozinho no slide seguinte.
+
+   ⚑ A assinatura do escritorio, no canto direito, NAO sai. Duas marcas na
+   mesma barra e' o certo aqui: uma e' de quem apresenta, a outra e' do que
+   esta sendo apresentado. Trocar a assinatura seria dizer que a peca e do
+   museu, e nao e.
+
+   Altura casada com a do texto que ele substitui, para a barra nao pular. */
+/* ⚑ MASCARA, NAO <img>. O chrome se inverte sozinho conforme o fundo do
+   slide (regra `em-imagem`), e um PNG colorido nao acompanharia: o logo
+   Vinho sumiria sobre foto escura, e o negativo sumiria sobre desenho claro.
+   Como mascara, o selo e' pintado por `background`, e entao obedece a mesma
+   regra de tres superficies do resto da barra:
+     slide claro  -> a cor da sub-marca
+     slide escuro -> Cal
+   Um arquivo so, nas duas situacoes, e sem ninguem escolher versao. */
+.chrome.topo .selo{display:block;height:clamp(16px,2.6cqh,30px);
+  /* a proporcao vem do arquivo, medida uma vez pelo go() — sub-marca nova
+     entra sem ninguem acertar largura na mao */
+  aspect-ratio:var(--selo-ar,3.6);
+  background:var(--m-marca,var(--tinta));
+  -webkit-mask:var(--selo) no-repeat left center/contain;
+          mask:var(--selo) no-repeat left center/contain}
+body.em-imagem .chrome.topo .selo{background:var(--papel-90)}
+body.em-imagem.claro .chrome.topo .selo{background:var(--m-marca,var(--tinta))}
+body.com-selo .chrome.topo .secao{display:none}
+/* ⚑ na abertura o selo SAI: o lockup ja esta gigante no meio da tela, e a
+   marca repetida em miniatura no canto so tira forca da entrada. */
+body.em-logo .chrome.topo .selo{display:none}
+body.em-logo .chrome.topo .secao{display:inline}
+
 
 /* grifo terracota — destaque dentro de célula de tabela ou de texto corrido */
 mark{background:var(--acento);color:var(--papel);padding:.12em .42em .16em;
@@ -1353,6 +1393,56 @@ body.em-imagem.claro .marca .marca-lk{
    hierarquia ficar visivel na propria pagina, e sem numero. */
 .divisor.menor .dt{font-size:clamp(26px,5.2cqh,58px);max-width:18ch}
 .divisor.menor .ds{margin-top:.8em;max-width:46ch}
+
+/* == GABARITO `logo` - a entrada da marca ================================
+   16/09/2026, pedido do Michel: *"la na apresentacao da AMAZ a gente fez uma
+   introducao de logo muito impactante, onde a gente tinha um slide de fundo
+   animado, e eu queria exatamente isso para o Museu do Cafe"*.
+
+   Portado do sistema da AMAZ (`amaz-convergencia`, gabarito `logo`), que
+   ficou preso naquela peca. Aqui vira gabarito do motor: serve a qualquer
+   marca que precise de uma entrada, nao so a esta.
+
+   TRES CAMADAS, e a ordem importa:
+   1 · o video em sangria total, `cover` - aqui cortar e certo, o fundo e
+       atmosfera e nao informacao (o oposto do gabarito `video`);
+   2 · o veu, em gradiente diagonal da cor da marca: escuro onde o lockup
+       pousa, aberto do outro lado para a imagem respirar;
+   3 · o lockup, revelado por VARREDURA (`clip-path`) da esquerda para a
+       direita. Nao e fade: varredura tem direcao, e direcao faz a marca
+       parecer que chega, nao que aparece.
+
+   `prefers-reduced-motion` entrega o lockup inteiro, parado. */
+.g-logo{padding:0;background-image:none;align-items:flex-start}
+.g-logo .bleed{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--moldura)}
+.g-logo .bleed video,.g-logo .bleed img{position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;display:block}
+.g-logo .bleed:after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(96deg,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 95%,transparent) 0%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 84%,transparent) 46%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 46%,transparent) 100%)}
+.g-logo .logowrap{position:relative;z-index:1;display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:center;height:100%;
+  gap:clamp(14px,2.6cqh,36px);padding:0 var(--gut)}
+.g-logo .ante{display:flex;align-items:center;gap:13px;
+  font-family:var(--f-mono);font-weight:500;font-size:var(--fs-cap);
+  letter-spacing:.22em;text-transform:uppercase;color:var(--m-apoio,var(--papel-70))}
+.g-logo .ante:before{content:'';width:44px;height:2px;
+  background:var(--m-acento,var(--acento))}
+/* a varredura. `overflow:hidden` no invólucro para o clip nao vazar sombra */
+.g-logo .lock{overflow:hidden;width:clamp(240px,46cqw,720px);max-width:100%}
+.g-logo .lock img{display:block;width:100%;height:auto;
+  clip-path:inset(0 100% 0 0);transition:clip-path 1.05s cubic-bezier(.22,.61,.36,1) .18s}
+.g-logo.revelado .lock img{clip-path:inset(0 0 0 0)}
+.g-logo .dep{font-size:var(--fs-body);line-height:1.6;max-width:46ch;
+  color:var(--m-apoio,var(--papel-80))}
+.g-logo .slot{position:relative;z-index:1;display:grid;place-content:center;
+  height:100%;width:100%;text-align:center;color:var(--papel-70);
+  font-family:var(--f-display);font-style:italic}
+@media (prefers-reduced-motion: reduce){
+  .g-logo .lock img{clip-path:inset(0 0 0 0);transition:none}
+}
 .chrome,.g-cheia .ov,.g-cheia .full:after{transition:opacity .55s cubic-bezier(.4,0,.2,1)}
 body.em-cheia.ocioso .chrome,
 body.em-cheia.ocioso .slide.ativo .ov,
@@ -1907,7 +1997,7 @@ body.em-imagem .nav{-webkit-backdrop-filter:none;backdrop-filter:none}
      (.marca-lk) quando o bloco da marca traz LOGO_CANTO — decisão de 03/09:
      michel stein_, AMAZ e Lavrō em texto; Sarasá em logotipo. O script de
      marca, abaixo do DECK, preenche isto; não editar aqui. -->
-<div class="chrome topo"><span class="secao"><span class="sn"></span><span class="sl"></span></span><span class="dots"></span><span class="marca"><span class="marca-txt">marca<u>_</u></span><span class="marca-lk" hidden></span></span></div>
+<div class="chrome topo"><span class="secao"><span class="sn"></span><span class="sl"></span></span><span class="selo" hidden></span><span class="dots"></span><span class="marca"><span class="marca-txt">marca<u>_</u></span><span class="marca-lk" hidden></span></span></div>
 <div class="chrome pe"><span class="pj">projeto · cliente</span><span class="nav"><span class="cont"></span><button class="seta" id="ant">&#9664;</button><button class="seta" id="pro">&#9654;</button></span></div>
 </div></div>
 <script>
@@ -2825,6 +2915,23 @@ function tpl(s){
       + `<div class="ov">${s.h2?`<h2 class="rev">${s.h2}</h2>`:''}`
       + (s.cap?`<div class="cap rev">${s.cap}</div>`:'') + `</div>`;
   }
+  if(s.g==='logo'){
+    /* o video usa a MESMA classe `vid` do gabarito `video`: assim o MSVideo
+       cuida de tocar ao chegar e parar ao sair, sem um segundo relogio. */
+    const F = s.vsrc ? (Array.isArray(s.vsrc)?s.vsrc:[s.vsrc]) : [];
+    const tipo = u => u.slice(5, u.indexOf(';')) || 'video/mp4';
+    const fundo = F.length
+      ? `<video class="vid" playsinline muted loop preload="none">`
+        + F.map(u=>`<source src="${u}" type="${tipo(u)}">`).join('') + `</video>`
+      : (s.fundo?`<img src="${s.fundo}" alt="">`:'');
+    return `<div class="bleed">${fundo}</div>`
+      + `<div class="logowrap">`
+      +   (s.ante?`<div class="ante rev">${s.ante}</div>`:'')
+      +   (s.marca?`<div class="lock"><img src="${s.marca}" alt="${(s.alt||'').replace(/"/g,'&quot;')}"></div>`
+                  :`<div class="slot">marca</div>`)
+      +   (s.dep?`<p class="dep rev">${s.dep}</p>`:'')
+      + `</div>`;
+  }
   if(s.g==='duo'){
     const RES=IMG;
     /* o slot so aparece se a imagem falhar — antes ele ficava por cima da foto */
@@ -3071,6 +3178,9 @@ function tpl(s){
 DECK.forEach(s=>{if(s.fim&&s.fim_==null)s.fim_=s.fim});
 let secs=[];DECK.forEach((s,i)=>{if(s.sec)secs.push({nome:s.sec,i})});
 let sa='';DECK.forEach(s=>{if(s.sec)sa=s.sec;s._sec=sa});
+/* o selo vale ate a proxima secao: quem declara `selo` num divisor cobre
+   a secao inteira sem repetir o campo slide a slide. `selo:0` corta. */
+let se='';DECK.forEach(s=>{if(s.sec&&!('selo' in s))se='';if('selo' in s)se=s.selo||'';s._selo=se});
 let num=0;DECK.forEach(s=>{if(s.div){s._b=null;return}if(!s.sub_)num++;s._b=num});
 const TOT=num;
 DECK.forEach(s=>{if(s._b===null){s._sub=0;return}const ir=DECK.filter(x=>x._b===s._b);s._sub=ir.length>1?ir.indexOf(s)+1:0});
@@ -3276,7 +3386,7 @@ function go(i,tudo){
      depois com o `modelo-3d`. */
   document.body.classList.toggle('em-imagem',
     s.g==='cheia' || s.g==='earth-3d' || s.g==='modelo-3d'
-    || s.g==='video' || s.g==='carrossel');
+    || s.g==='video' || s.g==='carrossel' || s.g==='logo');
   /* `claro` = a imagem tem fundo branco, então o slide também. Regra do
      Michel, 10/09/2026: desenho de traço sobre campo escuro é leitura
      errada — planta, corte e fachada pedem campo claro. Inverte de volta o
@@ -3293,6 +3403,19 @@ function go(i,tudo){
   /* no fechamento o chrome fica: as bolinhas para voltar a qualquer secao e
      as setas, para o caso de um clique a mais passar do fim. */
   document.body.classList.toggle('no-fim',!!s.fim_);
+  /* selo de sub-marca: `selo` no slide, ou herdado por `_selo` de quem abriu
+     a secao. Ver "SELO DE SUB-MARCA" no CSS. */
+  (function(){
+    var el=document.querySelector('.chrome.topo .selo'), src=s.selo||s._selo||'';
+    if(el){ if(src){ el.style.setProperty('--selo','url("'+src+'")'); el.hidden=false;
+              if(el.dataset.ar!==src){ el.dataset.ar=src;
+                var im=new Image(); im.onload=function(){
+                  if(im.naturalHeight) el.style.setProperty('--selo-ar', im.naturalWidth/im.naturalHeight); };
+                im.src=src; } }
+            else el.hidden=true; }
+    document.body.classList.toggle('com-selo', !!src);
+    document.body.classList.toggle('em-logo', s.g==='logo');
+  })();
   document.querySelector('.sl').textContent=s._sec||'';
   const si=secs.findIndex(x=>x.nome===s._sec);
   document.querySelector('.sn').textContent=si>=0?String(si+1).padStart(2,'0'):'';
@@ -4273,7 +4396,8 @@ window.MSModelo=(function(){
     document.body.classList.toggle('em-imagem',
       !!(DECK[cur] && (DECK[cur].g==='cheia'||DECK[cur].g==='earth-3d'
                        ||DECK[cur].g==='modelo-3d'||DECK[cur].g==='mapa-2d'
-                       ||DECK[cur].g==='video'||DECK[cur].g==='carrossel')));
+                       ||DECK[cur].g==='video'||DECK[cur].g==='carrossel'
+                       ||DECK[cur].g==='logo')));
   }
   window.__msLupaFecha=function(){ fecha(galeria()); };
 

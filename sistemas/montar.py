@@ -152,6 +152,14 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
         perfil = 'desenho' if s.get('tipo') == 'desenho' else (g if g in RESIZE else 'padrao')
         if 'src' in s:
             add(s, 'src', perfil)
+        # gabarito `logo`: o lockup preserva alfa (perfil desenho, sem redimensionar
+        # para baixo); o fundo parado e' imagem de tela cheia
+        if 'marca' in s:
+            add(s, 'marca', 'desenho')
+        if isinstance(s.get('selo'), str):
+            add(s, 'selo', 'desenho')
+        if 'fundo' in s and isinstance(s.get('fundo'), str):
+            add(s, 'fundo', 'cheia')
         for f in s.get('figs') or []:
             if isinstance(f, list) and len(f) > 1:
                 add(f, 1, perfil)
@@ -242,6 +250,45 @@ def embute_videos(deck, pasta, avisos):
         else:
             s.pop('vsrc', None)          # sem o campo o gabarito mostra o slot, e nao um 404
     return n, bytes_tot
+
+
+VAR_TEMA = re.compile(r'^--[a-z0-9][a-z0-9-]{0,30}$')
+HEX_TEMA = re.compile(r'^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$')
+
+
+def bloco_tema(tema, avisos):
+    """Escreve o `tema` do deck.json como variaveis CSS no :root da peca.
+
+    POR QUE EXISTE (16/09/2026). O Michel quis uma secao com identidade
+    propria - o Museu do Cafe - sem refazer a peca inteira: *"eu nao quero
+    fazer um rebranding da apresentacao inteira, mas eu quero ter uma secao
+    especial, com uma identidade especial para o museu"*. Sub-marca dentro de
+    uma peca e caso recorrente: um projeto tem a marca do escritorio e a marca
+    do que se projeta.
+
+    O caminho obvio - cor solta no slide - esbarra no validador, e com razao:
+    o check `hex` barra `#RRGGBB` fora do `:root` justamente para ninguem
+    pintar cor a mao no meio do deck. Entao a cor entra por onde o sistema ja
+    aceita: declarada uma vez, no topo, com nome.
+
+    Chave = nome de variavel CSS (`--m-campo`); valor = hex. Nada alem disso
+    passa - o que entra na peca e conferido aqui, nao confiado ao autor.
+    """
+    if not tema:
+        return ''
+    linhas = []
+    for k, v in tema.items():
+        if not VAR_TEMA.match(str(k)):
+            avisos.append(f'tema: chave "{k}" ignorada — use nome de variavel CSS, ex. --m-campo')
+            continue
+        if not HEX_TEMA.match(str(v)):
+            avisos.append(f'tema: valor "{v}" de "{k}" ignorado — so hex (#RGB, #RRGGBB, #RRGGBBAA)')
+            continue
+        linhas.append(f'  {k}:{v};')
+    if not linhas:
+        return ''
+    return ('<style>\n/* tema da peca — sub-marca declarada no deck.json */\n'
+            ':root{\n' + '\n'.join(linhas) + '\n}\n</style>\n')
 
 
 def capa_do_modulo(raiz, marca):
@@ -501,6 +548,11 @@ def main():
     esq = colar(esq, 'div_imgs', f'const DIV_IMGS={js(div_imgs)};')
     if dj.get('map'):
         esq = colar(esq, 'map', f'const MAP = {js(dj["map"])};')
+    bt = bloco_tema(dj.get('tema'), avisos)
+    if bt:
+        if '</head>' not in esq:
+            falha('esqueleto sem </head> — nao sei onde por o tema')
+        esq = esq.replace('</head>', bt + '</head>', 1)
     titulo = html.escape(re.sub(r'<[^>]+>', ' ', dj.get('titulo') or dj['projeto']).strip())
     esq = re.sub(r'<title>.*?</title>', f'<title>{titulo}</title>', esq, count=1, flags=re.S)
     # ── a chave da Maps: por caminho aqui dentro, EMBUTIDA lá fora ──
