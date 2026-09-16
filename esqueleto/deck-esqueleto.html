@@ -488,7 +488,14 @@ body.terra .chrome{color:var(--papel-90)}
    regra de tres superficies do resto da barra:
      slide claro  -> a cor da sub-marca
      slide escuro -> Cal
-   Um arquivo so, nas duas situacoes, e sem ninguem escolher versao. */
+   Um arquivo so, nas duas situacoes, e sem ninguem escolher versao.
+
+   ⚑ ARMADILHA, medida em 16/09/2026: mascara CSS passa por CORS, e `file://`
+   tem origem `null` — o Chromium bloqueia, e o selo simplesmente nao aparece
+   ao abrir o HTML direto do disco. Por http(s) da mesma origem funciona. Nao
+   e' bug do selo nem do arquivo: conferir SEMPRE servindo, nunca por
+   `file://`. (Falhar assim e o melhor dos casos: mascara que nao carrega
+   apaga o elemento, nao pinta a caixa.) */
 .chrome.topo .selo{display:block;height:clamp(24px,4cqh,46px);
   /* a proporcao vem do arquivo, medida uma vez pelo go() — sub-marca nova
      entra sem ninguem acertar largura na mao */
