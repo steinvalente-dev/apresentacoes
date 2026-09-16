@@ -154,7 +154,9 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
             add(s, 'src', perfil)
         # gabarito `logo`: o lockup preserva alfa (perfil desenho, sem redimensionar
         # para baixo); o fundo parado e' imagem de tela cheia
-        if 'marca' in s:
+        # ⚑ `.svg` NAO passa pelo moinho: rasterizar mataria o unico motivo de
+        #   ele existir, que e' ter caminho para desenhar. Ver inline_svg().
+        if 'marca' in s and not str(s.get('marca','')).lower().endswith('.svg'):
             add(s, 'marca', 'desenho')
         if isinstance(s.get('selo'), str):
             add(s, 'selo', 'desenho')
@@ -293,8 +295,47 @@ def coloca_videos(deck, pasta, modo, saida, avisos):
     return n, bytes_tot
 
 
+def inline_svg(deck, pasta, avisos):
+    """Poe o conteudo de um `marca: x.svg` dentro da peca, como markup.
+
+    POR QUE (16/09/2026). O Michel pediu a marca DESENHADA e depois
+    preenchida, como na AMAZ e na Lavro. Contorno animado exige caminho, e
+    caminho exige vetor: um PNG nao tem o que desenhar. Entao quando `marca`
+    aponta para `.svg`, o arquivo entra inteiro no HTML — e nao como `<img>`,
+    porque dentro de `<img>` o CSS da peca nao alcanca os `<path>`.
+
+    O que sai daqui e' markup confiado: o arquivo e do acervo, gerado por
+    nos. Mesmo assim tira-se o cabecalho XML e qualquer `<script>`, que num
+    SVG inline executaria de verdade.
+    """
+    n = 0
+    for s in deck:
+        v = s.get('marca')
+        if not isinstance(v, str) or not v.lower().endswith('.svg'):
+            continue
+        arq = pasta / v
+        if not arq.is_file():
+            avisos.append(f'svg de marca nao encontrado em {pasta}: {v}')
+            s.pop('marca', None)
+            continue
+        m = arq.read_text(encoding='utf-8')
+        m = re.sub(r'<\?xml[^>]*\?>', '', m)
+        m = re.sub(r'<!DOCTYPE[^>]*>', '', m)
+        m = re.sub(r'(?is)<script.*?</script>', '', m)
+        if '<script' in m.lower() or 'onload' in m.lower():
+            falha(f'svg de marca {v} tem script — recusado')
+        s['marcasvg'] = m.strip()
+        s.pop('marca', None)
+        n += 1
+    return n
+
+
 VAR_TEMA = re.compile(r'^--[a-z0-9][a-z0-9-]{0,30}$')
 HEX_TEMA = re.compile(r'^#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$')
+# 16/09/2026: alem de cor, o tema passa a aceitar NUMERO PURO — `--m-veu: .55`
+# regula a carga do veu do gabarito `logo` num valor so. Sem unidade e sem
+# funcao: numero entre 0 e 4, que e' o que `calc(90% * var(--m-veu))` espera.
+NUM_TEMA = re.compile(r'^(?:[0-3](?:\.[0-9]{1,3})?|4|\.[0-9]{1,3})$')
 
 
 def bloco_tema(tema, avisos):
@@ -322,8 +363,9 @@ def bloco_tema(tema, avisos):
         if not VAR_TEMA.match(str(k)):
             avisos.append(f'tema: chave "{k}" ignorada — use nome de variavel CSS, ex. --m-campo')
             continue
-        if not HEX_TEMA.match(str(v)):
-            avisos.append(f'tema: valor "{v}" de "{k}" ignorado — so hex (#RGB, #RRGGBB, #RRGGBBAA)')
+        if not (HEX_TEMA.match(str(v)) or NUM_TEMA.match(str(v))):
+            avisos.append(f'tema: valor "{v}" de "{k}" ignorado — so hex (#RGB, #RRGGBB, '
+                          f'#RRGGBBAA) ou numero puro de 0 a 4')
             continue
         linhas.append(f'  {k}:{v};')
     if not linhas:
@@ -570,6 +612,7 @@ def main():
         capa_fonte = f'modulos/{mod}' if mod else 'nenhuma'
     capa_imgs_js = None
     div_imgs = list(dj.get('div_imgs') or [])
+    n_svg = inline_svg(dj['deck'], pasta_img, avisos)
     jobs = coleta_imagens(dj['deck'], capa_imgs, div_imgs)
     saida.mkdir(parents=True, exist_ok=True)
     if a.sobrescrever and (saida / 'img').is_dir():
@@ -580,6 +623,8 @@ def main():
     total_img, modo, faltam = processa_imagens(jobs, pasta_img, saida,
                                                pesa_videos(dj['deck'], pasta_img))
     n_vid, bytes_vid = coloca_videos(dj['deck'], pasta_img, modo, saida, avisos)
+    if n_svg:
+        print(f'montar: marca — {n_svg} svg inline (caminho vivo, para animar)')
     if n_vid:
         onde = 'ao lado, em img/' if modo == 'arquivo' else 'em base64'
         print(f'montar: video — {n_vid} arquivo(s), {bytes_vid/1048576:.2f} MB {onde}')

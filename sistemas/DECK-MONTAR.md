@@ -175,7 +175,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 | `divisor` | abre seção e ganha um ponto no chrome | `dn` · `ds` · **`dt`** · `subdiv` |
 | `fim` | próximos passos. É o que o cliente leva embora | **`itens` (2)** |
 | `escolha` | a bifurcação: dois ou três botões que saltam para outro trecho. Cada opção declara `para` com o NOME de um gabarito e o motor procura o próximo slide daquele gabarito — nunca índice | `opcoes` |
-| `logo` | a entrada da marca: vídeo em sangria total, véu na cor da sub-marca e o lockup revelado por varredura. Portado da AMAZ — `marca`, `vsrc`, `ante`, `dep` | `alt` · `ante` · `dep` · `marca` · `vsrc` |
+| `logo` | a entrada da marca: vídeo em sangria total, véu na cor da sub-marca e o lockup revelado por varredura. Portado da AMAZ — `marca`, `vsrc`, `ante`, `dep` | `alt` · `ante` · `dep` · `marca` · `marcasvg` · `vsrc` |
 | `sumario` | o argumento inteiro em blocos, logo depois da capa. 4o elemento de cada item, opcional: lista de subitens | `cols` · `grade` · **`itens` (4)** |
 
 **Texto**

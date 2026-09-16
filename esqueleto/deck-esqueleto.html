@@ -1457,15 +1457,17 @@ body.em-imagem.claro .marca .marca-lk{
       color-mix(in srgb,var(--m-acento,var(--acento)) 30%,transparent) 0%,
       color-mix(in srgb,var(--m-acento,var(--acento)) 10%,transparent) 34%,
       transparent 66%),
+    /* `--m-veu` multiplica a rampa inteira de uma vez: 1 e a carga
+       cheia, .5 e metade. Um botao so, em vez de oito. */
     linear-gradient(96deg,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 90%,transparent) 0%,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 88%,transparent) 30%,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 82%,transparent) 46%,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 72%,transparent) 58%,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 59%,transparent) 69%,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 46%,transparent) 80%,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 36%,transparent) 90%,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 32%,transparent) 100%)}
+    color-mix(in srgb,var(--m-campo,var(--tinta)) calc(90% * var(--m-veu,1)),transparent) 0%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) calc(88% * var(--m-veu,1)),transparent) 30%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) calc(82% * var(--m-veu,1)),transparent) 46%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) calc(72% * var(--m-veu,1)),transparent) 58%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) calc(59% * var(--m-veu,1)),transparent) 69%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) calc(46% * var(--m-veu,1)),transparent) 80%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) calc(36% * var(--m-veu,1)),transparent) 90%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) calc(32% * var(--m-veu,1)),transparent) 100%)}
 .g-logo .logowrap{position:relative;z-index:1;display:flex;flex-direction:column;
   align-items:flex-start;justify-content:center;height:100%;
   gap:clamp(14px,2.6cqh,36px);padding:0 var(--gut)}
@@ -1486,8 +1488,40 @@ body.em-imagem.claro .marca .marca-lk{
      mexe sem sujar a cor da marca. Acompanha a varredura, porque o filtro se
      aplica depois do clip-path. */
   filter:drop-shadow(0 3px 22px color-mix(in srgb,var(--m-campo,var(--tinta)) 62%,transparent));
-  clip-path:inset(0 100% 0 0);transition:clip-path 1.95s cubic-bezier(.14,.46,.22,1) .32s}
+  clip-path:inset(0 100% 0 0);
+  transition:clip-path 1.95s cubic-bezier(.14,.46,.22,1) var(--logo-espera,.32s)}
 .g-logo.revelado .lock img{clip-path:inset(0 0 0 0)}
+
+/* ══ CONSTRUCAO DA MARCA — lockup em SVG ═════════════════════════════════
+   O contorno e' desenhado forma a forma, da esquerda para a direita, e o
+   preenchimento entra atras do proprio traco.
+
+   `pathLength="1"` no arquivo e' o que faz isto ser CSS puro: o comprimento
+   de todo caminho passa a valer 1, entao `stroke-dasharray:1` com
+   `stroke-dashoffset` de 1 a 0 desenha qualquer forma sem medir nada em JS —
+   e uma vesica grande leva o mesmo tempo que um losango pequeno, que e' o
+   que faz o conjunto ler como UMA construcao.
+
+   `--i` vem do proprio arquivo, por forma, na ordem da esquerda para a
+   direita. `--logo-espera` empurra tudo para depois do fundo tocar sozinho.
+   O traco e' fino de proposito: ele nao e' um contorno de marca, e' o rastro
+   da construcao, e desaparece dentro do preenchimento. */
+.g-logo .lock.viva{overflow:visible;
+  filter:drop-shadow(0 3px 22px color-mix(in srgb,var(--m-campo,var(--tinta)) 55%,transparent))}
+.g-logo .lock.viva svg{display:block;width:100%;height:auto;overflow:visible}
+.g-logo .lock.viva svg path{
+  fill:var(--m-apoio,var(--papel));fill-opacity:0;
+  stroke:var(--m-apoio,var(--papel));
+  stroke-width:var(--logo-traco,.7);stroke-linejoin:round;
+  stroke-dasharray:1;stroke-dashoffset:1;
+  transition:stroke-dashoffset 1.15s cubic-bezier(.3,.6,.3,1),
+             fill-opacity .55s ease, stroke-opacity .5s ease;
+  /* 2,4 s de fundo sozinho antes do primeiro traco. Pedido do Michel: o
+     video precisa existir como video antes de virar pano de fundo da marca. */
+  transition-delay:calc(var(--logo-espera,2.4s) + var(--i,0)*var(--logo-passo,42ms)),
+                   calc(var(--logo-espera,2.4s) + var(--i,0)*var(--logo-passo,42ms) + 820ms),
+                   calc(var(--logo-espera,2.4s) + var(--i,0)*var(--logo-passo,42ms) + 1180ms)}
+.g-logo.revelado .lock.viva svg path{stroke-dashoffset:0;fill-opacity:1;stroke-opacity:0}
 .g-logo .dep{font-size:var(--fs-body);line-height:1.6;max-width:46ch;
   color:var(--m-apoio,var(--papel-80))}
 .g-logo .slot{position:relative;z-index:1;display:grid;place-content:center;
@@ -1495,6 +1529,7 @@ body.em-imagem.claro .marca .marca-lk{
   font-family:var(--f-display);font-style:italic}
 @media (prefers-reduced-motion: reduce){
   .g-logo .lock img{clip-path:inset(0 0 0 0);transition:none}
+  .g-logo .lock.viva svg path{stroke-dashoffset:0;fill-opacity:1;stroke-opacity:0;transition:none}
 }
 .chrome,.g-cheia .ov,.g-cheia .full:after{transition:opacity .55s cubic-bezier(.4,0,.2,1)}
 body.em-cheia.ocioso .chrome,
@@ -2989,10 +3024,13 @@ function tpl(s){
       : (s.fundo?`<img src="${s.fundo}" alt="">`:'');
     return `<div class="bleed">${fundo}</div>`
       + `<div class="logowrap">`
-      +   (s.ante?`<div class="ante rev">${s.ante}</div>`:'')
-      +   (s.marca?`<div class="lock"><img src="${s.marca}" alt="${(s.alt||'').replace(/"/g,'&quot;')}"></div>`
+      /* o `ante` e o `dep` esperam junto: `--i` e' o mesmo relogio de todo
+         item `rev` do motor, entao nao ha mecanismo novo aqui. */
+      +   (s.ante?`<div class="ante rev" style="--i:52">${s.ante}</div>`:'')
+      +   (s.marcasvg?`<div class="lock viva">${s.marcasvg}</div>`
+          : s.marca?`<div class="lock"><img src="${s.marca}" alt="${(s.alt||'').replace(/"/g,'&quot;')}"></div>`
                   :`<div class="slot">marca</div>`)
-      +   (s.dep?`<p class="dep rev">${s.dep}</p>`:'')
+      +   (s.dep?`<p class="dep rev" style="--i:148">${s.dep}</p>`:'')
       + `</div>`;
   }
   if(s.g==='duo'){
@@ -3275,7 +3313,13 @@ const tplSeguro=s=>{try{return tpl(s)}catch(e){console.error('deck · '+s.g,e);
   return aviso(s,'gabarito '+s.g+' quebrou','<code>'+String(e.message).replace(/</g,'&lt;')+'</code>')}};
 palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}${s.dois?' dois':''}${s.claro?' claro':''}" data-i="${i}">${tplSeguro(s)}</section>`).join('');
 const sl=[...document.querySelectorAll('.slide')];
-sl.forEach(el=>[...el.querySelectorAll('.rev')].forEach((r,j)=>r.style.setProperty('--i',Math.min(j,10))));
+/* ⚑ quem ja declarou `--i` no proprio gabarito manda. O teto de 10 existe
+   para a cascata de um slide comum nao virar espera; um gabarito que precisa
+   de espera longa — a construcao da marca no `logo` — declara o seu e nao
+   pode ser sobrescrito aqui. */
+sl.forEach(el=>[...el.querySelectorAll('.rev')].forEach((r,j)=>{
+  if(r.style.getPropertyValue('--i')==='') r.style.setProperty('--i',Math.min(j,10));
+}));
 sl.forEach((el,i)=>{if(DECK[i].g==='mapa')ligaHover(el)});
 /* ─── o viewBox do isométrico sai do desenho, não de conta à mão ─────────
    Toda vez que o espaçamento dos volumes mudava, o número escrito no código
