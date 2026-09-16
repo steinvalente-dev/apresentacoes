@@ -230,6 +230,8 @@ body.esc .chrome{color:var(--papel-70)}
 .chrome.pe{top:auto;bottom:0;height:var(--bot)}
 .chrome.topo{top:0}
 .secao{font-style:italic;position:relative;padding-left:26px;white-space:nowrap}
+/* secao sem numero (`secn:0`): some tambem a calha de 26px do numero */
+.secao:has(.sn:empty){padding-left:0}
 .secao .sn{position:absolute;left:0;top:50%;transform:translateY(-50%);font-style:normal;opacity:.55}
 .dots{display:flex;gap:clamp(9px,.8cqw,14px);pointer-events:auto;
   position:absolute;left:50%;transform:translateX(-50%)}
@@ -924,7 +926,9 @@ body.esc .fft{color:var(--papel-70)}
 @media(prefers-reduced-motion:reduce){.frbg{transition:none}}
 
 /* ═══ 23/08 · sumário: o argumento inteiro, seis blocos ═════════════════════ */
-.smgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+/* `cols` no sumario, 16/09/2026: com 4 topicos a grade de tres deixa um
+   orfao na segunda linha. 2x2 fecha, e ainda da largura para os subitens. */
+.smgrid{display:grid;grid-template-columns:repeat(var(--smc,3),minmax(0,1fr));
   gap:clamp(16px,2.4cqw,44px) clamp(18px,2.8cqw,52px);
   margin-top:clamp(20px,3.2cqh,48px);width:100%}
 .sm{border-top:1.5px solid currentColor;padding-top:clamp(10px,1.5cqh,18px)}
@@ -1442,7 +1446,18 @@ body.em-imagem.claro .marca .marca-lk{
 .g-logo .bleed video,.g-logo .bleed img{position:absolute;inset:0;
   width:100%;height:100%;object-fit:cover;display:block}
 .g-logo .bleed:after{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(96deg,
+  background:
+    /* ⚑ 16/09/2026 — DUAS camadas, e a de cima existe por um motivo. Com o
+       veu numa cor so, um fundo que tem sol (o cafezal com lens flare) perde
+       justamente o que tem de vivo: o campo de cor apaga o brilho. Esta
+       camada e' o sol atravessando o veu, ancorada onde o flare nasce no
+       video — direita, um pouco acima do meio. Se o fundo nao tiver sol, ela
+       so aquece a lateral e nao atrapalha. */
+    radial-gradient(112% 86% at 91% 40%,
+      color-mix(in srgb,var(--m-acento,var(--acento)) 30%,transparent) 0%,
+      color-mix(in srgb,var(--m-acento,var(--acento)) 10%,transparent) 34%,
+      transparent 66%),
+    linear-gradient(96deg,
     color-mix(in srgb,var(--m-campo,var(--tinta)) 90%,transparent) 0%,
     color-mix(in srgb,var(--m-campo,var(--tinta)) 88%,transparent) 30%,
     color-mix(in srgb,var(--m-campo,var(--tinta)) 82%,transparent) 46%,
@@ -1467,6 +1482,10 @@ body.em-imagem.claro .marca .marca-lk{
    A curva tambem abriu (.18/.5 -> .14/.46 no comeco): segura a velocidade
    por mais tempo antes de assentar, em vez de frear cedo. */
 .g-logo .lock img{display:block;width:100%;height:auto;
+  /* sombra na cor do campo, nao preta: descola o lockup de um fundo que se
+     mexe sem sujar a cor da marca. Acompanha a varredura, porque o filtro se
+     aplica depois do clip-path. */
+  filter:drop-shadow(0 3px 22px color-mix(in srgb,var(--m-campo,var(--tinta)) 62%,transparent));
   clip-path:inset(0 100% 0 0);transition:clip-path 1.95s cubic-bezier(.14,.46,.22,1) .32s}
 .g-logo.revelado .lock img{clip-path:inset(0 0 0 0)}
 .g-logo .dep{font-size:var(--fs-body);line-height:1.6;max-width:46ch;
@@ -3169,7 +3188,12 @@ function tpl(s){
       +(Array.isArray(sb)&&sb.length
         ?`<ul class="smsub">`+sb.map(x=>`<li>${RS(x)}</li>`).join('')+`</ul>`:'')
       +`</div>`).join('');
-    return `<div class="wrap largo">${k}${t}${sub}<div class="smgrid rev">${it}</div>`
+    /* ⚑ o campo chama-se `grade`, e nao `cols`: `cols` ja e' array de nomes
+       de coluna na `tabela` e numero na `prancha`, e o `const tab` acima faz
+       `s.cols.map` em qualquer slide que chegue ate la. Terceiro sentido para
+       o mesmo nome seria armadilha — e foi: quebrou na primeira montagem. */
+    return `<div class="wrap largo">${k}${t}${sub}<div class="smgrid rev"`
+      +(s.grade?` style="--smc:${+s.grade||3}"`:'')+`>${it}</div>`
       +(s.fecho?`<p class="smf rev">${RS(s.fecho)}</p>`:'')+`</div>`;
   }
 
@@ -3225,7 +3249,17 @@ function tpl(s){
 }
 /* `fim:1` e `fim_:1` valem o mesmo: o go() lê `fim_` */
 DECK.forEach(s=>{if(s.fim&&s.fim_==null)s.fim_=s.fim});
-let secs=[];DECK.forEach((s,i)=>{if(s.sec)secs.push({nome:s.sec,i})});
+/* ⚑ SECAO SEM NUMERO — 16/09/2026. O indice deixou de listar todas as
+   secoes: o Michel tirou dele a localizacao, o uso publico e a sustentacao,
+   e mandou manter as sete bolinhas. Se o chrome continuasse numerando por
+   ordem de secao, a peca diria "05 museu" num slide cuja secao o indice
+   chama de 04 — contradicao na cara do cliente.
+   Entao a numeracao passa a contar so o que e' topico do indice: `secn:0` no
+   slide que abre a secao tira o numero e nao consome a contagem. A secao
+   continua existindo, continua no chrome pelo nome e continua sendo parada
+   das bolinhas — so nao e' um dos capitulos numerados. */
+let secs=[];DECK.forEach((s,i)=>{if(s.sec)secs.push({nome:s.sec,i,num:(s.secn===0||s.secn===false)?0:-1})});
+(function(){let c=0;secs.forEach(x=>{if(x.num===-1){c++;x.num=c}})})();
 let sa='';DECK.forEach(s=>{if(s.sec)sa=s.sec;s._sec=sa});
 /* o selo vale ate a proxima secao: quem declara `selo` num divisor cobre
    a secao inteira sem repetir o campo slide a slide. `selo:0` corta. */
@@ -3467,7 +3501,8 @@ function go(i,tudo){
   })();
   document.querySelector('.sl').textContent=s._sec||'';
   const si=secs.findIndex(x=>x.nome===s._sec);
-  document.querySelector('.sn').textContent=si>=0?String(si+1).padStart(2,'0'):'';
+  document.querySelector('.sn').textContent=
+    (si>=0&&secs[si].num>0)?String(secs[si].num).padStart(2,'0'):'';
   [...dots.children].forEach((d,j)=>d.classList.toggle('on',j===si));
   conta();location.hash=i+1;
 }
