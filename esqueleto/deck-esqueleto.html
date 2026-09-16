@@ -231,7 +231,8 @@ body.esc .chrome{color:var(--papel-70)}
 .chrome.topo{top:0}
 .secao{font-style:italic;position:relative;padding-left:26px;white-space:nowrap}
 .secao .sn{position:absolute;left:0;top:50%;transform:translateY(-50%);font-style:normal;opacity:.55}
-.dots{display:flex;gap:clamp(9px,.8cqw,14px);pointer-events:auto}
+.dots{display:flex;gap:clamp(9px,.8cqw,14px);pointer-events:auto;
+  position:absolute;left:50%;transform:translateX(-50%)}
 .sdot{width:var(--pt);height:var(--pt);border-radius:50%;background:currentColor;opacity:.28;cursor:pointer;position:relative;transition:opacity .25s}
 .sdot.on{opacity:1}
 .sdot span{position:absolute;bottom:150%;left:50%;transform:translateX(-50%);opacity:0;white-space:nowrap;font-style:italic;letter-spacing:.1em;transition:opacity .2s;pointer-events:none}
@@ -488,7 +489,7 @@ body.terra .chrome{color:var(--papel-90)}
      slide claro  -> a cor da sub-marca
      slide escuro -> Cal
    Um arquivo so, nas duas situacoes, e sem ninguem escolher versao. */
-.chrome.topo .selo{display:block;height:clamp(16px,2.6cqh,30px);
+.chrome.topo .selo{display:block;height:clamp(24px,4cqh,46px);
   /* a proporcao vem do arquivo, medida uma vez pelo go() — sub-marca nova
      entra sem ninguem acertar largura na mao */
   aspect-ratio:var(--selo-ar,3.6);
@@ -497,6 +498,10 @@ body.terra .chrome{color:var(--papel-90)}
           mask:var(--selo) no-repeat left center/contain}
 body.em-imagem .chrome.topo .selo{background:var(--papel-90)}
 body.em-imagem.claro .chrome.topo .selo{background:var(--m-marca,var(--tinta))}
+/* ⚑ o `hidden` do HTML tem de vencer o display:block acima — sem isto
+   sobra uma caixa sem mascara, e caixa sem mascara e o `background`
+   inteiro: o retangulo Vinho que apareceu em todo slide fora da secao. */
+.chrome.topo .selo[hidden]{display:none}
 body.com-selo .chrome.topo .secao{display:none}
 /* ⚑ na abertura o selo SAI: o lockup ja esta gigante no meio da tela, e a
    marca repetida em miniatura no canto so tira forca da entrada. */
@@ -1419,9 +1424,14 @@ body.em-imagem.claro .marca .marca-lk{
   width:100%;height:100%;object-fit:cover;display:block}
 .g-logo .bleed:after{content:'';position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(96deg,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 95%,transparent) 0%,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 84%,transparent) 46%,
-    color-mix(in srgb,var(--m-campo,var(--tinta)) 46%,transparent) 100%)}
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 90%,transparent) 0%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 88%,transparent) 30%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 82%,transparent) 46%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 72%,transparent) 58%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 59%,transparent) 69%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 46%,transparent) 80%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 36%,transparent) 90%,
+    color-mix(in srgb,var(--m-campo,var(--tinta)) 32%,transparent) 100%)}
 .g-logo .logowrap{position:relative;z-index:1;display:flex;flex-direction:column;
   align-items:flex-start;justify-content:center;height:100%;
   gap:clamp(14px,2.6cqh,36px);padding:0 var(--gut)}
@@ -1654,7 +1664,7 @@ body.ocioso .g-galeria.lupando .lconta{opacity:0}
    papel e o lockup fica monocromático, como o negativo oficial. SVG
    monocromático usa fill="currentColor" e recebe o mesmo tratamento.   */
 .marca{display:flex;align-items:center}
-.marca .marca-lk{display:block;width:var(--logo-canto-w,clamp(120px,8.6cqw,148px));
+.marca .marca-lk{display:block;width:var(--logo-canto-w,clamp(104px,7.4cqw,128px));
   line-height:0;opacity:.9;transition:opacity .3s ease;color:var(--tinta)}
 .marca .marca-lk svg{display:block;width:100%;height:auto}
 
