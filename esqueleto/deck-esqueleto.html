@@ -1509,19 +1509,37 @@ body.em-imagem.claro .marca .marca-lk{
 .g-logo .lock.viva{overflow:visible;
   filter:drop-shadow(0 3px 22px color-mix(in srgb,var(--m-campo,var(--tinta)) 55%,transparent))}
 .g-logo .lock.viva svg{display:block;width:100%;height:auto;overflow:visible}
+/* ⚑ ANIMACAO, E NAO TRANSICAO — e o motivo e' um defeito medido.
+   Com transicao, antes do atraso vencer o caminho fica em
+   `stroke-dashoffset:1`, que em tese nao desenha nada. Na pratica o Chromium
+   emite um segmento de comprimento zero no inicio de cada subcaminho, e a
+   juncao arredondada dele vira um PONTO. Medido em 16/09/2026 comparando o
+   slide com e sem o SVG no mesmo quadro de video: 218 pixels acesos,
+   espalhados por toda a caixa — um ponto por subcaminho. O Michel viu:
+   *"vejo pequenos pontinhos brancos na tela, como se fosse uma previa dos
+   pontos de ancora"*. Era exatamente isso.
+
+   `animation` com `animation-fill-mode:both` resolve na raiz: antes do
+   atraso o elemento segura o quadro 0%, e nele `stroke-opacity:0`. Nao
+   importa o que o rasterizador faca com o tracejado degenerado — esta
+   transparente. A juncao arredondada tambem saiu; nao fazia falta. */
+@keyframes ms-constroi{
+  0%  {stroke-opacity:0;fill-opacity:0;stroke-dashoffset:1}
+  4%  {stroke-opacity:1}
+  44% {stroke-opacity:1;fill-opacity:0;stroke-dashoffset:0}
+  70% {fill-opacity:1}
+  100%{stroke-opacity:0;fill-opacity:1;stroke-dashoffset:0}
+}
 .g-logo .lock.viva svg path{
   fill:var(--m-apoio,var(--papel));fill-opacity:0;
-  stroke:var(--m-apoio,var(--papel));
-  stroke-width:var(--logo-traco,.7);stroke-linejoin:round;
-  stroke-dasharray:1;stroke-dashoffset:1;
-  transition:stroke-dashoffset 1.15s cubic-bezier(.3,.6,.3,1),
-             fill-opacity .55s ease, stroke-opacity .5s ease;
-  /* 2,4 s de fundo sozinho antes do primeiro traco. Pedido do Michel: o
-     video precisa existir como video antes de virar pano de fundo da marca. */
-  transition-delay:calc(var(--logo-espera,2.4s) + var(--i,0)*var(--logo-passo,42ms)),
-                   calc(var(--logo-espera,2.4s) + var(--i,0)*var(--logo-passo,42ms) + 820ms),
-                   calc(var(--logo-espera,2.4s) + var(--i,0)*var(--logo-passo,42ms) + 1180ms)}
-.g-logo.revelado .lock.viva svg path{stroke-dashoffset:0;fill-opacity:1;stroke-opacity:0}
+  stroke:var(--m-apoio,var(--papel));stroke-opacity:0;
+  stroke-width:var(--logo-traco,.7);
+  stroke-dasharray:1;stroke-dashoffset:1}
+/* 2,4 s de fundo sozinho antes do primeiro traco. Pedido do Michel: o video
+   precisa existir como video antes de virar pano de fundo da marca. */
+.g-logo.revelado .lock.viva svg path{
+  animation:ms-constroi 2.6s cubic-bezier(.3,.6,.3,1) both;
+  animation-delay:calc(var(--logo-espera,2.4s) + var(--i,0)*var(--logo-passo,42ms))}
 .g-logo .dep{font-size:var(--fs-body);line-height:1.6;max-width:46ch;
   color:var(--m-apoio,var(--papel-80))}
 .g-logo .slot{position:relative;z-index:1;display:grid;place-content:center;
@@ -1529,7 +1547,7 @@ body.em-imagem.claro .marca .marca-lk{
   font-family:var(--f-display);font-style:italic}
 @media (prefers-reduced-motion: reduce){
   .g-logo .lock img{clip-path:inset(0 0 0 0);transition:none}
-  .g-logo .lock.viva svg path{stroke-dashoffset:0;fill-opacity:1;stroke-opacity:0;transition:none}
+  .g-logo.revelado .lock.viva svg path{animation:none;fill-opacity:1;stroke-opacity:0}
 }
 .chrome,.g-cheia .ov,.g-cheia .full:after{transition:opacity .55s cubic-bezier(.4,0,.2,1)}
 body.em-cheia.ocioso .chrome,
