@@ -24,7 +24,7 @@ DESCRICAO = {
     'marca':       ('estrutura', 'abertura e contracapa. Vêm do bloco da marca, não se inventam'),
     'capa':        ('estrutura', 'nome do projeto, endereço e três metas'),
     'divisor':     ('estrutura', 'abre seção e ganha um ponto no chrome'),
-    'sumario':     ('estrutura', 'o argumento inteiro em blocos, logo depois da capa'),
+    'sumario':     ('estrutura', 'o argumento inteiro em blocos, logo depois da capa. 4o elemento de cada item, opcional: lista de subitens'),
     'fim':         ('estrutura', 'próximos passos. É o que o cliente leva embora'),
     'frase':       ('texto', 'uma ideia por tela, tipo grande'),
     'lista':       ('texto', 'itens numerados, entram por clique'),

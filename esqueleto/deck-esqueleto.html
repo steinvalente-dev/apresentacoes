@@ -937,6 +937,18 @@ body.esc .smn{color:var(--acento-claro)}
 .smd{font-size:var(--fs-body);line-height:1.55;color:var(--soft);
   margin-top:clamp(7px,1cqh,12px);display:block}
 body.esc .smd{color:var(--papel-70)}
+/* SUBITEM — 16/09/2026. Topico que deixou de ser secao propria e passou a
+   pender de outra. Registro mono, um degrau abaixo do `.smd`: le como
+   desdobramento e nunca disputa com o titulo da secao. O tracinho no lugar
+   do bullet repete o filete que ja abre o `.ante` do gabarito `logo`. */
+.smsub{list-style:none;margin:clamp(9px,1.3cqh,15px) 0 0;padding:0;
+  display:flex;flex-direction:column;gap:clamp(5px,.7cqh,8px)}
+.smsub li{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.08em;
+  line-height:1.55;color:var(--soft);padding-left:19px;position:relative}
+.smsub li:before{content:'';position:absolute;left:0;top:.66em;
+  width:10px;height:1.5px;background:var(--acento)}
+body.esc .smsub li{color:var(--papel-70)}
+body.esc .smsub li:before{background:var(--acento-claro)}
 .smf{font-size:var(--fs-item);line-height:1.5;max-width:64ch;
   margin-top:clamp(18px,2.8cqh,42px)}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
@@ -3133,10 +3145,15 @@ function tpl(s){
       + col(s.esq)+col(s.dir)+fora(s.esqfora)+fora(s.dirfora)+`</div></div>`;
   }
 
-  /* ─── sumario: o argumento inteiro em seis blocos, um por secao ───────── */
+  /* ─── sumario: o argumento inteiro em blocos, um por secao. O 4o elemento
+     de cada item e OPCIONAL: lista de subitens que pendem dele ─────────── */
   if(s.g==='sumario'){
-    const it=s.itens.map(([n,ti,d])=>`<div class="sm passo"><span class="smn">${n}</span>`
-      +`<span class="smt">${RS(ti)}</span><span class="smd">${RS(d)}</span></div>`).join('');
+    /* 4o elemento, opcional: subitens — topicos que pendem deste. */
+    const it=s.itens.map(([n,ti,d,sb])=>`<div class="sm passo"><span class="smn">${n}</span>`
+      +`<span class="smt">${RS(ti)}</span><span class="smd">${RS(d)}</span>`
+      +(Array.isArray(sb)&&sb.length
+        ?`<ul class="smsub">`+sb.map(x=>`<li>${RS(x)}</li>`).join('')+`</ul>`:'')
+      +`</div>`).join('');
     return `<div class="wrap largo">${k}${t}${sub}<div class="smgrid rev">${it}</div>`
       +(s.fecho?`<p class="smf rev">${RS(s.fecho)}</p>`:'')+`</div>`;
   }
