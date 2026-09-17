@@ -125,7 +125,9 @@
   --fs-marca:clamp(14px,1.28cqw,26px);   /* assinatura, alto direita    */
   --fs-pe:clamp(13px,1.16cqw,23px);      /* projeto · cliente, pé       */
   /* navegação */
-  --seta:clamp(38px,2.9cqw,56px);        /* ITTB — o tamanho do botão   */
+  /* 17/09/2026: o TETO cai de 56 para 46 px, a pedido. O piso de 38 px fica:
+     é ele que vale em tela pequena, e alvo de toque não se encolhe. */
+  --seta:clamp(38px,2.4cqw,46px);        /* ITTB — o tamanho do botão   */
   --pt:clamp(6px,.44cqw,9px);            /* bolinha de seção            */
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1819,7 +1821,12 @@ body.ocioso .g-galeria.lupando .lconta{opacity:0}
    de altura pega celular deitado em tela curta, onde a largura sozinha não
    denuncia. */
 @media (max-width:900px),(max-height:520px){
-  .marca .marca-lk{--logo-canto-w:clamp(70px,10cqw,100px);opacity:.82}
+  /* ⚑ `!important` porque o bloco de marca escreve `--logo-canto-w` no
+     ESTILO INLINE do nó (`lk.style.setProperty`), e inline vence folha. Sem
+     isto o nível Micro da §4 nunca disparava para quem declara `largura` —
+     medido em 17/09/2026: em tela de 430 px o lockup ficava com 132 px, 31%
+     da largura, e com `estúdio` abaixo do piso de 130 px. */
+  .marca .marca-lk{--logo-canto-w:clamp(70px,10cqw,100px)!important;opacity:.82}
   /* o seletor casa a STRING do atributo, não o valor computado: continua
      valendo quando o tema troca --tinta por --papel sobre campo escuro. */
   .marca .marca-lk svg path[fill="var(--tinta)"]{display:none}

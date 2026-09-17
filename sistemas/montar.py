@@ -654,6 +654,17 @@ def main():
         esq = esq.replace('</head>', bt + '</head>', 1)
     titulo = html.escape(re.sub(r'<[^>]+>', ' ', dj.get('titulo') or dj['projeto']).strip())
     esq = re.sub(r'<title>.*?</title>', f'<title>{titulo}</title>', esq, count=1, flags=re.S)
+    # ── o rodape de todo slide ──────────────────────────────────────────
+    # ⚑ `projeto · cliente` era texto fixo no esqueleto e NUNCA foi trocado:
+    #   todo deck desta casa foi ao cliente com o placeholder no pe. Agora
+    #   vem do `pe` do deck.json e, na falta dele, do nome do projeto — o
+    #   placeholder nao volta a ser publicado por esquecimento.
+    pe = (dj.get('pe') or '').strip() \
+        or re.sub(r'<[^>]+>', ' ', dj.get('projeto') or '').strip().lower()
+    if pe:
+        esq = re.sub(r'(<span class="pj">).*?(</span>)',
+                     lambda m: m.group(1) + html.escape(pe) + m.group(2),
+                     esq, count=1, flags=re.S)
     # ── a chave da Maps: por caminho aqui dentro, EMBUTIDA lá fora ──
     # `../modulos/ms-maps-chave.js` resolve para peça que mora neste
     # repositório, e é assim que tem de ser: trocar a chave um dia é editar um
