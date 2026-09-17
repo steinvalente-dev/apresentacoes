@@ -376,6 +376,17 @@ body.com-fundo .kick,body.com-fundo .sub{color:var(--papel-80)}
 .dfig{position:relative;min-height:clamp(220px,52cqh,620px);background:var(--tinta-5);border:1px solid var(--hair);overflow:hidden}
 .dfig img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .dfig.pb img{filter:grayscale(1) contrast(1.06)}
+/* `caber` — a quarta posição da fig aceita classe, e esta troca o `cover` por
+   `contain`. CROQUI NÃO SE RECORTA: em 17/09/2026 o croqui do reforço perdeu
+   a cota de baixo e a última barra, porque a imagem é 4:3 e o slot é mais
+   largo. Foto aguenta perder borda; desenho cotado, não. */
+.dfig.caber img{object-fit:contain;background:var(--papel)}
+/* `alto:1` no slide — par de imagens EM PÉ. O slot do duo é deitado, e
+   imagem em pé dentro dele, contida, fica pequena no meio de duas faixas de
+   branco. Aqui ele cresce até o que a página permite. Medido em 17/09/2026
+   com a parede das fissuras: 0,75 de razão num slot 1,9:1 usava 40% da
+   largura da coluna. */
+.dcols.alto .dfig{min-height:clamp(260px,57cqh,820px)}
 .dfig .slot{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
   padding:clamp(14px,2cqw,28px);font-family:var(--f-mono);font-size:var(--fs-cap);line-height:1.6;color:var(--soft)}
 .dfig .slot b{color:var(--acento);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
@@ -3146,7 +3157,7 @@ function tpl(s){
     const RES=IMG;
     /* o slot so aparece se a imagem falhar — antes ele ficava por cima da foto */
     const f=s.figs.map(([tag,src,cap,cl])=>`<div class="dfig ${cl}"><img src="${RES[src]||src}" alt="${cap}" onerror="const p=this.parentNode;this.remove();p.classList.add('semimg')"><span class="tag">${tag}</span><div class="slot"><b>slot de imagem</b><span>${cap}</span></div><span class="dcap">${cap}</span></div>`).join('');
-    return `<div class="wrap" style="max-width:none">${k}${t}${sub}<div class="dcols rev">${f}</div><p class="dleg rev">${s.leg}</p></div>`;
+    return `<div class="wrap" style="max-width:none">${k}${t}${sub}<div class="dcols${s.alto?' alto':''} rev">${f}</div><p class="dleg rev">${s.leg}</p></div>`;
   }
   if(s.g==='fotos'){
     const li=s.itens.map(([q,x],i)=>`<li class="passo" data-f="${i}"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('');

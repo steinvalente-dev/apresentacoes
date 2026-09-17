@@ -207,7 +207,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 | `cheia` | o render em tela cheia. É o padrão para render — ver `gabaritos/render-cheia.md` | `abre` · `cap` · `h2` · `lbl` · `src` |
 | `video` | vídeo em sangria total: mudo, em laço e com botão de pausa. `vsrc` entra como data-URI pelo montar.py, com teto de 3 MB — comprimir antes | `cap` · `h2` · `lbl` · `vsrc` |
 | `carrossel` | uma pilha de desenhos passando em cross-fade, com o texto por cima. Para mostrar VOLUME de trabalho, não para ler desenho | `cap` · `h2` · `imgs` · `lbl` |
-| `duo` | duas imagens lado a lado | **`figs` (4)** · **`leg`** |
+| `duo` | duas imagens lado a lado | `alto` · **`figs` (4)** · **`leg`** |
 | `fotos` | linha do tempo ilustrada | `cols` · **`itens`** |
 | `prancha` | grade de 2 a 4 imagens sobre um tema. Retrato 3–4 colunas, deitada 2. `cols` aqui é NÚMERO — ver `gabaritos/prancha-referencia.md` | `ar` · `cols` · `items` · `top` |
 | `viva` | a peça vizinha rodando DENTRO do slide, em quadro de sangria total. `src` relativo, mesma pasta; o slide fica travado e só as setas trocam — `gabaritos/viva.md` | `alt` · `cap` · `h2` · **`src`** |
