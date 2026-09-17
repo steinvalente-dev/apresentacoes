@@ -1891,14 +1891,21 @@ body.no-fim #msgraf{opacity:.18}
 .g-viva.pronto iframe{opacity:1}
 /* enquanto carrega: campo parado com o anel do resto da casa. São 6 MB de
    arquivo local — um piscar, mas um piscar que não pode ser tela preta. */
+/* enquanto carrega: o MESMO indicador do `earth-3d` e do `modelo-3d` — anel
+   girando para o que não se sabe medir. São 6 MB de arquivo local; costuma
+   ser um piscar, mas um piscar que não pode ser campo vazio. Os seletores do
+   indicador estão logo abaixo, no bloco dos visores, e ganharam `.g-viva`. */
+/* slide `claro`: o campo de espera acompanha, senão o branco da peça entra
+   depois de um retângulo escuro — um salto de cor no meio da fala. */
+body.claro .g-viva,body.claro .g-viva .estado{background:var(--papel)}
+body.claro .g-viva .estado b{color:var(--tinta)}
+body.claro .g-viva .estado s{color:var(--tinta-60)}
+body.claro .g-viva .anel{border-color:var(--tinta-15);border-top-color:var(--tinta)}
 .g-viva .estado{position:absolute;inset:0;z-index:5;display:grid;place-content:center;
   justify-items:center;gap:.7em;text-align:center;padding:0 12%;
-  opacity:1;transition:opacity .4s ease;pointer-events:none}
+  background:var(--moldura);
+  opacity:1;transition:opacity .45s ease;pointer-events:none}
 .g-viva.pronto .estado{opacity:0}
-.g-viva .estado b{font-family:var(--f-display);font-weight:500;font-style:italic;
-  font-size:var(--fs-h3);color:var(--papel)}
-.g-viva .estado s{text-decoration:none;font-family:var(--f-mono);font-size:var(--fs-cap);
-  letter-spacing:.12em;text-transform:uppercase;color:var(--papel-60)}
 
 /* ═══ visores — earth-3d e modelo-3d ═════════════════════════════════════
    Portados da EMEI Presidente Dutra em 03/09/2026 (módulos mestres:
@@ -2041,17 +2048,18 @@ body.no-fim #msgraf{opacity:.18}
 .g-earth-3d.esperando .veu,.g-earth-3d.esperando .cmd,.g-earth-3d.falhou .veu,.g-earth-3d.falhou .cmd,
 .g-modelo-3d.esperando .veu,.g-modelo-3d.esperando .cmd,.g-modelo-3d.esperando .rotulo,
 .g-modelo-3d.falhou .veu{display:none}
-.g-earth-3d .estado b,.g-modelo-3d .estado b{font-family:var(--f-display);font-weight:500;font-style:italic;
+.g-earth-3d .estado b,.g-modelo-3d .estado b,.g-viva .estado b{font-family:var(--f-display);font-weight:500;font-style:italic;
   text-transform:lowercase;font-size:var(--fs-item);color:var(--papel);letter-spacing:-.02em}
-.g-earth-3d .estado span,.g-modelo-3d .estado span{font-size:var(--fs-body);color:var(--papel-60);line-height:1.6;
+.g-earth-3d .estado span,.g-modelo-3d .estado span,.g-viva .estado s{
+  display:block;text-decoration:none;font-size:var(--fs-body);color:var(--papel-60);line-height:1.6;
   max-width:56ch;margin:0 auto}
 .g-earth-3d .estado code,.g-modelo-3d .estado code{font-family:var(--f-mono);font-size:.9em;color:var(--papel)}
 /* o indicador de carga: barra com passo REAL (os degraus são nossos) e o
    anel girando para o que não se sabe medir. Pedido do Michel, 02/09. */
-.g-earth-3d .carga,.g-modelo-3d .carga{display:flex;flex-direction:column;align-items:center;
+.g-earth-3d .carga,.g-modelo-3d .carga,.g-viva .carga{display:flex;flex-direction:column;align-items:center;
   gap:clamp(14px,2cqh,24px)}
 .g-earth-3d.falhou .carga,.g-modelo-3d.falhou .carga{display:none}
-.g-earth-3d .anel,.g-modelo-3d .anel{width:clamp(30px,3.4cqw,46px);height:clamp(30px,3.4cqw,46px);
+.g-earth-3d .anel,.g-modelo-3d .anel,.g-viva .anel{width:clamp(30px,3.4cqw,46px);height:clamp(30px,3.4cqw,46px);
   border-radius:50%;border:2px solid var(--papel-15);border-top-color:var(--papel);
   animation:gira3d .85s linear infinite}
 @keyframes gira3d{to{transform:rotate(360deg)}}
@@ -2061,7 +2069,7 @@ body.no-fim #msgraf{opacity:.18}
   background:var(--papel);transition:width .7s cubic-bezier(.3,.8,.3,1)}
 .g-earth-3d .passos,.g-modelo-3d .passos{font-family:var(--f-mono);font-size:var(--fs-cap);
   letter-spacing:.14em;text-transform:uppercase;color:var(--papel-45)}
-@media (prefers-reduced-motion:reduce){.g-earth-3d .anel,.g-modelo-3d .anel{animation:none}}
+@media (prefers-reduced-motion:reduce){.g-earth-3d .anel,.g-modelo-3d .anel,.g-viva .anel{animation:none}}
 
 /* ══ A ANOTAÇÃO DENTRO DO VISOR 3D ═══════════════════════════════════════
    Rótulo de lote e nome de rua desenhados DENTRO da malha, não por cima
@@ -3172,7 +3180,8 @@ function tpl(s){
        trinta slides é memória que ninguém está usando. */
     return `<div class="visor"><iframe title="${(s.alt||'peça interativa').replace(/"/g,'&quot;')}"`
       + ` data-src="${s.src}" allow="fullscreen"></iframe>`
-      + `<div class="estado"><b>${s.h2||'abrindo a peça'}</b>`
+      + `<div class="estado"><div class="carga"><div class="anel"></div></div>`
+      + `<b>${s.h2||'abrindo a peça'}</b>`
       + `<s>${s.cap||'um instante'}</s></div></div>`;
   }
   if(s.g==='modelo-3d'){

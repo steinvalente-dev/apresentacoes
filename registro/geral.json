@@ -157,6 +157,13 @@
   {
    "aba": "deck",
    "grupo": "as peças de montar",
+   "nome": "gabarito `viva` — a peça vizinha dentro do slide",
+   "desc": "Um slide de sangria total que roda OUTRO arquivo HTML da mesma pasta, num quadro. Foi assim que a planta interativa entrou no deck sem ser colada no esqueleto: 6 MB com CSS e ids próprios ficam isolados, a peça segue sendo um arquivo só, e o teclado fica dela enquanto o slide é dela — é o que faz o clicker andar no roteiro da planta e sair do slide na ponta. `src` relativo, slide travado, chrome do deck por cima, e o motor mede o próprio chrome e manda a medida para a peça desviar",
+   "arq": "sistemas/gabaritos/viva.md"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
    "nome": "módulos",
    "desc": "Capa, engine, laboratório e o chip de voltar. Sem revisão: o arquivo é o vigente",
    "arq": "modulos/LEIA-ME.md"
