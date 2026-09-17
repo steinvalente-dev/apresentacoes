@@ -204,7 +204,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 | gabarito | o que é | campos próprios |
 |---|---|---|
 | `galeria` | mosaico de miniaturas com lupa: clique abre a vista grande, com setas e contador. As miniaturas entram quando o slide chega, não na carga | `fotos` |
-| `cheia` | o render em tela cheia. É o padrão para render — ver `gabaritos/render-cheia.md` | `cap` · `h2` · `lbl` · `src` |
+| `cheia` | o render em tela cheia. É o padrão para render — ver `gabaritos/render-cheia.md` | `abre` · `cap` · `h2` · `lbl` · `src` |
 | `video` | vídeo em sangria total: mudo, em laço e com botão de pausa. `vsrc` entra como data-URI pelo montar.py, com teto de 3 MB — comprimir antes | `cap` · `h2` · `lbl` · `vsrc` |
 | `carrossel` | uma pilha de desenhos passando em cross-fade, com o texto por cima. Para mostrar VOLUME de trabalho, não para ler desenho | `cap` · `h2` · `imgs` · `lbl` |
 | `duo` | duas imagens lado a lado | **`figs` (4)** · **`leg`** |

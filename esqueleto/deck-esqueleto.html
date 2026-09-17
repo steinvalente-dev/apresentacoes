@@ -1253,6 +1253,33 @@ body.em-imagem .chrome.pe{
   letter-spacing:-.022em;line-height:1}
 .g-cheia .ov .cap{color:var(--papel-70);margin-top:.7em;max-width:70ch;
   font-family:var(--f-mono);font-size:var(--fs-cap);line-height:1.45}
+/* ══ CHIP `abre` — a peca que mora ao lado ═══════════════════════════════
+   17/09/2026. Modulo que ainda nao e' gabarito (a planta interativa) roda em
+   arquivo proprio, na MESMA PASTA da peca, e o deck so o chama. O `href` e'
+   relativo por regra: as duas moram juntas, entao o caminho da pasta de
+   cliente nunca precisa ser escrito.
+
+   Canto inferior DIREITO, oposto ao titulo. E irmao do `.ov`, nao filho:
+   o `.ov` esvanece com o ponteiro parado e o chip nao pode esvanecer junto —
+   botao que some e' botao que nao se acha no meio da fala.
+
+   Pastilha clara, como a `.nav`: a mesma medida de leitura garantida sobre
+   render de qualquer cor. */
+.g-cheia .abrir{position:absolute;right:var(--gut);bottom:calc(var(--bot) + clamp(14px,2.2cqh,30px));
+  z-index:3;pointer-events:auto;display:flex;flex-direction:column;align-items:flex-end;gap:.2em;
+  text-decoration:none;cursor:pointer;
+  background:color-mix(in srgb,var(--papel) 94%,transparent);
+  -webkit-backdrop-filter:blur(7px) saturate(1.1);backdrop-filter:blur(7px) saturate(1.1);
+  border:1px solid var(--tinta-20);border-radius:999px;
+  padding:clamp(9px,1.2cqh,15px) clamp(16px,1.8cqw,28px);
+  box-shadow:0 1px 5px var(--tinta-15);color:var(--tinta);
+  transition:transform .25s ease,box-shadow .25s ease}
+.g-cheia .abrir b{font-family:var(--f-corpo);font-weight:600;
+  font-size:var(--fs-cap);letter-spacing:-.005em;line-height:1.1}
+.g-cheia .abrir s{text-decoration:none;font-family:var(--f-mono);font-weight:500;
+  font-size:calc(var(--fs-cap)*.88);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--tinta-60)}
+.g-cheia .abrir:hover{transform:translateY(-2px);box-shadow:0 3px 12px var(--tinta-20)}
 .g-cheia .slot{position:absolute;inset:0;display:grid;place-content:center;
   gap:.35em;text-align:center;padding:1em;background:var(--slot-escuro);
   border:1px dashed var(--papel-20)}
@@ -2992,9 +3019,16 @@ function tpl(s){
          seguinte), pelo __msPuxa(). Vale para base64 e para arquivo ao lado. */
       ? `<img decoding="async" data-src="${s.src}" alt="${(s.cap||'').replace(/"/g,'&quot;')}">`
       : `<div class="slot"><u>_</u><b>${s.lbl||'render'}</b><s>16:9 · sangria total</s></div>`;
+    /* `abre`: chip para uma peca que mora ao lado, na mesma pasta. Ver
+       "CHIP `abre`" no CSS — ele fica FORA do `.ov` de proposito. */
+    const ab = s.abre && s.abre.href
+      ? `<a class="abrir" href="${s.abre.href}" target="_blank" rel="noopener">`
+        + `<b>${s.abre.rot||'abrir'}</b>`
+        + (s.abre.sub?`<s>${s.abre.sub}</s>`:'') + `</a>`
+      : '';
     return `<div class="full"><div class="ph">${img}</div></div>`
       + `<div class="ov">${s.h2?`<h2 class="rev">${s.h2}</h2>`:''}`
-      + (s.cap?`<div class="cap rev">${s.cap}</div>`:'') + `</div>`;
+      + (s.cap?`<div class="cap rev">${s.cap}</div>`:'') + `</div>` + ab;
   }
   if(s.g==='video'){
     /* `vsrc` chega como data-URI de video, posto pelo montar.py. Sem ele o

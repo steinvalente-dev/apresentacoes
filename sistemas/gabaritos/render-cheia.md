@@ -99,6 +99,35 @@ avisar o Michel: passa do limite de anexo de e-mail.
 
 ---
 
+## `abre` — o chip para uma peça que mora ao lado
+
+17/09/2026. Módulo que ainda não é gabarito — a planta interativa é o primeiro
+caso — roda em arquivo próprio, na MESMA PASTA da apresentação, e o deck só o
+chama:
+
+```json
+"abre": { "rot": "abrir a planta interativa",
+          "sub": "abre em aba nova",
+          "href": "planta-interativa.html" }
+```
+
+Vira uma âncora `target="_blank"` no canto inferior direito, em pastilha clara
+como a `.nav`.
+
+**`href` RELATIVO, sempre.** As duas peças moram juntas, então o nome do arquivo
+basta — e assim o caminho da área de cliente não é escrito em lugar nenhum.
+URL de área de cliente dentro de arquivo é justamente o que o `guarda-publico`
+existe para barrar.
+
+**O chip é irmão do `.ov`, não filho.** O `.ov` esvanece com o ponteiro parado
+(`body.em-cheia.ocioso`), e é assim de propósito: a imagem tem de ficar inteira.
+Título pode sumir; **botão não** — quem está apresentando precisa achar o chip
+sem mexer o mouse primeiro. Medido: com o slide ocioso, `.ov` a 0 e o chip a 1.
+
+**O clique não troca de slide**: `<a>` já está na lista `INTERATIVO` do motor.
+
+---
+
 ## O que ainda não está no esqueleto
 
 `cheia` entrou em 29/08/2026. **`planta` e `desenho` continuam fora** — os dois

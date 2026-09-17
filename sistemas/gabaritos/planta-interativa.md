@@ -357,6 +357,14 @@ dentro de um slide pede três coisas:
 Enquanto isso não existe, a peça pode ser **linkada ao lado do deck** — abre em
 aba própria e volta pelo `ms-voltar.js`.
 
+**Feito em 17/09/2026, no deck do Museu do Café.** O campo `abre` do gabarito
+`cheia` (ver `render-cheia.md`) põe um chip no canto inferior direito de um
+slide de planta, com `href` RELATIVO — as duas peças moram na mesma pasta da
+área de cliente, então o nome do arquivo basta e o caminho nunca é escrito. A
+imagem do slide é a própria peça capturada com as camadas 2 e 3 ligadas e a
+interface escondida (`body.veil`), para que o slide mostre exatamente o que o
+clique abre.
+
 ---
 
 ## Pendências
