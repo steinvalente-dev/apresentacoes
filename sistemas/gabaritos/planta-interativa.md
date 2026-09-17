@@ -143,8 +143,52 @@ O que **não** pode mudar entre uma exportação e outra: o enquadramento, a
 escala, o tamanho da folha. Recortar diferente desalinha tudo, e desalinhamento
 de meio metro numa planta de museu aparece no projetor.
 
+**O Rayon passa nesse teste.** Medido em 17/09/2026: as duas exportações saíram
+com caixa de página idêntica, `2383,94 × 1683,78 pt`, e o registro ficou exato
+sem nenhum ajuste. Confere assim antes de montar:
+
+```
+pdfinfo base.pdf | grep "Page size"
+pdfinfo camada.pdf | grep "Page size"     # tem de ser igual, dígito a dígito
+```
+
+Caixa igual dispensa retângulo de registro. Caixa diferente quer dizer que o
+exportador recortou pelo conteúdo — aí sim é preciso um elemento comum em todas
+as exportações para alinhar, e removê-lo depois.
+
 Conversão igual à da planta base — `mutool convert` —, e o conteúdo do `<svg>`
 convertido entra como `<g data-cam="...">` dentro do SVG da base.
+
+### ⚑ Os ids colidem entre duas exportações — soldar sem prefixo troca os glifos
+
+Confirmado em 17/09/2026 com a planta e o percurso da Fazenda Lageado.
+
+O `mutool` numera os ids do zero em **cada** arquivo: `font_0_7`, `clip_1`… Duas
+exportações da mesma folha saem com o **mesmo esquema**, e na base de Lageado
+**49 dos 114 ids do percurso colidiam com os da planta**. Soldar sem tratar isso
+não dá erro: o navegador fica com a última definição e os glifos de uma camada
+aparecem no lugar dos da outra.
+
+Antes de injetar, prefixar os ids da camada e as referências a eles —
+`id="x"`, `href="#x"` e `url(#x)`:
+
+```python
+for i in sorted(ids, key=len, reverse=True):
+    txt = txt.replace('id="%s"'%i,      'id="rt_%s"'%i)
+    txt = txt.replace('href="#%s"'%i,   'href="#rt_%s"'%i)
+    txt = txt.replace('url(#%s)'%i,     'url(#rt_%s)'%i)
+```
+
+Ordenar por tamanho decrescente importa: sem isso `clip_1` come o começo de
+`clip_12`.
+
+### A moldura da folha vem repetida, e tudo bem
+
+Cada exportação traz o norte, as marcas de elevação e o carimbo. Como são
+idênticos e caem na mesma coordenada, **se sobrepõem exatamente e leem como um
+só** — não há o que suprimir. O custo é peso: no caso de Lageado, o percurso
+sozinho pesou 822 KB, dos quais 278 KB são as fontes repetidas da base. Vale
+limpar só se o teto de 8 MB apertar.
 
 **Quando só existe um PDF com tudo junto:** dá para isolar a camada no SVG
 convertido filtrando por cor ou por grupo, **se** ela tiver cor própria no
@@ -319,9 +363,9 @@ aba própria e volta pelo `ms-voltar.js`.
 
 - virar tipo de slide do esqueleto (`tpl()`), com `ms-voltar.js` antes do
   `</body>` e `node --check` no script extraído
-- camada exportada do Rayon ainda não foi testada com arquivo real: o percurso
-  deste módulo é sintético. O que falta provar é o registro entre duas
-  exportações da mesma folha
+- o percurso **deste módulo** continua sintético, porque a planta real é de
+  cliente e não entra no repositório público. O registro entre duas exportações
+  já foi provado com arquivo real — ver "o Rayon passa nesse teste"
 - decidir a persistência da anotação, se um dia precisar sobreviver ao refresh
 - conferência no iPad: pinça, borracha por toque e o custo do véu em aparelho
   real ainda não foram medidos fora do desktop
