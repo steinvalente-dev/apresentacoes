@@ -1312,8 +1312,8 @@ body.em-imagem.claro .chrome.pe{
 body.em-imagem.claro .chrome,
 .g-cheia.claro .ov h2,.g-cheia.claro .ov .cap{
   text-shadow:0 1px 3px var(--papel-70),0 2px 14px var(--papel-45)}
-body.em-imagem.claro .marca .marca-lk{
-  --tinta:initial;--primaria:initial;--acento:initial;color:var(--tinta)}
+/* nada a declarar aqui: sem a inversão acima, o lockup já herda os tokens
+   da raiz — que é o logotipo colorido. */
 /* o slot vazio também é claro: montar a estrutura antes das imagens é o modo
    normal de trabalho, e uma sequência de retângulos escuros no meio de slides
    claros lê como peça quebrada, não como andaime. */
@@ -1815,8 +1815,14 @@ body.ocioso .g-galeria.lupando .lconta{opacity:0}
 }
 /* o `hidden` do HTML tem de vencer o display:block acima */
 .marca .marca-lk[hidden],.marca .marca-txt[hidden]{display:none}
+/* ⚑ `em-imagem` NÃO inverte quando o slide é `claro`: ali o campo é papel, e
+   o lockup tem de sair com a cor dele — `estúdio` em Ferro e `Sarasá` em
+   Vinho, que é como o SVG oficial separa os dois tokens (MARCA-SARASA §4).
+   Antes disto a regra do `claro` zerava os três com `initial` e as duas
+   palavras caíam para preto. Pedido do Michel em 17/09/2026, com o campo da
+   planta interativa virando branco. */
 body.esc .marca .marca-lk,body.terra .marca .marca-lk,body.com-fundo .marca .marca-lk,
-body.em-imagem .marca .marca-lk{--tinta:var(--papel);--primaria:var(--papel);--acento:var(--papel);color:var(--papel)}
+body.em-imagem:not(.claro) .marca .marca-lk{--tinta:var(--papel);--primaria:var(--papel);--acento:var(--papel);color:var(--papel)}
 
 /* ═══ grafismo de marca na base — opcional, por `graf:1` ══════════════════
    Portado da EMEI (Sarasá: contorno da Fortaleza da Barra Grande). Sempre
@@ -1885,6 +1891,8 @@ body.no-fim #msgraf{opacity:.18}
      então o chrome inverte; e o slide não troca por toque nem por arrasto —
      dentro dele o dedo desenha e arrasta a planta. As setinhas seguem. */
 .slide.g-viva{padding:0;overflow:hidden;background:var(--moldura)}
+/* peça com a lupa aberta: a pílula sai de cena (ver "A LUPA DA PEÇA" no JS) */
+body.lupa-viva .nav{opacity:0;pointer-events:none;transition:opacity .22s ease}
 .g-viva .visor{position:absolute;inset:0}
 .g-viva iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
   opacity:0;transition:opacity .5s ease}
@@ -2956,6 +2964,16 @@ function tpl(s){
   /* R$ é símbolo de moeda, não texto: sobrevive ao text-transform:lowercase
      dos títulos. Aplicado no render para não poluir o DECK com <span>. */
   const RS=x=>String(x).replace(/R\$/g,'<span class="ru">R$</span>');
+  /* `nota` aceita as duas formas: PAR [figura, texto], que põe a figura em
+     corpo grande, e STRING, que é só o rodapé. A string vinha sendo lida
+     como par — `n[0]` virava capitular e o resto do texto sumia. Ver o "F"
+     de 104 px no slide dos oitenta desenhos, 17/09/2026.
+     ⚑ Mora AQUI DENTRO porque usa o `RS`, que é local do tpl().  */
+  const notaHTML=(n)=>{ if(!n) return '';
+    const par=Array.isArray(n)?n:['',n];
+    return `<div class="notaN">`
+      + (par[0]?`<span class="nn">${RS(par[0])}</span>`:'')
+      + `<span class="nt">${RS(par[1]||'')}</span></div>`; };
   const t=s.t?`<h1 class="${grande?'mega':'big'} rev">${RS(s.t)}</h1>`:'';
   const sub=s.sub?`<p class="sub rev">${s.sub}</p>`:'';
   const prem=s.prem?`<p class="prem rev">${s.prem}</p>`:'';
@@ -3272,7 +3290,7 @@ function tpl(s){
     s.linhas.map((r,i)=>`<tr class="${s.hi===i?'hi':''}${s.fora===i?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`).join('')+`</tbody></table></div>`:'';
   if(s.g==='porte'){
     const f2=s.fecho?`<p class="sub rev" style="max-width:44ch">${s.fecho}</p>`:'';
-    const nota=(n)=>n?`<div class="notaN"><span class="nn">${RS(n[0])}</span><span class="nt">${n[1]}</span></div>`:'';
+    const nota=(n)=>notaHTML(n);
     /* troca:1 — dois estados no MESMO slide. O isometrico e o titulo nao
        re-animam; o clique so faz o bloco da direita atravessar. Como dois
        slides, tudo entrava de novo a cada passagem. */
@@ -3286,7 +3304,7 @@ function tpl(s){
   }
   if(s.g==='tabela'){
     const f=s.fecho?`<p class="sub rev" style="max-width:56ch">${s.fecho}</p>`:'';
-    const nt=s.nota?`<div class="notaN rev"><span class="nn">${RS(s.nota[0])}</span><span class="nt">${s.nota[1]}</span></div>`:'';
+    const nt=s.nota?notaHTML(s.nota).replace('class="notaN"','class="notaN rev"'):'';
     return `<div class="wrap">${k}${t}${sub}${tab}${f}${nt}${prem}</div>`;
   }
   if(s.g==='plug'){
@@ -3350,7 +3368,7 @@ function tpl(s){
 
   /* ─── avulso: o preco de mercado de cada frente, dentro e fora do pacote ─ */
   if(s.g==='avulso'){
-    const nota=s.nota?`<div class="notaN rev"><span class="nn">${RS(s.nota[0])}</span><span class="nt">${RS(s.nota[1])}</span></div>`:'';
+    const nota=s.nota?notaHTML(s.nota).replace('class="notaN"','class="notaN rev"'):'';
     const gr=s.grupos.map(([tit,sb,rows],gi)=>`<div class="av av${gi}">`
       +`<div class="avcab rev"><span class="avpil">${tit}</span>`
       +(sb?`<span class="avsub">${sb}</span>`:'')+`</div>`
@@ -3874,8 +3892,15 @@ window.MSViva=(function(){
     medida(quadro(document.querySelectorAll('#palco .slide')[cur]));
   });
   /* o recado do fim do roteiro — ver o `postMessage` na peça */
+  /* A LUPA DA PEÇA ESCONDE A PÍLULA. Com a imagem aberta em tela cheia, um
+     clique na seta tiraria a pessoa do slide sem ela querer — e o que está
+     na tela naquele instante é assunto da peça, não do deck. A peça avisa
+     quando abre e quando fecha. O `.chrome` fica: os dois logotipos
+     continuam em cena. */
   addEventListener('message',function(e){
     if(e.origin!==location.origin) return;
+    var x=e.data;
+    if(x&&x.ms==='viva-lupa'){ document.body.classList.toggle('lupa-viva',!!x.on); return; }
     var d=e.data; if(!d||d.ms!=='viva') return;
     var s=DECK[cur]; if(!s||s.g!=='viva') return;
     if(d.vai<0) recua(); else avanca();
