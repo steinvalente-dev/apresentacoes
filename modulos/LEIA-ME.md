@@ -21,7 +21,7 @@ do Git. Nunca criar `-R2` ao lado.
 | `modelo-sketchup.html` | o modelo do projeto vivo, no viewer do 3D Warehouse (iframe montado só na chegada ao slide, reserva de imagens para rede ruim); mestre do gabarito `modelo-3d`. **O modelo tem de estar público.** Mesmo aviso "NÃO VIGENTE" no título, mesma situação | receita em `../sistemas/gabaritos/modelo.md` |
 | `ms-maps-chave.js` | a chave da Google Maps Platform, uma só, restrita por referrer; ~3 KB. Domínio novo exige cadastro no console antes de a peça ir ao ar | `<script src="../modulos/ms-maps-chave.js">` no fim do `<body>`, antes do `ms-voltar.js` |
 | `capa-morph-sarasa.html` | a abertura da Sarasá em dois momentos (capa institucional com lockup → título da peça), sobre o morph; **1,4 MB, protótipo com fontes e imagens embutidas** | já portada para o esqueleto como `dois:1` no slide `marca`; o bloco da marca em `../marca/sarasa/bloco.html` |
-| `planta-interativa.html` | a prancha em tela cheia que o cliente percorre: zoom, pan, pontos de mídia e anotação ao vivo sobre o desenho. Planta em **SVG vetorial**, nunca rasterizada. **198 KB com planta sintética e mídia de exemplo** | receita em `../sistemas/gabaritos/planta-interativa.md`; ainda não é gabarito do esqueleto |
+| `planta-interativa.html` | a prancha em tela cheia que o cliente percorre: **camadas que ligam e desligam**, roteiro de apresentação, zoom, pan, pontos de mídia e anotação ao vivo. Planta em **SVG vetorial**, nunca rasterizada. **204 KB com planta sintética, percurso e mídia de exemplo** | receita em `../sistemas/gabaritos/planta-interativa.md`; ainda não é gabarito do esqueleto |
 
 ## A engine, hoje
 

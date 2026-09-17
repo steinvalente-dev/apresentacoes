@@ -9,8 +9,9 @@ Abre de `file://`, sem servidor e sem rede.
 
 **Para que serve:** planta grande, com muitos ambientes, que não cabe legível
 numa prancha impressa no projetor. Em vez de fatiar o desenho em seis slides, o
-cliente percorre **um** desenho: aproxima onde interessa, caminha, abre render e
-vídeo nos pontos, e você risca por cima enquanto fala.
+cliente percorre **um** desenho: você liga as camadas na ordem em que quer
+contar a história, aproxima onde interessa, caminha, abre render e vídeo nos
+pontos, e risca por cima enquanto fala.
 
 ---
 
@@ -69,6 +70,89 @@ Irrelevante para apresentar; relevante se um dia quiser busca por ambiente.
 
 ---
 
+## Camadas — a narrativa, e não só o desenho
+
+É o que transforma a planta em apresentação: começar com a casa nua, **ligar o
+percurso de visitação**, depois **ligar os pontos de mídia**, e só então contar o
+que a pessoa vê primeiro e por quê. Cada camada entra com esvanecimento de
+0,32 s; ligar e desligar é reversível a qualquer momento.
+
+### Como uma camada existe
+
+```html
+<svg id="planta" viewBox="...">
+  ...o desenho base...
+  <g data-cam="percurso" id="cam-percurso"> ...a polilinha do percurso... </g>
+</svg>
+```
+
+O grupo mora **dentro** do SVG da planta: anda e escala junto com o desenho,
+porque **é desenho**. Aqui a espessura do traço é em unidade de desenho e deve
+crescer no zoom — uma linha de percurso de 60 cm continua com 60 cm.
+
+> **É o oposto da anotação ao vivo**, que é recalculada em pixel de tela para
+> *não* engordar. Duas camadas, duas naturezas: a camada de projeto pertence ao
+> desenho; o rabisco pertence à tela.
+
+A camada `pins` é a exceção: são os pontos de mídia, que já vivem em HTML.
+
+### Declaração
+
+```js
+window.__LAYERS__=[
+  {id:"base",     nome:"Planta",                fixa:true, on:true},
+  {id:"percurso", nome:"Percurso de visitação",            on:false},
+  {id:"pins",     nome:"Pontos de mídia",                  on:false}
+];
+```
+
+`fixa:true` sai do alcance dos botões — a planta não se desliga. A ordem do
+array é a ordem do painel e das teclas **1…9**.
+
+### Roteiro — a sequência da fala
+
+```js
+window.__ROTEIRO__=[
+  {t:"A casa",                  on:[]},
+  {t:"O percurso de visitação", on:["percurso"]},
+  {t:"O que se vê no caminho",  on:["percurso","pins"]},
+  {t:"Parada 2 — o estar",      on:["percurso","pins"], ir:{x:700,y:1500,z:3.2}}
+];
+```
+
+Cada passo declara **o estado inteiro** das camadas, não um delta: voltar um
+passo desfaz sozinho, sem acumular. `ir` é opcional e leva a vista até um ponto
+do desenho — `x` e `y` em coordenada de desenho, `z` em múltiplos do
+enquadramento da prancha. `ir:{}` sem coordenada volta a ajustar.
+
+**Espaço** e **PageDown** avançam; **shift+espaço** e **PageUp** voltam. É de
+propósito: controle remoto de apresentação manda PageDown e PageUp, então o
+roteiro anda no clicker, sem voltar ao teclado. As setas continuam servindo para
+caminhar pela planta.
+
+### ⚑ O que pedir ao Rayon — uma exportação por camada
+
+**Esta é a parte que decide, e é trabalho de quem desenha, não de quem monta.**
+
+Exportar **um PDF por camada, com o mesmo enquadramento e a mesma escala**: a
+planta sem o percurso, o percurso sozinho, e assim por diante. O registro entre
+elas sai perfeito de graça, porque as coordenadas são idênticas — nada de
+realinhar à mão.
+
+O que **não** pode mudar entre uma exportação e outra: o enquadramento, a
+escala, o tamanho da folha. Recortar diferente desalinha tudo, e desalinhamento
+de meio metro numa planta de museu aparece no projetor.
+
+Conversão igual à da planta base — `mutool convert` —, e o conteúdo do `<svg>`
+convertido entra como `<g data-cam="...">` dentro do SVG da base.
+
+**Quando só existe um PDF com tudo junto:** dá para isolar a camada no SVG
+convertido filtrando por cor ou por grupo, **se** ela tiver cor própria no
+desenho. É frágil e depende do arquivo — tentar só quando reexportar não for
+possível, e conferir olhando.
+
+---
+
 ## A mecânica
 
 ### Zoom e pan
@@ -94,8 +178,8 @@ posição é recalculada a cada quadro por `(x - VBX) * escala + tx`. Se o pino
 escalasse junto com o desenho, a 700% ele viraria uma bola cobrindo dois
 ambientes.
 
-Abrem imagem, carrossel ou vídeo. **Ligam e desligam por botão** — na prancha
-cheia as bolinhas se sobrepõem e competem com o desenho.
+Abrem imagem, carrossel ou vídeo. **São uma camada** — na prancha cheia as bolinhas se
+sobrepõem e competem com o desenho, então entram quando a fala chega neles.
 
 **Como se posiciona um pino, sem adivinhação:** a ferramenta *marcar ponto*
 captura a coordenada do clique e copia para a área de transferência, já no
@@ -235,6 +319,9 @@ aba própria e volta pelo `ms-voltar.js`.
 
 - virar tipo de slide do esqueleto (`tpl()`), com `ms-voltar.js` antes do
   `</body>` e `node --check` no script extraído
+- camada exportada do Rayon ainda não foi testada com arquivo real: o percurso
+  deste módulo é sintético. O que falta provar é o registro entre duas
+  exportações da mesma folha
 - decidir a persistência da anotação, se um dia precisar sobreviver ao refresh
 - conferência no iPad: pinça, borracha por toque e o custo do véu em aparelho
   real ainda não foram medidos fora do desktop
