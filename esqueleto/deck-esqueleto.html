@@ -1871,6 +1871,35 @@ body.no-fim #msgraf{opacity:.18}
 .g-marca .cm-pe{font-family:var(--f-mono);font-size:clamp(9px,.72cqw,13px);letter-spacing:.14em;
   text-transform:uppercase;color:var(--papel-60);margin-top:clamp(10px,1.6cqh,24px);line-height:1}
 
+/* ═══ VIVA — a peça vizinha, dentro do slide ══════════════════════════════
+   Um quadro de sangria total com um arquivo que mora NA MESMA PASTA da peça.
+   Hoje é a planta interativa; serve para qualquer módulo que ainda não seja
+   gabarito do esqueleto.
+
+   ⚑ O ARQUIVO SABE QUE ESTÁ AQUI. Ele liga o modo `embutida` (o chrome dele
+     sai, porque o do deck já cobre os mesmos cantos) e, no fim do roteiro,
+     devolve o clicker ao deck por `postMessage`. Receita:
+     sistemas/gabaritos/planta-interativa.md
+
+   ⚑ `viva` está na lista `em-imagem` do go() e na `G_TRAVA`: o fundo é visor,
+     então o chrome inverte; e o slide não troca por toque nem por arrasto —
+     dentro dele o dedo desenha e arrasta a planta. As setinhas seguem. */
+.slide.g-viva{padding:0;overflow:hidden;background:var(--moldura)}
+.g-viva .visor{position:absolute;inset:0}
+.g-viva iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
+  opacity:0;transition:opacity .5s ease}
+.g-viva.pronto iframe{opacity:1}
+/* enquanto carrega: campo parado com o anel do resto da casa. São 6 MB de
+   arquivo local — um piscar, mas um piscar que não pode ser tela preta. */
+.g-viva .estado{position:absolute;inset:0;z-index:5;display:grid;place-content:center;
+  justify-items:center;gap:.7em;text-align:center;padding:0 12%;
+  opacity:1;transition:opacity .4s ease;pointer-events:none}
+.g-viva.pronto .estado{opacity:0}
+.g-viva .estado b{font-family:var(--f-display);font-weight:500;font-style:italic;
+  font-size:var(--fs-h3);color:var(--papel)}
+.g-viva .estado s{text-decoration:none;font-family:var(--f-mono);font-size:var(--fs-cap);
+  letter-spacing:.12em;text-transform:uppercase;color:var(--papel-60)}
+
 /* ═══ visores — earth-3d e modelo-3d ═════════════════════════════════════
    Portados da EMEI Presidente Dutra em 03/09/2026 (módulos mestres:
    modulos/mapa-earth-3d.html e modulos/modelo-sketchup.html). Mesma
@@ -2837,6 +2866,8 @@ const DECK=[
      → sistemas/gabaritos/mapa-earth-3d.md · só funciona por link
    {g:'modelo-3d',modelo:'<id do 3D Warehouse>',res:[{src,cap}],kick:'',h2:'',lead:'',cap:''}
      → sistemas/gabaritos/modelo.md · modelo PÚBLICO
+   {g:'viva',src:'planta-interativa.html',alt:'',h2:'',cap:''}
+     → a peça vizinha dentro do slide; `src` RELATIVO, mesma pasta
    Abertura em dois momentos (capa da frente com título dentro):
    {g:'marca',dois:1,fundo:1,esc:1,lockup:1,papel:'',descritor:'',site:'',
      kick:'',t:'',sub:'',pe:''}                                            */
@@ -2899,7 +2930,7 @@ const EXIGE={
   lista:['itens'], fim:['itens'], sumario:['itens'], trio:['itens'],
   jogadas:['itens'], fotos:['itens'], unit:['cards'], players:['casas'],
   avulso:['grupos'], plug:['ancoras'], duasfrentes:['esq','dir'],
-  divisor:['dt'], 'earth-3d':['lat','lng'], 'modelo-3d':['modelo']
+  divisor:['dt'], 'earth-3d':['lat','lng'], 'modelo-3d':['modelo'], viva:['src']
 };
 /* bloco de marca antigo, sem a linha UNDERSCORE: vale o padrão da casa (ligado) */
 const US=(typeof UNDERSCORE==='undefined')?true:!!UNDERSCORE;
@@ -3132,6 +3163,17 @@ function tpl(s){
     const centra=s.ar||(s.items||[]).some(i=>i.ar||i.pilha);
     return `<div class="pbody">${topo}<div class="grade" style="grid-template-columns:repeat(${s.cols||3},1fr)`
       + (centra?';align-content:center;align-items:center':'')+`">${cels}</div></div>`;
+  }
+  if(s.g==='viva'){
+    /* A PEÇA VIZINHA — ver "VIVA" no CSS. `src` é relativo: o arquivo mora na
+       mesma pasta da apresentação, então o nome basta e o caminho da área de
+       cliente não é escrito em lugar nenhum.
+       O `src` do iframe entra na chegada, não na carga: 6 MB parados atrás de
+       trinta slides é memória que ninguém está usando. */
+    return `<div class="visor"><iframe title="${(s.alt||'peça interativa').replace(/"/g,'&quot;')}"`
+      + ` data-src="${s.src}" allow="fullscreen"></iframe>`
+      + `<div class="estado"><b>${s.h2||'abrindo a peça'}</b>`
+      + `<s>${s.cap||'um instante'}</s></div></div>`;
   }
   if(s.g==='modelo-3d'){
     /* O MODELO DO PROJETO, VIVO — modulos/modelo-sketchup.html
@@ -3576,7 +3618,7 @@ function go(i,tudo){
      depois com o `modelo-3d`. */
   document.body.classList.toggle('em-imagem',
     s.g==='cheia' || s.g==='earth-3d' || s.g==='modelo-3d'
-    || s.g==='video' || s.g==='carrossel' || s.g==='logo');
+    || s.g==='video' || s.g==='carrossel' || s.g==='logo' || s.g==='viva');
   /* `claro` = a imagem tem fundo branco, então o slide também. Regra do
      Michel, 10/09/2026: desenho de traço sobre campo escuro é leitura
      errada — planta, corte e fachada pedem campo claro. Inverte de volta o
@@ -3683,7 +3725,7 @@ addEventListener('keydown',e=>{
    Automático por gabarito (o autor não declara nada), e `trava:1` no slide
    força a mesma coisa em qualquer outro — a porta para a camada interativa
    sobre a ortofoto. */
-const G_TRAVA=['earth-3d','modelo-3d','mapa','galeria'];
+const G_TRAVA=['earth-3d','modelo-3d','mapa','galeria','viva'];
 const travado=i=>{const s=DECK[i]; return !!s&&(s.trava===1||s.trava===true||G_TRAVA.indexOf(s.g)>=0);};
 const INTERATIVO='a,button,.pin,.lote,.g-earth-3d .visor,.g-modelo-3d .visor,'
   +'.g-modelo-3d .cenas,.g-mapa-2d .visor,.g-galeria .lupa,.g-galeria .mosaico,'
@@ -3793,6 +3835,66 @@ window.MSVideo=(function(){
       if(atual&&atual.contains(v)){ toca(v); }
       else if(!v.paused||v.currentTime){ v.pause(); v.currentTime=0; selo(v,false); }
     });
+  } };
+})();
+
+
+window.MSViva=(function(){
+  /* Monta o quadro na chegada e NÃO desmonta na saída: o arquivo é local, e
+     desmontar jogaria fora o zoom, as camadas ligadas e a anotação que a
+     pessoa fez na frente do cliente. Isto é o oposto do `modelo-3d`, que
+     desmonta — lá são 40 MB de WebGL de outro domínio; aqui é um SVG local.
+
+     O FOCO É O PONTO DELICADO. O clicker só anda no roteiro da planta se o
+     quadro tiver o foco; e só volta a trocar de slide quando o foco sai. Por
+     isso: foca ao chegar, devolve ao corpo ao sair. */
+  function quadro(sl){ return sl&&sl.querySelector('iframe'); }
+  /* A MEDIDA VAI DAQUI. A peca tem chrome proprio nas mesmas bordas e precisa
+     desviar do nosso; proporcao adivinhada la dentro nao fecha (medido: em
+     2560x1080 o topo do deck continua alto e um `9vh` ja encolheu). Entao
+     quem sabe o tamanho manda o numero. */
+  function medida(q){
+    if(!q||!q.contentWindow) return;
+    var t=document.querySelector('.chrome.topo'), p=document.querySelector('.chrome.pe');
+    try{ q.contentWindow.postMessage({ms:'viva-chrome',
+      topo: t?Math.round(t.getBoundingClientRect().height):null,
+      pe:   p?Math.round(p.getBoundingClientRect().height):null}, location.origin); }catch(x){}
+  }
+  addEventListener('resize',function(){
+    var s=DECK[cur]; if(!s||s.g!=='viva') return;
+    medida(quadro(document.querySelectorAll('#palco .slide')[cur]));
+  });
+  /* o recado do fim do roteiro — ver o `postMessage` na peça */
+  addEventListener('message',function(e){
+    if(e.origin!==location.origin) return;
+    var d=e.data; if(!d||d.ms!=='viva') return;
+    var s=DECK[cur]; if(!s||s.g!=='viva') return;
+    if(d.vai<0) recua(); else avanca();
+  });
+  return { chegou:function(){
+    var atual=document.querySelectorAll('#palco .slide')[cur],
+        s=DECK[cur], eViva=!!s&&s.g==='viva';
+    if(!eViva){
+      /* saiu: o foco volta ao documento, senão o clicker continua falando com
+         a planta que nem está mais na tela. */
+      if(document.activeElement&&document.activeElement.tagName==='IFRAME')
+        document.activeElement.blur();
+      if(document.body.focus) document.body.focus();
+      return;
+    }
+    var q=quadro(atual); if(!q) return;
+    if(!q.src||q.src==='about:blank'){
+      q.addEventListener('load',function(){
+        atual.classList.add('pronto');
+        medida(q);
+        try{ q.contentWindow.focus(); }catch(x){}
+      },{once:true});
+      q.src=q.dataset.src;
+    }else{
+      atual.classList.add('pronto');
+      medida(q);
+      try{ q.contentWindow.focus(); }catch(x){}
+    }
   } };
 })();
 
@@ -4505,8 +4607,8 @@ window.MSModelo=(function(){
 (function(){
   var _go=window.go;
   window.go=function(i,tudo){ _go(i,tudo); setTimeout(function(){
-    window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); MSVideo.chegou(); MSCarrossel.chegou(); },700); };
-  window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); MSVideo.chegou(); MSCarrossel.chegou();
+    window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); MSVideo.chegou(); MSCarrossel.chegou(); MSViva.chegou(); },700); };
+  window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); MSVideo.chegou(); MSCarrossel.chegou(); MSViva.chegou();
 })();
 
 </script>

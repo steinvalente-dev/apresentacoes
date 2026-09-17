@@ -150,7 +150,11 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
     for s in deck:
         g = s.get('g', '')
         perfil = 'desenho' if s.get('tipo') == 'desenho' else (g if g in RESIZE else 'padrao')
-        if 'src' in s:
+        # ⚑ `viva` NAO e imagem: o `src` dele e o arquivo vizinho que o slide
+        #   abre num quadro (planta-interativa.html). Passar pelo moinho de
+        #   imagem seria erro de leitura de arquivo, e o arquivo nem esta na
+        #   pasta de imagens — ele ja mora ao lado da apresentacao.
+        if 'src' in s and g != 'viva':
             add(s, 'src', perfil)
         # gabarito `logo`: o lockup preserva alfa (perfil desenho, sem redimensionar
         # para baixo); o fundo parado e' imagem de tela cheia

@@ -48,6 +48,7 @@ DESCRICAO = {
     'cheia':       ('imagem', 'o render em tela cheia. É o padrão para render — ver `gabaritos/render-cheia.md`'),
     'earth-3d':    ('imagem', 'onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md`'),
     'modelo-3d':   ('imagem', 'o que o projeto é: o modelo do SketchUp, vivo. Exige modelo PÚBLICO no 3D Warehouse — `gabaritos/modelo.md`'),
+    'viva':        ('imagem', 'a peça vizinha rodando DENTRO do slide, em quadro de sangria total. `src` relativo, mesma pasta; o slide fica travado e só as setas trocam — `gabaritos/viva.md`'),
     'mapa':        ('imagem', 'o cadastro desenhado, com hover por lote. Exige o objeto `MAP` — `gabaritos/mapa-lotes.md`'),
 }
 ORDEM_GRUPO = ['estrutura', 'texto', 'dado', 'imagem']

@@ -354,23 +354,52 @@ dentro de um slide pede três coisas:
 3. **a planta e a mídia entram como campos do `DECK`**, não como HTML colado: o
    SVG inline, o array `PINS` em coordenada de desenho e a lista de mídia
 
-Enquanto isso não existe, a peça pode ser **linkada ao lado do deck** — abre em
-aba própria e volta pelo `ms-voltar.js`.
+**Resolvido em 17/09/2026, e por um caminho mais barato que os três: o
+quadro.** O gabarito `viva` (ver `viva.md`) roda a peça DENTRO do slide, num
+quadro de sangria total, com `src` relativo. Os três pontos acima caem:
 
-**Feito em 17/09/2026, no deck do Museu do Café.** O campo `abre` do gabarito
-`cheia` (ver `render-cheia.md`) põe um chip no canto inferior direito de um
-slide de planta, com `href` RELATIVO — as duas peças moram na mesma pasta da
-área de cliente, então o nome do arquivo basta e o caminho nunca é escrito. A
-imagem do slide é a própria peça capturada com as camadas 2 e 3 ligadas e a
-interface escondida (`body.veil`), para que o slide mostre exatamente o que o
-clique abre.
+1. o slide assume a tela inteira e **o teclado fica da peça enquanto o slide é
+   dela** — evento dentro do quadro não chega ao motor. O `trava`, que já
+   existia, tira o toque e o arrasto; as setas do deck seguem;
+2. **o chrome do deck é que aparece** — logotipo nos dois cantos de cima,
+   bolinhas de seção, setas no pé. A peça esconde o dela no modo `embutida`,
+   abaixo;
+3. a planta e a mídia **não precisaram virar campos do `DECK`**: a peça
+   continua um arquivo só, que abre sozinho. É o que evita as colisões de id
+   registradas aqui — colar duas exportações no mesmo documento é o problema
+   que este módulo já pagou uma vez.
+
+### o modo `embutida`
+
+Liga sozinho quando a peça está num quadro (`self!==top`), ou por `?embutida`
+para conferir abrindo sozinha. Nele:
+
+- **saem** `#topleft`, `#topright` e `#hint` — o deck cobre os mesmos cantos, e
+  o indicador "Pontos ligados" é redundante com o menu de camadas;
+- **o roteiro desce e camadas/marcas sobem**, por `--deck-topo` e `--deck-pe`,
+  que chegam MEDIDOS do deck. Estimar a proporção por fora não fechou: ver a
+  armadilha em `viva.md`;
+- o rótulo do zoom (`Prancha / Ambiente / Detalhe`) **vira o botão de voltar à
+  prancha** — a função do "Ajustar", que saiu junto com o canto;
+- **o roteiro devolve o clicker ao deck na ponta.** Ele é um conjunto de passos
+  dentro do slide, como os `.passo` do motor: andou até o fim, o próximo avanço
+  sai do slide, senão o clicker morre na mão de quem apresenta.
+
+⚑ Quem regenerar esta peça tem de repor o modo `embutida` — são quatro pontos,
+todos marcados no arquivo com o comentário `EMBUTIDA`.
+
+O caminho anterior, de **linkar ao lado** (`abre`, no `cheia` — ver
+`render-cheia.md`), continua no motor e continua válido para peça vizinha que
+não caiba dentro do slide. Só não é mais o que este deck usa.
 
 ---
 
 ## Pendências
 
-- virar tipo de slide do esqueleto (`tpl()`), com `ms-voltar.js` antes do
-  `</body>` e `node --check` no script extraído
+- ~~virar tipo de slide do esqueleto~~ — **feito de outro jeito em 17/09/2026**:
+  o gabarito `viva` roda a peça num quadro, sem colá-la no esqueleto. Colar o
+  SVG e os pins como campos do `DECK` continua possível, mas deixou de ser
+  necessário
 - o percurso **deste módulo** continua sintético, porque a planta real é de
   cliente e não entra no repositório público. O registro entre duas exportações
   já foi provado com arquivo real — ver "o Rayon passa nesse teste"

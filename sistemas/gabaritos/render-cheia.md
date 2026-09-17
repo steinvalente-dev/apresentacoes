@@ -126,6 +126,11 @@ sem mexer o mouse primeiro. Medido: com o slide ocioso, `.ov` a 0 e o chip a 1.
 
 **O clique não troca de slide**: `<a>` já está na lista `INTERATIVO` do motor.
 
+**Quando NÃO usar.** Se a peça vizinha couber dentro do slide, o gabarito
+`viva` é melhor: ela roda ali mesmo, sem tirar ninguém da apresentação. Foi o
+que aconteceu com a planta interativa no mesmo dia — ver `viva.md`. O `abre`
+fica para peça que exige a tela inteira dela, ou que não é nossa.
+
 ---
 
 ## O que ainda não está no esqueleto
