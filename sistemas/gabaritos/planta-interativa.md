@@ -322,6 +322,71 @@ pausa e zera. Se o navegador recusar, sobra o pôster com controles.
 
 ---
 
+## Camada de pontos a partir de uma prancha de CAD
+
+18/09/2026, com a prancha estrutural do térreo de Lageado: 30 patologias, cada
+uma com linha de chamada em planta, foto e legenda. **Nada disso foi marcado à
+mão** — a prancha já continha tudo, e o método vale para qualquer folha com
+chamadas numeradas.
+
+**1 · A posição sai do vetor, não do olho.** As chamadas são vermelhas e o
+desenho é preto, então um filtro por cor separa as duas em uma linha. A ponta
+de cada chamada é a posição do item — e é a parede certa, não o centro da
+sala.
+
+**⚑ Encadear os segmentos em GRAFO, não pegar "o primeiro vértice de cada
+grupo".** Uma chamada normal é ponta → joelho → prateleira, com duas pontas
+livres. Mas duas delas (P16 e P30) eram **chamada múltipla**: um rótulo, duas
+setas saindo de um nó comum — a trinca passante e a propagação para a parede
+contígua. A regra ingênua marcou o NÓ como se fosse ponta e o ponto caiu no
+meio do cômodo. Com o grafo: a ponta livre junto ao rótulo é a âncora, e
+**toda outra ponta livre é uma seta de verdade**. 30 chamadas, 32 setas.
+
+**2 · O número não está no texto.** Rótulo de AutoCAD é SHX, plotado como
+geometria: `get_text()` devolve zero. OCR dos recortes chegou a 28 de 30 e
+errou três — com 30 itens, montar uma **folha de contato** dos recortes e ler
+de uma vez sai mais barato e é 100%. A folga de aglomeração dos glifos é
+anisotrópica: larga na horizontal (o vão entre caracteres do mesmo rótulo
+chega a 7,8 pt), apertada na vertical (rótulos empilhados a poucos pontos).
+
+**3 · A legenda, ao contrário, É texto.** Mas `get_text('blocks')` **funde
+colunas vizinhas** — devolveu 28 blocos para 32 entradas, sumiu com três itens
+e deu foto emprestada a outros seis. A granularidade certa é **linha**
+(`get_text('dict')`): a entrada se remonta encadeando as linhas seguintes da
+mesma faixa de x. E cuidado com a **legenda larga**, que se estende sob duas
+fotos: na primeira passada ela é tomada pela foto da esquerda, e a da direita
+precisa de uma segunda passada sem a trava de "já usada".
+
+**4 · O encaixe sobre a base, quando as duas pranchas são de CADs
+diferentes.** Aqui o registro não sai de graça: a planta estrutural ocupa
+823 × 895 pt no canto da folha, a base ocupa 1792 × 1318 em outro lugar. Mas as
+duas são 1:100, então é **escala 1,000 e translação pura** — confirmado pelo
+ajuste, que devolveu s = 0,999906.
+
+Os pontos de controle foram as **seis colunas da varanda**: círculos, então o
+centro é bem definido, e estão bem separados. No PDF saem por
+`get_drawings()` filtrando grupos com 4+ itens `'c'`; na base (que é raster
+aqui) saem por Hough, refinados pelo centroide do disco escuro. A matriz
+desenho→tela da base vem do próprio SVG, com `getScreenCTM()` na peça viva —
+sem isso não há como converter pixel em unidade de desenho.
+
+Resíduo: **0,11 pt médio, 0,16 pt máximo = 0,6 cm no terreno**. E, como
+sempre, **provado reprojetando antes de usar**: os 32 pontos desenhados sobre
+a base, e cada um caindo numa parede.
+
+**5 · A foto vai EMBUTIDA.** Ver a seção seguinte: mídia de pino tem de
+existir no deck, e 35 fotos de patologia não viram 35 slides. Em `data:` são
+654 KB — a peça foi a 4,0 MB e ficou autossuficiente, sem depender do moinho.
+
+**6 · O que a prancha diz sobre si mesma entra junto.** A nota 4 dizia que a
+indicação de intervenção é **preliminar**, e que prevalecem o memorial
+descritivo e o laudo estrutural. Colorir 30 pinos por solução é apresentar
+como fechado o que o projetista marcou como provisório — então o aviso viaja
+no rodapé da chave de cores e no cartão de cada foto. **Ler as notas da folha
+faz parte de importá-la.**
+
+---
+
 ## ⚑ A mídia do pino tem de existir no DECK
 
 O caminho da mídia (`"src": "img/x.jpg"`) é escrito **à mão** na lista de pinos,
