@@ -2192,6 +2192,7 @@ body.claro .g-viva .anel{border-color:var(--tinta-15);border-top-color:var(--tin
 .g-earth-3d .legenda button[aria-pressed="true"] .luz{background:var(--m-acento,var(--acento));
   border-color:var(--m-acento,var(--acento))}
 .g-earth-3d .legenda .luz.obra{border-radius:50%}
+.g-earth-3d .legenda .luz.seta{border-radius:1px;transform:skewX(-18deg);width:13px;height:5px}
 .g-earth-3d .legenda .fio{height:1px;background:var(--papel-20);margin:.4em 0}
 .g-earth-3d .legenda .acao .luz{border:0;background:none}
 .g-earth-3d .legenda svg{display:block;width:1em;height:1em;opacity:.7}
@@ -3350,6 +3351,9 @@ function tpl(s){
       +   ((s.cafe&&s.cafe.length)
             ? `<button class="caf" type="button" aria-pressed="false">`
               + `<span class="luz"></span>processo do café</button>` : '')
+      +   ((s.cafe&&s.cafe.length)||(s.fluxo&&s.fluxo.length)
+            ? `<button class="cam" type="button" aria-pressed="false">`
+              + `<span class="luz seta"></span>caminho do café</button>` : '')
       +   `<div class="fio"></div>`
       +   `<button class="rec acao" type="button" title="voltar ao ponto central">`
       +     `<span class="luz"></span>`
@@ -4246,6 +4250,7 @@ window.MSEarth=(function(){
      visor porque mora aqui fora, não no slide. */
   var anotLiga=true;      /* camada `edificações` */
   var cafeLiga=false;     /* camada `processo do café` — entra a pedido */
+  var caminhoLiga=false;  /* camada `caminho do café` — as setas no chão */
 
   function limpaAnot(){
     posto.forEach(function(n){ if(n.parentNode) n.parentNode.removeChild(n); });
@@ -4291,6 +4296,39 @@ window.MSEarth=(function(){
     }
     po(tok('--papel')+'d9','#00000000',(esp||3)+3,9);   /* halo */
     po(traco,fill,esp||3,10);
+  }
+
+  /* ── O CAMINHO DO CAFÉ, NO CHÃO ──────────────────────────────────────
+     `CLAMP_TO_GROUND` faz a linha acompanhar o terreno. Um halo mais largo
+     por baixo, como na `area()`: sobre terreiro claro e sobre mata escura a
+     mesma linha precisa de fundo, senão some numa das duas. */
+  function trilha(m3d,pts,cor,larg){
+    function li(c,w,z){
+      var pl=new m3d.Polyline3DElement({
+        altitudeMode:m3d.AltitudeMode.CLAMP_TO_GROUND,
+        path:pts,strokeColor:c,strokeWidth:w,
+        drawsOccludedSegments:true,zIndex:z});
+      mapa.append(pl); posto.push(pl);
+    }
+    li(tok('--tinta')+'b3',(larg||5)+4,10);   /* halo */
+    li(cor,larg||5,11);
+  }
+  /* a ponta: triangulo girado pelo azimute do trecho, medido em METROS —
+     assim encolhe quando a camera sobe, como tudo que esta desenhado no chao */
+  function ponta(m3d,a,b,cor,metros){
+    var R=6378137, rad=Math.PI/180, coslat=Math.cos(b.lat*rad);
+    var az=Math.atan2((b.lng-a.lng)*coslat, b.lat-a.lat);
+    function anda(p,d,ang){
+      return {lat:p.lat + (d*Math.cos(ang)/R)/rad,
+              lng:p.lng + (d*Math.sin(ang)/(R*coslat))/rad};
+    }
+    var L=metros||13, W=L*0.62, base=anda(b,-L,az);
+    var pg=new m3d.Polygon3DElement({
+      altitudeMode:m3d.AltitudeMode.CLAMP_TO_GROUND,
+      path:[b, anda(base,W/2,az+Math.PI/2), anda(base,-W/2,az+Math.PI/2), b],
+      strokeColor:cor,strokeWidth:2,fillColor:cor,
+      drawsOccludedSegments:true,zIndex:12});
+    mapa.append(pg); posto.push(pg);
   }
 
   /* ── PRIORIDADE ENTRE AS CAMADAS ─────────────────────────────────────
@@ -4344,19 +4382,22 @@ window.MSEarth=(function(){
     var sl=document.querySelectorAll('#palco .slide')[cur];
     if(!sl||!sl.classList.contains('g-earth-3d')) return;
     sl.classList.toggle('com-anot',anotLiga);
-    var a=sl.querySelector('.legenda .pin'), c=sl.querySelector('.legenda .caf');
+    var a=sl.querySelector('.legenda .pin'), c=sl.querySelector('.legenda .caf'),
+        m=sl.querySelector('.legenda .cam');
     if(a) a.setAttribute('aria-pressed',anotLiga?'true':'false');
     if(c) c.setAttribute('aria-pressed',cafeLiga?'true':'false');
+    if(m) m.setAttribute('aria-pressed',caminhoLiga?'true':'false');
   }
   /* as duas camadas se redesenham juntas: as caixas dividem o mesmo resolvedor
      de colisão, e redesenhar só uma deixaria a outra medindo posição velha. */
   function alternaAnot(liga){ anotLiga=!!liga; desenhaAnot(); }
   function alternaCafe(liga){ cafeLiga=!!liga; desenhaAnot(); }
+  function alternaCaminho(liga){ caminhoLiga=!!liga; desenhaAnot(); }
   function desenhaAnot(){
     limpaAnot();
     selo();
     var s=DECK[cur]; if(!s||!mapa||!lib) return;
-    if(!anotLiga&&!cafeLiga) return;
+    if(!anotLiga&&!cafeLiga&&!caminhoLiga) return;
     var m3d=lib;
     if(!m3d.PopoverElement) return;    /* preview sem popover: sai calado */
     var VINHO=tok('--primaria'), FERRO=tok('--tinta');
@@ -4378,6 +4419,22 @@ window.MSEarth=(function(){
     /* O PROCESSO DO CAFÉ. Haste em acento, para separar da edificação já no
        primeiro olhar, e a caixa com número + parada + etapa. */
     var ACENTO=tok('--m-acento')||tok('--acento');
+    /* O CAMINHO — camada própria. Os vértices vêm de `fluxo` quando existe;
+       sem ele, é reta de parada em parada, que é o primeiro esboço honesto:
+       diz a ordem, não finge conhecer a curva. */
+    if(caminhoLiga){
+      var vias=(s.fluxo&&s.fluxo.length)
+        ? s.fluxo.map(function(q){ return {lat:q[0],lng:q[1]}; })
+        : (s.cafe||[]).map(function(p){ return {lat:p.lat,lng:p.lng}; });
+      if(vias.length>1){
+        trilha(m3d,vias,ACENTO+'ff',5);
+        /* uma ponta por PARADA, e não por vértice: o que a seta conta é a
+           sequência do processo, não a quantidade de curvas do desenho. */
+        var marcos=(s.fluxo&&s.fluxo.length&&s.cafe&&s.cafe.length)
+          ? s.cafe.map(function(p){ return {lat:p.lat,lng:p.lng}; }) : vias;
+        for(var i=1;i<marcos.length;i++) ponta(m3d,marcos[i-1],marcos[i],ACENTO+'ff',13);
+      }
+    }
     (cafeLiga?(s.cafe||[]):[]).forEach(function(p){
       var h=p.h||74;
       haste(m3d,{lat:p.lat,lng:p.lng},h,ACENTO+'ff',4);
@@ -4514,6 +4571,7 @@ window.MSEarth=(function(){
     var sl=e.target.closest&&e.target.closest('.g-earth-3d'); if(!sl) return;
     if(e.target.closest('.pin')){ e.stopPropagation(); alternaAnot(!anotLiga); return; }
     if(e.target.closest('.caf')){ e.stopPropagation(); alternaCafe(!cafeLiga); return; }
+    if(e.target.closest('.cam')){ e.stopPropagation(); alternaCaminho(!caminhoLiga); return; }
     if(e.target.closest('.orb')){ e.stopPropagation(); orbita(!orbitando); return; }
     if(e.target.closest('.rec')){ e.stopPropagation(); recentra(); return; }
     if(e.target.closest('.sair')){ e.stopPropagation(); desativa(); document.body.focus(); return; }

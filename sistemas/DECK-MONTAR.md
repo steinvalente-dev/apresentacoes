@@ -212,7 +212,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 | `prancha` | grade de 2 a 4 imagens sobre um tema. Retrato 3–4 colunas, deitada 2. `cols` aqui é NÚMERO — ver `gabaritos/prancha-referencia.md` | `ar` · `cols` · `items` · `top` |
 | `viva` | a peça vizinha rodando DENTRO do slide, em quadro de sangria total. `src` relativo, mesma pasta; o slide fica travado e só as setas trocam — `gabaritos/viva.md` | `alt` · `cap` · `h2` · **`src`** |
 | `modelo-3d` | o que o projeto é: o modelo do SketchUp, vivo. Exige modelo PÚBLICO no 3D Warehouse — `gabaritos/modelo.md` | `cap` · `compacto` · `h2` · `lead` · **`modelo`** · `res` |
-| `earth-3d` | onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md` | `alt` · `anot` · `cafe` · `cap` · `compacto` · `h2` · **`lat`** · `lead` · **`lng`** · `ruas` |
+| `earth-3d` | onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md` | `alt` · `anot` · `cafe` · `cap` · `compacto` · `fluxo` · `h2` · **`lat`** · `lead` · **`lng`** · `ruas` |
 | `mapa` | o cadastro desenhado, com hover por lote. Exige o objeto `MAP` — `gabaritos/mapa-lotes.md` | `chave` · `hint` · `leg` (2) · `which` |
 <!-- GABARITOS:FIM -->
 
