@@ -159,6 +159,19 @@ as exportações para alinhar, e removê-lo depois.
 Conversão igual à da planta base — `mutool convert` —, e o conteúdo do `<svg>`
 convertido entra como `<g data-cam="...">` dentro do SVG da base.
 
+**Sem `mutool` no container** (18/09/2026: sumiu do PATH), o mesmo motor vem por
+Python, e o SVG sai equivalente:
+
+```
+pip install pymupdf --break-system-packages
+python3 -c "import pymupdf; open('c.svg','w').write(pymupdf.open('c.pdf')[0].get_svg_image())"
+```
+
+Foi assim que entrou a **rota acessível** de Lageado: 61 KB de PDF → 209 KB de
+SVG, 61 ids prefixados, mesma caixa `2383,94 × 1683,78 pt` — registro exato,
+sem uma linha de transformação. O PDF já veio **isolado**, só a hachura e os
+símbolos de cadeira, que é o pedido feito ao Rayon acima funcionando.
+
 ### ⚑ Os ids colidem entre duas exportações — soldar sem prefixo troca os glifos
 
 Confirmado em 17/09/2026 com a planta e o percurso da Fazenda Lageado.
@@ -309,8 +322,39 @@ pausa e zera. Se o navegador recusar, sobra o pôster com controles.
 
 ---
 
+## ⚑ A mídia do pino tem de existir no DECK
+
+O caminho da mídia (`"src": "img/x.jpg"`) é escrito **à mão** na lista de pinos,
+mas a pasta `img/` da peça é gerada pelo `montar`, que só copia o que **algum
+slide** usa. Imagem que existe apenas no pino não chega à pasta: 404 no primeiro
+publish, e o slide continua verde porque o validador não olha a peça vizinha.
+
+Duas consequências práticas, pagas em 18/09/2026 com a sala do trabalho:
+
+- **render sem slide não entra no pino.** Dos sete renders que chegaram, dois
+  não tinham lugar no deck — saíram do pino em vez de virar arquivo solto.
+- **o moinho escolhe o formato por imagem.** `trab-sala.png` saiu
+  `trab-sala.webp`, e não `.jpg` como as irmãs — o pino apontava para `.jpg` e
+  quebrava. O formato pode mudar entre um `montar` e outro, então a conferência
+  é **depois de cada montagem**, não só quando o pino é novo:
+
+```python
+import re, pathlib
+t = pathlib.Path('planta-interativa.html').read_text()
+falta = [r for r in sorted(set(re.findall(r'"src": "(img/[^"]+)"', t)))
+         if not pathlib.Path(r).is_file()]
+print(falta or 'todas as mídias de pino resolvem')
+```
+
+---
+
 ## Armadilhas já pagas
 
+- **`setAttribute` não decodifica entidade.** O `aria-label` dos pinos era
+  montado com `"Abrir m&#237;dia: "`, e o leitor de tela lia `m&#237;dia`
+  literal — entidade HTML só é interpretada no *parse* do documento, nunca num
+  atributo escrito por JS. Em string de JavaScript o caractere vai direto, ou
+  por escape de JS (`í`). Corrigido em 18/09/2026.
 - **Acentuação.** Peça gravada em UTF-8 sem `<meta charset>` abre do disco
   mostrando `RecepÃ§Ã£o`. Este módulo declara o charset; a versão que sai do
   acervo e viaja por e-mail deve, além disso, gravar os acentos como entidades.
