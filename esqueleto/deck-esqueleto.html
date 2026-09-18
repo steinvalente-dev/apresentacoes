@@ -1751,6 +1751,25 @@ body.ocioso .g-galeria.lupando .lconta{opacity:0}
    larga e baixa (medido em 18/09/2026: +389px em 2560×1080 com
    `aspect-ratio` na célula). */
 .g-prancha.caber .grade .cel .ph{background:var(--papel)}
+/* `caber` + `pilha`: a célula PERDE o `aspect-ratio`. Com ele, a altura vira
+   função da largura e a pilha estoura o quadro em tela larga e baixa —
+   medido em 18/09/2026: +390px em 2560×1080 com duas elevações empilhadas.
+   Sem ele, a coluna divide a ALTURA disponível e cada desenho se contém
+   dentro da sua parte. */
+.g-prancha.caber .grade .cel.pilha{aspect-ratio:auto!important}
+/* sem `aspect-ratio` a celula perde a altura definida, e uma linha de grade
+   sem altura definida cresce ate o tamanho do conteudo — que aqui e a altura
+   intrinseca das imagens. `minmax(0,1fr)` devolve o teto: a linha ocupa o que
+   sobra, e nao mais do que isso. */
+.g-prancha.caber .grade{grid-auto-rows:minmax(0,1fr);align-items:stretch}
+/* `align-items:stretch` fecha a conta: com o `center` da regra base o item
+   nao recebe a altura da linha — e sizedo pelo conteudo e so centralizado,
+   entao o teto da linha nao o alcanca. Medido: celula de 1.655 px numa linha
+   de 769. */
+.g-prancha.caber .grade .cel.pilha .ph{background:var(--papel);min-height:0}
+/* `min-height:0` nao e detalhe: num flex em coluna o minimo de cada item e o
+   TAMANHO DO CONTEUDO, e imagem tem altura intrinseca. Sem isto os tres
+   desenhos se recusam a encolher e a pilha transborda. */
 .g-prancha.caber .grade .cel .ph img{object-fit:contain}
 .g-prancha .pcap{font-family:var(--f-mono);font-size:var(--fs-cap);line-height:1.42;
   color:var(--soft);letter-spacing:.02em}
@@ -3262,7 +3281,12 @@ function tpl(s){
     const topo=(s.top&&(s.top.h2||s.top.lead))
       ? `<div class="ptop rev"><h2>${s.top.h2||''}</h2>`
         + (s.top.lead?`<div class="plead">${s.top.lead}</div>`:'')+`</div>` : '';
-    const centra=s.ar||(s.items||[]).some(i=>i.ar||i.pilha);
+    /* ⚑ `caber` NAO centraliza por estilo inline: a celula precisa RECEBER a
+       altura da linha, e `align-items:center` faz o oposto — ela e sizeda
+       pelo conteudo e so centralizada, entao o teto da linha nao a alcanca.
+       Medido em 18/09/2026: celula de 1.655 px numa linha de 769. Quem
+       centraliza no `caber` e o `object-fit:contain`, dentro da celula. */
+    const centra=!s.caber&&(s.ar||(s.items||[]).some(i=>i.ar||i.pilha));
     return `<div class="pbody">${topo}<div class="grade" style="grid-template-columns:repeat(${s.cols||3},1fr)`
       + (centra?';align-content:center;align-items:center':'')+`">${cels}</div></div>`;
   }

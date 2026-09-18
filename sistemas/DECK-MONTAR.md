@@ -209,7 +209,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 | `carrossel` | uma pilha de desenhos passando em cross-fade, com o texto por cima. Para mostrar VOLUME de trabalho, não para ler desenho | `cap` · `h2` · `imgs` · `lbl` |
 | `duo` | duas imagens lado a lado | `alto` · **`figs` (4)** · **`leg`** |
 | `fotos` | linha do tempo ilustrada | `cols` · **`itens`** |
-| `prancha` | grade de 2 a 4 imagens sobre um tema. Retrato 3–4 colunas, deitada 2. `cols` aqui é NÚMERO — ver `gabaritos/prancha-referencia.md` | `ar` · `cols` · `items` · `top` |
+| `prancha` | grade de 2 a 4 imagens sobre um tema. Retrato 3–4 colunas, deitada 2. `cols` aqui é NÚMERO — ver `gabaritos/prancha-referencia.md` | `ar` · `caber` · `cols` · `items` · `top` |
 | `viva` | a peça vizinha rodando DENTRO do slide, em quadro de sangria total. `src` relativo, mesma pasta; o slide fica travado e só as setas trocam — `gabaritos/viva.md` | `alt` · `cap` · `h2` · **`src`** |
 | `modelo-3d` | o que o projeto é: o modelo do SketchUp, vivo. Exige modelo PÚBLICO no 3D Warehouse — `gabaritos/modelo.md` | `cap` · `compacto` · `h2` · `lead` · **`modelo`** · `res` |
 | `earth-3d` | onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md` | `alt` · `anot` · `cafe` · `cap` · `compacto` · `fluxo` · `h2` · **`lat`** · `lead` · **`lng`** · `ruas` |
