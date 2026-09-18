@@ -312,6 +312,31 @@ sumir sob a legenda, a folga entra como pixel transparente no próprio arquivo
 
 ---
 
+## `anexos` — mídia que nenhum slide usa
+
+Campo do **topo do deck.json**, não de slide:
+
+```json
+{ "projeto": "...", "anexos": ["adm-porta.png", "sala-jantar.mp4"], "deck": [...] }
+```
+
+O `montar` copia esses arquivos para `img/` mesmo sem nenhum slide referenciá-los.
+Imagem passa pelo moinho no perfil `cheia`; vídeo passa reto, já vem comprimido.
+Só funciona em modo `arquivo` — em base64 não há pasta para preencher, e o montar
+avisa.
+
+**Para que serve.** A peça vizinha do gabarito `viva` — a planta interativa — tem
+pinos que apontam para `img/...` por caminho escrito à mão. Enquanto o mesmo
+render estava num slide **e** num pino, os dois viviam do mesmo arquivo. No dia em
+que o slide sai do deck, o arquivo para de ser copiado e **o pino vira 404 sem
+erro em lugar nenhum** — o validador olha a apresentação, não a peça ao lado.
+`anexos` declara a dependência em vez de deixá-la implícita.
+
+Pago em 18/09/2026, ao enxugar 19 slides do Lageado que a planta já mostrava: 30
+arquivos teriam sumido da pasta.
+
+---
+
 ## Campos que valem em qualquer gabarito
 
 | campo | efeito |

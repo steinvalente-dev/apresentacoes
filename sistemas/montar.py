@@ -402,6 +402,53 @@ def capa_do_modulo(raiz, marca):
     return [], None
 
 
+def copia_anexos(dj, pasta_img, saida, modo, avisos):
+    """Copia para `img/` a midia que NENHUM slide usa.
+
+    ⚑ Por que isto existe. A pasta `img/` e' saida do `montar`, que so copia
+    o que algum slide referencia. Mas a peca vizinha do gabarito `viva` — a
+    planta interativa — tem pinos que apontam para `img/...` por caminho
+    relativo, escrito a mao. Enquanto o mesmo render estava num slide E num
+    pino, os dois viviam do mesmo arquivo e ninguem reparava. No dia em que o
+    slide sai do deck, o arquivo para de ser copiado e o pino vira 404 — sem
+    erro em lugar nenhum, porque o validador olha a apresentacao e nao a peca
+    ao lado. Pago em 18/09/2026, ao enxugar 16 slides duplicados.
+
+    O campo `anexos` no deck.json resolve declarando a dependencia:
+
+        "anexos": ["adm-porta.png", "sala-jantar.mp4", ...]
+
+    Passam PELO MOINHO quando sao imagem, com o perfil `cheia` — e' o mesmo
+    render que o pino abre em tela cheia. Video passa reto, ja vem comprimido.
+    So faz sentido em modo `arquivo`; em base64 nao ha pasta para preencher.
+    """
+    nomes = dj.get('anexos') or []
+    if not nomes:
+        return 0, 0
+    if modo != 'arquivo':
+        avisos.append(f'{len(nomes)} anexo(s) declarados, mas a peca saiu em base64 '
+                      f'(sem pasta img/) — a peca vizinha nao vai achar a midia')
+        return 0, 0
+    (saida / 'img').mkdir(parents=True, exist_ok=True)
+    n = bytes_tot = 0
+    for nome in nomes:
+        arq = pasta_img / nome
+        if not arq.is_file():
+            avisos.append(f'anexo nao encontrado em {pasta_img}: {nome}')
+            continue
+        ext = arq.suffix.lower()
+        if ext in ('.mp4', '.m4v', '.webm'):
+            dados, destino = arq.read_bytes(), arq.name
+        else:
+            larg, q = RESIZE['cheia']
+            fmt = 'WEBP' if tem_alfa(arq) else 'JPEG'
+            dados = redimensiona(arq, larg, q, fmt)
+            destino = arq.stem + ('.webp' if fmt == 'WEBP' else '.jpg')
+        (saida / 'img' / destino).write_bytes(dados)
+        n += 1; bytes_tot += len(dados)
+    return n, bytes_tot
+
+
 def processa_imagens(jobs, pasta_img, saida, peso_vid=0):
     """→ (bytes em base64, modo, imagens que faltaram)
 
@@ -627,6 +674,10 @@ def main():
     total_img, modo, faltam = processa_imagens(jobs, pasta_img, saida,
                                                pesa_videos(dj['deck'], pasta_img))
     n_vid, bytes_vid = coloca_videos(dj['deck'], pasta_img, modo, saida, avisos)
+    n_anx, bytes_anx = copia_anexos(dj, pasta_img, saida, modo, avisos)
+    if n_anx:
+        print(f'montar: anexos — {n_anx} arquivo(s), {bytes_anx/1048576:.2f} MB em img/, '
+              f'so para a peca vizinha (nenhum slide usa)')
     if n_svg:
         print(f'montar: marca — {n_svg} svg inline (caminho vivo, para animar)')
     if n_vid:
