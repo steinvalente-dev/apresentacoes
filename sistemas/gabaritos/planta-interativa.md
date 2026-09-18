@@ -394,6 +394,48 @@ não caiba dentro do slide. Só não é mais o que este deck usa.
 
 ---
 
+## Zoom nítido: a escala não pode morar só no `transform`
+
+18/09/2026. O Michel: *"quando aproximo o zoom, a resolução fica ruim"*.
+Reproduzido antes de mexer: **a 1600% tudo borra** — parede, cota, rótulo de
+ambiente — e não só o texto. Logo não é a origem do desenho, é o navegador.
+
+`#stage` tem `will-change:transform` e recebe `scale()`. Isso promove a camada,
+e o Chromium **rasteriza o SVG uma vez**, na escala em que ele estava, e depois
+amplia o bitmap. **Vetor ampliado por `transform` não volta a ser vetor.**
+
+A correção é fazer a escala morar no **tamanho de layout do SVG**, que é o que
+manda o motor gráfico redesenhar o vetor, por ladrilho, na resolução da tela.
+Mas refazer o layout de 2,9 MB de SVG a cada tique da roda travaria o gesto —
+então os dois convivem:
+
+| momento | onde mora a escala | como fica |
+|---|---|---|
+| durante o gesto | `transform: scale()` | suave e borrada |
+| 180 ms depois do último gesto | `width`/`height` do `<svg>` | nítida |
+
+```js
+var base = 1;                       // escala JÁ cometida no layout
+function comete(){ base = scale;
+  svg.style.width = (CW*base)+"px"; svg.style.height = (CH*base)+"px"; }
+// no apply():
+stage.style.transform = "translate("+tx+"px,"+ty+"px) scale("+(scale/base)+")";
+```
+
+**A conta de tela não muda**: um ponto do desenho continua caindo em
+`tx + (dx-VBX)*scale`, porque `base * (scale/base) = scale`. Pinos, tinta e
+`toDraw()` seguem iguais — nenhum precisou saber disto.
+
+Medido: energia de borda a 1600% sobe de **0,763 para 2,318** (3,0×). O commit
+custa **2 ms de layout e 28 ms até o quadro pintado** a 800% — imperceptível,
+porque só acontece com a mão parada. A 1600% o `<svg>` fica com 19.938 px de
+largura e o `transform` volta a `matrix(1,0,0,1,…)`.
+
+⚑ Vale para qualquer peça que amplie SVG por `transform`. É a armadilha de
+classe deste módulo.
+
+---
+
 ## Pendências
 
 - ~~virar tipo de slide do esqueleto~~ — **feito de outro jeito em 17/09/2026**:
