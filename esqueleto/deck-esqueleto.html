@@ -187,6 +187,22 @@ table.tb td{padding:clamp(11px,1.5cqh,19px) 0;border-bottom:1px solid var(--hair
 body.esc table.tb td{border-color:var(--papel-20)}
 table.tb td+td,table.tb th+th{padding-left:clamp(14px,2cqw,40px);text-align:right}
 table.tb td.d{font-family:var(--f-display);font-weight:500;font-size:clamp(15px,1.5cqw,25px);letter-spacing:-.03em;white-space:nowrap}
+/* ⚑ A COLUNA DO NUMERO NAO FICA NA BEIRA. Com `width:100%` a primeira coluna
+   engole toda a folga e o numero vai para a ponta: medido em 18/09/2026 na
+   tabela dos oitenta desenhos, "casa sede" ocupava ~90 px numa celula de 797, e
+   o "10" ficava a 700 px de vao dali — o olho perde a linha no meio do branco.
+   Pedido do Michel na mesma data.
+
+   A tabela de DUAS colunas passa a ser dimensionada pelo CONTEUDO, entre um
+   piso e um teto. So conteudo, sem piso, encolheu a tabela dos oitenta
+   desenhos a 422 px debaixo de um titulo de 600 — fica atarracada. So teto
+   fixo em `ch` mandaria rotulo comprido quebrar linha, que e pior do que o
+   vao. Com os dois: 40ch de piso da a medida do titulo, 56ch de teto deixa
+   rotulo longo crescer antes de quebrar.
+
+   So duas colunas, e so no gabarito `tabela`: com tres ou mais o vao nao
+   existe, e em `porte` a tabela ja mora numa coluna estreita. */
+.wrap>.rev>table.tb.duasc{width:auto;min-width:min(100%,40ch);max-width:min(100%,56ch)}
 table.tb tr.hi td{color:var(--acento)}
 body.esc table.tb tr.hi td{color:var(--acento-claro)}
 /* mapa */
@@ -3398,7 +3414,7 @@ function tpl(s){
       /* <span> vazio de propósito: é onde o falha() escreve o diagnóstico */
       +   `<span></span></div>`;
   }
-  const tab=s.cols?`<div class="rev"><table class="tb"><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`+
+  const tab=s.cols?`<div class="rev"><table class="tb${s.cols.length===2?' duasc':''}"><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`+
     s.linhas.map((r,i)=>`<tr class="${s.hi===i?'hi':''}${s.fora===i?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`).join('')+`</tbody></table></div>`:'';
   if(s.g==='porte'){
     const f2=s.fecho?`<p class="sub rev" style="max-width:44ch">${s.fecho}</p>`:'';
