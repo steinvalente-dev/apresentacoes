@@ -2079,6 +2079,10 @@ body.claro .g-viva .anel{border-color:var(--tinta-15);border-top-color:var(--tin
   gap:.9em;background:var(--moldura)}
 .g-earth-3d.esperando .estado,.g-earth-3d.falhou .estado,
 .g-modelo-3d.esperando .estado,.g-modelo-3d.falhou .estado{display:grid}
+/* a legenda entra junto com o visor: enquanto carrega ou depois de falhar
+   nao ha camada para ligar, e uma lista de camadas sobre a tela de estado e
+   promessa que a peca nao pode cumprir. */
+.g-earth-3d.esperando .legenda,.g-earth-3d.falhou .legenda,
 .g-earth-3d.esperando .veu,.g-earth-3d.esperando .cmd,.g-earth-3d.falhou .veu,.g-earth-3d.falhou .cmd,
 .g-modelo-3d.esperando .veu,.g-modelo-3d.esperando .cmd,.g-modelo-3d.esperando .rotulo,
 .g-modelo-3d.falhou .veu{display:none}
@@ -2147,6 +2151,51 @@ body.claro .g-viva .anel{border-color:var(--tinta-15);border-top-color:var(--tin
   color:var(--tinta);font-weight:600;
   font-size:clamp(10.5px,.88cqw,13.5px);padding:.45em .8em;
   box-shadow:0 1px 7px var(--tinta-35);border:1px solid var(--tinta-20)}
+/* ══ A CAMADA DO PROCESSO DO CAFÉ ════════════════════════════════════════
+   Duas informações na mesma caixa, em cores diferentes, porque são coisas
+   diferentes: ONDE se está (o número e o nome da parada, em Cal) e O QUE o
+   café é naquele ponto (a etapa, em acento). Fonte do conteúdo: consulta ao
+   João Piza, 18/09/2026, no Diário de bordo. */
+.g-earth-3d .anot.cafe{background:color-mix(in srgb,var(--tinta) 80%,transparent);
+  color:var(--papel);font-weight:600;
+  font-size:clamp(11px,.95cqw,14.5px);padding:.46em .86em;
+  box-shadow:0 1px 8px var(--tinta-45);
+  border:1px solid color-mix(in srgb,var(--m-acento,var(--acento)) 70%,transparent)}
+.g-earth-3d .anot.cafe u{text-decoration:none;font-family:var(--f-mono);font-weight:600;
+  font-size:.8em;letter-spacing:.06em;color:var(--m-acento,var(--acento));margin-right:.5em}
+.g-earth-3d .anot.cafe s{text-decoration:none;display:block;margin-top:.2em;
+  font-family:var(--f-mono);font-weight:500;font-size:.8em;letter-spacing:.05em;
+  color:var(--m-acento,var(--acento))}
+
+/* ══ A LEGENDA — as camadas em lista, e não em botões soltos ══════════════
+   18/09/2026. Três botões soltos no canto viravam três perguntas ("o que faz
+   cada um?"); em lista, com luz acesa ou apagada, a resposta está no próprio
+   desenho. Mesmo princípio do menu da planta interativa.
+   O `recentrar` fica separado por um filete: é ação, não camada, e misturar
+   os dois na mesma lista é o que faria a lista mentir. */
+.g-earth-3d .legenda{position:absolute;right:var(--gut);
+  bottom:calc(var(--bot) + clamp(52px,7cqh,96px));z-index:3;
+  display:flex;flex-direction:column;gap:.1em;min-width:clamp(150px,13cqw,210px);
+  background:var(--tinta-60);border:1px solid var(--papel-20);border-radius:10px;
+  padding:clamp(7px,.9cqh,12px) clamp(8px,.85cqw,13px);transition:opacity .3s ease}
+.g-earth-3d .legenda h4{margin:0 0 .45em;font-family:var(--f-mono);
+  font-size:calc(var(--fs-cap)*.9);letter-spacing:.14em;text-transform:uppercase;
+  font-weight:500;color:var(--papel-45)}
+.g-earth-3d .legenda button{display:flex;align-items:center;gap:.6em;width:100%;
+  padding:.36em .42em;background:none;border:0;border-radius:6px;cursor:pointer;
+  font-family:var(--f-corpo);font-size:var(--fs-cap);color:var(--papel-60);
+  text-align:left;transition:background .14s ease,color .14s ease}
+.g-earth-3d .legenda button:hover{background:var(--papel-10);color:var(--papel)}
+.g-earth-3d .legenda button[aria-pressed="true"]{color:var(--papel)}
+.g-earth-3d .legenda .luz{width:10px;height:10px;border-radius:3px;flex:0 0 auto;
+  border:1.5px solid var(--papel-35);background:transparent;transition:background .18s ease,border-color .18s ease}
+.g-earth-3d .legenda button[aria-pressed="true"] .luz{background:var(--m-acento,var(--acento));
+  border-color:var(--m-acento,var(--acento))}
+.g-earth-3d .legenda .luz.obra{border-radius:50%}
+.g-earth-3d .legenda .fio{height:1px;background:var(--papel-20);margin:.4em 0}
+.g-earth-3d .legenda .acao .luz{border:0;background:none}
+.g-earth-3d .legenda svg{display:block;width:1em;height:1em;opacity:.7}
+
 .g-earth-3d .anot.rua{background:color-mix(in srgb,var(--tinta) 62%,transparent);
   color:var(--papel-90);
   font-family:var(--f-mono);font-weight:500;font-size:clamp(9px,.72cqw,11.5px);
@@ -3293,16 +3342,25 @@ function tpl(s){
       + (s.lead?`<div class="lead">${s.lead}</div>`:'')
       + (s.cap?`<span class="cap">${s.cap}</span>`:'')
       + `</div>`
-      + `<div class="cmd">`
-      +   `<button class="rec" type="button" title="voltar ao ponto central">`
+      /* a legenda das camadas — ver "A LEGENDA" no CSS */
+      + `<div class="legenda"><h4>camadas</h4>`
+      +   (((s.anot&&s.anot.length)||(s.ruas&&s.ruas.length))
+            ? `<button class="pin" type="button" aria-pressed="true">`
+              + `<span class="luz obra"></span>edificações</button>` : '')
+      +   ((s.cafe&&s.cafe.length)
+            ? `<button class="caf" type="button" aria-pressed="false">`
+              + `<span class="luz"></span>processo do café</button>` : '')
+      +   `<div class="fio"></div>`
+      +   `<button class="rec acao" type="button" title="voltar ao ponto central">`
+      +     `<span class="luz"></span>`
       +     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"`
       +     ` stroke-linecap="round" aria-hidden="true">`
       +     `<circle cx="12" cy="12" r="7"/>`
       +     `<circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/>`
       +     `<path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>recentrar</button>`
+      + `</div>`
+      + `<div class="cmd">`
       +   `<button class="orb" type="button"><i></i>orbitar</button>`
-      +   ((s.anot&&s.anot.length)||(s.ruas&&s.ruas.length)
-            ? `<button class="pin" type="button"><i></i>nomes</button>` : '')
       + `</div>`
       + `<div class="estado">`
       +   `<div class="carga"><div class="anel"></div>`
@@ -4186,21 +4244,28 @@ window.MSEarth=(function(){
   /* Estado da camada, de sessão: quem desligou os nomes no slide 3 não quer
      vê-los de volta ao voltar para ele depois. Sobrevive à desmontagem do
      visor porque mora aqui fora, não no slide. */
-  var anotLiga=true;
+  var anotLiga=true;      /* camada `edificações` */
+  var cafeLiga=false;     /* camada `processo do café` — entra a pedido */
 
   function limpaAnot(){
     posto.forEach(function(n){ if(n.parentNode) n.parentNode.removeChild(n); });
     posto=[];
     if(tAnot){ clearInterval(tAnot); tAnot=null; }
   }
-  function caixa(m3d,txt,pos,tipo){
+  function caixa(m3d,txt,pos,tipo,extra){
     var pop=new m3d.PopoverElement({
       open:true,
       /* sem isto um clique no mapa fecha a anotação — e ela não volta */
       lightDismissDisabled:true,
       altitudeMode:m3d.AltitudeMode.RELATIVE_TO_GROUND});
     var d=document.createElement('div');
-    d.className='anot '+tipo; d.textContent=txt;
+    d.className='anot '+tipo;
+    if(extra&&(extra.n!=null||extra.sub)){
+      /* duas informações, duas cores: onde se está, e o que o café é ali */
+      if(extra.n!=null){ var u=document.createElement('u'); u.textContent=extra.n; d.append(u); }
+      d.append(document.createTextNode(txt));
+      if(extra.sub){ var sb=document.createElement('s'); sb.textContent=extra.sub; d.append(sb); }
+    } else d.textContent=txt;
     pop.append(d);
     pop.positionAnchor=pos;          /* literal, não elemento */
     mapa.append(pop);
@@ -4274,22 +4339,28 @@ window.MSEarth=(function(){
   }
 
   function selo(){
-    /* a classe vive no slide: é ela que acende o indicador do botão */
+    /* a classe vive no slide: é ela que acende o indicador do botão. E a
+       legenda diz o estado das duas camadas, cada uma na sua linha. */
     var sl=document.querySelectorAll('#palco .slide')[cur];
-    if(sl&&sl.classList.contains('g-earth-3d')) sl.classList.toggle('com-anot',anotLiga);
+    if(!sl||!sl.classList.contains('g-earth-3d')) return;
+    sl.classList.toggle('com-anot',anotLiga);
+    var a=sl.querySelector('.legenda .pin'), c=sl.querySelector('.legenda .caf');
+    if(a) a.setAttribute('aria-pressed',anotLiga?'true':'false');
+    if(c) c.setAttribute('aria-pressed',cafeLiga?'true':'false');
   }
-  function alternaAnot(liga){
-    anotLiga=!!liga;
-    if(anotLiga) desenhaAnot(); else { limpaAnot(); selo(); }
-  }
+  /* as duas camadas se redesenham juntas: as caixas dividem o mesmo resolvedor
+     de colisão, e redesenhar só uma deixaria a outra medindo posição velha. */
+  function alternaAnot(liga){ anotLiga=!!liga; desenhaAnot(); }
+  function alternaCafe(liga){ cafeLiga=!!liga; desenhaAnot(); }
   function desenhaAnot(){
     limpaAnot();
     selo();
-    var s=DECK[cur]; if(!s||!mapa||!lib||!anotLiga) return;
+    var s=DECK[cur]; if(!s||!mapa||!lib) return;
+    if(!anotLiga&&!cafeLiga) return;
     var m3d=lib;
     if(!m3d.PopoverElement) return;    /* preview sem popover: sai calado */
     var VINHO=tok('--primaria'), FERRO=tok('--tinta');
-    (s.anot||[]).forEach(function(a){
+    (anotLiga?(s.anot||[]):[]).forEach(function(a){
       var cor=a.tipo==='ctx'?FERRO:VINHO;
       if(a.anel&&a.anel.length){
         var anel=a.anel.map(function(q){ return {lat:q[0],lng:q[1]}; });
@@ -4301,8 +4372,16 @@ window.MSEarth=(function(){
       haste(m3d,pos,h,cor+(a.tipo==='ctx'?'cc':'ff'),a.tipo==='ctx'?3:5);
       caixa(m3d,a.rot,{lat:a.lat,lng:a.lng,altitude:h},a.tipo==='ctx'?'ctx':'obra');
     });
-    (s.ruas||[]).forEach(function(r){
+    (anotLiga?(s.ruas||[]):[]).forEach(function(r){
       caixa(m3d,r.rot,{lat:r.lat,lng:r.lng,altitude:r.h||14},'rua');
+    });
+    /* O PROCESSO DO CAFÉ. Haste em acento, para separar da edificação já no
+       primeiro olhar, e a caixa com número + parada + etapa. */
+    var ACENTO=tok('--m-acento')||tok('--acento');
+    (cafeLiga?(s.cafe||[]):[]).forEach(function(p){
+      var h=p.h||74;
+      haste(m3d,{lat:p.lat,lng:p.lng},h,ACENTO+'ff',4);
+      caixa(m3d,p.rot,{lat:p.lat,lng:p.lng,altitude:h},'cafe',p);
     });
     if(posto.length){
       resolveColisao();
@@ -4434,6 +4513,7 @@ window.MSEarth=(function(){
   document.addEventListener('click',function(e){
     var sl=e.target.closest&&e.target.closest('.g-earth-3d'); if(!sl) return;
     if(e.target.closest('.pin')){ e.stopPropagation(); alternaAnot(!anotLiga); return; }
+    if(e.target.closest('.caf')){ e.stopPropagation(); alternaCafe(!cafeLiga); return; }
     if(e.target.closest('.orb')){ e.stopPropagation(); orbita(!orbitando); return; }
     if(e.target.closest('.rec')){ e.stopPropagation(); recentra(); return; }
     if(e.target.closest('.sair')){ e.stopPropagation(); desativa(); document.body.focus(); return; }

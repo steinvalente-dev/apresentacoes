@@ -401,3 +401,56 @@ O que tem de acontecer antes, nesta ordem: `gmp-map-3d` sair de preview para
 GA · uma chave restrita por referrer criada e documentada em `CREDENCIAIS.md` ·
 um teste em rede de cliente, não de escritório · e a decisão de o que aparece
 quando a rede cai.
+
+---
+
+## A legenda das camadas, e o processo como camada
+
+18/09/2026, pedido do Michel: *"ao invés de ter aqueles checks abertos ali no
+canto, a gente vai compilar isso numa listinha de legenda. O único botão que eu
+quero que fique desmembrado é o de orbitar"*.
+
+Três botões soltos no canto viravam três perguntas — "o que faz cada um?". Em
+lista, com a luz acesa ou apagada, a resposta está no próprio desenho. É o
+mesmo princípio do menu da planta interativa (`viva.md`).
+
+- **`edificações`** — o que era o botão `nomes`: `anot` e `ruas`.
+- **`processo do café`** — campo novo `cafe`, desligado por padrão.
+- **`recentrar`** fica na mesma caixa, **abaixo de um filete**: é ação, não
+  camada. Misturar as duas coisas na mesma lista é o que faria a lista mentir.
+- **`orbitar`** continua botão, sozinho: é o único que se liga e desliga o
+  tempo todo durante a fala.
+
+⚑ A legenda entra e sai **com o visor** (`.esperando` e `.falhou` a escondem).
+Lista de camadas sobre a tela de estado é promessa que a peça não cumpre.
+
+### o campo `cafe`
+
+```json
+"cafe": [
+ {"n":1,"rot":"lavoura","sub":"café cereja","lat":…,"lng":…,"h":92}
+]
+```
+
+`n` + `rot` saem em Cal e `sub` em acento — **duas informações, duas cores**:
+onde se está, e o que o café é naquele ponto. A haste também é de acento, para
+separar da edificação já no primeiro olhar.
+
+### de onde saíram as coordenadas
+
+Do croqui que o Michel marcou sobre um print do Google, por **transformação de
+semelhança entre o print e a ortofoto georreferenciada** (EPSG:31982, o
+geotransform do mosaico está em `claude/lageado-coordenadas-edificacoes.md` e
+nas especificações da ortofoto).
+
+**A transformação foi provada antes de ser usada**: projetando de volta as nove
+edificações de coordenada conhecida, todas caem sobre o prédio certo no print.
+Sem essa prova o número sai bonito e errado — foi assim que a armadilha da zona
+UTM quase passou, no levantamento das edificações.
+
+⚑ O print do Michel estava **girado 13°** em relação ao norte. Duas
+correspondências bastam para achar escala e rotação; a terceira em diante é o
+que prova que achou.
+
+---
+
