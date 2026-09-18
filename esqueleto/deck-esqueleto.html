@@ -1744,6 +1744,14 @@ body.ocioso .g-galeria.lupando .lconta{opacity:0}
 .g-prancha .grade .cel.pilha{gap:clamp(6px,.65cqw,14px)}
 .g-prancha .grade .cel.pilha .ph{flex:1;background:transparent}
 .g-prancha .grade .cel.pilha .ph img{object-fit:contain}
+/* `caber:1` no slide — FOLHA TÉCNICA INTEIRA. Prancha de mapeamento não se
+   recorta: a legenda e o carimbo fazem parte do documento, e `cover` come um
+   ou outro. Aqui a imagem é contida e a célula é limitada pela ALTURA, não
+   pela largura — é o que impede a folha de 1,42:1 de transbordar em tela
+   larga e baixa (medido em 18/09/2026: +389px em 2560×1080 com
+   `aspect-ratio` na célula). */
+.g-prancha.caber .grade .cel .ph{background:var(--papel)}
+.g-prancha.caber .grade .cel .ph img{object-fit:contain}
 .g-prancha .pcap{font-family:var(--f-mono);font-size:var(--fs-cap);line-height:1.42;
   color:var(--soft);letter-spacing:.02em}
 .g-prancha .slot{position:absolute;inset:0;display:grid;place-content:center;gap:.35em;
@@ -3461,7 +3469,7 @@ secs.forEach((sc,i)=>{const d=document.createElement('span');d.className='sdot';
    próprio slide, e o console recebe a pilha. */
 const tplSeguro=s=>{try{return tpl(s)}catch(e){console.error('deck · '+s.g,e);
   return aviso(s,'gabarito '+s.g+' quebrou','<code>'+String(e.message).replace(/</g,'&lt;')+'</code>')}};
-palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}${s.dois?' dois':''}${s.claro?' claro':''}" data-i="${i}">${tplSeguro(s)}</section>`).join('');
+palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}${s.dois?' dois':''}${s.claro?' claro':''}${s.caber?' caber':''}" data-i="${i}">${tplSeguro(s)}</section>`).join('');
 const sl=[...document.querySelectorAll('.slide')];
 /* ⚑ quem ja declarou `--i` no proprio gabarito manda. O teto de 10 existe
    para a cascata de um slide comum nao virar espera; um gabarito que precisa
