@@ -354,6 +354,7 @@ arquivos teriam sumido da pasta.
 | `cel:1` | ajuste de composição para tela pequena |
 | `nota` | rodapé pequeno do slide |
 | `sang` | sangria total |
+| `juntar:1` | **só em `prancha` de 2 colunas com `caber`**: puxa as duas imagens para o meio do slide. Desenho alto e estreito centralizado em célula de meia tela deixa o vazio no centro e gruda o par nas bordas — ver `gabaritos/prancha-referencia.md` |
 
 ---
 

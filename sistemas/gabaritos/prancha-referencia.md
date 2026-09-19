@@ -119,6 +119,52 @@ quebrar a regra, e aí é decisão sua.
 
 ---
 
+## `juntar` — folha técnica de duas colunas não se cola nas bordas
+
+19/09/2026, na legenda-mestre do Lageado. Com `caber`, a imagem usa
+`object-fit:contain` e se centraliza **na própria célula**. Desenho alto e
+estreito numa célula de meia tela sobra branco dos dois lados de cada imagem, e
+o resultado é o par grudado nas bordas com todo o vazio no meio — exatamente ao
+contrário do que a leitura pede, porque as duas colunas de uma legenda se leem
+comparando uma com a outra.
+
+`juntar:1` resolve por `object-position`: a primeira célula empurra a imagem
+para a direita, a última para a esquerda. A grade não muda, o branco vai para
+fora. Medido depois: os dois blocos passaram a desenhar em 806–1270 e
+1290–1728 numa tela de 2560 — 20 px entre eles, e o par centrado no slide.
+
+Só faz sentido com **duas** colunas; com três ou mais não há "meio" para onde
+puxar.
+
+---
+
+## ⚑ Recorte de prancha: a moldura da folha não entra
+
+No mesmo dia, e é a outra metade do mesmo problema. Os dois recortes da legenda
+tinham sido feitos a olho e levaram junto **as linhas de margem da folha** —
+três verticais — mais a borda do topo e as marcas de coordenada (`C`, `1`). Num
+slide isso lê como sujeira: traço solto que não pertence a nada.
+
+O corte sai da **medida**, não do olho:
+
+```python
+# onde o conteudo realmente esta
+palavras = pg.get_text('words')          # extremos do texto
+amostras = pg.get_drawings()             # extremos das amostras de cor
+# onde NAO pode comecar: as verticais longas a esquerda do conteudo
+molduras = sorted({round(g['rect'].x0,1) for g in pg.get_drawings()
+                   if g['rect'].width==0 and g['rect'].height>700})
+assert x0 > max(molduras)
+```
+
+⚑ **As duas colunas saem na MESMA faixa de y**, não cada uma na sua altura. Uma
+acaba antes da outra, mas cortar cada imagem na própria altura faz o `caber`
+escalar as duas por fatores diferentes — e o corpo de letra passa a divergir
+entre colunas que existem para ser comparadas. Melhor sobrar branco embaixo da
+mais curta.
+
+---
+
 ## A imagem que falha vira slot
 
 O tratamento é **ouvinte de `error`, não `onerror` inline**:

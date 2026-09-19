@@ -1787,6 +1787,17 @@ body.ocioso .g-galeria.lupando .lconta{opacity:0}
    TAMANHO DO CONTEUDO, e imagem tem altura intrinseca. Sem isto os tres
    desenhos se recusam a encolher e a pilha transborda. */
 .g-prancha.caber .grade .cel .ph img{object-fit:contain}
+/* ⚑ `juntar` — as duas imagens vem para o MEIO do slide.
+   Com `caber`, a imagem usa `object-fit:contain` e se centraliza na propria
+   celula. Desenho alto e estreito em celula de meia tela sobra branco dos dois
+   lados de cada uma, e o par se afasta: a legenda-mestre do Lageado ficava com
+   as duas colunas grudadas nas bordas, com o vazio todo no centro. Pedido do
+   Michel em 19/09/2026.
+   `object-position` resolve sem mexer na grade: a primeira celula empurra a
+   imagem para a direita, a ultima para a esquerda, e o branco vai para fora.
+   So faz sentido com DUAS colunas — por isso e' campo, e nao regra geral. */
+.g-prancha.juntar .grade .cel:first-child .ph img{object-position:100% 50%}
+.g-prancha.juntar .grade .cel:last-child  .ph img{object-position:0% 50%}
 .g-prancha .pcap{font-family:var(--f-mono);font-size:var(--fs-cap);line-height:1.42;
   color:var(--soft);letter-spacing:.02em}
 .g-prancha .slot{position:absolute;inset:0;display:grid;place-content:center;gap:.35em;
@@ -3571,7 +3582,7 @@ secs.forEach((sc,i)=>{const d=document.createElement('span');d.className='sdot';
    próprio slide, e o console recebe a pilha. */
 const tplSeguro=s=>{try{return tpl(s)}catch(e){console.error('deck · '+s.g,e);
   return aviso(s,'gabarito '+s.g+' quebrou','<code>'+String(e.message).replace(/</g,'&lt;')+'</code>')}};
-palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}${s.dois?' dois':''}${s.claro?' claro':''}${s.caber?' caber':''}" data-i="${i}">${tplSeguro(s)}</section>`).join('');
+palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}${s.dois?' dois':''}${s.claro?' claro':''}${s.caber?' caber':''}${s.juntar?' juntar':''}" data-i="${i}">${tplSeguro(s)}</section>`).join('');
 const sl=[...document.querySelectorAll('.slide')];
 /* ⚑ quem ja declarou `--i` no proprio gabarito manda. O teto de 10 existe
    para a cascata de um slide comum nao virar espera; um gabarito que precisa
