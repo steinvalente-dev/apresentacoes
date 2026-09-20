@@ -637,6 +637,44 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-sequencia .seqnav button:disabled{opacity:.42;cursor:default;background:var(--papel-10)}
 @media (prefers-reduced-motion:reduce){.g-sequencia .seq-etapa{transition:none}}
 
+/* ══ A ROTA, EM LISTA FIXA ═══════════════════════════════════════════════
+   20/09/2026. O texto da parada saiu do mouseover do pino — o conteúdo do
+   popover do Earth não recebe ponteiro — e virou lista na tela, ligada à
+   camada "processo do café". Some junto com ela.
+
+   Fica acima da legenda de camadas, na mesma coluna e na mesma língua: o
+   canto direito é o chrome, o resto da tela é a paisagem.              ══ */
+.g-earth-3d .rota{position:absolute;right:var(--gut);
+  bottom:calc(var(--bot) + clamp(52px,7cqh,96px) + clamp(112px,17cqh,210px));
+  z-index:3;display:none;flex-direction:column;gap:.05em;
+  min-width:clamp(176px,15.5cqw,254px);max-width:clamp(176px,15.5cqw,254px);
+  background:var(--tinta-60);border:1px solid var(--papel-20);border-radius:10px;
+  padding:clamp(7px,.9cqh,12px) clamp(8px,.85cqw,13px)}
+.g-earth-3d.com-cafe .rota{display:flex}
+.g-earth-3d .rota h4{margin:0 0 .45em;font-family:var(--f-mono);
+  font-size:calc(var(--fs-cap)*.9);letter-spacing:.14em;text-transform:uppercase;
+  font-weight:500;color:var(--papel-45)}
+.g-earth-3d .rota button{display:grid;grid-template-columns:1.6em 1fr;
+  align-items:baseline;gap:.15em .55em;width:100%;padding:.22em .4em;
+  background:none;border:0;border-radius:6px;text-align:left;cursor:default;
+  transition:background .14s ease}
+.g-earth-3d .rota button:hover,.g-earth-3d .rota button:focus-visible{
+  background:var(--papel-10);outline:none}
+.g-earth-3d .rota .rn{font-family:var(--f-mono);font-size:calc(var(--fs-cap)*.95);
+  color:var(--m-acento,var(--acento));font-variant-numeric:tabular-nums}
+.g-earth-3d .rota .rt{font-family:var(--f-corpo);font-size:var(--fs-cap);
+  font-weight:600;color:var(--papel-80);line-height:1.15}
+.g-earth-3d .rota .rs{grid-column:2;font-family:var(--f-mono);
+  font-size:calc(var(--fs-cap)*.82);letter-spacing:.03em;line-height:1.25;
+  color:var(--papel-45)}
+/* a porta da tulha: é ação, não parada — filete e cursor de clique */
+.g-earth-3d .rota .rtul{margin-top:.3em;padding-top:.45em;
+  border-top:1px solid var(--papel-20);cursor:pointer}
+.g-earth-3d .rota .rtul .rt{color:var(--m-acento,var(--acento))}
+/* o pino que a linha acende */
+.g-earth-3d .anot.cafe.aceso u{transform:scale(1.35);
+  background:var(--m-acento,var(--acento));color:var(--tinta)}
+
 /* ══ A GAVETA DA TULHA ═══════════════════════════════════════════════════
    20/09/2026. Entra pela direita sobre o visor, sem tirar o 3D da tela: o
    Michel continua falando do conjunto enquanto mostra o que há por dentro.
@@ -3706,6 +3744,17 @@ function tpl(s){
       +   `<span></span></div>`
       /* a gaveta da tulha: o que o layer do café não mostra, porque acontece
          debaixo do telhado. Ver "A GAVETA DA TULHA" no CSS. */
+      + ((s.cafe&&s.cafe.length) ? `<div class="rota"><h4>a rota do caf&#233;</h4>`
+          + s.cafe.map(q=>`<button type="button" data-n="${q.n}">`
+              + `<span class="rn">${String(q.n).padStart(2,'0')}</span>`
+              + `<span class="rt">${q.rot||''}</span>`
+              + (q.sub?`<span class="rs">${q.sub}</span>`:'') + `</button>`).join('')
+          + (s.tulha ? `<button type="button" class="rtul abre-tulha">`
+              + `<span class="rn">8&#8211;11</span>`
+              + `<span class="rt">dentro da tulha &#8594;</span>`
+              + `<span class="rs">limpador, descascador, classificador, ensacamento</span>`
+              + `</button>` : '')
+          + `</div>` : '')
       + (s.tulha ? `<aside class="gaveta">`
           + `<button class="gfecha" type="button" aria-label="Fechar">&#10005;</button>`
           + `<span class="gkick">${s.tulha.kick||'dentro da tulha'}</span>`
@@ -4663,7 +4712,8 @@ window.MSEarth=(function(){
     if(extra&&(extra.n!=null||extra.sub)){
       /* ⚑ SÓ O NÚMERO FICA NA TELA. Nome e etapa vão para uma caixa que abre
          no hover — ver "A CAIXA VIROU BOLINHA" no CSS. */
-      if(extra.n!=null){ var u=document.createElement('u'); u.textContent=extra.n; d.append(u); }
+      if(extra.n!=null){ var u=document.createElement('u'); u.textContent=extra.n; d.append(u);
+        d.dataset.n=extra.n; }
       var cx=document.createElement('i'); cx.className='cxa';
       var nb=document.createElement('b'); nb.textContent=txt; cx.append(nb);
       if(extra.sub){ var sb=document.createElement('s'); sb.textContent=extra.sub; cx.append(sb); }
@@ -4784,6 +4834,7 @@ window.MSEarth=(function(){
     var sl=document.querySelectorAll('#palco .slide')[cur];
     if(!sl||!sl.classList.contains('g-earth-3d')) return;
     sl.classList.toggle('com-anot',anotLiga);
+    sl.classList.toggle('com-cafe',cafeLiga);   /* a lista da rota vai junto */
     var a=sl.querySelector('.legenda .pin'), c=sl.querySelector('.legenda .caf'),
         m=sl.querySelector('.legenda .cam');
     if(a) a.setAttribute('aria-pressed',anotLiga?'true':'false');
@@ -4999,7 +5050,9 @@ window.MSEarth=(function(){
     if(e.target.closest('.tul')){ e.stopPropagation();
       var g0=gavetaDe(); abreGaveta(!(g0&&g0.hasAttribute('data-on'))); return; }
     if(e.target.closest('.gfecha')){ e.stopPropagation(); abreGaveta(false); return; }
-    if(e.target.closest('.anot[data-abre]')){ e.stopPropagation(); abreGaveta(true); return; }
+    if(e.target.closest('.anot[data-abre]')||e.target.closest('.abre-tulha')){
+      e.stopPropagation(); abreGaveta(true); return; }
+    if(e.target.closest('.rota')){ e.stopPropagation(); return; }
     var pt=e.target.closest('.gpt');
     if(pt){ e.stopPropagation(); leGaveta(pt.closest('.gaveta'),+pt.dataset.i); return; }
     if(e.target.closest('.gaveta')){ e.stopPropagation(); return; }
@@ -5017,6 +5070,23 @@ window.MSEarth=(function(){
     if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando'); }
   });
 
+  /* ⚑ A LISTA ACENDE O PINO. O caminho inverso — pino acende a lista — nao
+     funciona: o conteudo do popover do Earth nao recebe ponteiro. Este
+     funciona porque a lista e' DOM nosso de ponta a ponta. */
+  function acende(n){
+    document.querySelectorAll('.anot.cafe').forEach(function(a){
+      a.classList.toggle('aceso', n!=null && a.dataset.n===String(n));
+    });
+  }
+  ['mouseover','focusin'].forEach(function(ev){
+    document.addEventListener(ev,function(e){
+      var li=e.target.closest&&e.target.closest('.rota button[data-n]');
+      acende(li?li.dataset.n:null);
+    },true);
+  });
+  document.addEventListener('mouseleave',function(e){
+    if(e.target.closest&&e.target.closest('.rota')) acende(null);
+  },true);
   /* passar o mouse já lê; o foco do teclado também, para quem não usa mouse */
   ['mouseover','focusin'].forEach(function(ev){
     document.addEventListener(ev,function(e){
