@@ -358,6 +358,23 @@ arquivos teriam sumido da pasta.
 
 ---
 
+### `atalho` — um ponto de navegação que vai direto a este slide
+
+```json
+{ "g": "viva", "atalho": "a planta, viva", "src": "planta-interativa.html" }
+```
+
+A fileira de pontos do alto leva às **seções**. `atalho` acrescenta um ponto de
+**destino**: anel vazado no fim da fileira, separado por uma folga, com o
+rótulo aparecendo ao passar o mouse. Clicar leva ao slide de qualquer lugar da
+apresentação, sem paginar; o anel acende quando o slide está em tela.
+
+⚑ Anel e não disco: na mesma fileira, um disco cheio a mais se leria como mais
+uma seção. Destino não é capítulo.
+
+Vale em qualquer gabarito. Use com parcimônia — dois ou três atalhos numa
+apresentação ainda se leem; dez viram outra barra de navegação.
+
 ## Três armadilhas que mordem na hora de montar
 
 **`cols` é campo reservado.** Quem usa `cols` tem de trazer `linhas` logo em

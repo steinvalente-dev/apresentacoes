@@ -257,6 +257,17 @@ body.esc .chrome{color:var(--papel-70)}
 .sdot.on{opacity:1}
 .sdot span{position:absolute;bottom:150%;left:50%;transform:translateX(-50%);opacity:0;white-space:nowrap;font-style:italic;letter-spacing:.1em;transition:opacity .2s;pointer-events:none}
 .sdot:hover span{opacity:.9}
+/* ── ATALHO · ponto de DESTINO, não de seção ────────────────────────────
+   Vazado em vez de cheio, e depois de uma folga: na mesma fileira, um disco
+   a mais se leria como mais uma seção. O anel de fora marca "você está
+   aqui" sem engordar o ponto. ── */
+.sdot.atalho{background:none;box-shadow:inset 0 0 0 1.6px currentColor;
+  opacity:.45;margin-left:clamp(7px,.7cqw,12px)}
+.sdot.atalho:hover{opacity:.95}
+.sdot.atalho::after{content:"";position:absolute;inset:-4px;border-radius:50%;
+  border:1px solid currentColor;opacity:0;transition:opacity .25s}
+.sdot.atalho.on{opacity:1}
+.sdot.atalho.on::after{opacity:.5}
 .marca{font-style:italic;font-weight:500;text-transform:lowercase}
 /* ── navegação · pastilha de leitura garantida ──────────────────────────
    Regra de sistema, 23/08/2026 (prancha/PRANCHA-SISTEMA.md, seção Chrome,
@@ -3578,6 +3589,11 @@ const TOT=num;
 DECK.forEach(s=>{if(s._b===null){s._sub=0;return}const ir=DECK.filter(x=>x._b===s._b);s._sub=ir.length>1?ir.indexOf(s)+1:0});
 const dots=document.querySelector('.dots');
 secs.forEach((sc,i)=>{const d=document.createElement('span');d.className='sdot';d.innerHTML=`<span>${sc.nome}</span>`;d.onclick=e=>{e.stopPropagation();go(sc.i)};dots.appendChild(d)});
+/* `atalho`: destino alcançável de qualquer lugar, sem paginar até ele. */
+DECK.forEach((s,i)=>{if(!s.atalho)return;
+  const d=document.createElement('span');d.className='sdot atalho';d.dataset.alvo=i;
+  d.innerHTML=`<span>${s.atalho}</span>`;
+  d.onclick=e=>{e.stopPropagation();go(i)};dots.appendChild(d)});
 /* um gabarito que lance exceção não derruba mais o deck: vira aviso no
    próprio slide, e o console recebe a pilha. */
 const tplSeguro=s=>{try{return tpl(s)}catch(e){console.error('deck · '+s.g,e);
@@ -3818,7 +3834,12 @@ function go(i,tudo){
   const si=secs.findIndex(x=>x.nome===s._sec);
   document.querySelector('.sn').textContent=
     (si>=0&&secs[si].num>0)?String(secs[si].num).padStart(2,'0'):'';
-  [...dots.children].forEach((d,j)=>d.classList.toggle('on',j===si));
+  /* ⚑ os dois grupos acendem por regras diferentes: seção por posição na
+     fileira, atalho pelo slide de destino. Ver "ATALHO" no CSS. */
+  [...dots.querySelectorAll('.sdot:not(.atalho)')]
+    .forEach((d,j)=>d.classList.toggle('on',j===si));
+  [...dots.querySelectorAll('.sdot.atalho')]
+    .forEach(d=>d.classList.toggle('on',+d.dataset.alvo===i));
   conta();location.hash=i+1;
 }
 function conta(){
