@@ -558,6 +558,71 @@ body.em-logo .chrome.topo .selo{display:none}
 body.em-logo .chrome.topo .secao{display:inline}
 
 
+/* ══ SEQUENCIA — uma coisa só, camada por camada ═════════════════════════
+   20/09/2026. Texto em 1/3 à esquerda, imagem em 2/3 à direita, uma etapa por
+   vez, com controle próprio no slide.
+
+   ⚑ A ETAPA É UM ELEMENTO SÓ. Legenda e imagem no mesmo `.passo`, empilhado
+   sobre a área inteira, com a grade de 1/3 e 2/3 por dentro. Separados, o
+   motor — que liga um passo por vez em ordem de documento — andava as sete
+   legendas primeiro e só depois as sete imagens.
+
+   ⚑ CROSSFADE E NADA MAIS. O `.passo` da casa entra com `translateY(14px)`,
+   que é o certo para item de lista chegando. Aqui seria erro: as sete imagens
+   são o MESMO telhado no MESMO enquadramento, e o que a sequência mostra é
+   uma camada aparecendo sobre a anterior. Deslocar quebra o registro, e a
+   pessoa deixa de ver "a manta entrou" para ver "a imagem trocou".
+
+   ⚑ A ALTURA MANDA. O `.slide` é coluna flex; sem `flex:1;min-height:0` no
+   caminho até a figura, ela só obedece à largura e estoura em tela larga e
+   baixa (2560×1080 deu +307px na conferência).
+
+   ⚑ SÓ A ÚLTIMA LIGADA APARECE. Os `.passo` acumulam. `:has(~ .passo.on)`
+   apaga toda etapa que tenha uma etapa ligada DEPOIS dela — inclusive a base,
+   que não é passo. Sobra exatamente a última ligada.                    ══ */
+.g-sequencia .wrap{max-width:none;flex:1;min-height:0;display:flex;flex-direction:column}
+.g-sequencia .seq{position:relative;flex:1;min-height:0;
+  margin-top:clamp(10px,1.6cqh,26px)}
+.g-sequencia .seq-etapa{position:absolute;inset:0;display:grid;
+  grid-template-columns:1fr 2fr;gap:clamp(18px,2.4cqw,44px);
+  opacity:0;transform:none;transition:opacity .5s ease}
+.g-sequencia .seq-etapa:not(.passo),
+.g-sequencia .seq-etapa.passo.on{opacity:1}
+.g-sequencia .seq-etapa:has(~ .seq-etapa.passo.on){opacity:0}
+
+.g-sequencia .seq-cap{min-width:0;padding-bottom:calc(var(--seta) + 18px)}
+.g-sequencia .sq{display:block;font-family:var(--f-mono);font-size:var(--fs-cap);
+  letter-spacing:.16em;color:var(--acento);margin-bottom:5px}
+.g-sequencia .st{display:block;font-family:var(--f-display);font-style:italic;
+  font-size:var(--fs-h3);line-height:1.15;margin-bottom:clamp(6px,.9cqh,12px)}
+.g-sequencia .sd{display:block;font-size:var(--fs-body);line-height:1.5;
+  color:var(--soft)}
+.g-sequencia .sd ul{margin:clamp(8px,1.2cqh,16px) 0 0;padding-left:15px}
+.g-sequencia .sd li{margin-bottom:5px}
+
+.g-sequencia .seq-etapa img{min-width:0;min-height:0;width:100%;height:100%;
+  object-fit:contain;object-position:center}
+
+/* o controle fica FORA da pilha: dentro de uma etapa, esvaneceria com ela.
+   Mesma pastilha da navegação do rodapé, porque faz a mesma coisa — só que
+   dentro do slide e sem sair dele. */
+.g-sequencia .seqnav{position:absolute;left:0;bottom:0;z-index:2;
+  display:inline-flex;align-items:center;gap:clamp(6px,.7cqw,11px);
+  background:color-mix(in srgb,var(--papel) 94%,transparent);
+  border:1px solid var(--tinta-20);border-radius:999px;
+  padding:clamp(3px,.34cqw,5px) clamp(5px,.5cqw,8px);
+  box-shadow:0 1px 5px var(--tinta-15);color:var(--tinta)}
+.g-sequencia .seqnav b{font-family:var(--f-mono);font-size:var(--fs-cap);
+  letter-spacing:.1em;font-weight:400;opacity:.72;font-variant-numeric:tabular-nums;
+  padding:0 clamp(2px,.3cqw,5px)}
+.g-sequencia .seqnav button{width:var(--seta);height:var(--seta);border-radius:50%;
+  border:0;background:var(--tinta-10);color:var(--tinta);cursor:pointer;
+  font-size:calc(var(--fs-cap) * 1.05);line-height:1;display:grid;place-items:center;
+  transition:background .16s ease,opacity .16s ease}
+.g-sequencia .seqnav button:hover:not(:disabled){background:var(--tinta-20)}
+.g-sequencia .seqnav button:disabled{opacity:.28;cursor:default;background:var(--tinta-5)}
+@media (prefers-reduced-motion:reduce){.g-sequencia .seq-etapa{transition:none}}
+
 /* ══ GRIFO ═══════════════════════════════════════════════════════════════
    `<mark>` vale em qualquer texto de qualquer gabarito, como `<b>`.
 
@@ -3101,7 +3166,8 @@ const EXIGE={
   lista:['itens'], fim:['itens'], sumario:['itens'], trio:['itens'],
   jogadas:['itens'], fotos:['itens'], unit:['cards'], players:['casas'],
   avulso:['grupos'], plug:['ancoras'], duasfrentes:['esq','dir'],
-  divisor:['dt'], 'earth-3d':['lat','lng'], 'modelo-3d':['modelo'], viva:['src']
+  divisor:['dt'], 'earth-3d':['lat','lng'], 'modelo-3d':['modelo'], viva:['src'],
+  sequencia:['items']
 };
 /* bloco de marca antigo, sem a linha UNDERSCORE: vale o padrão da casa (ligado) */
 const US=(typeof UNDERSCORE==='undefined')?true:!!UNDERSCORE;
@@ -3302,6 +3368,22 @@ function tpl(s){
     /* o slot so aparece se a imagem falhar — antes ele ficava por cima da foto */
     const f=s.figs.map(([tag,src,cap,cl])=>`<div class="dfig ${cl}"><img src="${RES[src]||src}" alt="${cap}" onerror="const p=this.parentNode;this.remove();p.classList.add('semimg')"><span class="tag">${tag}</span><div class="slot"><b>slot de imagem</b><span>${cap}</span></div><span class="dcap">${cap}</span></div>`).join('');
     return `<div class="wrap" style="max-width:none">${k}${t}${sub}<div class="dcols${s.alto?' alto':''} rev">${f}</div><p class="dleg rev">${s.leg}</p></div>`;
+  }
+  if(s.g==='sequencia'){
+    /* a primeira etapa nao e' `.passo`: e' o estado de chegada do slide */
+    const it=s.items||[], N=String(it.length).padStart(2,'0');
+    const et=it.map((x,i)=>`<div class="seq-etapa${i?' passo':''}">`
+      + `<span class="seq-cap">`
+      +   `<span class="sq">${String(i+1).padStart(2,'0')} / ${N}</span>`
+      +   `<span class="st">${x.t||''}</span>`
+      +   `<span class="sd">${x.cap||''}</span></span>`
+      + `<img src="${IMG[x.src]||x.src}" alt="${(x.t||'').replace(/"/g,'&quot;')}"`
+      +   ` onerror="this.dataset.err=1"></div>`).join('');
+    return `<div class="wrap">${k}${t}${sub}<div class="seq">${et}`
+      + `<span class="seqnav"><button type="button" data-sq="-1" aria-label="Etapa anterior">&#9664;</button>`
+      + `<b></b>`
+      + `<button type="button" data-sq="1" aria-label="Pr&#243;xima etapa">&#9654;</button></span>`
+      + `</div></div>`;
   }
   if(s.g==='fotos'){
     const li=s.itens.map(([q,x],i)=>`<li class="passo" data-f="${i}"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('');
@@ -3634,6 +3716,26 @@ sl.forEach(el=>[...el.querySelectorAll('.rev')].forEach((r,j)=>{
   if(r.style.getPropertyValue('--i')==='') r.style.setProperty('--i',Math.min(j,10));
 }));
 sl.forEach((el,i)=>{if(DECK[i].g==='mapa')ligaHover(el)});
+/* o controle do `sequencia`: anda a sequencia e NAO sai do slide */
+function pintaSeq(el){
+  const ps=[...el.querySelectorAll('.seq-etapa.passo')];
+  const n=ps.filter(x=>x.classList.contains('on')).length;
+  const nav=el.querySelector('.seqnav'); if(!nav) return;
+  nav.querySelector('b').textContent=(n+1)+' / '+(ps.length+1);
+  nav.querySelector('[data-sq="-1"]').disabled=(n===0);
+  nav.querySelector('[data-sq="1"]').disabled=(n===ps.length);
+}
+sl.forEach((el,i)=>{
+  if(DECK[i].g!=='sequencia') return;
+  el.querySelectorAll('.seqnav button').forEach(b=>{
+    b.addEventListener('click',e=>{
+      e.stopPropagation();
+      (b.dataset.sq==='1'?avancaPasso:recuaPasso)();
+      pintaSeq(el);
+    });
+  });
+  pintaSeq(el);
+});
 /* ─── o viewBox do isométrico sai do desenho, não de conta à mão ─────────
    Toda vez que o espaçamento dos volumes mudava, o número escrito no código
    decepava os dois últimos prédios. getBBox() mede o que de fato foi
@@ -3869,6 +3971,9 @@ function go(i,tudo){
   conta();location.hash=i+1;
 }
 function conta(){
+  /* o controle do `sequencia` tambem acompanha o espaco e a seta do rodape */
+  const sq=sl[cur]&&sl[cur].querySelector('.seqnav');
+  if(sq&&typeof pintaSeq==='function') pintaSeq(sl[cur]);
   const s=DECK[cur],ps=passos(cur),on=ps.filter(p=>p.classList.contains('on')).length;
   let txt=s._b===null?`— / ${TOT}`:(s._sub?`${s._b}.${s._sub}`:s._b)+` / ${TOT}`;
   if(ps.length)txt+=` · ${on}/${ps.length}`;
@@ -3877,6 +3982,20 @@ function conta(){
 function avanca(){const ps=passos(cur),p=ps.find(x=>!x.classList.contains('on'));
   if(p){p.classList.add('on');foto(cur);caixa(cur);rola(cur);conta();return}go(cur+1)}
 const recua=()=>go(cur>0?cur-1:0,true);
+/* ⚑ O MOTOR SO SABIA VOLTAR DE SLIDE. `recua()` vai para o slide anterior, e
+   e' o certo para a seta do rodape. O controle do `sequencia` precisa do
+   outro movimento: desfazer o ultimo passo sem sair do slide. */
+function recuaPasso(){
+  const on=passos(cur).filter(x=>x.classList.contains('on'));
+  if(!on.length) return false;
+  on[on.length-1].classList.remove('on');
+  foto(cur);caixa(cur);rola(cur);conta();return true;
+}
+function avancaPasso(){
+  const p=passos(cur).find(x=>!x.classList.contains('on'));
+  if(!p) return false;
+  p.classList.add('on');foto(cur);caixa(cur);rola(cur);conta();return true;
+}
 document.getElementById('pro').onclick=e=>{e.stopPropagation();avanca()};
 document.getElementById('ant').onclick=e=>{e.stopPropagation();recua()};
 addEventListener('keydown',e=>{
