@@ -753,6 +753,10 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-meia .wrap{max-width:none;flex:1;min-height:0;display:flex;flex-direction:column}
 .g-meia .meia{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;
   gap:clamp(20px,2.8cqw,52px);margin-top:clamp(10px,1.6cqh,26px)}
+/* `largo:1` — quando a figura é que manda. Meio a meio é o certo para um
+   desenho só; para prancha composta, metade da tela transforma a figura em
+   miniatura e o texto em parede. 1/3 e 2/3, como no `sequencia`. */
+.g-meia .meia.largo{grid-template-columns:1fr 2fr}
 .g-meia .mtx{min-width:0;display:flex;flex-direction:column;justify-content:center;
   font-size:var(--fs-lead);line-height:1.5;color:var(--soft)}
 .g-meia .mtx p{margin:0 0 .75em}
@@ -3557,7 +3561,7 @@ function tpl(s){
     return `<div class="wrap" style="max-width:none">${k}${t}${sub}<div class="dcols${s.alto?' alto':''} rev">${f}</div><p class="dleg rev">${s.leg}</p></div>`;
   }
   if(s.g==='meia'){
-    return `<div class="wrap">${k}${t}${sub}<div class="meia">`
+    return `<div class="wrap">${k}${t}${sub}<div class="meia${s.largo?' largo':''}">`
       + `<div class="mtx rev" style="--i:2">${s.cap||''}</div>`
       + `<div class="mfig rev" style="--i:6">`
       +   `<img src="${IMG[s.src]||s.src}" alt="${(s.leg||s.t||'').replace(/"/g,'&quot;')}"`
