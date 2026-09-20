@@ -684,9 +684,17 @@ body.em-logo .chrome.topo .secao{display:inline}
   box-shadow:0 0 0 5px color-mix(in srgb,var(--acento) 22%,transparent)}
 .g-earth-3d .gpt[data-on]{background:var(--tinta)}
 
-.g-earth-3d .gler{border-top:1px solid var(--tinta-15);
+/* ⚑ ALTURA FIXA, NÃO MÍNIMA. Com `min-height` o bloco crescia conforme o
+   texto, e a figura — que divide a mesma coluna flex — encolhia e voltava a
+   cada ponto: o "soquinho" que o Michel viu. Fixa a altura, a figura fica
+   parada e o texto longo rola dentro do próprio bloco. */
+/* ⚑ O GRIFO NÃO ESPERA AQUI. O atraso padrão de 640 ms existe para o grifo
+   chegar depois dos `rev` do slide. Dentro da gaveta o texto é recriado a
+   cada ponto que se pousa o mouse, e esperar meio segundo a cada troca seria
+   sentido como travamento. */
+.g-earth-3d .gler{--gd:90ms;border-top:1px solid var(--tinta-15);
   padding-top:clamp(7px,1cqh,13px);margin-top:clamp(7px,1cqh,13px);
-  min-height:clamp(58px,9cqh,104px)}
+  height:clamp(96px,15cqh,178px);overflow:auto}
 .g-earth-3d .gler b{display:block;font-family:var(--f-display);font-style:italic;
   font-size:calc(var(--fs-body) * 1.18);color:var(--acento);margin-bottom:3px}
 .g-earth-3d .gler b::before{content:attr(data-n) " · ";font-family:var(--f-mono);
@@ -2420,15 +2428,36 @@ body.claro .g-viva .anel{border-color:var(--tinta-15);border-top-color:var(--tin
    diferentes: ONDE se está (o número e o nome da parada, em Cal) e O QUE o
    café é naquele ponto (a etapa, em acento). Fonte do conteúdo: consulta ao
    João Piza, 18/09/2026, no Diário de bordo. */
-.g-earth-3d .anot.cafe{background:color-mix(in srgb,var(--tinta) 80%,transparent);
-  color:var(--papel);font-weight:600;
-  font-size:clamp(11px,.95cqw,14.5px);padding:.46em .86em;
+/* ⚑ 20/09/2026 — A CAIXA VIROU BOLINHA. Sete paradas num nucleo de 800 m:
+   em qualquer angulo da orbita duas caixas de texto se tocam, e o resolvedor
+   de colisao so' sabia esconder uma. A bolinha com o numero quase nunca
+   colide, e o texto aparece ao pousar o mouse. O numero sozinho tambem
+   fecha a leitura com o croqui do processo, que e' numerado. */
+.g-earth-3d .anot.cafe{background:none;border:0;box-shadow:none;padding:0;
+  position:relative;pointer-events:auto}
+.g-earth-3d .anot.cafe u{text-decoration:none;display:grid;place-items:center;
+  width:clamp(22px,1.85cqw,32px);height:clamp(22px,1.85cqw,32px);border-radius:50%;
+  background:color-mix(in srgb,var(--tinta) 88%,transparent);color:var(--papel);
+  border:1.5px solid var(--m-acento,var(--acento));
   box-shadow:0 1px 8px var(--tinta-45);
-  border:1px solid color-mix(in srgb,var(--m-acento,var(--acento)) 70%,transparent)}
-.g-earth-3d .anot.cafe u{text-decoration:none;font-family:var(--f-mono);font-weight:600;
-  font-size:.8em;letter-spacing:.06em;color:var(--m-acento,var(--acento));margin-right:.5em}
-.g-earth-3d .anot.cafe s{text-decoration:none;display:block;margin-top:.2em;
-  font-family:var(--f-mono);font-weight:500;font-size:.8em;letter-spacing:.05em;
+  font-family:var(--f-mono);font-weight:600;font-size:clamp(10px,.82cqw,13.5px);
+  transition:transform .16s ease}
+.g-earth-3d .anot.cafe[data-abre] u{cursor:pointer;
+  background:var(--m-acento,var(--acento));color:var(--tinta)}
+.g-earth-3d .anot.cafe:hover u{transform:scale(1.18)}
+/* a caixa flutuante: nasce fechada, abre no hover e no foco. `nowrap` porque
+   ela e' uma linha de leitura rapida, nao um paragrafo. */
+.g-earth-3d .anot.cafe .cxa{position:absolute;left:50%;bottom:calc(100% + 9px);
+  transform:translateX(-50%);display:grid;gap:.18em;text-align:left;
+  background:color-mix(in srgb,var(--tinta) 88%,transparent);color:var(--papel);
+  border:1px solid color-mix(in srgb,var(--m-acento,var(--acento)) 70%,transparent);
+  border-radius:2px;padding:.46em .86em;box-shadow:0 1px 9px var(--tinta-45);
+  opacity:0;visibility:hidden;transition:opacity .16s ease,visibility 0s .16s}
+.g-earth-3d .anot.cafe:hover .cxa,.g-earth-3d .anot.cafe:focus-within .cxa{
+  opacity:1;visibility:visible;transition-delay:0s}
+.g-earth-3d .anot.cafe .cxa b{font-weight:600;font-size:clamp(11px,.95cqw,14.5px)}
+.g-earth-3d .anot.cafe .cxa s{text-decoration:none;font-family:var(--f-mono);
+  font-weight:500;font-size:clamp(9.5px,.78cqw,12px);letter-spacing:.05em;
   color:var(--m-acento,var(--acento))}
 
 /* ══ A LEGENDA — as camadas em lista, e não em botões soltos ══════════════
@@ -4632,10 +4661,13 @@ window.MSEarth=(function(){
     var d=document.createElement('div');
     d.className='anot '+tipo;
     if(extra&&(extra.n!=null||extra.sub)){
-      /* duas informações, duas cores: onde se está, e o que o café é ali */
+      /* ⚑ SÓ O NÚMERO FICA NA TELA. Nome e etapa vão para uma caixa que abre
+         no hover — ver "A CAIXA VIROU BOLINHA" no CSS. */
       if(extra.n!=null){ var u=document.createElement('u'); u.textContent=extra.n; d.append(u); }
-      d.append(document.createTextNode(txt));
-      if(extra.sub){ var sb=document.createElement('s'); sb.textContent=extra.sub; d.append(sb); }
+      var cx=document.createElement('i'); cx.className='cxa';
+      var nb=document.createElement('b'); nb.textContent=txt; cx.append(nb);
+      if(extra.sub){ var sb=document.createElement('s'); sb.textContent=extra.sub; cx.append(sb); }
+      d.append(cx);
     } else d.textContent=txt;
     pop.append(d);
     /* a parada que declara `abre` vira porta: o clique na caixa do 3D abre a
@@ -4773,7 +4805,8 @@ window.MSEarth=(function(){
     var b=bs[i], al=g.querySelector('.gler b'), sp=g.querySelector('.gler span');
     al.dataset.n=b.firstChild.nodeValue||'';
     al.textContent=(b.querySelector('u')||{}).textContent||'';
-    sp.textContent=(b.querySelector('s')||{}).textContent||'';
+    /* innerHTML: o texto do ponto aceita <mark> e <b>, como todo texto do deck */
+    sp.innerHTML=(b.querySelector('s')||{}).innerHTML||'';
   }
   function abreGaveta(liga){
     var g=gavetaDe(); if(!g) return;
