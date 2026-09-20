@@ -558,9 +558,28 @@ body.em-logo .chrome.topo .selo{display:none}
 body.em-logo .chrome.topo .secao{display:inline}
 
 
-/* grifo terracota — destaque dentro de célula de tabela ou de texto corrido */
-mark{background:var(--acento);color:var(--papel);padding:.12em .42em .16em;
-  border-radius:2px;font-style:inherit;font-weight:500}
+/* ══ GRIFO ═══════════════════════════════════════════════════════════════
+   `<mark>` vale em qualquer texto de qualquer gabarito, como `<b>`.
+
+   20/09/2026 — passa de TARJA a VARREDURA. A regra antiga era acento cheio
+   com texto em papel: serve para uma palavra dentro de uma célula, e foi
+   para isso que nasceu. Sobre uma oração inteira de texto corrido ela deixa
+   de grifar e passa a interromper — vira caixa, e o olho lê a caixa antes da
+   frase. A varredura cobre só a metade de baixo da linha, como caneta que
+   não sobe até o topo da letra: marca a palavra e a oração igualmente bem.
+
+   A tarja continua disponível em `<mark class="tarja">`, para o caso curto
+   em campo apertado. Nenhum deck usava `<mark>` quando isto mudou.
+   ═══════════════════════════════════════════════════════════════════════ */
+mark{background:linear-gradient(to top,
+    var(--acento-35) 0, var(--acento-35) 44%, transparent 44%);
+  color:inherit;padding:0 .1em;border-radius:1px;font-style:inherit}
+body.esc mark{background:linear-gradient(to top,
+    color-mix(in srgb,var(--acento-claro) 32%,transparent) 0,
+    color-mix(in srgb,var(--acento-claro) 32%,transparent) 44%, transparent 44%)}
+mark.tarja{background:var(--acento);color:var(--papel);padding:.12em .42em .16em;
+  border-radius:2px;font-weight:500}
+body.esc mark.tarja{background:var(--acento-claro);color:var(--tinta)}
 table.tb th mark{letter-spacing:.16em}
 
 /* nota de ressalva: quando o número é leitura nossa, não dado declarado */
@@ -1762,6 +1781,9 @@ body.ocioso .g-galeria.lupando .lconta{opacity:0}
 .g-prancha .ptop h2{font-family:var(--f-display);font-weight:500;font-style:italic;
   text-transform:lowercase;font-size:var(--fs-h);letter-spacing:-.022em;line-height:1}
 .g-prancha .plead{font-size:var(--fs-body);color:var(--soft);max-width:52ch;line-height:1.5}
+.g-prancha .pkick{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.16em;
+  text-transform:uppercase;color:var(--acento);margin-bottom:6px}
+body.esc .g-prancha .pkick{color:var(--acento-claro)}
 .g-prancha .grade{flex:1;min-height:0;display:grid;gap:clamp(8px,.9cqw,20px)}
 .g-prancha .grade .cel{display:flex;flex-direction:column;gap:.5em;min-height:0;
   justify-content:center}
@@ -3316,8 +3338,12 @@ function tpl(s){
       if(med>1.2&&c>2) console.warn('prancha: imagem deitada (ar~'+med.toFixed(2)+') em '+c+' colunas. Deitada pede 2, ou 3 recortando em quadrado.');
       if(med<0.85&&c<3) console.warn('prancha: imagem em retrato (ar~'+med.toFixed(2)+') em '+c+' colunas. Retrato aceita 3 ou 4.');
     })();
-    const topo=(s.top&&(s.top.h2||s.top.lead))
-      ? `<div class="ptop rev"><h2>${s.top.h2||''}</h2>`
+    /* `top.kick`: o mesmo kicker dos outros gabaritos, para o numero que
+       resume a folha ("30 manifestacoes") nao ter de morar no lead. */
+    const topo=(s.top&&(s.top.h2||s.top.lead||s.top.kick))
+      ? `<div class="ptop rev">`
+        + (s.top.kick?`<div class="pkick">${s.top.kick}</div>`:'')
+        + (s.top.h2?`<h2>${s.top.h2}</h2>`:'')
         + (s.top.lead?`<div class="plead">${s.top.lead}</div>`:'')+`</div>` : '';
     /* ⚑ `caber` NAO centraliza por estilo inline: a celula precisa RECEBER a
        altura da linha, e `align-items:center` faz o oposto — ela e sizeda
