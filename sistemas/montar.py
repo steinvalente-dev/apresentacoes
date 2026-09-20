@@ -183,6 +183,13 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
         for r in s.get('res') or []:
             if isinstance(r, dict) and 'src' in r:
                 add(r, 'src', perfil)
+        # ⚑ GAVETA: o `src` mora um nivel abaixo, dentro de um objeto proprio
+        #   (hoje `tulha`, no earth-3d). Sem esta linha o arquivo nao entra no
+        #   moinho NEM na pasta, e o html referencia um nome que nao existe —
+        #   404 mudo, que so o validador pega.
+        for cx in (s.get('tulha'),):
+            if isinstance(cx, dict) and 'src' in cx:
+                add(cx, 'src', 'desenho')
         if g == 'fotos':
             for it in s.get('itens') or []:
                 if isinstance(it, list) and len(it) > 2:

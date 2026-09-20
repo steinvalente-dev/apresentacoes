@@ -637,6 +637,88 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-sequencia .seqnav button:disabled{opacity:.42;cursor:default;background:var(--papel-10)}
 @media (prefers-reduced-motion:reduce){.g-sequencia .seq-etapa{transition:none}}
 
+/* ══ A GAVETA DA TULHA ═══════════════════════════════════════════════════
+   20/09/2026. Entra pela direita sobre o visor, sem tirar o 3D da tela: o
+   Michel continua falando do conjunto enquanto mostra o que há por dentro.
+
+   ⚑ A LEITURA É FIXA. Balão no cursor cobriria o desenho e saltaria de lugar
+   a cada ponto. Aqui o texto troca numa faixa abaixo da figura, sempre no
+   mesmo sítio, e o ponto ativo acende.                                  ══ */
+.g-earth-3d .gaveta{position:absolute;top:0;right:0;bottom:0;z-index:40;
+  width:min(46%,780px);display:flex;flex-direction:column;
+  background:color-mix(in srgb,var(--papel) 95%,transparent);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-left:1px solid var(--tinta-15);box-shadow:-12px 0 44px var(--tinta-20);
+  /* ⚑ A FAIXA DE CIMA E A DE BAIXO SAO DO CHROME. A marca mora no alto a
+     direita e a pastilha de navegacao no rodape: sem reservar as duas, o
+     titulo da gaveta entra por baixo do logo e a nota fica atras da
+     pastilha. */
+  padding:clamp(50px,7.4cqh,94px) clamp(16px,1.7cqw,32px) clamp(54px,8cqh,98px);
+  transform:translateX(101%);visibility:hidden;
+  transition:transform .42s cubic-bezier(.22,.61,.36,1),visibility 0s .42s}
+.g-earth-3d .gaveta[data-on]{transform:none;visibility:visible;transition-delay:0s}
+.g-earth-3d .gaveta .gfecha{position:absolute;top:clamp(50px,7.4cqh,94px);
+  right:clamp(14px,1.4cqw,26px);width:var(--seta);
+  height:var(--seta);border:0;border-radius:50%;background:var(--tinta-10);
+  color:var(--tinta);cursor:pointer;font-size:var(--fs-cap);line-height:1;
+  display:grid;place-items:center}
+.g-earth-3d .gaveta .gfecha:hover{background:var(--tinta-20)}
+.g-earth-3d .gkick{display:block;font-family:var(--f-mono);font-size:var(--fs-cap);
+  letter-spacing:.16em;text-transform:uppercase;color:var(--acento);
+  padding-right:calc(var(--seta) + 14px)}
+.g-earth-3d .gaveta h3{font-family:var(--f-display);font-style:italic;
+  font-size:var(--fs-h3);line-height:1.12;margin:4px 0 clamp(5px,.8cqh,10px)}
+.g-earth-3d .gsub{font-size:var(--fs-body);line-height:1.45;color:var(--soft);
+  margin:0 0 clamp(8px,1.2cqh,16px)}
+
+.g-earth-3d .gfig{position:relative;flex:1;min-height:0;display:flex}
+.g-earth-3d .gfig img{width:100%;height:100%;object-fit:contain;object-position:center}
+.g-earth-3d .gpt{position:absolute;translate:-50% -50%;width:clamp(21px,1.9cqw,32px);
+  height:clamp(21px,1.9cqw,32px);border-radius:50%;border:0;cursor:pointer;
+  background:var(--acento);color:var(--papel);font-family:var(--f-mono);
+  font-size:var(--fs-cap);display:grid;place-items:center;padding:0;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--papel) 70%,transparent);
+  transition:transform .18s ease,box-shadow .18s ease}
+.g-earth-3d .gpt u,.g-earth-3d .gpt s{display:none}
+.g-earth-3d .gpt:hover,.g-earth-3d .gpt[data-on]{transform:translate(0) scale(1.22);
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--acento) 22%,transparent)}
+.g-earth-3d .gpt[data-on]{background:var(--tinta)}
+
+.g-earth-3d .gler{border-top:1px solid var(--tinta-15);
+  padding-top:clamp(7px,1cqh,13px);margin-top:clamp(7px,1cqh,13px);
+  min-height:clamp(58px,9cqh,104px)}
+.g-earth-3d .gler b{display:block;font-family:var(--f-display);font-style:italic;
+  font-size:calc(var(--fs-body) * 1.18);color:var(--acento);margin-bottom:3px}
+.g-earth-3d .gler b::before{content:attr(data-n) " · ";font-family:var(--f-mono);
+  font-style:normal;font-size:var(--fs-cap);letter-spacing:.1em;opacity:.7}
+.g-earth-3d .gler span{display:block;font-size:var(--fs-body);line-height:1.45;
+  color:var(--soft)}
+.g-earth-3d .gnota{font-size:var(--fs-cap);line-height:1.4;color:var(--soft);
+  opacity:.8;margin:clamp(6px,.9cqh,12px) 0 0}
+@media (prefers-reduced-motion:reduce){.g-earth-3d .gaveta{transition:none}}
+
+/* ══ MEIA — texto de um lado, desenho do outro ═══════════════════════════
+   20/09/2026. Meio a meio: o texto lê no ritmo de parágrafo e o desenho
+   ocupa metade da tela, sem virar miniatura de legenda.
+
+   ⚑ A ALTURA MANDA, como no `sequencia`: `flex:1;min-height:0` em todo o
+   caminho até a figura, e `object-fit:contain` na caixa flexionada. Sem
+   isso a imagem só obedece à largura e estoura em tela baixa.         ══ */
+.g-meia .wrap{max-width:none;flex:1;min-height:0;display:flex;flex-direction:column}
+.g-meia .meia{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(20px,2.8cqw,52px);margin-top:clamp(10px,1.6cqh,26px)}
+.g-meia .mtx{min-width:0;display:flex;flex-direction:column;justify-content:center;
+  font-size:var(--fs-lead);line-height:1.5;color:var(--soft)}
+.g-meia .mtx p{margin:0 0 .75em}
+.g-meia .mtx p:last-child{margin-bottom:0}
+.g-meia .mtx b{color:var(--tinta);font-weight:600}
+.g-meia .mfig{min-width:0;min-height:0;display:flex;flex-direction:column;
+  gap:clamp(5px,.7cqh,10px)}
+.g-meia .mfig img{flex:1;min-height:0;width:100%;object-fit:contain;
+  object-position:center}
+.g-meia .mleg{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.08em;
+  color:var(--soft);text-align:right}
+
 /* ══ GRIFO ═══════════════════════════════════════════════════════════════
    `<mark>` vale em qualquer texto de qualquer gabarito, como `<b>`.
 
@@ -3205,7 +3287,7 @@ const EXIGE={
   jogadas:['itens'], fotos:['itens'], unit:['cards'], players:['casas'],
   avulso:['grupos'], plug:['ancoras'], duasfrentes:['esq','dir'],
   divisor:['dt'], 'earth-3d':['lat','lng'], 'modelo-3d':['modelo'], viva:['src'],
-  sequencia:['items']
+  sequencia:['items'], meia:['src']
 };
 /* bloco de marca antigo, sem a linha UNDERSCORE: vale o padrão da casa (ligado) */
 const US=(typeof UNDERSCORE==='undefined')?true:!!UNDERSCORE;
@@ -3407,6 +3489,15 @@ function tpl(s){
     const f=s.figs.map(([tag,src,cap,cl])=>`<div class="dfig ${cl}"><img src="${RES[src]||src}" alt="${cap}" onerror="const p=this.parentNode;this.remove();p.classList.add('semimg')"><span class="tag">${tag}</span><div class="slot"><b>slot de imagem</b><span>${cap}</span></div><span class="dcap">${cap}</span></div>`).join('');
     return `<div class="wrap" style="max-width:none">${k}${t}${sub}<div class="dcols${s.alto?' alto':''} rev">${f}</div><p class="dleg rev">${s.leg}</p></div>`;
   }
+  if(s.g==='meia'){
+    return `<div class="wrap">${k}${t}${sub}<div class="meia">`
+      + `<div class="mtx rev" style="--i:2">${s.cap||''}</div>`
+      + `<div class="mfig rev" style="--i:6">`
+      +   `<img src="${IMG[s.src]||s.src}" alt="${(s.leg||s.t||'').replace(/"/g,'&quot;')}"`
+      +   ` onerror="this.dataset.err=1">`
+      +   (s.leg?`<span class="mleg">${s.leg}</span>`:'')
+      + `</div></div></div>`;
+  }
   if(s.g==='sequencia'){
     /* a primeira etapa nao e' `.passo`: e' o estado de chegada do slide */
     const it=s.items||[], N=String(it.length).padStart(2,'0');
@@ -3562,6 +3653,9 @@ function tpl(s){
       +   ((s.cafe&&s.cafe.length)||(s.fluxo&&s.fluxo.length)
             ? `<button class="cam" type="button" aria-pressed="false">`
               + `<span class="luz seta"></span>caminho do café</button>` : '')
+      +   (s.tulha
+            ? `<button class="tul" type="button" aria-pressed="false">`
+              + `<span class="luz"></span>dentro da tulha</button>` : '')
       +   `<div class="fio"></div>`
       +   `<button class="rec acao" type="button" title="voltar ao ponto central">`
       +     `<span class="luz"></span>`
@@ -3580,7 +3674,24 @@ function tpl(s){
       +   `<div class="passos">preparando</div></div>`
       +   `<b>carregando localização</b>`
       /* <span> vazio de propósito: é onde o falha() escreve o diagnóstico */
-      +   `<span></span></div>`;
+      +   `<span></span></div>`
+      /* a gaveta da tulha: o que o layer do café não mostra, porque acontece
+         debaixo do telhado. Ver "A GAVETA DA TULHA" no CSS. */
+      + (s.tulha ? `<aside class="gaveta">`
+          + `<button class="gfecha" type="button" aria-label="Fechar">&#10005;</button>`
+          + `<span class="gkick">${s.tulha.kick||'dentro da tulha'}</span>`
+          + (s.tulha.t?`<h3>${s.tulha.t}</h3>`:'')
+          + (s.tulha.sub?`<p class="gsub">${s.tulha.sub}</p>`:'')
+          + `<div class="gfig"><img src="${IMG[s.tulha.src]||s.tulha.src}" alt="${(s.tulha.t||'').replace(/"/g,'&quot;')}" onerror="this.dataset.err=1">`
+          +   (s.tulha.pontos||[]).map((q,i)=>`<button class="gpt" type="button"`
+              + ` data-i="${i}" style="left:${q.x}%;top:${q.y}%"`
+              + ` aria-label="${(q.rot||'').replace(/"/g,'&quot;')}">`
+              + `${String(q.n!=null?q.n:i+1).padStart(2,'0')}`
+              + `<u>${q.rot||''}</u><s>${q.txt||''}</s></button>`).join('')
+          + `</div>`
+          + `<div class="gler"><b data-n=""></b><span></span></div>`
+          + (s.tulha.nota?`<p class="gnota">${s.tulha.nota}</p>`:'')
+          + `</aside>` : '');
   }
   const tab=s.cols?`<div class="rev"><table class="tb${s.cols.length===2?' duasc':''}"><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`+
     s.linhas.map((r,i)=>`<tr class="${s.hi===i?'hi':''}${s.fora===i?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`).join('')+`</tbody></table></div>`:'';
@@ -4527,6 +4638,10 @@ window.MSEarth=(function(){
       if(extra.sub){ var sb=document.createElement('s'); sb.textContent=extra.sub; d.append(sb); }
     } else d.textContent=txt;
     pop.append(d);
+    /* a parada que declara `abre` vira porta: o clique na caixa do 3D abre a
+       gaveta. É o gesto natural de quem explora sozinho. */
+    if(extra&&extra.abre){ d.dataset.abre='1'; d.setAttribute('role','button');
+      d.setAttribute('tabindex','0'); }
     pop.positionAnchor=pos;          /* literal, não elemento */
     mapa.append(pop);
     pop._tipo=tipo; pop._el=d;
@@ -4645,6 +4760,28 @@ window.MSEarth=(function(){
   }
   /* as duas camadas se redesenham juntas: as caixas dividem o mesmo resolvedor
      de colisão, e redesenhar só uma deixaria a outra medindo posição velha. */
+  /* ── A GAVETA ─────────────────────────────────────────────────────── */
+  function gavetaDe(){
+    var sl=document.querySelectorAll('#palco .slide')[cur];
+    return sl&&sl.classList.contains('g-earth-3d')?sl.querySelector('.gaveta'):null;
+  }
+  function leGaveta(g,i){
+    var bs=[].slice.call(g.querySelectorAll('.gpt'));
+    if(!bs.length) return;
+    i=Math.max(0,Math.min(bs.length-1,i));
+    bs.forEach(function(b,j){ if(j===i) b.setAttribute('data-on',''); else b.removeAttribute('data-on'); });
+    var b=bs[i], al=g.querySelector('.gler b'), sp=g.querySelector('.gler span');
+    al.dataset.n=b.firstChild.nodeValue||'';
+    al.textContent=(b.querySelector('u')||{}).textContent||'';
+    sp.textContent=(b.querySelector('s')||{}).textContent||'';
+  }
+  function abreGaveta(liga){
+    var g=gavetaDe(); if(!g) return;
+    if(liga){ g.setAttribute('data-on',''); leGaveta(g,0); }
+    else g.removeAttribute('data-on');
+    var sl=g.closest('.g-earth-3d'), b=sl&&sl.querySelector('.legenda .tul');
+    if(b) b.setAttribute('aria-pressed',liga?'true':'false');
+  }
   function alternaAnot(liga){ anotLiga=!!liga; desenhaAnot(); }
   function alternaCafe(liga){ cafeLiga=!!liga; desenhaAnot(); }
   function alternaCaminho(liga){ caminhoLiga=!!liga; desenhaAnot(); }
@@ -4826,6 +4963,13 @@ window.MSEarth=(function(){
     var sl=e.target.closest&&e.target.closest('.g-earth-3d'); if(!sl) return;
     if(e.target.closest('.pin')){ e.stopPropagation(); alternaAnot(!anotLiga); return; }
     if(e.target.closest('.caf')){ e.stopPropagation(); alternaCafe(!cafeLiga); return; }
+    if(e.target.closest('.tul')){ e.stopPropagation();
+      var g0=gavetaDe(); abreGaveta(!(g0&&g0.hasAttribute('data-on'))); return; }
+    if(e.target.closest('.gfecha')){ e.stopPropagation(); abreGaveta(false); return; }
+    if(e.target.closest('.anot[data-abre]')){ e.stopPropagation(); abreGaveta(true); return; }
+    var pt=e.target.closest('.gpt');
+    if(pt){ e.stopPropagation(); leGaveta(pt.closest('.gaveta'),+pt.dataset.i); return; }
+    if(e.target.closest('.gaveta')){ e.stopPropagation(); return; }
     if(e.target.closest('.cam')){ e.stopPropagation(); alternaCaminho(!caminhoLiga); return; }
     if(e.target.closest('.orb')){ e.stopPropagation(); orbita(!orbitando); return; }
     if(e.target.closest('.rec')){ e.stopPropagation(); recentra(); return; }
@@ -4840,6 +4984,13 @@ window.MSEarth=(function(){
     if(e.target.closest('.veu')){ e.stopPropagation(); sl.classList.add('girando'); }
   });
 
+  /* passar o mouse já lê; o foco do teclado também, para quem não usa mouse */
+  ['mouseover','focusin'].forEach(function(ev){
+    document.addEventListener(ev,function(e){
+      var pt=e.target.closest&&e.target.closest('.gpt');
+      if(pt) leGaveta(pt.closest('.gaveta'),+pt.dataset.i);
+    },true);
+  });
   /* ── QUEM PEGA A CÂMERA PARA A ÓRBITA — mas só quem pega de verdade ──────
      O sinal é ARRASTO, não toque: `pointerdown` sozinho inclui o clique que
      acabou de tirar o véu, e um clique seco no mapa não é intenção de
