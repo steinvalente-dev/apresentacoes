@@ -590,15 +590,27 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-sequencia .seq-etapa.passo.on{opacity:1}
 .g-sequencia .seq-etapa:has(~ .seq-etapa.passo.on){opacity:0}
 
-.g-sequencia .seq-cap{min-width:0;padding-bottom:calc(var(--seta) + 18px)}
+/* ancorada embaixo: a legenda cresce para CIMA a partir do rodape da
+   coluna, e o `padding-bottom` guarda a faixa do controle. */
+.g-sequencia .seq-cap{min-width:0;display:flex;flex-direction:column;
+  justify-content:flex-end;padding-bottom:calc(var(--seta) + 30px)}
 .g-sequencia .sq{display:block;font-family:var(--f-mono);font-size:var(--fs-cap);
   letter-spacing:.16em;color:var(--acento);margin-bottom:5px}
 .g-sequencia .st{display:block;font-family:var(--f-display);font-style:italic;
-  font-size:var(--fs-h3);line-height:1.15;margin-bottom:clamp(6px,.9cqh,12px)}
-.g-sequencia .sd{display:block;font-size:var(--fs-body);line-height:1.5;
-  color:var(--soft)}
+  font-size:var(--fs-h3);line-height:1.15;margin-bottom:clamp(6px,.9cqh,12px);
+  color:var(--acento)}
+/* o corpo sobe de `--fs-body` para `--fs-lead` e vai para o vinho: a leitura
+   estava timida do lado de uma imagem que ocupa dois tercos da tela. */
+.g-sequencia .sd{display:block;font-size:var(--fs-lead);line-height:1.45;
+  color:var(--acento)}
 .g-sequencia .sd ul{margin:clamp(8px,1.2cqh,16px) 0 0;padding-left:15px}
 .g-sequencia .sd li{margin-bottom:5px}
+.g-sequencia .sd b{color:var(--acento);font-weight:600}
+/* ⚑ O GRIFO INVERTE porque o texto virou vinho: faixa cheia (100%) e letra
+   no creme. A varredura e' a mesma — como a letra ja' nasce creme, a palavra
+   e' PINTADA da esquerda para a direita quando a faixa passa. */
+.g-sequencia .sd mark{--grifo-cor:var(--acento);color:var(--papel);
+  padding:.04em .2em;margin:0 -.04em;font-weight:500}
 
 .g-sequencia .seq-etapa img{min-width:0;min-height:0;width:100%;height:100%;
   object-fit:contain;object-position:center}
@@ -606,21 +618,23 @@ body.em-logo .chrome.topo .secao{display:inline}
 /* o controle fica FORA da pilha: dentro de uma etapa, esvaneceria com ela.
    Mesma pastilha da navegação do rodapé, porque faz a mesma coisa — só que
    dentro do slide e sem sair dele. */
+/* ⚑ EM VINHO, NAO EM PAPEL. Pedido do Michel: o controle desta sequencia
+   nao e' o chrome do rodape, e' parte do slide — a pessoa precisa achar que
+   ali se clica. Cheio, na cor da marca. */
 .g-sequencia .seqnav{position:absolute;left:0;bottom:0;z-index:2;
   display:inline-flex;align-items:center;gap:clamp(6px,.7cqw,11px);
-  background:color-mix(in srgb,var(--papel) 94%,transparent);
-  border:1px solid var(--tinta-20);border-radius:999px;
-  padding:clamp(3px,.34cqw,5px) clamp(5px,.5cqw,8px);
-  box-shadow:0 1px 5px var(--tinta-15);color:var(--tinta)}
+  background:var(--acento);border:0;border-radius:999px;
+  padding:clamp(4px,.4cqw,7px) clamp(6px,.6cqw,10px);
+  box-shadow:0 2px 10px var(--acento-25);color:var(--papel)}
 .g-sequencia .seqnav b{font-family:var(--f-mono);font-size:var(--fs-cap);
-  letter-spacing:.1em;font-weight:400;opacity:.72;font-variant-numeric:tabular-nums;
+  letter-spacing:.1em;font-weight:400;opacity:.88;font-variant-numeric:tabular-nums;
   padding:0 clamp(2px,.3cqw,5px)}
 .g-sequencia .seqnav button{width:var(--seta);height:var(--seta);border-radius:50%;
-  border:0;background:var(--tinta-10);color:var(--tinta);cursor:pointer;
+  border:0;background:var(--papel-20);color:var(--papel);cursor:pointer;
   font-size:calc(var(--fs-cap) * 1.05);line-height:1;display:grid;place-items:center;
   transition:background .16s ease,opacity .16s ease}
-.g-sequencia .seqnav button:hover:not(:disabled){background:var(--tinta-20)}
-.g-sequencia .seqnav button:disabled{opacity:.28;cursor:default;background:var(--tinta-5)}
+.g-sequencia .seqnav button:hover:not(:disabled){background:var(--papel-40)}
+.g-sequencia .seqnav button:disabled{opacity:.42;cursor:default;background:var(--papel-10)}
 @media (prefers-reduced-motion:reduce){.g-sequencia .seq-etapa{transition:none}}
 
 /* ══ GRIFO ═══════════════════════════════════════════════════════════════
@@ -636,14 +650,38 @@ body.em-logo .chrome.topo .secao{display:inline}
    A tarja continua disponível em `<mark class="tarja">`, para o caso curto
    em campo apertado. Nenhum deck usava `<mark>` quando isto mudou.
    ═══════════════════════════════════════════════════════════════════════ */
-mark{background:linear-gradient(to top,
-    var(--acento-35) 0, var(--acento-35) 44%, transparent 44%);
-  color:inherit;padding:0 .1em;border-radius:1px;font-style:inherit}
-body.esc mark{background:linear-gradient(to top,
-    color-mix(in srgb,var(--acento-claro) 32%,transparent) 0,
-    color-mix(in srgb,var(--acento-claro) 32%,transparent) 44%, transparent 44%)}
+/* ⚑ MESMA MECANICA DO `.grifo`, acima: uma so' forma de grifar no motor.
+   Faixa alta (a cobertura do destaque do navegador, nao os 44% de baixo) e
+   varredura da esquerda para a direita quando o slide se revela. O tom cai
+   de 35% para 20% porque a area dobrou — no tom de antes viraria bloco. */
+mark{
+  /* ⚑ O AMARELO DO NAVEGADOR. `mark` traz `background-color:yellow` do UA, e
+     a faixa e' translucida: sem zerar a cor de fundo, o grifo sai verde-limao
+     em vez do acento. Antes isso nao aparecia porque a regra usava o atalho
+     `background`, que ja zera a cor; agora so' a imagem e' declarada. */
+  background-color:transparent;
+  background-image:linear-gradient(var(--grifo-cor,var(--acento-20)),
+                                   var(--grifo-cor,var(--acento-20)));
+  background-repeat:no-repeat;
+  background-position:0 .14em;
+  background-size:0% calc(100% - .22em);
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+  color:inherit;padding:0 .14em;margin:0 -.14em;border-radius:2px;
+  font-style:inherit}
+.revelado mark{animation:ms-grifo 620ms cubic-bezier(.62,0,.30,1) forwards;
+  animation-delay:var(--gd,640ms)}
+/* ⚑ dentro de um passo, a varredura espera o passo acender — senao ela
+   acontece atras de uma linha ainda invisivel e a linha entra com o grifo
+   pronto. */
+.revelado .passo mark{animation:none}
+.revelado .passo.on mark{animation:ms-grifo 620ms cubic-bezier(.62,0,.30,1) forwards;
+  animation-delay:var(--gdp,220ms)}
+body.esc mark,body.com-fundo mark{--grifo-cor:var(--papel-20)}
+body.terra mark{--grifo-cor:var(--papel-20)}
+@media(prefers-reduced-motion:reduce){
+  mark{background-size:100% calc(100% - .22em)!important;animation:none!important}}
 mark.tarja{background:var(--acento);color:var(--papel);padding:.12em .42em .16em;
-  border-radius:2px;font-weight:500}
+  border-radius:2px;font-weight:500;margin:0;animation:none}
 body.esc mark.tarja{background:var(--acento-claro);color:var(--tinta)}
 table.tb th mark{letter-spacing:.16em}
 
