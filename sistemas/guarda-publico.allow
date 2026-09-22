@@ -19,3 +19,18 @@ marca/michel-stein/manual.html:11 99999-0000
 # da chave guardada no aparelho. A constante abaixo é só o prefixo — sem token, sem slug.
 # Qualquer outra ocorrência de /cliente/ neste repositório continua barrada.
 index.html:michel-stein.netlify.app/cliente
+
+# Seção 09 "a proposta" da AMAZ R1: números do estudo de viabilidade Vila Madalena, para terrenista.
+# Decisão do Michel, 22.09.2026: publicar com os valores em R$, ciente de que o repositório é público.
+amaz-r1/apresentacao.html:R$ 25
+amaz-r1/apresentacao.html:R$ 66,1
+amaz-r1/apresentacao.html:R$ 17,8
+amaz-r1/apresentacao.html:R$ 17,9
+amaz-r1/apresentacao.html:R$ 8.000
+amaz-r1/apresentacao.html:R$ 4,3
+amaz-r1/apresentacao.html:R$ 4,0
+amaz-r1/apresentacao.html:R$ 18,1
+amaz-r1/apresentacao.html:R$ 2,8
+amaz-r1/apresentacao.html:R$ 3,55
+amaz-r1/apresentacao.html:R$ 478
+amaz-r1/apresentacao.html:R$ 47,8

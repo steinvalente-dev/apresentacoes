@@ -1041,6 +1041,11 @@ canvas.march{position:absolute;inset:0;width:100%;height:100%;display:block;z-in
 .mzgrade{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;
   gap:clamp(10px,1.2vw,20px);align-items:center;width:100%}
 .mz{margin:0;min-width:0}
+.mzi.mzslot{display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
+  padding:clamp(12px,1.6vw,22px);font-family:var(--sans);font-size:var(--fs-cap);
+  letter-spacing:.12em;color:var(--apoio)}
+.mzi.mzslot b{font-weight:600;text-transform:uppercase;letter-spacing:.16em}
+.mzi.mzslot span{opacity:.6}
 .mzi{background-image:var(--fonte);background-size:cover;background-position:center;
   width:100%;height:clamp(180px,42vh,420px);background-color:var(--escura)}
 .mz:nth-child(2) .mzi{height:clamp(150px,34vh,340px)}
@@ -1741,6 +1746,106 @@ const DECK=[
   ['04','<b>Levantar dois benchmarks brasileiros.</b> Sem eles, o bloco de referências convence arquiteto e deixa o investidor em dúvida.'],
   ['05','<b>Bater o martelo na assinatura de marca</b> e registrar no INPI, classes 36 e 37.']]},
 
+/* ─── ATO 09 · A PROPOSTA ─────────────────────────────────────────────
+   O modelo do negócio para o terrenista. Serve para o litoral e para a
+   zona oeste: o que muda de um para o outro é a casa (casa jardim no
+   litoral, townhouse na cidade) e os critérios do slide "o que procuramos".
+   Números do estudo Vila Madalena, aba 5 LOTES da planilha Ônica Madalena. */
+
+{min:5,g:'divisor',div:1,funda:1,sec:'a proposta',dn:'09',dt:'a proposta',
+ ds:'Você tem o terreno. Nós temos a solução. O modelo do negócio para quem quer transformar um terreno parado em casa pronta e participação.'},
+
+{min:5,g:'mosaico',kick:'a casa-conceito',
+ t:'a casa<br>vem primeiro',
+ sub:'Toda conversa começa por uma casa pronta: a casa-conceito AMAZ, já desenhada e renderizada. <span class="grifo">É esta casa que implantamos no seu terreno</span>, com as adequações e melhorias que o lugar pedir.',
+ fotos:[
+  ['','townhouse · 197 m² privativos · a casa da cidade','render · townhouse'],
+  ['','casa jardim · 142 m² privativos · a casa no chão, para o litoral','render · casa jardim']],
+ pend:'SLOT DE IMAGEM: renders da casa-conceito. Na apresentação para um terreno específico, entra só a casa daquele terreno.'},
+
+{min:5,g:'frase',esc:1,kick:'o modelo',
+ pre:'terreno → projeto → aprovação → obra → casa pronta',
+ t:'não é compra.<br>não é permuta<br>comum.',
+ sub:'É uma parceria de desenvolvimento. O terreno não é vendido: ele entra no negócio e volta transformado — <span class="grifo forte">em casa pronta e em participação</span> no que a vila render.',
+ dados:[
+  ['você','entra com o terreno','E com a documentação em dia. Sem gestão de obra, sem canteiro para acompanhar.'],
+  ['a AMAZ','entra com todo o resto','Projeto, aprovação, estrutura financeira, obra e venda das demais casas.'],
+  ['o resultado','casa + participação','Uma casa de alto padrão no seu terreno e um percentual da venda das casas remanescentes.']],
+ etapas:1,
+ prem:'Terreno médio também entra: lotes vizinhos podem se somar para formar a vila. No estudo Vila Madalena, cinco lotes de 515 m² viram uma vila de 16 casas.'},
+
+{min:5,g:'tabela',kick:'três formatos',t:'o terreno entra,<br>a casa volta',
+ sub:'O formato se ajusta ao terreno e ao que o proprietário quer dele.',
+ cols:['','<mark>o proprietário recebe</mark>','<mark>quando faz sentido</mark>'],
+ linhas:[
+  ['<b>terreno → casa</b>','a propriedade de uma casa pronta — para morar, alugar ou vender','quando o terreno vale o mesmo que a casa'],
+  ['<b>terreno → casa + complemento</b>','casa pronta e um valor em dinheiro','quando o terreno vale mais que a casa'],
+  ['<b>terreno → % do empreendimento</b>','participação nas unidades ou no resultado','terrenos maiores e operações maiores']],
+ fecho:'Nos dois primeiros formatos, o proprietário também participa da venda das casas remanescentes da vila.'},
+
+{min:20,g:'tabela',kick:'por que não vender',t:'terreno parado<br>ou parceria',
+ sub:'Terreno de baixa liquidez, geometria irregular ou com restrição de construção costuma esperar anos — ou ser vendido pelo preço de quem tem pressa.',
+ cols:['','<mark>vender</mark>','<mark>permuta tradicional</mark>','<mark>parceria AMAZ</mark>'],
+ linhas:[
+  ['o que você recebe','dinheiro, uma vez','unidades no prédio que vier','casa autoral e participação'],
+  ['o seu patrimônio','sai do seu nome','vira apartamento','vira casa, com projeto próprio'],
+  ['a valorização','fica com o comprador','diluída no prédio','dividida com você'],
+  ['o prazo','o da negociação','o do prédio — anos de obra','12 meses de obra após a aprovação'],
+  ['o entorno','indiferente','adensa','vila de baixa densidade, que valoriza o bairro']],
+ fecho:'Vender realiza o valor do terreno uma vez. <span class="grifo">A parceria realiza esse valor e divide o que ele ainda pode render.</span>'},
+
+{min:5,g:'planilha',kick:'o estudo vila madalena',
+ t:'a conta,<br>aberta',
+ sub:'Cinco lotes vizinhos, 2.577 m² de terreno, 16 casas e 2.644 m² privativos, a R$ 25 mil o m². Valor total de venda: <span class="grifo forte">R$ 66,1 milhões</span>. Cada linha é uma fatia desse total.',
+ itens:[
+  ['terreno','<b>27%</b> · R$ 17,8 mi — o valor dos lotes'],
+  ['obra','<b>27%</b> · R$ 17,9 mi — casas e áreas comuns, a R$ 8.000/m²'],
+  ['gestão e incorporação','<b>6,5%</b> · R$ 4,3 mi — administração de obra, jurídico, pesquisa e reserva de risco'],
+  ['venda','<b>6%</b> · R$ 4,0 mi — comissão e marketing'],
+  ['financeiro e impostos','<b>6%</b> · R$ 4,0 mi — custo de capital e impostos'],
+  ['margem da operação','<b>27%</b> · R$ 18,1 mi']],
+ fecho:'A operação só entra se houver margem confortável. <span class="grifo">É ela que garante que a obra termina — e que a sua casa é entregue.</span>',
+ pend:'Valores do estudo Vila Madalena, aba 5 LOTES. Para o Litoral Norte, refazer com o estudo do terreno.'},
+
+{min:5,g:'frase',esc:1,kick:'o que fica com você',
+ pre:'No mesmo estudo, cada lote de 515 m² entra na parceria e volta como casa.',
+ t:'seu terreno,<br>sua casa,<br>sua parte',
+ dados:[
+  ['515 m²','seu lote hoje','Avaliado entre R$ 2,8 e 4 milhões no estudo. Parado, ele não rende.'],
+  ['R$ 3,55 mi','sua casa pronta','Casa jardim de 142 m² privativos, no preço de mercado do estudo: R$ 25 mil o m².'],
+  ['R$ 478 mil','cada 1% de participação','Sobre R$ 47,8 milhões de venda das 11 casas remanescentes da vila.']],
+ etapas:1,
+ prem:'Lote que vale mais que a casa recebe a diferença em dinheiro — é o formato casa + complemento.',
+ pend:'Valores do estudo Vila Madalena. No Litoral Norte, preço de venda e casa mudam: refazer com o estudo do terreno. PREENCHER o percentual de participação acordado.'},
+
+{min:5,g:'frase',kick:'garantias',
+ pre:'A construção industrializada permite prometer o que a obra convencional não consegue.',
+ t:'prazo e garantia,<br>por escrito',
+ dados:[
+  ['12 meses','de obra, após a aprovação','A estrutura é fabricada enquanto a fundação é executada. No terreno, a obra é montagem.'],
+  ['20 anos','de garantia da construção','Muito acima do padrão de mercado. Assinada com a ITA e a engenharia da AMAZ.'],
+  ['10 anos','de garantia das instalações','No mesmo contrato, com a mesma assinatura.']],
+ etapas:1,
+ prem:'Garantia AMAZ de entrega: estruturada em contrato, com cronograma de marcos — aprovação, registro, obra e entrega — e as condições de cada um escritas antes da assinatura.',
+ pend:'CONFIRMAR com o jurídico a estrutura da Garantia AMAZ de entrega; com a ITA e o Eduardo, o escopo exato das garantias de 20 e 10 anos.'},
+
+{min:20,g:'tabela',kick:'o que procuramos',t:'terrenos que<br>recebem uma AMAZ',
+ cols:['','<mark>litoral norte</mark>','<mark>zona oeste · são paulo</mark>'],
+ linhas:[
+  ['onde','São Lourenço, Itaguaré e Guaratuba','Vila Leopoldina, Vila Madalena e bairros selecionados'],
+  ['a casa','casa jardim — térrea, no chão','townhouse — dois pavimentos, em fileira'],
+  ['a vila','casas entre jardins, com a natureza em volta','casas em torno de um verde comum, dentro do bairro']],
+ fecho:'Nos dois casos: <b>frente a partir de 12 m</b>, profundidade ideal em torno de 50 m, terreno vazio ou subutilizado e documentação em dia. Lotes vizinhos podem se somar.'},
+
+{min:5,g:'fim',esc:1,kick:'próximos passos',t:'vamos estudar<br>juntos',
+ itens:[
+  ['01','<b>Um café.</b> Conhecer o terreno, a história dele e o que você espera da parceria.'],
+  ['02','<b>O estudo do seu terreno.</b> A casa implantada no lugar, a vila inteira e o que ela muda no entorno.'],
+  ['03','<b>A proposta formal.</b> Formato, casa, participação e cronograma, por escrito.'],
+  ['04','<b>O contrato.</b> Com a Garantia AMAZ de entrega e os marcos de obra.']],
+ fecho:'Estamos procurando poucos terrenos para esse movimento. <span class="grifo forte">Talvez o seu seja o próximo.</span>'},
+
+
 /* ─── CONTRACAPA ─── */
 
 {min:5,g:'marca',capa:1,div:1,esc:1,fim_:1,pisca:1,
@@ -2053,8 +2158,10 @@ function tpl(s){
     /* prancha de referências: duas ou três imagens lado a lado, alturas
        diferentes, cada uma com a sua legenda. Serve enquanto o projeto não
        tem imagem própria — e o gabarito continua servindo depois. */
-    const cels=s.fotos.map(([f,leg])=>
-      `<figure class="mz"><div class="mzi" style="--fonte:var(--img-${f})"></div>`
+    /* foto vazia vira slot de imagem com rótulo — o 3º elemento do item */
+    const cels=s.fotos.map(([f,leg,slot])=>
+      `<figure class="mz">`+(f?`<div class="mzi" style="--fonte:var(--img-${f})"></div>`
+        :`<div class="mzi mzslot"><b>slot de imagem</b><span>${slot||''}</span></div>`)
       +(leg?`<figcaption>${leg}</figcaption>`:'')+`</figure>`).join('');
     return `<div class="mzcols"><div class="wrap">${k}${t}${sub}${pend}</div>`
       +`<div class="mzgrade rev">${cels}</div></div>`;

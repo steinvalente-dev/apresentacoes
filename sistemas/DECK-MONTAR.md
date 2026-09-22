@@ -208,12 +208,13 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 | `video` | vídeo em sangria total: mudo, em laço e com botão de pausa. `vsrc` entra como data-URI pelo montar.py, com teto de 3 MB — comprimir antes | `cap` · `h2` · `lbl` · `vsrc` |
 | `carrossel` | uma pilha de desenhos passando em cross-fade, com o texto por cima. Para mostrar VOLUME de trabalho, não para ler desenho | `cap` · `h2` · `imgs` · `lbl` |
 | `duo` | duas imagens lado a lado | `alto` · **`figs` (4)** · **`leg`** |
+| `meia` | meio a meio: texto à esquerda, desenho à direita. `cap` é o texto, `leg` a legenda sob a imagem | `cap` · `leg` · **`src`** |
 | `sequencia` | uma coisa só, camada por camada: texto em 1/3 à esquerda, imagem em 2/3 à direita, uma por vez em crossfade, com controle próprio no slide que anda a sequência sem trocar de slide. `items:[{src,t,cap}]`; a primeira é o estado de chegada | **`items`** |
 | `fotos` | linha do tempo ilustrada | `cols` · **`itens`** |
 | `prancha` | grade de 2 a 4 imagens sobre um tema. Retrato 3–4 colunas, deitada 2. `cols` aqui é NÚMERO — ver `gabaritos/prancha-referencia.md` | `ar` · `caber` · `cols` · `items` · `top` |
 | `viva` | a peça vizinha rodando DENTRO do slide, em quadro de sangria total. `src` relativo, mesma pasta; o slide fica travado e só as setas trocam — `gabaritos/viva.md` | `alt` · `cap` · `h2` · **`src`** |
 | `modelo-3d` | o que o projeto é: o modelo do SketchUp, vivo. Exige modelo PÚBLICO no 3D Warehouse — `gabaritos/modelo.md` | `cap` · `compacto` · `h2` · `lead` · **`modelo`** · `res` |
-| `earth-3d` | onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md` | `alt` · `anot` · `cafe` · `cap` · `compacto` · `fluxo` · `h2` · **`lat`** · `lead` · **`lng`** · `ruas` |
+| `earth-3d` | onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md` | `alt` · `anot` · `cafe` · `cap` · `compacto` · `fluxo` · `h2` · **`lat`** · `lead` · **`lng`** · `ruas` · `tulha` |
 | `mapa` | o cadastro desenhado, com hover por lote. Exige o objeto `MAP` — `gabaritos/mapa-lotes.md` | `chave` · `hint` · `leg` (2) · `which` |
 <!-- GABARITOS:FIM -->
 
