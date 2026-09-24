@@ -417,6 +417,10 @@ ol.credenciais li.passo::before{opacity:1}
 .sccols{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1fr);
   gap:clamp(20px,3.4vw,64px);align-items:center;width:100%}
 .s3wrap{max-width:none;width:100%}
+.s3frase,.scfrase{font-family:var(--disp);font-weight:800;letter-spacing:-.02em;line-height:1.18;
+  color:var(--tinta);border-left:3px solid var(--acento);padding-left:.75em}
+.s3frase{font-size:clamp(13px,1.1vw,19px);margin-top:clamp(8px,1.2vh,16px);max-width:30ch}
+.scfrase{font-size:clamp(16px,1.55vw,27px);margin-top:clamp(10px,1.6vh,22px);max-width:30ch}
 .s3grade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:clamp(16px,2.4vw,44px);margin-top:clamp(16px,2.6vh,40px);width:100%}
 .s3foto{position:relative;height:clamp(110px,28vh,320px);background:var(--hair);overflow:hidden}
@@ -1452,14 +1456,16 @@ const DECK=[
  etapas:1,
 },
 
-{min:20,nao:[20],g:'socio',dir:0,nome:'Adriano Carvalho',papel:'marketing e comunicação',
+{min:20,nao:[20],g:'socio',dir:0,nome:'Adriano Carvalho',papel:'pessoas · marca · experiência · negócio',
  slotfoto:'retrato · filtro Hora Dourada',
- bio:'Responsável pelo posicionamento, pela construção de marca e pela conversa com o mercado. É quem transforma um sistema construtivo em argumento que o comprador entende.',
+ bio:'Há mais de 30 anos estuda o que faz as pessoas desejarem, escolherem e se conectarem com marcas, produtos e lugares. Agora leva esse repertório para um dos maiores desejos humanos: morar bem.',
+ frase:'Tudo o que construí até aqui tem uma coisa em comum: pessoas.',
  cred:[
-  ['—','<b>PREENCHER:</b> marcas e contas de comunicação já atendidas — as três ou quatro mais reconhecíveis, com o segmento de cada uma.'],
-  ['—','<b>PREENCHER:</b> anos de atuação, e se houve agência própria ou cargo de liderança.'],
-  ['—','<b>PREENCHER:</b> prêmios, cases ou números de campanha que valham citar.']],
- pend:'Adriano: mandar as marcas de comunicação, o tempo de estrada e o que pode ser mostrado em imagem. Sem isso esta prancha não vai para fora.'},
+  ['WPP','<b>Grey / G2 — aos 25 anos, estruturou uma unidade nova de ativação e eventos.</b> P&amp;G, Mercedes-Benz, Souza Cruz, Santander.'],
+  ['IPG','<b>Mullen Lowe / OPEN — criou a unidade de negócios para Brasil e América Latina</b>, ligada ao board internacional em Londres. Unilever, Ambev, Land Rover.'],
+  ['prêmios','Empresário do Ano (Colunistas), jurado de prêmios nacionais e internacionais, Cannes com o case Kibon / Morro do Alemão.'],
+  ['hoje','<b>De marcas para experiências:</b> The Host, um app de eventos na casa das pessoas e A Chacrinha, um laboratório de convivência em 1.000 m² de área verde, no meio da cidade.']],
+ pend:'Retrato do Adriano no filtro Hora Dourada. CONFIRMAR com ele a grafia do prêmio e o resultado do case em Cannes.'},
 
 {min:20,nao:[20],g:'socio',dir:1,nome:'Eduardo Eid',papel:'engenharia e obra',
  slotfoto:'obra de grande porte · aeroporto ou instalação industrial · filtro Mata',
@@ -1486,7 +1492,7 @@ const DECK=[
  t:'três ofícios,<br>uma mesa',
  sub:'Comunicação, engenharia e arquitetura — as três competências que decidem um empreendimento. <span class="grifo">Nenhuma é contratada</span>, e cada uma chega com quilometragem própria antes da AMAZ existir.',
  pessoas:[
-  ['Adriano Carvalho','marketing e comunicação','Posicionamento, marca e conversa com o mercado. É quem transforma um sistema construtivo em argumento que o comprador entende.','retrato · filtro Hora Dourada'],
+  ['Adriano Carvalho','pessoas · marca · experiência','Mais de 30 anos entendendo o que faz as pessoas desejarem marcas, produtos e lugares — da WPP e da IPG às experiências próprias, The Host e A Chacrinha.','retrato · filtro Hora Dourada','','Tudo o que construí até aqui tem uma coisa em comum: pessoas.'],
   ['Eduardo Eid','engenharia e obra','Viabilidade, sistema construtivo e execução. Traz para a vila a disciplina de quem entregou instalações de grande porte.','retrato ou obra de grande porte · filtro Mata'],
   ['Michel Stein','arquitetura e produto','Projeto, terreno e material de venda. É quem define o produto — a casa, a vila e a relação de cada uma com o bairro.','retrato ou projeto autoral · filtro Mata']],
  pend:'SLOT DE IMAGEM: um retrato de cada sócio, no mesmo filtro, para as três colunas lerem como conjunto.'},
@@ -2221,10 +2227,10 @@ function tpl(s){
   }
 
   if(s.g==='socios') return `<div class="wrap s3wrap">${k}${t}${sub}<div class="s3grade">`
-    +s.pessoas.map(([n,pa,bio,slot,foto])=>`<div class="s3 passo"><div class="s3foto">`
+    +s.pessoas.map(([n,pa,bio,slot,foto,fr])=>`<div class="s3 passo"><div class="s3foto">`
       +(foto?`<img src="${foto}" alt="${n}">`:`<div class="slot"><b>slot de imagem</b><span>${slot||''}</span></div>`)
       +`</div><span class="s3nome">${n}</span><span class="s3papel">${pa}</span>`
-      +`<p class="s3bio">${bio}</p></div>`).join('')
+      +`<p class="s3bio">${bio}</p>`+(fr?`<p class="s3frase">“${fr}”</p>`:'')+`</div>`).join('')
     +`</div>${pend}</div>`;
 
   if(s.g==='socio'){
@@ -2234,6 +2240,7 @@ function tpl(s){
       +`<div class="wrap"><span class="scnome rev">${s.nome}</span>`
       +`<span class="scpapel rev">${s.papel}</span>`
       +`<p class="scbio rev">${s.bio}</p>`
+      +(s.frase?`<p class="scfrase rev">“${s.frase}”</p>`:'')
       +`<ol class="credenciais">`+s.cred.map(([q,x])=>
         `<li class="passo"><span class="cq">${q}</span><span class="ct">${x}</span></li>`).join('')
       +`</ol>${pend}</div></div>`;
