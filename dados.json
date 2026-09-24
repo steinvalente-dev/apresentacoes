@@ -5,9 +5,9 @@
    "pecas": [
     {
      "nome": "apresentação institucional · R1",
-     "pranchas": 66,
+     "pranchas": 64,
      "peso": 6.1,
-     "data": "22.09.2026",
+     "data": "24.09.2026",
      "href": "amaz-r1/apresentacao.html",
      "frente": "amaz"
     },
@@ -635,5 +635,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-09-22T21:33:51+00:00"
+ "gerado": "2026-09-24T21:33:18+00:00"
 }

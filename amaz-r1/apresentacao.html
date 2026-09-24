@@ -416,6 +416,22 @@ ol.credenciais li.passo::before{opacity:1}
 /* ═══ gabarito `socio` — a qualificação de cada sócio ═══ */
 .sccols{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1fr);
   gap:clamp(20px,3.4vw,64px);align-items:center;width:100%}
+.s3wrap{max-width:none;width:100%}
+.s3grade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(16px,2.4vw,44px);margin-top:clamp(16px,2.6vh,40px);width:100%}
+.s3foto{position:relative;height:clamp(110px,28vh,320px);background:var(--hair);overflow:hidden}
+.s3foto img{width:100%;height:100%;object-fit:cover;display:block}
+.s3foto .slot{position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:flex-end;gap:5px;padding:clamp(10px,1.4vw,20px);font-family:var(--sans);
+  font-size:var(--fs-cap);letter-spacing:.1em;line-height:1.6;color:var(--soft)}
+.s3foto .slot b{color:var(--acento);font-weight:600;text-transform:uppercase;letter-spacing:.16em}
+.s3nome{display:block;font-family:var(--disp);font-weight:800;font-size:clamp(17px,1.8vw,30px);
+  letter-spacing:-.03em;line-height:1.05;margin-top:clamp(10px,1.4vh,18px)}
+.s3papel{display:block;font-family:var(--sans);font-size:var(--fs-cap);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--acento);margin-top:6px}
+.s3bio{font-size:var(--fs-body);color:var(--soft);line-height:1.5;margin-top:8px;max-width:40ch}
+@media(max-width:620px){.s3grade{grid-template-columns:1fr;gap:10px}.s3foto{display:none}
+  .s3bio{margin-top:4px}}
 .scfoto{position:relative;aspect-ratio:4/5;background:#06392F0f;
   border:1px solid var(--hair);overflow:hidden;max-height:64vh}
 body.esc .scfoto,body.funda .scfoto{background:#F4F1EA10}
@@ -1436,7 +1452,7 @@ const DECK=[
  etapas:1,
 },
 
-{min:20,g:'socio',dir:0,nome:'Adriano Carvalho',papel:'marketing e comunicação',
+{min:20,nao:[20],g:'socio',dir:0,nome:'Adriano Carvalho',papel:'marketing e comunicação',
  slotfoto:'retrato · filtro Hora Dourada',
  bio:'Responsável pelo posicionamento, pela construção de marca e pela conversa com o mercado. É quem transforma um sistema construtivo em argumento que o comprador entende.',
  cred:[
@@ -1445,7 +1461,7 @@ const DECK=[
   ['—','<b>PREENCHER:</b> prêmios, cases ou números de campanha que valham citar.']],
  pend:'Adriano: mandar as marcas de comunicação, o tempo de estrada e o que pode ser mostrado em imagem. Sem isso esta prancha não vai para fora.'},
 
-{min:20,g:'socio',dir:1,nome:'Eduardo Eid',papel:'engenharia e obra',
+{min:20,nao:[20],g:'socio',dir:1,nome:'Eduardo Eid',papel:'engenharia e obra',
  slotfoto:'obra de grande porte · aeroporto ou instalação industrial · filtro Mata',
  bio:'Responsável pela viabilidade, pelo sistema construtivo e pela execução. Traz para a escala da vila a disciplina de quem entregou instalações de grande porte, onde erro de coordenação custa caro e prazo não se negocia.',
  cred:[
@@ -1454,7 +1470,7 @@ const DECK=[
   ['—','<b>PREENCHER:</b> total de m² executados na carreira. É o número que qualifica de imediato.']],
  pend:'Eduardo: mandar a lista de obras entregues, com metragem e imagem liberada para uso. Priorizar o aeroporto — é o que dá escala ao currículo aos olhos de investidor.'},
 
-{min:20,g:'socio',dir:0,nome:'Michel Stein',papel:'arquitetura e produto',
+{min:20,nao:[20],g:'socio',dir:0,nome:'Michel Stein',papel:'arquitetura e produto',
  slotfoto:'projeto autoral entregue · filtro Mata',
  bio:'Responsável pelo projeto, pela prospecção de terreno e pelo material de venda. É quem define o produto — a casa, a vila e a relação de cada uma com o bairro em que entra.',
  cred:[
@@ -1462,6 +1478,18 @@ const DECK=[
   ['—','<b>PREENCHER:</b> três a quatro projetos autorais que representem o repertório, com imagem própria.'],
   ['—','<b>PREENCHER:</b> tempo de escritório próprio e tipologias dominadas.']],
  pend:'Michel: escolher os projetos que entram e fechar o número de m². Usar o filtro Mata em todas as imagens para que as três pranchas de sócio leiam como um conjunto.'},
+
+/* prancha única dos sócios — só no percurso de 20 minutos (`so:[20]`).
+   No completo entram as três pranchas individuais acima (`nao:[20]`).
+   A numeração herda a das três: aparece como "12–14". */
+{min:20,so:[20],junta:'socio',g:'socios',kick:'quem faz',
+ t:'três ofícios,<br>uma mesa',
+ sub:'Comunicação, engenharia e arquitetura — as três competências que decidem um empreendimento. <span class="grifo">Nenhuma é contratada</span>, e cada uma chega com quilometragem própria antes da AMAZ existir.',
+ pessoas:[
+  ['Adriano Carvalho','marketing e comunicação','Posicionamento, marca e conversa com o mercado. É quem transforma um sistema construtivo em argumento que o comprador entende.','retrato · filtro Hora Dourada'],
+  ['Eduardo Eid','engenharia e obra','Viabilidade, sistema construtivo e execução. Traz para a vila a disciplina de quem entregou instalações de grande porte.','retrato ou obra de grande porte · filtro Mata'],
+  ['Michel Stein','arquitetura e produto','Projeto, terreno e material de venda. É quem define o produto — a casa, a vila e a relação de cada uma com o bairro.','retrato ou projeto autoral · filtro Mata']],
+ pend:'SLOT DE IMAGEM: um retrato de cada sócio, no mesmo filtro, para as três colunas lerem como conjunto.'},
 
 {g:'meio',esc:1,dir:1,foto:'tora',leg:'seção de tora · os anéis e as fendas radiais',kick:'quem faz',
  pre:'Comunicação, engenharia e arquitetura — as três competências que decidem um empreendimento, sentadas na mesma mesa.',
@@ -1724,35 +1752,13 @@ const DECK=[
   ['Poucos montadores','Blindagem contra escassez','Menos gente estranha no quintal'],
   ['Qualidade de fábrica','Menos assistência técnica','Menos manutenção pela vida da casa']]},
 
-/* ─── ATO 08 · A PLATAFORMA ───────────────────────────────────────────── */
-
-{min:5,g:'divisor',div:1,funda:1,sec:'a plataforma',dn:'08',dt:'a plataforma',
- ds:'Por que o sistema vale mais que qualquer empreendimento isolado que ele produza.'},
-
-{g:'lista',esc:1,largo:1,kick:'o desdobramento',
- t:'a autoridade<br>inverte o fluxo',
- sub:'A cadeia da madeira engenheirada vende para arquitetos e para quem já entende do assunto. Ninguém traduz a madeira para quem vai morar na casa. É o espaço vazio que ocupamos — e é dele que nasce tudo o mais.',
- itens:[
-  ['01','<b>O conteúdo não é marketing de empreendimento.</b> Podcast, cortes curtos, por que construir em madeira: é construção de autoridade em um assunto que ninguém no Brasil traduziu para o público leigo.'],
-  ['02','<b>O objetivo é inverter a originação.</b> Em vez de caçar terreno, os terrenos passam a vir até nós — e com eles a pousada, a hotelaria, o proprietário que quer usar o mesmo método.'],
-  ['03','<b>O módulo é replicável fora da vila.</b> O mesmo sistema atende outros formatos, e o Hotel Jakarta já prova isso lá fora.'],
-  ['04','<b>A Rambøll faz exatamente isso.</b> A engenharia do Marmormolen abriu uma base pública de dados de carbono para virar referência no assunto. Não é coincidência — é a mesma jogada, em outra escala.']]},
-
-{min:5,g:'fim',esc:1,fim_:1,kick:'próximos passos',t:'o que precisa<br>acontecer',
- itens:[
-  ['01','<b>Fechar os números com a ITA.</b> Garantia, desempenho ao fogo, tolerância de fábrica, prazo de montagem e custo por m².'],
-  ['02','<b>Contratar o estudo de ACV.</b> Ônica em madeira contra casa equivalente em alvenaria. Assinado por terceiro — evidência vale dez vezes mais que argumento.'],
-  ['03','<b>Checar seguro e financiamento.</b> Bancos e seguradoras precificam madeira engenheirada de forma diferente? É o risco silencioso mais relevante do modelo.'],
-  ['04','<b>Levantar dois benchmarks brasileiros.</b> Sem eles, o bloco de referências convence arquiteto e deixa o investidor em dúvida.'],
-  ['05','<b>Bater o martelo na assinatura de marca</b> e registrar no INPI, classes 36 e 37.']]},
-
-/* ─── ATO 09 · A PROPOSTA ─────────────────────────────────────────────
+/* ─── ATO 08 · A PROPOSTA ─────────────────────────────────────────────
    O modelo do negócio para o terrenista. Serve para o litoral e para a
    zona oeste: o que muda de um para o outro é a casa (casa jardim no
    litoral, townhouse na cidade) e os critérios do slide "o que procuramos".
    Números do estudo Vila Madalena, aba 5 LOTES da planilha Ônica Madalena. */
 
-{min:5,g:'divisor',div:1,funda:1,sec:'a proposta',dn:'09',dt:'a proposta',
+{min:5,g:'divisor',div:1,funda:1,sec:'a proposta',dn:'08',dt:'a proposta',
  ds:'Você tem o terreno. Nós temos a solução. O modelo do negócio para quem quer transformar um terreno parado em casa pronta e participação.'},
 
 {min:5,g:'mosaico',kick:'a casa-conceito',
@@ -2214,6 +2220,13 @@ function tpl(s){
       +`</div>`;
   }
 
+  if(s.g==='socios') return `<div class="wrap s3wrap">${k}${t}${sub}<div class="s3grade">`
+    +s.pessoas.map(([n,pa,bio,slot,foto])=>`<div class="s3 passo"><div class="s3foto">`
+      +(foto?`<img src="${foto}" alt="${n}">`:`<div class="slot"><b>slot de imagem</b><span>${slot||''}</span></div>`)
+      +`</div><span class="s3nome">${n}</span><span class="s3papel">${pa}</span>`
+      +`<p class="s3bio">${bio}</p></div>`).join('')
+    +`</div>${pend}</div>`;
+
   if(s.g==='socio'){
     const im=s.foto?`<img src="${s.foto}" alt="${s.nome}">`:'';
     const slot=s.foto?'':`<div class="slot"><b>slot de imagem</b><span>${s.slotfoto||''}</span></div>`;
@@ -2241,14 +2254,23 @@ let sa='';DECK.forEach(s=>{if(s.sec)sa=s.sec;s._sec=sa});
 let MODO=0, ROTA=[], secs=[], TOT=0;
 function rota(modo){
   MODO=modo;
+  /* `so:[20]` = prancha que só existe naquele percurso; `nao:[20]` = prancha
+     que sai dele. Sem nenhum dos dois, vale o `min` de sempre. */
   ROTA=DECK.map((s,i)=>i).filter(i=>{
-    const m=DECK[i].min;
+    const s=DECK[i], m=s.min;
+    if(s.so) return s.so.includes(modo);
+    if(s.nao && s.nao.includes(modo)) return false;
     return !modo || (m && m<=modo);
   });
-  /* renumera: o rodapé conta as pranchas DO PERCURSO, não as do deck */
-  let n=0; DECK.forEach(s=>s._b=null);
-  ROTA.forEach(i=>{ if(!DECK[i].div){ DECK[i]._b=++n; } });
+  /* a numeração é SEMPRE a do deck completo (decisão do Michel, 24/09): o
+     número de uma prancha é o mesmo nos três percursos, para ela poder ser
+     citada. O percurso curto pula números; não renumera. A prancha que só
+     existe num percurso herda a faixa das que ela junta ("12–14"). */
+  let n=0; DECK.forEach(s=>{ s._b=null; if(!s.div && !s.so) s._b=++n; });
   TOT=n;
+  DECK.forEach(s=>{ if(!s.so||!s.junta) return;
+    const ir=DECK.filter(x=>x.g===s.junta && x._b!==null);
+    if(ir.length) s._b=ir[0]._b+'–'+ir[ir.length-1]._b; });
   /* as bolinhas do topo só listam as seções que sobreviveram ao corte */
   secs=[]; ROTA.forEach(i=>{ const s=DECK[i];
     if(s.sec && !secs.some(x=>x.nome===s.sec)) secs.push({nome:s.sec,i}); });
