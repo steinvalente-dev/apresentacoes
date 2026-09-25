@@ -207,6 +207,12 @@
    "ver": "sistemas/gerar-gabaritos.py"
   },
   {
+   "grupo": "montar",
+   "nome": "fontes no sandbox",
+   "desc": "Instalar DM Mono, Inter, Space Grotesk, Fraunces e Poppins antes de gerar .docx ou PDF. Vale para as quatro frentes. Deck não precisa — o bloco da marca já traz as faces em base64",
+   "arq": "sistemas/FONTES-NO-SANDBOX.md"
+  },
+  {
    "grupo": "publicação",
    "nome": "guarda do repositório público",
    "desc": "Este repositório é aberto a qualquer pessoa, com ou sem link do acervo. A guarda varre nome de cliente, endereço, CNPJ, valor, URL da área de cliente e segredo antes do push — tem de imprimir “guarda: limpo”. Peça de cliente mora na área de cliente do site; o registro dela é privado. Regra na seção “Público quer dizer aberto” do GitHub — como trabalhar",
@@ -230,6 +236,12 @@
    "nome": "processo de proposta",
    "desc": "Só prática própria. Os três estágios: bloco de perguntas, texto de WhatsApp com valor, documento formal",
    "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/proposta/PROCESSO-PROPOSTA.md"
+  },
+  {
+   "grupo": "proposta",
+   "nome": "padrão de proposta · michel stein_",
+   "desc": "Como o documento é escrito: estrutura 01 a 10, a frase de conceito, PRODUTO por etapa, prazo opcional, revisões, histórico de preço e checklist. Companheiro do processo — um diz como se chega, o outro como se escreve",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/proposta/PADRAO-PROPOSTA-MICHEL-STEIN.md"
   },
   {
    "grupo": "notion",

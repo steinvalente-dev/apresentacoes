@@ -138,6 +138,11 @@ internos. O R1 não fechou isso.
 
 ---
 
+
+> **Gerando `.docx` ou PDF?** As fontes não vêm instaladas no sandbox — receita e
+> armadilhas em [`sistemas/FONTES-NO-SANDBOX.md`](../sistemas/FONTES-NO-SANDBOX.md).
+> Para deck não é preciso: o `bloco.html` já traz as faces em base64.
+
 ## 4 · O lockup
 
 Wordmark `amaz` em Bricolage 800, com **kerning manual por par** — não é tracking

@@ -270,6 +270,11 @@ consequências práticas:
 
 ---
 
+
+> **Gerando `.docx` ou PDF?** As fontes não vêm instaladas no sandbox — receita e
+> armadilhas em [`sistemas/FONTES-NO-SANDBOX.md`](../sistemas/FONTES-NO-SANDBOX.md).
+> Para deck não é preciso: o `bloco.html` já traz as faces em base64.
+
 ## 4 · O lockup
 
 Medido do `Sarasa-logotipo-principal.svg`. `viewBox 0 0 234 77`, catorze

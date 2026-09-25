@@ -131,6 +131,11 @@ marca elas vêm do Google Fonts, porque ali a rede está pressuposta.
 
 ---
 
+
+> **Gerando `.docx` ou PDF?** As fontes não vêm instaladas no sandbox — receita e
+> armadilhas em [`sistemas/FONTES-NO-SANDBOX.md`](../sistemas/FONTES-NO-SANDBOX.md).
+> Para deck não é preciso: o `bloco.html` já traz as faces em base64.
+
 ## 4 · Regras fixas em slide
 
 - **Capa do projeto:** nome do projeto, endereço logo abaixo, três metas —
