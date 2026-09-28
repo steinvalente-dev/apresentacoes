@@ -576,6 +576,12 @@
    "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/notion/CONSULTAS-BARAKA.md"
   },
   {
+   "grupo": "notion",
+   "nome": "banco de preços · obras",
+   "desc": "A base transversal de custos: o que responde, o que ainda não responde, schema, fator do INCC e como alimentar sem duplicar",
+   "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/notion/BANCO-DE-PRECOS.md"
+  },
+  {
    "grupo": "sarasá · banco de referência",
    "nome": "estratégia do banco e do gerador de memoriais",
    "desc": "As três camadas, onde mora cada arquivo, por que a estrutura é base e não texto, e as armadilhas já mapeadas",
@@ -647,5 +653,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-09-28T10:57:58+00:00"
+ "gerado": "2026-09-28T11:02:22+00:00"
 }
