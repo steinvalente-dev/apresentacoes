@@ -1467,14 +1467,16 @@ const DECK=[
   ['hoje','<b>De marcas para experiências:</b> The Host, um app de eventos na casa das pessoas e A Chacrinha, um laboratório de convivência em 1.000 m² de área verde, no meio da cidade.']],
  pend:'Retrato do Adriano no filtro Hora Dourada. CONFIRMAR com ele a grafia do prêmio e o resultado do case em Cannes.'},
 
-{min:20,nao:[20],g:'socio',dir:1,nome:'Eduardo Eid',papel:'engenharia e obra',
+{min:20,nao:[20],g:'socio',dir:1,nome:'Eduardo Eid',papel:'engenharia · execução · tecnologia · viabilidade',
  slotfoto:'obra de grande porte · aeroporto ou instalação industrial · filtro Mata',
- bio:'Responsável pela viabilidade, pelo sistema construtivo e pela execução. Traz para a escala da vila a disciplina de quem entregou instalações de grande porte, onde erro de coordenação custa caro e prazo não se negocia.',
+ bio:'À frente da Baraka Engenharia desde 2012: gerenciamento de obras e retrofits e instalações eletromecânicas para empreendimentos comerciais, industriais e de saúde. Traz para a vila a disciplina de quem entrega onde erro de coordenação custa caro e prazo não se negocia.',
+ mote:'Escopo, prazo, custo e qualidade: quando um muda, os outros sentem.',
  cred:[
-  ['—','<b>PREENCHER:</b> o aeroporto — qual, qual escopo, qual metragem, qual ano.'],
-  ['—','<b>PREENCHER:</b> as demais instalações de grande porte executadas e entregues, com m² e valor de contrato quando puder ser citado.'],
-  ['—','<b>PREENCHER:</b> total de m² executados na carreira. É o número que qualifica de imediato.']],
- pend:'Eduardo: mandar a lista de obras entregues, com metragem e imagem liberada para uso. Priorizar o aeroporto — é o que dá escala ao currículo aos olhos de investidor.'},
+  ['aeroporto','<b>Aeroporto Internacional de Belo Horizonte:</b> instalações elétricas, hidráulicas e de incêndio em 40.000 m², com retrofit de quatro subestações — 10.000 kVA.'],
+  ['shopping','<b>Shopping Tamboré:</b> retrofit de todo o sistema de média tensão, 11.500 kVA. Franca Shopping: iluminação e combate a incêndio.'],
+  ['saúde','Biobanco do Instituto Butantan, ICB IV da USP, Hospital Sino Brasileiro e AACD.'],
+  ['indústria','GM em São Caetano do Sul e em São José dos Campos, Barry Callebaut e Fagron.']],
+ pend:'Imagem do Eduardo ou de obra de grande porte, filtro Mata. CONFIRMAR com ele: o material da Baraka fala em "experiência da equipe técnica" — os casos podem ser citados como dele? Falta o total de m² da carreira.'},
 
 {min:20,nao:[20],g:'socio',dir:0,nome:'Michel Stein',papel:'arquitetura e produto',
  slotfoto:'projeto autoral entregue · filtro Mata',
@@ -1493,7 +1495,7 @@ const DECK=[
  sub:'Comunicação, engenharia e arquitetura — as três competências que decidem um empreendimento. <span class="grifo">Nenhuma é contratada</span>, e cada uma chega com quilometragem própria antes da AMAZ existir.',
  pessoas:[
   ['Adriano Carvalho','pessoas · marca · experiência','Mais de 30 anos entendendo o que faz as pessoas desejarem marcas, produtos e lugares — da WPP e da IPG às experiências próprias, The Host e A Chacrinha.','retrato · filtro Hora Dourada','','Tudo o que construí até aqui tem uma coisa em comum: pessoas.'],
-  ['Eduardo Eid','engenharia e obra','Viabilidade, sistema construtivo e execução. Traz para a vila a disciplina de quem entregou instalações de grande porte.','retrato ou obra de grande porte · filtro Mata'],
+  ['Eduardo Eid','engenharia · execução · viabilidade','À frente da Baraka Engenharia desde 2012. Aeroporto de Belo Horizonte, Shopping Tamboré, Instituto Butantan e GM no currículo de obra.','retrato ou obra de grande porte · filtro Mata','','Escopo, prazo, custo e qualidade: quando um muda, os outros sentem.',1],
   ['Michel Stein','arquitetura e produto','Projeto, terreno e material de venda. É quem define o produto — a casa, a vila e a relação de cada uma com o bairro.','retrato ou projeto autoral · filtro Mata']],
  pend:'SLOT DE IMAGEM: um retrato de cada sócio, no mesmo filtro, para as três colunas lerem como conjunto.'},
 
@@ -2227,10 +2229,10 @@ function tpl(s){
   }
 
   if(s.g==='socios') return `<div class="wrap s3wrap">${k}${t}${sub}<div class="s3grade">`
-    +s.pessoas.map(([n,pa,bio,slot,foto,fr])=>`<div class="s3 passo"><div class="s3foto">`
+    +s.pessoas.map(([n,pa,bio,slot,foto,fr,sem])=>`<div class="s3 passo"><div class="s3foto">`
       +(foto?`<img src="${foto}" alt="${n}">`:`<div class="slot"><b>slot de imagem</b><span>${slot||''}</span></div>`)
       +`</div><span class="s3nome">${n}</span><span class="s3papel">${pa}</span>`
-      +`<p class="s3bio">${bio}</p>`+(fr?`<p class="s3frase">“${fr}”</p>`:'')+`</div>`).join('')
+      +`<p class="s3bio">${bio}</p>`+(fr?`<p class="s3frase">${sem?fr:`“${fr}”`}</p>`:'')+`</div>`).join('')
     +`</div>${pend}</div>`;
 
   if(s.g==='socio'){
@@ -2241,6 +2243,7 @@ function tpl(s){
       +`<span class="scpapel rev">${s.papel}</span>`
       +`<p class="scbio rev">${s.bio}</p>`
       +(s.frase?`<p class="scfrase rev">“${s.frase}”</p>`:'')
+      +(s.mote?`<p class="scfrase rev">${s.mote}</p>`:'')
       +`<ol class="credenciais">`+s.cred.map(([q,x])=>
         `<li class="passo"><span class="cq">${q}</span><span class="ct">${x}</span></li>`).join('')
       +`</ol>${pend}</div></div>`;
