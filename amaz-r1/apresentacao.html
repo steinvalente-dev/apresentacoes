@@ -1527,6 +1527,11 @@ const DECK=[
  sub:'Incorporadora pequena costuma ter uma perna faltando e terceirizar caro. É aí que ela perde margem, prazo e controle de qualidade. Aqui nenhuma das três pernas é contratada — e cada uma chega com <span class="grifo">quilometragem própria antes da AMAZ existir</span>.',
  prem:'O que é novo é a combinação, não a capacidade. Nenhum dos três está aprendendo o próprio ofício neste projeto.'},
 
+{min:5,g:'logo',esc:1,capa:1,video:'HERO',
+ ante:'e foi daí que veio',
+ dep:'Uma incorporadora que existe para fazer uma coisa só, e fazer bem: vilas residenciais em madeira engenheirada, em bairros urbanos consolidados de São Paulo.',
+},
+
 {min:20,g:'frase',kick:'o que fazemos',
  t:'vilas residenciais<br>em bairros<br>consolidados',
  sub:'Casas independentes em formato de vila, com área comum e paisagismo, dentro da cidade que já existe — não no vazio urbano. Venda de casa mais terreno. Escala humana, poucas unidades, sistema construtivo industrializado em madeira engenheirada.',
@@ -1545,11 +1550,6 @@ const DECK=[
   ['04','paisagismo e cobertura','O verde não é sobra de terreno: é parte do projeto desde a primeira camada.']],
  pend:'Esta é uma axonométrica esquemática, gerada por código. A peça definitiva é um desenho autoral da casa-módulo Ônica — item de produção nossa.'},
 
-{min:5,g:'logo',esc:1,capa:1,video:'HERO',
- ante:'e foi daí que veio',
- dep:'Uma incorporadora que existe para fazer uma coisa só, e fazer bem: vilas residenciais em madeira engenheirada, em bairros urbanos consolidados de São Paulo.',
-},
-
 {g:'janela',kick:'a tese',
  pre:'Num mercado que se diferencia por planta, metragem e acabamento, escolhemos nos diferenciar por aquilo que a casa é feita.',
  t:'a alma da casa<br>vem primeiro.<br>a planta vem depois.',
@@ -1562,13 +1562,13 @@ const DECK=[
 {min:5,g:'divisor',div:1,funda:1,sec:'a casa viva',dn:'04',dt:'a casa viva',
  ds:'Aqui a conversa deixa de ser sobre sistema e passa a ser sobre a casa. O que se vê, o que se toca, e o que se sente ao chegar em casa.'},
 
-{g:'frase',esc:1,kick:'a matéria',
+{min:20,g:'frase',esc:1,kick:'a matéria',
  pre:'A madeira trabalha com a umidade. Ela absorve, ela expele, ela responde ao clima e ao tempo. A solução técnica existe para prever esse movimento, não para impedi-lo.',
  t:'a casa respira',
  sub:'Numa era em que todo mundo vende metro quadrado, nós vendemos uma coisa viva. A casa não é um produto acabado que começa a se deteriorar no dia da entrega — é um organismo que envelhece junto com quem mora nela.',
  prem:'Precisão não é rigidez. É prever o movimento. O sistema é milimétrico justamente porque a matéria é viva — a engenharia existe para dar liberdade à madeira, não para domá-la.'},
 
-{g:'frase',kick:'o toque',
+{min:20,g:'frase',kick:'o toque',
  pre:'A frase surgiu na fábrica, dita por um representante da ITA diante de um pilar redondo de madeira engenheirada.',
  t:'ninguém abraça<br>um pilar de concreto',
  sub:'Mas um pilar de madeira todo mundo quer abraçar. As pessoas querem tocar, querem encostar a mão. Existe uma experiência tátil aí que é o centro da proposta inteira: você abraça a casa, e a casa te abraça de volta.',
@@ -1578,13 +1578,13 @@ const DECK=[
   ['o cheiro','que não se fotografa','O único argumento do nosso produto que nenhum concorrente consegue colocar num anúncio.']],
  pend:'CONFIRMAR a solução acústica de entrepiso e o custo incremental. O toc-toc é assinatura da marca, mas em ticket alto precisa existir alternativa para quem pedir.'},
 
-{g:'dado',funda:1,
+{min:20,g:'dado',funda:1,
  num:'casa',
  rot:'não é apartamento deitado no chão',
  nota:'Pé-direito duplo na sala. Telhado com inclinação de verdade, e o madeiramento inteiro aparente por dentro. Pilares de madeira que atravessam o pé-direito e ficam à vista. Nada disso é decoração aplicada depois — é a própria estrutura, que a gente escolheu não esconder.',
  foto:'sombra',moldura:1},
 
-{g:'frase',kick:'o que se vê ao entrar',
+{min:20,g:'frase',kick:'o que se vê ao entrar',
  t:'a estrutura<br>é o acabamento',
  sub:'Na construção convencional a estrutura é feia e por isso é escondida: forro de gesso, revestimento, pintura — camadas inteiras existem para tapar o que sustenta a casa. Aqui a estrutura é a coisa mais bonita do ambiente, e o projeto é feito para <span class="grifo">deixá-la à mostra</span>.',
  dados:[
@@ -1609,7 +1609,7 @@ const DECK=[
  sub:'Varanda profunda e coberta, ligando a sala ao quintal sem porta no meio do caminho. É onde se come no fim de semana, onde as crianças ficam quando chove e onde a casa encontra a vila. <span class="grifo">Em clima de São Paulo, é o cômodo que funciona o ano inteiro.</span>',
 },
 
-{g:'dado',funda:1,
+{min:20,g:'dado',funda:1,
  num:'o verde',
  rot:'não é o que sobra do terreno — é o que organiza a vila',
  nota:'O paisagismo entra na primeira camada do projeto, junto da implantação, e não no fim junto do orçamento. São as árvores que definem onde cada casa senta, para onde ela olha e o que ela vê pela janela. Numa vila de poucas unidades, o jardim comum é o que transforma vizinhança em convívio — e é a única parte do empreendimento que fica melhor com o tempo em vez de pior.',
@@ -1643,11 +1643,23 @@ const DECK=[
  t:'reflorestamento,<br>não floresta',
  pe:'Madeira de reflorestamento, com cadeia de custódia rastreável e origem verificável.'},
 
-{min:5,g:'frase',esc:1,kick:'a escolha estrutural',
- pre:'Existem empreendimentos em madeira no mercado. Quase todos escondem isso.',
- t:'nós colocamos<br>a madeira<br>em primeiro lugar',
- sub:'A MLC não é acabamento nem detalhe de projeto — é o sistema estrutural inteiro. Quem usa madeira e mostra com receio está pedindo desculpa por uma escolha. Nós fazemos o oposto: é o primeiro assunto, com orgulho.',
- prem:'Quem não gosta de madeira não é cliente da AMAZ. Isso é filtro de público, não perda de mercado.'},
+{min:20,g:'grelha',kick:'os quatro enganos',t:'o que você acha<br>que sabe sobre<br>madeira',
+ sub:'Quatro crenças que circulam sobre madeira na construção civil. Nenhuma delas se sustenta diante do material que existe hoje — e as quatro juntas explicam por que o Brasil ainda constrói do jeito que constrói.',
+ itens:[
+  ['incêndio','fogo','<span class="grifo">Carboniza de fora para dentro em taxa previsível</span> e mantém a capacidade do núcleo. O aço, que o imaginário considera seguro, perde resistência e colapsa sem aviso.'],
+  ['cupim e fungo','cupim','Imersão em tratamento preservativo, antifúngico e anticupim, antes de sair da fábrica. A peça chega à obra já protegida.'],
+  ['durabilidade','relogio','<span class="grifo">20 anos de garantia</span> — patamar que bate de frente com o mercado convencional, e supera boa parte dele.'],
+  ['escala','predio','<span class="grifo">Brock Commons: 18 pavimentos e 54 metros em madeira, Vancouver, 2017.</span> Se dá para aprovar isso, uma casa de dois pavimentos está em outra ordem de grandeza.']],
+ pend:'CONFIRMAR com a ITA: nome correto do produto de imersão, escopo exato da garantia de 20 anos, TRRF atingido e taxa de carbonização, com laudo e norma ABNT.'},
+
+{min:20,g:'donut',esc:1,kick:'análise de ciclo de vida',
+ unidade:[
+  ['1 m³ de madeira','−1 t de CO₂','Retira carbono da atmosfera em vez de emitir. Número da Urbem para mass timber.'],
+  ['1 m³ de concreto','+ emite','PREENCHER com fator verificado — sai do estudo de ACV.'],
+  ['1 m³ de aço','+ emite muito','PREENCHER com fator verificado — sai do estudo de ACV.']],
+ t:'2% do material.<br>45% das emissões.',
+ sub:'A comparação entre o volume de material de uma obra e o carbono que cada material emite. O aço ocupa 2% do volume e responde por 45% das emissões — cerca de 22 vezes mais carbono por unidade de volume que a madeira. A madeira é 34% do volume e apenas 13% das emissões.',
+ pend:'VERIFICAR a fonte primária e o escopo do estudo (A1-A3 ou A1-A5). Os valores aparentam ser percentuais normalizados de um caso específico, não absolutos. Se não for possível rastrear, refazer o cálculo com uma casa Ônica e fatores brasileiros.'},
 
 {g:'frase',esc:1,kick:'a virada silenciosa',
  pre:'Por décadas, a briga do carbono na construção foi sobre energia de operação: ar-condicionado, iluminação, aquecimento. Essa briga está ganha.',
@@ -1660,24 +1672,6 @@ const DECK=[
   ['e ela volta','o único que renasce','Reflorestamento é a única cadeia de material estrutural em que a matéria-prima se repõe sozinha, em escala de décadas e não de eras geológicas.']],
  etapas:1,
  pend:'VERIFICAR os percentuais de carbono incorporado com fonte citável antes de qualquer material impresso.'},
-
-{min:20,g:'donut',esc:1,kick:'análise de ciclo de vida',
- unidade:[
-  ['1 m³ de madeira','−1 t de CO₂','Retira carbono da atmosfera em vez de emitir. Número da Urbem para mass timber.'],
-  ['1 m³ de concreto','+ emite','PREENCHER com fator verificado — sai do estudo de ACV.'],
-  ['1 m³ de aço','+ emite muito','PREENCHER com fator verificado — sai do estudo de ACV.']],
- t:'2% do material.<br>45% das emissões.',
- sub:'A comparação entre o volume de material de uma obra e o carbono que cada material emite. O aço ocupa 2% do volume e responde por 45% das emissões — cerca de 22 vezes mais carbono por unidade de volume que a madeira. A madeira é 34% do volume e apenas 13% das emissões.',
- pend:'VERIFICAR a fonte primária e o escopo do estudo (A1-A3 ou A1-A5). Os valores aparentam ser percentuais normalizados de um caso específico, não absolutos. Se não for possível rastrear, refazer o cálculo com uma casa Ônica e fatores brasileiros.'},
-
-{min:20,g:'grelha',kick:'os quatro enganos',t:'o que você acha<br>que sabe sobre<br>madeira',
- sub:'Quatro crenças que circulam sobre madeira na construção civil. Nenhuma delas se sustenta diante do material que existe hoje — e as quatro juntas explicam por que o Brasil ainda constrói do jeito que constrói.',
- itens:[
-  ['incêndio','fogo','<span class="grifo">Carboniza de fora para dentro em taxa previsível</span> e mantém a capacidade do núcleo. O aço, que o imaginário considera seguro, perde resistência e colapsa sem aviso.'],
-  ['cupim e fungo','cupim','Imersão em tratamento preservativo, antifúngico e anticupim, antes de sair da fábrica. A peça chega à obra já protegida.'],
-  ['durabilidade','relogio','<span class="grifo">20 anos de garantia</span> — patamar que bate de frente com o mercado convencional, e supera boa parte dele.'],
-  ['escala','predio','<span class="grifo">Brock Commons: 18 pavimentos e 54 metros em madeira, Vancouver, 2017.</span> Se dá para aprovar isso, uma casa de dois pavimentos está em outra ordem de grandeza.']],
- pend:'CONFIRMAR com a ITA: nome correto do produto de imersão, escopo exato da garantia de 20 anos, TRRF atingido e taxa de carbonização, com laudo e norma ABNT.'},
 
 {g:'frase',esc:1,kick:'02 · madeira engenheirada',
  pre:'A madeira que limitava projeto era a madeira maciça serrada — com nó, fibra torta e variação de peça para peça.',
@@ -1696,25 +1690,6 @@ const DECK=[
  sub:'Daí vem o retrabalho, o furo no meio da obra, o jeitinho. Na madeira as decisões estão todas no projeto, porque o sistema chega como solução completa, cortada em fábrica.',
  prem:'A prova material: o caixilho pode ser produzido antes da estrutura estar de pé. Nenhuma construção convencional consegue isso — porque nenhuma sabe, de antemão, onde o vão vai estar.'},
 
-{min:20,g:'frase',esc:1,kick:'a entrega',
- pre:'A estrutura chega pré-cortada, etiquetada e numerada. A obra deixa de ser fabricação e passa a ser montagem — e montagem tem duração previsível, o que fabricação em canteiro nunca teve.',
- t:'velocidade de<br>entrega<br>incomparável',
- sub:'Uma equipe pequena e treinada levanta em dias o que a construção convencional levaria meses para erguer. E essa velocidade não beneficia um lado só: <span class="grifo">ela paga três vezes, para três pessoas diferentes, ao mesmo tempo</span>.',
- dados:[
-  ['o investidor','recebe antes','Ciclo curto é capital girando antes e menos meses de exposição a juros, obra e imprevisto. É o argumento financeiro mais direto do sistema.'],
-  ['o morador','entra antes','Menos tempo de espera, menos aluguel em paralelo, menos incerteza sobre quando a casa fica pronta — e uma data que se cumpre.'],
-  ['a obra','erra menos','Menos tempo de canteiro é menos exposição a chuva, furto, acidente e rotatividade de equipe. Prazo curto não é só rápido: é mais seguro.']],
- etapas:1,
- pend:'PREENCHER com números reais: tempo de fabricação por lote, dias de montagem por casa e número de montadores. A confirmar com a ITA — este slide é forte demais para sair sem número.'},
-
-{g:'frase',kick:'resíduo',t:'a obra que não<br>suja a rua',
- sub:'Obra convencional gera resíduo e sujeira. Na primeira chuva o material se espalha, a calçada e a mata em volta ficam sujas. Há bota-fora, sobra, peça quebrada e refeita. Com o sistema industrializado isso não acontece: o que chega ao terreno é o que vai ser montado.',
- dados:[
-  ['25%','de desperdício evitado','O número do canteiro convencional, do slide de abertura. Aqui ele deixa de ser estatística e vira linha de custo.'],
-  ['0','caçambas de bota-fora','Sem sobra de fabricação, sem quebra, sem refazer. O corte aconteceu na fábrica, onde a sobra volta para a linha.'],
-  ['—','de limpeza pós-obra','Não existe o serviço especializado de remover cimento grudado onde não deveria estar. Nunca houve cimento.']],
- pend:'PREENCHER a economia real em m³ de resíduo evitado e custo de caçamba evitado, para este slide sair com número em vez de adjetivo.'},
-
 {g:'casos',kick:'referências · o mundo',t:'não somos<br>os primeiros',
  sub:'Fundo de pensão dinamarquês. Hotel certificado BREEAM. Dezoito pavimentos em Vancouver.',
  itens:[
@@ -1730,6 +1705,31 @@ const DECK=[
   ['Aurora 275','Suzano · Crosslam','6 pav.','Dez apartamentos de 74 m² em estrutura híbrida de CLT, MLC, pré-moldado e aço — descrito como o maior residencial em madeira da América Latina. VGV de R$ 7,4 milhões, a cerca de R$ 10 mil o m². A Crosslam incorporou o próprio prédio para provar a tese.']],
  prem:'Existe no mundo, e já existe aqui. O que ainda não existe no Brasil é uma incorporadora cujo negócio inteiro seja isso — não um experimento, não um showroom, não uma obra de demonstração.',
  pend:'VERIFICAR o estágio atual de cada um antes de apresentar: o Arvoredo saiu do papel? O Aurora 275 foi entregue? Fontes: Revista HAUS, Exame, Urbem, Crosslam e ArchDaily. Michel: mandar o link da matéria da Idea!Zarvos que você citou — não achei registro dela e ela pode substituir uma destas três.'},
+
+{g:'frase',kick:'resíduo',t:'a obra que não<br>suja a rua',
+ sub:'Obra convencional gera resíduo e sujeira. Na primeira chuva o material se espalha, a calçada e a mata em volta ficam sujas. Há bota-fora, sobra, peça quebrada e refeita. Com o sistema industrializado isso não acontece: o que chega ao terreno é o que vai ser montado.',
+ dados:[
+  ['25%','de desperdício evitado','O número do canteiro convencional, do slide de abertura. Aqui ele deixa de ser estatística e vira linha de custo.'],
+  ['0','caçambas de bota-fora','Sem sobra de fabricação, sem quebra, sem refazer. O corte aconteceu na fábrica, onde a sobra volta para a linha.'],
+  ['—','de limpeza pós-obra','Não existe o serviço especializado de remover cimento grudado onde não deveria estar. Nunca houve cimento.']],
+ pend:'PREENCHER a economia real em m³ de resíduo evitado e custo de caçamba evitado, para este slide sair com número em vez de adjetivo.'},
+
+{min:20,g:'frase',esc:1,kick:'a entrega',
+ pre:'A estrutura chega pré-cortada, etiquetada e numerada. A obra deixa de ser fabricação e passa a ser montagem — e montagem tem duração previsível, o que fabricação em canteiro nunca teve.',
+ t:'velocidade de<br>entrega<br>incomparável',
+ sub:'Uma equipe pequena e treinada levanta em dias o que a construção convencional levaria meses para erguer. E essa velocidade não beneficia um lado só: <span class="grifo">ela paga três vezes, para três pessoas diferentes, ao mesmo tempo</span>.',
+ dados:[
+  ['o investidor','recebe antes','Ciclo curto é capital girando antes e menos meses de exposição a juros, obra e imprevisto. É o argumento financeiro mais direto do sistema.'],
+  ['o morador','entra antes','Menos tempo de espera, menos aluguel em paralelo, menos incerteza sobre quando a casa fica pronta — e uma data que se cumpre.'],
+  ['a obra','erra menos','Menos tempo de canteiro é menos exposição a chuva, furto, acidente e rotatividade de equipe. Prazo curto não é só rápido: é mais seguro.']],
+ etapas:1,
+ pend:'PREENCHER com números reais: tempo de fabricação por lote, dias de montagem por casa e número de montadores. A confirmar com a ITA — este slide é forte demais para sair sem número.'},
+
+{min:5,g:'frase',esc:1,kick:'a escolha estrutural',
+ pre:'Existem empreendimentos em madeira no mercado. Quase todos escondem isso.',
+ t:'nós colocamos<br>a madeira<br>em primeiro lugar',
+ sub:'A MLC não é acabamento nem detalhe de projeto — é o sistema estrutural inteiro. Quem usa madeira e mostra com receio está pedindo desculpa por uma escolha. Nós fazemos o oposto: é o primeiro assunto, com orgulho.',
+ prem:'Quem não gosta de madeira não é cliente da AMAZ. Isso é filtro de público, não perda de mercado.'},
 
 /* ─── ATO 06 · O PRODUTO ──────────────────────────────────────────────── */
 
@@ -1802,11 +1802,11 @@ const DECK=[
 
 {min:5,g:'mosaico',kick:'a casa-conceito',
  t:'a casa<br>vem primeiro',
- sub:'Toda conversa começa por uma casa pronta: a casa-conceito AMAZ, já desenhada e renderizada. <span class="grifo">É esta casa que implantamos no seu terreno</span>, com as adequações e melhorias que o lugar pedir.',
+ sub:'Toda conversa começa por uma casa pronta: a casa-conceito AMAZ, já desenhada e renderizada. <span class="grifo">É esta casa que implantamos no seu terreno</span>, com as adequações e melhorias que o lugar pedir. E em volta dela, <span class="grifo">áreas de lazer generosas</span>.',
  fotos:[
   ['rd-fileira','townhouse · 197 m² privativos · a casa da cidade','render · townhouse'],
-  ['','casa jardim · 142 m² privativos · a casa no chão, para o litoral','render · casa jardim']],
- pend:'SLOT DE IMAGEM: render da casa jardim. Na apresentação para um terreno específico, entra só a casa daquele terreno.'},
+  ['rd-piscina','área comum · lazer generoso, piscina e jardim para a vila inteira','']],
+ pend:'Na apresentação para um terreno específico, entra a casa daquele terreno — townhouse na cidade, casa jardim no litoral.'},
 
 {min:5,g:'frase',esc:1,kick:'o modelo',
  pre:'terreno → projeto → aprovação → obra → casa pronta',
