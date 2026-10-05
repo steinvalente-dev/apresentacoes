@@ -358,7 +358,7 @@
    "aba": "marca",
    "grupo": "Lavrō",
    "nome": "relatório de período · anatomia",
-   "desc": "Como um mês de RDOs vira um documento de oito páginas: estrutura, escala, especificação dos três gráficos, receita do duotone e as armadilhas de impressão que custaram uma rodada cada. Dados fictícios",
+   "desc": "Como um mês de RDOs vira um documento de oito páginas: estrutura, escala, especificação dos quatro gráficos, o critério de medição do avanço físico, receita do duotone e as armadilhas de impressão que custaram uma rodada cada. Dados fictícios",
    "arq": "marca/lavro/01-MARCA-normativo.md",
    "ver": "lavro-relatorio/apresentacao.html"
   },
@@ -653,5 +653,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-09-29T21:37:02+00:00"
+ "gerado": "2026-10-05T23:05:25+00:00"
 }

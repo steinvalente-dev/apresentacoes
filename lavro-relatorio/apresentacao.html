@@ -58,7 +58,8 @@
     color:var(--label);font-weight:700;padding:0 10px 9px 0;border-bottom:1px solid var(--line-2);
   }
   td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
-  tr:last-child td{border-bottom:none}
+  tbody tr:last-child td{border-bottom:none}
+  tfoot td{border-top:1px solid var(--line-2);border-bottom:none;padding-top:10px}
   td.mono,th.mono{font-family:"Cascadia Mono",Consolas,monospace;font-size:13px;color:var(--ink-2);white-space:nowrap}
   .g{width:100%;height:auto;display:block;margin:6px 0 4px}
   figure{margin:0 0 22px}
@@ -112,7 +113,7 @@
     <p class="sub">Como um mês de Relatórios Diários de Obra vira um documento de oito
       páginas que o cliente lê em dois minutos. Estrutura, escala, especificação dos
       gráficos e as armadilhas de impressão que custaram uma rodada cada.</p>
-    <div class="meta">Documento técnico · versão 1.0 · 02.09.2026</div>
+    <div class="meta">Documento técnico · versão 1.1 · 05.10.2026</div>
     <div class="aviso">
       <b>Todos os dados desta página são fictícios.</b> Obra “Ed. Fictício”, setembro de
       2026, 24 RDOs inventados. A peça real é emitida por obra e fica fora deste
@@ -172,7 +173,7 @@
     <thead><tr><th class="mono">pág.</th><th>conteúdo</th><th>tratamento</th></tr></thead>
     <tbody>
       <tr><td class="mono">capa</td><td>Obra, período, marca do executante</td><td>Foto em duotone escuro, sangrada, texto em branco</td></tr>
-      <tr><td class="mono">1</td><td>Dados da obra · 4 indicadores · efetivo diário · frentes · efetivo por função · equipamentos</td><td>Painel: nenhum texto corrido</td></tr>
+      <tr><td class="mono">1</td><td>Dados da obra · evolução física · 4 indicadores · efetivo diário · frentes · efetivo por função</td><td>Painel: nenhum texto corrido</td></tr>
       <tr><td class="mono">2</td><td>Síntese do período · 3 números âncora · 4 fotos</td><td>Página inteira sobre fundo escuro</td></tr>
       <tr><td class="mono">3–6</td><td>Uma frente por bloco: código do marco, nome, fase, narrativa e 4 fotos</td><td>Herda o bloco de marco do próprio RDO</td></tr>
       <tr><td class="mono">última</td><td>Testes, segurança, recebimentos, situação ao encerramento, assinatura</td><td>Assinatura única empilhada; nota de sistema no rodapé</td></tr>
@@ -185,7 +186,68 @@
 </section>
 
 <section>
-  <h2>3 · Os três gráficos</h2>
+  <h2>3 · Os quatro gráficos</h2>
+
+  <h3>Evolução física</h3>
+  <p>Vem primeiro, logo abaixo dos dados da obra: é o número que o cliente procura. Não sai
+    dos RDOs — o diário registra atividade, não percentual. O avanço é <strong>informado
+    pela medição de obra</strong>, com a data em que foi medido, e a peça diz as duas
+    coisas.</p>
+  <p>Tem duas formas, e a escolha é de conteúdo, não de gosto. <strong>Curva previsto ×
+    realizado</strong> quando existe cronograma na mesma quebra de escopo que os RDOs
+    executam:</p>
+  <figure>
+    <svg class="g" viewBox="0 0 720 170" role="img" aria-label="Evolução física: curva de previsto do cronograma e o ponto medido em obra">
+<line x1="46" y1="138.0" x2="712" y2="138.0" stroke="#C9CDD4" stroke-width="1"/>
+<text x="38" y="142.0" text-anchor="end" font-size="12" fill="#6B7280">0%</text>
+<line x1="46" y1="107.5" x2="712" y2="107.5" stroke="#E3E5E9" stroke-width="1"/>
+<text x="38" y="111.5" text-anchor="end" font-size="12" fill="#6B7280">25%</text>
+<line x1="46" y1="77.0" x2="712" y2="77.0" stroke="#E3E5E9" stroke-width="1"/>
+<text x="38" y="81.0" text-anchor="end" font-size="12" fill="#6B7280">50%</text>
+<line x1="46" y1="46.5" x2="712" y2="46.5" stroke="#E3E5E9" stroke-width="1"/>
+<text x="38" y="50.5" text-anchor="end" font-size="12" fill="#6B7280">75%</text>
+<line x1="46" y1="16.0" x2="712" y2="16.0" stroke="#E3E5E9" stroke-width="1"/>
+<text x="38" y="20.0" text-anchor="end" font-size="12" fill="#6B7280">100%</text>
+<polyline fill="none" stroke="#94A0F7" stroke-width="2" points="46.0,135.8 101.5,126.5 157.0,115.8 212.5,105.1 268.0,93.5 323.5,81.9 379.0,70.7 434.5,59.9 490.0,50.0 545.5,39.9 601.0,30.6 656.5,22.6 712.0,16.0"/>
+<text x="234.7" y="59.9" font-size="11.5" fill="#6B7280">previsto · cronograma</text>
+<circle cx="157.0" cy="126.2" r="5" fill="#0123FF"/>
+<text x="168.0" y="117.2"><tspan font-size="13" font-weight="700" fill="#0E1116">9,7%</tspan><tspan font-size="10.5" fill="#3D444D"> realizado em agosto</tspan></text>
+<text x="46.0" y="157.0" text-anchor="start" font-size="11" fill="#6B7280">JUN/26</text>
+<text x="157.0" y="157.0" text-anchor="middle" font-size="11" fill="#6B7280">AGO</text>
+<text x="268.0" y="157.0" text-anchor="middle" font-size="11" fill="#6B7280">OUT</text>
+<text x="379.0" y="157.0" text-anchor="middle" font-size="11" fill="#6B7280">DEZ</text>
+<text x="490.0" y="157.0" text-anchor="middle" font-size="11" fill="#6B7280">FEV</text>
+<text x="601.0" y="157.0" text-anchor="middle" font-size="11" fill="#6B7280">ABR</text>
+<text x="712.0" y="157.0" text-anchor="end" font-size="11" fill="#6B7280">JUN</text>
+</svg>
+    <figcaption>Previsto como linha contínua em tom claro — é referência, não protagonista.
+      O realizado entra como ponto medido, em azul cheio, com rótulo direto e a data da
+      medição. Um ponto medido não vira curva: ligar dois pontos inventaria uma
+      progressão que ninguém levantou.</figcaption>
+  </figure>
+  <p><strong>Medidor</strong> quando não existe. Cronograma que recorta o escopo por
+    pavimento enquanto os RDOs executam por área de projeto não é comparável: o previsto
+    por duração pode acusar 15% contra 70% de realizado, e a curva passa a mentir com
+    aparência de rigor. Num entregável de cliente, curva incomparável é pior que gráfico
+    nenhum.</p>
+  <figure>
+    <svg class="g" viewBox="0 0 720 62" role="img" aria-label="Avanço físico acumulado de 48 por cento, medição de obra">
+<rect x="4" y="10" width="712" height="26" rx="13.0" fill="#EDEFF3"/>
+<rect x="4" y="10" width="341.8" height="26" rx="13.0" fill="#0123FF"/>
+<line x1="182.0" y1="13" x2="182.0" y2="33" stroke="#FFFFFF" stroke-width="1" opacity="0.45"/>
+<line x1="360.0" y1="13" x2="360.0" y2="33" stroke="#C9CDD4" stroke-width="1"/>
+<line x1="538.0" y1="13" x2="538.0" y2="33" stroke="#C9CDD4" stroke-width="1"/>
+<text x="334.8" y="29" text-anchor="end" font-size="16" font-weight="700" fill="#FFFFFF">48%</text>
+<text x="4.0" y="54" text-anchor="start" font-size="11" fill="#6B7280">0%</text>
+<text x="182.0" y="54" text-anchor="middle" font-size="11" fill="#6B7280">25%</text>
+<text x="360.0" y="54" text-anchor="middle" font-size="11" fill="#6B7280">50%</text>
+<text x="538.0" y="54" text-anchor="middle" font-size="11" fill="#6B7280">75%</text>
+<text x="716.0" y="54" text-anchor="end" font-size="11" fill="#6B7280">100%</text>
+</svg>
+    <figcaption>Mesma informação sem a comparação que não se sustenta. As marcas de quarto
+      dão a escala; o rótulo fica dentro do preenchimento enquanto couber. A peça registra
+      em texto por que não há previsto.</figcaption>
+  </figure>
 
   <h3>Efetivo diário</h3>
   <p>Uma barra por RDO, na ordem da data. O trabalho da forma é magnitude ao longo do
@@ -327,7 +389,39 @@
 </section>
 
 <section>
-  <h2>4 · Cor, tipografia e grid</h2>
+  <h2>4 · Como o avanço é medido</h2>
+  <p>O percentual não é opinião nem régua de tempo: é <strong>soma de setores
+    concluídos</strong>. A obra é dividida em partes, cada parte recebe um peso, e o
+    avanço é a fração do peso total que já saiu. O critério é definido pelo responsável
+    técnico e <strong>vale por obra</strong> — estrutura de frentes diferente, régua
+    diferente.</p>
+  <table>
+    <thead><tr><th>parte</th><th class="mono">qtd.</th><th class="mono">peso</th><th class="mono">total</th></tr></thead>
+    <tbody>
+      <tr><td>Pavimento, até o último de repetição</td><td class="mono">27</td><td class="mono">1</td><td class="mono">27</td></tr>
+      <tr><td>Pavimentos de cobertura, contados em conjunto</td><td class="mono">3</td><td class="mono">1 (total)</td><td class="mono">1</td></tr>
+      <tr><td>Casa de bombas</td><td class="mono">1</td><td class="mono">1</td><td class="mono">1</td></tr>
+      <tr><td>Prumada</td><td class="mono">1</td><td class="mono">2</td><td class="mono">2</td></tr>
+    </tbody>
+    <tfoot><tr><td><strong>31 setores</strong></td><td class="mono"></td><td class="mono"></td><td class="mono"><strong>3,2258% cada</strong></td></tr></tfoot>
+  </table>
+  <p>Exemplo de uma obra real, com os nomes fora. O que importa é a consequência: com passo
+    de 3,2258%, <strong>os valores possíveis são discretos</strong> — 2 setores dão 6,45%,
+    3 dão 9,68%. Nenhum deles é 7%.</p>
+  <div class="aviso">
+    <strong>A regra de arredondamento.</strong> Quando o número informado não cai na régua,
+    o sistema diz o valor exato primeiro e só então pergunta se arredonda. Nunca arredonda
+    calado, e nunca para cima por conta própria: 6,45 virar 7 é meio ponto a mais num
+    documento que o cliente arquiva. No chat isso é uma pergunta; no app, um campo que
+    mostra o exato ao lado do arredondado.
+  </div>
+  <p>A razão de registrar isto aqui, e não só no código: quem recalcular o avanço daqui a
+    um ano precisa saber que 27 pavimentos não são 27 setores, que a prumada pesa dobrado,
+    e que o número redondo do relatório pode não ser o número da planilha.</p>
+</section>
+
+<section>
+  <h2>5 · Cor, tipografia e grid</h2>
   <div class="cores">
     <div class="cor"><div class="sw" style="background:#0123FF"></div><div class="nm">Elétrico</div><div class="hx">#0123FF</div></div>
     <div class="cor"><div class="sw" style="background:#94A0F7"></div><div class="nm">Elétrico claro</div><div class="hx">#94A0F7</div></div>
@@ -358,7 +452,7 @@
 </section>
 
 <section>
-  <h2>5 · Duotone das páginas escuras</h2>
+  <h2>6 · Duotone das páginas escuras</h2>
   <p>Capa e página de síntese usam foto da própria obra rebaixada a textura. A receita é
     assada na imagem, não aplicada em CSS, para que impressão e leitores de PDF não
     interpretem nada:</p>
@@ -377,7 +471,7 @@
 </section>
 
 <section>
-  <h2>6 · Armadilhas de impressão</h2>
+  <h2>7 · Armadilhas de impressão</h2>
   <p>Nenhuma destas aparece em validador de sintaxe. Todas apareceram executando, e cada
     uma custou uma rodada.</p>
 
@@ -413,11 +507,15 @@
       Sem o <code>screen</code>, ela vale na impressão e desmonta a paginação.</li>
     <li><code>page-break-inside: avoid</code> num bloco mais alto que a página joga a
       página inteira fora. Só em <code>figure</code>.</li>
+    <li><strong>O diário pode sair noutro idioma.</strong> Um dos PDFs veio com os
+      cabeçalhos em inglês — locale do aplicativo vazando para a exportação. O leitor
+      precisa dos dois dicionários, e o defeito volta para a fila do app: documento de
+      obra brasileira não se emite em inglês.</li>
   </ul>
 </section>
 
 <section>
-  <h2>7 · Critérios de aprovação</h2>
+  <h2>8 · Critérios de aprovação</h2>
   <p>A peça não sai sem passar por execução. O medidor roda Chromium sem interface e
     reporta, folha por folha, a altura do conteúdo em milímetros contra a área útil:</p>
   <ul>
@@ -430,13 +528,23 @@
     <li>fonte da marca confirmada carregada, não presumida;</li>
     <li>contraste do branco medido nas faixas de texto das páginas escuras.</li>
   </ul>
-  <p>E depois disso, <strong>abrir as páginas renderizadas e olhar.</strong> Rótulo
-    colidindo com legenda, foto no marco errado e recorte que decepa o assunto da imagem
-    não aparecem em medição nenhuma.</p>
+  <p>E depois disso, <strong>abrir as páginas renderizadas e olhar.</strong> Nada do que
+    vem abaixo aparece em medição, e tudo já passou por aqui:</p>
+  <ul>
+    <li><strong>foto no marco errado</strong> — legenda de uma frente numa página de outra;</li>
+    <li><strong>foto repetida</strong> em dois marcos diferentes;</li>
+    <li><strong>legenda que não bate com a imagem.</strong> A legenda se escreve olhando a
+      foto, não lendo o que o diário daquele dia diz que foi feito;</li>
+    <li><strong>colisão de rótulo</strong> em gráfico — a média sobre as barras, a legenda
+      sobre os meses, o percentual cruzando a curva;</li>
+    <li><strong>quebra de linha feia</strong> em caixa estreita, sobretudo no rodapé da capa;</li>
+    <li><strong>meia página em branco.</strong> Vazio grande no meio do documento lê como
+      erro de montagem: ou sobe o bloco seguinte, ou as fotos daquele bloco crescem.</li>
+  </ul>
 </section>
 
 <section>
-  <h2>8 · O que ainda é humano</h2>
+  <h2>9 · O que ainda é humano</h2>
   <p>Três coisas nesta peça não saem de consulta ao banco, e vale registrar antes que
     pareçam automáticas:</p>
   <ol>
@@ -456,7 +564,7 @@
 
 <footer>
   <div class="wrap">
-    Documento técnico · Relatório de período, versão 1.0 · 02.09.2026<br>
+    Documento técnico · Relatório de período, versão 1.1 · 05.10.2026<br>
     Dados fictícios · <div class="lavro">Lavr<span class="lo">o<i></i></span></div>
   </div>
 </footer>
