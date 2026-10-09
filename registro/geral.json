@@ -299,6 +299,18 @@
    "nome": "nuvem de pontos → malha, ortofoto e deck",
    "desc": "Pipeline de sete passos do LAZ ao GLB: grelha regular em vez de Poisson, ortofoto como subproduto, o que o SketchUp importa de verdade, e o orçamento de máquina medido",
    "arq": "sistemas/NUVEM-PARA-MALHA.md"
+  },
+  {
+   "grupo": "levantamento de fachada",
+   "nome": "elevação a partir de fotos",
+   "desc": "Do print de rua ao DXF em cinco etapas: retificar por geometria, elevação na IA, detalhe de cada esquadria, DXF paramétrico. O print manda na contagem; a IA serve para ortogonalidade e proporção. Inclui as armadilhas de profundidade e de simetria",
+   "arq": "sistemas/ELEVACAO-DE-FOTOS.md"
+  },
+  {
+   "grupo": "levantamento de fachada",
+   "nome": "elevacao-de-fotos · retificar e desenhar caixilho",
+   "desc": "Scripts que rodam no container: retificação por homografia com espelhamento, e biblioteca de DXF com camadas e hachuras padrão, blocos, arco verdadeiro, vidro sob arco abatido e caixilho recortado atrás de coluna",
+   "arq": "ferramentas/elevacao-de-fotos/LEIA-ME.md"
   }
  ]
 }

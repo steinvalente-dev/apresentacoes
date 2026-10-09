@@ -50,7 +50,7 @@ ORDEM_GRUPOS = {
     'deck':  ['montar', 'gabaritos', 'consulta', 'as peças de montar', 'precisa de uma marca', 'rodadas', 'registro'],
     'marca': ['michel stein_', 'AMAZ', 'Lavrō', 'Sarasá', 'a levantar'],
     None:    ['site', 'operação', 'montar', 'publicação', 'contexto', 'proposta', 'notion',
-              'sarasá · banco de referência', 'sarasá · mapeamento de danos', 'levantamento 3D'],
+              'sarasá · banco de referência', 'sarasá · mapeamento de danos', 'levantamento 3D', 'levantamento de fachada'],
 }
 # pastas que nunca são peça: não entram no índice nem contam como órfã
 IGNORA = {'superado', 'sistemas', 'modulos', 'esqueleto', 'ferramentas', 'registro', 'fundo', 'marca', 'entregas', '.git', '.github'}
