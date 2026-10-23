@@ -228,6 +228,15 @@ regra exista: só contexto informal, nunca documento formal ou proposta.
 - Não trocar a cor do traço · não usar a versão reta · não usar caixa-alta · não
   esticar · não aplicar sombra · não usar sobre fundo de baixo contraste.
 
+**O favicon está desenhado** (23.10.2026), na raiz do repositório: `favicon.svg`
+(mestre, 64×64), `favicon-32.png`, `favicon.ico` (16/32/48) e
+`apple-touch-icon.png` (180, com mais respiro porque o iOS arredonda e corta).
+É o `m_` sobre oliva, creme no `m` e terracota no underscore — **contorno
+vetorial, não texto**: favicon não espera webfont carregar, e DM Mono não
+existe na máquina de quem abre. Regerar: extrair os glifos de
+`DMMono-MediumItalic.ttf` (receita em `../sistemas/FONTES-NO-SANDBOX.md`),
+nunca redesenhar à mão.
+
 ---
 
 ## 8 · Checklist para criar `MARCA-<outra>.md`
