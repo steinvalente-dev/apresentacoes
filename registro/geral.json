@@ -262,6 +262,12 @@
    "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/notion/BANCO-DE-PRECOS.md"
   },
   {
+   "grupo": "notion",
+   "nome": "banco de preços · como usar",
+   "desc": "O método público da base única: Natureza da obra como único separador, leitura sempre pela coluna Preço atualizado e o que perguntar antes de carregar planilha nova. Sem dado de cliente — abre por URL raw",
+   "arq": "sistemas/BANCO-DE-PRECOS-COMO-USAR.md"
+  },
+  {
    "grupo": "publicação",
    "nome": "github · como trabalhar",
    "desc": "Onde cada coisa vai, clonar, registrar, validar e publicar. Vale para apresentação, documento e ferramenta",

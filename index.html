@@ -835,7 +835,7 @@ docs = dados.docs || [];
 })();
 </script>
 
-<script src="modulos/ms-fundo-engine.js" defer></script>
+<script id="ms-fundo-js" src="modulos/ms-fundo-engine.js" defer></script>
 <script>
 /* fundo morph — nove peças a 640px WebP, já pré-expostas no arquivo (prep:false)
    e em ordem sorteada, para cada abertura começar por um par diferente.
@@ -845,6 +845,7 @@ const FUNDO_V = 2;   /* subir ao trocar qualquer peça: o Pages serve com max-ag
 (function(){
   function sobe(){
     if(!window.MSFundo) return;
+    if(window.MSF) return;   /* já montado: nunca montar duas vezes */
     try{
       /* a paleta sai da ABAS, fonte única: aba nova não precisa ser repetida aqui */
       const ativa = (typeof ABAS !== 'undefined') ? ABAS.find(function(a){
@@ -860,8 +861,34 @@ const FUNDO_V = 2;   /* subir ao trocar qualquer peça: o Pages serve com max-ag
       window.MSF.entrada();
     }catch(e){ /* fundo é enfeite: falhar aqui não pode derrubar a página */ }
   }
-  if('requestIdleCallback' in window) requestIdleCallback(sobe,{timeout:1200});
-  else addEventListener('load',function(){ setTimeout(sobe,120); });
+  /* ── quando subir ────────────────────────────────────────────────────
+     A engine vem por <script defer>: só executa quando TERMINA de baixar.
+     O requestIdleCallback, porém, dispara no primeiro ocioso — e esperar a
+     rede É ocioso. Em rede lenta ou cache frio o ocioso chegava primeiro,
+     `window.MSFundo` ainda não existia, o `return` era silencioso e o fundo
+     não subia mais naquela abertura. Era o "às vezes só entra no refresh":
+     no segundo load a engine vinha do cache e ganhava a corrida.
+     Agora a espera é pelo evento de load DO PRÓPRIO script, que é o fato que
+     importa; o ocioso é só o atraso educado depois disso.                 */
+  let agendado = false;
+  function agenda(){
+    if(agendado) return; agendado = true;
+    if('requestIdleCallback' in window) requestIdleCallback(sobe,{timeout:1200});
+    else setTimeout(sobe,120);
+  }
+  const js = document.getElementById('ms-fundo-js');
+  if(window.MSFundo){ agenda(); }
+  else if(js){
+    js.addEventListener('load', agenda, {once:true});
+    /* rede de segurança: se o evento se perder (bfcache, extensão que
+       reescreve a tag), ainda assim tenta — limitado, para script quebrado
+       ou ausente não virar laço eterno. */
+    let tent = 0;
+    const bate = setInterval(function(){
+      if(window.MSFundo || ++tent > 20){ clearInterval(bate); if(window.MSFundo) agenda(); }
+    }, 300);
+  }
+  else addEventListener('load', agenda);
 })();
 </script>
 

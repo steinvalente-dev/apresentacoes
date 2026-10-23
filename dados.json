@@ -582,6 +582,12 @@
    "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/notion/BANCO-DE-PRECOS.md"
   },
   {
+   "grupo": "notion",
+   "nome": "banco de preços · como usar",
+   "desc": "O método público da base única: Natureza da obra como único separador, leitura sempre pela coluna Preço atualizado e o que perguntar antes de carregar planilha nova. Sem dado de cliente — abre por URL raw",
+   "arq": "sistemas/BANCO-DE-PRECOS-COMO-USAR.md"
+  },
+  {
    "grupo": "sarasá · banco de referência",
    "nome": "estratégia do banco e do gerador de memoriais",
    "desc": "As três camadas, onde mora cada arquivo, por que a estrutura é base e não texto, e as armadilhas já mapeadas",
@@ -665,5 +671,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-10-13T16:02:32+00:00"
+ "gerado": "2026-10-23T14:54:39+00:00"
 }
