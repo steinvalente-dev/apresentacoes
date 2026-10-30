@@ -300,6 +300,10 @@ body.esc .chrome{color:var(--papel-70)}
 .seta:hover{opacity:1;background:var(--tinta-10)}
 .seta:active{transform:scale(.94)}
 body.na-capa .chrome.pe .pj,body.na-capa .marca{opacity:0}
+/* 30/10/2026 — o nome do projeto no pe NAO aparece na abertura institucional:
+   ele entra quando a peca comeca a falar do projeto, isto e', do primeiro
+   `divisor` em diante. Antes disso o rodape fica so com a navegacao. */
+body.antes-do-projeto .chrome.pe .pj{opacity:0}
 /* [quadro 1600x900: nunca dispara — retirado] (max-height:780px) */
 
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:960px) */
@@ -768,6 +772,31 @@ body.em-logo .chrome.topo .secao{display:inline}
   object-position:center}
 .g-meia .mleg{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.08em;
   color:var(--soft);text-align:right}
+
+/* == `meia` com PILHA de imagens — o carrossel institucional ===============
+   30/10/2026. `meia` ganhou `imgs:[...]`: a metade direita vira um carrossel
+   que anda sozinho, no mesmo relogio do gabarito `carrossel` (MSCarrossel).
+   Serve a abertura institucional — tres slides de texto com a mesma pilha de
+   obras correndo ao lado, sem que o avanco do slide reinicie a sequencia.
+
+   ⚑ `cover`, nao `contain`. A regra do contain vale para DESENHO, que nao
+   pode ser cortado. Aqui sao FOTOGRAFIAS de proporcao variada: com contain a
+   imagem pula de tamanho a cada troca e a metade direita fica cheia de vazio.
+   Se a pilha for de desenho, usar o gabarito `carrossel`.                   */
+.g-meia .full{position:relative;flex:1;min-height:0;overflow:hidden;
+  border-radius:2px;background:var(--moldura)}
+.g-meia .full img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;opacity:0;transition:opacity .9s ease}
+.g-meia .full img.on{opacity:1}
+.g-meia .cont-c{display:flex;gap:6px;justify-content:flex-end;
+  font-family:var(--f-mono)}
+.g-meia .cont-c u{text-decoration:none;display:block;width:5px;height:5px;
+  border-radius:50%;background:var(--tinta-20)}
+.g-meia .cont-c u.on{background:var(--tinta-80)}
+/* `meia` com `src` E `imgs`: a imagem do `src` vai para a coluna da ESQUERDA
+   (mapa, diagrama) e a pilha corre na direita. */
+.g-meia .mtx .mfigesq{display:block;width:100%;max-height:62cqh;
+  object-fit:contain;object-position:center;margin:0 auto}
 
 /* ══ GRIFO ═══════════════════════════════════════════════════════════════
    `<mark>` vale em qualquer texto de qualquer gabarito, como `<b>`.
@@ -3358,7 +3387,9 @@ const EXIGE={
   jogadas:['itens'], fotos:['itens'], unit:['cards'], players:['casas'],
   avulso:['grupos'], plug:['ancoras'], duasfrentes:['esq','dir'],
   divisor:['dt'], 'earth-3d':['lat','lng'], 'modelo-3d':['modelo'], viva:['src'],
-  sequencia:['items'], meia:['src']
+  sequencia:['items']
+  /* `meia` sai do EXIGE em 30/10/2026: passou a aceitar `src` OU `imgs`
+     (pilha que corre na direita). A checagem foi para dentro do gabarito. */
 };
 /* bloco de marca antigo, sem a linha UNDERSCORE: vale o padrão da casa (ligado) */
 const US=(typeof UNDERSCORE==='undefined')?true:!!UNDERSCORE;
@@ -3561,11 +3592,23 @@ function tpl(s){
     return `<div class="wrap" style="max-width:none">${k}${t}${sub}<div class="dcols${s.alto?' alto':''} rev">${f}</div><p class="dleg rev">${s.leg}</p></div>`;
   }
   if(s.g==='meia'){
+    if(!s.src && !(Array.isArray(s.imgs)&&s.imgs.length))
+      return aviso(s,'gabarito meia: falta <code>src</code> ou <code>imgs</code>',
+        'formato de cada campo em sistemas/DECK-MONTAR.md');
     return `<div class="wrap">${k}${t}${sub}<div class="meia${s.largo?' largo':''}">`
-      + `<div class="mtx rev" style="--i:2">${s.cap||''}</div>`
+      + `<div class="mtx rev" style="--i:2">`
+      +   ((s.src && Array.isArray(s.imgs) && s.imgs.length)
+            ? `<img class="mfigesq" src="${IMG[s.src]||s.src}" alt="${(s.leg||s.t||'').replace(/"/g,'&quot;')}">`
+            : '')
+      +   `${s.cap||''}</div>`
       + `<div class="mfig rev" style="--i:6">`
-      +   `<img src="${IMG[s.src]||s.src}" alt="${(s.leg||s.t||'').replace(/"/g,'&quot;')}"`
-      +   ` onerror="this.dataset.err=1">`
+      +   (Array.isArray(s.imgs)&&s.imgs.length
+            ? `<div class="full">`
+              + s.imgs.map((src,i)=>`<img decoding="async" class="${i===0?'on':''}" src="${IMG[src]||src}" alt="">`).join('')
+              + `</div>`
+              + (s.imgs.length>1?`<div class="cont-c">`+s.imgs.map((_,i)=>`<u class="${i===0?'on':''}"></u>`).join('')+`</div>`:'')
+            : `<img src="${IMG[s.src]||s.src}" alt="${(s.leg||s.t||'').replace(/"/g,'&quot;')}"`
+              + ` onerror="this.dataset.err=1">`)
       +   (s.leg?`<span class="mleg">${s.leg}</span>`:'')
       + `</div></div></div>`;
   }
@@ -4104,6 +4147,8 @@ function rola(i){
   requestAnimationFrame(()=>el.classList.toggle('rola',el.scrollHeight-el.clientHeight>4));
 }
 addEventListener('resize',()=>{if(cur>=0)rola(cur)});
+/* indice do primeiro divisor: antes dele a peca ainda nao fala do projeto */
+var PRIMEIRO_DIVISOR=(function(){var k=DECK.findIndex(function(x){return x.g==='divisor';});return k<0?0:k;})();
 function go(i,tudo){
   /* trocar de slide fecha a lupa da galeria: voltar depois e encontra-la
      aberta, sobre a imagem de antes, e desnorteante. */
@@ -4172,6 +4217,8 @@ function go(i,tudo){
   if(window.MSF ){ MSF .pausar(!marcaFundo); if(marcaFundo) MSF .entrada(); }
   if(window.MSFD){ MSFD.pausar(!divFundo);   if(divFundo)   MSFD.entrada(); }
   document.body.classList.toggle('na-capa',!!s.capa);
+  /* o pe so ganha o nome do projeto a partir do primeiro `divisor` */
+  document.body.classList.toggle('antes-do-projeto', cur < PRIMEIRO_DIVISOR);
   document.body.classList.toggle('na-marca',s.g==='marca'&&!s.fim_);
   /* no fechamento o chrome fica: as bolinhas para voltar a qualquer secao e
      as setas, para o caso de um clique a mais passar do fim. */
@@ -4346,6 +4393,7 @@ go(Math.max(0,(parseInt(location.hash.slice(1))||1)-1));
    `prefers-reduced-motion` para tudo: quem pediu menos movimento no sistema
    ve o primeiro desenho, parado. O slide continua dizendo o que precisa -
    o numero esta no texto, nao na animacao. */
+var MSCarrosselPos=0;
 window.MSCarrossel=(function(){
   var PASSO=3200, timer=null;
   function para(){ if(timer){ clearInterval(timer); timer=null; } }
@@ -4356,19 +4404,31 @@ window.MSCarrossel=(function(){
   }
   return { chegou:function(){
     para();
-    var todos=document.querySelectorAll('#palco .slide.g-carrossel');
+    var todos=document.querySelectorAll('#palco .slide.g-carrossel,#palco .slide.g-meia');
     var atual=document.querySelectorAll('#palco .slide')[cur];
-    todos.forEach(function(sl){ if(sl!==atual) zera(sl); });
-    if(!atual||!atual.classList.contains('g-carrossel')) return;
+    var meia=!!(atual&&atual.classList.contains('g-meia')&&atual.querySelector('.full img'));
+    todos.forEach(function(sl){ if(sl!==atual && !sl.classList.contains('g-meia')) zera(sl); });
+    if(!atual||!(atual.classList.contains('g-carrossel')||meia)) return;
     var im=atual.querySelectorAll('.full img');
     if(im.length<2) return;
-    zera(atual);
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var i=0, pt=atual.querySelectorAll('.cont-c u');
+    /* ⚑ no `meia` a pilha NAO volta ao comeco: a abertura institucional sao
+       tres slides seguidos e o avanco do slide nao pode reiniciar a sequencia
+       — e' o que o Michel pediu em 30/10/2026. No `carrossel` continua
+       zerando, porque la a pilha E' o conteudo do slide. */
+    var i=0;
+    if(meia){ i=MSCarrosselPos%im.length; } else { zera(atual); }
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){
+      if(meia){ im.forEach(function(e,k){ e.classList.toggle('on',k===i); }); }
+      return;
+    }
+    var pt=atual.querySelectorAll('.cont-c u');
+    im.forEach(function(e,k){ e.classList.toggle('on',k===i); });
+    pt.forEach(function(e,k){ e.classList.toggle('on',k===i); });
     timer=setInterval(function(){
       im[i].classList.remove('on'); if(pt[i]) pt[i].classList.remove('on');
       i=(i+1)%im.length;
       im[i].classList.add('on');    if(pt[i]) pt[i].classList.add('on');
+      if(meia) MSCarrosselPos=i;
     },PASSO);
   } };
 })();
