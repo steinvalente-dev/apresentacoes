@@ -173,6 +173,13 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
         # gabarito novo que precise de uma pilha de imagens ganha o campo de graca
         for i in range(len(s.get('imgs') or [])):
             add(s['imgs'], i, perfil)
+        # ⚑ `meia` com `estados`: o `src` de cada estado (mapa, diagrama) mora um
+        #   nivel abaixo. Sem esta linha ele nao entra no moinho NEM na pasta e
+        #   o html aponta para um nome que nao existe — 404 mudo. Mesma armadilha
+        #   da GAVETA, abaixo. 30/10/2026.
+        for e in s.get('estados') or []:
+            if isinstance(e, dict) and 'src' in e:
+                add(e, 'src', perfil)
         for it in s.get('items') or []:
             if isinstance(it, dict):
                 if 'src' in it:

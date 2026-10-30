@@ -39,7 +39,7 @@ DESCRICAO = {
     'players':     ('dado', 'atores do mesmo mercado, em faixas. `casas`, não `cols`'),
     'plug':        ('dado', 'diagrama de encaixe'),
     'duo':         ('imagem', 'duas imagens lado a lado'),
-    'meia':        ('imagem', 'meio a meio: texto à esquerda, desenho à direita. `cap` é o texto, `leg` a legenda sob a imagem'),
+    'meia':        ('imagem', 'meio a meio: texto à esquerda, desenho à direita. `cap` é o texto, `leg` a legenda sob a imagem. `imgs:[...]` troca o desenho por um carrossel que não reinicia, com uma legenda por imagem em `legs`. `estados:[{kick,t,cap,src}]` mantém a metade direita PARADA e troca só a coluna da esquerda, um clique por estado — era o que antes se fazia com três slides iguais, ao custo de embutir as imagens uma vez por slide'),
     'fotos':       ('imagem', 'linha do tempo ilustrada'),
     'prancha':     ('imagem', 'grade de 2 a 4 imagens sobre um tema. Retrato 3–4 colunas, deitada 2. `cols` aqui é NÚMERO — ver `gabaritos/prancha-referencia.md`'),
     'galeria':     ('imagem', 'mosaico de miniaturas com lupa: clique abre a vista grande, com setas e contador. As miniaturas entram quando o slide chega, não na carga'),

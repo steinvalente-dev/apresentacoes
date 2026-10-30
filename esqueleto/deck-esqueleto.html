@@ -805,6 +805,43 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-meia .legs span{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
 .g-meia .legs span.on{opacity:1}
 
+/* == `meia` com ESTADOS — um slide, varios textos ==========================
+   30/10/2026. Antes, a abertura institucional eram TRES slides `meia` com a
+   mesma pilha de dez fotos. Dois custos: o avanco re-animava a metade direita
+   (o carrossel nao reinicia, mas o slide entra de novo, e a troca aparece),
+   e o montar embutia as dez imagens UMA VEZ POR SLIDE — 3,78 MB para 1,26 MB
+   de foto. Agora e UM slide com `estados:[{kick,t,cap,src}]`: a metade
+   direita fica parada e so a coluna da esquerda troca, a cada clique.
+
+   ⚑ A ETAPA E UM ELEMENTO SO — a mesma armadilha do `sequencia`. Cabecalho e
+   texto no MESMO `.passo`: separados, o motor (que liga um `.passo` por vez,
+   em ordem de documento) andaria os tres titulos primeiro e so depois os tres
+   textos. Por isso o `kick` e o `t` do estado descem para dentro da coluna da
+   esquerda, em vez de ficarem na faixa de largura total do topo.
+
+   ⚑ SO A ULTIMA LIGADA APARECE. `:has(~ .mest.passo.on)` apaga todo estado
+   que tenha um estado ligado DEPOIS dele — inclusive o primeiro, que nao e
+   passo. Sobra exatamente a ultima ligada.
+
+   ⚑ A ALTURA VEM DA GRADE, nao de medicao. Todos os estados caem na MESMA
+   celula (`grid-area:1/1`), entao a coluna nasce com a altura do maior e nada
+   salta na troca — o mesmo motivo pelo qual a faixa de `legs` tem altura
+   propria.
+
+   ⚑ CROSSFADE E NADA MAIS, como no `sequencia`: o `.passo` da casa entra com
+   `translateY`, que e certo para item de lista chegando. Aqui a coluna esta
+   ancorada ao lado de uma imagem parada, e deslocar faria o texto deslizar
+   contra ela.                                                             */
+.g-meia .mtx.estados{display:grid;justify-content:stretch}
+.g-meia .mest{grid-area:1/1;min-width:0;display:flex;flex-direction:column;
+  justify-content:center;opacity:0;transform:none;transition:opacity .5s ease}
+.g-meia .mest:not(.passo),
+.g-meia .mest.passo.on{opacity:1}
+.g-meia .mest:has(~ .mest.passo.on){opacity:0}
+/* o cabecalho do estado: mesma tipografia do topo, so que dentro da coluna */
+.g-meia .mest .kick{margin-bottom:clamp(6px,1cqh,14px)}
+.g-meia .mest h1{margin:0 0 clamp(10px,1.6cqh,22px)}
+
 /* ══ GRIFO ═══════════════════════════════════════════════════════════════
    `<mark>` vale em qualquer texto de qualquer gabarito, como `<b>`.
 
@@ -3599,15 +3636,30 @@ function tpl(s){
     return `<div class="wrap" style="max-width:none">${k}${t}${sub}<div class="dcols${s.alto?' alto':''} rev">${f}</div><p class="dleg rev">${s.leg}</p></div>`;
   }
   if(s.g==='meia'){
+    const ests=(Array.isArray(s.estados)&&s.estados.length)?s.estados:null;
     if(!s.src && !(Array.isArray(s.imgs)&&s.imgs.length))
       return aviso(s,'gabarito meia: falta <code>src</code> ou <code>imgs</code>',
         'formato de cada campo em sistemas/DECK-MONTAR.md');
+    /* `estados`: a metade direita fica parada e so a coluna da esquerda troca,
+       um clique por estado. Cabecalho e texto no MESMO `.passo` — ver o bloco
+       `meia` com ESTADOS no CSS. O primeiro nao e passo: e o estado de chegada. */
+    const mesq=(e)=>((e.src && Array.isArray(s.imgs) && s.imgs.length)
+            ? `<img class="mfigesq" src="${IMG[e.src]||e.src}" alt="${(e.leg||e.t||'').replace(/"/g,'&quot;')}">`
+            : '')+`${e.cap||''}`;
     return `<div class="wrap">${k}${t}${sub}<div class="meia${s.largo?' largo':''}">`
-      + `<div class="mtx rev" style="--i:2">`
-      +   ((s.src && Array.isArray(s.imgs) && s.imgs.length)
-            ? `<img class="mfigesq" src="${IMG[s.src]||s.src}" alt="${(s.leg||s.t||'').replace(/"/g,'&quot;')}">`
-            : '')
-      +   `${s.cap||''}</div>`
+      + (ests
+          ? `<div class="mtx estados rev" style="--i:2">`
+            + ests.map((e,i)=>`<div class="mest${i?' passo':''}">`
+                + (e.kick?`<div class="kick">${e.kick}</div>`:'')
+                + (e.t?`<h1 class="big">${RS(e.t)}</h1>`:'')
+                + mesq(e)
+              + `</div>`).join('')
+            + `</div>`
+          : `<div class="mtx rev" style="--i:2">`
+            +   ((s.src && Array.isArray(s.imgs) && s.imgs.length)
+                  ? `<img class="mfigesq" src="${IMG[s.src]||s.src}" alt="${(s.leg||s.t||'').replace(/"/g,'&quot;')}">`
+                  : '')
+            +   `${s.cap||''}</div>`)
       + `<div class="mfig rev" style="--i:6">`
       +   (Array.isArray(s.imgs)&&s.imgs.length
             ? `<div class="full">`
