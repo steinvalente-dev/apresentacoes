@@ -1,0 +1,533 @@
+{
+ "projeto": "Centro de Acolhimento ao Autista",
+ "titulo": "centro de acolhimento<br>ao autista",
+ "sub": "Reuso de conjunto tombado para o Centro Municipal da Pessoa com TEA.",
+ "kick": "BUTANTÃ · SÃO PAULO",
+ "metas": [
+  [
+   "cliente",
+   "—"
+  ],
+  [
+   "etapa",
+   "estudo preliminar"
+  ],
+  [
+   "versão",
+   "estrutura R00"
+  ]
+ ],
+ "deck": [
+  {
+   "g": "capa"
+  },
+  {
+   "g": "meia",
+   "kick": "quem apresenta",
+   "t": "setenta anos de ofício",
+   "imgs": [
+    "sarasa-vitral.jpg",
+    "sarasa-ipiranga.jpg",
+    "sarasa-cine-sao-luiz.jpg",
+    "sarasa-mibio.jpg",
+    "sarasa-estacao-luz.jpg",
+    "sarasa-campos-novos.jpg",
+    "sarasa-olinda.jpg",
+    "sarasa-itu.jpg",
+    "sarasa-casa-artesao.jpg",
+    "sarasa-barra-grande.jpg"
+   ],
+   "cap": "<p><b>70 anos.</b> Em 1956, vindo de Arbúcias, na Catalunha, Gerardo Martin Sarasá funda no Ipiranga o atelier de azulejaria e vitral que deu origem à casa. O endereço é o mesmo até hoje.</p><p><b>Três gerações.</b> A direção é de Antonio Luís e Marcelo Sarasá Martin, filhos de Gerardo. Equipe inter e multidisciplinar: arquitetos, gestores, conservadores-restauradores, oficiais e mestres de ofício.</p><p><b>Nove estados.</b> Do Amazonas ao Rio Grande do Sul.</p><p><b>Mais de 40 obras</b> documentadas apenas entre 2004 e 2022, entre projeto, intervenção, pesquisa e zeladoria.</p>",
+   "legs": [
+    "Vitral · conservação e restauro",
+    "Museu do Ipiranga · São Paulo, SP",
+    "Cine São Luiz · Recife, PE",
+    "MiBIO, Museu Interativo da Biodiversidade · Campo Grande, MS",
+    "Estação da Luz · São Paulo, SP",
+    "Fazenda Campos Novos · Cabo Frio, RJ",
+    "Sociedade Beneficente de Artistas e Operários de Olinda · Olinda, PE",
+    "Museu de Energia de Itu · Itu, SP",
+    "Casa do Artesão · Campo Grande, MS",
+    "Fortaleza da Barra Grande · Guarujá, SP"
+   ]
+  },
+  {
+   "g": "meia",
+   "kick": "onde atuamos",
+   "t": "nove estados",
+   "imgs": [
+    "sarasa-vitral.jpg",
+    "sarasa-ipiranga.jpg",
+    "sarasa-cine-sao-luiz.jpg",
+    "sarasa-mibio.jpg",
+    "sarasa-estacao-luz.jpg",
+    "sarasa-campos-novos.jpg",
+    "sarasa-olinda.jpg",
+    "sarasa-itu.jpg",
+    "sarasa-casa-artesao.jpg",
+    "sarasa-barra-grande.jpg"
+   ],
+   "src": "mapa-atuacao.png",
+   "cap": "<p>Amazonas · Maranhão · Pernambuco · Bahia · Mato Grosso · Mato Grosso do Sul · São Paulo · Rio de Janeiro · Rio Grande do Sul.</p>",
+   "legs": [
+    "Vitral · conservação e restauro",
+    "Museu do Ipiranga · São Paulo, SP",
+    "Cine São Luiz · Recife, PE",
+    "MiBIO, Museu Interativo da Biodiversidade · Campo Grande, MS",
+    "Estação da Luz · São Paulo, SP",
+    "Fazenda Campos Novos · Cabo Frio, RJ",
+    "Sociedade Beneficente de Artistas e Operários de Olinda · Olinda, PE",
+    "Museu de Energia de Itu · Itu, SP",
+    "Casa do Artesão · Campo Grande, MS",
+    "Fortaleza da Barra Grande · Guarujá, SP"
+   ]
+  },
+  {
+   "g": "meia",
+   "kick": "o que fazemos",
+   "t": "serviços",
+   "imgs": [
+    "sarasa-vitral.jpg",
+    "sarasa-ipiranga.jpg",
+    "sarasa-cine-sao-luiz.jpg",
+    "sarasa-mibio.jpg",
+    "sarasa-estacao-luz.jpg",
+    "sarasa-campos-novos.jpg",
+    "sarasa-olinda.jpg",
+    "sarasa-itu.jpg",
+    "sarasa-casa-artesao.jpg",
+    "sarasa-barra-grande.jpg"
+   ],
+   "cap": "<p><b>Projetos.</b> Conservação e restauro · adaptações e adequações · expográficos e museográficos.</p><p><b>Investigação.</b> Prospecções · pesquisas técnico-científicas · consultoria.</p><p><b>Ofícios.</b> Vitrais · azulejaria · argamassas e pinturas tradicionais · modelação · marcenaria · cantaria.</p><p><b>Execução.</b> Intervenções de conservação e restauro.</p><p><b>Transmissão.</b> Oficinas · educação patrimonial · zeladoria do patrimônio cultural.</p>",
+   "legs": [
+    "Vitral · conservação e restauro",
+    "Museu do Ipiranga · São Paulo, SP",
+    "Cine São Luiz · Recife, PE",
+    "MiBIO, Museu Interativo da Biodiversidade · Campo Grande, MS",
+    "Estação da Luz · São Paulo, SP",
+    "Fazenda Campos Novos · Cabo Frio, RJ",
+    "Sociedade Beneficente de Artistas e Operários de Olinda · Olinda, PE",
+    "Museu de Energia de Itu · Itu, SP",
+    "Casa do Artesão · Campo Grande, MS",
+    "Fortaleza da Barra Grande · Guarujá, SP"
+   ]
+  },
+  {
+   "g": "sumario",
+   "t": "índice da apresentação",
+   "itens": [
+    [
+     "01",
+     "introdução",
+     "Três círculos: o equipamento, o desejável e a história do lugar."
+    ],
+    [
+     "02",
+     "o edifício existente",
+     "Localização, qualidades, desafios, tombamento — e a pergunta central."
+    ],
+    [
+     "03",
+     "a proposta de intervenção",
+     "Vocação, fluxos, setorização e demolição, camada por camada."
+    ],
+    [
+     "04",
+     "números",
+     "Áreas, superfícies de intervenção e ordem de grandeza."
+    ]
+   ]
+  },
+  {
+   "g": "divisor",
+   "div": 1,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "introdução",
+   "dn": "01",
+   "dt": "introdução",
+   "ds": "A proposta nasce no encontro de três coisas. Antes de mostrar o que está no meio, é preciso desenhar os três círculos."
+  },
+  {
+   "g": "trio",
+   "kick": "o método do argumento",
+   "t": "três círculos",
+   "itens": [
+    [
+     "o equipamento",
+     "O que a SMPED faz, o que já construiu e o que o termo de referência pede."
+    ],
+    [
+     "o desejável",
+     "O que a arquitetura sabe sobre espaço para pessoas no espectro."
+    ],
+    [
+     "o lugar",
+     "O que este conjunto foi, e o papel que desempenhou na cidade."
+    ]
+   ]
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "círculo 01",
+   "t": "o Centro TEA da SMPED",
+   "itens": [
+    [
+     "01",
+     "<b>Política pública consolidada.</b> Lei federal, lei municipal e meta de programa de governo sustentam o equipamento."
+    ],
+    [
+     "02",
+     "<b>Já existe unidade operando.</b> O primeiro centro municipal foi entregue e está em uso — é o modelo da casa."
+    ],
+    [
+     "03",
+     "<b>O programa está escrito.</b> O termo de referência detalha cada ambiente, com quantidade, lotação e área."
+    ],
+    [
+     "04",
+     "<b>Rede, não equipamento isolado.</b> Saúde, educação e assistência articuladas em torno do vínculo familiar."
+    ]
+   ]
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "círculo 02",
+   "t": "o que o espaço faz por quem é atendido",
+   "itens": [
+    [
+     "01",
+     "<b>Gradiente sensorial.</b> O edifício se organiza por nível de estímulo, não por função administrativa."
+    ],
+    [
+     "02",
+     "<b>Transição.</b> Entre o alto e o baixo estímulo existe um espaço que recalibra — não se passa de um ao outro por uma porta."
+    ],
+    [
+     "03",
+     "<b>Refúgio.</b> Lugares de retirada distribuídos, ajustáveis por quem os usa."
+    ],
+    [
+     "04",
+     "<b>Percurso previsível.</b> Sequência legível, sem bifurcação e sem retorno."
+    ],
+    [
+     "05",
+     "<b>Sem bolha.</b> A escala inteira de estímulo dentro do edifício, para que se transite por ela."
+    ]
+   ]
+  },
+  {
+   "g": "cheia",
+   "src": "",
+   "h2": "círculo 03 · a Chácara do Jockey",
+   "cap": "Imagem histórica do conjunto — pesquisa iconográfica em andamento.",
+   "claro": 1
+  },
+  {
+   "g": "divisor",
+   "div": 2,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "o edifício",
+   "dn": "02",
+   "dt": "o edifício existente",
+   "ds": "Qualidades e desafios de um conjunto que já existe."
+  },
+  {
+   "g": "cheia",
+   "src": "",
+   "h2": "localização",
+   "cap": "Planta do parque, com norte. Zoom na edificação existente no slide seguinte.",
+   "claro": 1
+  },
+  {
+   "g": "cheia",
+   "src": "",
+   "h2": "o conjunto edificado",
+   "cap": "Os braços longilíneos do conjunto preexistente.",
+   "claro": 1
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "o que o lugar oferece",
+   "t": "qualidades e oportunidades",
+   "itens": [
+    [
+     "01",
+     "<b>Sequência pronta.</b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."
+    ],
+    [
+     "02",
+     "<b>Compartimentação pronta.</b> A malha de baias está na escala do atendimento em grupo pequeno."
+    ],
+    [
+     "03",
+     "<b>Arvoredo maduro.</b> Estímulo natural é regulador, e não se planta em dois anos."
+    ],
+    [
+     "04",
+     "<b>Endereço com história.</b> Um bem ocioso volta à vida pública."
+    ]
+   ]
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "o que o lugar impõe",
+   "t": "desafios",
+   "itens": [
+    [
+     "01",
+     "<b>Geometria restritiva.</b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."
+    ],
+    [
+     "02",
+     "<b>Arborização em posição de risco.</b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."
+    ],
+    [
+     "03",
+     "<b>Acústica.</b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."
+    ]
+   ]
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "o que o tombamento permite",
+   "t": "a proteção como liberdade",
+   "itens": [
+    [
+     "01",
+     "<b>A proteção recai sobre as fachadas.</b> As características arquitetônicas externas são o objeto do tombamento."
+    ],
+    [
+     "02",
+     "<b>O interior está livre de obrigação de preservação.</b> A reorganização interna é possível — e necessária para gerar os salões amplos."
+    ],
+    [
+     "03",
+     "<b>A área livre do parque dispensa análise prévia.</b> O que exige vão grande encontra lugar sem passar pelo rito."
+    ],
+    [
+     "04",
+     "<b>O que se altera deixa testemunho.</b> A própria resolução exige preservar o traço do elemento original — é a base da intervenção legível."
+    ]
+   ]
+  },
+  {
+   "g": "frase",
+   "esc": 1,
+   "kick": "a pergunta central",
+   "t": "este programa cabe<br>neste lugar?"
+  },
+  {
+   "g": "tabela",
+   "kick": "a resposta, em área",
+   "t": "o programa e o conjunto existente",
+   "cols": [
+    "",
+    "projeto que não avançou",
+    "conjunto existente"
+   ],
+   "linhas": [
+    [
+     "área construída",
+     "mais de 4.000 m²",
+     "cerca de 3.300 m²"
+    ],
+    [
+     "programa útil coberto",
+     "cerca de 2.900 m²",
+     "a confirmar em estudo"
+    ],
+    [
+     "programa do termo de referência",
+     "4.684 m²",
+     "o mesmo programa"
+    ]
+   ],
+   "nota": "A área construída maior não significa mais programa: parte expressiva se perde em circulação. Números em verificação."
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "a resposta",
+   "t": "cabe, e cumpre",
+   "itens": [
+    [
+     "01",
+     "<b>Cabe em área.</b> O programa útil do modelo entra no conjunto existente."
+    ],
+    [
+     "02",
+     "<b>Cumpre todos os papéis.</b> Atendimento, cultura, esporte, autonomia e acolhimento de famílias."
+    ],
+    [
+     "03",
+     "<b>E ganha o que terreno vazio não dá.</b> Arvoredo maduro, escala construída e história."
+    ]
+   ]
+  },
+  {
+   "g": "divisor",
+   "div": 3,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "a proposta",
+   "dn": "03",
+   "dt": "a proposta de intervenção",
+   "ds": "A planta, camada por camada: do que o conjunto é hoje ao que ele passa a ser."
+  },
+  {
+   "g": "cheia",
+   "src": "",
+   "h2": "a planta, por camadas",
+   "cap": "Planta viva — camadas liga e desliga. Módulo a integrar na próxima versão.",
+   "claro": 1
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "as camadas",
+   "t": "as camadas · do conjunto ao partido",
+   "itens": [
+    [
+     "01",
+     "<b>O conjunto hoje.</b> A planta como ela é."
+    ],
+    [
+     "02",
+     "<b>Vocação dos espaços.</b> Que uso cada braço pede, pelo que já é."
+    ],
+    [
+     "03",
+     "<b>Circulação solicitada.</b> Os fluxos que o termo de referência determina."
+    ],
+    [
+     "04",
+     "<b>Circulação pretendida.</b> O que propomos — e é daqui que decorre o resto."
+    ],
+    [
+     "05",
+     "<b>Acessos separados.</b> Serviço, visitantes e usuários, com chegada de van pela frente."
+    ]
+   ]
+  },
+  {
+   "g": "lista",
+   "largo": 1,
+   "kick": "as camadas",
+   "t": "as camadas · do partido à intervenção",
+   "itens": [
+    [
+     "06",
+     "<b>A cobertura de ligação.</b> Decorre dos fluxos; não é gesto formal."
+    ],
+    [
+     "07",
+     "<b>Setorização dos braços.</b> O que cada edifício recebe."
+    ],
+    [
+     "08",
+     "<b>Demolição.</b> As paredes internas que caem para gerar salões amplos."
+    ],
+    [
+     "09",
+     "<b>Pontos de aproximação.</b> Croquis e imagens conceituais, abertos por clique."
+    ]
+   ]
+  },
+  {
+   "g": "cheia",
+   "src": "",
+   "h2": "a cobertura que liga os dois prédios",
+   "cap": "Imagem conceitual.",
+   "claro": 1
+  },
+  {
+   "g": "cheia",
+   "src": "",
+   "h2": "o corredor como orientação",
+   "cap": "Imagem conceitual — o eixo longitudinal do conjunto.",
+   "claro": 1
+  },
+  {
+   "g": "divisor",
+   "div": 4,
+   "terra": 1,
+   "fundo": 1,
+   "sec": "números",
+   "dn": "04",
+   "dt": "números",
+   "ds": "Áreas, superfícies de intervenção e ordem de grandeza."
+  },
+  {
+   "g": "tabela",
+   "kick": "em números",
+   "t": "áreas e superfícies de intervenção",
+   "cols": [
+    "",
+    "medida",
+    "observação"
+   ],
+   "linhas": [
+    [
+     "área construída existente",
+     "a confirmar",
+     "levantamento em curso"
+    ],
+    [
+     "área de demolição interna",
+     "a confirmar",
+     "paredes internas, para salões amplos"
+    ],
+    [
+     "área de edificação nova",
+     "a confirmar",
+     "o que não cabe no existente"
+    ],
+    [
+     "superfície de telhado",
+     "a confirmar",
+     "restauro e recomposição"
+    ],
+    [
+     "superfície de fachada",
+     "a confirmar",
+     "objeto do tombamento"
+    ]
+   ],
+   "nota": "Quadro a preencher com o estudo em andamento."
+  },
+  {
+   "g": "frase",
+   "esc": 1,
+   "trama": 1,
+   "kick": "o fecho",
+   "t": "aqui, nenhuma árvore<br>precisa cair para<br>que o centro exista"
+  },
+  {
+   "g": "fim",
+   "kick": "encaminhamento",
+   "t": "próximos passos",
+   "itens": [
+    [
+     "primeiro",
+     "<b>Validar a leitura do conjunto</b> e o encaixe do programa."
+    ],
+    [
+     "em paralelo",
+     "<b>Laudo de risco da arborização</b>, por profissional habilitado."
+    ],
+    [
+     "depois",
+     "<b>Estudo preliminar</b>, com setorização e demolição desenhadas."
+    ]
+   ]
+  }
+ ]
+}
