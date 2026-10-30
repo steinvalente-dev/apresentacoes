@@ -105,6 +105,32 @@ o **endereço por extenso do Notion**. Os dois campos, as duas fontes, cada uma
 no seu lugar. Sem levantamento, a coordenada do Notion serve, e o orbital é
 conferido antes de publicar.
 
+## ⚑ A COORDENADA DO CENTRO VEM DO NOTION — procurar ANTES de buscar fora
+
+**Primeira coisa, antes de escrever `lat` e `lng`:** abrir a página do projeto na
+base *Projetos* da frente e ler o campo **`Coordenada`**. É um campo próprio, que
+o Michel preenche à mão apontando o que importa no sítio — não é o centroide do
+terreno nem o resultado de uma busca por endereço.
+
+Não é preciosismo de método. Em 30/10/2026, no CAAB, a coordenada veio de uma
+busca pelo nome do parque: caiu **129 m** ao norte do ponto gravado no Notion.
+O slide abriu, o lugar era reconhecível, e **a órbita girava em torno da coisa
+errada** — o conjunto tombado ficava de lado enquanto o visor dava a volta no
+meio do gramado. Erro que não acusa: só se vê apresentando.
+
+Ordem, e não há atalho:
+
+1. **Campo `Coordenada` da página do projeto.** É o canônico.
+2. A propriedade `Endereço` da mesma página tem lat/lng próprios, do geocoder —
+   servem de conferência, não de fonte. No CAAB as duas diferem ~90 m.
+3. **Só se as duas faltarem**, buscar fora — e então dizer ao Michel que a
+   coordenada foi estimada e pedir que ele grave a boa no Notion.
+
+Vale para `earth-3d` e para `mapa-localizacao`: qualquer slide que centre uma
+vista num ponto do mundo.
+
+---
+
 ## Coordenada de CADA edificação — a prancha planialtimétrica resolve
 
 Para o pino de um lote só, a coordenada do Notion basta. Para **um pino por
