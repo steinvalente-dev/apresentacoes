@@ -19,9 +19,6 @@
   ],
   "deck": [
     {
-      "g": "capa"
-    },
-    {
       "g": "meia",
       "imgs": [
         "sarasa-vitral.jpg",
@@ -51,7 +48,7 @@
         {
           "kick": "quem apresenta",
           "t": "setenta anos de ofício",
-          "cap": "<p><b>70 anos.</b> Em 1956, vindo de Arbúcias, na Catalunha, Gerardo Martin Sarasá funda no Ipiranga o atelier de azulejaria e vitral que deu origem à casa. O endereço é o mesmo até hoje.</p><p><b>Três gerações.</b> A direção é de Antonio Luís e Marcelo Sarasá Martin, filhos de Gerardo. Equipe inter e multidisciplinar: arquitetos, gestores, conservadores-restauradores, oficiais e mestres de ofício.</p><p><b>Nove estados.</b> Do Amazonas ao Rio Grande do Sul.</p><p><b>Mais de 40 obras</b> documentadas apenas entre 2004 e 2022, entre projeto, intervenção, pesquisa e zeladoria.</p>"
+          "cap": "<p><b>70 anos.</b> Em 1956, vindo de Arbúcias, na Catalunha, Gerardo Martin Sarasá funda no Ipiranga o atelier de azulejaria e vitral que deu origem à casa. O endereço é o mesmo até hoje.</p><p><b>Três gerações.</b> A direção é de Antonio Luís e Marcelo Sarasá Martin, filhos de Gerardo. Equipe inter e multidisciplinar: arquitetos, gestores, conservadores-restauradores, oficiais e mestres de ofício.</p><p><b>Nove estados.</b> Do Amazonas ao Rio Grande do Sul.</p>"
         },
         {
           "kick": "onde atuamos",
@@ -62,9 +59,13 @@
         {
           "kick": "o que fazemos",
           "t": "serviços",
-          "cap": "<p><b>Projetos.</b> Conservação e restauro · adaptações e adequações · expográficos e museográficos.</p><p><b>Investigação.</b> Prospecções · pesquisas técnico-científicas · consultoria.</p><p><b>Ofícios.</b> Vitrais · azulejaria · argamassas e pinturas tradicionais · modelação · marcenaria · cantaria.</p><p><b>Execução.</b> Intervenções de conservação e restauro.</p><p><b>Transmissão.</b> Oficinas · educação patrimonial · zeladoria do patrimônio cultural.</p>"
+          "cap": "<p><b>Projetos</b><br>Conservação e restauro · adaptações e adequações · expográficos e museográficos.</p><p><b>Investigação</b><br>Prospecções · pesquisas técnico-científicas · consultoria.</p><p><b>Ofícios</b><br>Vitrais · azulejaria · argamassas e pinturas tradicionais · modelação · marcenaria · cantaria.</p><p><b>Execução</b><br>Intervenções de conservação e restauro.</p><p><b>Transmissão</b><br>Oficinas · educação patrimonial · zeladoria do patrimônio cultural.</p>",
+          "servicos": 1
         }
       ]
+    },
+    {
+      "g": "capa"
     },
     {
       "g": "sumario",
@@ -103,22 +104,25 @@
       "ds": "A proposta nasce no encontro de três coisas. Antes de mostrar o que está no meio, é preciso desenhar os três círculos."
     },
     {
-      "g": "trio",
+      "g": "conceitos",
       "kick": "o método do argumento",
-      "t": "três círculos",
+      "t": "três conceitos",
       "itens": [
-        [
-          "o equipamento",
-          "O que a SMPED faz, o que já construiu e o que o termo de referência pede."
-        ],
-        [
-          "o desejável",
-          "O que a arquitetura sabe sobre espaço para pessoas no espectro."
-        ],
-        [
-          "o lugar",
-          "O que este conjunto foi, e o papel que desempenhou na cidade."
-        ]
+        {
+          "q": "o equipamento",
+          "x": "O que a SMPED faz, o que já construiu e o que o termo de referência pede.",
+          "slot": "o Centro TEA já construído"
+        },
+        {
+          "q": "o desejável",
+          "x": "O que a arquitetura sabe sobre espaço para pessoas no espectro.",
+          "slot": "referências projetuais"
+        },
+        {
+          "q": "o patrimônio histórico",
+          "x": "O que este conjunto foi, e o papel que desempenhou na cidade.",
+          "slot": "imagem histórica do conjunto"
+        }
       ]
     },
     {
@@ -176,7 +180,7 @@
     {
       "g": "cheia",
       "src": "",
-      "h2": "círculo 03 · a Chácara do Jockey",
+      "h2": "a Chácara do Jockey",
       "cap": "Imagem histórica do conjunto — pesquisa iconográfica em andamento.",
       "claro": 1
     },
@@ -348,9 +352,9 @@
     },
     {
       "g": "cheia",
-      "src": "",
+      "src": "croqui-planta-r00.jpg",
       "h2": "a planta, por camadas",
-      "cap": "Planta viva — camadas liga e desliga. Módulo a integrar na próxima versão.",
+      "cap": "Croqui de estudo, R00 — em desenvolvimento. Vira planta viva, com camadas que ligam e desligam, quando o desenho vetorial estiver fechado.",
       "claro": 1
     },
     {

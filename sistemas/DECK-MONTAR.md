@@ -184,6 +184,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 |---|---|---|
 | `frase` | uma ideia por tela, tipo grande | — |
 | `jogadas` | duas ou três jogadas numeradas, com apoio longo | **`itens` (3)** |
+| `conceitos` | três círculos desenhados lado a lado, um por clique: o anel está na tela desde a chegada e o miolo acende. `itens:[{q,x,imgs,slot}]` — `imgs` vira uma pilha que roda DENTRO do disco; sem ela, slot hachurado | **`itens`** |
 | `trio` | três blocos curtos lado a lado | **`itens` (2)** |
 | `lista` | itens numerados, entram por clique | **`itens` (2)** |
 | `duasfrentes` | o pacote se fechando; caixa que cresce a cada item | **`dir`** · `dirfora` · **`esq`** · `esqfora` |

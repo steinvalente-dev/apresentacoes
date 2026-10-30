@@ -356,6 +356,77 @@ ol.trio li{display:grid;grid-template-columns:minmax(0,.46fr) minmax(0,1fr);gap:
   align-items:baseline;border-top:1px solid var(--hair);padding-top:clamp(11px,1.6cqh,20px)}
 ol.trio .q{font-family:var(--f-display);font-style:italic;font-weight:500;font-size:clamp(24px,3.6cqw,58px);letter-spacing:-.05em;line-height:1;color:var(--acento)}
 ol.trio .t{font-size:var(--fs-body);line-height:1.6}
+
+/* ══ CONCEITOS — os circulos desenhados, um por clique ════════════════════
+   30/10/2026. Nasce do `trio`, que era lista de tres linhas. O Michel:
+   *"a gente nao deve usar a palavra circulos... eu queria que a gente
+   desenhasse esses circulos na tela"* — e cada um ganha preenchimento de
+   imagem, com um mini carrossel rodando dentro.
+
+   ⚑ O CIRCULO EXISTE DESDE A CHEGADA, o conteudo e que entra. Os tres
+   aneis estao na tela quando o slide abre: o slide ANUNCIA que sao tres, e
+   a fala constroi um a um. Fazer o anel aparecer junto esconderia a
+   estrutura do argumento ate o ultimo clique.
+
+   ⚑ O `.passo` E O <li> INTEIRO — disco, rotulo e texto no mesmo elemento.
+   Separados, o motor (um `.passo` por vez, em ordem de documento) andaria
+   os tres discos primeiro e so depois os tres textos. Mesma armadilha do
+   `sequencia` e do `meia` com estados.
+
+   ⚑ SEM `translateY`. O `.passo` da casa desloca, que e certo para item de
+   lista chegando. Aqui o anel JA ESTA no lugar e so o miolo acende: mover
+   faria o circuloporar de posicao contra os vizinhos parados.          */
+ol.cncs{list-style:none;margin-top:clamp(18px,2.8cqh,44px);
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(18px,3cqw,56px);align-items:start}
+ol.cncs li.cnc{opacity:1;transform:none;display:flex;flex-direction:column;
+  align-items:center;text-align:center;min-width:0}
+/* o disco: anel sempre visivel, miolo que acende */
+/* ⚑ `--moldura` NAO serve de fundo aqui. Ela e a TARJA — tinta puxada ao
+   preto —, certa atras de uma foto que sangra, e o disco vazio com ela vira
+   um buraco preto no meio do papel. O fundo do anel e um veu de tinta a 4%:
+   o circulo le como area reservada, nao como objeto. */
+.cncs .disco{position:relative;width:100%;max-width:clamp(118px,15.5cqw,232px);
+  aspect-ratio:1;border-radius:50%;overflow:hidden;margin:0 0 clamp(12px,1.8cqh,24px);
+  border:1.5px solid var(--tinta-20);
+  background:color-mix(in srgb,var(--tinta) 4%,transparent);
+  transition:border-color .45s ease,transform .45s ease}
+.cncs li.cnc.on .disco{border-color:var(--primaria);transform:scale(1.02)}
+/* o miolo — imagem, pilha ou hachura — so aparece com o passo */
+.cncs .disco .full{position:absolute;inset:0;opacity:0;transition:opacity .55s ease}
+.cncs li.cnc.on .disco .full{opacity:1}
+.cncs .disco .full img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center;opacity:0;transition:opacity .9s ease}
+.cncs .disco .full img.on{opacity:1}
+/* slot vazio: a hachura da casa, dentro do circulo, para o slide poder ser
+   apresentado antes de a imagem chegar */
+.cncs .disco .vazio{position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--soft);text-align:center;padding:14%;
+  background:repeating-linear-gradient(135deg,transparent 0 9px,
+    color-mix(in srgb,var(--tinta) 7%,transparent) 9px 10px)}
+/* o numero fica no anel, nao no miolo: ele pertence a estrutura, que ja
+   esta na tela, e nao ao conteudo, que entra */
+.cncs .nn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:var(--f-display);font-style:italic;font-weight:500;
+  font-size:clamp(28px,4.2cqw,64px);line-height:1;color:var(--tinta-20);
+  transition:opacity .45s ease}
+.cncs li.cnc.on .nn{opacity:0}
+.cncs .q{display:block;font-family:var(--f-display);font-style:italic;font-weight:500;
+  font-size:clamp(19px,2.3cqw,38px);letter-spacing:-.04em;line-height:1.05;
+  color:var(--primaria);margin-bottom:clamp(6px,.9cqh,14px);
+  /* duas linhas reservadas: um rotulo que quebra (o patrimonio historico)
+     empurraria so o seu texto para baixo e os tres deixariam de alinhar */
+  min-height:2.1em;
+  opacity:0;transition:opacity .45s ease .12s}
+.cncs .tx{display:block;font-size:var(--fs-body);line-height:1.55;
+  max-width:34ch;color:var(--tinta);
+  opacity:0;transition:opacity .45s ease .2s}
+.cncs li.cnc.on .q,.cncs li.cnc.on .tx{opacity:1}
+body.esc .cncs .q,body.com-fundo .cncs .q{color:var(--acento-claro)}
+body.terra .cncs .q{color:var(--papel)}
+body.esc .cncs li.cnc.on .disco,body.terra .cncs li.cnc.on .disco{
+  border-color:var(--acento-claro)}
 /* [quadro 1600x900: nunca dispara — retirado] (max-width:860px) */
 
 /* nota com numero grande */
@@ -795,7 +866,7 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-meia .cont-c u.on{background:var(--tinta-80)}
 /* `meia` com `src` E `imgs`: a imagem do `src` vai para a coluna da ESQUERDA
    (mapa, diagrama) e a pilha corre na direita. */
-.g-meia .mtx .mfigesq{display:block;width:100%;max-height:62cqh;
+.g-meia .mtx .mfigesq{display:block;width:100%;max-height:46cqh;
   object-fit:contain;object-position:center;margin:0 auto}
 /* legenda por imagem da pilha: uma por vez, no mesmo cross-fade. A faixa tem
    altura propria para o layout nao pular quando a legenda troca de 1 para 2
@@ -838,9 +909,25 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-meia .mest:not(.passo),
 .g-meia .mest.passo.on{opacity:1}
 .g-meia .mest:has(~ .mest.passo.on){opacity:0}
+/* ESTADO DE SERVICOS — lista de verbetes, nao texto corrido. 30/10/2026,
+   pedido do Michel: *"esta muito texto corrido, esta um pouco chato"*. O
+   rotulo (Projetos, Investigacao, Oficios...) sai do meio do paragrafo,
+   vira cabeca de verbete em display italico na primaria, e o que ele
+   enumera desce para a linha de baixo. Mesmo texto, outra leitura.        */
+.g-meia .mest.servicos p{margin:0 0 clamp(10px,1.5cqh,22px)}
+.g-meia .mest.servicos p b{display:block;font-family:var(--f-display);
+  font-style:italic;font-weight:500;letter-spacing:-.035em;line-height:1.05;
+  font-size:clamp(17px,1.75cqw,30px);color:var(--primaria);
+  margin-bottom:clamp(2px,.35cqh,6px)}
+body.esc .g-meia .mest.servicos p b{color:var(--acento-claro)}
 /* o cabecalho do estado: mesma tipografia do topo, so que dentro da coluna */
 .g-meia .mest .kick{margin-bottom:clamp(6px,1cqh,14px)}
-.g-meia .mest h1{margin:0 0 clamp(10px,1.6cqh,22px)}
+/* ⚑ o titulo volta a TINTA. A coluna inteira e `--soft` — ela e texto de
+   apoio ao lado da imagem —, e o h1 herdava isso: no topo do slide, onde
+   ele morava antes, a cor vinha do chrome. Dentro da coluna, herdada, a
+   chamada saia mais fraca que o proprio corpo do texto. */
+.g-meia .mest h1{color:var(--tinta);margin:0 0 clamp(16px,2.4cqh,34px)}
+body.esc .g-meia .mest h1,body.terra .g-meia .mest h1{color:var(--papel)}
 
 /* ══ GRIFO ═══════════════════════════════════════════════════════════════
    `<mark>` vale em qualquer texto de qualquer gabarito, como `<b>`.
@@ -3429,6 +3516,7 @@ const EXIGE={
   duo:['figs','leg'], tabela:['cols','linhas'], porte:['cols','linhas'],
   lista:['itens'], fim:['itens'], sumario:['itens'], trio:['itens'],
   jogadas:['itens'], fotos:['itens'], unit:['cards'], players:['casas'],
+  conceitos:['itens'],
   avulso:['grupos'], plug:['ancoras'], duasfrentes:['esq','dir'],
   divisor:['dt'], 'earth-3d':['lat','lng'], 'modelo-3d':['modelo'], viva:['src'],
   sequencia:['items']
@@ -3519,6 +3607,23 @@ function tpl(s){
   if(s.g==='frase') return `<div class="wrap">${k}${pre}${t}${sub}${prem}${dad}</div>`;
   if(s.g==='jogadas') return `<div class="wrap">${k}${t}<div class="jogadas rev">`+s.itens.map(([n,ti,d])=>`<div class="jogada${et}"><span class="jn">${n}</span><span class="jt">${ti}</span><span class="jd">${d}</span></div>`).join('')+`</div></div>`;
   if(s.g==='unit') return `<div class="wrap">${k}${t}${sub}<div class="unit rev">`+s.cards.map(([ti,a,r,l,m])=>`<div class="uc${et}"><span class="ut">${ti}</span><span class="ua">${a}</span><span class="ur">${RS(r)}</span><span class="ul">${l}</span><span class="um">${m}</span></div>`).join('')+`</div></div>`;
+  /* `conceitos`: tres circulos desenhados, um por clique. O <li> inteiro e
+     o `.passo` — disco, rotulo e texto juntos (ver o bloco CONCEITOS no CSS).
+     `imgs:[...]` por item vira a pilha que roda dentro do disco; sem ela, o
+     slot hachurado, para o slide poder ser apresentado antes da imagem. */
+  if(s.g==='conceitos'){
+    const li=(s.itens||[]).map((c,i)=>{
+      const ims=Array.isArray(c.imgs)&&c.imgs.length;
+      const miolo = ims
+        ? `<div class="full">`+c.imgs.map((src,k)=>`<img decoding="async" class="${k===0?'on':''}" src="${IMG[src]||src}" alt="">`).join('')+`</div>`
+        : `<div class="full"><div class="vazio">${c.slot||'slot de imagem'}</div></div>`;
+      return `<li class="cnc passo">`
+        + `<figure class="disco">${miolo}<span class="nn">${String(i+1).padStart(2,'0')}</span></figure>`
+        + `<span class="q">${RS(c.q||'')}</span>`
+        + `<span class="tx">${c.x||''}</span></li>`;
+    }).join('');
+    return `<div class="wrap">${k}${t}${sub}<ol class="cncs">${li}</ol></div>`;
+  }
   if(s.g==='trio') return `<div class="wrap">${k}${t}${sub}<ol class="trio">`+s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')+`</ol></div>`;
   if(s.g==='lista'||s.g==='fim') return `<div class="wrap${s.largo?' largo':''}">${k}${pre}${t}${sub}<ol class="lista${s.largo?' largo':''}">`+s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')+`</ol></div>`;
   if(s.g==='escolha'){
@@ -3649,7 +3754,7 @@ function tpl(s){
     return `<div class="wrap">${k}${t}${sub}<div class="meia${s.largo?' largo':''}">`
       + (ests
           ? `<div class="mtx estados rev" style="--i:2">`
-            + ests.map((e,i)=>`<div class="mest${i?' passo':''}">`
+            + ests.map((e,i)=>`<div class="mest${i?' passo':''}${e.servicos?' servicos':''}">`
                 + (e.kick?`<div class="kick">${e.kick}</div>`:'')
                 + (e.t?`<h1 class="big">${RS(e.t)}</h1>`:'')
                 + mesq(e)
@@ -4468,6 +4573,33 @@ window.MSCarrossel=(function(){
   }
   return { chegou:function(){
     para();
+    /* `conceitos` tem UMA pilha por circulo, nao uma por slide: um interval
+       so, com as tres defasadas pelo indice do disco, para nao trocarem
+       todas no mesmo quadro. 30/10/2026. */
+    var atualC=document.querySelectorAll('#palco .slide')[cur];
+    if(atualC&&atualC.classList.contains('g-conceitos')){
+      var discos=[].slice.call(atualC.querySelectorAll('.disco .full'))
+        .filter(function(f){ return f.querySelectorAll('img').length>1; });
+      if(!discos.length) return;
+      discos.forEach(function(f){
+        var im=f.querySelectorAll('img');
+        im.forEach(function(e,k){ e.classList.toggle('on',k===0); });
+      });
+      if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var tick=0;
+      timer=setInterval(function(){
+        tick++;
+        discos.forEach(function(f,d){
+          if((tick+d)%discos.length!==0) return;      /* defasagem por disco */
+          var im=f.querySelectorAll('img');
+          var atu=f.querySelector('img.on'), j=[].indexOf.call(im,atu);
+          if(j<0) j=0;
+          im[j].classList.remove('on');
+          im[(j+1)%im.length].classList.add('on');
+        });
+      },PASSO);
+      return;
+    }
     var todos=document.querySelectorAll('#palco .slide.g-carrossel,#palco .slide.g-meia');
     var atual=document.querySelectorAll('#palco .slide')[cur];
     var meia=!!(atual&&atual.classList.contains('g-meia')&&atual.querySelector('.full img'));

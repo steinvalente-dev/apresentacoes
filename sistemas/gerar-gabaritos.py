@@ -29,6 +29,7 @@ DESCRICAO = {
     'frase':       ('texto', 'uma ideia por tela, tipo grande'),
     'lista':       ('texto', 'itens numerados, entram por clique'),
     'trio':        ('texto', 'três blocos curtos lado a lado'),
+    'conceitos':   ('texto', 'três círculos desenhados lado a lado, um por clique: o anel está na tela desde a chegada e o miolo acende. `itens:[{q,x,imgs,slot}]` — `imgs` vira uma pilha que roda DENTRO do disco; sem ela, slot hachurado'),
     'jogadas':     ('texto', 'duas ou três jogadas numeradas, com apoio longo'),
     'duasfrentes': ('texto', 'o pacote se fechando; caixa que cresce a cada item'),
     'escolha':     ('estrutura', 'a bifurcação: dois ou três botões que saltam para outro trecho. Cada opção declara `para` com o NOME de um gabarito e o motor procura o próximo slide daquele gabarito — nunca índice'),

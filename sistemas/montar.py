@@ -180,6 +180,13 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
         for e in s.get('estados') or []:
             if isinstance(e, dict) and 'src' in e:
                 add(e, 'src', perfil)
+        # ⚑ `conceitos`: cada item traz a PROPRIA pilha (`itens[].imgs`), que
+        #   roda dentro do disco. Diferente de `imgs` no slide, que e uma so.
+        if g == 'conceitos':
+            for c in s.get('itens') or []:
+                if isinstance(c, dict):
+                    for i in range(len(c.get('imgs') or [])):
+                        add(c['imgs'], i, perfil)
         for it in s.get('items') or []:
             if isinstance(it, dict):
                 if 'src' in it:
