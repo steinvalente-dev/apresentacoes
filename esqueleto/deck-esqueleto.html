@@ -797,6 +797,13 @@ body.em-logo .chrome.topo .secao{display:inline}
    (mapa, diagrama) e a pilha corre na direita. */
 .g-meia .mtx .mfigesq{display:block;width:100%;max-height:62cqh;
   object-fit:contain;object-position:center;margin:0 auto}
+/* legenda por imagem da pilha: uma por vez, no mesmo cross-fade. A faixa tem
+   altura propria para o layout nao pular quando a legenda troca de 1 para 2
+   linhas — e' o mesmo motivo pelo qual as imagens usam `cover`. */
+.g-meia .legs{position:relative;min-height:2.6em;font-family:var(--f-mono);
+  font-size:var(--fs-cap);letter-spacing:.08em;color:var(--soft);text-align:right}
+.g-meia .legs span{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
+.g-meia .legs span.on{opacity:1}
 
 /* ══ GRIFO ═══════════════════════════════════════════════════════════════
    `<mark>` vale em qualquer texto de qualquer gabarito, como `<b>`.
@@ -3606,6 +3613,9 @@ function tpl(s){
             ? `<div class="full">`
               + s.imgs.map((src,i)=>`<img decoding="async" class="${i===0?'on':''}" src="${IMG[src]||src}" alt="">`).join('')
               + `</div>`
+              + (Array.isArray(s.legs)&&s.legs.length
+                   ? `<div class="legs">`+s.imgs.map((_,i)=>`<span class="${i===0?'on':''}">${s.legs[i]||''}</span>`).join('')+`</div>`
+                   : '')
               + (s.imgs.length>1?`<div class="cont-c">`+s.imgs.map((_,i)=>`<u class="${i===0?'on':''}"></u>`).join('')+`</div>`:'')
             : `<img src="${IMG[s.src]||s.src}" alt="${(s.leg||s.t||'').replace(/"/g,'&quot;')}"`
               + ` onerror="this.dataset.err=1">`)
@@ -4398,9 +4408,11 @@ window.MSCarrossel=(function(){
   var PASSO=3200, timer=null;
   function para(){ if(timer){ clearInterval(timer); timer=null; } }
   function zera(sl){
-    var im=sl.querySelectorAll('.full img'), pt=sl.querySelectorAll('.cont-c u');
+    var im=sl.querySelectorAll('.full img'), pt=sl.querySelectorAll('.cont-c u'),
+        lg=sl.querySelectorAll('.legs span');
     im.forEach(function(e,i){ e.classList.toggle('on',i===0); });
     pt.forEach(function(e,i){ e.classList.toggle('on',i===0); });
+    lg.forEach(function(e,i){ e.classList.toggle('on',i===0); });
   }
   return { chegou:function(){
     para();
@@ -4415,7 +4427,7 @@ window.MSCarrossel=(function(){
        tres slides seguidos e o avanco do slide nao pode reiniciar a sequencia
        — e' o que o Michel pediu em 30/10/2026. No `carrossel` continua
        zerando, porque la a pilha E' o conteudo do slide. */
-    var i=0;
+    var i=0, lg=atual.querySelectorAll('.legs span');
     if(meia){ i=MSCarrosselPos%im.length; } else { zera(atual); }
     if(matchMedia('(prefers-reduced-motion: reduce)').matches){
       if(meia){ im.forEach(function(e,k){ e.classList.toggle('on',k===i); }); }
@@ -4424,10 +4436,13 @@ window.MSCarrossel=(function(){
     var pt=atual.querySelectorAll('.cont-c u');
     im.forEach(function(e,k){ e.classList.toggle('on',k===i); });
     pt.forEach(function(e,k){ e.classList.toggle('on',k===i); });
+    lg.forEach(function(e,k){ e.classList.toggle('on',k===i); });
     timer=setInterval(function(){
       im[i].classList.remove('on'); if(pt[i]) pt[i].classList.remove('on');
+      if(lg&&lg[i]) lg[i].classList.remove('on');
       i=(i+1)%im.length;
       im[i].classList.add('on');    if(pt[i]) pt[i].classList.add('on');
+      if(lg&&lg[i]) lg[i].classList.add('on');
       if(meia) MSCarrosselPos=i;
     },PASSO);
   } };
