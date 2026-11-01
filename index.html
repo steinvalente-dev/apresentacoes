@@ -123,14 +123,19 @@
   /* ── arquivo: projetos | peças ────────────────────────── */
   .arquivo{display:grid;grid-template-columns:minmax(190px,270px) 1fr;
     gap:clamp(26px,5vw,58px);align-items:start}
-  .projetos{list-style:none;display:flex;flex-direction:column;gap:4px}
+  .projetos{list-style:none;display:flex;flex-direction:column;gap:4px;
+    --fs-proj:clamp(17px,2vw,21px)}
   .projetos button{width:100%;display:flex;align-items:baseline;
     justify-content:space-between;gap:16px;text-align:left;background:none;
     border:1px solid transparent;background:var(--card);
     -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
-    border-radius:999px;padding:11px 21px;cursor:pointer;color:var(--soft);
+    /* raio FIXO, nao 999px: a pilula de 1 linha define o canto, e o mesmo
+       canto vale para 2 ou 3 linhas (quarto de curva, reta, quarto de curva).
+       raio = metade da altura de 1 linha = (lh*fs + 2*pad + 2*borda)/2 */
+    border-radius:calc(.625 * var(--fs-proj) + 12px);
+    padding:11px 21px;cursor:pointer;color:var(--soft);
     font-family:var(--mono);font-style:italic;font-weight:500;text-transform:lowercase;
-    letter-spacing:-.02em;font-size:clamp(17px,2vw,21px);line-height:1.25;
+    letter-spacing:-.02em;font-size:var(--fs-proj);line-height:1.25;
     transition:color .25s,border-color .25s,background .25s}
   .projetos button:hover{color:var(--cream);background:var(--card-forte)}
   .projetos button[aria-current="true"]{border-color:var(--cream);color:var(--cream);
