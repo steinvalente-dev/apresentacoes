@@ -48,21 +48,29 @@
         {
           "kick": "quem apresenta",
           "t": "setenta anos de ofício",
-          "cap": "<p><b>70 anos.</b> Em 1956, vindo de Arbúcias, na Catalunha, Gerardo Martin Sarasá funda no Ipiranga o atelier de azulejaria e vitral que deu origem à casa. O endereço é o mesmo até hoje.</p><p><b>Três gerações.</b> A direção é de Antonio Luís e Marcelo Sarasá Martin, filhos de Gerardo. Equipe inter e multidisciplinar: arquitetos, gestores, conservadores-restauradores, oficiais e mestres de ofício.</p><p><b>Nove estados.</b> Do Amazonas ao Rio Grande do Sul.</p>"
+          "cap": "<p><b>70 anos</b>Gerardo Martin Sarasá chega de Arbúcias, na Catalunha, e abre o atelier de azulejaria e vitral que deu origem à casa.</p><p><b>Três gerações</b>Hoje sob direção de Antonio Luís e Marcelo Sarasá Martin. Arquitetos, gestores, <mark>conservadores-restauradores</mark> e mestres de ofício na mesma equipe.</p>",
+          "serif": 1,
+          "dados": 1,
+          "lead": "Fundada em 1956, no Ipiranga, por um azulejista catalão. Nunca saiu do mesmo endereço."
+        },
+        {
+          "kick": "o que fazemos",
+          "t": "serviços",
+          "cap": "<p><b>Projetos</b>Conservação e restauro · adequação de uso · expografia.</p><p><b>Investigação</b>Prospecções · pesquisa técnico-científica · consultoria.</p><p><b>Ofícios</b>Vitral · azulejaria · argamassa e pintura tradicionais · modelação · marcenaria · cantaria.</p><p><b>Execução</b>Intervenções de conservação e restauro.</p><p><b>Transmissão</b>Oficinas · educação patrimonial · zeladoria.</p>",
+          "servicos": 1,
+          "serif": 1,
+          "lead": "Cinco frentes, da prospecção ao ofício executado na obra."
         },
         {
           "kick": "onde atuamos",
           "t": "nove estados",
           "src": "mapa-atuacao.png",
-          "cap": "<p>Amazonas · Maranhão · Pernambuco · Bahia · Mato Grosso · Mato Grosso do Sul · São Paulo · Rio de Janeiro · Rio Grande do Sul.</p>"
-        },
-        {
-          "kick": "o que fazemos",
-          "t": "serviços",
-          "cap": "<p><b>Projetos</b><br>Conservação e restauro · adaptações e adequações · expográficos e museográficos.</p><p><b>Investigação</b><br>Prospecções · pesquisas técnico-científicas · consultoria.</p><p><b>Ofícios</b><br>Vitrais · azulejaria · argamassas e pinturas tradicionais · modelação · marcenaria · cantaria.</p><p><b>Execução</b><br>Intervenções de conservação e restauro.</p><p><b>Transmissão</b><br>Oficinas · educação patrimonial · zeladoria do patrimônio cultural.</p>",
-          "servicos": 1
+          "cap": "<p>Amazonas · Maranhão · Pernambuco · Bahia · Mato Grosso · Mato Grosso do Sul · <mark>São Paulo</mark> · Rio de Janeiro · Rio Grande do Sul.</p>",
+          "serif": 1,
+          "lead": "Do Amazonas ao Rio Grande do Sul."
         }
-      ]
+      ],
+      "sangra": 1
     },
     {
       "g": "capa"

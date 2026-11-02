@@ -866,7 +866,7 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-meia .cont-c u.on{background:var(--tinta-80)}
 /* `meia` com `src` E `imgs`: a imagem do `src` vai para a coluna da ESQUERDA
    (mapa, diagrama) e a pilha corre na direita. */
-.g-meia .mtx .mfigesq{display:block;width:100%;max-height:46cqh;
+.g-meia .mtx .mfigesq{display:block;width:100%;max-height:30cqh;
   object-fit:contain;object-position:center;margin:0 auto}
 /* legenda por imagem da pilha: uma por vez, no mesmo cross-fade. A faixa tem
    altura propria para o layout nao pular quando a legenda troca de 1 para 2
@@ -875,6 +875,83 @@ body.em-logo .chrome.topo .secao{display:inline}
   font-size:var(--fs-cap);letter-spacing:.08em;color:var(--soft);text-align:right}
 .g-meia .legs span{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
 .g-meia .legs span.on{opacity:1}
+
+/* ══ `meia` COM SANGRIA — a metade direita vai ate a borda ════════════════
+   02/11/2026, pedido do Michel: *"a metade direita, onde aparecem as
+   imagens, elas devem ser tela cheia, sem espaco branco nenhum em volta"*.
+   Cara de revista: a foto encosta no papel em tres lados e a coluna de
+   texto respira do outro.
+
+   ⚑ A SANGRIA E OPT-IN (`sangra:1`). Ela sai do `padding` do `.slide` por
+   margem negativa — e o `.slide` tem padding em cima TAMBEM para o chrome
+   (logotipo, bolinhas de secao). Ligada num `meia` que tenha titulo no topo
+   da prancha, a foto sobe por tras do titulo. Aqui funciona porque com
+   `estados` o titulo mora DENTRO da coluna da esquerda.
+
+   ⚑ A COLUNA DA ESQUERDA NAO MUDA DE LARGURA. A sangria so estica a figura
+   para dentro das margens; o grid continua 1fr 1fr, medido no espaco util.
+   Esticar a coluna de texto junto jogaria a primeira letra contra a borda.*/
+/* ⚑ SANGRIA POR POSICIONAMENTO, NAO POR MARGEM NEGATIVA. A primeira versao
+   puxava a figura para fora com margem negativa nos quatro lados. Nao
+   funciona: num item de grid esticado, a altura da LINHA ja foi decidida
+   pela coluna de texto, e a margem negativa SOMA a essa altura em vez de
+   recortar — a figura saiu com 1308px numa tela de 1080 e o validador
+   acusou +242px de transbordo. Medido em 02/11/2026.
+
+   Fora do fluxo, a figura se posiciona contra o `.slide`, que e o ancestral
+   posicionado mais proximo, e `inset:0` chega a borda REAL do papel.
+
+   ⚑ `left:50%` nao e aproximacao, e identidade. A caixa de conteudo do
+   slide e a largura menos duas goteiras; com `gap:0` a segunda coluna de
+   `1fr 1fr` comeca em `gut + (L - 2*gut)/2`, que e exatamente `L/2`. Por
+   isso o respiro entre texto e foto vai no `padding-right` da coluna da
+   esquerda, nunca no `gap`: mexer no gap desalinha a conta.             */
+.g-meia .meia.sangra{gap:0;margin-top:0}
+.g-meia .meia.sangra .mtx{padding-right:clamp(20px,2.8cqw,52px)}
+/* ⚑ A FIGURA EM SANGRIA NAO SE DESLOCA AO ENTRAR. `.rev` entra com
+   `translateY(14px)`, que e o certo para um bloco que tem folga em volta.
+   Aqui a figura ocupa a tela INTEIRA: deslocar 14px para baixo empurra a
+   borda de baixo para fora e o slide ganha 14px de rolagem — constante em
+   toda tela, que foi como o validador apontou. Fica so o esvanecimento. */
+.g-meia .meia.sangra .mfig{position:absolute;inset:0 0 0 50%;margin:0}
+.g-meia .meia.sangra .mfig.rev{transform:none}
+.g-meia .meia.sangra .full{border-radius:0}
+/* ⚑ O CHROME PRECISA DO SEU CHAO DE VOLTA. Com a foto ate a borda, o
+   logotipo e as bolinhas de secao caem sobre a imagem — e o logotipo da
+   Sarasa e Vinho, desenhado para a Cal. Sobre foto escura ele apaga; sobre
+   ceu claro, lava. Os dois casos apareceram na mesma peca (vitral e Museu
+   do Ipiranga), entao nao e questao de escolher foto.
+   Um veu de Cal na faixa do chrome devolve o fundo para que o logotipo foi
+   feito, e some no resto da imagem. Nao e correcao de foto: e a faixa de
+   cabecalho da revista, que tambem existe para isso.                    */
+.g-meia .meia.sangra .full::after{content:"";position:absolute;
+  inset:0 0 auto 0;height:calc((var(--top) + clamp(14px,2.4cqh,40px)) * 1.7);
+  background:linear-gradient(color-mix(in srgb,var(--papel) 88%,transparent) 0%,
+    color-mix(in srgb,var(--papel) 54%,transparent) 38%,transparent 100%);
+  pointer-events:none;z-index:1}
+body.esc .g-meia .meia.sangra .full::after,
+body.terra .g-meia .meia.sangra .full::after{
+  background:linear-gradient(color-mix(in srgb,var(--primaria) 88%,transparent) 0%,
+    color-mix(in srgb,var(--primaria) 54%,transparent) 38%,transparent 100%)}
+/* ⚑ legenda e bolinhas SOBEM PARA CIMA DA FOTO. Fora da sangria elas moram
+   embaixo, na coluna flex; aqui nao ha "embaixo" — embaixo e a borda da
+   tela. Viram camada, ancorada no canto inferior da propria figura. */
+.g-meia .meia.sangra .legs{position:absolute;inset:auto auto
+    calc(var(--bot) + clamp(6px,1cqh,18px)) clamp(16px,1.8cqw,34px);
+  right:clamp(16px,1.8cqw,34px);min-height:0;text-align:left;z-index:2}
+.g-meia .meia.sangra .legs span{position:absolute;inset:auto auto 0 0;
+  white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+/* ⚑ A LEGENDA SOBRE FOTO PEDE TARJA, NAO VARREDURA. A varredura e
+   translucida: serve sobre papel, e sobre uma foto de contraste variavel
+   some na metade clara. Aqui e campo cheio no Vinho, com a Cal por cima —
+   a mesma `mark.tarja` da casa, aplicada pelo gabarito e nao pelo texto. */
+.g-meia .meia.sangra .legs span{background:var(--primaria);color:var(--papel);
+  padding:.34em .7em .4em;border-radius:2px;letter-spacing:.1em}
+.g-meia .meia.sangra .cont-c{position:absolute;inset:auto
+    clamp(16px,1.8cqw,34px) calc(var(--bot) + clamp(6px,1cqh,18px)) auto;
+  z-index:2}
+.g-meia .meia.sangra .cont-c u{background:var(--papel-40)}
+.g-meia .meia.sangra .cont-c u.on{background:var(--papel)}
 
 /* == `meia` com ESTADOS — um slide, varios textos ==========================
    30/10/2026. Antes, a abertura institucional eram TRES slides `meia` com a
@@ -914,11 +991,11 @@ body.em-logo .chrome.topo .secao{display:inline}
    rotulo (Projetos, Investigacao, Oficios...) sai do meio do paragrafo,
    vira cabeca de verbete em display italico na primaria, e o que ele
    enumera desce para a linha de baixo. Mesmo texto, outra leitura.        */
-.g-meia .mest.servicos p{margin:0 0 clamp(10px,1.5cqh,22px)}
+.g-meia .mest.servicos p{margin:0 0 clamp(6px,.85cqh,12px);line-height:1.4}
 .g-meia .mest.servicos p b{display:block;font-family:var(--f-display);
   font-style:italic;font-weight:500;letter-spacing:-.035em;line-height:1.05;
-  font-size:clamp(17px,1.75cqw,30px);color:var(--primaria);
-  margin-bottom:clamp(2px,.35cqh,6px)}
+  font-size:clamp(15px,1.35cqw,24px);color:var(--primaria);
+  margin-bottom:clamp(1px,.2cqh,3px)}
 body.esc .g-meia .mest.servicos p b{color:var(--acento-claro)}
 /* o cabecalho do estado: mesma tipografia do topo, so que dentro da coluna */
 .g-meia .mest .kick{margin-bottom:clamp(6px,1cqh,14px)}
@@ -928,6 +1005,50 @@ body.esc .g-meia .mest.servicos p b{color:var(--acento-claro)}
    chamada saia mais fraca que o proprio corpo do texto. */
 .g-meia .mest h1{color:var(--tinta);margin:0 0 clamp(16px,2.4cqh,34px)}
 body.esc .g-meia .mest h1,body.terra .g-meia .mest h1{color:var(--papel)}
+
+/* ══ A SERIFADA NO SLOGAN — `serif:1` no estado ═══════════════════════════
+   02/11/2026. EM EXPERIMENTO: o §3 da MARCA-SARASA deixou serifada x sans em
+   aberto, a decidir vendo o primeiro deck. Isto e esse deck. Playfair
+   Display entra pelo bloco da marca em duas faces, e so o slogan a usa —
+   corpo, rotulo e chrome seguem Poppins/Archivo.
+
+   ⚑ A DIDONE NAO ACEITA O TRACKING DA CASA. O `h1` do motor traz
+   `letter-spacing:-.045em`, que e o certo para a geometrica: fecha o
+   rio entre letras de haste reta. Numa didone, o contraste grosso-fino JA
+   e o que aperta a palavra — somar tracking negativo encosta a serifa de
+   uma letra na barriga da outra, e some com o par `fi`. Aqui volta a zero.
+
+   ⚑ E NAO ACEITA `lowercase`. O motor baixa a caixa de todo titulo, que na
+   Poppins le como assinatura. A didone tem maiuscula desenhada para ser
+   vista — e o slogan e justamente onde ela deve aparecer. `none`.        */
+.g-meia .mest.serif h1{font-family:var(--f-serif);font-style:italic;
+  font-weight:400;letter-spacing:0;text-transform:none;line-height:1.04;
+  font-size:clamp(25px,2.75cqw,47px);
+  margin:0 0 clamp(10px,1.5cqh,21px)}
+/* o lead: a primeira linha do corpo, em serifada romana, maior. E o que da
+   a passada de olho — quem le so uma frase, le esta. */
+.g-meia .mest.serif .lead{display:block;font-family:var(--f-serif);
+  font-style:normal;font-weight:400;color:var(--tinta);
+  font-size:clamp(13px,1.05cqw,18px);line-height:1.42;
+  margin:0 0 clamp(8px,1.2cqh,17px);max-width:44ch}
+body.esc .g-meia .mest.serif .lead{color:var(--papel)}
+/* filete entre o lead e os verbetes — a regra de revista */
+.g-meia .mest.serif .lead::after{content:"";display:block;
+  width:clamp(38px,4cqw,72px);height:1.5px;background:var(--primaria);
+  margin-top:clamp(7px,1cqh,14px)}
+
+/* ══ OS DADOS DO INSTITUCIONAL — verbete, nao paragrafo ═══════════════════
+   O `<b>` de cada paragrafo (70 anos, tres geracoes, nove estados) vira
+   numero de verbete: serifada, no Vinho, em corpo maior que o texto que
+   explica. Mesma mecanica do estado de `servicos`, outra escala — la o
+   rotulo e uma palavra de categoria, aqui e um DADO, e o dado e o que a
+   pessoa leva embora de uma passada de olho. */
+.g-meia .mest.dados p{margin:0 0 clamp(8px,1.2cqh,17px);max-width:40ch}
+.g-meia .mest.dados p b{display:block;font-family:var(--f-serif);
+  font-style:normal;font-weight:400;letter-spacing:-.01em;line-height:1;
+  font-size:clamp(17px,1.7cqw,30px);color:var(--primaria);
+  margin-bottom:clamp(2px,.35cqh,5px)}
+body.esc .g-meia .mest.dados p b{color:var(--acento-claro)}
 
 /* ══ GRIFO ═══════════════════════════════════════════════════════════════
    `<mark>` vale em qualquer texto de qualquer gabarito, como `<b>`.
@@ -3751,12 +3872,13 @@ function tpl(s){
     const mesq=(e)=>((e.src && Array.isArray(s.imgs) && s.imgs.length)
             ? `<img class="mfigesq" src="${IMG[e.src]||e.src}" alt="${(e.leg||e.t||'').replace(/"/g,'&quot;')}">`
             : '')+`${e.cap||''}`;
-    return `<div class="wrap">${k}${t}${sub}<div class="meia${s.largo?' largo':''}">`
+    return `<div class="wrap">${k}${t}${sub}<div class="meia${s.largo?' largo':''}${s.sangra?' sangra':''}">`
       + (ests
           ? `<div class="mtx estados rev" style="--i:2">`
-            + ests.map((e,i)=>`<div class="mest${i?' passo':''}${e.servicos?' servicos':''}">`
+            + ests.map((e,i)=>`<div class="mest${i?' passo':''}${e.servicos?' servicos':''}${e.serif?' serif':''}${e.dados?' dados':''}">`
                 + (e.kick?`<div class="kick">${e.kick}</div>`:'')
                 + (e.t?`<h1 class="big">${RS(e.t)}</h1>`:'')
+                + (e.lead?`<span class="lead">${e.lead}</span>`:'')
                 + mesq(e)
               + `</div>`).join('')
             + `</div>`
