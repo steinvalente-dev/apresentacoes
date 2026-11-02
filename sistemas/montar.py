@@ -38,7 +38,7 @@ LIMITE_BASE64 = 8 * 1024 * 1024          # medido JÁ EM BASE64 (o que pesa no H
 # e o que sobra para os slots de imagem que a peca ainda vai receber.
 RESIZE = {'cheia': (2200, 80), 'duo': (1800, 82), 'prancha': (1800, 82), 'desenho': (None, 88),
           'tempo': (1300, 78),   # a peca tem de caber em arquivo unico: acima disso o montar quebra em pasta
-          'fundo': (640, 80), 'mosaico': (560, 74), 'padrao': (1800, 82)}
+          'fundo': (640, 80), 'mosaico': (560, 74), 'confronto': (1200, 78), 'padrao': (1800, 82)}
 
 
 def falha(msg, cod=1):
@@ -188,6 +188,11 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
         #   nivel abaixo. Sem esta linha ele nao entra no moinho NEM na pasta e
         #   o html aponta para um nome que nao existe — 404 mudo. Mesma armadilha
         #   da GAVETA, abaixo. 30/10/2026.
+        # `confronto`: o `src` de cada lado mora um nivel abaixo
+        if g == 'confronto':
+            for l in s.get('lados') or []:
+                if isinstance(l, dict) and l.get('src'):
+                    add(l, 'src', 'confronto')
         for e in s.get('estados') or []:
             if isinstance(e, dict) and 'src' in e:
                 add(e, 'src', perfil)

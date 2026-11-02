@@ -439,32 +439,52 @@
       "t": "este programa cabe<br>neste lugar?"
     },
     {
-      "g": "tabela",
+      "g": "confronto",
       "kick": "a resposta, em área",
-      "t": "o programa e o conjunto existente",
-      "cols": [
-        "",
-        "projeto que não avançou",
-        "conjunto existente"
+      "t": "o mesmo programa, dois lugares",
+      "lados": [
+        {
+          "rot": "o projeto que não avançou",
+          "nm": "TEA Oeste · Butantã",
+          "src": "implantacao-tea-oeste.png",
+          "alt": "Implantação do TEA Oeste, com as áreas úteis destacadas",
+          "linhas": [
+            [
+              "ambientes",
+              "2.556,55 m²"
+            ],
+            [
+              "circulação",
+              "1.543,24 m²"
+            ]
+          ],
+          "total": [
+            "área construída",
+            "4.099,79 m²"
+          ]
+        },
+        {
+          "rot": "a nossa proposta",
+          "nm": "Chácara do Jockey",
+          "src": "implantacao-jockey.png",
+          "linhas": [
+            [
+              "ambientes",
+              "a confirmar"
+            ],
+            [
+              "circulação",
+              "a confirmar"
+            ]
+          ],
+          "total": [
+            "área construída",
+            "a confirmar"
+          ],
+          "alt": "Implantação da proposta na Chácara do Jockey, com as áreas úteis e o segundo pavimento destacados"
+        }
       ],
-      "linhas": [
-        [
-          "área construída",
-          "mais de 4.000 m²",
-          "cerca de 3.300 m²"
-        ],
-        [
-          "programa útil coberto",
-          "cerca de 2.900 m²",
-          "a confirmar em estudo"
-        ],
-        [
-          "programa do termo de referência",
-          "4.684 m²",
-          "o mesmo programa"
-        ]
-      ],
-      "nota": "A área construída maior não significa mais programa: parte expressiva se perde em circulação. Números em verificação."
+      "nota": "Área construída maior não é mais programa: <b>1.543 m², 38% do total</b>, são circulação. O termo de referência pede 4.684 m²."
     },
     {
       "g": "lista",
