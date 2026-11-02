@@ -365,71 +365,77 @@
       "claro": 1
     },
     {
-      "g": "lista",
-      "largo": 1,
-      "kick": "o que o lugar oferece",
-      "t": "qualidades e oportunidades",
-      "itens": [
-        [
-          "01",
-          "<b>Sequência pronta.</b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."
-        ],
-        [
-          "02",
-          "<b>Compartimentação pronta.</b> A malha de baias está na escala do atendimento em grupo pequeno."
-        ],
-        [
-          "03",
-          "<b>Arvoredo maduro.</b> Estímulo natural é regulador, e não se planta em dois anos."
-        ],
-        [
-          "04",
-          "<b>Endereço com história.</b> Um bem ocioso volta à vida pública."
-        ]
-      ]
-    },
-    {
-      "g": "lista",
-      "largo": 1,
-      "kick": "o que o lugar impõe",
-      "t": "desafios",
-      "itens": [
-        [
-          "01",
-          "<b>Geometria restritiva.</b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."
-        ],
-        [
-          "02",
-          "<b>Arborização em posição de risco.</b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."
-        ],
-        [
-          "03",
-          "<b>Acústica.</b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."
-        ]
-      ]
-    },
-    {
-      "g": "lista",
-      "largo": 1,
-      "kick": "o que o tombamento permite",
-      "t": "a proteção como liberdade",
-      "itens": [
-        [
-          "01",
-          "<b>A proteção recai sobre as fachadas.</b> As características arquitetônicas externas são o objeto do tombamento."
-        ],
-        [
-          "02",
-          "<b>O interior está livre de obrigação de preservação.</b> A reorganização interna é possível — e necessária para gerar os salões amplos."
-        ],
-        [
-          "03",
-          "<b>A área livre do parque dispensa análise prévia.</b> O que exige vão grande encontra lugar sem passar pelo rito."
-        ],
-        [
-          "04",
-          "<b>O que se altera deixa testemunho.</b> A própria resolução exige preservar o traço do elemento original — é a base da intervenção legível."
-        ]
+      "g": "earth-3d",
+      "lat": -23.599136,
+      "lng": -46.744936,
+      "alt": 760,
+      "compacto": 1,
+      "kick": "o lugar, de perto",
+      "h2": "o que este conjunto oferece",
+      "lead": "Três leituras sobre o mesmo lugar.",
+      "temas": [
+        {
+          "bt": "qualidades e oportunidades",
+          "t": "qualidades e oportunidades",
+          "itens": [
+            [
+              "01",
+              "<b>Sequência pronta.</b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."
+            ],
+            [
+              "02",
+              "<b>Compartimentação pronta.</b> A malha de baias está na escala do atendimento em grupo pequeno."
+            ],
+            [
+              "03",
+              "<b>Arvoredo maduro.</b> Estímulo natural é regulador, e não se planta em dois anos."
+            ],
+            [
+              "04",
+              "<b>Endereço com história.</b> Um bem ocioso volta à vida pública."
+            ]
+          ]
+        },
+        {
+          "bt": "desafios",
+          "t": "desafios",
+          "itens": [
+            [
+              "01",
+              "<b>Geometria restritiva.</b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."
+            ],
+            [
+              "02",
+              "<b>Arborização em posição de risco.</b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."
+            ],
+            [
+              "03",
+              "<b>Acústica.</b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."
+            ]
+          ]
+        },
+        {
+          "bt": "o que o tombamento permite",
+          "t": "a proteção como liberdade",
+          "itens": [
+            [
+              "01",
+              "<b>A proteção recai sobre as fachadas.</b> As características arquitetônicas externas são o objeto do tombamento."
+            ],
+            [
+              "02",
+              "<b>O interior está livre de obrigação de preservação.</b> A reorganização interna é possível — e necessária para gerar os salões amplos."
+            ],
+            [
+              "03",
+              "<b>A área livre do parque dispensa análise prévia.</b> O que exige vão grande encontra lugar sem passar pelo rito."
+            ],
+            [
+              "04",
+              "<b>O que se altera deixa testemunho.</b> A própria resolução exige preservar o traço do elemento original — é a base da intervenção legível."
+            ]
+          ]
+        }
       ]
     },
     {
@@ -601,7 +607,8 @@
           "t": "",
           "cap": ""
         }
-      ]
+      ],
+      "sangra": 1
     },
     {
       "g": "lista",

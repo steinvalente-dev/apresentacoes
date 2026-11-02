@@ -42,8 +42,8 @@
    "pecas": [
     {
      "nome": "centro de acolhimento ao autista",
-     "pranchas": 32,
-     "peso": 44.99,
+     "pranchas": 30,
+     "peso": 45.0,
      "data": "02.11.2026",
      "href": "centro-tea-butanta/apresentacao.html",
      "frente": "sarasa",
@@ -693,5 +693,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-11-02T23:12:30+00:00"
+ "gerado": "2026-11-02T23:32:37+00:00"
 }

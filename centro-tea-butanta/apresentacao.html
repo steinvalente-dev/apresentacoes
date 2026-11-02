@@ -880,6 +880,46 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-sequencia .seq:not(:has(.st:not(:empty))):not(:has(.sd:not(:empty))) .seq-cap{
   position:absolute;left:0;bottom:0;padding-bottom:0;z-index:2}
 
+/* ══ `sangra:1` no `sequencia` — a planta ate a borda, ancorada a DIREITA ══
+   02/11/2026. A sequencia construtiva e quase quadrada (4:3) numa prancha
+   16:9. Em `contain` sobrava moldura dos dois lados e a planta encolhia no
+   meio. Ancorada a direita e com a altura TODA da prancha, ela cresce o
+   maximo que a proporcao permite e a sobra vira uma faixa util a esquerda
+   — que e onde o Michel vai pôr texto.
+
+   ⚑ A FAIXA SE MEDE, nao se chuta: `100cqh * a proporcao da imagem` e a
+   largura que a planta ocupa com altura cheia, e o que sobra e a faixa.
+   Fixar a faixa em px ou em % da largura daria sobreposicao em projetor
+   largo e baixo, que e onde esta peca ja falhou antes.
+
+   ⚑ A planta vai ATRAS do kicker e do titulo (`z-index`), nao ao lado:
+   eles moram na faixa, e a faixa so existe porque a planta parou ali. */
+.g-sequencia.sangra{--pl-ar:1.333;
+  --pl-w:calc(100cqh * var(--pl-ar));
+  --faixa:calc(100% - var(--pl-w))}
+.g-sequencia.sangra .wrap{position:static}
+.g-sequencia.sangra .seq{position:absolute;inset:0;margin:0;z-index:0}
+.g-sequencia.sangra .seq-etapa{grid-template-columns:1fr;gap:0}
+.g-sequencia.sangra .seq-etapa img{position:absolute;top:0;right:0;bottom:0;
+  height:100%;width:auto;max-width:100%;object-fit:contain;object-position:right center}
+/* kicker, titulo e o controle sobem para a faixa */
+/* ⚑ A FAIXA DITA O CORPO DO TITULO. Com a planta em altura cheia sobram
+   ~25% da largura; o `big` da casa, dimensionado para a prancha inteira,
+   quebrava "como o projeto se constrói" em QUATRO linhas. Na sangria ele
+   cai para a escala da faixa e volta a duas. */
+.g-sequencia.sangra .kick,.g-sequencia.sangra h1,.g-sequencia.sangra .sub{
+  position:relative;z-index:3;max-width:calc(var(--faixa) - var(--gut) * 1.2)}
+.g-sequencia.sangra h1{font-size:clamp(21px,2.1cqw,38px);line-height:1.06}
+.g-sequencia.sangra .kick{letter-spacing:.18em}
+.g-sequencia.sangra .seq-cap{z-index:3}
+/* ⚑ o controle sobe para DENTRO da faixa: no pe ele caia sobre o nome do
+   projeto, que mora no chrome e nao se move. */
+.g-sequencia.sangra .seqnav{z-index:3;left:0;right:auto;
+  bottom:calc(var(--bot) + clamp(10px,1.6cqh,26px))}
+/* ⚑ o contador solto da etapa sai: na sangria ele caia na borda da tela,
+   cortado, e repetia o numero que o proprio controle ja mostra. */
+.g-sequencia.sangra .seq-cap{display:none}
+
 /* ancorada embaixo: a legenda cresce para CIMA a partir do rodape da
    coluna, e o `padding-bottom` guarda a faixa do controle. */
 .g-sequencia .seq-cap{min-width:0;display:flex;flex-direction:column;
@@ -934,6 +974,70 @@ body.em-logo .chrome.topo .secao{display:inline}
 
    Fica acima da legenda de camadas, na mesma coluna e na mesma língua: o
    canto direito é o chrome, o resto da tela é a paisagem.              ══ */
+/* ══ TEMAS SOBRE O 3D — `temas:[{bt,t,itens}]` ═══════════════════════════
+   02/11/2026, pedido do Michel: *"eu queria que o 3D ficasse girando, e aí
+   eu vou falar certas coisas... alguns botões que ligavam certas
+   informações, abrir um painel lateral"*. Eram tres pranchas de lista
+   seguidas — qualidades, desafios e o que o tombamento permite — que
+   tiravam o lugar da tela justamente enquanto se falava dele.
+
+   ⚑ UM SLIDE, NAO TRES. Como tres pranchas, o visor 3D montaria e
+   desmontaria tres vezes: cada chegada reinicia a aproximacao e o giro
+   para. Num slide so, a camera nunca para — e e o giro contínuo que faz
+   a fala parecer sobre o lugar, e nao sobre uma lista.
+
+   ⚑ UM PAINEL POR VEZ. Abrir o segundo fecha o primeiro: dois paineis
+   sobre o 3D cobrem o que eles estao explicando.
+
+   ⚑ O PAINEL NAO ROUBA O TECLADO. O visor ja disputa teclado com o deck
+   (ver o `veu` e o botao `sair`); os botoes de tema sao DOM comum, com
+   `pointer-events` proprio, e nao entram nessa disputa.          */
+.g-earth-3d .temas{position:absolute;left:var(--gut);z-index:4;
+  bottom:calc(var(--bot) + clamp(14px,2.2cqh,32px));
+  display:flex;flex-wrap:wrap;gap:clamp(6px,.6cqw,10px);max-width:46cqw}
+.g-earth-3d .temas button{pointer-events:auto;cursor:pointer;
+  font-family:var(--f-corpo);font-weight:600;font-size:clamp(10px,.84cqw,14px);
+  letter-spacing:.05em;color:var(--papel);
+  background:color-mix(in srgb,var(--tinta) 58%,transparent);
+  border:1.5px solid var(--papel-40);border-radius:999px;
+  padding:.62em 1.15em;transition:background .22s ease,border-color .22s ease}
+.g-earth-3d .temas button:hover{border-color:var(--papel)}
+.g-earth-3d .temas button[aria-pressed="true"]{
+  background:var(--primaria);border-color:var(--primaria);color:var(--papel)}
+.g-earth-3d .painel{position:absolute;left:var(--gut);z-index:4;
+  top:calc(var(--top) + clamp(60px,9cqh,130px));
+  bottom:calc(var(--bot) + clamp(58px,7.5cqh,104px));
+  width:clamp(260px,30cqw,460px);overflow-y:auto;overscroll-behavior:contain;
+  background:color-mix(in srgb,var(--tinta) 72%,transparent);
+  border:1px solid var(--papel-20);border-radius:12px;
+  padding:clamp(14px,1.9cqh,26px) clamp(14px,1.4cqw,24px);
+  opacity:0;pointer-events:none;transform:translateX(-12px);
+  transition:opacity .3s ease,transform .3s cubic-bezier(.2,.7,.3,1)}
+.g-earth-3d .painel.on{opacity:1;pointer-events:auto;transform:none}
+/* ⚑ O ROTULO RECOLHE QUANDO UM PAINEL ABRE. Os dois moram no canto
+   inferior esquerdo — o rotulo porque e onde o `earth-3d` sempre o pos, o
+   painel porque e de onde os botoes saem — e sobrepostos o painel engolia
+   o titulo da prancha. Fechado o painel, o rotulo volta. */
+.g-earth-3d.com-painel .rotulo{opacity:0;pointer-events:none;
+  transition:opacity .25s ease}
+/* O convite do veu atravessa o meio da cena e compete com o painel aberto.
+   Some a opacidade mas NAO o pointer-events: o veu continua sendo quem
+   captura o primeiro clique e liga `girando`. */
+.g-earth-3d.com-painel .veu{opacity:0}
+.g-earth-3d .painel h4{margin:0 0 clamp(10px,1.5cqh,20px);
+  font-family:var(--f-display);font-style:italic;font-weight:500;
+  letter-spacing:-.035em;line-height:1.05;color:var(--papel);
+  font-size:clamp(17px,1.6cqw,28px)}
+.g-earth-3d .painel ol{list-style:none;margin:0;padding:0;
+  display:flex;flex-direction:column;gap:clamp(9px,1.3cqh,18px)}
+.g-earth-3d .painel li{display:grid;grid-template-columns:auto 1fr;
+  gap:0 clamp(8px,.85cqw,15px);align-items:baseline}
+.g-earth-3d .painel .q{font-family:var(--f-mono);font-size:calc(var(--fs-cap)*.95);
+  letter-spacing:.1em;color:var(--acento-claro)}
+.g-earth-3d .painel .x{font-size:clamp(12px,1cqw,17px);line-height:1.5;
+  color:var(--papel-90)}
+.g-earth-3d .painel .x b{color:var(--papel);font-weight:600}
+
 .g-earth-3d .rota{position:absolute;right:var(--gut);
   bottom:calc(var(--bot) + clamp(52px,7cqh,96px) + clamp(112px,17cqh,210px));
   z-index:3;display:none;flex-direction:column;gap:.05em;
@@ -3097,6 +3201,13 @@ body.claro .g-viva .anel{border-color:var(--tinta-15);border-top-color:var(--tin
 /* a legenda entra junto com o visor: enquanto carrega ou depois de falhar
    nao ha camada para ligar, e uma lista de camadas sobre a tela de estado e
    promessa que a peca nao pode cumprir. */
+/* ⚑ os TEMAS seguem a regra da legenda: enquanto o visor carrega ou
+   depois de falhar eles somem. Botao que abre painel sobre um 3D que nao
+   esta na tela e a mesma promessa que a peca nao pode cumprir — e, pior,
+   a tela de estado tem z-index maior e engole o clique, que foi como isto
+   apareceu: o teste nao conseguia clicar no botao. */
+.g-earth-3d.esperando .temas,.g-earth-3d.falhou .temas,
+.g-earth-3d.esperando .painel,.g-earth-3d.falhou .painel,
 .g-earth-3d.esperando .legenda,.g-earth-3d.falhou .legenda,
 .g-earth-3d.esperando .veu,.g-earth-3d.esperando .cmd,.g-earth-3d.falhou .veu,.g-earth-3d.falhou .cmd,
 .g-modelo-3d.esperando .veu,.g-modelo-3d.esperando .cmd,.g-modelo-3d.esperando .rotulo,
@@ -3940,14 +4051,12 @@ const DECK=[
 {"g":"earth-3d","lat":-23.599136,"lng":-46.744936,"alt":760,"kick":"o lugar","h2":"o Parque Chácara do Jockey","lead":"Rua Santa Crescência · Ferreira, Butantã · São Paulo","cap":"O conjunto da antiga sede do Jockey Club dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos — cavalariças, alojamento dos cavalariços e casa da administração. A massa arbórea que se vê é o dado que condiciona a implantação."},
 {"g":"cheia","src":"","h2":"localização","cap":"Planta do parque, com norte. Zoom na edificação existente no slide seguinte.","claro":1},
 {"g":"cheia","src":"","h2":"o conjunto edificado","cap":"Os braços longilíneos do conjunto preexistente.","claro":1},
-{"g":"lista","largo":1,"kick":"o que o lugar oferece","t":"qualidades e oportunidades","itens":[["01","<b>Sequência pronta.<\/b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."],["02","<b>Compartimentação pronta.<\/b> A malha de baias está na escala do atendimento em grupo pequeno."],["03","<b>Arvoredo maduro.<\/b> Estímulo natural é regulador, e não se planta em dois anos."],["04","<b>Endereço com história.<\/b> Um bem ocioso volta à vida pública."]]},
-{"g":"lista","largo":1,"kick":"o que o lugar impõe","t":"desafios","itens":[["01","<b>Geometria restritiva.<\/b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."],["02","<b>Arborização em posição de risco.<\/b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."],["03","<b>Acústica.<\/b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."]]},
-{"g":"lista","largo":1,"kick":"o que o tombamento permite","t":"a proteção como liberdade","itens":[["01","<b>A proteção recai sobre as fachadas.<\/b> As características arquitetônicas externas são o objeto do tombamento."],["02","<b>O interior está livre de obrigação de preservação.<\/b> A reorganização interna é possível — e necessária para gerar os salões amplos."],["03","<b>A área livre do parque dispensa análise prévia.<\/b> O que exige vão grande encontra lugar sem passar pelo rito."],["04","<b>O que se altera deixa testemunho.<\/b> A própria resolução exige preservar o traço do elemento original — é a base da intervenção legível."]]},
+{"g":"earth-3d","lat":-23.599136,"lng":-46.744936,"alt":760,"compacto":1,"kick":"o lugar, de perto","h2":"o que este conjunto oferece","lead":"Três leituras sobre o mesmo lugar.","temas":[{"bt":"qualidades e oportunidades","t":"qualidades e oportunidades","itens":[["01","<b>Sequência pronta.<\/b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."],["02","<b>Compartimentação pronta.<\/b> A malha de baias está na escala do atendimento em grupo pequeno."],["03","<b>Arvoredo maduro.<\/b> Estímulo natural é regulador, e não se planta em dois anos."],["04","<b>Endereço com história.<\/b> Um bem ocioso volta à vida pública."]]},{"bt":"desafios","t":"desafios","itens":[["01","<b>Geometria restritiva.<\/b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."],["02","<b>Arborização em posição de risco.<\/b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."],["03","<b>Acústica.<\/b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."]]},{"bt":"o que o tombamento permite","t":"a proteção como liberdade","itens":[["01","<b>A proteção recai sobre as fachadas.<\/b> As características arquitetônicas externas são o objeto do tombamento."],["02","<b>O interior está livre de obrigação de preservação.<\/b> A reorganização interna é possível — e necessária para gerar os salões amplos."],["03","<b>A área livre do parque dispensa análise prévia.<\/b> O que exige vão grande encontra lugar sem passar pelo rito."],["04","<b>O que se altera deixa testemunho.<\/b> A própria resolução exige preservar o traço do elemento original — é a base da intervenção legível."]]}]},
 {"g":"frase","esc":1,"kick":"a pergunta central","t":"este programa cabe<br>neste lugar?"},
 {"g":"confronto","kick":"a resposta, em área","t":"o mesmo programa, dois lugares","lados":[{"rot":"o projeto que não avançou","nm":"TEA Oeste · Butantã","src":"img/implantacao-tea-oeste.jpg","alt":"Implantação do TEA Oeste, com as áreas úteis destacadas","linhas":[["ambientes","2.556,55 m²"],["circulação","1.543,24 m²"]],"total":["área construída","4.099,79 m²"]},{"rot":"a nossa proposta","nm":"Chácara do Jockey","src":"img/implantacao-jockey.jpg","linhas":[["ambientes","a confirmar"],["circulação","a confirmar"]],"total":["área construída","a confirmar"],"alt":"Implantação da proposta na Chácara do Jockey, com as áreas úteis e o segundo pavimento destacados"}],"nota":"Área construída maior não é mais programa: <b>1.543 m², 38% do total<\/b>, são circulação. O termo de referência pede 4.684 m²."},
 {"g":"lista","largo":1,"kick":"a resposta","t":"cabe, e cumpre","itens":[["01","<b>Cabe em área.<\/b> O programa útil do modelo entra no conjunto existente."],["02","<b>Cumpre todos os papéis.<\/b> Atendimento, cultura, esporte, autonomia e acolhimento de famílias."],["03","<b>E ganha o que terreno vazio não dá.<\/b> Arvoredo maduro, escala construída e história."]]},
 {"g":"divisor","div":3,"terra":1,"fundo":1,"sec":"a proposta","dn":"03","dt":"a proposta de intervenção","ds":"A planta, camada por camada: do que o conjunto é hoje ao que ele passa a ser."},
-{"g":"sequencia","kick":"a proposta, passo a passo","t":"como o projeto se constrói","items":[{"src":"img/evo-01.jpg","t":"","cap":""},{"src":"img/evo-02.jpg","t":"","cap":""},{"src":"img/evo-03.jpg","t":"","cap":""},{"src":"img/evo-04.jpg","t":"","cap":""},{"src":"img/evo-05.jpg","t":"","cap":""},{"src":"img/evo-06.jpg","t":"","cap":""},{"src":"img/evo-07.jpg","t":"","cap":""},{"src":"img/evo-08.jpg","t":"","cap":""},{"src":"img/evo-09.jpg","t":"","cap":""},{"src":"img/evo-10.jpg","t":"","cap":""},{"src":"img/evo-11.jpg","t":"","cap":""},{"src":"img/evo-12.jpg","t":"","cap":""},{"src":"img/evo-13.jpg","t":"","cap":""},{"src":"img/evo-14.jpg","t":"","cap":""},{"src":"img/evo-15.jpg","t":"","cap":""},{"src":"img/evo-16.jpg","t":"","cap":""}]},
+{"g":"sequencia","kick":"a proposta, passo a passo","t":"como o projeto se constrói","items":[{"src":"img/evo-01.jpg","t":"","cap":""},{"src":"img/evo-02.jpg","t":"","cap":""},{"src":"img/evo-03.jpg","t":"","cap":""},{"src":"img/evo-04.jpg","t":"","cap":""},{"src":"img/evo-05.jpg","t":"","cap":""},{"src":"img/evo-06.jpg","t":"","cap":""},{"src":"img/evo-07.jpg","t":"","cap":""},{"src":"img/evo-08.jpg","t":"","cap":""},{"src":"img/evo-09.jpg","t":"","cap":""},{"src":"img/evo-10.jpg","t":"","cap":""},{"src":"img/evo-11.jpg","t":"","cap":""},{"src":"img/evo-12.jpg","t":"","cap":""},{"src":"img/evo-13.jpg","t":"","cap":""},{"src":"img/evo-14.jpg","t":"","cap":""},{"src":"img/evo-15.jpg","t":"","cap":""},{"src":"img/evo-16.jpg","t":"","cap":""}],"sangra":1},
 {"g":"lista","largo":1,"kick":"as camadas","t":"as camadas · do conjunto ao partido","itens":[["01","<b>O conjunto hoje.<\/b> A planta como ela é."],["02","<b>Vocação dos espaços.<\/b> Que uso cada braço pede, pelo que já é."],["03","<b>Circulação solicitada.<\/b> Os fluxos que o termo de referência determina."],["04","<b>Circulação pretendida.<\/b> O que propomos — e é daqui que decorre o resto."],["05","<b>Acessos separados.<\/b> Serviço, visitantes e usuários, com chegada de van pela frente."]]},
 {"g":"lista","largo":1,"kick":"as camadas","t":"as camadas · do partido à intervenção","itens":[["06","<b>A cobertura de ligação.<\/b> Decorre dos fluxos; não é gesto formal."],["07","<b>Setorização dos braços.<\/b> O que cada edifício recebe."],["08","<b>Demolição.<\/b> As paredes internas que caem para gerar salões amplos."],["09","<b>Pontos de aproximação.<\/b> Croquis e imagens conceituais, abertos por clique."]]},
 {"g":"cheia","src":"","h2":"a cobertura que liga os dois prédios","cap":"Imagem conceitual.","claro":1},
@@ -4557,6 +4666,17 @@ function tpl(s){
       +   `<b>carregando localização</b>`
       /* <span> vazio de propósito: é onde o falha() escreve o diagnóstico */
       +   `<span></span></div>`
+      + ((s.temas&&s.temas.length)
+          ? `<div class="temas">`
+            + s.temas.map((x,i)=>`<button type="button" class="tm" data-tm="${i}"`
+                + ` aria-pressed="false">${x.bt||x.t||('tema '+(i+1))}</button>`).join('')
+            + `</div>`
+            + s.temas.map((x,i)=>`<div class="painel" data-tm="${i}">`
+                + (x.t?`<h4>${RS(x.t)}</h4>`:'')
+                + `<ol>`+(x.itens||[]).map(([q,y])=>
+                    `<li><span class="q">${q}</span><span class="x">${y}</span></li>`).join('')
+                + `</ol></div>`).join('')
+          : '')
       /* a gaveta da tulha: o que o layer do café não mostra, porque acontece
          debaixo do telhado. Ver "A GAVETA DA TULHA" no CSS. */
       + ((s.cafe&&s.cafe.length) ? `<div class="rota"><h4>a rota do caf&#233;</h4>`
@@ -4748,7 +4868,7 @@ DECK.forEach((s,i)=>{if(!s.atalho)return;
    próprio slide, e o console recebe a pilha. */
 const tplSeguro=s=>{try{return tpl(s)}catch(e){console.error('deck · '+s.g,e);
   return aviso(s,'gabarito '+s.g+' quebrou','<code>'+String(e.message).replace(/</g,'&lt;')+'</code>')}};
-palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.cel?' cel':''}${s.dois?' dois':''}${s.claro?' claro':''}${s.caber?' caber':''}${s.juntar?' juntar':''}" data-i="${i}">${tplSeguro(s)}</section>`).join('');
+palco.innerHTML=DECK.map((s,i)=>`<section class="slide g-${s.g}${s.g==='fotos'?' temfoto':''}${s.sang?' temmapa':''}${s.sangra?' sangra':''}${s.cel?' cel':''}${s.dois?' dois':''}${s.claro?' claro':''}${s.caber?' caber':''}${s.juntar?' juntar':''}" data-i="${i}">${tplSeguro(s)}</section>`).join('');
 const sl=[...document.querySelectorAll('.slide')];
 /* ⚑ quem ja declarou `--i` no proprio gabarito manda. O teto de 10 existe
    para a cascata de um slide comum nao virar espera; um gabarito que precisa
@@ -4969,6 +5089,7 @@ function go(i,tudo){
   /* `semtopo:1` — a peca vizinha ja traz cabecalho proprio; ver o bloco
      no CSS. */
   document.body.classList.toggle('semtopo', !!s.semtopo);
+  if(window.__msFechaTemas) window.__msFechaTemas();
   /* grafismo de marca na base (GRAFISMO do bloco), só onde o slide pedir */
   document.body.classList.toggle('com-graf', !!(s.graf&&GRAFISMO));
   /* `em-imagem` = o fundo do slide é imagem ou visor, não campo pintado. É
@@ -5415,6 +5536,39 @@ window.MSTempo=(function(){
     }
   };
 })();
+
+/* ── TEMAS DO `earth-3d`: um painel por vez, sobre o 3D girando ────────
+   Delegacao no palco, para valer em qualquer slide `earth-3d` com `temas`
+   sem precisar religar nada quando o deck remonta. `stopPropagation` e
+   obrigatorio: o palco inteiro avanca o slide no clique, e abrir um painel
+   nao pode trocar de prancha. */
+addEventListener('click',function(e){
+  var bt=e.target.closest && e.target.closest('.g-earth-3d .temas button.tm');
+  if(!bt) return;
+  e.stopPropagation(); e.preventDefault();
+  var sl=bt.closest('.slide'), k=bt.dataset.tm;
+  var abrir=bt.getAttribute('aria-pressed')!=='true';
+  sl.querySelectorAll('.temas button.tm').forEach(function(b){
+    b.setAttribute('aria-pressed','false'); });
+  sl.querySelectorAll('.painel').forEach(function(p){ p.classList.remove('on'); });
+  sl.classList.remove('com-painel');
+  if(abrir){
+    bt.setAttribute('aria-pressed','true');
+    var p=sl.querySelector('.painel[data-tm="'+k+'"]');
+    if(p){ p.classList.add('on'); sl.classList.add('com-painel'); }
+  }
+},true);
+/* ⚑ fechar ao sair do slide: NAO ha evento de troca de prancha no motor —
+   a primeira versao escutava um `ms-slide` que eu inventei e que nunca
+   dispara. A limpeza mora no `go()`, junto das outras classes de corpo. */
+window.__msFechaTemas=function(){
+  document.querySelectorAll('.g-earth-3d .painel.on').forEach(function(p){
+    p.classList.remove('on'); });
+  document.querySelectorAll('.g-earth-3d .temas button.tm').forEach(function(b){
+    b.setAttribute('aria-pressed','false'); });
+  document.querySelectorAll('.g-earth-3d.com-painel').forEach(function(s){
+    s.classList.remove('com-painel'); });
+};
 
 window.MSViva=(function(){
   /* Monta o quadro na chegada e NÃO desmonta na saída: o arquivo é local, e
