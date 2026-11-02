@@ -29,11 +29,15 @@ LINHA_VOLTAR = '<script defer src="../modulos/ms-voltar.js"></script>\n'
 LIMITE_BASE64 = 8 * 1024 * 1024          # medido JÁ EM BASE64 (o que pesa no HTML); acima disto: arquivo ao lado
 
 # tabela do DECK-MONTAR: (largura máxima, qualidade JPEG). None = resolução nativa.
-# `mosaico`: a foto roda numa coluna de ~1/6 da tela. 1800px ali sao sete
-# vezes o necessario, e o mosaico pede MUITAS fotos — e o numero de fotos,
-# nao o tamanho de cada uma, que faz a leitura de panorama. 02/11/2026.
+# `mosaico`: a foto roda numa coluna de ~1/6 da tela — 320px num projetor
+# 1920. 1800px ali sao cinco vezes o necessario, e o mosaico pede MUITAS
+# fotos: e o numero delas, nao o tamanho de cada uma, que faz a leitura de
+# panorama. Medido em 02/11/2026 com as 23 obras do portfolio 2026:
+#   760px q78 -> 2,64 MB em base64 · 560px q74 -> 1,38 MB
+# 560 ainda e 1,75x a coluna, que cobre tela densa. A diferenca de 1,26 MB
+# e o que sobra para os slots de imagem que a peca ainda vai receber.
 RESIZE = {'cheia': (2200, 80), 'duo': (1800, 82), 'prancha': (1800, 82), 'desenho': (None, 88),
-          'fundo': (640, 80), 'mosaico': (760, 78), 'padrao': (1800, 82)}
+          'fundo': (640, 80), 'mosaico': (560, 74), 'padrao': (1800, 82)}
 
 
 def falha(msg, cod=1):
