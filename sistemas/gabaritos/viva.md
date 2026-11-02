@@ -71,6 +71,28 @@ na ponta** (`postMessage` `{ms:'viva',vai:±1}`).
 
 ---
 
+## Duas peças, dois comportamentos — `recarrega` e `semtopo`
+
+02/11/2026, quando o **mapa de atuação** entrou no deck do CAAB. O `viva`
+nasceu para a planta interativa, e os dois padrões dele são os da planta.
+O mapa quis o oposto nos dois:
+
+| | planta interativa | mapa de atuação |
+|---|---|---|
+| ao voltar ao slide | **mantém** — zoom, camadas ligadas e a anotação feita na frente do cliente são trabalho; recarregar seria jogar fora | **`recarrega:1`** — a peça tem abertura de 9,5 s (Brasil → São Paulo → centro → varredura) que *é* o argumento do slide. Encontrá-la parada no fim entrega o resultado sem o movimento que o explica |
+| chrome | esconde o próprio e usa o do deck (modo `embutida`) | **`semtopo:1`** — ela é peça de tela cheia com cabeçalho completo: logotipo à esquerda, título e três contadores à direita. O topo do deck sai, senão é logotipo sobre logotipo |
+
+Com `semtopo` **o pé fica**: `viva` está na `G_TRAVA`, o toque no palco não
+avança, e as setas são a única forma de sair do slide.
+
+⚑ **Pendência conhecida.** O mapa não implementa o modo `embutida`, então não
+desvia do pé: a pílula de navegação cai sobre as duas últimas linhas da lista
+lateral. O conserto é no módulo, não aqui — o deck já manda a medida por
+`postMessage` (`{ms:'viva-chrome',topo,pe}`); falta a peça escutar e aplicar
+`padding-bottom` na lista. É mudança no módulo, que é mantido fora desta peça.
+
+---
+
 ## Armadilhas
 
 **Proporção adivinhada por fora não fecha.** A primeira versão desviava do

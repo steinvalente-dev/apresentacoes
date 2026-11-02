@@ -124,17 +124,18 @@
           "servicos": 1,
           "serif": 1,
           "lead": "Cinco frentes, da prospecção ao ofício executado na obra."
-        },
-        {
-          "kick": "onde atuamos",
-          "t": "nove estados",
-          "src": "mapa-atuacao.png",
-          "cap": "<p>Amazonas · Maranhão · Pernambuco · Bahia · Mato Grosso · Mato Grosso do Sul · <mark>São Paulo</mark> · Rio de Janeiro · Rio Grande do Sul.</p>",
-          "serif": 1,
-          "lead": "Do Amazonas ao Rio Grande do Sul."
         }
       ],
       "espelho": 1
+    },
+    {
+      "g": "viva",
+      "src": "../modulos/mapa-atuacao-sarasa.html",
+      "recarrega": 1,
+      "semtopo": 1,
+      "alt": "Mapa de atuação do Estúdio Sarasá: 35 imóveis em São Paulo e obras em nove estados",
+      "h2": "onde atuamos",
+      "cap": "abrindo o mapa de atuação"
     },
     {
       "g": "capa"

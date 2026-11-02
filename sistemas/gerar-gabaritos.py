@@ -51,7 +51,7 @@ DESCRICAO = {
     'earth-3d':    ('imagem', 'onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md`'),
     'modelo-3d':   ('imagem', 'o que o projeto é: o modelo do SketchUp, vivo. Exige modelo PÚBLICO no 3D Warehouse — `gabaritos/modelo.md`'),
     'sequencia':   ('imagem', 'uma coisa só, camada por camada: texto em 1/3 à esquerda, imagem em 2/3 à direita, uma por vez em crossfade, com controle próprio no slide que anda a sequência sem trocar de slide. `items:[{src,t,cap}]`; a primeira é o estado de chegada'),
-    'viva':        ('imagem', 'a peça vizinha rodando DENTRO do slide, em quadro de sangria total. `src` relativo, mesma pasta; o slide fica travado e só as setas trocam — `gabaritos/viva.md`'),
+    'viva':        ('imagem', 'a peça vizinha rodando DENTRO do slide, em quadro de sangria total. `src` relativo (mesma pasta, ou `../modulos/` no acervo); o slide fica travado e só as setas trocam. `recarrega` remonta o quadro a cada chegada, para peça que abre sozinha; `semtopo` tira o chrome do topo, para peça que já tem cabeçalho próprio — `gabaritos/viva.md`'),
     'mapa':        ('imagem', 'o cadastro desenhado, com hover por lote. Exige o objeto `MAP` — `gabaritos/mapa-lotes.md`'),
 }
 ORDEM_GRUPO = ['estrutura', 'texto', 'dado', 'imagem']

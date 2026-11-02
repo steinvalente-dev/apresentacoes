@@ -2700,6 +2700,22 @@ body.no-fim #msgraf{opacity:.18}
    ⚑ `viva` está na lista `em-imagem` do go() e na `G_TRAVA`: o fundo é visor,
      então o chrome inverte; e o slide não troca por toque nem por arrasto —
      dentro dele o dedo desenha e arrasta a planta. As setinhas seguem. */
+/* ⚑ `semtopo:1` — QUANDO A PECA VIZINHA JA TEM CABECALHO. O `viva` nasceu
+   para a planta interativa, que esconde o chrome dela e usa o do deck. O
+   mapa de atuacao e outra coisa: ele e peca de tela cheia com cabecalho
+   proprio completo — logotipo a esquerda, titulo e os tres contadores a
+   direita. Sobrepor o chrome do deck poe logotipo em cima de logotipo e
+   as bolinhas de secao em cima do titulo.
+
+   Entao o topo do deck sai e o PE FICA: as setas e o contador de pranchas
+   sao a unica forma de sair do slide, porque `viva` esta na `G_TRAVA` e o
+   toque no palco nao avanca.
+
+   O caminho completo seria dar ao modulo um modo `embutida`, como a planta
+   tem — ele esconderia o proprio chrome e desviaria do nosso pela medida
+   que ja chega por `postMessage`. Fica anotado: o modulo e mantido fora
+   desta peca, e mexer nele e decisao do Michel.                        */
+body.semtopo .chrome.topo{opacity:0;pointer-events:none}
 .slide.g-viva{padding:0;overflow:hidden;background:var(--moldura)}
 /* peça com a lupa aberta: a pílula sai de cena (ver "A LUPA DA PEÇA" no JS) */
 body.lupa-viva .nav{opacity:0;pointer-events:none;transition:opacity .22s ease}
@@ -4699,6 +4715,9 @@ function go(i,tudo){
      cresce e vira cabecalho. Ver o bloco no CSS. */
   document.body.classList.toggle('inst', !!s.inst);
   document.body.classList.toggle('espelho', s.g==='meia' && !!s.espelho);
+  /* `semtopo:1` — a peca vizinha ja traz cabecalho proprio; ver o bloco
+     no CSS. */
+  document.body.classList.toggle('semtopo', !!s.semtopo);
   /* grafismo de marca na base (GRAFISMO do bloco), só onde o slide pedir */
   document.body.classList.toggle('com-graf', !!(s.graf&&GRAFISMO));
   /* `em-imagem` = o fundo do slide é imagem ou visor, não campo pintado. É
@@ -5053,7 +5072,16 @@ window.MSViva=(function(){
       return;
     }
     var q=quadro(atual); if(!q) return;
-    if(!q.src||q.src==='about:blank'){
+    /* ⚑ `recarrega:1` — a peca que ABRE SOZINHA tem de abrir de novo. O
+       padrao do `viva` e montar uma vez e nunca desmontar, porque a planta
+       interativa guarda zoom, camadas e a anotacao feita na frente do
+       cliente: recarregar la seria perder trabalho. O mapa de atuacao e o
+       oposto — ele tem uma abertura de 9,5 s (Brasil, Sao Paulo, centro,
+       varredura das fotos) que E o argumento do slide. Voltar ao slide e
+       encontrar o mapa parado no fim da sequencia entrega o resultado sem
+       o movimento que o explica. 02/11/2026. */
+    if(!q.src||q.src==='about:blank'||s.recarrega){
+      atual.classList.remove('pronto');
       q.addEventListener('load',function(){
         atual.classList.add('pronto');
         medida(q);
