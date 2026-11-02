@@ -57,26 +57,35 @@
           "manchete": 1,
           "linha": [
             [
+              "1939",
+              "Nasce <mark>Gerardo Martin Sarasá</mark> em Arbúcias, Girona, entre o fim da Guerra Civil Espanhola e o começo da Segunda Guerra."
+            ],
+            [
               "1956",
-              "Gerardo Martin Sarasá chega ao Brasil e funda o Atelier Artístico, de azulejaria e vitrais."
+              "Chega ao Brasil e funda o <mark>Atelier Artístico Gerardo Sarasá</mark>, com especialidade em azulejaria e vitral."
             ],
             [
               "1970",
-              "Passa a projetos de conservação e restauro do patrimônio edificado."
+              "Passa aos projetos de <mark>conservação e restauro</mark> do patrimônio edificado."
             ],
             [
               "1980",
-              "Antonio Luís e Marcelo Sarasá Martin assumem a casa."
+              "Antonio Luís e Marcelo Sarasá Martin assumem a casa, hoje na <mark>terceira geração</mark>."
             ],
             [
               "2002",
-              "É criada a Zeladoria do Patrimônio Cultural."
+              "No Mosteiro da Luz, é concebida a <mark>Zeladoria do Patrimônio Cultural</mark> como disciplina autônoma — conceituada em 2012 e registrada na Biblioteca Nacional em 2017."
             ],
             [
               "2022",
-              "É fundado o Instituto Sarasá."
+              "É fundado o <mark>Instituto Sarasá de Arte, Cultura e Cidadania</mark>."
             ]
-          ]
+          ],
+          "lk": 1,
+          "botao": {
+            "t": "visite o nosso site",
+            "url": "https://estudiosarasa.com.br"
+          }
         }
       ]
     },
@@ -124,7 +133,8 @@
           "serif": 1,
           "lead": "Do Amazonas ao Rio Grande do Sul."
         }
-      ]
+      ],
+      "espelho": 1
     },
     {
       "g": "capa"
