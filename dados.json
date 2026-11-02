@@ -528,7 +528,7 @@
    "aba": "deck",
    "grupo": "as peças de montar",
    "nome": "mapa de atuação ⚑ Sarasá",
-   "desc": "Os 35 imóveis da carteira sobre os 96 distritos administrativos de São Paulo (GeoSampa): o distrito escurece pela densidade de contrato, ponto cheio é contrato ativo e ponto vazado é serviço pós-contrato. Clique isola o distrito e abre a ficha, com a linha-guia ligando mapa e dossiê; a tecla P — ou \"modo projeção\" — esconde o painel lateral e entrega o mapa cheio para o slide institucional. Marca Sarasá, Poppins e Archivo em base64: abre sem internet. Protótipo — 15 dos 35 endereços ainda dependem de confirmação com o estúdio",
+   "desc": "Os 35 imóveis da carteira sobre os 96 distritos administrativos de São Paulo (GeoSampa): o distrito escurece pela densidade de contrato, ponto cheio é contrato ativo e ponto vazado é serviço pós-contrato. O mouse sobre o ponto — ou sobre o item da lista — abre a miniatura do imóvel; o clique isola o distrito e abre a ficha, com a linha-guia ligando mapa e dossiê. A tecla P, ou \"modo projeção\", esconde o painel lateral e entrega o mapa cheio para o slide institucional. As 35 fotos saíram do mapa de atuação do próprio estúdio (apresentação da Praça Pari, ago/2026), recortadas a 128 px e embutidas junto com Poppins e Archivo: a peça abre inteira sem internet. Protótipo — 15 dos 35 endereços ainda dependem de confirmação",
    "arq": "modulos/LEIA-ME.md",
    "ver": "modulos/mapa-atuacao-sarasa.html"
   },
@@ -693,5 +693,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-11-02T13:46:51+00:00"
+ "gerado": "2026-11-02T13:54:05+00:00"
 }
