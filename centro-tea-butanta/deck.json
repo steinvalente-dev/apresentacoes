@@ -251,11 +251,84 @@
       ]
     },
     {
-      "g": "cheia",
-      "src": "",
-      "h2": "a Chácara do Jockey",
-      "cap": "Imagem histórica do conjunto — pesquisa iconográfica em andamento.",
-      "claro": 1
+      "g": "tempo",
+      "kick": "o lugar no tempo",
+      "cobre": 640,
+      "de": 1925,
+      "ate": 2026,
+      "items": [
+        {
+          "ano": "1930",
+          "src": "tempo-1930.jpg",
+          "ficha": "Levantamento Sara Brasil · 1930 · carta",
+          "t": "Sara Brasil: o sítio antes de tudo",
+          "cap": "Chácara rural na divisa do município. O córrego Charco Grande corta o terreno e a mata ocupa o que hoje é o parque. Não há uma construção sequer no perímetro."
+        },
+        {
+          "ano": "1940",
+          "x": 1940,
+          "ficha": "Foto aérea · 1940 · a baixar",
+          "t": "Levantamento a incorporar",
+          "vazio": "Foto aérea 1940 · quadrícula FM5-019 · a baixar no GeoSampa"
+        },
+        {
+          "ano": "1954",
+          "x": 1954,
+          "ficha": "Foto aérea · 1954 · a baixar",
+          "t": "Levantamento a incorporar",
+          "vazio": "Foto aérea 1954 · quadrícula FX03-173 · a baixar no GeoSampa"
+        },
+        {
+          "ano": "s/d",
+          "x": 1962,
+          "src": "tempo-vasp.jpg",
+          "ficha": "Carta Vasp-Cruzeiro · <span class=\"pend\">sem data no metadado — confirmar no DPH</span>",
+          "t": "Vasp-Cruzeiro: a era hípica desenhada",
+          "cap": "A pista oval de treino e as duas fileiras de cocheiras aparecem com todos os módulos. É a única peça que registra o conjunto em pleno funcionamento — e a borda esquerda está cortada no fim do mosaico."
+        },
+        {
+          "ano": "1988",
+          "src": "tempo-1988.jpg",
+          "ficha": "Folhas do Livro da Vegetação · 1988 · carta",
+          "t": "Livro da Vegetação: o miolo limpo",
+          "cap": "A carta registra a massa verde apenas no perímetro do conjunto. Entre os dois agrupamentos de edificações não há arborização mapeada. É o ponto de partida do argumento."
+        },
+        {
+          "ano": "1996",
+          "x": 1996,
+          "ficha": "Foto aérea · 1994/1996 · a baixar",
+          "t": "Levantamento a incorporar",
+          "vazio": "Foto aérea 1994/1996 · a baixar no GeoSampa"
+        },
+        {
+          "ano": "2001",
+          "x": 2001,
+          "ficha": "Foto aérea · 2000/2001 · a baixar",
+          "t": "Levantamento a incorporar",
+          "vazio": "Fotos aéreas 2000 e 2001 · a baixar no GeoSampa"
+        },
+        {
+          "ano": "2004",
+          "src": "tempo-2004.jpg",
+          "ficha": "Ortofoto MDC · 2004 · 1:1.000",
+          "t": "A alameda ainda aberta",
+          "cap": "Dezesseis anos depois, a alameda central entre os dois agrupamentos continua livre. Telhados íntegros, perímetro arborizado, miolo sem nada."
+        },
+        {
+          "ano": "2017",
+          "src": "tempo-2017.jpg",
+          "ficha": "Ortofoto PMD · 2017",
+          "t": "As primeiras árvores no miolo",
+          "cap": "Aqui começam a aparecer, esparsas, as árvores entre as fileiras. Nenhuma plantada por projeto: são espontâneas, nascidas da ausência de manejo depois do fim da atividade hípica."
+        },
+        {
+          "ano": "2020",
+          "src": "tempo-2020.jpg",
+          "ficha": "Ortofoto · 2020 · 10 cm/px",
+          "t": "O miolo tomado",
+          "cap": "Em três anos a alameda fecha. As copas encostam nos telhados e passam a representar risco direto sobre o bem tombado. É o estado que o projeto encontra."
+        }
+      ]
     },
     {
       "g": "divisor",

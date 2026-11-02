@@ -240,6 +240,131 @@ body.esc .leg{color:var(--papel-70)}
   font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.06em;line-height:1.6;color:var(--soft)}
 .fbox .slot b{color:var(--acento);font-weight:500;letter-spacing:.16em;text-transform:uppercase}
 .fcap{font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;color:var(--soft);margin-top:11px;line-height:1.6}
+
+/* ═══ TEMPO — a linha do tempo do lugar ═══════════════════════════════
+   Uma camada por levantamento, no MESMO recorte geográfico, trocadas por
+   uma régua proporcional ao tempo. A régua é proporcional de propósito:
+   trinta anos de miolo limpo ocupam trilho largo e o fechamento recente
+   fica espremido no fim — o argumento se vê sem precisar ser dito.
+
+   A origem é QUADRADA (recorte de WMS); o painel não é. O `tcam` é um
+   quadrado de lado igual à maior dimensão do painel e o transform o
+   passeia dentro dele: o que a sangria corta continua alcançável pelo
+   arrasto, sem zoom. `cobre` diz quantos metros tem o lado — é o que
+   alimenta a escala gráfica.
+
+   A costura cai em 54%, não em 50%: os pontos de seção do chrome moram
+   em `left:50%` e, com a divisa no meio exato, ficavam metade sobre a
+   foto e metade sobre o papel. 02/11/2026.                            */
+.g-tempo{padding:0;background-image:none;background:var(--papel);
+  display:grid;grid-template-columns:54% minmax(0,1fr)}
+.g-tempo .tvista{position:relative;overflow:hidden;background:var(--tinta);
+  cursor:grab;touch-action:none;user-select:none}
+.g-tempo .tvista.arrasta{cursor:grabbing}
+.g-tempo .tcam{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+.g-tempo .tcam img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .34s ease;pointer-events:none}
+.g-tempo .tcam img.on{opacity:1}
+.g-tempo .tvazio{position:absolute;inset:0;opacity:0;transition:opacity .3s ease;
+  display:grid;place-items:center;text-align:center;pointer-events:none;
+  background:repeating-linear-gradient(45deg,
+    var(--tinta-claro,color-mix(in srgb,var(--tinta) 92%,var(--papel))),
+    var(--tinta-claro,color-mix(in srgb,var(--tinta) 92%,var(--papel))) 9px,
+    var(--tinta) 9px,var(--tinta) 18px)}
+.g-tempo .tvazio.on{opacity:1}
+.g-tempo .tvazio div{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--papel-70);line-height:2;max-width:24ch}
+.g-tempo .tvazio b{display:block;font-family:var(--f-display);font-weight:600;
+  font-size:var(--fs-h);letter-spacing:-.01em;color:var(--papel);
+  margin-bottom:.5em;text-transform:none}
+/* véus: só para o chrome continuar legível sobre a foto em sangria */
+body.em-tempo .chrome.topo .secao,
+body.em-tempo .chrome.topo .dots,
+body.em-tempo .chrome.pe .pj{color:var(--papel-90)}
+.g-tempo .tveu{position:absolute;left:0;right:0;pointer-events:none;z-index:2}
+.g-tempo .tveu.a{top:0;height:calc(var(--top) * 1.5);background:linear-gradient(var(--tinta-60),transparent)}
+.g-tempo .tveu.b{bottom:0;height:calc(var(--bot) * 1.9);background:linear-gradient(transparent,var(--tinta-60))}
+.g-tempo .tesc{position:absolute;left:var(--gut);bottom:calc(var(--bot) + clamp(10px,1.4cqh,20px));
+  z-index:3;pointer-events:none;font-family:var(--f-mono);font-size:var(--fs-cap);
+  letter-spacing:.12em;color:var(--papel);text-transform:uppercase}
+.g-tempo .tesc u{display:block;height:3px;background:var(--papel);text-decoration:none;margin-bottom:.5em}
+.g-tempo .tzoom{position:absolute;right:clamp(14px,1.6cqw,26px);
+  bottom:calc(var(--bot) + clamp(10px,1.4cqh,20px));z-index:3;display:flex;gap:6px;pointer-events:auto}
+.g-tempo .tzoom button{font-family:var(--f-mono);font-size:var(--fs-cap);font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--tinta);background:var(--papel);
+  border:0;border-radius:2px;cursor:pointer;padding:.62em .85em;line-height:1;
+  transition:background .2s,opacity .3s}
+.g-tempo .tzoom button[disabled]{opacity:.35;cursor:default}
+.g-tempo .tzoom button[data-t="rev"]{background:var(--acento);color:var(--acento-claro);margin-right:4px}
+.g-tempo.andando .tzoom button[data-t="rev"],
+.g-tempo.andando .trebob{opacity:.4;pointer-events:none}
+
+/* a coluna do texto: três faixas FIXAS. O parágrafo cresce para baixo
+   dentro do vão do meio e nunca empurra a data nem a régua. */
+.g-tempo .ttx{display:grid;grid-template-rows:auto minmax(0,1fr) auto;min-width:0;
+  padding:var(--top) var(--gut) var(--bot) clamp(30px,4cqw,76px)}
+.g-tempo .talto{padding-top:clamp(14px,2.4cqh,40px)}
+.g-tempo .tano{font-family:var(--f-display);font-weight:600;font-size:var(--fs-mega);
+  line-height:.92;letter-spacing:-.02em;margin:0;font-variant-numeric:tabular-nums}
+/* a ficha é o FATO: procedência e data do levantamento, logo abaixo do
+   ano. O que vem depois dela é leitura nossa. Duas linhas reservadas
+   para a ficha mais longa não fazer o título dançar. */
+.g-tempo .tficha{font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--tinta);line-height:1.7;max-width:34ch;
+  padding-top:clamp(9px,1.2cqh,15px);border-top:1px solid var(--hair);
+  margin-top:clamp(12px,1.6cqh,22px);min-height:calc(2 * 1.7em + 15px)}
+.g-tempo .tficha .pend{color:var(--acento);font-weight:600}
+.g-tempo .tmeio{align-self:start;padding-top:clamp(18px,2.6cqh,36px);overflow:hidden}
+.g-tempo .ttit{font-family:var(--f-display);font-weight:500;font-size:var(--fs-item);
+  line-height:1.25;margin:0 0 clamp(8px,1.2cqh,16px);max-width:22ch}
+.g-tempo .tlead{font-size:var(--fs-body);line-height:1.65;color:var(--tinta-80);
+  margin:0;max-width:36ch}
+
+/* a régua, encostada na base */
+.g-tempo .tregua{align-self:end;position:relative;padding:clamp(22px,2.8cqh,38px) 0 0}
+.g-tempo .ttrilho{position:relative;height:clamp(5px,.42cqw,8px);border-radius:99px;
+  background:var(--tinta-10);margin:0 6px}
+.g-tempo .tpreenche{position:absolute;left:0;top:0;height:100%;border-radius:99px;
+  background:var(--acento);transition:width .42s cubic-bezier(.4,.05,.2,1)}
+.g-tempo .tviajante{position:absolute;top:50%;left:0;z-index:3;pointer-events:none;
+  width:clamp(20px,1.72cqw,31px);height:clamp(20px,1.72cqw,31px);
+  transform:translate(-50%,-50%);border-radius:50%;background:var(--papel);
+  box-shadow:inset 0 0 0 clamp(2px,.17cqw,3px) var(--acento),0 2px 10px var(--acento-25);
+  transition:left .42s cubic-bezier(.4,.05,.2,1)}
+.g-tempo .tm{position:absolute;top:50%;transform:translate(-50%,-50%);
+  width:clamp(26px,2.3cqw,40px);height:clamp(26px,2.3cqw,40px);border:0;background:none;
+  padding:0;cursor:pointer;z-index:2;display:grid;place-items:center}
+.g-tempo .tm i{display:block;width:clamp(8px,.72cqw,13px);height:clamp(8px,.72cqw,13px);
+  border-radius:50%;background:var(--papel);box-shadow:inset 0 0 0 2px var(--tinta-25);
+  transition:box-shadow .25s,background .25s}
+.g-tempo .tm:hover i{box-shadow:inset 0 0 0 2px var(--acento)}
+.g-tempo .tm.tem i{box-shadow:inset 0 0 0 2px var(--tinta-40);background:var(--tinta-40)}
+.g-tempo .tm.on i{background:var(--acento);box-shadow:inset 0 0 0 2px var(--acento)}
+.g-tempo .tm.falta i{background:var(--papel);box-shadow:inset 0 0 0 2px var(--acento-40)}
+.g-tempo .tm.falta{cursor:not-allowed}
+.g-tempo .tm b{position:absolute;top:calc(100% - 4px);font-family:var(--f-mono);
+  font-weight:500;font-size:var(--fs-cap);letter-spacing:.08em;color:var(--soft);
+  white-space:nowrap;font-variant-numeric:tabular-nums;transition:color .25s,font-weight .25s}
+.g-tempo .tm.alto b{top:auto;bottom:calc(100% - 4px)}
+.g-tempo .tm.on b{color:var(--acento);font-weight:600}
+.g-tempo .tm.falta b{color:var(--acento-40)}
+.g-tempo .tleg{margin-top:clamp(36px,4.4cqh,56px);font-family:var(--f-mono);
+  font-size:var(--fs-cap);letter-spacing:.1em;color:var(--soft);text-transform:uppercase;
+  display:flex;gap:1.2em;align-items:center;flex-wrap:wrap}
+.g-tempo .tleg span{display:inline-flex;align-items:center;gap:.5em}
+.g-tempo .tleg u{display:block;width:9px;height:9px;border-radius:50%;text-decoration:none}
+.g-tempo .tleg .t1{background:var(--tinta-40)}
+.g-tempo .tleg .t2{background:var(--papel);box-shadow:inset 0 0 0 2px var(--acento-40)}
+.g-tempo .trebob{font-family:var(--f-mono);font-size:var(--fs-cap);font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--acento-claro);
+  background:var(--acento);cursor:pointer;border:0;border-radius:99px;
+  padding:.62em 1.15em;line-height:1;transition:opacity .3s}
+@media (max-width:900px){
+  .g-tempo{grid-template-columns:1fr;grid-template-rows:46% minmax(0,1fr)}
+  .g-tempo .ttx{padding:18px 22px var(--bot)}
+  .g-tempo .tficha{min-height:0}
+}
+
 /* chrome */
 .chrome{position:absolute;left:0;right:0;pointer-events:none;z-index:9;font-family:var(--f-mono);font-size:var(--fs-cap);
   letter-spacing:.16em;text-transform:lowercase;color:var(--soft);padding:0 var(--gut);
@@ -3845,7 +3970,7 @@ const EXIGE={
   conceitos:['itens'],
   avulso:['grupos'], plug:['ancoras'], duasfrentes:['esq','dir'],
   divisor:['dt'], 'earth-3d':['lat','lng'], 'modelo-3d':['modelo'], viva:['src'],
-  sequencia:['items']
+  sequencia:['items'], tempo:['items']
   /* `meia` sai do EXIGE em 30/10/2026: passou a aceitar `src` OU `imgs`
      (pilha que corre na direita). A checagem foi para dentro do gabarito. */
 };
@@ -4144,6 +4269,45 @@ function tpl(s){
       + `<b></b>`
       + `<button type="button" data-sq="1" aria-label="Pr&#243;xima etapa">&#9654;</button></span>`
       + `</div></div>`;
+  }
+  /* ⚑ `tempo` usa `items` (inglês), como `sequencia` e `prancha`: é a chave
+     que o `coleta_imagens` do montar.py já varre atrás de `src`. Chamar de
+     `itens` obrigaria a mexer no montador — e a imagem entraria crua. */
+  if(s.g==='tempo'){
+    const it=s.items||[], de=+s.de||1925, ate=+s.ate||2026;
+    const pos=v=>((v-de)/(ate-de)*100);
+    const ondeX=x=>(x.x!=null?+x.x:(parseInt(x.ano,10)||de));
+    const imgs=it.map((x,i)=>x.src
+      ? `<img decoding="async" data-i="${i}" src="${IMG[x.src]||x.src}"`
+        + ` alt="${(x.t||x.ano||'').replace(/"/g,'&quot;')}" onerror="this.dataset.err=1">`
+      : '').join('');
+    const marcos=it.map((x,i)=>
+      `<button type="button" class="tm ${x.src?'tem':'falta'}${i%2?' alto':''}"`
+      + ` data-i="${i}" style="left:${pos(ondeX(x)).toFixed(3)}%"`
+      + ` aria-label="${(x.ano||'').replace(/"/g,'&quot;')}"><i></i><b>${x.ano||''}</b></button>`
+    ).join('');
+    return `<div class="tvista">`
+      +   `<div class="tcam">${imgs}</div>`
+      +   `<div class="tvazio"><div><b></b><span></span></div></div>`
+      +   `<div class="tveu a"></div><div class="tveu b"></div>`
+      +   `<div class="tesc"><u></u><span></span></div>`
+      +   `<div class="tzoom">`
+      +     `<button type="button" data-t="rev">&#8634; rever do in&iacute;cio</button>`
+      +     `<button type="button" data-t="menos" aria-label="Afastar">&minus;</button>`
+      +     `<button type="button" data-t="mais" aria-label="Aproximar">+</button>`
+      +     `<button type="button" data-t="ajustar">ajustar</button>`
+      +   `</div>`
+      + `</div>`
+      + `<div class="ttx">`
+      +   `<div class="talto rev" style="--i:1">${k}<h1 class="tano"></h1><div class="tficha"></div></div>`
+      +   `<div class="tmeio rev" style="--i:3"><p class="ttit"></p><p class="tlead"></p></div>`
+      +   `<div class="tregua rev" style="--i:5"><div class="ttrilho">`
+      +     `<div class="tpreenche"></div><div class="tviajante"></div>${marcos}</div>`
+      +     `<div class="tleg"><span><u class="t1"></u> em m&atilde;os</span>`
+      +     `<span><u class="t2"></u> a baixar</span>`
+      +     `<button type="button" class="trebob" data-t="rev">&#8634; rever do in&iacute;cio</button></div>`
+      +   `</div>`
+      + `</div>`;
   }
   if(s.g==='fotos'){
     const li=s.itens.map(([q,x],i)=>`<li class="passo" data-f="${i}"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('');
@@ -4732,6 +4896,11 @@ function go(i,tudo){
   document.body.classList.toggle('em-imagem',
     s.g==='cheia' || s.g==='earth-3d' || s.g==='modelo-3d'
     || s.g==='video' || s.g==='carrossel' || s.g==='logo' || s.g==='viva');
+  /* ⚑ `tempo` NÃO entra no `em-imagem`, e é de propósito: ele é meio e
+     meio — imagem à esquerda, papel à direita. Inverter o chrome inteiro
+     deixaria a marca do canto direito em Cal sobre Cal. `em-tempo` inverte
+     só o que cai sobre a foto: a seção, os pontos e o nome do projeto. */
+  document.body.classList.toggle('em-tempo', s.g==='tempo');
   /* `claro` = a imagem tem fundo branco, então o slide também. Regra do
      Michel, 10/09/2026: desenho de traço sobre campo escuro é leitura
      errada — planta, corte e fachada pedem campo claro. Inverte de volta o
@@ -5020,6 +5189,145 @@ window.MSVideo=(function(){
   } };
 })();
 
+
+window.MSTempo=(function(){
+  /* ══ A LINHA DO TEMPO DO LUGAR ═════════════════════════════════════════
+     Irmão do MSViva: monta na chegada e guarda o estado por slide, para
+     quem volta ao slide reencontrar o enquadramento onde deixou.
+
+     A "volta no tempo" roda ao chegar: entra no levantamento mais recente
+     e retrocede até o primeiro, 0,76 s por marco. PULA os marcos sem
+     imagem — hachura piscando no meio da sequência não comunica nada, e a
+     lacuna continua visível na régua, por onde o anel passa. Qualquer
+     clique, arrasto ou tecla interrompe e devolve o controle: ninguém
+     fica refém da animação na frente do cliente.
+
+     `prefers-reduced-motion` não rebobina: mostra o primeiro marco,
+     parado. Mesma regra do carrossel. */
+  'use strict';
+  var PASSO=760;
+  function dados(){ return (typeof DECK!=='undefined' && DECK[cur]) || {}; }
+  function atual(){
+    var sl=document.querySelectorAll('#palco .slide')[cur];
+    return (sl && sl.classList.contains('g-tempo')) ? sl : null;
+  }
+  function est(sl){
+    if(!sl.__t) sl.__t={i:-1,k:1,x:0,y:0,S:0,reb:null,ar:null};
+    return sl.__t;
+  }
+  function cheios(it){ var r=[]; it.forEach(function(x,i){ if(x.src) r.push(i); }); return r; }
+
+  function aplica(sl){
+    var e=est(sl), cam=sl.querySelector('.tcam'), v=sl.querySelector('.tvista');
+    if(!cam||!v) return;
+    var W=v.clientWidth, H=v.clientHeight, S=Math.max(W,H);
+    if(!S) return;
+    e.S=S; cam.style.width=cam.style.height=S+'px';
+    /* KMIN mostra o quadro inteiro mesmo em tela mais alta que 16:9, onde a
+       sangria cortaria parte do recorte. Um passo a menos devolve tudo. */
+    var KMIN=Math.min(1,W/S);
+    e.k=Math.max(KMIN,Math.min(5,e.k));
+    e.x=(S*e.k<=W)?(W-S*e.k)/2:Math.min(0,Math.max(W-S*e.k,e.x));
+    e.y=(S*e.k<=H)?(H-S*e.k)/2:Math.min(0,Math.max(H-S*e.k,e.y));
+    cam.style.transform='translate('+e.x+'px,'+e.y+'px) scale('+e.k+')';
+    var bm=sl.querySelector('[data-t="menos"]');
+    if(bm) bm.disabled=(e.k<=KMIN*1.001);
+    var cobre=+dados().cobre||640, mpp=cobre/(S*e.k),
+        alvo=[5,10,20,50,100,200,500,1000], px=0, u=0;
+    for(var i=0;i<alvo.length;i++){ u=i; px=alvo[i]/mpp; if(px>=70&&px<=200) break; }
+    var esc=sl.querySelector('.tesc');
+    if(esc){ esc.querySelector('u').style.width=Math.round(px)+'px';
+             esc.querySelector('span').textContent=alvo[u]+' m'; }
+  }
+  function ajusta(sl){ var e=est(sl); e.k=1; aplica(sl); }
+
+  function mostra(sl,i){
+    var it=dados().items||[], x=it[i]; if(!x) return;
+    var e=est(sl); e.i=i;
+    var de=+dados().de||1925, ate=+dados().ate||2026;
+    var ondeX=(x.x!=null?+x.x:(parseInt(x.ano,10)||de));
+    var pc=((ondeX-de)/(ate-de)*100)+'%';
+    sl.querySelectorAll('.tcam img').forEach(function(im){
+      im.classList.toggle('on', +im.dataset.i===i); });
+    sl.querySelectorAll('.tm').forEach(function(b){
+      b.classList.toggle('on', +b.dataset.i===i); });
+    sl.querySelector('.tpreenche').style.width=pc;
+    sl.querySelector('.tviajante').style.left=pc;
+    var vz=sl.querySelector('.tvazio');
+    vz.classList.toggle('on', !x.src);
+    vz.querySelector('b').textContent=x.ano||'';
+    vz.querySelector('span').textContent=x.vazio||'';
+    sl.querySelector('.tano').textContent=x.ano||'';
+    sl.querySelector('.tficha').innerHTML=x.ficha||'';
+    sl.querySelector('.ttit').innerHTML=x.t||'';
+    sl.querySelector('.tlead').innerHTML=x.cap||'';
+  }
+
+  function para(sl){ var e=est(sl); if(e.reb){ clearTimeout(e.reb); e.reb=null; }
+    sl.classList.remove('andando'); }
+  function rebobina(sl){
+    var it=dados().items||[], c=cheios(it); if(!c.length) return;
+    para(sl);
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){ mostra(sl,c[0]); return; }
+    var j=c.length-1, e=est(sl);
+    mostra(sl,c[j]); sl.classList.add('andando');
+    (function passo(){
+      e.reb=setTimeout(function(){
+        j--; if(j<0){ para(sl); return; }
+        mostra(sl,c[j]); passo();
+      },PASSO);
+    })();
+  }
+
+  function liga(sl){
+    if(sl.dataset.tligado) return; sl.dataset.tligado='1';
+    var v=sl.querySelector('.tvista'), e=est(sl);
+    sl.querySelectorAll('.tm').forEach(function(b){
+      b.addEventListener('click',function(){ para(sl); mostra(sl,+b.dataset.i); }); });
+    sl.querySelectorAll('[data-t]').forEach(function(b){
+      b.addEventListener('click',function(ev){
+        ev.stopPropagation();
+        var a=b.dataset.t;
+        if(a==='rev'){ rebobina(sl); return; }
+        para(sl);
+        if(a==='ajustar'){ ajusta(sl); return; }
+        var W=v.clientWidth,H=v.clientHeight,f=(a==='mais'?1.4:1/1.4);
+        var kn=Math.max(Math.min(1,W/e.S),Math.min(5,e.k*f));
+        e.x=W/2-(W/2-e.x)*(kn/e.k); e.y=H/2-(H/2-e.y)*(kn/e.k); e.k=kn; aplica(sl);
+      });
+    });
+    v.addEventListener('wheel',function(ev){
+      ev.preventDefault(); para(sl);
+      var r=v.getBoundingClientRect(), px=ev.clientX-r.left, py=ev.clientY-r.top;
+      var kn=Math.max(Math.min(1,v.clientWidth/e.S),
+                      Math.min(5,e.k*(ev.deltaY<0?1.14:1/1.14)));
+      e.x=px-(px-e.x)*(kn/e.k); e.y=py-(py-e.y)*(kn/e.k); e.k=kn; aplica(sl);
+    },{passive:false});
+    v.addEventListener('pointerdown',function(ev){
+      if(ev.target.closest('.tzoom')) return;
+      para(sl);
+      e.ar={px:ev.clientX,py:ev.clientY,x:e.x,y:e.y};
+      v.classList.add('arrasta'); v.setPointerCapture(ev.pointerId);
+    });
+    v.addEventListener('pointermove',function(ev){
+      if(!e.ar) return;
+      e.x=e.ar.x+(ev.clientX-e.ar.px); e.y=e.ar.y+(ev.clientY-e.ar.py); aplica(sl);
+    });
+    ['pointerup','pointercancel'].forEach(function(n){
+      v.addEventListener(n,function(){ e.ar=null; v.classList.remove('arrasta'); }); });
+    window.addEventListener('resize',function(){ if(atual()===sl) aplica(sl); });
+  }
+
+  return {
+    chegou:function(){
+      /* parar a rebobinagem de QUALQUER slide de tempo fora de cena */
+      document.querySelectorAll('#palco .slide.g-tempo').forEach(function(o){
+        if(o!==atual()) para(o); });
+      var sl=atual(); if(!sl) return;
+      liga(sl); ajusta(sl); rebobina(sl);
+    }
+  };
+})();
 
 window.MSViva=(function(){
   /* Monta o quadro na chegada e NÃO desmonta na saída: o arquivo é local, e
@@ -5946,8 +6254,8 @@ window.MSModelo=(function(){
 (function(){
   var _go=window.go;
   window.go=function(i,tudo){ _go(i,tudo); setTimeout(function(){
-    window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); MSVideo.chegou(); MSCarrossel.chegou(); MSViva.chegou(); },700); };
-  window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); MSVideo.chegou(); MSCarrossel.chegou(); MSViva.chegou();
+    window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); MSVideo.chegou(); MSCarrossel.chegou(); MSViva.chegou(); MSTempo.chegou(); },700); };
+  window.__msPuxa(); MSEarth.chegou(); MSModelo.chegou(); MSVideo.chegou(); MSCarrossel.chegou(); MSViva.chegou(); MSTempo.chegou();
 })();
 
 </script>
