@@ -115,8 +115,8 @@
       "aba": "deck",
       "grupo": "as peças de montar",
       "nome": "mapa de atuação ⚑ Sarasá",
-      "desc": "Os 35 imóveis da carteira sobre os 96 distritos administrativos de São Paulo (GeoSampa): o distrito escurece pela densidade de contrato, ponto cheio é contrato ativo e ponto vazado é serviço pós-contrato. O mouse sobre o ponto — ou sobre o item da lista — abre a miniatura do imóvel; o clique isola o distrito e abre a ficha, com a linha-guia ligando mapa e dossiê. A tecla P, ou \"modo projeção\", esconde o painel lateral e entrega o mapa cheio para o slide institucional. As 35 fotos saíram do mapa de atuação do próprio estúdio (apresentação da Praça Pari, ago/2026), recortadas a 128 px e embutidas junto com Poppins e Archivo: a peça abre inteira sem internet. Protótipo — 15 dos 35 endereços ainda dependem de confirmação",
-      "arq": "modulos/LEIA-ME.md",
+      "desc": "Três escalas na mesma projeção, sem corte entre elas: nove estados do Brasil com 13 obras do portfólio, a cidade de São Paulo com os 96 distritos, e o centro expandido com os 35 imóveis da carteira. O mouse sobre o ponto abre a miniatura do imóvel; o clique abre a ficha em campo Vinho, ligada ao mapa pela linha-guia. \"Ver as fotos\" troca os pontos pelas fotos e revela uma a uma, da esquerda para a direita — é a abertura de apresentação. Carrega sozinho em Brasil → São Paulo → centro → varredura, e qualquer gesto devolve o mapa interativo. Arquivo único, fotos e fontes embutidas: abre sem internet, ~268 KB servidos",
+      "arq": "sistemas/MAPA-ATUACAO.md",
       "ver": "modulos/mapa-atuacao-sarasa.html"
     }
   ]
