@@ -517,11 +517,91 @@
       "ds": "A planta, camada por camada: do que o conjunto é hoje ao que ele passa a ser."
     },
     {
-      "g": "cheia",
-      "src": "croqui-planta-r00.jpg",
-      "h2": "a planta, por camadas",
-      "cap": "Croqui de estudo, R00 — em desenvolvimento. Vira planta viva, com camadas que ligam e desligam, quando o desenho vetorial estiver fechado.",
-      "claro": 1
+      "g": "sequencia",
+      "kick": "a proposta, passo a passo",
+      "t": "como o projeto se constrói",
+      "items": [
+        {
+          "src": "evo-01.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-02.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-03.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-04.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-05.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-06.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-07.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-08.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-09.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-10.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-11.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-12.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-13.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-14.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-15.jpg",
+          "t": "",
+          "cap": ""
+        },
+        {
+          "src": "evo-16.jpg",
+          "t": "",
+          "cap": ""
+        }
+      ]
     },
     {
       "g": "lista",

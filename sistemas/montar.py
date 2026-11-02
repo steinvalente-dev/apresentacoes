@@ -38,7 +38,10 @@ LIMITE_BASE64 = 8 * 1024 * 1024          # medido JÁ EM BASE64 (o que pesa no H
 # e o que sobra para os slots de imagem que a peca ainda vai receber.
 RESIZE = {'cheia': (2200, 80), 'duo': (1800, 82), 'prancha': (1800, 82), 'desenho': (None, 88),
           'tempo': (1300, 78),   # a peca tem de caber em arquivo unico: acima disso o montar quebra em pasta
-          'fundo': (640, 80), 'mosaico': (560, 74), 'confronto': (1200, 78), 'padrao': (1800, 82)}
+          'fundo': (640, 80), 'mosaico': (560, 74), 'confronto': (1200, 78),
+          # `sequencia`: 16 quadros do MESMO enquadramento, um por clique. O que
+          # importa e o registro entre eles, nao a resolucao de cada um.
+          'sequencia': (1400, 78), 'padrao': (1800, 82)}
 
 
 def falha(msg, cod=1):

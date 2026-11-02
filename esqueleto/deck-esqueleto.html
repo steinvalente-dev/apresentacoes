@@ -851,6 +851,18 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-sequencia .seq-etapa:not(.passo),
 .g-sequencia .seq-etapa.passo.on{opacity:1}
 .g-sequencia .seq-etapa:has(~ .seq-etapa.passo.on){opacity:0}
+/* ⚑ SEM TEXTO, A IMAGEM FICA COM A PRANCHA INTEIRA. O `sequencia` nasceu
+   com 1/3 de texto e 2/3 de imagem. Numa sequencia construtiva que ainda
+   nao recebeu as etiquetas — e ela e montada ANTES delas, porque a ordem
+   dos quadros e o que se confere primeiro — a coluna da esquerda fica
+   vazia e come um terco da tela. `:has()` detecta isso no proprio
+   conteudo: nenhuma etapa com `.st` ou `.sd` preenchido, a grade vira uma
+   coluna so. Quando os textos entrarem, o layout de 1/3 volta sozinho,
+   sem ninguem mexer num campo. 02/11/2026. */
+.g-sequencia .seq:not(:has(.st:not(:empty))):not(:has(.sd:not(:empty))) .seq-etapa{
+  grid-template-columns:1fr}
+.g-sequencia .seq:not(:has(.st:not(:empty))):not(:has(.sd:not(:empty))) .seq-cap{
+  position:absolute;left:0;bottom:0;padding-bottom:0;z-index:2}
 
 /* ancorada embaixo: a legenda cresce para CIMA a partir do rodape da
    coluna, e o `padding-bottom` guarda a faixa do controle. */
