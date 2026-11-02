@@ -20,6 +20,9 @@
   "deck": [
     {
       "g": "meia",
+      "sangra": 1,
+      "mosaico": 1,
+      "inst": 1,
       "imgs": [
         "sarasa-vitral.jpg",
         "sarasa-ipiranga.jpg",
@@ -30,19 +33,18 @@
         "sarasa-olinda.jpg",
         "sarasa-itu.jpg",
         "sarasa-casa-artesao.jpg",
-        "sarasa-barra-grande.jpg"
-      ],
-      "legs": [
-        "Vitral · conservação e restauro",
-        "Museu do Ipiranga · São Paulo, SP",
-        "Cine São Luiz · Recife, PE",
-        "MiBIO, Museu Interativo da Biodiversidade · Campo Grande, MS",
-        "Estação da Luz · São Paulo, SP",
-        "Fazenda Campos Novos · Cabo Frio, RJ",
-        "Sociedade Beneficente de Artistas e Operários de Olinda · Olinda, PE",
-        "Museu de Energia de Itu · Itu, SP",
-        "Casa do Artesão · Campo Grande, MS",
-        "Fortaleza da Barra Grande · Guarujá, SP"
+        "sarasa-barra-grande.jpg",
+        "acervo-04.jpg",
+        "acervo-05.jpg",
+        "acervo-06.jpg",
+        "acervo-09.jpg",
+        "acervo-10.jpg",
+        "acervo-11.jpg",
+        "acervo-12.jpg",
+        "acervo-13.jpg",
+        "acervo-14.jpg",
+        "acervo-15.jpg",
+        "acervo-16.jpg"
       ],
       "estados": [
         {
@@ -73,7 +75,37 @@
               "É fundado o Instituto Sarasá."
             ]
           ]
-        },
+        }
+      ]
+    },
+    {
+      "g": "meia",
+      "sangra": 1,
+      "imgs": [
+        "sarasa-vitral.jpg",
+        "sarasa-ipiranga.jpg",
+        "sarasa-cine-sao-luiz.jpg",
+        "sarasa-mibio.jpg",
+        "sarasa-estacao-luz.jpg",
+        "sarasa-campos-novos.jpg",
+        "sarasa-olinda.jpg",
+        "sarasa-itu.jpg",
+        "sarasa-casa-artesao.jpg",
+        "sarasa-barra-grande.jpg"
+      ],
+      "legs": [
+        "Vitral · conservação e restauro",
+        "Museu do Ipiranga · São Paulo, SP",
+        "Cine São Luiz · Recife, PE",
+        "MiBIO, Museu Interativo da Biodiversidade · Campo Grande, MS",
+        "Estação da Luz · São Paulo, SP",
+        "Fazenda Campos Novos · Cabo Frio, RJ",
+        "Sociedade Beneficente de Artistas e Operários de Olinda · Olinda, PE",
+        "Museu de Energia de Itu · Itu, SP",
+        "Casa do Artesão · Campo Grande, MS",
+        "Fortaleza da Barra Grande · Guarujá, SP"
+      ],
+      "estados": [
         {
           "kick": "o que fazemos",
           "t": "serviços",
@@ -90,8 +122,7 @@
           "serif": 1,
           "lead": "Do Amazonas ao Rio Grande do Sul."
         }
-      ],
-      "sangra": 1
+      ]
     },
     {
       "g": "capa"

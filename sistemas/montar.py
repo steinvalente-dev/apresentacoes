@@ -29,8 +29,11 @@ LINHA_VOLTAR = '<script defer src="../modulos/ms-voltar.js"></script>\n'
 LIMITE_BASE64 = 8 * 1024 * 1024          # medido JÁ EM BASE64 (o que pesa no HTML); acima disto: arquivo ao lado
 
 # tabela do DECK-MONTAR: (largura máxima, qualidade JPEG). None = resolução nativa.
+# `mosaico`: a foto roda numa coluna de ~1/6 da tela. 1800px ali sao sete
+# vezes o necessario, e o mosaico pede MUITAS fotos — e o numero de fotos,
+# nao o tamanho de cada uma, que faz a leitura de panorama. 02/11/2026.
 RESIZE = {'cheia': (2200, 80), 'duo': (1800, 82), 'prancha': (1800, 82), 'desenho': (None, 88),
-          'fundo': (640, 80), 'padrao': (1800, 82)}
+          'fundo': (640, 80), 'mosaico': (760, 78), 'padrao': (1800, 82)}
 
 
 def falha(msg, cod=1):
@@ -150,6 +153,9 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
     for s in deck:
         g = s.get('g', '')
         perfil = 'desenho' if s.get('tipo') == 'desenho' else (g if g in RESIZE else 'padrao')
+        # `meia` com `mosaico`: a pilha da direita e muita foto pequena
+        if g == 'meia' and s.get('mosaico'):
+            perfil = 'mosaico'
         # ⚑ `viva` NAO e imagem: o `src` dele e o arquivo vizinho que o slide
         #   abre num quadro (planta-interativa.html). Passar pelo moinho de
         #   imagem seria erro de leitura de arquivo, e o arquivo nem esta na

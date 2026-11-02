@@ -873,8 +873,13 @@ body.em-logo .chrome.topo .secao{display:inline}
    linhas — e' o mesmo motivo pelo qual as imagens usam `cover`. */
 .g-meia .legs{position:relative;min-height:2.6em;font-family:var(--f-mono);
   font-size:var(--fs-cap);letter-spacing:.08em;color:var(--soft);text-align:right}
-.g-meia .legs span{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
-.g-meia .legs span.on{opacity:1}
+/* ⚑ DUAS TARJAS SOLIDAS NAO PODEM SE CRUZAR. Com legenda em texto puro o
+   cross-fade some; com a tarja Vinho, por um instante aparecem dois
+   retangulos sobrepostos com dois textos — foi o que o Michel viu na
+   captura ("Casa do Artesao" por cima de "Museu da Energia"). A troca
+   passa a ser por VAZIO: a que sai apaga em .3s, a que entra espera .35s. */
+.g-meia .legs span{position:absolute;inset:0;opacity:0;transition:opacity .3s ease}
+.g-meia .legs span.on{opacity:1;transition:opacity .45s ease .35s}
 
 /* ══ `meia` COM SANGRIA — a metade direita vai ate a borda ════════════════
    02/11/2026, pedido do Michel: *"a metade direita, onde aparecem as
@@ -938,6 +943,17 @@ body.em-logo .chrome.topo .secao{display:inline}
 body.meia-sangra .chrome.topo{
   right:calc(50% - var(--gut) + clamp(20px,2.8cqw,52px))}
 body.meia-sangra .chrome.topo .dots{left:50%}
+/* ⚑ NA PRANCHA INSTITUCIONAL O LOGOTIPO TROCA DE LADO E CRESCE. No resto
+   da peca ele e assinatura de canto, pequena e a direita, porque o assunto
+   e o projeto. Aqui o assunto E a casa: o logotipo encosta na mesma
+   vertical do kicker e do titulo, abre a prancha como um cabecalho de
+   revista abre a materia, e so por isso pode dobrar de tamanho sem
+   competir — ele passou a ser conteudo, nao marca d'agua.
+   `order:-1` troca a ordem no flex sem mexer no HTML, e a secao vai para a
+   direita; `margin-right:auto` segura o logotipo colado na goteira.   */
+body.inst .chrome.topo .selo{order:-1;margin-right:auto;
+  height:clamp(38px,6.4cqh,76px)}
+body.inst .chrome.topo .secao{display:none}
 /* ⚑ legenda e bolinhas SOBEM PARA CIMA DA FOTO. Fora da sangria elas moram
    embaixo, na coluna flex; aqui nao ha "embaixo" — embaixo e a borda da
    tela. Viram camada, ancorada no canto inferior da propria figura. */
@@ -962,6 +978,47 @@ body.meia-sangra .chrome.topo .dots{left:50%}
   z-index:2}
 .g-meia .meia.sangra .cont-c u{background:var(--papel-40)}
 .g-meia .meia.sangra .cont-c u.on{background:var(--papel)}
+
+/* ══ MOSAICO — tres colunas que correm, em vez de uma foto por vez ═══════
+   02/11/2026, pedido do Michel: *"a ideia e subdividir isso em tres
+   colunas verticais... a da esquerda sobe lentamente, a do meio desce, e a
+   da direita sobe tambem... quase que imediato eu vou enxergar muitas
+   fotos"*. O carrossel mostra UMA obra bem; o mosaico mostra a EXTENSAO
+   da casa. Sao argumentos diferentes, e por isso convivem: o mosaico
+   abre, o carrossel fica no slide dos servicos.
+
+   ⚑ A COLUNA TRAZ A LISTA DUAS VEZES e anda exatamente -50%. E o que faz
+   a volta ser invisivel: ao chegar em -50% o que esta na tela e a copia,
+   pixel a pixel igual ao quadro inicial, e o salto para 0 nao se ve.
+   Qualquer outro valor mostra a emenda.
+
+   ⚑ DIRECOES E TEMPOS DIFERENTES POR COLUNA. Tres colunas subindo juntas
+   leem como UMA imagem grande rolando. Alternar o sentido e desencontrar
+   os tempos (38s / 31s / 44s) e o que faz o conjunto parecer muitas obras
+   em vez de uma parede andando.
+
+   ⚑ `prefers-reduced-motion` PARA TUDO, e o mosaico continua servindo:
+   parado, ele e uma grade de obras, que e a mensagem. Nao ha informacao
+   so no movimento.                                                      */
+.g-meia .mos{position:absolute;inset:0;overflow:hidden;display:grid;
+  grid-template-columns:repeat(3,1fr);gap:var(--mos-gap,3px);
+  background:var(--moldura)}
+.g-meia .mos .col{position:relative;overflow:hidden}
+.g-meia .mos .fita{display:flex;flex-direction:column;gap:var(--mos-gap,3px);
+  position:absolute;left:0;right:0;top:0;will-change:transform}
+/* ⚑ ALTURA NATURAL, SEM PROPORCAO FORCADA. Travar tudo em 3/4 corta uma
+   panoramica ate sobrar um naco do meio — e o pedido era "no melhor
+   enquadramento possivel". Cada foto entra inteira, na sua proporcao, e a
+   coluna fica com alturas desiguais: e o que faz a parede parecer um
+   mosaico de revista em vez de uma grade de fichas. */
+.g-meia .mos .fita img{width:100%;height:auto;display:block}
+@keyframes ms-mos-sobe{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+@keyframes ms-mos-desce{from{transform:translateY(-50%)}to{transform:translateY(0)}}
+.g-meia .mos .col:nth-child(1) .fita{animation:ms-mos-sobe 38s linear infinite}
+.g-meia .mos .col:nth-child(2) .fita{animation:ms-mos-desce 31s linear infinite}
+.g-meia .mos .col:nth-child(3) .fita{animation:ms-mos-sobe 44s linear infinite}
+@media(prefers-reduced-motion:reduce){
+  .g-meia .mos .fita{animation:none!important}}
 
 /* == `meia` com ESTADOS — um slide, varios textos ==========================
    30/10/2026. Antes, a abertura institucional eram TRES slides `meia` com a
@@ -1039,7 +1096,7 @@ body.esc .g-meia .mest h1,body.terra .g-meia .mest h1{color:var(--papel)}
    entrelinha fechada: numa didone, titulo grande pede MENOS entrelinha,
    porque a altura-x alta ja separa as linhas sozinha. */
 .g-meia .mest.serif.manchete h1{font-weight:700;line-height:.95;
-  font-size:clamp(38px,5cqw,88px);margin:0 0 clamp(16px,2.5cqh,36px)}
+  font-size:clamp(44px,5.9cqw,104px);margin:0 0 clamp(16px,2.5cqh,36px)}
 
 /* ══ LINHA DO TEMPO no estado — `linha:[[ano,texto],…]` ══════════════════
    02/11/2026. Os marcos da casa, resumidos da apresentacao institucional.
@@ -1060,9 +1117,32 @@ body.esc .g-meia .mest h1,body.terra .g-meia .mest h1{color:var(--papel)}
   column-gap:clamp(9px,1cqw,18px);row-gap:clamp(5px,.8cqh,11px);
   align-items:baseline}
 .g-meia .mest .tl li{display:contents}
+/* a data em pilula Vinho. ⚑ `justify-self:start` mais largura minima: sem
+   os dois, a pilula estica ate a coluna inteira num grid `auto` e as de
+   ano curto ficam com ar sobrando dentro. */
 .g-meia .mest .tl .an{font-family:var(--f-serif);font-style:normal;
-  font-weight:400;color:var(--primaria);
-  font-size:clamp(14px,1.25cqw,22px);line-height:1.25}
+  font-weight:400;color:var(--papel);background:var(--primaria);
+  font-size:clamp(12px,1.05cqw,19px);line-height:1;
+  justify-self:start;padding:.34em .72em .4em;border-radius:999px;
+  white-space:nowrap}
+body.esc .g-meia .mest .tl .an{background:var(--papel);color:var(--primaria)}
+/* ⚑ A LINHA DO TEMPO ENTRA DO PASSADO PARA O FUTURO, um marco de cada vez.
+   Nao e enfeite: a ordem da animacao E a leitura — a casa comecou ali e
+   chegou aqui. Por isso o atraso cresce com o indice, e por isso ela so
+   dispara quando o estado acende (`.on`), nunca na carga da prancha.
+   O indice vem do proprio grid, com `--tli` escrito no render: contar por
+   `nth-child` nao serve, porque `display:contents` no `li` faz o ano e o
+   texto virarem irmaos no mesmo grid. */
+.g-meia .mest .tl .an,.g-meia .mest .tl .mk{
+  opacity:0;transform:translateY(7px)}
+.mest:not(.passo) .tl .an,.mest:not(.passo) .tl .mk,
+.mest.passo.on .tl .an,.mest.passo.on .tl .mk{
+  opacity:1;transform:none;
+  transition:opacity .42s ease,transform .42s cubic-bezier(.2,.7,.3,1);
+  transition-delay:calc(var(--tld,.5s) + var(--tli,0)*.17s)}
+@media(prefers-reduced-motion:reduce){
+  .g-meia .mest .tl .an,.g-meia .mest .tl .mk{
+    opacity:1!important;transform:none!important;transition:none!important}}
 .g-meia .mest .tl .mk{font-size:clamp(12px,1cqw,17px);line-height:1.35;
   color:var(--soft)}
 body.esc .g-meia .mest .tl{border-left-color:var(--papel-40)}
@@ -3915,6 +3995,17 @@ function tpl(s){
     /* `estados`: a metade direita fica parada e so a coluna da esquerda troca,
        um clique por estado. Cabecalho e texto no MESMO `.passo` — ver o bloco
        `meia` com ESTADOS no CSS. O primeiro nao e passo: e o estado de chegada. */
+    /* `mosaico:1`: a metade direita vira tres fitas verticais. As imagens
+       se repartem em volta (1,4,7… / 2,5,8… / 3,6,9…) e nao em blocos, para
+       que fotos vizinhas na lista nao caiam lado a lado na mesma altura.
+       Cada fita traz a sua lista DUAS vezes — ver o bloco MOSAICO no CSS. */
+    const mos=()=>{
+      const im=s.imgs||[], cols=[[],[],[]];
+      im.forEach((src,i)=>cols[i%3].push(src));
+      return `<div class="mos">`+cols.map(c=>`<div class="col"><div class="fita">`
+        + c.concat(c).map(src=>`<img decoding="async" loading="lazy" src="${IMG[src]||src}" alt="">`).join('')
+        + `</div></div>`).join('')+`</div>`;
+    };
     const mesq=(e)=>((e.src && Array.isArray(s.imgs) && s.imgs.length)
             ? `<img class="mfigesq" src="${IMG[e.src]||e.src}" alt="${(e.leg||e.t||'').replace(/"/g,'&quot;')}">`
             : '')+`${e.cap||''}`;
@@ -3927,8 +4018,9 @@ function tpl(s){
                 + (e.lead?`<span class="lead">${e.lead}</span>`:'')
                 + mesq(e)
                 + ((Array.isArray(e.linha)&&e.linha.length)
-                    ? `<ul class="tl">`+e.linha.map(([a,x])=>
-                        `<li><span class="an">${a}</span><span class="mk">${x}</span></li>`).join('')+`</ul>`
+                    ? `<ul class="tl">`+e.linha.map(([a,x],j)=>
+                        `<li style="--tli:${j}"><span class="an" style="--tli:${j}">${a}</span>`
+                        + `<span class="mk" style="--tli:${j}">${x}</span></li>`).join('')+`</ul>`
                     : '')
               + `</div>`).join('')
             + `</div>`
@@ -3938,7 +4030,8 @@ function tpl(s){
                   : '')
             +   `${s.cap||''}</div>`)
       + `<div class="mfig rev" style="--i:6">`
-      +   (Array.isArray(s.imgs)&&s.imgs.length
+      +   (s.mosaico ? mos()
+          : Array.isArray(s.imgs)&&s.imgs.length
             ? `<div class="full">`
               + s.imgs.map((src,i)=>`<img decoding="async" class="${i===0?'on':''}" src="${IMG[src]||src}" alt="">`).join('')
               + `</div>`
@@ -4533,6 +4626,9 @@ function go(i,tudo){
   /* `meia` com sangria: o chrome do topo recolhe para a metade do papel,
      porque a foto ocupa a outra metade — ver o bloco MASTHEAD no CSS. */
   document.body.classList.toggle('meia-sangra', s.g==='meia' && !!s.sangra);
+  /* `inst:1` — a prancha que apresenta a CASA: o logotipo troca de lado,
+     cresce e vira cabecalho. Ver o bloco no CSS. */
+  document.body.classList.toggle('inst', !!s.inst);
   /* grafismo de marca na base (GRAFISMO do bloco), só onde o slide pedir */
   document.body.classList.toggle('com-graf', !!(s.graf&&GRAFISMO));
   /* `em-imagem` = o fundo do slide é imagem ou visor, não campo pintado. É
