@@ -916,23 +916,28 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-meia .meia.sangra .mfig{position:absolute;inset:0 0 0 50%;margin:0}
 .g-meia .meia.sangra .mfig.rev{transform:none}
 .g-meia .meia.sangra .full{border-radius:0}
-/* ⚑ O CHROME PRECISA DO SEU CHAO DE VOLTA. Com a foto ate a borda, o
-   logotipo e as bolinhas de secao caem sobre a imagem — e o logotipo da
-   Sarasa e Vinho, desenhado para a Cal. Sobre foto escura ele apaga; sobre
-   ceu claro, lava. Os dois casos apareceram na mesma peca (vitral e Museu
-   do Ipiranga), entao nao e questao de escolher foto.
-   Um veu de Cal na faixa do chrome devolve o fundo para que o logotipo foi
-   feito, e some no resto da imagem. Nao e correcao de foto: e a faixa de
-   cabecalho da revista, que tambem existe para isso.                    */
-.g-meia .meia.sangra .full::after{content:"";position:absolute;
-  inset:0 0 auto 0;height:calc((var(--top) + clamp(14px,2.4cqh,40px)) * 1.7);
-  background:linear-gradient(color-mix(in srgb,var(--papel) 88%,transparent) 0%,
-    color-mix(in srgb,var(--papel) 54%,transparent) 38%,transparent 100%);
-  pointer-events:none;z-index:1}
-body.esc .g-meia .meia.sangra .full::after,
-body.terra .g-meia .meia.sangra .full::after{
-  background:linear-gradient(color-mix(in srgb,var(--primaria) 88%,transparent) 0%,
-    color-mix(in srgb,var(--primaria) 54%,transparent) 38%,transparent 100%)}
+/* ══ O MASTHEAD RECOLHE PARA O PAPEL ═════════════════════════════════════
+   02/11/2026. A primeira resposta ao logotipo sobre a foto foi um veu de
+   Cal na faixa do chrome. O Michel nao gostou — e tinha razao: o veu
+   conserta o sintoma sujando a foto, que e justamente o que a sangria
+   queria limpar.
+
+   A resposta certa e tirar o chrome de cima da foto. Numa prancha com
+   sangria o topo recolhe para a metade do papel, e logotipo, secao e
+   bolinhas passam a morar no mesmo alinhamento da coluna de texto — que e
+   onde a Cal esta, e onde o logotipo Vinho foi desenhado para viver. A
+   foto fica inteira, sem veu.
+
+   `right:50%` mais o respiro da coluna: o logotipo encosta exatamente na
+   mesma vertical em que o texto termina. As bolinhas recentram no meio da
+   metade esquerda (`left:25%`), nao no meio da tela.                    */
+/* a conta: o chrome tem `padding:0 var(--gut)`, entao a borda do conteudo
+   fica `gut` para dentro da caixa. Para o logotipo terminar na MESMA
+   vertical em que o texto termina (50% menos o respiro da coluna), o
+   `right` devolve esse `gut`. */
+body.meia-sangra .chrome.topo{
+  right:calc(50% - var(--gut) + clamp(20px,2.8cqw,52px))}
+body.meia-sangra .chrome.topo .dots{left:50%}
 /* ⚑ legenda e bolinhas SOBEM PARA CIMA DA FOTO. Fora da sangria elas moram
    embaixo, na coluna flex; aqui nao ha "embaixo" — embaixo e a borda da
    tela. Viram camada, ancorada no canto inferior da propria figura. */
@@ -945,8 +950,13 @@ body.terra .g-meia .meia.sangra .full::after{
    translucida: serve sobre papel, e sobre uma foto de contraste variavel
    some na metade clara. Aqui e campo cheio no Vinho, com a Cal por cima —
    a mesma `mark.tarja` da casa, aplicada pelo gabarito e nao pelo texto. */
+/* corpo proprio, maior que a legenda de rodape: o Michel pediu forca aqui
+   porque e a legenda que conta o que a Sarasa faz, obra por obra, enquanto
+   a pilha corre. Quem para para ler, le isto. */
+.g-meia .meia.sangra .legs{font-size:clamp(11px,.92cqw,16px)}
 .g-meia .meia.sangra .legs span{background:var(--primaria);color:var(--papel);
-  padding:.34em .7em .4em;border-radius:2px;letter-spacing:.1em}
+  padding:.46em .85em .52em;border-radius:2px;letter-spacing:.08em;
+  font-weight:600}
 .g-meia .meia.sangra .cont-c{position:absolute;inset:auto
     clamp(16px,1.8cqw,34px) calc(var(--bot) + clamp(6px,1cqh,18px)) auto;
   z-index:2}
@@ -1025,6 +1035,38 @@ body.esc .g-meia .mest h1,body.terra .g-meia .mest h1{color:var(--papel)}
   font-weight:400;letter-spacing:0;text-transform:none;line-height:1.04;
   font-size:clamp(25px,2.75cqw,47px);
   margin:0 0 clamp(10px,1.5cqh,21px)}
+/* `manchete:1` — o slogan em corpo de capa de revista. Peso 700 e
+   entrelinha fechada: numa didone, titulo grande pede MENOS entrelinha,
+   porque a altura-x alta ja separa as linhas sozinha. */
+.g-meia .mest.serif.manchete h1{font-weight:700;line-height:.95;
+  font-size:clamp(38px,5cqw,88px);margin:0 0 clamp(16px,2.5cqh,36px)}
+
+/* ══ LINHA DO TEMPO no estado — `linha:[[ano,texto],…]` ══════════════════
+   02/11/2026. Os marcos da casa, resumidos da apresentacao institucional.
+   Filete vertical a esquerda e um marco por linha: cabe onde um paragrafo
+   nao caberia, e e o formato em que uma trajetoria se le de relance.
+   ⚑ O ano em `tabular-nums`: sem isso o 1 estreito da didone desalinha a
+   coluna de anos, e e justamente a coluna que da a leitura de sequencia. */
+/* ⚑ UM GRID SO PARA A LISTA INTEIRA, nao um por linha. Com `display:grid`
+   em cada `li`, cada linha mede a propria coluna de ano e o texto comeca
+   alguns pixels adiante ou atras do vizinho — some a coluna, que e o que
+   faz a sequencia ser lida como sequencia. `display:contents` no `li`
+   entrega os dois filhos ao grid do `ul`, que entao alinha todos.
+   Alinhar por `tabular-nums` nao resolveria: a feature `tnum` nao
+   sobrevive ao subset das faces da marca — e nao deve, pelo peso. */
+.g-meia .mest .tl{list-style:none;margin:0;padding:0 0 0 clamp(13px,1.5cqw,26px);
+  border-left:1.5px solid color-mix(in srgb,var(--primaria) 24%,transparent);
+  display:grid;grid-template-columns:auto minmax(0,1fr);
+  column-gap:clamp(9px,1cqw,18px);row-gap:clamp(5px,.8cqh,11px);
+  align-items:baseline}
+.g-meia .mest .tl li{display:contents}
+.g-meia .mest .tl .an{font-family:var(--f-serif);font-style:normal;
+  font-weight:400;color:var(--primaria);
+  font-size:clamp(14px,1.25cqw,22px);line-height:1.25}
+.g-meia .mest .tl .mk{font-size:clamp(12px,1cqw,17px);line-height:1.35;
+  color:var(--soft)}
+body.esc .g-meia .mest .tl{border-left-color:var(--papel-40)}
+body.esc .g-meia .mest .tl .an{color:var(--acento-claro)}
 /* o lead: a primeira linha do corpo, em serifada romana, maior. E o que da
    a passada de olho — quem le so uma frase, le esta. */
 .g-meia .mest.serif .lead{display:block;font-family:var(--f-serif);
@@ -1033,6 +1075,10 @@ body.esc .g-meia .mest h1,body.terra .g-meia .mest h1{color:var(--papel)}
   margin:0 0 clamp(8px,1.2cqh,17px);max-width:44ch}
 body.esc .g-meia .mest.serif .lead{color:var(--papel)}
 /* filete entre o lead e os verbetes — a regra de revista */
+/* o filete do lead sai quando ha linha do tempo: dois filetes a dois
+   centimetros um do outro disputam, e o da linha do tempo carrega
+   informacao. */
+.g-meia .mest.serif:has(.tl) .lead::after{display:none}
 .g-meia .mest.serif .lead::after{content:"";display:block;
   width:clamp(38px,4cqw,72px);height:1.5px;background:var(--primaria);
   margin-top:clamp(7px,1cqh,14px)}
@@ -3875,11 +3921,15 @@ function tpl(s){
     return `<div class="wrap">${k}${t}${sub}<div class="meia${s.largo?' largo':''}${s.sangra?' sangra':''}">`
       + (ests
           ? `<div class="mtx estados rev" style="--i:2">`
-            + ests.map((e,i)=>`<div class="mest${i?' passo':''}${e.servicos?' servicos':''}${e.serif?' serif':''}${e.dados?' dados':''}">`
+            + ests.map((e,i)=>`<div class="mest${i?' passo':''}${e.servicos?' servicos':''}${e.serif?' serif':''}${e.dados?' dados':''}${e.manchete?' manchete':''}">`
                 + (e.kick?`<div class="kick">${e.kick}</div>`:'')
                 + (e.t?`<h1 class="big">${RS(e.t)}</h1>`:'')
                 + (e.lead?`<span class="lead">${e.lead}</span>`:'')
                 + mesq(e)
+                + ((Array.isArray(e.linha)&&e.linha.length)
+                    ? `<ul class="tl">`+e.linha.map(([a,x])=>
+                        `<li><span class="an">${a}</span><span class="mk">${x}</span></li>`).join('')+`</ul>`
+                    : '')
               + `</div>`).join('')
             + `</div>`
           : `<div class="mtx rev" style="--i:2">`
@@ -4480,6 +4530,9 @@ function go(i,tudo){
   const marcaFundo = !!((!!s.fundo && s.g!=='divisor') || trama);   /* idem */
   document.body.classList.toggle('com-fundo',marcaFundo||divFundo);
   document.body.classList.toggle('em-cheia', s.g==='cheia');
+  /* `meia` com sangria: o chrome do topo recolhe para a metade do papel,
+     porque a foto ocupa a outra metade — ver o bloco MASTHEAD no CSS. */
+  document.body.classList.toggle('meia-sangra', s.g==='meia' && !!s.sangra);
   /* grafismo de marca na base (GRAFISMO do bloco), só onde o slide pedir */
   document.body.classList.toggle('com-graf', !!(s.graf&&GRAFISMO));
   /* `em-imagem` = o fundo do slide é imagem ou visor, não campo pintado. É

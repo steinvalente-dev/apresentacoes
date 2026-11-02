@@ -46,12 +46,33 @@
       ],
       "estados": [
         {
-          "kick": "quem apresenta",
+          "kick": "um pouco sobre o estúdio Sarasá",
           "t": "setenta anos de ofício",
-          "cap": "<p><b>70 anos</b>Gerardo Martin Sarasá chega de Arbúcias, na Catalunha, e abre o atelier de azulejaria e vitral que deu origem à casa.</p><p><b>Três gerações</b>Hoje sob direção de Antonio Luís e Marcelo Sarasá Martin. Arquitetos, gestores, <mark>conservadores-restauradores</mark> e mestres de ofício na mesma equipe.</p>",
           "serif": 1,
-          "dados": 1,
-          "lead": "Fundada em 1956, no Ipiranga, por um azulejista catalão. Nunca saiu do mesmo endereço."
+          "lead": "Uma casa de ofício fundada em 1956, no Ipiranga, por um azulejista catalão — hoje na terceira geração.",
+          "manchete": 1,
+          "linha": [
+            [
+              "1956",
+              "Gerardo Martin Sarasá chega ao Brasil e funda o Atelier Artístico, de azulejaria e vitrais."
+            ],
+            [
+              "1970",
+              "Passa a projetos de conservação e restauro do patrimônio edificado."
+            ],
+            [
+              "1980",
+              "Antonio Luís e Marcelo Sarasá Martin assumem a casa."
+            ],
+            [
+              "2002",
+              "É criada a Zeladoria do Patrimônio Cultural."
+            ],
+            [
+              "2022",
+              "É fundado o Instituto Sarasá."
+            ]
+          ]
         },
         {
           "kick": "o que fazemos",
