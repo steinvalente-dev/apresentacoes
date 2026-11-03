@@ -891,18 +891,48 @@ body.em-logo .chrome.topo .secao{display:inline}
    ~25% da largura; o `big` da casa, dimensionado para a prancha inteira,
    quebrava "como o projeto se constrói" em QUATRO linhas. Na sangria ele
    cai para a escala da faixa e volta a duas. */
+.g-sequencia.sangra{--faixa-util:calc(var(--faixa) - var(--gut) - clamp(10px,1.2cqw,24px))}
 .g-sequencia.sangra .kick,.g-sequencia.sangra h1,.g-sequencia.sangra .sub{
-  position:relative;z-index:3;max-width:calc(var(--faixa) - var(--gut) * 1.2)}
+  position:relative;z-index:3;max-width:var(--faixa-util)}
 .g-sequencia.sangra h1{font-size:clamp(21px,2.1cqw,38px);line-height:1.06}
 .g-sequencia.sangra .kick{letter-spacing:.18em}
 .g-sequencia.sangra .seq-cap{z-index:3}
 /* ⚑ o controle sobe para DENTRO da faixa: no pe ele caia sobre o nome do
    projeto, que mora no chrome e nao se move. */
-.g-sequencia.sangra .seqnav{z-index:3;left:0;right:auto;
+.g-sequencia.sangra .seqnav{z-index:3;left:var(--gut);right:auto;
   bottom:calc(var(--bot) + clamp(10px,1.6cqh,26px))}
 /* ⚑ o contador solto da etapa sai: na sangria ele caia na borda da tela,
-   cortado, e repetia o numero que o proprio controle ja mostra. */
-.g-sequencia.sangra .seq-cap{display:none}
+   cortado, e repetia o numero que o proprio controle ja mostra. O resto da
+   legenda FICA: 03/11/2026, a faixa deixou de ser so titulo e passou a ser
+   onde a etapa se explica. */
+.g-sequencia.sangra .sq{display:none}
+/* ⚑ A LEGENDA E ABSOLUTA DENTRO DA ETAPA, nao item de grade: a etapa e'
+   `inset:0` e a grade de uma coluna so a jogaria por cima da planta. Ancorada
+   em baixo, ela cresce PARA CIMA conforme o texto do quadro — e o `bottom`
+   guarda a altura do controle, que mora logo abaixo. Esvanece junto com a
+   imagem porque mora dentro da etapa: o cross-fade ja' e' sincronizado. */
+.g-sequencia.sangra .seq-cap{display:flex;position:absolute;z-index:3;
+  width:var(--faixa-util);padding-bottom:0;left:var(--gut);
+  bottom:calc(var(--bot) + var(--seta) + clamp(30px,3.8cqh,56px))}
+.g-sequencia.sangra .st{font-size:clamp(19px,1.85cqw,34px);line-height:1.1;
+  margin-bottom:clamp(7px,1cqh,14px)}
+.g-sequencia.sangra .sd{font-size:clamp(11px,.92cqw,17px);line-height:1.4}
+
+/* ══ chave de cores da etapa ═══════════════════════════════════════════════
+   03/11/2026. Os quadros finais pintam a planta por setor e sem chave a cor
+   nao diz nada. As cores NAO foram escolhidas: foram MEDIDAS no proprio
+   desenho — diferenca entre quadros consecutivos, isolando o que cada clique
+   acrescenta, e o tom dominante dessa diferenca. Por isso batem com a planta
+   em vez de chegar perto. A chave e' acumulativa: cada quadro repete as
+   anteriores e soma a sua. */
+.g-sequencia .scor{display:flex;flex-direction:column;gap:clamp(3px,.5cqh,7px);
+  margin-top:clamp(9px,1.3cqh,18px)}
+.g-sequencia .sc{display:flex;align-items:center;gap:clamp(5px,.6cqw,10px);
+  font-family:var(--f-mono);font-size:var(--fs-cap);letter-spacing:.055em;
+  line-height:1.25;color:var(--acento)}
+.g-sequencia .sc i{flex:0 0 auto;width:clamp(9px,.86cqw,15px);
+  height:clamp(9px,.86cqw,15px);border-radius:3px;
+  box-shadow:inset 0 0 0 1px var(--acento-25)}
 
 /* ancorada embaixo: a legenda cresce para CIMA a partir do rodape da
    coluna, e o `padding-bottom` guarda a faixa do controle. */
@@ -3364,6 +3394,66 @@ body.claro .g-viva .anel{border-color:var(--tinta-15);border-top-color:var(--tin
 .g-modelo-3d.reserva-on .rescap{display:block}
 /* visor vivo: nada de backdrop-filter em cima dele — 04/09/2026 */
 body.em-imagem .nav{-webkit-backdrop-filter:none;backdrop-filter:none}
+
+/* ══ RABISCO — anotar por cima da prancha, ao vivo ════════════════════════
+   03/11/2026. Pedido do Michel: trazer para o deck a anotacao que a planta
+   interativa do Lageado ja tinha. O nucleo e o mesmo (traco livre, reta,
+   seta, borracha, tres canetas, desfazer) e duas coisas mudam:
+
+   1 · NAO HA ZOOM AQUI. Na planta os pontos ficavam em coordenada de
+       desenho porque o desenho andava sob o dedo. No deck a prancha e fixa,
+       entao o ponto vira FRACAO do quadro (0..1) — o que preserva a unica
+       propriedade que importava: redimensionar a janela ou trocar de
+       projetor nao desloca o rabisco, ele reescala com a prancha.
+   2 · A TINTA E' POR SLIDE. Cada prancha guarda o seu proprio array; trocar
+       de slide troca o que se ve. Voltar devolve o rabisco de la.
+
+   ⚑ A ESPESSURA ACOMPANHA A TELA. `w` esta em pixel de uma tela de 1600 e e'
+   multiplicado pela largura real. Fixo em px, o traco some num projetor
+   grande e borra num laptop.
+
+   ⚑ NAO PERSISTE: recarregou, perdeu. E' anotacao de conversa, nao projeto.
+
+   ⚑ QUEM CAPTURA O GESTO E' #mscapta, nao o svg. O svg fica SEMPRE com
+   pointer-events:none — a tinta continua visivel depois de sair do modo, e
+   nunca rouba um clique do chrome. */
+/* ⚑ `inset:0` NAO ESTICA UM <svg>: ele e' elemento substituido e cai no
+   tamanho intrinseco de 300x150. Width/height explicitos, sempre. */
+#mstinta{position:absolute;left:0;top:0;width:100%;height:100%;
+  z-index:41;pointer-events:none;overflow:visible}
+#mscapta{position:absolute;inset:0;z-index:40;display:none;cursor:crosshair;
+  touch-action:none}
+body.rabisca #mscapta{display:block}
+#msferr{position:absolute;z-index:42;left:50%;transform:translateX(-50%);
+  bottom:calc(var(--bot) + clamp(8px,1.5cqh,24px));display:none;
+  align-items:center;gap:clamp(3px,.42cqw,7px);
+  background:var(--tinta-85);border-radius:999px;
+  padding:clamp(4px,.45cqw,8px) clamp(6px,.6cqw,11px);
+  box-shadow:0 3px 18px var(--tinta-35)}
+body.rabisca #msferr{display:flex}
+#msferr button{width:clamp(23px,2.05cqw,36px);height:clamp(23px,2.05cqw,36px);
+  border-radius:50%;border:0;background:transparent;color:var(--papel);
+  cursor:pointer;display:grid;place-items:center;padding:0;
+  transition:background .15s ease,opacity .15s ease}
+#msferr button:hover{background:var(--papel-20)}
+#msferr button[aria-pressed="true"]{background:var(--papel);color:var(--tinta)}
+#msferr button svg{width:58%;height:58%;fill:none;stroke:currentColor;
+  stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+#msferr .pena{position:relative}
+#msferr .pena i{position:absolute;inset:22%;border-radius:50%;
+  box-shadow:inset 0 0 0 1px var(--tinta-25)}
+#msferr hr{width:1px;height:clamp(14px,1.3cqw,22px);border:0;margin:0 2px;
+  background:var(--papel-25)}
+/* o botao que LIGA o modo mora no chrome do pe, ao lado da navegacao, e
+   some junto com ele quando o ponteiro fica ocioso. */
+#msrab{border:0;background:transparent;color:inherit;cursor:pointer;
+  width:var(--seta);height:var(--seta);border-radius:50%;display:grid;
+  place-items:center;padding:0;opacity:.72;transition:opacity .15s,background .15s}
+#msrab:hover{opacity:1;background:var(--papel-20)}
+body.rabisca #msrab{opacity:1;background:var(--papel-25)}
+#msrab svg{width:54%;height:54%;fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+@media (prefers-reduced-motion:reduce){#msferr button{transition:none}}
 </style></head><body>
 <!-- #moldura mede a ÁREA SEGURA da tela, nunca a tela bruta: é o que impede
      o notch e a Dynamic Island de comerem canto de prancha.
@@ -3383,7 +3473,9 @@ body.em-imagem .nav{-webkit-backdrop-filter:none;backdrop-filter:none}
      michel stein_, AMAZ e Lavrō em texto; Sarasá em logotipo. O script de
      marca, abaixo do DECK, preenche isto; não editar aqui. -->
 <div class="chrome topo"><span class="secao"><span class="sn"></span><span class="sl"></span></span><span class="selo" hidden></span><span class="dots"></span><span class="marca"><span class="marca-txt">marca<u>_</u></span><span class="marca-lk" hidden></span></span></div>
-<div class="chrome pe"><span class="pj">projeto · cliente</span><span class="nav"><span class="cont"></span><button class="seta" id="ant">&#9664;</button><button class="seta" id="pro">&#9654;</button></span></div>
+<div class="chrome pe"><span class="pj">projeto · cliente</span><span class="nav"><button id="msrab" type="button" aria-pressed="false" aria-label="Anotar sobre a prancha" title="Anotar sobre a prancha (D)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 9.5-9.5a2 2 0 0 0-3-3L5 16z"/><path d="M14 6.5l3 3"/></svg></button><span class="cont"></span><button class="seta" id="ant">&#9664;</button><button class="seta" id="pro">&#9654;</button></span></div>
+<svg id="mstinta" aria-hidden="true"></svg><div id="mscapta"></div>
+<div id="msferr" role="toolbar" aria-label="Ferramentas de anotação"></div>
 </div></div>
 <script>
 /* ─── escala do quadro ─────────────────────────────────────────────────────
@@ -4467,7 +4559,12 @@ function tpl(s){
       + `<span class="seq-cap">`
       +   `<span class="sq">${String(i+1).padStart(2,'0')} / ${N}</span>`
       +   `<span class="st">${x.t||''}</span>`
-      +   `<span class="sd">${x.cap||''}</span></span>`
+      +   `<span class="sd">${x.cap||''}</span>`
+      +   ((x.cores&&x.cores.length)
+            ? `<span class="scor">` + x.cores.map(c=>
+                `<span class="sc"><i style="background:${c[0]}"></i>${RS(c[1])}</span>`).join('')
+              + `</span>` : '')
+      + `</span>`
       + `<img src="${IMG[x.src]||x.src}" alt="${(x.t||'').replace(/"/g,'&quot;')}"`
       +   ` onerror="this.dataset.err=1"></div>`).join('');
     return `<div class="wrap">${k}${t}${sub}<div class="seq">${et}`
@@ -5099,6 +5196,7 @@ function go(i,tudo){
   /* `semtopo:1` — a peca vizinha ja traz cabecalho proprio; ver o bloco
      no CSS. */
   document.body.classList.toggle('semtopo', !!s.semtopo);
+  if(window.__msTinta) window.__msTinta.vai(i);
   if(window.__msFechaTemas) window.__msFechaTemas();
   /* grafismo de marca na base (GRAFISMO do bloco), só onde o slide pedir */
   document.body.classList.toggle('com-graf', !!(s.graf&&GRAFISMO));
@@ -6616,6 +6714,218 @@ window.MSModelo=(function(){
     if(e.key==='ArrowLeft'||e.key==='PageUp'){
       e.preventDefault(); e.stopPropagation(); abre(sl,atual-1); return; }
   },true);
+})();
+
+/* ─── RABISCO: anotação ao vivo sobre a prancha ────────────────────────────
+   03/11/2026. Núcleo portado da planta interativa do Lageado. O que mudou
+   está comentado no CSS, em #mstinta. Aqui vale lembrar duas regras:
+   · ponto em FRAÇÃO do quadro; pixel só na hora de pintar
+   · a tinta é POR SLIDE, e não persiste entre recargas
+   ───────────────────────────────────────────────────────────────────────── */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  var svg=document.getElementById('mstinta'), capta=document.getElementById('mscapta'),
+      barra=document.getElementById('msferr'), liga=document.getElementById('msrab');
+  if(!svg||!capta||!barra||!liga) return;
+
+  var TINTA={}, slide=0, live=null, tool='free', andou=false, ponteiros=0;
+  /* ⚑ A QUARTA CANETA E' O PAPEL DA MARCA, e existe porque o deck tem
+     prancha escura: sobre o vinho dos divisores e das frases o vermelho
+     praticamente some. Vem do token, nao de um hex fixo — assim acompanha
+     a frente em que a peca for montada. */
+  var CREME=(getComputedStyle(document.documentElement)
+              .getPropertyValue('--papel')||'').trim()||'#FFF8EE';
+  var PENS=[{c:'#C1272D',w:3,o:1},{c:'#1F3A5F',w:3,o:1},
+            {c:'#F5C518',w:19,o:.34},{c:CREME,w:3,o:1}];
+  var pen=0;
+  function tracos(){ return TINTA[slide]||(TINTA[slide]=[]); }
+  function cx(){ return svg.getBoundingClientRect(); }
+  /* ⚑ ESCALA DO TRAÇO: `w` está em pixel de uma tela de 1600 de largura. */
+  function k(){ return cx().width/1600; }
+
+  var ICO={
+    free :'<path d="M3 16c3.2 0 3.2-8 6.4-8s3.2 8 6.4 8 5.2-5 5.2-5"/>',
+    line :'<path d="M4 20L20 4"/>',
+    arrow:'<path d="M4 20L19 5"/><path d="M12 5h7v7"/>',
+    erase:'<path d="M8 20h11"/><path d="M15.5 4.5l4 4-9 9-4-4z"/>',
+    undo :'<path d="M4 10h9a5 5 0 0 1 0 10H8"/><path d="M4 10l4-4M4 10l4 4"/>',
+    wipe :'<path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/>',
+    sair :'<path d="M6 6l12 12M18 6L6 18"/>'
+  };
+  function bt(acao,rot,glifo,apertado){
+    return '<button type="button" data-ac="'+acao+'" aria-label="'+rot+'" title="'+rot+'"'
+      + (apertado!=null?' aria-pressed="'+apertado+'"':'')
+      + '><svg viewBox="0 0 24 24" aria-hidden="true">'+glifo+'</svg></button>';
+  }
+  barra.innerHTML =
+      bt('free','Traço livre (V)',ICO.free,true)
+    + bt('line','Reta (L) — shift trava o ângulo',ICO.line,false)
+    + bt('arrow','Seta (A) — shift trava o ângulo',ICO.arrow,false)
+    + bt('erase','Borracha (E)',ICO.erase,false)
+    + '<hr>'
+    + PENS.map(function(p,i){
+        return '<button type="button" class="pena" data-pen="'+i+'" aria-label="Caneta '+(i+1)+'"'
+          + ' title="Caneta '+(i+1)+'" aria-pressed="'+(i===0)+'"><i style="background:'+p.c+'"></i></button>';
+      }).join('')
+    + '<hr>'
+    + bt('undo','Desfazer (ctrl+Z)',ICO.undo)
+    + bt('wipe','Limpar esta prancha',ICO.wipe)
+    + bt('sair','Sair do modo anotação (Esc)',ICO.sair);
+
+  /* ── pintura ───────────────────────────────────────────────────────── */
+  function elDe(st){
+    var el=document.createElementNS(NS, st.type==='point'?'circle':'path');
+    el.setAttribute('fill','none'); el.setAttribute('stroke',st.c);
+    el.setAttribute('stroke-linecap','round'); el.setAttribute('stroke-linejoin','round');
+    svg.appendChild(el); return el;
+  }
+  function paraTela(p){ var r=cx(); return [p.x*r.width, p.y*r.height]; }
+  function dDe(st){
+    var pts=st.pts, d='', i, s;
+    if(!pts.length) return '';
+    for(i=0;i<pts.length;i++){ s=paraTela(pts[i]); d+=(i?'L':'M')+s[0].toFixed(1)+' '+s[1].toFixed(1); }
+    if(st.type==='arrow'&&pts.length>1){
+      var a=paraTela(pts[0]), b=paraTela(pts[pts.length-1]);
+      var ang=Math.atan2(b[1]-a[1],b[0]-a[0]), L=16*k(), w=.44;
+      d+='M'+(b[0]-L*Math.cos(ang-w)).toFixed(1)+' '+(b[1]-L*Math.sin(ang-w)).toFixed(1)
+       + 'L'+b[0].toFixed(1)+' '+b[1].toFixed(1)
+       + 'L'+(b[0]-L*Math.cos(ang+w)).toFixed(1)+' '+(b[1]-L*Math.sin(ang+w)).toFixed(1);
+    }
+    return d;
+  }
+  function pinta(){
+    var ts=tracos(), e=k();
+    for(var i=0;i<ts.length;i++){
+      var st=ts[i]; if(!st.el) st.el=elDe(st);
+      st.el.setAttribute('stroke-width',(st.w*e).toFixed(2));
+      st.el.setAttribute('stroke-opacity',st.o);
+      if(st.type==='point'){ var s=paraTela(st.pts[0]);
+        st.el.setAttribute('r',(7*e).toFixed(1));
+        st.el.setAttribute('cx',s[0].toFixed(1)); st.el.setAttribute('cy',s[1].toFixed(1)); }
+      else st.el.setAttribute('d',dDe(st));
+    }
+  }
+  /* trocar de prancha troca a tinta: os elementos do slide anterior saem do
+     DOM mas os pontos ficam no array, para voltar intactos. */
+  function vai(i){
+    var ts=TINTA[slide]; if(ts) ts.forEach(function(s){ if(s.el){s.el.remove(); s.el=null;} });
+    slide=i|0; svg.innerHTML=''; pinta();
+  }
+  function solta(i){
+    var ts=tracos(); if(i<0||i>=ts.length) return;
+    if(ts[i].el) ts[i].el.remove(); ts.splice(i,1);
+  }
+  function desfaz(){ solta(tracos().length-1); }
+  function limpa(){ var ts=tracos(); while(ts.length) solta(ts.length-1); }
+
+  function dist(px,py,a,b){
+    var vx=b[0]-a[0], vy=b[1]-a[1], wx=px-a[0], wy=py-a[1];
+    var L=vx*vx+vy*vy, t=L?Math.max(0,Math.min(1,(wx*vx+wy*vy)/L)):0;
+    return Math.hypot(px-(a[0]+t*vx), py-(a[1]+t*vy));
+  }
+  function apaga(ex,ey){
+    var r=cx(), px=ex-r.left, py=ey-r.top, ts=tracos(), alvo=-1, melhor=1e9;
+    for(var i=ts.length-1;i>=0;i--){
+      var st=ts[i], pts=st.pts, dd=1e9, j;
+      if(st.type==='point'){ var s=paraTela(pts[0]); dd=Math.hypot(s[0]-px,s[1]-py); }
+      else for(j=0;j<pts.length-1;j++) dd=Math.min(dd,dist(px,py,paraTela(pts[j]),paraTela(pts[j+1])));
+      if(dd<melhor){ melhor=dd; alvo=i; }
+    }
+    if(alvo>=0 && melhor<=18*k()){ solta(alvo); return true; }
+    return false;
+  }
+
+  /* ── gesto ─────────────────────────────────────────────────────────── */
+  function ponto(ev){ var r=cx(); return {x:(ev.clientX-r.left)/r.width, y:(ev.clientY-r.top)/r.height}; }
+  /* shift trava o ângulo em múltiplos de 45°, medido em PIXEL — travar na
+     fração daria ângulos tortos em tela que não é quadrada. */
+  function trava(a,b){
+    var r=cx(), dx=(b.x-a.x)*r.width, dy=(b.y-a.y)*r.height;
+    var ang=Math.round(Math.atan2(dy,dx)/(Math.PI/4))*(Math.PI/4), L=Math.hypot(dx,dy);
+    return {x:a.x+L*Math.cos(ang)/r.width, y:a.y+L*Math.sin(ang)/r.height};
+  }
+  capta.addEventListener('pointerdown',function(e){
+    ponteiros++;
+    if(ponteiros>1){ if(live){ solta(tracos().length-1); live=null; } return; }
+    e.preventDefault(); capta.setPointerCapture(e.pointerId); andou=false;
+    if(tool==='erase'){ apaga(e.clientX,e.clientY); return; }
+    var p=ponto(e), P=PENS[pen];
+    live={type:tool,pts:[p,{x:p.x,y:p.y}],c:P.c,w:P.w,o:P.o};
+    tracos().push(live); pinta();
+  });
+  capta.addEventListener('pointermove',function(e){
+    if(!live){ if(tool==='erase'&&e.buttons) apaga(e.clientX,e.clientY); return; }
+    andou=true; var p=ponto(e);
+    if(tool==='free') live.pts.push(p);
+    else live.pts[live.pts.length-1]=e.shiftKey?trava(live.pts[0],p):p;
+    pinta();
+  });
+  function fim(e){
+    ponteiros=Math.max(0,ponteiros-1);
+    if(!live) return;
+    /* toque sem arrasto não vira traço: na reta e na seta sobraria um ponto
+       solto; no livre, um pingo que ninguém quis. */
+    if(!andou) solta(tracos().length-1);
+    live=null;
+  }
+  capta.addEventListener('pointerup',fim);
+  capta.addEventListener('pointercancel',fim);
+  capta.addEventListener('contextmenu',function(e){ e.preventDefault(); });
+
+  /* ── barra ─────────────────────────────────────────────────────────── */
+  function ferramenta(t){
+    tool=t;
+    barra.querySelectorAll('button[data-ac]').forEach(function(b){
+      if(b.getAttribute('aria-pressed')!=null)
+        b.setAttribute('aria-pressed', String(b.dataset.ac===t)); });
+  }
+  function caneta(i){
+    pen=i|0;
+    barra.querySelectorAll('button[data-pen]').forEach(function(b){
+      b.setAttribute('aria-pressed', String(+b.dataset.pen===pen)); });
+  }
+  barra.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    e.stopPropagation();
+    if(b.dataset.pen!=null){ caneta(b.dataset.pen); return; }
+    var a=b.dataset.ac;
+    if(a==='undo') desfaz();
+    else if(a==='wipe') limpa();
+    else if(a==='sair') modo(false);
+    else ferramenta(a);
+  });
+  barra.addEventListener('pointerdown',function(e){ e.stopPropagation(); });
+
+  function modo(v){
+    document.body.classList.toggle('rabisca', !!v);
+    liga.setAttribute('aria-pressed', String(!!v));
+    if(!v && live){ solta(tracos().length-1); live=null; }
+  }
+  liga.addEventListener('click',function(e){
+    e.stopPropagation(); modo(!document.body.classList.contains('rabisca')); });
+
+  /* ⚑ CAPTURA, não bolha: o `d` tem de chegar antes de qualquer gabarito que
+     escute teclado. As setas ficam de fora de propósito — anotar e avançar
+     são a mesma conversa, e o apresentador remoto manda seta. */
+  addEventListener('keydown',function(e){
+    if(e.ctrlKey||e.metaKey){
+      if(document.body.classList.contains('rabisca') && e.key.toLowerCase()==='z'){
+        e.preventDefault(); e.stopPropagation(); desfaz(); }
+      return;
+    }
+    var t=e.key.toLowerCase();
+    if(t==='d'){ e.preventDefault(); e.stopPropagation();
+      modo(!document.body.classList.contains('rabisca')); return; }
+    if(!document.body.classList.contains('rabisca')) return;
+    if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); modo(false); return; }
+    var mapa={v:'free',l:'line',a:'arrow',e:'erase'};
+    if(mapa[t]){ e.preventDefault(); e.stopPropagation(); ferramenta(mapa[t]); return; }
+    if(t>='1'&&t<='4'){ e.preventDefault(); e.stopPropagation(); caneta(+t-1); }
+  },true);
+
+  addEventListener('resize',pinta);
+  if(window.ResizeObserver) new ResizeObserver(pinta).observe(svg);
+  window.__msTinta={vai:vai, pinta:pinta};
 })();
 
 /* ─── ociosidade do ponteiro ───────────────────────────────────────────
