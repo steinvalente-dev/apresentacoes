@@ -1056,6 +1056,36 @@ body.em-logo .chrome.topo .secao{display:inline}
    Some a opacidade mas NAO o pointer-events: o veu continua sendo quem
    captura o primeiro clique e liga `girando`. */
 .g-earth-3d.com-painel .veu{opacity:0}
+/* ══ a prancha oficial dentro do painel ═══════════════════════════════════
+   03/11/2026. O painel do tombamento passou a carregar o mapa da Resolucao
+   53/CONPRESP/2018. Duas consequencias:
+
+   ⚑ O PAINEL ALARGA QUANDO TEM FIGURA. Com 30cqw o desenho cadastral vira
+   mancha: sao quadras inteiras de linha fina. `:has(figure)` abre para
+   38cqw, so onde faz falta.
+
+   ⚑ A PRANCHA E' DESENHO, ENTAO FICA EM CAMPO CLARO. Ela nasceu preta
+   sobre branco; sobre o painel translucido escuro o traco sumiria. O fundo
+   claro atras dela nao e' decoracao, e' o que mantem o desenho legivel. */
+/* ⚑ COM FIGURA O PAINEL SOBE E ALARGA. Ele precisa caber prancha E lista
+   sem rolagem: lista fora da dobra, numa apresentacao, e lista que nao
+   existe. Sobe porque o espaco esta livre — o rotulo recolhe assim que um
+   painel abre — e alarga porque desenho cadastral de linha fina a 30cqw
+   vira mancha. */
+.g-earth-3d .painel:has(figure){width:clamp(280px,38cqw,560px);
+  top:calc(var(--top) + clamp(8px,1.4cqh,20px))}
+.g-earth-3d .painel figure{margin:0 0 clamp(11px,1.6cqh,20px);
+  background:var(--papel);border-radius:6px;padding:clamp(5px,.6cqh,9px);
+  border:1px solid var(--papel-25)}
+/* ⚑ A FIGURA CEDE ANTES DO TEXTO. O teto em `cqh` e' o que garante que os
+   itens entrem na dobra em tela baixa; a imagem encolhe e centra, em vez
+   de empurrar a lista para fora. */
+.g-earth-3d .painel figure img{display:block;width:100%;height:auto;
+  max-height:34cqh;object-fit:contain;margin:0 auto;border-radius:3px}
+.g-earth-3d .painel figure figcaption{font-family:var(--f-mono);
+  font-size:calc(var(--fs-cap)*.9);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--tinta);opacity:.62;margin-top:clamp(4px,.6cqh,8px);
+  padding:0 2px;line-height:1.3}
 .g-earth-3d .painel h4{margin:0 0 clamp(10px,1.5cqh,20px);
   font-family:var(--f-display);font-style:italic;font-weight:500;
   letter-spacing:-.035em;line-height:1.05;color:var(--papel);
@@ -4818,6 +4848,8 @@ function tpl(s){
                 + ` aria-pressed="false">${x.bt||x.t||('tema '+(i+1))}</button>`).join('')
             + `</div>`
             + s.temas.map((x,i)=>`<div class="painel" data-tm="${i}">`
+                + (x.img?`<figure><img src="${IMG[x.img]||x.img}" alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}" loading="lazy">`
+                         + (x.imgCap?`<figcaption>${x.imgCap}</figcaption>`:'')+`</figure>`:'')
                 + (x.t?`<h4>${RS(x.t)}</h4>`:'')
                 + `<ol>`+(x.itens||[]).map(([q,y])=>
                     `<li><span class="q">${q}</span><span class="x">${y}</span></li>`).join('')
@@ -5004,12 +5036,26 @@ let num=0;DECK.forEach(s=>{if(s.div){s._b=null;return}if(!s.sub_)num++;s._b=num}
 const TOT=num;
 DECK.forEach(s=>{if(s._b===null){s._sub=0;return}const ir=DECK.filter(x=>x._b===s._b);s._sub=ir.length>1?ir.indexOf(s)+1:0});
 const dots=document.querySelector('.dots');
-secs.forEach((sc,i)=>{const d=document.createElement('span');d.className='sdot';d.innerHTML=`<span>${sc.nome}</span>`;d.onclick=e=>{e.stopPropagation();go(sc.i)};dots.appendChild(d)});
-/* `atalho`: destino alcançável de qualquer lugar, sem paginar até ele. */
-DECK.forEach((s,i)=>{if(!s.atalho)return;
-  const d=document.createElement('span');d.className='sdot atalho';d.dataset.alvo=i;
-  d.innerHTML=`<span>${s.atalho}</span>`;
-  d.onclick=e=>{e.stopPropagation();go(i)};dots.appendChild(d)});
+/* `atalho`: destino alcançável de qualquer lugar, sem paginar até ele.
+   ⚑ A FILEIRA SEGUE A ORDEM DA PEÇA, não a ordem em que se monta. Até
+   03/11/2026 os atalhos iam todos para o fim da fileira, porque eram
+   anexados depois das seções. Isso quebra assim que o atalho aponta para
+   algo que vem ANTES da primeira seção — a abertura institucional, por
+   exemplo: a bolinha dela aparecia por último, do lado direito, apontando
+   para o começo da apresentação. Ordenar por índice de slide resolve e
+   vale para qualquer atalho futuro.
+   A marcação do slide atual continua indexando as seções entre si
+   (`:not(.atalho)`), então intercalar atalhos não a desalinha. */
+const pontos=secs.map(sc=>({i:sc.i,nome:sc.nome,atalho:false}))
+  .concat(DECK.map((s,i)=>s.atalho?{i:i,nome:s.atalho,atalho:true}:null).filter(Boolean))
+  .sort((a,b)=>a.i-b.i);
+pontos.forEach(pt=>{
+  const d=document.createElement('span');
+  d.className='sdot'+(pt.atalho?' atalho':'');
+  if(pt.atalho) d.dataset.alvo=pt.i;
+  d.innerHTML=`<span>${pt.nome}</span>`;
+  d.onclick=e=>{e.stopPropagation();go(pt.i)};
+  dots.appendChild(d);});
 /* um gabarito que lance exceção não derruba mais o deck: vira aviso no
    próprio slide, e o console recebe a pilha. */
 const tplSeguro=s=>{try{return tpl(s)}catch(e){console.error('deck · '+s.g,e);

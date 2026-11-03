@@ -87,7 +87,8 @@
       "url": "https://estudiosarasa.com.br"
      }
     }
-   ]
+   ],
+   "atalho": "sobre a Sarasá"
   },
   {
    "g": "meia",
@@ -341,20 +342,6 @@
    "ds": "Qualidades e desafios de um conjunto que já existe."
   },
   {
-   "g": "cheia",
-   "src": "",
-   "h2": "localização",
-   "cap": "Planta do parque, com norte. Zoom na edificação existente no slide seguinte.",
-   "claro": 1
-  },
-  {
-   "g": "cheia",
-   "src": "",
-   "h2": "o conjunto edificado",
-   "cap": "Os braços longilíneos do conjunto preexistente.",
-   "claro": 1
-  },
-  {
    "g": "earth-3d",
    "lat": -23.599136,
    "lng": -46.744936,
@@ -405,7 +392,7 @@
      ]
     },
     {
-     "bt": "o que o tombamento permite",
+     "bt": "leitura do tombamento",
      "t": "a proteção como liberdade",
      "itens": [
       [
@@ -414,17 +401,20 @@
       ],
       [
        "02",
-       "<b>O interior está livre de obrigação de preservação.</b> A reorganização interna é possível — e necessária para gerar os salões amplos."
+       "<b>O interior está livre.</b> A reorganização interna é possível — e é ela que gera os salões amplos."
       ],
       [
        "03",
-       "<b>A área livre do parque dispensa análise prévia.</b> O que exige vão grande encontra lugar sem passar pelo rito."
+       "<b>A área livre dispensa análise prévia.</b> O que exige vão grande encontra lugar fora do rito."
       ],
       [
        "04",
-       "<b>O que se altera deixa testemunho.</b> A própria resolução exige preservar o traço do elemento original — é a base da intervenção legível."
+       "<b>O que se altera deixa testemunho.</b> A resolução exige preservar o traço do original."
       ]
-     ]
+     ],
+     "img": "conpresp-f1.jpg",
+     "imgAlt": "Mapa da Resolução 53/CONPRESP/2018, folha 1: perímetro do Parque Chácara do Jockey, área envoltória e as quatro edificações tombadas",
+     "imgCap": "Res. 53/CONPRESP/2018 · folha 1/2"
     }
    ],
    "cap": "Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos."

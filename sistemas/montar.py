@@ -191,6 +191,14 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
         #   nivel abaixo. Sem esta linha ele nao entra no moinho NEM na pasta e
         #   o html aponta para um nome que nao existe — 404 mudo. Mesma armadilha
         #   da GAVETA, abaixo. 30/10/2026.
+        # ⚑ `earth-3d` com `temas`: cada tema pode carregar UMA prancha no
+        #   painel (a folha do CONPRESP, p.ex.). Mesmo nivel abaixo, mesma
+        #   armadilha: sem esta linha o html aponta para nome que nao existe.
+        #   Perfil `prancha` — e desenho cadastral de linha fina, nao foto.
+        if g == 'earth-3d':
+            for x in s.get('temas') or []:
+                if isinstance(x, dict) and x.get('img'):
+                    add(x, 'img', 'prancha')
         # `confronto`: o `src` de cada lado mora um nivel abaixo
         if g == 'confronto':
             for l in s.get('lados') or []:

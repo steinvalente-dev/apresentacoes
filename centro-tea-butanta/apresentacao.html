@@ -1072,6 +1072,36 @@ body.em-logo .chrome.topo .secao{display:inline}
    Some a opacidade mas NAO o pointer-events: o veu continua sendo quem
    captura o primeiro clique e liga `girando`. */
 .g-earth-3d.com-painel .veu{opacity:0}
+/* ══ a prancha oficial dentro do painel ═══════════════════════════════════
+   03/11/2026. O painel do tombamento passou a carregar o mapa da Resolucao
+   53/CONPRESP/2018. Duas consequencias:
+
+   ⚑ O PAINEL ALARGA QUANDO TEM FIGURA. Com 30cqw o desenho cadastral vira
+   mancha: sao quadras inteiras de linha fina. `:has(figure)` abre para
+   38cqw, so onde faz falta.
+
+   ⚑ A PRANCHA E' DESENHO, ENTAO FICA EM CAMPO CLARO. Ela nasceu preta
+   sobre branco; sobre o painel translucido escuro o traco sumiria. O fundo
+   claro atras dela nao e' decoracao, e' o que mantem o desenho legivel. */
+/* ⚑ COM FIGURA O PAINEL SOBE E ALARGA. Ele precisa caber prancha E lista
+   sem rolagem: lista fora da dobra, numa apresentacao, e lista que nao
+   existe. Sobe porque o espaco esta livre — o rotulo recolhe assim que um
+   painel abre — e alarga porque desenho cadastral de linha fina a 30cqw
+   vira mancha. */
+.g-earth-3d .painel:has(figure){width:clamp(280px,38cqw,560px);
+  top:calc(var(--top) + clamp(8px,1.4cqh,20px))}
+.g-earth-3d .painel figure{margin:0 0 clamp(11px,1.6cqh,20px);
+  background:var(--papel);border-radius:6px;padding:clamp(5px,.6cqh,9px);
+  border:1px solid var(--papel-25)}
+/* ⚑ A FIGURA CEDE ANTES DO TEXTO. O teto em `cqh` e' o que garante que os
+   itens entrem na dobra em tela baixa; a imagem encolhe e centra, em vez
+   de empurrar a lista para fora. */
+.g-earth-3d .painel figure img{display:block;width:100%;height:auto;
+  max-height:34cqh;object-fit:contain;margin:0 auto;border-radius:3px}
+.g-earth-3d .painel figure figcaption{font-family:var(--f-mono);
+  font-size:calc(var(--fs-cap)*.9);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--tinta);opacity:.62;margin-top:clamp(4px,.6cqh,8px);
+  padding:0 2px;line-height:1.3}
 .g-earth-3d .painel h4{margin:0 0 clamp(10px,1.5cqh,20px);
   font-family:var(--f-display);font-style:italic;font-weight:500;
   letter-spacing:-.035em;line-height:1.05;color:var(--papel);
@@ -4157,7 +4187,7 @@ const DECK=[
   slogan:'O Patrimônio Cultural vivo',
   site:'estudiosarasa.com.br'},
 /* ══ MIOLO ══ gerado de deck.json por sistemas/montar.py */
-{"g":"meia","sangra":1,"mosaico":1,"inst":1,"imgs":["img/obra-11.jpg","img/obra-14.jpg","img/obra-16.jpg","img/obra-17.jpg","img/obra-18.jpg","img/obra-21.jpg","img/obra-23.jpg","img/obra-28.jpg","img/obra-30.jpg","img/obra-32.jpg","img/obra-34.jpg","img/obra-40.jpg","img/obra-47.jpg","img/obra-49.jpg","img/obra-50.jpg","img/obra-55.jpg","img/obra-56.jpg","img/obra-57.jpg","img/obra-58.jpg","img/obra-59.jpg","img/obra-66.jpg","img/obra-67.jpg","img/obra-82.jpg"],"estados":[{"kick":"um pouco sobre o estúdio Sarasá","t":"setenta anos de ofício","serif":1,"lead":"Uma casa de ofício fundada em 1956, no Ipiranga, por um azulejista catalão — hoje na terceira geração.","manchete":1,"linha":[["1939","Nasce <mark>Gerardo Martin Sarasá<\/mark> em Arbúcias, Girona, entre o fim da Guerra Civil Espanhola e o começo da Segunda Guerra."],["1956","Chega ao Brasil e funda o <mark>Atelier Artístico Gerardo Sarasá<\/mark>, com especialidade em azulejaria e vitral."],["1970","Passa aos projetos de <mark>conservação e restauro<\/mark> do patrimônio edificado."],["1980","Antonio Luís e Marcelo Sarasá Martin assumem a casa, hoje na <mark>terceira geração<\/mark>."],["2002","No Mosteiro da Luz, é concebida a <mark>Zeladoria do Patrimônio Cultural<\/mark> como disciplina autônoma — conceituada em 2012 e registrada na Biblioteca Nacional em 2017."],["2022","É fundado o <mark>Instituto Sarasá de Arte, Cultura e Cidadania<\/mark>."]],"lk":1,"botao":{"t":"visite o nosso site","url":"https://estudiosarasa.com.br"}}]},
+{"g":"meia","sangra":1,"mosaico":1,"inst":1,"imgs":["img/obra-11.jpg","img/obra-14.jpg","img/obra-16.jpg","img/obra-17.jpg","img/obra-18.jpg","img/obra-21.jpg","img/obra-23.jpg","img/obra-28.jpg","img/obra-30.jpg","img/obra-32.jpg","img/obra-34.jpg","img/obra-40.jpg","img/obra-47.jpg","img/obra-49.jpg","img/obra-50.jpg","img/obra-55.jpg","img/obra-56.jpg","img/obra-57.jpg","img/obra-58.jpg","img/obra-59.jpg","img/obra-66.jpg","img/obra-67.jpg","img/obra-82.jpg"],"estados":[{"kick":"um pouco sobre o estúdio Sarasá","t":"setenta anos de ofício","serif":1,"lead":"Uma casa de ofício fundada em 1956, no Ipiranga, por um azulejista catalão — hoje na terceira geração.","manchete":1,"linha":[["1939","Nasce <mark>Gerardo Martin Sarasá<\/mark> em Arbúcias, Girona, entre o fim da Guerra Civil Espanhola e o começo da Segunda Guerra."],["1956","Chega ao Brasil e funda o <mark>Atelier Artístico Gerardo Sarasá<\/mark>, com especialidade em azulejaria e vitral."],["1970","Passa aos projetos de <mark>conservação e restauro<\/mark> do patrimônio edificado."],["1980","Antonio Luís e Marcelo Sarasá Martin assumem a casa, hoje na <mark>terceira geração<\/mark>."],["2002","No Mosteiro da Luz, é concebida a <mark>Zeladoria do Patrimônio Cultural<\/mark> como disciplina autônoma — conceituada em 2012 e registrada na Biblioteca Nacional em 2017."],["2022","É fundado o <mark>Instituto Sarasá de Arte, Cultura e Cidadania<\/mark>."]],"lk":1,"botao":{"t":"visite o nosso site","url":"https://estudiosarasa.com.br"}}],"atalho":"sobre a Sarasá"},
 {"g":"meia","sangra":1,"imgs":["img/sarasa-vitral.jpg","img/sarasa-ipiranga.jpg","img/sarasa-cine-sao-luiz.jpg","img/sarasa-mibio.jpg","img/sarasa-estacao-luz.jpg","img/sarasa-campos-novos.jpg","img/sarasa-olinda.jpg","img/sarasa-itu.jpg","img/sarasa-casa-artesao.jpg","img/sarasa-barra-grande.jpg"],"legs":["Vitral · conservação e restauro","Museu do Ipiranga · São Paulo, SP","Cine São Luiz · Recife, PE","MiBIO, Museu Interativo da Biodiversidade · Campo Grande, MS","Estação da Luz · São Paulo, SP","Fazenda Campos Novos · Cabo Frio, RJ","Sociedade Beneficente de Artistas e Operários de Olinda · Olinda, PE","Museu de Energia de Itu · Itu, SP","Casa do Artesão · Campo Grande, MS","Fortaleza da Barra Grande · Guarujá, SP"],"estados":[{"kick":"o que fazemos","t":"serviços","cap":"<p><b>Projetos<\/b>Conservação e restauro · adequação de uso · expografia.<\/p><p><b>Investigação<\/b>Prospecções · pesquisa técnico-científica · consultoria.<\/p><p><b>Ofícios<\/b>Vitral · azulejaria · argamassa e pintura tradicionais · modelação · marcenaria · cantaria.<\/p><p><b>Execução<\/b>Intervenções de conservação e restauro.<\/p><p><b>Transmissão<\/b>Oficinas · educação patrimonial · zeladoria.<\/p>","servicos":1,"serif":1,"lead":"Cinco frentes, da prospecção ao ofício executado na obra."}],"espelho":1},
 {"g":"viva","src":"../modulos/mapa-atuacao-sarasa.html","recarrega":1,"semtopo":1,"alt":"Mapa de atuação do Estúdio Sarasá: 35 imóveis em São Paulo e obras em nove estados","h2":"onde atuamos","cap":"abrindo o mapa de atuação"},
 {"g":"capa","capa":1,"esc":1,"t":"<span class=\"sg\">TEA<\/span><br>Chácara Jockey","sub":"Reuso de conjunto tombado para o Centro Municipal da Pessoa com TEA.","metas":[["cliente","—"],["etapa","estudo preliminar"],["versão","estrutura R00"]],"kick":"BUTANTÃ · SÃO PAULO"},
@@ -4168,9 +4198,7 @@ const DECK=[
 {"g":"lista","largo":1,"kick":"círculo 02","t":"o que o espaço faz por quem é atendido","itens":[["01","<b>Gradiente sensorial.<\/b> O edifício se organiza por nível de estímulo, não por função administrativa."],["02","<b>Transição.<\/b> Entre o alto e o baixo estímulo existe um espaço que recalibra — não se passa de um ao outro por uma porta."],["03","<b>Refúgio.<\/b> Lugares de retirada distribuídos, ajustáveis por quem os usa."],["04","<b>Percurso previsível.<\/b> Sequência legível, sem bifurcação e sem retorno."],["05","<b>Sem bolha.<\/b> A escala inteira de estímulo dentro do edifício, para que se transite por ela."]]},
 {"g":"tempo","kick":"o lugar no tempo","cobre":640,"de":1925,"ate":2026,"items":[{"ano":"1930","src":"img/tempo-1930.jpg","ficha":"Levantamento Sara Brasil · 1930 · carta","t":"Sara Brasil: o sítio antes de tudo","cap":"Chácara rural na divisa do município. O córrego Charco Grande corta o terreno e a mata ocupa o que hoje é o parque. Não há uma construção sequer no perímetro."},{"ano":"1940","x":1940,"ficha":"Foto aérea · 1940 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1940 · quadrícula FM5-019 · a baixar no GeoSampa"},{"ano":"1954","x":1954,"ficha":"Foto aérea · 1954 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1954 · quadrícula FX03-173 · a baixar no GeoSampa"},{"ano":"s/d","x":1962,"src":"img/tempo-vasp.jpg","ficha":"Carta Vasp-Cruzeiro · <span class=\"pend\">sem data no metadado — confirmar no DPH<\/span>","t":"Vasp-Cruzeiro: a era hípica desenhada","cap":"A pista oval de treino e as duas fileiras de cocheiras aparecem com todos os módulos. É a única peça que registra o conjunto em pleno funcionamento — e a borda esquerda está cortada no fim do mosaico."},{"ano":"1988","src":"img/tempo-1988.jpg","ficha":"Folhas do Livro da Vegetação · 1988 · carta","t":"Livro da Vegetação: o miolo limpo","cap":"A carta registra a massa verde apenas no perímetro do conjunto. Entre os dois agrupamentos de edificações não há arborização mapeada. É o ponto de partida do argumento."},{"ano":"1996","x":1996,"ficha":"Foto aérea · 1994/1996 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1994/1996 · a baixar no GeoSampa"},{"ano":"2001","x":2001,"ficha":"Foto aérea · 2000/2001 · a baixar","t":"Levantamento a incorporar","vazio":"Fotos aéreas 2000 e 2001 · a baixar no GeoSampa"},{"ano":"2004","src":"img/tempo-2004.jpg","ficha":"Ortofoto MDC · 2004 · 1:1.000","t":"A alameda ainda aberta","cap":"Dezesseis anos depois, a alameda central entre os dois agrupamentos continua livre. Telhados íntegros, perímetro arborizado, miolo sem nada."},{"ano":"2017","src":"img/tempo-2017.jpg","ficha":"Ortofoto PMD · 2017","t":"As primeiras árvores no miolo","cap":"Aqui começam a aparecer, esparsas, as árvores entre as fileiras. Nenhuma plantada por projeto: são espontâneas, nascidas da ausência de manejo depois do fim da atividade hípica."},{"ano":"2020","src":"img/tempo-2020.jpg","ficha":"Ortofoto · 2020 · 10 cm/px","t":"O miolo tomado","cap":"Em três anos a alameda fecha. As copas encostam nos telhados e passam a representar risco direto sobre o bem tombado. É o estado que o projeto encontra."}]},
 {"g":"divisor","div":2,"terra":1,"fundo":1,"sec":"o edifício","dn":"02","dt":"o edifício existente","ds":"Qualidades e desafios de um conjunto que já existe."},
-{"g":"cheia","src":"","h2":"localização","cap":"Planta do parque, com norte. Zoom na edificação existente no slide seguinte.","claro":1},
-{"g":"cheia","src":"","h2":"o conjunto edificado","cap":"Os braços longilíneos do conjunto preexistente.","claro":1},
-{"g":"earth-3d","lat":-23.599136,"lng":-46.744936,"alt":760,"compacto":1,"kick":"o lugar","h2":"o Parque Chácara do Jockey","lead":"Rua Santa Crescência · Ferreira, Butantã · São Paulo","temas":[{"bt":"qualidades e oportunidades","t":"qualidades e oportunidades","itens":[["01","<b>Sequência pronta.<\/b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."],["02","<b>Compartimentação pronta.<\/b> A malha de baias está na escala do atendimento em grupo pequeno."],["03","<b>Arvoredo maduro.<\/b> Estímulo natural é regulador, e não se planta em dois anos."],["04","<b>Endereço com história.<\/b> Um bem ocioso volta à vida pública."]]},{"bt":"desafios","t":"desafios","itens":[["01","<b>Geometria restritiva.<\/b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."],["02","<b>Arborização em posição de risco.<\/b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."],["03","<b>Acústica.<\/b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."]]},{"bt":"o que o tombamento permite","t":"a proteção como liberdade","itens":[["01","<b>A proteção recai sobre as fachadas.<\/b> As características arquitetônicas externas são o objeto do tombamento."],["02","<b>O interior está livre de obrigação de preservação.<\/b> A reorganização interna é possível — e necessária para gerar os salões amplos."],["03","<b>A área livre do parque dispensa análise prévia.<\/b> O que exige vão grande encontra lugar sem passar pelo rito."],["04","<b>O que se altera deixa testemunho.<\/b> A própria resolução exige preservar o traço do elemento original — é a base da intervenção legível."]]}],"cap":"Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos."},
+{"g":"earth-3d","lat":-23.599136,"lng":-46.744936,"alt":760,"compacto":1,"kick":"o lugar","h2":"o Parque Chácara do Jockey","lead":"Rua Santa Crescência · Ferreira, Butantã · São Paulo","temas":[{"bt":"qualidades e oportunidades","t":"qualidades e oportunidades","itens":[["01","<b>Sequência pronta.<\/b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."],["02","<b>Compartimentação pronta.<\/b> A malha de baias está na escala do atendimento em grupo pequeno."],["03","<b>Arvoredo maduro.<\/b> Estímulo natural é regulador, e não se planta em dois anos."],["04","<b>Endereço com história.<\/b> Um bem ocioso volta à vida pública."]]},{"bt":"desafios","t":"desafios","itens":[["01","<b>Geometria restritiva.<\/b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."],["02","<b>Arborização em posição de risco.<\/b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."],["03","<b>Acústica.<\/b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."]]},{"bt":"leitura do tombamento","t":"a proteção como liberdade","itens":[["01","<b>A proteção recai sobre as fachadas.<\/b> As características arquitetônicas externas são o objeto do tombamento."],["02","<b>O interior está livre.<\/b> A reorganização interna é possível — e é ela que gera os salões amplos."],["03","<b>A área livre dispensa análise prévia.<\/b> O que exige vão grande encontra lugar fora do rito."],["04","<b>O que se altera deixa testemunho.<\/b> A resolução exige preservar o traço do original."]],"img":"img/conpresp-f1.jpg","imgAlt":"Mapa da Resolução 53/CONPRESP/2018, folha 1: perímetro do Parque Chácara do Jockey, área envoltória e as quatro edificações tombadas","imgCap":"Res. 53/CONPRESP/2018 · folha 1/2"}],"cap":"Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos."},
 {"g":"frase","esc":1,"kick":"a pergunta central","t":"este programa cabe<br>neste lugar?"},
 {"g":"confronto","kick":"a resposta, em área","t":"o mesmo programa, dois lugares","lados":[{"nm":"TEA Oeste · Butantã","src":"img/implantacao-tea-oeste.jpg","alt":"Implantação do TEA Oeste, com as áreas úteis destacadas","linhas":[["ambientes","2.556,55 m²"],["circulação coberta","1.543,24 m²"]],"total":[["total","4.099,79 m²"],["total coberto","4.099,79 m²"]]},{"rot":"a nossa proposta","nm":"Chácara do Jockey","src":"img/implantacao-jockey.jpg","linhas":[["ambientes","3.311,07 m²"],["circulação descoberta","3.651,62 m²"]],"total":[["total","6.962,69 m²"],["total coberto","3.311,07 m²"]],"alt":"Implantação da proposta na Chácara do Jockey, com as áreas úteis e o segundo pavimento destacados em laranja"}],"etapas":1},
 {"g":"lista","largo":1,"kick":"a resposta","t":"cabe, e cumpre","itens":[["01","<b>Cabe em área.<\/b> O programa útil do modelo entra no conjunto existente."],["02","<b>Cumpre todos os papéis.<\/b> Atendimento, cultura, esporte, autonomia e acolhimento de famílias."],["03","<b>E ganha o que terreno vazio não dá.<\/b> Arvoredo maduro, escala construída e história."]]},
@@ -4807,6 +4835,8 @@ function tpl(s){
                 + ` aria-pressed="false">${x.bt||x.t||('tema '+(i+1))}</button>`).join('')
             + `</div>`
             + s.temas.map((x,i)=>`<div class="painel" data-tm="${i}">`
+                + (x.img?`<figure><img src="${IMG[x.img]||x.img}" alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}" loading="lazy">`
+                         + (x.imgCap?`<figcaption>${x.imgCap}</figcaption>`:'')+`</figure>`:'')
                 + (x.t?`<h4>${RS(x.t)}</h4>`:'')
                 + `<ol>`+(x.itens||[]).map(([q,y])=>
                     `<li><span class="q">${q}</span><span class="x">${y}</span></li>`).join('')
@@ -4993,12 +5023,26 @@ let num=0;DECK.forEach(s=>{if(s.div){s._b=null;return}if(!s.sub_)num++;s._b=num}
 const TOT=num;
 DECK.forEach(s=>{if(s._b===null){s._sub=0;return}const ir=DECK.filter(x=>x._b===s._b);s._sub=ir.length>1?ir.indexOf(s)+1:0});
 const dots=document.querySelector('.dots');
-secs.forEach((sc,i)=>{const d=document.createElement('span');d.className='sdot';d.innerHTML=`<span>${sc.nome}</span>`;d.onclick=e=>{e.stopPropagation();go(sc.i)};dots.appendChild(d)});
-/* `atalho`: destino alcançável de qualquer lugar, sem paginar até ele. */
-DECK.forEach((s,i)=>{if(!s.atalho)return;
-  const d=document.createElement('span');d.className='sdot atalho';d.dataset.alvo=i;
-  d.innerHTML=`<span>${s.atalho}</span>`;
-  d.onclick=e=>{e.stopPropagation();go(i)};dots.appendChild(d)});
+/* `atalho`: destino alcançável de qualquer lugar, sem paginar até ele.
+   ⚑ A FILEIRA SEGUE A ORDEM DA PEÇA, não a ordem em que se monta. Até
+   03/11/2026 os atalhos iam todos para o fim da fileira, porque eram
+   anexados depois das seções. Isso quebra assim que o atalho aponta para
+   algo que vem ANTES da primeira seção — a abertura institucional, por
+   exemplo: a bolinha dela aparecia por último, do lado direito, apontando
+   para o começo da apresentação. Ordenar por índice de slide resolve e
+   vale para qualquer atalho futuro.
+   A marcação do slide atual continua indexando as seções entre si
+   (`:not(.atalho)`), então intercalar atalhos não a desalinha. */
+const pontos=secs.map(sc=>({i:sc.i,nome:sc.nome,atalho:false}))
+  .concat(DECK.map((s,i)=>s.atalho?{i:i,nome:s.atalho,atalho:true}:null).filter(Boolean))
+  .sort((a,b)=>a.i-b.i);
+pontos.forEach(pt=>{
+  const d=document.createElement('span');
+  d.className='sdot'+(pt.atalho?' atalho':'');
+  if(pt.atalho) d.dataset.alvo=pt.i;
+  d.innerHTML=`<span>${pt.nome}</span>`;
+  d.onclick=e=>{e.stopPropagation();go(pt.i)};
+  dots.appendChild(d);});
 /* um gabarito que lance exceção não derruba mais o deck: vira aviso no
    próprio slide, e o console recebe a pilha. */
 const tplSeguro=s=>{try{return tpl(s)}catch(e){console.error('deck · '+s.g,e);

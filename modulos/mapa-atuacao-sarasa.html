@@ -105,7 +105,20 @@ h1 em{font-style:normal;color:var(--vinho)}
 .pin .alvo{fill:#00000001}            /* área de pegada: invisível, bem maior que o ponto */
 .pin .halo{fill:none;stroke:var(--tinta);stroke-width:1.3;vector-effect:non-scaling-stroke;
   opacity:0;transition:opacity .18s}
-.pin:hover .halo,.pin:focus-visible .halo,.pin.sel .halo{opacity:.9}
+/* ⚑ O DESTAQUE NAO E' RETANGULO. O <g> do pino e' focavel, e o anel que o
+   navegador desenha sozinho e' uma CAIXA — preto e branco, de cantos
+   chanfrados — em volta de um alvo que e' redondo. Cada navegador desenha
+   o seu, e nenhum combina com o mapa. Pedido do Michel em 03/11: que seja
+   so uma bolinha no vinho.
+
+   ⚑ O OUTLINE SAI E O HALO ASSUME. Tirar o anel padrao sem por nada no
+   lugar quebraria quem navega por teclado — o halo cheio, em vinho e mais
+   grosso, e' a mesma indicacao de foco, redonda e na cor da casa. */
+.pin:hover .halo,.pin.sel .halo{opacity:.9}
+.pin:focus{outline:none}
+.pin:focus-visible{outline:none}
+.pin:focus-visible .halo{opacity:1;stroke:var(--vinho);stroke-width:2.4}
+.pin.sel .halo{stroke:var(--vinho);stroke-width:2}
 .pin.fora{opacity:.12;pointer-events:none}
 
 .rotulos{position:absolute;inset:0;pointer-events:none}
