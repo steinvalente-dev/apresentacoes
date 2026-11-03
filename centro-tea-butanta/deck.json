@@ -1,6 +1,6 @@
 {
  "projeto": "Centro de Acolhimento ao Autista",
- "titulo": "centro de acolhimento<br>ao autista",
+ "titulo": "<span class=\"sg\">TEA</span><br>Chácara Jockey",
  "sub": "Reuso de conjunto tombado para o Centro Municipal da Pessoa com TEA.",
  "kick": "BUTANTÃ · SÃO PAULO",
  "metas": [
@@ -341,16 +341,6 @@
    "ds": "Qualidades e desafios de um conjunto que já existe."
   },
   {
-   "g": "earth-3d",
-   "lat": -23.599136,
-   "lng": -46.744936,
-   "alt": 760,
-   "kick": "o lugar",
-   "h2": "o Parque Chácara do Jockey",
-   "lead": "Rua Santa Crescência · Ferreira, Butantã · São Paulo",
-   "cap": "O conjunto da antiga sede do Jockey Club dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos — cavalariças, alojamento dos cavalariços e casa da administração. A massa arbórea que se vê é o dado que condiciona a implantação."
-  },
-  {
    "g": "cheia",
    "src": "",
    "h2": "localização",
@@ -370,9 +360,9 @@
    "lng": -46.744936,
    "alt": 760,
    "compacto": 1,
-   "kick": "o lugar, de perto",
-   "h2": "o que este conjunto oferece",
-   "lead": "Três leituras sobre o mesmo lugar.",
+   "kick": "o lugar",
+   "h2": "o Parque Chácara do Jockey",
+   "lead": "Rua Santa Crescência · Ferreira, Butantã · São Paulo",
    "temas": [
     {
      "bt": "qualidades e oportunidades",
@@ -436,7 +426,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "cap": "Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos."
   },
   {
    "g": "frase",
@@ -450,7 +441,6 @@
    "t": "o mesmo programa, dois lugares",
    "lados": [
     {
-     "rot": "o projeto que não avançou",
      "nm": "TEA Oeste · Butantã",
      "src": "implantacao-tea-oeste.png",
      "alt": "Implantação do TEA Oeste, com as áreas úteis destacadas",
@@ -460,13 +450,19 @@
        "2.556,55 m²"
       ],
       [
-       "circulação",
+       "circulação coberta",
        "1.543,24 m²"
       ]
      ],
      "total": [
-      "área construída",
-      "4.099,79 m²"
+      [
+       "total",
+       "4.099,79 m²"
+      ],
+      [
+       "total coberto",
+       "4.099,79 m²"
+      ]
      ]
     },
     {
@@ -479,18 +475,24 @@
        "3.311,07 m²"
       ],
       [
-       "circulação",
+       "circulação descoberta",
        "3.651,62 m²"
       ]
      ],
      "total": [
-      "área construída",
-      "6.962,69 m²"
+      [
+       "total",
+       "6.962,69 m²"
+      ],
+      [
+       "total coberto",
+       "3.311,07 m²"
+      ]
      ],
-     "alt": "Implantação da proposta na Chácara do Jockey, com as áreas úteis e o segundo pavimento destacados"
+     "alt": "Implantação da proposta na Chácara do Jockey, com as áreas úteis e o segundo pavimento destacados em laranja"
     }
    ],
-   "nota": "O conjunto tombado entrega <b>6.962,69 m²</b> — acima dos 4.684 m² que o termo de referência pede. A circulação pesa porque os corredores <b>já existem</b>: são os braços longilíneos do conjunto, não metros projetados. E num programa TEA o corredor legível é recurso de orientação, não sobra."
+   "etapas": 1
   },
   {
    "g": "lista",

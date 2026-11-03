@@ -512,6 +512,10 @@ ol.trio .t{font-size:var(--fs-body);line-height:1.6}
 body.esc .conf .nm{color:var(--papel)}
 .conf .fig{flex:1;min-height:0;position:relative;border-radius:2px;
   background:color-mix(in srgb,var(--tinta) 4%,transparent)}
+/* ⚑ COM PLANTA, SEM FUNDO. O veu de 4% existe para dar corpo ao slot
+   vazio. Com a imagem dentro em `contain`, ele vira exatamente o que a
+   planta nao preenche — duas faixas cinza ladeando o desenho. */
+.conf .fig:has(img){background:none}
 .conf .fig img{position:absolute;inset:0;width:100%;height:100%;
   object-fit:contain;object-position:center}
 .conf .fig .vazio{position:absolute;inset:0;display:grid;place-items:center;
@@ -531,8 +535,15 @@ body.esc .conf .nm{color:var(--papel)}
   font-size:clamp(13px,1.08cqw,19px);color:var(--tinta);
   font-variant-numeric:tabular-nums;white-space:nowrap}
 body.esc .conf .qd .vv{color:var(--papel)}
-.conf .qd .tot{border-top:1.5px solid var(--primaria);border-bottom:0;
-  margin-top:clamp(2px,.3cqh,5px)}
+.conf .qd .tot{border-top:1px solid color-mix(in srgb,var(--tinta) 22%,transparent);
+  border-bottom:0;margin-top:clamp(2px,.3cqh,5px)}
+.conf .qd .tot.fecha{border-top:1.5px solid var(--primaria)}
+/* so o fechamento final vai para o vinho; o total intermediario fica no
+   peso do corpo, senao duas linhas disputam a mesma enfase. */
+.conf .qd .tot:not(.fecha) .rr{color:var(--soft);font-weight:500}
+.conf .qd .tot:not(.fecha) .vv{color:var(--tinta);font-weight:500;
+  font-size:clamp(13px,1.08cqw,19px)}
+body.esc .conf .qd .tot:not(.fecha) .vv{color:var(--papel)}
 .conf .qd .tot .rr{color:var(--primaria);font-weight:600}
 .conf .qd .tot .vv{color:var(--primaria);font-weight:600;
   font-size:clamp(15px,1.32cqw,24px)}
@@ -1034,6 +1045,13 @@ body.em-logo .chrome.topo .secao{display:inline}
    o titulo da prancha. Fechado o painel, o rotulo volta. */
 .g-earth-3d.com-painel .rotulo{opacity:0;pointer-events:none;
   transition:opacity .25s ease}
+/* ⚑ COM TEMAS, O ROTULO SOBE. Os dois nasceram no mesmo canto inferior
+   esquerdo e com o rotulo cheio — kicker, titulo, endereco e legenda — a
+   caixa descia por cima dos botoes. Aqui ele reserva a faixa da barra.
+   03/11/2026, depois de medir: rotulo terminava em 814 e a barra comecava
+   em 786 numa tela de 900. */
+.g-earth-3d:has(.temas) .rotulo{
+  bottom:calc(var(--bot) + clamp(4px,1.4cqh,22px) + clamp(50px,6.8cqh,88px))}
 /* O convite do veu atravessa o meio da cena e compete com o painel aberto.
    Some a opacidade mas NAO o pointer-events: o veu continua sendo quem
    captura o primeiro clique e liga `girando`. */
@@ -3424,10 +3442,15 @@ body.em-imagem .nav{-webkit-backdrop-filter:none;backdrop-filter:none}
 #mscapta{position:absolute;inset:0;z-index:40;display:none;cursor:crosshair;
   touch-action:none}
 body.rabisca #mscapta{display:block}
-#msferr{position:absolute;z-index:42;left:50%;transform:translateX(-50%);
-  bottom:calc(var(--bot) + clamp(8px,1.5cqh,24px));display:none;
+/* ⚑ A BARRA MORA NA FAIXA DO RODAPE, nao acima dela. Flutuando sobre a
+   prancha ela cobria conteudo — no `confronto` caiu em cima do quadro de
+   areas. A faixa `--bot` ja' e' territorio de controle, e o meio dela esta
+   livre: o nome do projeto fica a esquerda e a navegacao a direita.
+   `bottom` na metade da faixa + `translateY(50%)` centra a pastilha nela. */
+#msferr{position:absolute;z-index:42;left:50%;
+  bottom:calc(var(--bot) / 2);transform:translate(-50%,50%);display:none;
   align-items:center;gap:clamp(3px,.42cqw,7px);
-  background:var(--tinta-85);border-radius:999px;
+  background:var(--tinta-80);border-radius:999px;
   padding:clamp(4px,.45cqw,8px) clamp(6px,.6cqw,11px);
   box-shadow:0 3px 18px var(--tinta-35)}
 body.rabisca #msferr{display:flex}
@@ -3454,6 +3477,11 @@ body.rabisca #msrab{opacity:1;background:var(--papel-25)}
 #msrab svg{width:54%;height:54%;fill:none;stroke:currentColor;stroke-width:1.9;
   stroke-linecap:round;stroke-linejoin:round}
 @media (prefers-reduced-motion:reduce){#msferr button{transition:none}}
+
+/* ⚑ SIGLA DENTRO DE TITULO EM CAIXA BAIXA. A capa e alguns kickers forcam
+   `text-transform`, o que e' certo para palavra e errado para sigla: "TEA"
+   virava "tea". `.sg` isenta o trecho, e vale em qualquer gabarito. */
+.sg{text-transform:none !important}
 </style></head><body>
 <!-- #moldura mede a ÁREA SEGURA da tela, nunca a tela bruta: é o que impede
      o notch e a Dynamic Island de comerem canto de prancha.
@@ -4342,16 +4370,27 @@ function tpl(s){
   /* `confronto`: duas implantacoes lado a lado, cada uma com rotulo, nome,
      figura e o quadro de areas. Ver o bloco CONFRONTO no CSS. */
   if(s.g==='confronto'){
-    const lados=(s.lados||[]).map(l=>{
+    const temRot=(s.lados||[]).some(l=>l.rot);
+    const lados=(s.lados||[]).map((l,i)=>{
       const fig = l.src
         ? `<img src="${IMG[l.src]||l.src}" alt="${(l.alt||l.nm||'').replace(/"/g,'&quot;')}">`
         : `<div class="vazio">${l.slot||'implantação a entrar'}</div>`;
+      /* ⚑ `total` aceita UM par ou uma LISTA de pares. 03/11/2026: a
+         circulacao do Jockey e' descoberta e nao entra na area construida,
+         entao o quadro passou a precisar de dois fechamentos — total e
+         total coberto — e so o ULTIMO leva o filete da marca. */
+      const tts = (l.total && Array.isArray(l.total[0])) ? l.total
+                : (l.total ? [l.total] : []);
       const qd = (l.linhas||[]).map(([r,v])=>
             `<div><span class="rr">${r}</span><span class="vv">${RS(v)}</span></div>`).join('')
-        + (l.total?`<div class="tot"><span class="rr">${l.total[0]}</span>`
-                   +`<span class="vv">${RS(l.total[1])}</span></div>`:'');
-      return `<div class="lado">`
-        + (l.rot?`<div class="rot">${l.rot}</div>`:'')
+        + tts.map((x,n)=>`<div class="tot${n===tts.length-1?' fecha':''}">`
+            +`<span class="rr">${x[0]}</span><span class="vv">${RS(x[1])}</span></div>`).join('');
+      return `<div class="lado${(s.etapas&&i)?' passo':''}">`
+        /* ⚑ SE UM LADO TEM ROTULO, TODOS RESERVAM A LINHA. Sem isso, tirar
+           o rotulo de um dos lados sobe o nome daquele lado e as duas
+           plantas deixam de comecar na mesma altura — numa prancha que
+           existe para comparar, desalinhar e' mentir. */
+        + (temRot?`<div class="rot">${l.rot||'&nbsp;'}</div>`:'')
         + (l.nm?`<div class="nm">${RS(l.nm)}</div>`:'')
         + `<figure class="fig">${fig}</figure>`
         + (qd?`<div class="qd">${qd}</div>`:'')
