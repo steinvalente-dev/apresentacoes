@@ -228,6 +228,10 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
             if isinstance(it, dict):
                 if 'src' in it:
                     add(it, 'src', perfil)
+                # a tira de epoca do marco: capas, gravuras, recortes
+                for g in it.get('gal') or []:
+                    if isinstance(g, dict) and g.get('src'):
+                        add(g, 'src', 'prancha')
                 # ⚑ `pontos` de um quadro da sequencia: cada ponto traz a
                 #   PROPRIA pilha. Dois niveis abaixo do slide — sem esta
                 #   linha o html aponta para nome que nao existe, 404 mudo.

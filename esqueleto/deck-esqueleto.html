@@ -1080,6 +1080,29 @@ body.em-logo .chrome.topo .secao{display:inline}
   display:grid;place-items:center;font-size:clamp(14px,1.2cqw,20px);line-height:1}
 .ptlupa .plfecha:hover{background:var(--tinta);border-color:var(--papel)}
 
+
+/* ══ A TIRA DE EPOCA NA LINHA DO TEMPO ═══════════════════════════════════
+   06/11/2026, pedido do Michel: *"colocar algumas imagens menores, para
+   ilustrar o texto e o contexto"*, aglomeradas sob o mapa de cada marco.
+   Pequenas de proposito — elas nao competem com a aerea, convidam. Cada
+   uma abre em tela cheia no mesmo motor de lupa do resto da peca. */
+.g-tempo .tgal{display:none;gap:clamp(6px,.75cqw,12px);
+  margin-top:clamp(12px,1.8cqh,24px);flex-wrap:wrap}
+.g-tempo .tgal.on{display:flex}
+.g-tempo .tgal .ep{margin:0;flex:0 0 auto;
+  width:clamp(62px,6.4cqw,112px);display:flex;flex-direction:column}
+.g-tempo .tgal .ep button{padding:0;border:2px solid var(--papel);
+  border-radius:3px;overflow:hidden;cursor:pointer;aspect-ratio:3/4;
+  background:var(--tinta-10);box-shadow:0 1px 6px var(--tinta-25);
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+.g-tempo .tgal .ep button:hover,.g-tempo .tgal .ep button:focus-visible{
+  transform:translateY(-2px);border-color:var(--primaria);
+  box-shadow:0 3px 12px var(--tinta-35)}
+.g-tempo .tgal .ep img{width:100%;height:100%;object-fit:cover;display:block}
+.g-tempo .tgal .ep figcaption{font-family:var(--f-mono);
+  font-size:calc(var(--fs-cap)*.8);letter-spacing:.06em;line-height:1.25;
+  color:var(--soft);margin-top:clamp(3px,.45cqh,6px)}
+
 /* ══ A ROTA, EM LISTA FIXA ═══════════════════════════════════════════════
    20/09/2026. O texto da parada saiu do mouseover do pino — o conteúdo do
    popover do Earth não recebe ponteiro — e virou lista na tela, ligada à
@@ -1117,9 +1140,14 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-earth-3d .temas button:hover{border-color:var(--papel)}
 .g-earth-3d .temas button[aria-pressed="true"]{
   background:var(--primaria);border-color:var(--primaria);color:var(--papel)}
+/* ⚑ ALTURA DO CONTEUDO, ancorada no PE. Com `top` e `bottom` fixos a
+   caixa tinha sempre a mesma altura e sobrava vazio embaixo quando o tema
+   era curto — o Michel viu isso no iPad em retrato. Agora ela cresce do
+   pe para cima ate onde cabe, e o que sobra e' 3d, nao caixa vazia. */
 .g-earth-3d .painel{position:absolute;left:var(--gut);z-index:4;
-  top:calc(var(--top) + clamp(60px,9cqh,130px));
   bottom:calc(var(--bot) + clamp(58px,7.5cqh,104px));
+  max-height:calc(100cqh - var(--top) - var(--bot)
+    - clamp(66px,9cqh,130px));
   width:clamp(260px,30cqw,460px);overflow-y:auto;overscroll-behavior:contain;
   background:color-mix(in srgb,var(--tinta) 72%,transparent);
   border:1px solid var(--papel-20);border-radius:12px;
@@ -1160,8 +1188,7 @@ body.em-logo .chrome.topo .secao{display:inline}
    existe. Sobe porque o espaco esta livre — o rotulo recolhe assim que um
    painel abre — e alarga porque desenho cadastral de linha fina a 30cqw
    vira mancha. */
-.g-earth-3d .painel:has(figure){width:clamp(280px,38cqw,560px);
-  top:calc(var(--top) + clamp(8px,1.4cqh,20px))}
+.g-earth-3d .painel:has(figure){width:clamp(280px,38cqw,560px)}
 .g-earth-3d .painel figure{margin:0 0 clamp(11px,1.6cqh,20px);
   background:var(--papel);border-radius:6px;padding:clamp(5px,.6cqh,9px);
   border:1px solid var(--papel-25)}
@@ -1253,16 +1280,18 @@ body.em-logo .chrome.topo .secao{display:inline}
 /* ⚑ COM CARROSSEL O PAINEL SOBE, como ja sobe com prancha. Medido: a
    caixa das fotos come 333px dos 591 do painel e o terceiro item caia
    para fora. Subir o topo devolve ~110px e a lista volta inteira. */
-.g-earth-3d .painel:not(:has(figure)){top:calc(var(--top) + clamp(8px,1.4cqh,20px))}
-.g-earth-3d .fotos{position:absolute;z-index:5;display:none;
-  left:calc(var(--gut) + clamp(14px,1.4cqw,24px));
-  top:calc(var(--top) + clamp(8px,1.4cqh,20px) + clamp(14px,1.9cqh,26px));
-  width:calc(clamp(260px,30cqw,460px) - clamp(28px,2.8cqw,48px));
+/* ⚑ O CARROSSEL ENTROU NO FLUXO DO PAINEL. 06/11/2026, segundo bug visto
+   pelo Michel no iPad: a caixa cobria o titulo do painel. Ela era absoluta
+   e o painel reservava a altura dela num `padding-top` que RECALCULAVA a
+   mesma conta — e duas contas que deviam dar o mesmo numero divergem assim
+   que a tela muda de proporcao. O JS move a caixa para dentro do painel
+   que abre, e o layout passa a resolver sozinho: nao ha como sobrepor o
+   que esta no fluxo. */
+.g-earth-3d .fotos{display:none;width:100%;margin-bottom:clamp(11px,1.5cqh,20px);
   border-radius:5px;overflow:hidden;cursor:pointer;
-  border:1px solid var(--papel-25);box-shadow:0 3px 16px var(--tinta-45);
+  border:1px solid var(--papel-25);box-shadow:0 2px 10px var(--tinta-45);
   background:var(--tinta-60);transition:transform .18s ease,border-color .18s ease}
-.g-earth-3d.com-painel .fotos{display:block}
-.g-earth-3d:has(.painel.on figure) .fotos{display:none}
+.g-earth-3d.com-painel .painel.on > .fotos{display:block}
 .g-earth-3d .fotos:hover{transform:translateY(-2px);border-color:var(--papel-60)}
 /* ⚑ 16/9, nao 4/3. Com o carrossel em 4/3 o painel dos desafios — que
    tem tres itens MAIS a tira da arborizacao — passava a rolar 107px. A
@@ -1277,12 +1306,6 @@ body.em-logo .chrome.topo .secao{display:inline}
   letter-spacing:.09em;text-transform:uppercase;color:var(--papel-80)}
 .g-earth-3d .fotos .fr b{font-weight:400;color:var(--papel);
   font-variant-numeric:tabular-nums}
-/* ⚑ A CAIXA CEDE O TOPO. O painel sem prancha reserva a altura do
-   carrossel no proprio padding — sobrepor sem reservar cobriria o titulo. */
-.g-earth-3d .painel:not(:has(figure)){
-  padding-top:calc(clamp(14px,1.9cqh,26px)
-    + (clamp(260px,30cqw,460px) - clamp(28px,2.8cqw,48px)) * .5625
-    + clamp(11px,1.3cqh,18px))}
 .g-earth-3d.esperando .fotos,.g-earth-3d.falhou .fotos{display:none}
 .g-earth-3d .rota{position:absolute;right:var(--gut);
   bottom:calc(var(--bot) + clamp(52px,7cqh,96px) + clamp(112px,17cqh,210px));
@@ -4813,8 +4836,16 @@ function tpl(s){
     const mos=()=>{
       const im=s.imgs||[], cols=[[],[],[]];
       im.forEach((src,i)=>cols[i%3].push(src));
+      /* ⚑ SEM `loading="lazy"` AQUI. 06/11/2026, bug visto pelo Michel no
+         iPad: metade do mosaico vinha preta. A fita rola por `transform`, e
+         o Safari NAO conta deslocamento por transform como entrada no
+         viewport — a imagem que a animacao traz para a tela nunca recebe a
+         ordem de carregar, e o lugar dela fica vazio. No Chrome passava
+         porque a margem de pre-carga e' bem mais larga.
+         Lazy aqui tambem nao economizava nada: e' a PRIMEIRA prancha da
+         peca e as fotos ja vem no perfil `mosaico`, a 560px. */
       return `<div class="mos">`+cols.map(c=>`<div class="col"><div class="fita">`
-        + c.concat(c).map(src=>`<img decoding="async" loading="lazy" src="${IMG[src]||src}" alt="">`).join('')
+        + c.concat(c).map(src=>`<img decoding="async" src="${IMG[src]||src}" alt="">`).join('')
         + `</div></div>`).join('')+`</div>`;
     };
     const mesq=(e)=>((e.src && Array.isArray(s.imgs) && s.imgs.length)
@@ -4943,14 +4974,41 @@ function tpl(s){
       + `</div>`
       + `<div class="ttx">`
       +   `<div class="talto rev" style="--i:1">${k}<h1 class="tano"></h1><div class="tficha"></div></div>`
-      +   `<div class="tmeio rev" style="--i:3"><p class="ttit"></p><p class="tlead"></p></div>`
+      +   `<div class="tmeio rev" style="--i:3"><p class="ttit"></p><p class="tlead"></p>`
+      +     `<div class="tgal"></div></div>`
       +   `<div class="tregua rev" style="--i:5"><div class="ttrilho">`
       +     `<div class="tpreenche"></div><div class="tviajante"></div>${marcos}</div>`
       +     `<div class="tleg"><span><u class="t1"></u> em m&atilde;os</span>`
       +     `<span><u class="t2"></u> a baixar</span>`
       +     `<button type="button" class="trebob" data-t="rev">&#8634; rever do in&iacute;cio</button></div>`
       +   `</div>`
-      + `</div>`;
+      + `</div>`
+      /* ⚑ AS IMAGENS DE EPOCA MORAM EM LUPAS PRONTAS, uma por marco. O
+         `mostra()` so troca as MINIATURAS na faixa; as lupas ficam no DOM
+         desde a montagem, porque carregar uma pilha de capas no meio da
+         fala e' exatamente onde nao se pode esperar rede. */
+      + it.map((x,i)=>(x.gal&&x.gal.length)
+          ? `<div class="ptlupa" data-pt="e${i}"><div class="plh">`
+            + x.gal.map(g=>`<img decoding="async" src="${IMG[g.src]||g.src}"`
+                + ` data-t="${(g.t||x.ano||'').replace(/"/g,'&quot;')}"`
+                + ` data-cap="${(g.cap||'').replace(/"/g,'&quot;')}"`
+                + ` alt="${(g.cap||'').replace(/"/g,'&quot;')}">`).join('')
+            + `</div><div class="plcap"></div>`
+            + `<button type="button" class="plfecha" data-pl="fecha" aria-label="Fechar">&#10005;</button>`
+            + `<div class="plbar">`
+            +   `<button type="button" data-pl="ant" aria-label="Anterior">&#9664;</button>`
+            +   `<button type="button" data-pl="pausa" aria-pressed="false" aria-label="Pausar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16"/></svg></button>`
+            +   `<button type="button" data-pl="pro" aria-label="Pr&#243;xima">&#9654;</button>`
+            +   `<b></b><hr>`
+            +   `<button type="button" data-pl="menos" aria-label="Afastar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>`
+            +   `<button type="button" data-pl="mais" aria-label="Aproximar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>`
+            +   `<button type="button" data-pl="ajusta" aria-label="Ajustar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5"/></svg>`
+            +   `</button></div></div>`
+          : '').join('');
   }
   if(s.g==='fotos'){
     const li=s.itens.map(([q,x],i)=>`<li class="passo" data-f="${i}"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('');
@@ -5154,7 +5212,12 @@ function tpl(s){
                    motor so para tudo que abre grande. */
                 + (x.img?`<figure data-pt="t${i}" role="button" tabindex="0"`
                          + ` aria-label="Abrir a prancha em tela cheia">`
-                         + `<img src="${IMG[x.img]||x.img}" alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}" loading="lazy">`
+                         /* sem lazy: o painel nasce com `opacity:0` e o
+                            Safari e' irregular com lazy em elemento que
+                            nunca "entrou" na tela por rolagem. E' uma
+                            prancha so, e ela precisa estar pronta quando
+                            o tema abrir. */
+                         + `<img src="${IMG[x.img]||x.img}" alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}">`
                          + (x.imgCap?`<figcaption>${x.imgCap}</figcaption>`:'')+`</figure>`:'')
                 + (x.t?`<h4>${RS(x.t)}</h4>`:'')
                 /* ⚑ O ITEM DO TEMA ACEITA UMA TIRA DE MINIATURAS como
@@ -6053,6 +6116,17 @@ window.MSTempo=(function(){
     sl.querySelector('.tficha').innerHTML=x.ficha||'';
     sl.querySelector('.ttit').innerHTML=x.t||'';
     sl.querySelector('.tlead').innerHTML=x.cap||'';
+    /* a tira de epoca do marco atual */
+    var g=sl.querySelector('.tgal');
+    if(g){
+      g.innerHTML=(x.gal||[]).map(function(a,m){
+        return '<figure class="ep"><button type="button" data-pt="e'+i+'"'
+          + ' data-ini="'+m+'" aria-label="Abrir em tela cheia">'
+          + '<img decoding="async" src="'+(a.src_||a.src)+'" alt=""></button>'
+          + '<figcaption>'+(a.rot||'')+'</figcaption></figure>';
+      }).join('');
+      g.classList.toggle('on', !!(x.gal&&x.gal.length));
+    }
   }
 
   function para(sl){ var e=est(sl); if(e.reb){ clearTimeout(e.reb); e.reb=null; }
@@ -6139,7 +6213,15 @@ addEventListener('click',function(e){
   if(abrir){
     bt.setAttribute('aria-pressed','true');
     var p=sl.querySelector('.painel[data-tm="'+k+'"]');
-    if(p){ p.classList.add('on'); sl.classList.add('com-painel'); }
+    if(p){
+      p.classList.add('on'); sl.classList.add('com-painel');
+      /* ⚑ A CAIXA DE FOTOS MUDA DE PAINEL. Ela e' uma so — 24 imagens nao
+         se duplicam por tema — entao o JS a move para o painel que abre,
+         no topo. Painel que ja tem prancha propria (o do tombamento) nao
+         a recebe: ali quem manda e o mapa, decisao do Michel. */
+      var f=sl.querySelector('.fotos');
+      if(f && !p.querySelector('figure')) p.insertBefore(f, p.firstChild);
+    }
   }
 },true);
 /* ⚑ fechar ao sair do slide: NAO ha evento de troca de prancha no motor —

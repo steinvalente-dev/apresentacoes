@@ -1096,6 +1096,29 @@ body.em-logo .chrome.topo .secao{display:inline}
   display:grid;place-items:center;font-size:clamp(14px,1.2cqw,20px);line-height:1}
 .ptlupa .plfecha:hover{background:var(--tinta);border-color:var(--papel)}
 
+
+/* ══ A TIRA DE EPOCA NA LINHA DO TEMPO ═══════════════════════════════════
+   06/11/2026, pedido do Michel: *"colocar algumas imagens menores, para
+   ilustrar o texto e o contexto"*, aglomeradas sob o mapa de cada marco.
+   Pequenas de proposito — elas nao competem com a aerea, convidam. Cada
+   uma abre em tela cheia no mesmo motor de lupa do resto da peca. */
+.g-tempo .tgal{display:none;gap:clamp(6px,.75cqw,12px);
+  margin-top:clamp(12px,1.8cqh,24px);flex-wrap:wrap}
+.g-tempo .tgal.on{display:flex}
+.g-tempo .tgal .ep{margin:0;flex:0 0 auto;
+  width:clamp(62px,6.4cqw,112px);display:flex;flex-direction:column}
+.g-tempo .tgal .ep button{padding:0;border:2px solid var(--papel);
+  border-radius:3px;overflow:hidden;cursor:pointer;aspect-ratio:3/4;
+  background:var(--tinta-10);box-shadow:0 1px 6px var(--tinta-25);
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+.g-tempo .tgal .ep button:hover,.g-tempo .tgal .ep button:focus-visible{
+  transform:translateY(-2px);border-color:var(--primaria);
+  box-shadow:0 3px 12px var(--tinta-35)}
+.g-tempo .tgal .ep img{width:100%;height:100%;object-fit:cover;display:block}
+.g-tempo .tgal .ep figcaption{font-family:var(--f-mono);
+  font-size:calc(var(--fs-cap)*.8);letter-spacing:.06em;line-height:1.25;
+  color:var(--soft);margin-top:clamp(3px,.45cqh,6px)}
+
 /* ══ A ROTA, EM LISTA FIXA ═══════════════════════════════════════════════
    20/09/2026. O texto da parada saiu do mouseover do pino — o conteúdo do
    popover do Earth não recebe ponteiro — e virou lista na tela, ligada à
@@ -1133,9 +1156,14 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-earth-3d .temas button:hover{border-color:var(--papel)}
 .g-earth-3d .temas button[aria-pressed="true"]{
   background:var(--primaria);border-color:var(--primaria);color:var(--papel)}
+/* ⚑ ALTURA DO CONTEUDO, ancorada no PE. Com `top` e `bottom` fixos a
+   caixa tinha sempre a mesma altura e sobrava vazio embaixo quando o tema
+   era curto — o Michel viu isso no iPad em retrato. Agora ela cresce do
+   pe para cima ate onde cabe, e o que sobra e' 3d, nao caixa vazia. */
 .g-earth-3d .painel{position:absolute;left:var(--gut);z-index:4;
-  top:calc(var(--top) + clamp(60px,9cqh,130px));
   bottom:calc(var(--bot) + clamp(58px,7.5cqh,104px));
+  max-height:calc(100cqh - var(--top) - var(--bot)
+    - clamp(66px,9cqh,130px));
   width:clamp(260px,30cqw,460px);overflow-y:auto;overscroll-behavior:contain;
   background:color-mix(in srgb,var(--tinta) 72%,transparent);
   border:1px solid var(--papel-20);border-radius:12px;
@@ -1176,8 +1204,7 @@ body.em-logo .chrome.topo .secao{display:inline}
    existe. Sobe porque o espaco esta livre — o rotulo recolhe assim que um
    painel abre — e alarga porque desenho cadastral de linha fina a 30cqw
    vira mancha. */
-.g-earth-3d .painel:has(figure){width:clamp(280px,38cqw,560px);
-  top:calc(var(--top) + clamp(8px,1.4cqh,20px))}
+.g-earth-3d .painel:has(figure){width:clamp(280px,38cqw,560px)}
 .g-earth-3d .painel figure{margin:0 0 clamp(11px,1.6cqh,20px);
   background:var(--papel);border-radius:6px;padding:clamp(5px,.6cqh,9px);
   border:1px solid var(--papel-25)}
@@ -1269,16 +1296,18 @@ body.em-logo .chrome.topo .secao{display:inline}
 /* ⚑ COM CARROSSEL O PAINEL SOBE, como ja sobe com prancha. Medido: a
    caixa das fotos come 333px dos 591 do painel e o terceiro item caia
    para fora. Subir o topo devolve ~110px e a lista volta inteira. */
-.g-earth-3d .painel:not(:has(figure)){top:calc(var(--top) + clamp(8px,1.4cqh,20px))}
-.g-earth-3d .fotos{position:absolute;z-index:5;display:none;
-  left:calc(var(--gut) + clamp(14px,1.4cqw,24px));
-  top:calc(var(--top) + clamp(8px,1.4cqh,20px) + clamp(14px,1.9cqh,26px));
-  width:calc(clamp(260px,30cqw,460px) - clamp(28px,2.8cqw,48px));
+/* ⚑ O CARROSSEL ENTROU NO FLUXO DO PAINEL. 06/11/2026, segundo bug visto
+   pelo Michel no iPad: a caixa cobria o titulo do painel. Ela era absoluta
+   e o painel reservava a altura dela num `padding-top` que RECALCULAVA a
+   mesma conta — e duas contas que deviam dar o mesmo numero divergem assim
+   que a tela muda de proporcao. O JS move a caixa para dentro do painel
+   que abre, e o layout passa a resolver sozinho: nao ha como sobrepor o
+   que esta no fluxo. */
+.g-earth-3d .fotos{display:none;width:100%;margin-bottom:clamp(11px,1.5cqh,20px);
   border-radius:5px;overflow:hidden;cursor:pointer;
-  border:1px solid var(--papel-25);box-shadow:0 3px 16px var(--tinta-45);
+  border:1px solid var(--papel-25);box-shadow:0 2px 10px var(--tinta-45);
   background:var(--tinta-60);transition:transform .18s ease,border-color .18s ease}
-.g-earth-3d.com-painel .fotos{display:block}
-.g-earth-3d:has(.painel.on figure) .fotos{display:none}
+.g-earth-3d.com-painel .painel.on > .fotos{display:block}
 .g-earth-3d .fotos:hover{transform:translateY(-2px);border-color:var(--papel-60)}
 /* ⚑ 16/9, nao 4/3. Com o carrossel em 4/3 o painel dos desafios — que
    tem tres itens MAIS a tira da arborizacao — passava a rolar 107px. A
@@ -1293,12 +1322,6 @@ body.em-logo .chrome.topo .secao{display:inline}
   letter-spacing:.09em;text-transform:uppercase;color:var(--papel-80)}
 .g-earth-3d .fotos .fr b{font-weight:400;color:var(--papel);
   font-variant-numeric:tabular-nums}
-/* ⚑ A CAIXA CEDE O TOPO. O painel sem prancha reserva a altura do
-   carrossel no proprio padding — sobrepor sem reservar cobriria o titulo. */
-.g-earth-3d .painel:not(:has(figure)){
-  padding-top:calc(clamp(14px,1.9cqh,26px)
-    + (clamp(260px,30cqw,460px) - clamp(28px,2.8cqw,48px)) * .5625
-    + clamp(11px,1.3cqh,18px))}
 .g-earth-3d.esperando .fotos,.g-earth-3d.falhou .fotos{display:none}
 .g-earth-3d .rota{position:absolute;right:var(--gut);
   bottom:calc(var(--bot) + clamp(52px,7cqh,96px) + clamp(112px,17cqh,210px));
@@ -4423,7 +4446,7 @@ const DECK=[
 {"g":"conceitos","kick":"o método do argumento","t":"três conceitos","itens":[{"q":"o equipamento","x":"O que a SMPED faz, o que já construiu e o que o termo de referência pede.","slot":"o Centro TEA já construído"},{"q":"o desejável","x":"O que a arquitetura sabe sobre espaço para pessoas no espectro.","slot":"referências projetuais"},{"q":"o patrimônio histórico","x":"O que este conjunto foi, e o papel que desempenhou na cidade.","slot":"imagem histórica do conjunto"}]},
 {"g":"lista","largo":1,"kick":"círculo 01","t":"o Centro TEA da SMPED","itens":[["01","<b>Política pública consolidada.<\/b> Lei federal, lei municipal e meta de programa de governo sustentam o equipamento."],["02","<b>Já existe unidade operando.<\/b> O primeiro centro municipal foi entregue e está em uso — é o modelo da casa."],["03","<b>O TEA Oeste já tem o programa escrito.<\/b> O termo de referência detalha cada ambiente — quantidade, lotação e área. É esse o programa que serve de base para o nosso projeto."],["04","<b>Rede, não equipamento isolado.<\/b> Saúde, educação e assistência articuladas em torno do vínculo familiar."]],"src":"img/implantacao-tea-oeste.jpg","alt":"Implantação do projeto do Centro TEA Zona Oeste","leg":"Implantação do projeto TEA Zona Oeste · SMPED"},
 {"g":"lista","largo":1,"kick":"círculo 02","t":"o que o espaço faz por quem é atendido","itens":[["01","<b>Gradiente sensorial.<\/b> O edifício se organiza por nível de estímulo, não por função administrativa."],["02","<b>Transição.<\/b> Entre o alto e o baixo estímulo existe um espaço que recalibra — não se passa de um ao outro por uma porta."],["03","<b>Refúgio.<\/b> Lugares de retirada distribuídos, ajustáveis por quem os usa."],["04","<b>Percurso previsível.<\/b> Sequência legível, sem bifurcação e sem retorno."],["05","<b>Sem bolha.<\/b> A escala inteira de estímulo dentro do edifício, para que se transite por ela."]]},
-{"g":"tempo","kick":"o lugar no tempo","cobre":640,"de":1925,"ate":2026,"items":[{"ano":"1930","src":"img/tempo-1930.jpg","ficha":"Levantamento Sara Brasil · 1930 · carta","t":"Sara Brasil: o sítio antes de tudo","cap":"Chácara rural na divisa do município. O córrego Charco Grande corta o terreno e a mata ocupa o que hoje é o parque. Não há uma construção sequer no perímetro."},{"ano":"1940","x":1940,"ficha":"Foto aérea · 1940 · voo PMSP, quadrícula FM5-019 <span class=\"pend\">sem registro geométrico — ver nota<\/span>","t":"antes do hipódromo","vazio":"1940 · sem registro geométrico","cap":"Campo, mata e estrada de terra. <b>Esta é a única das cinco que não entrou no enquadramento comum<\/b>: sem pista, sem malha urbana e sem nenhuma feição que sobreviva até 1954, não há como amarrá-la às outras por medição. Ela entra ao lado, fora do registro."},{"ano":"1954","x":1954,"ficha":"Foto aérea · 1954 · voo PMSP, quadrícula FX03-173","t":"a pista no meio da várzea","vazio":"Foto aérea 1954 · quadrícula FX03-173 · a baixar no GeoSampa","src":"img/tempo-1954.jpg","cobre":1180,"cap":"A pista de treino e as duas fileiras de cocheiras já estão no lugar, e em volta ainda é chácara: estrada de terra, campo e mata. A cidade chega pela direita. <b>Registro pela pista oval<\/b> — ela é a única feição que atravessa os cinquenta anos até a foto de 2004."},{"ano":"s/d","x":1962,"src":"img/tempo-vasp.jpg","ficha":"Carta Vasp-Cruzeiro · <span class=\"pend\">sem data no metadado — confirmar no DPH<\/span>","t":"Vasp-Cruzeiro: a era hípica desenhada","cap":"A pista oval de treino e as duas fileiras de cocheiras aparecem com todos os módulos. É a única peça que registra o conjunto em pleno funcionamento — e a borda esquerda está cortada no fim do mosaico."},{"ano":"1988","src":"img/tempo-1988.jpg","ficha":"Folhas do Livro da Vegetação · 1988 · carta","t":"Livro da Vegetação: o miolo limpo","cap":"A carta registra a massa verde apenas no perímetro do conjunto. Entre os dois agrupamentos de edificações não há arborização mapeada. É o ponto de partida do argumento."},{"ano":"1996","x":1996,"ficha":"Foto aérea · fev/1996 · Base S.A. para a PMSP, 1:5.000","t":"o conjunto cercado pela cidade","vazio":"Foto aérea 1994/1996 · a baixar no GeoSampa","src":"img/tempo-1996.jpg","cobre":640,"cap":"A várzea virou bairro. O conjunto sobrevive inteiro dentro do quarteirão, com as cocheiras ainda em uso e o miolo da pista limpo."},{"ano":"2000","x":2000,"ficha":"Foto aérea · mai/2000 · Base S.A. / SEMAB-Resolo, 1:6.000","t":"o último registro em atividade","vazio":"Fotos aéreas 2000 e 2001 · a baixar no GeoSampa","src":"img/tempo-2000.jpg","cobre":640,"cap":"O miolo ainda é campo aberto e a alameda central atravessa o conjunto de ponta a ponta."},{"ano":"2004","src":"img/tempo-2004.jpg","ficha":"Ortofoto MDC · 2004 · 1:1.000","t":"A alameda ainda aberta","cap":"Dezesseis anos depois, a alameda central entre os dois agrupamentos continua livre. Telhados íntegros, perímetro arborizado, miolo sem nada."},{"ano":"2017","src":"img/tempo-2017.jpg","ficha":"Ortofoto PMD · 2017","t":"As primeiras árvores no miolo","cap":"Aqui começam a aparecer, esparsas, as árvores entre as fileiras. Nenhuma plantada por projeto: são espontâneas, nascidas da ausência de manejo depois do fim da atividade hípica."},{"ano":"2020","src":"img/tempo-2020.jpg","ficha":"Ortofoto · 2020 · 10 cm/px","t":"O miolo tomado","cap":"Em três anos a alameda fecha. As copas encostam nos telhados e passam a representar risco direto sobre o bem tombado. É o estado que o projeto encontra."}],"atalho":"linha do tempo"},
+{"g":"tempo","kick":"o lugar no tempo","cobre":640,"de":1925,"ate":2026,"items":[{"ano":"1930","src":"img/tempo-1930.jpg","ficha":"Levantamento Sara Brasil · 1930 · carta","t":"Sara Brasil: o sítio antes de tudo","cap":"Chácara rural na divisa do município. O córrego Charco Grande corta o terreno e a mata ocupa o que hoje é o parque. Não há uma construção sequer no perímetro.","gal":[{"src":"img/ep-mappa.jpg","rot":"séc. XVIII","cap":"Mappa da Capitania de São Paulo, século XVIII — o caminho de Pirajussara já atravessa a várzea."}]},{"ano":"1940","x":1940,"ficha":"Foto aérea · 1940 · voo PMSP, quadrícula FM5-019 <span class=\"pend\">sem registro geométrico — ver nota<\/span>","t":"antes do hipódromo","vazio":"1940 · sem registro geométrico","cap":"Campo, mata e estrada de terra. <b>Esta é a única das cinco que não entrou no enquadramento comum<\/b>: sem pista, sem malha urbana e sem nenhuma feição que sobreviva até 1954, não há como amarrá-la às outras por medição. Ela entra ao lado, fora do registro."},{"ano":"1954","x":1954,"ficha":"Foto aérea · 1954 · voo PMSP, quadrícula FX03-173","t":"a pista no meio da várzea","vazio":"Foto aérea 1954 · quadrícula FX03-173 · a baixar no GeoSampa","src":"img/tempo-1954.jpg","cobre":1180,"cap":"A pista de treino e as duas fileiras de cocheiras já estão no lugar, e em volta ainda é chácara: estrada de terra, campo e mata. A cidade chega pela direita. <b>Registro pela pista oval<\/b> — ela é a única feição que atravessa os cinquenta anos até a foto de 2004.","gal":[{"src":"img/ep-turf1960.jpg","rot":"Turf · 1960","cap":"Primeira edição da revista Turf-Fomento, 1960."},{"src":"img/ep-leilao1961.jpg","rot":"leilão · 1961","cap":"Leilão de potros na Chácara, Turf-Fomento, 1961 — o pátio em plena atividade."},{"src":"img/ep-varzea.jpg","rot":"várzea · anos 60","cap":"A várzea do Pirajussara nos anos 1960, antes da canalização. Autoria não identificada."}]},{"ano":"s/d","x":1962,"src":"img/tempo-vasp.jpg","ficha":"Carta Vasp-Cruzeiro · <span class=\"pend\">sem data no metadado — confirmar no DPH<\/span>","t":"Vasp-Cruzeiro: a era hípica desenhada","cap":"A pista oval de treino e as duas fileiras de cocheiras aparecem com todos os módulos. É a única peça que registra o conjunto em pleno funcionamento — e a borda esquerda está cortada no fim do mosaico.","gal":[{"src":"img/ep-gp1961.jpg","rot":"GP SP · 1961","cap":"Grande Prêmio São Paulo, Turf-Fomento, 1961."},{"src":"img/ep-arquib1961.jpg","rot":"arquibancada · 1961","cap":"A arquibancada em dia de prova, Turf-Fomento, 1961."},{"src":"img/ep-capa1962.jpg","rot":"capa · 1962","cap":"Capa da Turf-Fomento de 1962, fotografada na própria Chácara."}]},{"ano":"1988","src":"img/tempo-1988.jpg","ficha":"Folhas do Livro da Vegetação · 1988 · carta","t":"Livro da Vegetação: o miolo limpo","cap":"A carta registra a massa verde apenas no perímetro do conjunto. Entre os dois agrupamentos de edificações não há arborização mapeada. É o ponto de partida do argumento.","gal":[{"src":"img/ep-ilustra1973.jpg","rot":"Turf · 1973","cap":"Ilustração da Turf-Fomento, agosto de 1973."},{"src":"img/ep-jockey1980.jpg","rot":"Jockey · 1980","cap":"O Jockey Club em 1980."}]},{"ano":"1996","x":1996,"ficha":"Foto aérea · fev/1996 · Base S.A. para a PMSP, 1:5.000","t":"o conjunto cercado pela cidade","vazio":"Foto aérea 1994/1996 · a baixar no GeoSampa","src":"img/tempo-1996.jpg","cobre":640,"cap":"A várzea virou bairro. O conjunto sobrevive inteiro dentro do quarteirão, com as cocheiras ainda em uso e o miolo da pista limpo."},{"ano":"2000","x":2000,"ficha":"Foto aérea · mai/2000 · Base S.A. / SEMAB-Resolo, 1:6.000","t":"o último registro em atividade","vazio":"Fotos aéreas 2000 e 2001 · a baixar no GeoSampa","src":"img/tempo-2000.jpg","cobre":640,"cap":"O miolo ainda é campo aberto e a alameda central atravessa o conjunto de ponta a ponta."},{"ano":"2004","src":"img/tempo-2004.jpg","ficha":"Ortofoto MDC · 2004 · 1:1.000","t":"A alameda ainda aberta","cap":"Dezesseis anos depois, a alameda central entre os dois agrupamentos continua livre. Telhados íntegros, perímetro arborizado, miolo sem nada.","gal":[{"src":"img/ep-radiohead.jpg","rot":"2009","cap":"2009: o terreno chegou a ser cogitado para um show do Radiohead — registro da circulação da ideia na imprensa."}]},{"ano":"2017","src":"img/tempo-2017.jpg","ficha":"Ortofoto PMD · 2017","t":"As primeiras árvores no miolo","cap":"Aqui começam a aparecer, esparsas, as árvores entre as fileiras. Nenhuma plantada por projeto: são espontâneas, nascidas da ausência de manejo depois do fim da atividade hípica.","gal":[{"src":"img/ep-inaug.jpg","rot":"inauguração","cap":"A inauguração do Parque Chácara do Jockey."}]},{"ano":"2020","src":"img/tempo-2020.jpg","ficha":"Ortofoto · 2020 · 10 cm/px","t":"O miolo tomado","cap":"Em três anos a alameda fecha. As copas encostam nos telhados e passam a representar risco direto sobre o bem tombado. É o estado que o projeto encontra.","gal":[{"src":"img/ep-motiva.jpg","rot":"2026","cap":"Ação do programa Motiva no parque, 2026 — o uso público já instalado."}]}],"atalho":"linha do tempo"},
 {"g":"divisor","div":2,"terra":1,"fundo":1,"sec":"o edifício","dn":"02","dt":"o edifício existente","ds":"Qualidades e desafios de um conjunto que já existe."},
 {"g":"earth-3d","lat":-23.599136,"lng":-46.744936,"alt":760,"compacto":1,"kick":"o lugar","h2":"o Parque Chácara do Jockey","lead":"Rua Santa Crescência · Ferreira, Butantã · São Paulo","temas":[{"bt":"qualidades e oportunidades","t":"qualidades e oportunidades","itens":[["01","<b>Sequência pronta.<\/b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."],["02","<b>Compartimentação pronta.<\/b> A malha de baias está na escala do atendimento em grupo pequeno."],["03","<b>Arvoredo maduro.<\/b> Estímulo natural é regulador, e não se planta em dois anos."],["04","<b>Endereço com história.<\/b> Um bem ocioso volta à vida pública."]]},{"bt":"desafios","t":"desafios","itens":[["01","<b>Geometria restritiva.<\/b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."],["02","<b>Arborização em posição de risco.<\/b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente.",[{"src":"img/arvore-01.jpg","t":"arborização em posição de risco","cap":"Exemplares crescidos dentro do pátio: tronco encostado no beiral e trepadeira sobre o telhado."},{"src":"img/arvore-02.jpg","t":"arborização em posição de risco","cap":"A mata avançou sobre a fileira — raízes levantando o piso e galhos apoiados na estrutura da cobertura."},{"src":"img/arvore-03.jpg","t":"arborização em posição de risco","cap":"Por dentro: a luz entra por onde a telha já cedeu."}]],["03","<b>Acústica.<\/b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."]]},{"bt":"leitura do tombamento","t":"a proteção como liberdade","itens":[["01","<b>A proteção recai sobre as fachadas.<\/b> As características arquitetônicas externas são o objeto do tombamento."],["02","<b>O interior está livre.<\/b> A reorganização interna é possível — e é ela que gera os salões amplos."],["03","<b>A área livre dispensa análise prévia.<\/b> O que exige vão grande encontra lugar fora do rito."],["04","<b>O que se altera deixa testemunho.<\/b> A resolução exige preservar o traço do original."]],"img":"img/conpresp-f1.jpg","imgAlt":"Mapa da Resolução 53/CONPRESP/2018, folha 1: perímetro do Parque Chácara do Jockey, área envoltória e as quatro edificações tombadas","imgCap":"Res. 53/CONPRESP/2018 · folha 1/2"}],"cap":"Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos.","fotos":[{"src":"img/visita-01.jpg","cap":"A alameda entre duas fileiras de cocheiras — a árvore cresceu no eixo e levantou o piso."},{"src":"img/visita-02.jpg","cap":"A mesma alameda em perfil: a trepadeira tomou os beirais dos dois lados."},{"src":"img/visita-03.jpg","cap":"Pátio entre fileiras, com o piso de grama seca e a árvore no centro."},{"src":"img/visita-04.jpg","cap":"O portão de um dos pátios, visto do parque — ao fundo, o galpão azul."},{"src":"img/visita-05.jpg","cap":"A empena cega da cocheira e o caminho do parque que corre ao lado."},{"src":"img/visita-06.jpg","cap":"Pátio interno: as baias de tijolo e a passarela que cruza ao fundo."},{"src":"img/visita-07.jpg","cap":"O conjunto visto do parque, com a cidade por cima do telhado."},{"src":"img/visita-08.jpg","cap":"A alvenaria de tijolo e o embasamento — a eflorescência marca a umidade ascendente."},{"src":"img/visita-09.jpg","cap":"O caminho de serviço entre o muro do conjunto e a mata do parque."},{"src":"img/visita-10.jpg","cap":"A rua coberta entre os galpões, com a passarela metálica sobre o eixo."},{"src":"img/visita-11.jpg","cap":"O pátio pavimentado diante do galpão de dois pavimentos."},{"src":"img/visita-12.jpg","cap":"A passarela metálica vista de baixo — estrutura independente da alvenaria."},{"src":"img/visita-13.jpg","cap":"A esquina da cocheira e o pátio de manobras, com a torre ao fundo."},{"src":"img/visita-14.jpg","cap":"O portal de entrada do conjunto, com o vão central passante."},{"src":"img/visita-15.jpg","cap":"Pátio interno com a estrutura metálica nova apoiada fora do tijolo."},{"src":"img/visita-16.jpg","cap":"As baias com as portas de madeira originais e a ferragem de época."},{"src":"img/visita-17.jpg","cap":"Detalhe da porta de baia: folha em duas partes, ferrolho e dobradiça originais."},{"src":"img/visita-18.jpg","cap":"O terraço sobre a cobertura, com o fechamento metálico perfurado."},{"src":"img/visita-19.jpg","cap":"Corredor interno já reformado — piso vinílico e luminárias de linha."},{"src":"img/visita-20.jpg","cap":"O mesmo corredor, com o mobiliário em uso hoje."},{"src":"img/visita-21.jpg","cap":"O pátio de chegada e o portão lateral de acesso às cocheiras."},{"src":"img/visita-22.jpg","cap":"Alameda de baias com as portas brancas, e a árvore que fechou o fundo."},{"src":"img/visita-23.jpg","cap":"A rampa acessível já executada, junto ao galpão de dois pavimentos."},{"src":"img/visita-24.jpg","cap":"A rua interna em toda a extensão: o muro de um lado, o galpão do outro."}],"fotosRot":"a visita ao lugar"},
 {"g":"frase","esc":1,"kick":"a pergunta central","t":"este programa cabe<br>neste lugar?"},
@@ -4795,8 +4818,16 @@ function tpl(s){
     const mos=()=>{
       const im=s.imgs||[], cols=[[],[],[]];
       im.forEach((src,i)=>cols[i%3].push(src));
+      /* ⚑ SEM `loading="lazy"` AQUI. 06/11/2026, bug visto pelo Michel no
+         iPad: metade do mosaico vinha preta. A fita rola por `transform`, e
+         o Safari NAO conta deslocamento por transform como entrada no
+         viewport — a imagem que a animacao traz para a tela nunca recebe a
+         ordem de carregar, e o lugar dela fica vazio. No Chrome passava
+         porque a margem de pre-carga e' bem mais larga.
+         Lazy aqui tambem nao economizava nada: e' a PRIMEIRA prancha da
+         peca e as fotos ja vem no perfil `mosaico`, a 560px. */
       return `<div class="mos">`+cols.map(c=>`<div class="col"><div class="fita">`
-        + c.concat(c).map(src=>`<img decoding="async" loading="lazy" src="${IMG[src]||src}" alt="">`).join('')
+        + c.concat(c).map(src=>`<img decoding="async" src="${IMG[src]||src}" alt="">`).join('')
         + `</div></div>`).join('')+`</div>`;
     };
     const mesq=(e)=>((e.src && Array.isArray(s.imgs) && s.imgs.length)
@@ -4925,14 +4956,41 @@ function tpl(s){
       + `</div>`
       + `<div class="ttx">`
       +   `<div class="talto rev" style="--i:1">${k}<h1 class="tano"></h1><div class="tficha"></div></div>`
-      +   `<div class="tmeio rev" style="--i:3"><p class="ttit"></p><p class="tlead"></p></div>`
+      +   `<div class="tmeio rev" style="--i:3"><p class="ttit"></p><p class="tlead"></p>`
+      +     `<div class="tgal"></div></div>`
       +   `<div class="tregua rev" style="--i:5"><div class="ttrilho">`
       +     `<div class="tpreenche"></div><div class="tviajante"></div>${marcos}</div>`
       +     `<div class="tleg"><span><u class="t1"></u> em m&atilde;os</span>`
       +     `<span><u class="t2"></u> a baixar</span>`
       +     `<button type="button" class="trebob" data-t="rev">&#8634; rever do in&iacute;cio</button></div>`
       +   `</div>`
-      + `</div>`;
+      + `</div>`
+      /* ⚑ AS IMAGENS DE EPOCA MORAM EM LUPAS PRONTAS, uma por marco. O
+         `mostra()` so troca as MINIATURAS na faixa; as lupas ficam no DOM
+         desde a montagem, porque carregar uma pilha de capas no meio da
+         fala e' exatamente onde nao se pode esperar rede. */
+      + it.map((x,i)=>(x.gal&&x.gal.length)
+          ? `<div class="ptlupa" data-pt="e${i}"><div class="plh">`
+            + x.gal.map(g=>`<img decoding="async" src="${IMG[g.src]||g.src}"`
+                + ` data-t="${(g.t||x.ano||'').replace(/"/g,'&quot;')}"`
+                + ` data-cap="${(g.cap||'').replace(/"/g,'&quot;')}"`
+                + ` alt="${(g.cap||'').replace(/"/g,'&quot;')}">`).join('')
+            + `</div><div class="plcap"></div>`
+            + `<button type="button" class="plfecha" data-pl="fecha" aria-label="Fechar">&#10005;</button>`
+            + `<div class="plbar">`
+            +   `<button type="button" data-pl="ant" aria-label="Anterior">&#9664;</button>`
+            +   `<button type="button" data-pl="pausa" aria-pressed="false" aria-label="Pausar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16"/></svg></button>`
+            +   `<button type="button" data-pl="pro" aria-label="Pr&#243;xima">&#9654;</button>`
+            +   `<b></b><hr>`
+            +   `<button type="button" data-pl="menos" aria-label="Afastar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>`
+            +   `<button type="button" data-pl="mais" aria-label="Aproximar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>`
+            +   `<button type="button" data-pl="ajusta" aria-label="Ajustar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5"/></svg>`
+            +   `</button></div></div>`
+          : '').join('');
   }
   if(s.g==='fotos'){
     const li=s.itens.map(([q,x],i)=>`<li class="passo" data-f="${i}"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('');
@@ -5136,7 +5194,12 @@ function tpl(s){
                    motor so para tudo que abre grande. */
                 + (x.img?`<figure data-pt="t${i}" role="button" tabindex="0"`
                          + ` aria-label="Abrir a prancha em tela cheia">`
-                         + `<img src="${IMG[x.img]||x.img}" alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}" loading="lazy">`
+                         /* sem lazy: o painel nasce com `opacity:0` e o
+                            Safari e' irregular com lazy em elemento que
+                            nunca "entrou" na tela por rolagem. E' uma
+                            prancha so, e ela precisa estar pronta quando
+                            o tema abrir. */
+                         + `<img src="${IMG[x.img]||x.img}" alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}">`
                          + (x.imgCap?`<figcaption>${x.imgCap}</figcaption>`:'')+`</figure>`:'')
                 + (x.t?`<h4>${RS(x.t)}</h4>`:'')
                 /* ⚑ O ITEM DO TEMA ACEITA UMA TIRA DE MINIATURAS como
@@ -6035,6 +6098,17 @@ window.MSTempo=(function(){
     sl.querySelector('.tficha').innerHTML=x.ficha||'';
     sl.querySelector('.ttit').innerHTML=x.t||'';
     sl.querySelector('.tlead').innerHTML=x.cap||'';
+    /* a tira de epoca do marco atual */
+    var g=sl.querySelector('.tgal');
+    if(g){
+      g.innerHTML=(x.gal||[]).map(function(a,m){
+        return '<figure class="ep"><button type="button" data-pt="e'+i+'"'
+          + ' data-ini="'+m+'" aria-label="Abrir em tela cheia">'
+          + '<img decoding="async" src="'+(a.src_||a.src)+'" alt=""></button>'
+          + '<figcaption>'+(a.rot||'')+'</figcaption></figure>';
+      }).join('');
+      g.classList.toggle('on', !!(x.gal&&x.gal.length));
+    }
   }
 
   function para(sl){ var e=est(sl); if(e.reb){ clearTimeout(e.reb); e.reb=null; }
@@ -6121,7 +6195,15 @@ addEventListener('click',function(e){
   if(abrir){
     bt.setAttribute('aria-pressed','true');
     var p=sl.querySelector('.painel[data-tm="'+k+'"]');
-    if(p){ p.classList.add('on'); sl.classList.add('com-painel'); }
+    if(p){
+      p.classList.add('on'); sl.classList.add('com-painel');
+      /* ⚑ A CAIXA DE FOTOS MUDA DE PAINEL. Ela e' uma so — 24 imagens nao
+         se duplicam por tema — entao o JS a move para o painel que abre,
+         no topo. Painel que ja tem prancha propria (o do tombamento) nao
+         a recebe: ali quem manda e o mapa, decisao do Michel. */
+      var f=sl.querySelector('.fotos');
+      if(f && !p.querySelector('figure')) p.insertBefore(f, p.firstChild);
+    }
   }
 },true);
 /* ⚑ fechar ao sair do slide: NAO ha evento de troca de prancha no motor —
