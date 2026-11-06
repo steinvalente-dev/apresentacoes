@@ -196,6 +196,10 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
         #   armadilha: sem esta linha o html aponta para nome que nao existe.
         #   Perfil `prancha` — e desenho cadastral de linha fina, nao foto.
         if g == 'earth-3d':
+            # as fotos da visita: carrossel na caixa e lupa em tela cheia
+            for f in s.get('fotos') or []:
+                if isinstance(f, dict) and f.get('src'):
+                    add(f, 'src', 'cheia')
             for x in s.get('temas') or []:
                 if isinstance(x, dict) and x.get('img'):
                     add(x, 'img', 'prancha')
@@ -218,6 +222,14 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
             if isinstance(it, dict):
                 if 'src' in it:
                     add(it, 'src', perfil)
+                # ⚑ `pontos` de um quadro da sequencia: cada ponto traz a
+                #   PROPRIA pilha. Dois niveis abaixo do slide — sem esta
+                #   linha o html aponta para nome que nao existe, 404 mudo.
+                #   Perfil `cheia`: a lupa abre em tela inteira e aceita zoom.
+                for pt in it.get('pontos') or []:
+                    if isinstance(pt, dict):
+                        for j in range(len(pt.get('imgs') or [])):
+                            add(pt['imgs'], j, 'cheia')
                 for p in it.get('pilha') or []:
                     if isinstance(p, dict) and 'src' in p:
                         add(p, 'src', perfil)

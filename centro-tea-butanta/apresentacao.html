@@ -905,14 +905,27 @@ body.em-logo .chrome.topo .secao{display:inline}
 
    ⚑ A planta vai ATRAS do kicker e do titulo (`z-index`), nao ao lado:
    eles moram na faixa, e a faixa so existe porque a planta parou ali. */
+/* ⚑ A FAIXA TEM PISO. 06/11/2026, pedido do Michel depois de abrir no
+   iPad: `100cqh * 1.333` e' quanto a planta QUER para encher a altura, e
+   numa tela 4:3 isso da 133% da largura — a faixa da esquerda sumia e o
+   titulo caia por cima do desenho, justo sobre o vestiario novo.
+
+   O teto de 70% garante 30% de faixa em qualquer proporcao. Em tela
+   horizontal quase nada muda (16:9 pedia 75%); em tela quadrada a planta
+   encolhe e sobra branco em cima e embaixo — o Michel: *"eu prefiro mil
+   vezes que nao tenha o branco, mas nesse caso a gente vai ter que abrir
+   uma excecao"*. */
 .g-sequencia.sangra{--pl-ar:1.333;
-  --pl-w:calc(100cqh * var(--pl-ar));
+  --pl-w:min(calc(100cqh * var(--pl-ar)), 70%);
   --faixa:calc(100% - var(--pl-w))}
 .g-sequencia.sangra .wrap{position:static}
 .g-sequencia.sangra .seq{position:absolute;inset:0;margin:0;z-index:0}
 .g-sequencia.sangra .seq-etapa{grid-template-columns:1fr;gap:0}
+/* com o teto, a imagem deixa de ser `width:auto`: ela se ajusta DENTRO da
+   caixa `--pl-w` x 100cqh e o `contain` decide se sobra em cima ou dos
+   lados. Sem isto a largura ignoraria o teto e a faixa sumiria de novo. */
 .g-sequencia.sangra .seq-etapa img{position:absolute;top:0;right:0;bottom:0;
-  height:100%;width:auto;max-width:100%;object-fit:contain;object-position:right center}
+  height:100%;width:var(--pl-w);object-fit:contain;object-position:right center}
 /* kicker, titulo e o controle sobem para a faixa */
 /* ⚑ A FAIXA DITA O CORPO DO TITULO. Com a planta em altura cheia sobram
    ~25% da largura; o `big` da casa, dimensionado para a prancha inteira,
@@ -1008,6 +1021,81 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-sequencia .seqnav button:disabled{opacity:.42;cursor:default;background:var(--papel-10)}
 @media (prefers-reduced-motion:reduce){.g-sequencia .seq-etapa{transition:none}}
 
+/* ══ PONTOS SOBRE A PLANTA VIVA — material que fica ao alcance ════════════
+   06/11/2026, pedido do Michel. Um ponto nasce num quadro da sequencia e
+   NAO SOME nos seguintes: "quando ela aparece, ela permanece ali na tela e
+   continua sendo uma opcao para eu interagir com esse material depois".
+   Isso muda a natureza da peca — a sequencia deixa de ser so narrativa e
+   vira acervo navegavel.
+
+   ⚑ O PONTO E' FRACAO DA PLANTA, nao pixel da tela. Em `sangra` a planta
+   ocupa `--pl-w` ancorada a direita, entao a conta sai em CSS puro e o
+   ponto acompanha qualquer projetor sem uma linha de JS de posicionamento.
+
+   ⚑ ELE PULSA PORQUE PRECISA SER DESCOBERTO. Num desenho cheio, marcador
+   parado vira detalhe do desenho. O halo que respira e o que diz "clique". */
+.g-sequencia .seqpt{position:absolute;inset:0;z-index:4;pointer-events:none}
+.g-sequencia .pt{position:absolute;width:clamp(19px,1.7cqw,30px);
+  height:clamp(19px,1.7cqw,30px);transform:translate(-50%,-50%);
+  border-radius:50%;border:0;padding:0;cursor:pointer;pointer-events:auto;
+  background:var(--primaria);box-shadow:0 2px 10px var(--tinta-45);
+  opacity:0;visibility:hidden;transition:opacity .45s ease,transform .2s ease}
+.g-sequencia .pt.on{opacity:1;visibility:visible}
+.g-sequencia .pt:hover{transform:translate(-50%,-50%) scale(1.12)}
+.g-sequencia .pt i{position:absolute;inset:0;border-radius:50%;
+  box-shadow:inset 0 0 0 2px var(--papel-60)}
+.g-sequencia .pt::after{content:"";position:absolute;inset:-5px;border-radius:50%;
+  border:2px solid var(--primaria);opacity:.75;animation:ptpulsa 2.3s ease-out infinite}
+@keyframes ptpulsa{0%{transform:scale(.78);opacity:.8}
+  70%{transform:scale(1.5);opacity:0}100%{transform:scale(1.5);opacity:0}}
+@media (prefers-reduced-motion:reduce){.g-sequencia .pt::after{animation:none;opacity:.5}}
+.g-sequencia.sangra .pt{
+  left:calc(100% - var(--pl-w) + var(--px) * var(--pl-w));
+  top:calc(var(--py) * 100cqh)}
+
+/* ── a lupa do ponto: carrossel em tela cheia, com zoom ─────────────────
+   ⚑ O ZOOM E' TRANSFORM, nao troca de arquivo. A imagem ja esta carregada
+   em resolucao maior que a tela; escalar o elemento aproxima de verdade e
+   custa zero rede no meio da fala. */
+.ptlupa{position:absolute;inset:0;z-index:30;display:none;
+  background:var(--tinta-90);touch-action:none}
+.ptlupa.on{display:block}
+.ptlupa .plh{position:absolute;inset:0;overflow:hidden;cursor:grab}
+.ptlupa .plh.arrastando{cursor:grabbing}
+.ptlupa .plh img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;opacity:0;transition:opacity .45s ease;
+  transform-origin:center center}
+.ptlupa .plh img.on{opacity:1}
+.ptlupa .plcap{position:absolute;left:0;right:0;bottom:0;z-index:3;
+  padding:clamp(40px,6cqh,90px) var(--gut) clamp(16px,2.4cqh,34px);
+  background:linear-gradient(to top,var(--tinta-85),transparent);
+  color:var(--papel);font-size:clamp(12px,1cqw,17px);line-height:1.45;
+  text-align:center;pointer-events:none}
+.ptlupa .plcap b{display:block;font-family:var(--f-display);font-style:italic;
+  font-weight:500;font-size:clamp(16px,1.5cqw,27px);margin-bottom:.3em}
+.ptlupa .plbar{position:absolute;left:50%;transform:translateX(-50%);z-index:4;
+  bottom:calc(var(--bot) / 2);display:flex;align-items:center;
+  gap:clamp(3px,.42cqw,7px);background:var(--tinta-80);border-radius:999px;
+  padding:clamp(4px,.45cqw,8px) clamp(6px,.6cqw,11px)}
+.ptlupa .plbar button{width:clamp(23px,2.05cqw,36px);height:clamp(23px,2.05cqw,36px);
+  border-radius:50%;border:0;background:transparent;color:var(--papel);
+  cursor:pointer;display:grid;place-items:center;padding:0;font-size:inherit;
+  transition:background .15s ease}
+.ptlupa .plbar button:hover{background:var(--papel-20)}
+.ptlupa .plbar b{font-family:var(--f-mono);font-size:var(--fs-cap);
+  letter-spacing:.1em;font-weight:400;color:var(--papel-80);
+  font-variant-numeric:tabular-nums;padding:0 clamp(3px,.4cqw,7px)}
+.ptlupa .plbar hr{width:1px;height:clamp(14px,1.3cqw,22px);border:0;margin:0 2px;
+  background:var(--papel-25)}
+.ptlupa .plbar svg{width:58%;height:58%;fill:none;stroke:currentColor;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ptlupa .plfecha{position:absolute;top:clamp(10px,1.6cqh,22px);
+  right:clamp(10px,1.2cqw,22px);z-index:4;width:clamp(28px,2.4cqw,42px);
+  height:clamp(28px,2.4cqw,42px);border-radius:50%;cursor:pointer;
+  border:1px solid var(--papel-25);background:var(--tinta-60);color:var(--papel);
+  display:grid;place-items:center;font-size:clamp(14px,1.2cqw,20px);line-height:1}
+.ptlupa .plfecha:hover{background:var(--tinta);border-color:var(--papel)}
+
 /* ══ A ROTA, EM LISTA FIXA ═══════════════════════════════════════════════
    20/09/2026. O texto da parada saiu do mouseover do pino — o conteúdo do
    popover do Earth não recebe ponteiro — e virou lista na tela, ligada à
@@ -1096,6 +1184,11 @@ body.em-logo .chrome.topo .secao{display:inline}
 /* ⚑ A FIGURA CEDE ANTES DO TEXTO. O teto em `cqh` e' o que garante que os
    itens entrem na dobra em tela baixa; a imagem encolhe e centra, em vez
    de empurrar a lista para fora. */
+/* a prancha do painel abre em tela cheia: o cursor e o realce dizem isso */
+.g-earth-3d .painel figure[data-pt]{cursor:pointer;
+  transition:border-color .18s ease,transform .18s ease}
+.g-earth-3d .painel figure[data-pt]:hover{border-color:var(--primaria);
+  transform:translateY(-2px)}
 .g-earth-3d .painel figure img{display:block;width:100%;height:auto;
   max-height:34cqh;object-fit:contain;margin:0 auto;border-radius:3px}
 .g-earth-3d .painel figure figcaption{font-family:var(--f-mono);
@@ -1136,6 +1229,51 @@ body.em-logo .chrome.topo .secao{display:inline}
   border-radius:2px;box-decoration-break:clone;
   -webkit-box-decoration-break:clone}
 
+
+/* ══ CARROSSEL DO VISOR 3D — as fotos da visita, dentro da caixa ═════════
+   06/11/2026. Pedido do Michel: uma caixa pequena com as fotos do lugar
+   correndo, sobre a caixa de texto translucida. Clicar abre a mesma lupa
+   do ponto da planta viva.
+
+   ⚑ NADA DE `backdrop-filter`. Sobre visor vivo o desfoque e' recalculado
+   a cada quadro do mapa — medido em 04/09: veu parado 61 fps, repintando
+   com blur 19. O cross-fade e' so opacidade, composto na GPU.
+
+   ⚑ ELE SOME ONDE O PAINEL JA TEM PRANCHA. Decisao do Michel: no tema do
+   tombamento quem manda e o mapa do CONPRESP. A regra nao e' por indice —
+   e' `:has(.painel.on figure)`, entao qualquer tema que ganhe prancha
+   propria amanha dispensa o carrossel sozinho, sem tocar em codigo. */
+/* ⚑ COM CARROSSEL O PAINEL SOBE, como ja sobe com prancha. Medido: a
+   caixa das fotos come 333px dos 591 do painel e o terceiro item caia
+   para fora. Subir o topo devolve ~110px e a lista volta inteira. */
+.g-earth-3d .painel:not(:has(figure)){top:calc(var(--top) + clamp(8px,1.4cqh,20px))}
+.g-earth-3d .fotos{position:absolute;z-index:5;display:none;
+  left:calc(var(--gut) + clamp(14px,1.4cqw,24px));
+  top:calc(var(--top) + clamp(8px,1.4cqh,20px) + clamp(14px,1.9cqh,26px));
+  width:calc(clamp(260px,30cqw,460px) - clamp(28px,2.8cqw,48px));
+  border-radius:5px;overflow:hidden;cursor:pointer;
+  border:1px solid var(--papel-25);box-shadow:0 3px 16px var(--tinta-45);
+  background:var(--tinta-60);transition:transform .18s ease,border-color .18s ease}
+.g-earth-3d.com-painel .fotos{display:block}
+.g-earth-3d:has(.painel.on figure) .fotos{display:none}
+.g-earth-3d .fotos:hover{transform:translateY(-2px);border-color:var(--papel-60)}
+.g-earth-3d .fotos .fh{position:relative;aspect-ratio:4/3}
+.g-earth-3d .fotos img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;opacity:0;transition:opacity .8s ease}
+.g-earth-3d .fotos img.on{opacity:1}
+.g-earth-3d .fotos .fr{display:flex;align-items:center;justify-content:space-between;
+  gap:6px;padding:clamp(3px,.42cqh,6px) clamp(7px,.7cqw,12px);
+  font-family:var(--f-mono);font-size:calc(var(--fs-cap)*.85);
+  letter-spacing:.09em;text-transform:uppercase;color:var(--papel-80)}
+.g-earth-3d .fotos .fr b{font-weight:400;color:var(--papel);
+  font-variant-numeric:tabular-nums}
+/* ⚑ A CAIXA CEDE O TOPO. O painel sem prancha reserva a altura do
+   carrossel no proprio padding — sobrepor sem reservar cobriria o titulo. */
+.g-earth-3d .painel:not(:has(figure)){
+  padding-top:calc(clamp(14px,1.9cqh,26px)
+    + (clamp(260px,30cqw,460px) - clamp(28px,2.8cqw,48px)) * .75
+    + clamp(20px,2.3cqh,32px))}
+.g-earth-3d.esperando .fotos,.g-earth-3d.falhou .fotos{display:none}
 .g-earth-3d .rota{position:absolute;right:var(--gut);
   bottom:calc(var(--bot) + clamp(52px,7cqh,96px) + clamp(112px,17cqh,210px));
   z-index:3;display:none;flex-direction:column;gap:.05em;
@@ -4242,12 +4380,12 @@ const DECK=[
 {"g":"lista","largo":1,"kick":"círculo 02","t":"o que o espaço faz por quem é atendido","itens":[["01","<b>Gradiente sensorial.<\/b> O edifício se organiza por nível de estímulo, não por função administrativa."],["02","<b>Transição.<\/b> Entre o alto e o baixo estímulo existe um espaço que recalibra — não se passa de um ao outro por uma porta."],["03","<b>Refúgio.<\/b> Lugares de retirada distribuídos, ajustáveis por quem os usa."],["04","<b>Percurso previsível.<\/b> Sequência legível, sem bifurcação e sem retorno."],["05","<b>Sem bolha.<\/b> A escala inteira de estímulo dentro do edifício, para que se transite por ela."]]},
 {"g":"tempo","kick":"o lugar no tempo","cobre":640,"de":1925,"ate":2026,"items":[{"ano":"1930","src":"img/tempo-1930.jpg","ficha":"Levantamento Sara Brasil · 1930 · carta","t":"Sara Brasil: o sítio antes de tudo","cap":"Chácara rural na divisa do município. O córrego Charco Grande corta o terreno e a mata ocupa o que hoje é o parque. Não há uma construção sequer no perímetro."},{"ano":"1940","x":1940,"ficha":"Foto aérea · 1940 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1940 · quadrícula FM5-019 · a baixar no GeoSampa"},{"ano":"1954","x":1954,"ficha":"Foto aérea · 1954 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1954 · quadrícula FX03-173 · a baixar no GeoSampa"},{"ano":"s/d","x":1962,"src":"img/tempo-vasp.jpg","ficha":"Carta Vasp-Cruzeiro · <span class=\"pend\">sem data no metadado — confirmar no DPH<\/span>","t":"Vasp-Cruzeiro: a era hípica desenhada","cap":"A pista oval de treino e as duas fileiras de cocheiras aparecem com todos os módulos. É a única peça que registra o conjunto em pleno funcionamento — e a borda esquerda está cortada no fim do mosaico."},{"ano":"1988","src":"img/tempo-1988.jpg","ficha":"Folhas do Livro da Vegetação · 1988 · carta","t":"Livro da Vegetação: o miolo limpo","cap":"A carta registra a massa verde apenas no perímetro do conjunto. Entre os dois agrupamentos de edificações não há arborização mapeada. É o ponto de partida do argumento."},{"ano":"1996","x":1996,"ficha":"Foto aérea · 1994/1996 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1994/1996 · a baixar no GeoSampa"},{"ano":"2001","x":2001,"ficha":"Foto aérea · 2000/2001 · a baixar","t":"Levantamento a incorporar","vazio":"Fotos aéreas 2000 e 2001 · a baixar no GeoSampa"},{"ano":"2004","src":"img/tempo-2004.jpg","ficha":"Ortofoto MDC · 2004 · 1:1.000","t":"A alameda ainda aberta","cap":"Dezesseis anos depois, a alameda central entre os dois agrupamentos continua livre. Telhados íntegros, perímetro arborizado, miolo sem nada."},{"ano":"2017","src":"img/tempo-2017.jpg","ficha":"Ortofoto PMD · 2017","t":"As primeiras árvores no miolo","cap":"Aqui começam a aparecer, esparsas, as árvores entre as fileiras. Nenhuma plantada por projeto: são espontâneas, nascidas da ausência de manejo depois do fim da atividade hípica."},{"ano":"2020","src":"img/tempo-2020.jpg","ficha":"Ortofoto · 2020 · 10 cm/px","t":"O miolo tomado","cap":"Em três anos a alameda fecha. As copas encostam nos telhados e passam a representar risco direto sobre o bem tombado. É o estado que o projeto encontra."}]},
 {"g":"divisor","div":2,"terra":1,"fundo":1,"sec":"o edifício","dn":"02","dt":"o edifício existente","ds":"Qualidades e desafios de um conjunto que já existe."},
-{"g":"earth-3d","lat":-23.599136,"lng":-46.744936,"alt":760,"compacto":1,"kick":"o lugar","h2":"o Parque Chácara do Jockey","lead":"Rua Santa Crescência · Ferreira, Butantã · São Paulo","temas":[{"bt":"qualidades e oportunidades","t":"qualidades e oportunidades","itens":[["01","<b>Sequência pronta.<\/b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."],["02","<b>Compartimentação pronta.<\/b> A malha de baias está na escala do atendimento em grupo pequeno."],["03","<b>Arvoredo maduro.<\/b> Estímulo natural é regulador, e não se planta em dois anos."],["04","<b>Endereço com história.<\/b> Um bem ocioso volta à vida pública."]]},{"bt":"desafios","t":"desafios","itens":[["01","<b>Geometria restritiva.<\/b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."],["02","<b>Arborização em posição de risco.<\/b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."],["03","<b>Acústica.<\/b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."]]},{"bt":"leitura do tombamento","t":"a proteção como liberdade","itens":[["01","<b>A proteção recai sobre as fachadas.<\/b> As características arquitetônicas externas são o objeto do tombamento."],["02","<b>O interior está livre.<\/b> A reorganização interna é possível — e é ela que gera os salões amplos."],["03","<b>A área livre dispensa análise prévia.<\/b> O que exige vão grande encontra lugar fora do rito."],["04","<b>O que se altera deixa testemunho.<\/b> A resolução exige preservar o traço do original."]],"img":"img/conpresp-f1.jpg","imgAlt":"Mapa da Resolução 53/CONPRESP/2018, folha 1: perímetro do Parque Chácara do Jockey, área envoltória e as quatro edificações tombadas","imgCap":"Res. 53/CONPRESP/2018 · folha 1/2"}],"cap":"Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos."},
+{"g":"earth-3d","lat":-23.599136,"lng":-46.744936,"alt":760,"compacto":1,"kick":"o lugar","h2":"o Parque Chácara do Jockey","lead":"Rua Santa Crescência · Ferreira, Butantã · São Paulo","temas":[{"bt":"qualidades e oportunidades","t":"qualidades e oportunidades","itens":[["01","<b>Sequência pronta.<\/b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."],["02","<b>Compartimentação pronta.<\/b> A malha de baias está na escala do atendimento em grupo pequeno."],["03","<b>Arvoredo maduro.<\/b> Estímulo natural é regulador, e não se planta em dois anos."],["04","<b>Endereço com história.<\/b> Um bem ocioso volta à vida pública."]]},{"bt":"desafios","t":"desafios","itens":[["01","<b>Geometria restritiva.<\/b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."],["02","<b>Arborização em posição de risco.<\/b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."],["03","<b>Acústica.<\/b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."]]},{"bt":"leitura do tombamento","t":"a proteção como liberdade","itens":[["01","<b>A proteção recai sobre as fachadas.<\/b> As características arquitetônicas externas são o objeto do tombamento."],["02","<b>O interior está livre.<\/b> A reorganização interna é possível — e é ela que gera os salões amplos."],["03","<b>A área livre dispensa análise prévia.<\/b> O que exige vão grande encontra lugar fora do rito."],["04","<b>O que se altera deixa testemunho.<\/b> A resolução exige preservar o traço do original."]],"img":"img/conpresp-f1.jpg","imgAlt":"Mapa da Resolução 53/CONPRESP/2018, folha 1: perímetro do Parque Chácara do Jockey, área envoltória e as quatro edificações tombadas","imgCap":"Res. 53/CONPRESP/2018 · folha 1/2"}],"cap":"Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos.","fotos":[{"src":"img/visita-01.jpg","cap":"A alameda entre duas fileiras de cocheiras — a árvore cresceu no eixo e levantou o piso."},{"src":"img/visita-02.jpg","cap":"A mesma alameda em perfil: a trepadeira tomou os beirais dos dois lados."},{"src":"img/visita-03.jpg","cap":"Pátio entre fileiras, com o piso de grama seca e a árvore no centro."},{"src":"img/visita-04.jpg","cap":"O portão de um dos pátios, visto do parque — ao fundo, o galpão azul."},{"src":"img/visita-05.jpg","cap":"A empena cega da cocheira e o caminho do parque que corre ao lado."},{"src":"img/visita-06.jpg","cap":"Pátio interno: as baias de tijolo e a passarela que cruza ao fundo."},{"src":"img/visita-07.jpg","cap":"O conjunto visto do parque, com a cidade por cima do telhado."},{"src":"img/visita-08.jpg","cap":"A alvenaria de tijolo e o embasamento — a eflorescência marca a umidade ascendente."},{"src":"img/visita-09.jpg","cap":"O caminho de serviço entre o muro do conjunto e a mata do parque."},{"src":"img/visita-10.jpg","cap":"A rua coberta entre os galpões, com a passarela metálica sobre o eixo."},{"src":"img/visita-11.jpg","cap":"O pátio pavimentado diante do galpão de dois pavimentos."},{"src":"img/visita-12.jpg","cap":"A passarela metálica vista de baixo — estrutura independente da alvenaria."},{"src":"img/visita-13.jpg","cap":"A esquina da cocheira e o pátio de manobras, com a torre ao fundo."},{"src":"img/visita-14.jpg","cap":"O portal de entrada do conjunto, com o vão central passante."},{"src":"img/visita-15.jpg","cap":"Pátio interno com a estrutura metálica nova apoiada fora do tijolo."},{"src":"img/visita-16.jpg","cap":"As baias com as portas de madeira originais e a ferragem de época."},{"src":"img/visita-17.jpg","cap":"Detalhe da porta de baia: folha em duas partes, ferrolho e dobradiça originais."},{"src":"img/visita-18.jpg","cap":"O terraço sobre a cobertura, com o fechamento metálico perfurado."},{"src":"img/visita-19.jpg","cap":"Corredor interno já reformado — piso vinílico e luminárias de linha."},{"src":"img/visita-20.jpg","cap":"O mesmo corredor, com o mobiliário em uso hoje."},{"src":"img/visita-21.jpg","cap":"O pátio de chegada e o portão lateral de acesso às cocheiras."},{"src":"img/visita-22.jpg","cap":"Alameda de baias com as portas brancas, e a árvore que fechou o fundo."},{"src":"img/visita-23.jpg","cap":"A rampa acessível já executada, junto ao galpão de dois pavimentos."},{"src":"img/visita-24.jpg","cap":"A rua interna em toda a extensão: o muro de um lado, o galpão do outro."}],"fotosRot":"a visita ao lugar"},
 {"g":"frase","esc":1,"kick":"a pergunta central","t":"este programa cabe<br>neste lugar?"},
 {"g":"confronto","kick":"a resposta, em área","t":"o mesmo programa, dois lugares","lados":[{"nm":"TEA Oeste · Butantã","src":"img/implantacao-tea-oeste-2.jpg","alt":"Implantação do TEA Oeste, com as áreas úteis destacadas","linhas":[["ambientes","2.556,55 m²"],["circulação coberta","1.543,24 m²"]],"total":[["total","4.099,79 m²"],["total coberto","4.099,79 m²"]]},{"rot":"a nossa proposta","nm":"Chácara do Jockey","src":"img/implantacao-jockey.jpg","linhas":[["ambientes","3.311,07 m²"],["circulação descoberta","3.651,62 m²"]],"total":[["total","6.962,69 m²"],["total coberto","3.311,07 m²"]],"alt":"Implantação da proposta na Chácara do Jockey, com as áreas úteis e o segundo pavimento destacados em laranja"}],"etapas":1},
 {"g":"lista","largo":1,"kick":"a resposta","t":"como o programa se encaixa","itens":[["01","<b>Cabe em área.<\/b> O programa útil do modelo entra no conjunto existente."],["02","<b>Cumpre todos os papéis.<\/b> Atendimento, cultura, esporte, autonomia e acolhimento de famílias."],["03","<b>Com uma ressalva: o auditório.<\/b> Nenhum vão edificado do conjunto é largo o bastante para recebê-lo. Ou ele ganha edificação própria — e aí a conversa é outra — ou o programa se ajusta."]]},
 {"g":"divisor","div":3,"terra":1,"fundo":1,"sec":"a proposta","dn":"03","dt":"a proposta de intervenção","ds":"A planta, camada por camada: do que o conjunto é hoje ao que ele passa a ser."},
-{"g":"sequencia","kick":"a proposta, passo a passo","items":[{"src":"img/evo-01.jpg","t":"situação atual","cap":""},{"src":"img/evo-02.jpg","t":"conflito de circulação dos vestiários","cap":""},{"src":"img/evo-03.jpg","t":"novo vestiário","cap":""},{"src":"img/evo-04.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-05.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-06.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-07.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-08.jpg","t":"acessos","cap":""},{"src":"img/evo-09.jpg","t":"cobertura de ligação","cap":"Três funções numa peça só: <b>marquise<\/b> para embarque e desembarque, <b>receptivo<\/b>, e <b>circulação coberta<\/b> entre os volumes."},{"src":"img/evo-10.jpg","t":"paisagismo","cap":""},{"src":"img/evo-11.jpg","t":"demolições","cap":"Abrem as novas circulações e os salões amplos."},{"src":"img/evo-12.jpg","t":"planta proposta","cap":""},{"src":"img/evo-13.jpg","t":"setor de atendimento","cap":"","cores":[["#B080F0","atendimento e atividades TEA"]]},{"src":"img/evo-14.jpg","t":"setor administrativo e de apoio","cap":"","cores":[["#B080F0","atendimento e atividades TEA"],["#E08030","administrativo e funcionários"],["#905040","apoio e serviços"]]},{"src":"img/evo-15.jpg","t":"setor de eventos e acolhimento","cap":"","cores":[["#B080F0","atendimento e atividades TEA"],["#E08030","administrativo e funcionários"],["#905040","apoio e serviços"],["#90A0C8","eventos: convenções e exposições"],["#A0D050","acolhimento de familiares"]]},{"src":"img/evo-16.jpg","t":"planta proposta","cap":"","cores":[["#B080F0","atendimento e atividades TEA"],["#E08030","administrativo e funcionários"],["#905040","apoio e serviços"],["#90A0C8","eventos: convenções e exposições"],["#A0D050","acolhimento de familiares"]]}],"sangra":1},
+{"g":"sequencia","kick":"a proposta, passo a passo","items":[{"src":"img/evo-01.jpg","t":"situação atual","cap":""},{"src":"img/evo-02.jpg","t":"conflito de circulação dos vestiários","cap":""},{"src":"img/evo-03.jpg","t":"novo vestiário","cap":""},{"src":"img/evo-04.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-05.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-06.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-07.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-08.jpg","t":"acessos","cap":""},{"src":"img/evo-09.jpg","t":"cobertura de ligação","cap":"Três funções numa peça só: <b>marquise<\/b> para embarque e desembarque, <b>receptivo<\/b>, e <b>circulação coberta<\/b> entre os volumes.","pontos":[{"x":0.536,"y":0.85,"t":"a entrada coberta","cap":"Estudo da marquise de chegada — croqui sobre foto e variações do painel curvo.","imgs":["img/ref-entrada-01.jpg","img/ref-entrada-02.jpg","img/ref-entrada-03.jpg","img/ref-entrada-04.jpg","img/ref-entrada-05.jpg"],"legs":["Simulação noturna: a marquise, o letreiro e o painel iluminado.","O painel em chapa lisa, sem grafismo.","Com o grafismo da casa aplicado em laranja.","Variação cromática — campos de cor em composição livre.","Variação orgânica, de desenho mais solto."]}]},{"src":"img/evo-10.jpg","t":"paisagismo","cap":"","pontos":[{"x":0.526,"y":0.489,"t":"Cinemateca da Vila Mariana","cap":"O caso mais próximo do nosso: galpões históricos em tijolo e uma praça coberta por estrutura metálica leve entre eles.","imgs":["img/ref-cine-01.jpg","img/ref-cine-02.jpg","img/ref-cine-03.jpg","img/ref-cine-04.jpg","img/ref-cine-05.jpg"],"legs":["A rua coberta entre os galpões: pergolado metálico apoiado fora da alvenaria histórica.","O conjunto visto de cima — os galpões paralelos e os vãos entre eles.","A mesma rua hoje, com piso tátil e a estrutura mantida aparente.","O remate envidraçado no topo da circulação.","A área livre em uso: feira, cinema ao ar livre e permanência."]}]},{"src":"img/evo-11.jpg","t":"demolições","cap":"Abrem as novas circulações e os salões amplos."},{"src":"img/evo-12.jpg","t":"planta proposta","cap":""},{"src":"img/evo-13.jpg","t":"setor de atendimento","cap":"","cores":[["#B080F0","atendimento e atividades TEA"]]},{"src":"img/evo-14.jpg","t":"setor administrativo e de apoio","cap":"","cores":[["#B080F0","atendimento e atividades TEA"],["#E08030","administrativo e funcionários"],["#905040","apoio e serviços"]]},{"src":"img/evo-15.jpg","t":"setor de eventos e acolhimento","cap":"","cores":[["#B080F0","atendimento e atividades TEA"],["#E08030","administrativo e funcionários"],["#905040","apoio e serviços"],["#90A0C8","eventos: convenções e exposições"],["#A0D050","acolhimento de familiares"]]},{"src":"img/evo-16.jpg","t":"planta proposta","cap":"","cores":[["#B080F0","atendimento e atividades TEA"],["#E08030","administrativo e funcionários"],["#905040","apoio e serviços"],["#90A0C8","eventos: convenções e exposições"],["#A0D050","acolhimento de familiares"]]}],"sangra":1},
 {"g":"divisor","div":4,"terra":1,"fundo":1,"sec":"números","dn":"04","dt":"números","ds":"Áreas, superfícies de intervenção e ordem de grandeza."},
 {"g":"tabela","kick":"em números","t":"o programa, lado a lado","cols":["ambiente","TEA Oeste","Chácara do Jockey",""],"linhas":[["atendimento e terapias","a confirmar","a confirmar",""],["convivência e autonomia","a confirmar","a confirmar",""],["esporte e piscina","a confirmar","a confirmar",""],["auditório","a confirmar","a confirmar","<b>em aberto<\/b>"],["cultura, eventos e famílias","a confirmar","a confirmar",""],["administração e apoio","a confirmar","a confirmar",""],["total de ambientes","2.556,55 m²","3.311,07 m²",""]],"nota":"<b>Esboço<\/b> — os totais são os medidos; o rateio por ambiente entra com a planilha."},
 {"g":"frase","esc":1,"trama":1,"kick":"o fecho","t":"o projeto é a união<br>do acolhimento ao autista<br>e do patrimônio cultural vivo"},
@@ -4675,11 +4813,42 @@ function tpl(s){
       + `</span>`
       + `<img src="${IMG[x.src]||x.src}" alt="${(x.t||'').replace(/"/g,'&quot;')}"`
       +   ` onerror="this.dataset.err=1"></div>`).join('');
-    return `<div class="wrap">${k}${t}${sub}<div class="seq">${et}`
+    /* ⚑ OS PONTOS NAO MORAM NAS ETAPAS. Dentro de uma etapa, o ponto
+       esvaneceria com ela no proximo clique — e o Michel pediu o contrario:
+       aparecido, fica. Por isso vao num container irmao, e `desde` diz a
+       partir de que quadro cada um acende. */
+    const pts=[]; it.forEach((x,q)=>(x.pontos||[]).forEach(pt=>pts.push([q,pt])));
+    const bolas=pts.length ? `<div class="seqpt">` + pts.map(([q,pt],n)=>
+        `<button type="button" class="pt" data-pt="${n}" data-desde="${q}"`
+        + ` style="--px:${+pt.x};--py:${+pt.y}"`
+        + ` aria-label="${(pt.t||'ver imagens').replace(/"/g,'&quot;')}"><i></i></button>`).join('')
+      + `</div>` : '';
+    const lupas=pts.map(([q,pt],n)=>
+        `<div class="ptlupa" data-pt="${n}"><div class="plh">`
+        + (pt.imgs||[]).map((src,j)=>`<img decoding="async" src="${IMG[src]||src}"`
+            + ` data-t="${(pt.t||'').replace(/"/g,'&quot;')}"`
+            + ` data-cap="${((pt.legs||[])[j]||pt.cap||'').replace(/"/g,'&quot;')}"`
+            + ` alt="${((pt.legs||[])[j]||pt.t||'').replace(/"/g,'&quot;')}">`).join('')
+        + `</div><div class="plcap"></div>`
+        + `<button type="button" class="plfecha" data-pl="fecha" aria-label="Fechar">&#10005;</button>`
+        + `<div class="plbar">`
+        +   `<button type="button" data-pl="ant" aria-label="Anterior">&#9664;</button>`
+        +   `<button type="button" data-pl="pausa" aria-pressed="false" aria-label="Pausar">`
+        +     `<svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16"/></svg></button>`
+        +   `<button type="button" data-pl="pro" aria-label="Pr&#243;xima">&#9654;</button>`
+        +   `<b></b><hr>`
+        +   `<button type="button" data-pl="menos" aria-label="Afastar">`
+        +     `<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>`
+        +   `<button type="button" data-pl="mais" aria-label="Aproximar">`
+        +     `<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>`
+        +   `<button type="button" data-pl="ajusta" aria-label="Ajustar">`
+        +     `<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5"/></svg>`
+        +   `</button></div></div>`).join('');
+    return `<div class="wrap">${k}${t}${sub}<div class="seq">${et}${bolas}`
       + `<span class="seqnav"><button type="button" data-sq="-1" aria-label="Etapa anterior">&#9664;</button>`
       + `<b></b>`
       + `<button type="button" data-sq="1" aria-label="Pr&#243;xima etapa">&#9654;</button></span>`
-      + `</div></div>`;
+      + `</div></div>` + lupas;
   }
   /* ⚑ `tempo` usa `items` (inglês), como `sequencia` e `prancha`: é a chave
      que o `coleta_imagens` do montar.py já varre atrás de `src`. Chamar de
@@ -4881,18 +5050,71 @@ function tpl(s){
       +   `<b>carregando localização</b>`
       /* <span> vazio de propósito: é onde o falha() escreve o diagnóstico */
       +   `<span></span></div>`
+      + ((s.fotos&&s.fotos.length)
+          ? `<div class="fotos" data-pt="f" role="button" tabindex="0"`
+            + ` aria-label="Abrir as fotos do lugar"><div class="fh">`
+            + s.fotos.map((f,i)=>`<img decoding="async" class="${i?'':'on'}"`
+                + ` src="${IMG[f.src]||f.src}" alt="${(f.cap||'').replace(/"/g,'&quot;')}">`).join('')
+            + `</div><div class="fr"><span>${s.fotosRot||'fotos do lugar'}</span>`
+            + `<b>${s.fotos.length}</b></div></div>`
+            + `<div class="ptlupa" data-pt="f"><div class="plh">`
+            + s.fotos.map(f=>`<img decoding="async" src="${IMG[f.src]||f.src}"`
+                + ` data-t="${(s.fotosRot||'').replace(/"/g,'&quot;')}"`
+                + ` data-cap="${(f.cap||'').replace(/"/g,'&quot;')}"`
+                + ` alt="${(f.cap||'').replace(/"/g,'&quot;')}">`).join('')
+            + `</div><div class="plcap"></div>`
+            + `<button type="button" class="plfecha" data-pl="fecha" aria-label="Fechar">&#10005;</button>`
+            + `<div class="plbar">`
+            +   `<button type="button" data-pl="ant" aria-label="Anterior">&#9664;</button>`
+            +   `<button type="button" data-pl="pausa" aria-pressed="false" aria-label="Pausar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16"/></svg></button>`
+            +   `<button type="button" data-pl="pro" aria-label="Pr&#243;xima">&#9654;</button>`
+            +   `<b></b><hr>`
+            +   `<button type="button" data-pl="menos" aria-label="Afastar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>`
+            +   `<button type="button" data-pl="mais" aria-label="Aproximar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>`
+            +   `<button type="button" data-pl="ajusta" aria-label="Ajustar">`
+            +     `<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5"/></svg>`
+            +   `</button></div></div>`
+          : '')
       + ((s.temas&&s.temas.length)
           ? `<div class="temas">`
             + s.temas.map((x,i)=>`<button type="button" class="tm" data-tm="${i}"`
                 + ` aria-pressed="false">${x.bt||x.t||('tema '+(i+1))}</button>`).join('')
             + `</div>`
             + s.temas.map((x,i)=>`<div class="painel" data-tm="${i}">`
-                + (x.img?`<figure><img src="${IMG[x.img]||x.img}" alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}" loading="lazy">`
+                /* ⚑ IMAGEM PEQUENA E' CLICAVEL, por padrao. Pedido do
+                   Michel em 06/11: "toda imagem pequena e' clicavel e ela
+                   aparece em tela cheia depois". A prancha do painel ganha
+                   o mesmo `data-pt` do carrossel e do ponto da planta — um
+                   motor so para tudo que abre grande. */
+                + (x.img?`<figure data-pt="t${i}" role="button" tabindex="0"`
+                         + ` aria-label="Abrir a prancha em tela cheia">`
+                         + `<img src="${IMG[x.img]||x.img}" alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}" loading="lazy">`
                          + (x.imgCap?`<figcaption>${x.imgCap}</figcaption>`:'')+`</figure>`:'')
                 + (x.t?`<h4>${RS(x.t)}</h4>`:'')
                 + `<ol>`+(x.itens||[]).map(([q,y])=>
                     `<li><span class="q">${q}</span><span class="x">${y}</span></li>`).join('')
                 + `</ol></div>`).join('')
+            + s.temas.map((x,i)=> x.img
+                ? `<div class="ptlupa" data-pt="t${i}"><div class="plh">`
+                  + `<img decoding="async" src="${IMG[x.img]||x.img}"`
+                  +   ` data-t="${(x.bt||x.t||'').replace(/"/g,'&quot;')}"`
+                  +   ` data-cap="${(x.imgCap||x.imgAlt||'').replace(/"/g,'&quot;')}"`
+                  +   ` alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}"></div>`
+                  + `<div class="plcap"></div>`
+                  + `<button type="button" class="plfecha" data-pl="fecha" aria-label="Fechar">&#10005;</button>`
+                  + `<div class="plbar">`
+                  +   `<button type="button" data-pl="menos" aria-label="Afastar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>`
+                  +   `<b></b>`
+                  +   `<button type="button" data-pl="mais" aria-label="Aproximar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>`
+                  +   `<hr><button type="button" data-pl="ajusta" aria-label="Ajustar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5"/></svg>`
+                  +   `</button></div></div>`
+                : '').join('')
           : '')
       /* a gaveta da tulha: o que o layer do café não mostra, porque acontece
          debaixo do telhado. Ver "A GAVETA DA TULHA" no CSS. */
@@ -5117,6 +5339,11 @@ function pintaSeq(el){
   nav.querySelector('b').textContent=(n+1)+' / '+(ps.length+1);
   nav.querySelector('[data-sq="-1"]').disabled=(n===0);
   nav.querySelector('[data-sq="1"]').disabled=(n===ps.length);
+  /* ⚑ ACESO CONTINUA ACESO. `desde <= quadro atual` — recuar apaga, avancar
+     nao apaga nada. */
+  el.querySelectorAll('.seqpt .pt').forEach(function(b){
+    b.classList.toggle('on', (+b.dataset.desde)<=n);
+  });
 }
 sl.forEach((el,i)=>{
   if(DECK[i].g!=='sequencia') return;
@@ -5321,6 +5548,7 @@ function go(i,tudo){
      no CSS. */
   document.body.classList.toggle('semtopo', !!s.semtopo);
   if(window.__msTinta) window.__msTinta.vai(i);
+  if(window.__msFechaPt) window.__msFechaPt();
   if(window.__msFechaTemas) window.__msFechaTemas();
   /* grafismo de marca na base (GRAFISMO do bloco), só onde o slide pedir */
   document.body.classList.toggle('com-graf', !!(s.graf&&GRAFISMO));
@@ -7050,6 +7278,147 @@ window.MSModelo=(function(){
   addEventListener('resize',pinta);
   if(window.ResizeObserver) new ResizeObserver(pinta).observe(svg);
   window.__msTinta={vai:vai, pinta:pinta};
+})();
+
+/* ─── PONTOS DA SEQUENCIA: carrossel em tela cheia, com zoom ───────────────
+   06/11/2026. O ponto nasce num quadro e fica. Clicar abre a pilha daquele
+   ponto; a pilha corre sozinha e para no botao; a imagem aceita zoom.
+   ⚑ Registrado na CAPTURA porque o slide inteiro avanca no clique: sem
+   parar o evento aqui, abrir a lupa tambem passaria de quadro.
+   ───────────────────────────────────────────────────────────────────── */
+(function(){
+  var rel=null, aberto=null, i=0, timer=null, pausado=false;
+  var esc=1, px=0, py=0, arr=null;
+
+  function imgs(l){ return [].slice.call(l.querySelectorAll('.plh img')); }
+  function aplica(){
+    var im=aberto && aberto.querySelector('.plh img.on'); if(!im) return;
+    im.style.transform='translate('+px.toFixed(1)+'px,'+py.toFixed(1)+'px) scale('+esc.toFixed(3)+')';
+  }
+  function zera(){ esc=1; px=0; py=0;
+    if(aberto) imgs(aberto).forEach(function(x){ x.style.transform=''; }); }
+  function zoom(d,cx,cy){
+    var a=esc, n=Math.min(6,Math.max(1,a*d));
+    if(n===a) return;
+    if(cx!=null && aberto){                     /* zoom no ponto do cursor */
+      var r=aberto.getBoundingClientRect();
+      var ox=cx-r.left-r.width/2, oy=cy-r.top-r.height/2;
+      px=ox-(ox-px)*(n/a); py=oy-(oy-py)*(n/a);
+    }
+    esc=n; if(esc===1){ px=0; py=0; } aplica();
+  }
+  function mostra(l,k){
+    var L=imgs(l); if(!L.length) return;
+    i=(k+L.length)%L.length;
+    L.forEach(function(x,n){ x.classList.toggle('on',n===i); });
+    zera();
+    var c=l.querySelector('.plcap'), d=L[i].dataset;
+    if(c) c.innerHTML=(d.t?'<b>'+d.t+'</b>':'')+(d.cap||'');
+    var b=l.querySelector('.plbar b');
+    if(b) b.textContent=(i+1)+' / '+L.length;
+  }
+  function anda(){ if(!aberto||pausado) return; mostra(aberto,i+1); }
+  function relogio(){ clearInterval(timer); timer=setInterval(anda,4200); }
+  function pausa(v){
+    pausado=v;
+    var bt=aberto&&aberto.querySelector('[data-pl="pausa"]');
+    if(bt){ bt.setAttribute('aria-pressed',String(v));
+      bt.innerHTML=v?'<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>'
+                    :'<svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16"/></svg>'; }
+  }
+  function abre(bt){
+    var sl=bt.closest('.slide');
+    var l=sl.querySelector('.ptlupa[data-pt="'+bt.dataset.pt+'"]');
+    if(!l) return;
+    if(aberto) fecha();
+    aberto=l; l.classList.add('on'); document.body.classList.add('pt-lupa');
+    pausado=false; pausa(false); mostra(l,0); relogio();
+  }
+  function fecha(){
+    if(!aberto) return;
+    clearInterval(timer); zera();
+    aberto.classList.remove('on'); document.body.classList.remove('pt-lupa');
+    aberto=null;
+  }
+  window.__msFechaPt=fecha;
+
+  /* ⚑ O CARROSSEL DA CAIXA SO RODA QUANDO ESTA A VISTA. `offsetParent`
+     nulo = caixa escondida (slide fora, tema do tombamento aberto, visor
+     ainda carregando): nesse caso nao ha o que animar, e sobre um 3d vivo
+     cada quadro poupado conta. Para tambem com a lupa aberta, porque a
+     caixa fica coberta. */
+  setInterval(function(){
+    if(aberto) return;
+    document.querySelectorAll('.g-earth-3d .fotos .fh').forEach(function(h){
+      if(!h.offsetParent) return;
+      var L=[].slice.call(h.querySelectorAll('img')); if(L.length<2) return;
+      var k=L.findIndex(function(x){ return x.classList.contains('on'); });
+      L[k<0?0:k].classList.remove('on');
+      L[((k<0?0:k)+1)%L.length].classList.add('on');
+    });
+  },5200);
+
+
+  addEventListener('click',function(e){
+    /* ⚑ QUALQUER ELEMENTO COM `data-pt` ABRE A LUPA. Nasceu do ponto da
+       planta viva; o carrossel do `earth-3d` usa o mesmo motor, e e' por
+       isso que ganhar lupa, carrossel, pausa e zoom num lugar novo custa
+       uma linha de marcacao em vez de um componente novo. */
+    var bt=e.target.closest && e.target.closest('[data-pt]:not(.ptlupa)');
+    if(bt){ e.preventDefault(); e.stopPropagation(); abre(bt); return; }
+    if(!aberto) return;
+    var b=e.target.closest('.ptlupa button');
+    if(b){
+      e.preventDefault(); e.stopPropagation();
+      var a=b.dataset.pl;
+      if(a==='fecha') fecha();
+      else if(a==='ant'){ pausa(true); mostra(aberto,i-1); }
+      else if(a==='pro'){ pausa(true); mostra(aberto,i+1); }
+      else if(a==='pausa') pausa(!pausado);
+      else if(a==='mais') zoom(1.4);
+      else if(a==='menos') zoom(1/1.4);
+      else if(a==='ajusta') zera();
+      return;
+    }
+    /* clique no fundo fecha; sobre a imagem, nao — ali se arrasta */
+    if(e.target.closest('.ptlupa')){ e.stopPropagation();
+      if(!e.target.closest('.plh img')) fecha(); }
+  },true);
+
+  addEventListener('wheel',function(e){
+    if(!aberto) return;
+    if(!e.target.closest('.ptlupa')) return;
+    e.preventDefault(); e.stopPropagation();
+    zoom(e.deltaY<0?1.18:1/1.18, e.clientX, e.clientY);
+  },{capture:true,passive:false});
+
+  addEventListener('pointerdown',function(e){
+    if(!aberto || esc<=1) return;
+    var h=e.target.closest('.ptlupa .plh'); if(!h) return;
+    e.preventDefault(); e.stopPropagation();
+    arr={x:e.clientX,y:e.clientY,px:px,py:py}; h.classList.add('arrastando');
+    try{ h.setPointerCapture(e.pointerId); }catch(err){}
+  },true);
+  addEventListener('pointermove',function(e){
+    if(!arr) return;
+    px=arr.px+(e.clientX-arr.x); py=arr.py+(e.clientY-arr.y); aplica();
+  },true);
+  addEventListener('pointerup',function(e){
+    if(!arr) return; arr=null;
+    var h=aberto&&aberto.querySelector('.plh'); if(h) h.classList.remove('arrastando');
+  },true);
+
+  addEventListener('keydown',function(e){
+    if(!aberto) return;
+    if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); fecha(); return; }
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){
+      e.preventDefault(); e.stopPropagation(); pausa(true); mostra(aberto,i+1); return; }
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){
+      e.preventDefault(); e.stopPropagation(); pausa(true); mostra(aberto,i-1); return; }
+    if(e.key==='+'||e.key==='='){ e.preventDefault(); e.stopPropagation(); zoom(1.4); return; }
+    if(e.key==='-'){ e.preventDefault(); e.stopPropagation(); zoom(1/1.4); return; }
+    if(e.key==='0'){ e.preventDefault(); e.stopPropagation(); zera(); }
+  },true);
 })();
 
 /* ─── ociosidade do ponteiro ───────────────────────────────────────────

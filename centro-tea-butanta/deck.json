@@ -420,7 +420,106 @@
      "imgCap": "Res. 53/CONPRESP/2018 · folha 1/2"
     }
    ],
-   "cap": "Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos."
+   "cap": "Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos.",
+   "fotos": [
+    {
+     "src": "visita-01.jpg",
+     "cap": "A alameda entre duas fileiras de cocheiras — a árvore cresceu no eixo e levantou o piso."
+    },
+    {
+     "src": "visita-02.jpg",
+     "cap": "A mesma alameda em perfil: a trepadeira tomou os beirais dos dois lados."
+    },
+    {
+     "src": "visita-03.jpg",
+     "cap": "Pátio entre fileiras, com o piso de grama seca e a árvore no centro."
+    },
+    {
+     "src": "visita-04.jpg",
+     "cap": "O portão de um dos pátios, visto do parque — ao fundo, o galpão azul."
+    },
+    {
+     "src": "visita-05.jpg",
+     "cap": "A empena cega da cocheira e o caminho do parque que corre ao lado."
+    },
+    {
+     "src": "visita-06.jpg",
+     "cap": "Pátio interno: as baias de tijolo e a passarela que cruza ao fundo."
+    },
+    {
+     "src": "visita-07.jpg",
+     "cap": "O conjunto visto do parque, com a cidade por cima do telhado."
+    },
+    {
+     "src": "visita-08.jpg",
+     "cap": "A alvenaria de tijolo e o embasamento — a eflorescência marca a umidade ascendente."
+    },
+    {
+     "src": "visita-09.jpg",
+     "cap": "O caminho de serviço entre o muro do conjunto e a mata do parque."
+    },
+    {
+     "src": "visita-10.jpg",
+     "cap": "A rua coberta entre os galpões, com a passarela metálica sobre o eixo."
+    },
+    {
+     "src": "visita-11.jpg",
+     "cap": "O pátio pavimentado diante do galpão de dois pavimentos."
+    },
+    {
+     "src": "visita-12.jpg",
+     "cap": "A passarela metálica vista de baixo — estrutura independente da alvenaria."
+    },
+    {
+     "src": "visita-13.jpg",
+     "cap": "A esquina da cocheira e o pátio de manobras, com a torre ao fundo."
+    },
+    {
+     "src": "visita-14.jpg",
+     "cap": "O portal de entrada do conjunto, com o vão central passante."
+    },
+    {
+     "src": "visita-15.jpg",
+     "cap": "Pátio interno com a estrutura metálica nova apoiada fora do tijolo."
+    },
+    {
+     "src": "visita-16.jpg",
+     "cap": "As baias com as portas de madeira originais e a ferragem de época."
+    },
+    {
+     "src": "visita-17.jpg",
+     "cap": "Detalhe da porta de baia: folha em duas partes, ferrolho e dobradiça originais."
+    },
+    {
+     "src": "visita-18.jpg",
+     "cap": "O terraço sobre a cobertura, com o fechamento metálico perfurado."
+    },
+    {
+     "src": "visita-19.jpg",
+     "cap": "Corredor interno já reformado — piso vinílico e luminárias de linha."
+    },
+    {
+     "src": "visita-20.jpg",
+     "cap": "O mesmo corredor, com o mobiliário em uso hoje."
+    },
+    {
+     "src": "visita-21.jpg",
+     "cap": "O pátio de chegada e o portão lateral de acesso às cocheiras."
+    },
+    {
+     "src": "visita-22.jpg",
+     "cap": "Alameda de baias com as portas brancas, e a árvore que fechou o fundo."
+    },
+    {
+     "src": "visita-23.jpg",
+     "cap": "A rampa acessível já executada, junto ao galpão de dois pavimentos."
+    },
+    {
+     "src": "visita-24.jpg",
+     "cap": "A rua interna em toda a extensão: o muro de um lado, o galpão do outro."
+    }
+   ],
+   "fotosRot": "a visita ao lugar"
   },
   {
    "g": "frase",
@@ -564,12 +663,56 @@
     {
      "src": "evo-09.jpg",
      "t": "cobertura de ligação",
-     "cap": "Três funções numa peça só: <b>marquise</b> para embarque e desembarque, <b>receptivo</b>, e <b>circulação coberta</b> entre os volumes."
+     "cap": "Três funções numa peça só: <b>marquise</b> para embarque e desembarque, <b>receptivo</b>, e <b>circulação coberta</b> entre os volumes.",
+     "pontos": [
+      {
+       "x": 0.536,
+       "y": 0.85,
+       "t": "a entrada coberta",
+       "cap": "Estudo da marquise de chegada — croqui sobre foto e variações do painel curvo.",
+       "imgs": [
+        "ref-entrada-01.jpg",
+        "ref-entrada-02.jpg",
+        "ref-entrada-03.jpg",
+        "ref-entrada-04.jpg",
+        "ref-entrada-05.jpg"
+       ],
+       "legs": [
+        "Simulação noturna: a marquise, o letreiro e o painel iluminado.",
+        "O painel em chapa lisa, sem grafismo.",
+        "Com o grafismo da casa aplicado em laranja.",
+        "Variação cromática — campos de cor em composição livre.",
+        "Variação orgânica, de desenho mais solto."
+       ]
+      }
+     ]
     },
     {
      "src": "evo-10.jpg",
      "t": "paisagismo",
-     "cap": ""
+     "cap": "",
+     "pontos": [
+      {
+       "x": 0.526,
+       "y": 0.489,
+       "t": "Cinemateca da Vila Mariana",
+       "cap": "O caso mais próximo do nosso: galpões históricos em tijolo e uma praça coberta por estrutura metálica leve entre eles.",
+       "imgs": [
+        "ref-cine-01.jpg",
+        "ref-cine-02.jpg",
+        "ref-cine-03.jpg",
+        "ref-cine-04.jpg",
+        "ref-cine-05.jpg"
+       ],
+       "legs": [
+        "A rua coberta entre os galpões: pergolado metálico apoiado fora da alvenaria histórica.",
+        "O conjunto visto de cima — os galpões paralelos e os vãos entre eles.",
+        "A mesma rua hoje, com piso tátil e a estrutura mantida aparente.",
+        "O remate envidraçado no topo da circulação.",
+        "A área livre em uso: feira, cinema ao ar livre e permanência."
+       ]
+      }
+     ]
     },
     {
      "src": "evo-11.jpg",
