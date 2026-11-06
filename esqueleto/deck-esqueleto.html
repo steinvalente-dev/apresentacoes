@@ -1695,7 +1695,26 @@ body.esc .g-meia .mest h1,body.terra .g-meia .mest h1{color:var(--papel)}
    entrelinha fechada: numa didone, titulo grande pede MENOS entrelinha,
    porque a altura-x alta ja separa as linhas sozinha. */
 .g-meia .mest.serif.manchete h1{font-weight:700;line-height:.95;
-  font-size:clamp(44px,5.9cqw,104px);margin:0 0 clamp(16px,2.5cqh,36px)}
+  font-size:clamp(44px,5.9cqw,104px);margin:0 0 clamp(16px,2.5cqh,36px);
+  /* ⚑ CINZA, NAO TINTA CHEIA. 06/11, pedido do Michel depois de ver no
+     iPad: em corpo de capa de revista o preto fechado pesa demais e a
+     prancha fica dura. A 72% da tinta o slogan continua sendo a voz mais
+     alta da pagina sem esmagar o que vem embaixo. */
+  color:color-mix(in srgb,var(--tinta) 72%,var(--papel))}
+
+/* ══ RESPIRO DA PRANCHA INSTITUCIONAL ════════════════════════════════════
+   06/11/2026, pedido do Michel: *"dar uma leve respirada nesse slide"* —
+   o logo sobe e o conjunto da linha do tempo com o botao desce.
+
+   ⚑ `margin-top:auto` EMPURRA, nao desloca. Com a coluna em flex, a
+   linha do tempo ocupa a sobra que existir: em tela alta ela desce muito,
+   em tela baixa nada, e em nenhuma das duas ela sai da prancha. Deslocar
+   com `transform` ou `top` daria o respiro numa altura e transbordo na
+   outra. */
+.g-meia .mest.manchete{display:flex;flex-direction:column;min-height:0}
+.g-meia .mest.manchete .lk{margin-bottom:clamp(20px,3.4cqh,52px)}
+.g-meia .mest.manchete .tl{margin-top:auto}
+.g-meia .mest.manchete .bt{margin-top:clamp(14px,2.2cqh,30px)}
 
 /* ══ BOTAO DE PILULA VAZADA — `botao:{t,url}` no estado ══════════════════
    02/11/2026. Contorno e texto no Vinho, fundo nenhum: solido ele viraria
@@ -5974,23 +5993,49 @@ window.MSTempo=(function(){
        sangria cortaria parte do recorte. Um passo a menos devolve tudo. */
     var KMIN=Math.min(1,W/S);
     e.k=Math.max(KMIN,Math.min(5,e.k));
+    /* ⚑ RECENTRAR AO MUDAR DE COBERTURA. Com `k>1` a imagem e maior que o
+       quadro e o clamp abaixo so a mantem dentro dos limites — ela ficava
+       ancorada no canto, e 1954 chegava mostrando mata em vez da pista.
+       Todas as epocas estao registradas no MESMO centro, entao recentrar
+       e' o unico enquadramento correto quando a cobertura troca. */
+    if(e.recentra){ e.x=(W-S*e.k)/2; e.y=(H-S*e.k)/2; e.recentra=false; }
     e.x=(S*e.k<=W)?(W-S*e.k)/2:Math.min(0,Math.max(W-S*e.k,e.x));
     e.y=(S*e.k<=H)?(H-S*e.k)/2:Math.min(0,Math.max(H-S*e.k,e.y));
     cam.style.transform='translate('+e.x+'px,'+e.y+'px) scale('+e.k+')';
     var bm=sl.querySelector('[data-t="menos"]');
     if(bm) bm.disabled=(e.k<=KMIN*1.001);
-    var cobre=+dados().cobre||640, mpp=cobre/(S*e.k),
+    /* ⚑ A COBERTURA E' DO ITEM, nao do slide. Cada epoca cobre o que a
+       folha original alcanca; a escala grafica tem de seguir isso, senao
+       mente justamente onde o publico vai medir. */
+    var cobre=+e.cobreItem||+dados().cobre||640, mpp=cobre/(S*e.k),
         alvo=[5,10,20,50,100,200,500,1000], px=0, u=0;
     for(var i=0;i<alvo.length;i++){ u=i; px=alvo[i]/mpp; if(px>=70&&px<=200) break; }
     var esc=sl.querySelector('.tesc');
     if(esc){ esc.querySelector('u').style.width=Math.round(px)+'px';
              esc.querySelector('span').textContent=alvo[u]+' m'; }
   }
-  function ajusta(sl){ var e=est(sl); e.k=1; aplica(sl); }
+  function ajusta(sl){ var e=est(sl); e.k=e.base||1; aplica(sl); }
 
   function mostra(sl,i){
     var it=dados().items||[], x=it[i]; if(!x) return;
     var e=est(sl); e.i=i;
+    /* ⚑ TODA EPOCA CHEGA NOS MESMOS 640 m. As folhas tem coberturas
+       diferentes — 1954 alcanca 1.180 m, 1996 alcanca 640 — e mostrar cada
+       uma inteira faria a mesma esquina mudar de tamanho a cada clique,
+       que e' exatamente o que a linha do tempo existe para nao fazer.
+       Decisao do Michel em 06/11: a epoca CHEGA em 640 m e o zoom abre
+       alem, ate onde a foto alcanca.
+
+       ⚑ O ZOOM DO USUARIO E' RELATIVO. Guardado como razao sobre o
+       enquadramento de chegada, ele atravessa a troca de epoca: quem
+       aproximou nas cocheiras continua nas cocheiras ao mudar de ano. */
+    var base640=+dados().cobre||640;
+    e.cobreItem=+x.cobre||base640;
+    var nova=e.cobreItem/base640;
+    var rel=(e.base ? e.k/e.base : 1);
+    if(e.base!==nova) e.recentra=true;      /* a cobertura mudou: recentra */
+    e.base=nova; e.k=nova*rel;
+    aplica(sl);
     var de=+dados().de||1925, ate=+dados().ate||2026;
     var ondeX=(x.x!=null?+x.x:(parseInt(x.ano,10)||de));
     var pc=((ondeX-de)/(ate-de)*100)+'%';

@@ -271,16 +271,20 @@
     {
      "ano": "1940",
      "x": 1940,
-     "ficha": "Foto aérea · 1940 · a baixar",
-     "t": "Levantamento a incorporar",
-     "vazio": "Foto aérea 1940 · quadrícula FM5-019 · a baixar no GeoSampa"
+     "ficha": "Foto aérea · 1940 · voo PMSP, quadrícula FM5-019 <span class=\"pend\">sem registro geométrico — ver nota</span>",
+     "t": "antes do hipódromo",
+     "vazio": "1940 · sem registro geométrico",
+     "cap": "Campo, mata e estrada de terra. <b>Esta é a única das cinco que não entrou no enquadramento comum</b>: sem pista, sem malha urbana e sem nenhuma feição que sobreviva até 1954, não há como amarrá-la às outras por medição. Ela entra ao lado, fora do registro."
     },
     {
      "ano": "1954",
      "x": 1954,
-     "ficha": "Foto aérea · 1954 · a baixar",
-     "t": "Levantamento a incorporar",
-     "vazio": "Foto aérea 1954 · quadrícula FX03-173 · a baixar no GeoSampa"
+     "ficha": "Foto aérea · 1954 · voo PMSP, quadrícula FX03-173",
+     "t": "a pista no meio da várzea",
+     "vazio": "Foto aérea 1954 · quadrícula FX03-173 · a baixar no GeoSampa",
+     "src": "tempo-1954.jpg",
+     "cobre": 1180,
+     "cap": "A pista de treino e as duas fileiras de cocheiras já estão no lugar, e em volta ainda é chácara: estrada de terra, campo e mata. A cidade chega pela direita. <b>Registro pela pista oval</b> — ela é a única feição que atravessa os cinquenta anos até a foto de 2004."
     },
     {
      "ano": "s/d",
@@ -300,16 +304,22 @@
     {
      "ano": "1996",
      "x": 1996,
-     "ficha": "Foto aérea · 1994/1996 · a baixar",
-     "t": "Levantamento a incorporar",
-     "vazio": "Foto aérea 1994/1996 · a baixar no GeoSampa"
+     "ficha": "Foto aérea · fev/1996 · Base S.A. para a PMSP, 1:5.000",
+     "t": "o conjunto cercado pela cidade",
+     "vazio": "Foto aérea 1994/1996 · a baixar no GeoSampa",
+     "src": "tempo-1996.jpg",
+     "cobre": 640,
+     "cap": "A várzea virou bairro. O conjunto sobrevive inteiro dentro do quarteirão, com as cocheiras ainda em uso e o miolo da pista limpo."
     },
     {
-     "ano": "2001",
-     "x": 2001,
-     "ficha": "Foto aérea · 2000/2001 · a baixar",
-     "t": "Levantamento a incorporar",
-     "vazio": "Fotos aéreas 2000 e 2001 · a baixar no GeoSampa"
+     "ano": "2000",
+     "x": 2000,
+     "ficha": "Foto aérea · mai/2000 · Base S.A. / SEMAB-Resolo, 1:6.000",
+     "t": "o último registro em atividade",
+     "vazio": "Fotos aéreas 2000 e 2001 · a baixar no GeoSampa",
+     "src": "tempo-2000.jpg",
+     "cobre": 640,
+     "cap": "O miolo ainda é campo aberto e a alameda central atravessa o conjunto de ponta a ponta."
     },
     {
      "ano": "2004",
@@ -332,7 +342,8 @@
      "t": "O miolo tomado",
      "cap": "Em três anos a alameda fecha. As copas encostam nos telhados e passam a representar risco direto sobre o bem tombado. É o estado que o projeto encontra."
     }
-   ]
+   ],
+   "atalho": "linha do tempo"
   },
   {
    "g": "divisor",
