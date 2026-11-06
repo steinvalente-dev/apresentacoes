@@ -1168,6 +1168,23 @@ body.em-logo .chrome.topo .secao{display:inline}
 /* ⚑ A FIGURA CEDE ANTES DO TEXTO. O teto em `cqh` e' o que garante que os
    itens entrem na dobra em tela baixa; a imagem encolhe e centra, em vez
    de empurrar a lista para fora. */
+/* ══ a tira de miniaturas dentro do item ═════════════════════════════════
+   06/11/2026. MOLDURA CLARA, nao vinho: o painel e escuro e o vinho ja
+   esta nos discos e nos grifos; mais vinho ali satura e a miniatura para
+   de se destacar justamente do que deveria. Papel sobre campo escuro e o
+   par de maior contraste da casa — e sobra a cor da marca para o que ela
+   ja marca. */
+.g-earth-3d .painel .tira{display:flex;gap:clamp(5px,.55cqw,9px);
+  margin-top:clamp(6px,.8cqh,11px)}
+.g-earth-3d .painel .mini{flex:1 1 0;min-width:0;aspect-ratio:4/3;padding:0;
+  border:2px solid var(--papel);border-radius:3px;overflow:hidden;
+  background:var(--tinta-45);cursor:pointer;display:block;
+  box-shadow:0 1px 6px var(--tinta-45);
+  transition:transform .16s ease,border-color .16s ease}
+.g-earth-3d .painel .mini:hover,.g-earth-3d .painel .mini:focus-visible{
+  transform:translateY(-2px) scale(1.03);border-color:var(--primaria)}
+.g-earth-3d .painel .mini img{width:100%;height:100%;object-fit:cover;display:block}
+
 /* a prancha do painel abre em tela cheia: o cursor e o realce dizem isso */
 .g-earth-3d .painel figure[data-pt]{cursor:pointer;
   transition:border-color .18s ease,transform .18s ease}
@@ -1185,6 +1202,12 @@ body.em-logo .chrome.topo .secao{display:inline}
   font-size:clamp(17px,1.6cqw,28px)}
 .g-earth-3d .painel ol{list-style:none;margin:0;padding:0;
   display:flex;flex-direction:column;gap:clamp(9px,1.3cqh,18px)}
+/* ⚑ COM TIRA, A LISTA APERTA. O painel dos desafios carrega carrossel,
+   tres itens e as tres fotos da arborizacao; so ele precisa disso, e
+   `:has()` aplica exatamente onde o conteudo pediu. */
+.g-earth-3d .painel:has(.tira) ol{gap:clamp(7px,.95cqh,13px)}
+.g-earth-3d .painel:has(.tira) h4{margin-bottom:clamp(7px,1cqh,13px)}
+.g-earth-3d .painel:has(.tira){padding-bottom:clamp(9px,1.2cqh,16px)}
 /* ⚑ O PAINEL FICA SOBRE CENA VIVA, e o veu translucido e' para manter.
    06/11/2026, pedido do Michel: a caixa fica como esta e a leitura se
    resolve DENTRO dela — disco no numero e grifo no termo-chave. Duas
@@ -1241,7 +1264,10 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-earth-3d.com-painel .fotos{display:block}
 .g-earth-3d:has(.painel.on figure) .fotos{display:none}
 .g-earth-3d .fotos:hover{transform:translateY(-2px);border-color:var(--papel-60)}
-.g-earth-3d .fotos .fh{position:relative;aspect-ratio:4/3}
+/* ⚑ 16/9, nao 4/3. Com o carrossel em 4/3 o painel dos desafios — que
+   tem tres itens MAIS a tira da arborizacao — passava a rolar 107px. A
+   caixa cede altura antes do texto: ela e' convite, a lista e' conteudo. */
+.g-earth-3d .fotos .fh{position:relative;aspect-ratio:16/9}
 .g-earth-3d .fotos img{position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;opacity:0;transition:opacity .8s ease}
 .g-earth-3d .fotos img.on{opacity:1}
@@ -1255,8 +1281,8 @@ body.em-logo .chrome.topo .secao{display:inline}
    carrossel no proprio padding — sobrepor sem reservar cobriria o titulo. */
 .g-earth-3d .painel:not(:has(figure)){
   padding-top:calc(clamp(14px,1.9cqh,26px)
-    + (clamp(260px,30cqw,460px) - clamp(28px,2.8cqw,48px)) * .75
-    + clamp(20px,2.3cqh,32px))}
+    + (clamp(260px,30cqw,460px) - clamp(28px,2.8cqw,48px)) * .5625
+    + clamp(11px,1.3cqh,18px))}
 .g-earth-3d.esperando .fotos,.g-earth-3d.falhou .fotos{display:none}
 .g-earth-3d .rota{position:absolute;right:var(--gut);
   bottom:calc(var(--bot) + clamp(52px,7cqh,96px) + clamp(112px,17cqh,210px));
@@ -5112,9 +5138,44 @@ function tpl(s){
                          + `<img src="${IMG[x.img]||x.img}" alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}" loading="lazy">`
                          + (x.imgCap?`<figcaption>${x.imgCap}</figcaption>`:'')+`</figure>`:'')
                 + (x.t?`<h4>${RS(x.t)}</h4>`:'')
-                + `<ol>`+(x.itens||[]).map(([q,y])=>
-                    `<li><span class="q">${q}</span><span class="x">${y}</span></li>`).join('')
+                /* ⚑ O ITEM DO TEMA ACEITA UMA TIRA DE MINIATURAS como
+                   terceiro elemento: `[q, texto, [imgs]]`. Retrocompativel —
+                   item sem o terceiro continua igual. Pedido do Michel em
+                   06/11 para a arborizacao em risco: o texto afirma, as
+                   fotos provam, e abrem grandes no mesmo motor de lupa. */
+                + `<ol>`+(x.itens||[]).map(([q,y,gs],j)=>
+                    `<li><span class="q">${q}</span><span class="x">${y}`
+                    + ((gs&&gs.length)
+                        ? `<span class="tira">` + gs.map((g,m)=>
+                            `<button type="button" class="mini" data-pt="g${i}_${j}"`
+                            + ` data-ini="${m}" aria-label="Abrir a foto ${m+1}">`
+                            + `<img decoding="async" src="${IMG[g.src]||g.src}"`
+                            + ` alt="${(g.cap||'').replace(/"/g,'&quot;')}"></button>`).join('')
+                          + `</span>` : '')
+                    + `</span></li>`).join('')
                 + `</ol></div>`).join('')
+            + s.temas.map((x,i)=>(x.itens||[]).map(([q,y,gs],j)=> (gs&&gs.length)
+                ? `<div class="ptlupa" data-pt="g${i}_${j}"><div class="plh">`
+                  + gs.map(g=>`<img decoding="async" src="${IMG[g.src]||g.src}"`
+                      + ` data-t="${(g.t||x.bt||'').replace(/"/g,'&quot;')}"`
+                      + ` data-cap="${(g.cap||'').replace(/"/g,'&quot;')}"`
+                      + ` alt="${(g.cap||'').replace(/"/g,'&quot;')}">`).join('')
+                  + `</div><div class="plcap"></div>`
+                  + `<button type="button" class="plfecha" data-pl="fecha" aria-label="Fechar">&#10005;</button>`
+                  + `<div class="plbar">`
+                  +   `<button type="button" data-pl="ant" aria-label="Anterior">&#9664;</button>`
+                  +   `<button type="button" data-pl="pausa" aria-pressed="false" aria-label="Pausar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16"/></svg></button>`
+                  +   `<button type="button" data-pl="pro" aria-label="Pr&#243;xima">&#9654;</button>`
+                  +   `<b></b><hr>`
+                  +   `<button type="button" data-pl="menos" aria-label="Afastar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>`
+                  +   `<button type="button" data-pl="mais" aria-label="Aproximar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>`
+                  +   `<button type="button" data-pl="ajusta" aria-label="Ajustar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5"/></svg>`
+                  +   `</button></div></div>`
+                : '').join('')).join('')
             + s.temas.map((x,i)=> x.img
                 ? `<div class="ptlupa" data-pt="t${i}"><div class="plh">`
                   + `<img decoding="async" src="${IMG[x.img]||x.img}"`
@@ -7344,13 +7405,15 @@ window.MSModelo=(function(){
       bt.innerHTML=v?'<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>'
                     :'<svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16"/></svg>'; }
   }
-  function abre(bt){
+  function abre(bt,ini){
     var sl=bt.closest('.slide');
     var l=sl.querySelector('.ptlupa[data-pt="'+bt.dataset.pt+'"]');
     if(!l) return;
     if(aberto) fecha();
     aberto=l; l.classList.add('on'); document.body.classList.add('pt-lupa');
-    pausado=false; pausa(false); mostra(l,0); relogio();
+    /* ⚑ ABRE NA QUE FOI CLICADA. Numa tira de tres, abrir sempre na
+       primeira faria o apresentador clicar na terceira e ver a primeira. */
+    pausado=false; pausa(false); mostra(l,ini||0); relogio();
   }
   function fecha(){
     if(!aberto) return;
@@ -7383,7 +7446,7 @@ window.MSModelo=(function(){
        isso que ganhar lupa, carrossel, pausa e zoom num lugar novo custa
        uma linha de marcacao em vez de um componente novo. */
     var bt=e.target.closest && e.target.closest('[data-pt]:not(.ptlupa)');
-    if(bt){ e.preventDefault(); e.stopPropagation(); abre(bt); return; }
+    if(bt){ e.preventDefault(); e.stopPropagation(); abre(bt, +bt.dataset.ini||0); return; }
     if(!aberto) return;
     var b=e.target.closest('.ptlupa button');
     if(b){

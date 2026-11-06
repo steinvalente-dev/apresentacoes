@@ -203,6 +203,12 @@ def coleta_imagens(deck, capa_imgs, div_imgs):
             for x in s.get('temas') or []:
                 if isinstance(x, dict) and x.get('img'):
                     add(x, 'img', 'prancha')
+                # a tira de miniaturas do item: [q, texto, [{src,cap}]]
+                for it_ in (x.get('itens') or []):
+                    if isinstance(it_, list) and len(it_) > 2 and it_[2]:
+                        for g in it_[2]:
+                            if isinstance(g, dict) and g.get('src'):
+                                add(g, 'src', 'cheia')
         # `confronto`: o `src` de cada lado mora um nivel abaixo
         if g == 'confronto':
             for l in s.get('lados') or []:

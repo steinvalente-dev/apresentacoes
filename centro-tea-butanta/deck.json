@@ -386,7 +386,24 @@
       ],
       [
        "02",
-       "<b>Arborização em posição de risco.</b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."
+       "<b>Arborização em posição de risco.</b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente.",
+       [
+        {
+         "src": "arvore-01.jpg",
+         "t": "arborização em posição de risco",
+         "cap": "Exemplares crescidos dentro do pátio: tronco encostado no beiral e trepadeira sobre o telhado."
+        },
+        {
+         "src": "arvore-02.jpg",
+         "t": "arborização em posição de risco",
+         "cap": "A mata avançou sobre a fileira — raízes levantando o piso e galhos apoiados na estrutura da cobertura."
+        },
+        {
+         "src": "arvore-03.jpg",
+         "t": "arborização em posição de risco",
+         "cap": "Por dentro: a luz entra por onde a telha já cedeu."
+        }
+       ]
       ],
       [
        "03",

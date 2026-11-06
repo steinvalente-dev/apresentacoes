@@ -1184,6 +1184,23 @@ body.em-logo .chrome.topo .secao{display:inline}
 /* ⚑ A FIGURA CEDE ANTES DO TEXTO. O teto em `cqh` e' o que garante que os
    itens entrem na dobra em tela baixa; a imagem encolhe e centra, em vez
    de empurrar a lista para fora. */
+/* ══ a tira de miniaturas dentro do item ═════════════════════════════════
+   06/11/2026. MOLDURA CLARA, nao vinho: o painel e escuro e o vinho ja
+   esta nos discos e nos grifos; mais vinho ali satura e a miniatura para
+   de se destacar justamente do que deveria. Papel sobre campo escuro e o
+   par de maior contraste da casa — e sobra a cor da marca para o que ela
+   ja marca. */
+.g-earth-3d .painel .tira{display:flex;gap:clamp(5px,.55cqw,9px);
+  margin-top:clamp(6px,.8cqh,11px)}
+.g-earth-3d .painel .mini{flex:1 1 0;min-width:0;aspect-ratio:4/3;padding:0;
+  border:2px solid var(--papel);border-radius:3px;overflow:hidden;
+  background:var(--tinta-45);cursor:pointer;display:block;
+  box-shadow:0 1px 6px var(--tinta-45);
+  transition:transform .16s ease,border-color .16s ease}
+.g-earth-3d .painel .mini:hover,.g-earth-3d .painel .mini:focus-visible{
+  transform:translateY(-2px) scale(1.03);border-color:var(--primaria)}
+.g-earth-3d .painel .mini img{width:100%;height:100%;object-fit:cover;display:block}
+
 /* a prancha do painel abre em tela cheia: o cursor e o realce dizem isso */
 .g-earth-3d .painel figure[data-pt]{cursor:pointer;
   transition:border-color .18s ease,transform .18s ease}
@@ -1201,6 +1218,12 @@ body.em-logo .chrome.topo .secao{display:inline}
   font-size:clamp(17px,1.6cqw,28px)}
 .g-earth-3d .painel ol{list-style:none;margin:0;padding:0;
   display:flex;flex-direction:column;gap:clamp(9px,1.3cqh,18px)}
+/* ⚑ COM TIRA, A LISTA APERTA. O painel dos desafios carrega carrossel,
+   tres itens e as tres fotos da arborizacao; so ele precisa disso, e
+   `:has()` aplica exatamente onde o conteudo pediu. */
+.g-earth-3d .painel:has(.tira) ol{gap:clamp(7px,.95cqh,13px)}
+.g-earth-3d .painel:has(.tira) h4{margin-bottom:clamp(7px,1cqh,13px)}
+.g-earth-3d .painel:has(.tira){padding-bottom:clamp(9px,1.2cqh,16px)}
 /* ⚑ O PAINEL FICA SOBRE CENA VIVA, e o veu translucido e' para manter.
    06/11/2026, pedido do Michel: a caixa fica como esta e a leitura se
    resolve DENTRO dela — disco no numero e grifo no termo-chave. Duas
@@ -1257,7 +1280,10 @@ body.em-logo .chrome.topo .secao{display:inline}
 .g-earth-3d.com-painel .fotos{display:block}
 .g-earth-3d:has(.painel.on figure) .fotos{display:none}
 .g-earth-3d .fotos:hover{transform:translateY(-2px);border-color:var(--papel-60)}
-.g-earth-3d .fotos .fh{position:relative;aspect-ratio:4/3}
+/* ⚑ 16/9, nao 4/3. Com o carrossel em 4/3 o painel dos desafios — que
+   tem tres itens MAIS a tira da arborizacao — passava a rolar 107px. A
+   caixa cede altura antes do texto: ela e' convite, a lista e' conteudo. */
+.g-earth-3d .fotos .fh{position:relative;aspect-ratio:16/9}
 .g-earth-3d .fotos img{position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;opacity:0;transition:opacity .8s ease}
 .g-earth-3d .fotos img.on{opacity:1}
@@ -1271,8 +1297,8 @@ body.em-logo .chrome.topo .secao{display:inline}
    carrossel no proprio padding — sobrepor sem reservar cobriria o titulo. */
 .g-earth-3d .painel:not(:has(figure)){
   padding-top:calc(clamp(14px,1.9cqh,26px)
-    + (clamp(260px,30cqw,460px) - clamp(28px,2.8cqw,48px)) * .75
-    + clamp(20px,2.3cqh,32px))}
+    + (clamp(260px,30cqw,460px) - clamp(28px,2.8cqw,48px)) * .5625
+    + clamp(11px,1.3cqh,18px))}
 .g-earth-3d.esperando .fotos,.g-earth-3d.falhou .fotos{display:none}
 .g-earth-3d .rota{position:absolute;right:var(--gut);
   bottom:calc(var(--bot) + clamp(52px,7cqh,96px) + clamp(112px,17cqh,210px));
@@ -4380,7 +4406,7 @@ const DECK=[
 {"g":"lista","largo":1,"kick":"círculo 02","t":"o que o espaço faz por quem é atendido","itens":[["01","<b>Gradiente sensorial.<\/b> O edifício se organiza por nível de estímulo, não por função administrativa."],["02","<b>Transição.<\/b> Entre o alto e o baixo estímulo existe um espaço que recalibra — não se passa de um ao outro por uma porta."],["03","<b>Refúgio.<\/b> Lugares de retirada distribuídos, ajustáveis por quem os usa."],["04","<b>Percurso previsível.<\/b> Sequência legível, sem bifurcação e sem retorno."],["05","<b>Sem bolha.<\/b> A escala inteira de estímulo dentro do edifício, para que se transite por ela."]]},
 {"g":"tempo","kick":"o lugar no tempo","cobre":640,"de":1925,"ate":2026,"items":[{"ano":"1930","src":"img/tempo-1930.jpg","ficha":"Levantamento Sara Brasil · 1930 · carta","t":"Sara Brasil: o sítio antes de tudo","cap":"Chácara rural na divisa do município. O córrego Charco Grande corta o terreno e a mata ocupa o que hoje é o parque. Não há uma construção sequer no perímetro."},{"ano":"1940","x":1940,"ficha":"Foto aérea · 1940 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1940 · quadrícula FM5-019 · a baixar no GeoSampa"},{"ano":"1954","x":1954,"ficha":"Foto aérea · 1954 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1954 · quadrícula FX03-173 · a baixar no GeoSampa"},{"ano":"s/d","x":1962,"src":"img/tempo-vasp.jpg","ficha":"Carta Vasp-Cruzeiro · <span class=\"pend\">sem data no metadado — confirmar no DPH<\/span>","t":"Vasp-Cruzeiro: a era hípica desenhada","cap":"A pista oval de treino e as duas fileiras de cocheiras aparecem com todos os módulos. É a única peça que registra o conjunto em pleno funcionamento — e a borda esquerda está cortada no fim do mosaico."},{"ano":"1988","src":"img/tempo-1988.jpg","ficha":"Folhas do Livro da Vegetação · 1988 · carta","t":"Livro da Vegetação: o miolo limpo","cap":"A carta registra a massa verde apenas no perímetro do conjunto. Entre os dois agrupamentos de edificações não há arborização mapeada. É o ponto de partida do argumento."},{"ano":"1996","x":1996,"ficha":"Foto aérea · 1994/1996 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1994/1996 · a baixar no GeoSampa"},{"ano":"2001","x":2001,"ficha":"Foto aérea · 2000/2001 · a baixar","t":"Levantamento a incorporar","vazio":"Fotos aéreas 2000 e 2001 · a baixar no GeoSampa"},{"ano":"2004","src":"img/tempo-2004.jpg","ficha":"Ortofoto MDC · 2004 · 1:1.000","t":"A alameda ainda aberta","cap":"Dezesseis anos depois, a alameda central entre os dois agrupamentos continua livre. Telhados íntegros, perímetro arborizado, miolo sem nada."},{"ano":"2017","src":"img/tempo-2017.jpg","ficha":"Ortofoto PMD · 2017","t":"As primeiras árvores no miolo","cap":"Aqui começam a aparecer, esparsas, as árvores entre as fileiras. Nenhuma plantada por projeto: são espontâneas, nascidas da ausência de manejo depois do fim da atividade hípica."},{"ano":"2020","src":"img/tempo-2020.jpg","ficha":"Ortofoto · 2020 · 10 cm/px","t":"O miolo tomado","cap":"Em três anos a alameda fecha. As copas encostam nos telhados e passam a representar risco direto sobre o bem tombado. É o estado que o projeto encontra."}]},
 {"g":"divisor","div":2,"terra":1,"fundo":1,"sec":"o edifício","dn":"02","dt":"o edifício existente","ds":"Qualidades e desafios de um conjunto que já existe."},
-{"g":"earth-3d","lat":-23.599136,"lng":-46.744936,"alt":760,"compacto":1,"kick":"o lugar","h2":"o Parque Chácara do Jockey","lead":"Rua Santa Crescência · Ferreira, Butantã · São Paulo","temas":[{"bt":"qualidades e oportunidades","t":"qualidades e oportunidades","itens":[["01","<b>Sequência pronta.<\/b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."],["02","<b>Compartimentação pronta.<\/b> A malha de baias está na escala do atendimento em grupo pequeno."],["03","<b>Arvoredo maduro.<\/b> Estímulo natural é regulador, e não se planta em dois anos."],["04","<b>Endereço com história.<\/b> Um bem ocioso volta à vida pública."]]},{"bt":"desafios","t":"desafios","itens":[["01","<b>Geometria restritiva.<\/b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."],["02","<b>Arborização em posição de risco.<\/b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."],["03","<b>Acústica.<\/b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."]]},{"bt":"leitura do tombamento","t":"a proteção como liberdade","itens":[["01","<b>A proteção recai sobre as fachadas.<\/b> As características arquitetônicas externas são o objeto do tombamento."],["02","<b>O interior está livre.<\/b> A reorganização interna é possível — e é ela que gera os salões amplos."],["03","<b>A área livre dispensa análise prévia.<\/b> O que exige vão grande encontra lugar fora do rito."],["04","<b>O que se altera deixa testemunho.<\/b> A resolução exige preservar o traço do original."]],"img":"img/conpresp-f1.jpg","imgAlt":"Mapa da Resolução 53/CONPRESP/2018, folha 1: perímetro do Parque Chácara do Jockey, área envoltória e as quatro edificações tombadas","imgCap":"Res. 53/CONPRESP/2018 · folha 1/2"}],"cap":"Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos.","fotos":[{"src":"img/visita-01.jpg","cap":"A alameda entre duas fileiras de cocheiras — a árvore cresceu no eixo e levantou o piso."},{"src":"img/visita-02.jpg","cap":"A mesma alameda em perfil: a trepadeira tomou os beirais dos dois lados."},{"src":"img/visita-03.jpg","cap":"Pátio entre fileiras, com o piso de grama seca e a árvore no centro."},{"src":"img/visita-04.jpg","cap":"O portão de um dos pátios, visto do parque — ao fundo, o galpão azul."},{"src":"img/visita-05.jpg","cap":"A empena cega da cocheira e o caminho do parque que corre ao lado."},{"src":"img/visita-06.jpg","cap":"Pátio interno: as baias de tijolo e a passarela que cruza ao fundo."},{"src":"img/visita-07.jpg","cap":"O conjunto visto do parque, com a cidade por cima do telhado."},{"src":"img/visita-08.jpg","cap":"A alvenaria de tijolo e o embasamento — a eflorescência marca a umidade ascendente."},{"src":"img/visita-09.jpg","cap":"O caminho de serviço entre o muro do conjunto e a mata do parque."},{"src":"img/visita-10.jpg","cap":"A rua coberta entre os galpões, com a passarela metálica sobre o eixo."},{"src":"img/visita-11.jpg","cap":"O pátio pavimentado diante do galpão de dois pavimentos."},{"src":"img/visita-12.jpg","cap":"A passarela metálica vista de baixo — estrutura independente da alvenaria."},{"src":"img/visita-13.jpg","cap":"A esquina da cocheira e o pátio de manobras, com a torre ao fundo."},{"src":"img/visita-14.jpg","cap":"O portal de entrada do conjunto, com o vão central passante."},{"src":"img/visita-15.jpg","cap":"Pátio interno com a estrutura metálica nova apoiada fora do tijolo."},{"src":"img/visita-16.jpg","cap":"As baias com as portas de madeira originais e a ferragem de época."},{"src":"img/visita-17.jpg","cap":"Detalhe da porta de baia: folha em duas partes, ferrolho e dobradiça originais."},{"src":"img/visita-18.jpg","cap":"O terraço sobre a cobertura, com o fechamento metálico perfurado."},{"src":"img/visita-19.jpg","cap":"Corredor interno já reformado — piso vinílico e luminárias de linha."},{"src":"img/visita-20.jpg","cap":"O mesmo corredor, com o mobiliário em uso hoje."},{"src":"img/visita-21.jpg","cap":"O pátio de chegada e o portão lateral de acesso às cocheiras."},{"src":"img/visita-22.jpg","cap":"Alameda de baias com as portas brancas, e a árvore que fechou o fundo."},{"src":"img/visita-23.jpg","cap":"A rampa acessível já executada, junto ao galpão de dois pavimentos."},{"src":"img/visita-24.jpg","cap":"A rua interna em toda a extensão: o muro de um lado, o galpão do outro."}],"fotosRot":"a visita ao lugar"},
+{"g":"earth-3d","lat":-23.599136,"lng":-46.744936,"alt":760,"compacto":1,"kick":"o lugar","h2":"o Parque Chácara do Jockey","lead":"Rua Santa Crescência · Ferreira, Butantã · São Paulo","temas":[{"bt":"qualidades e oportunidades","t":"qualidades e oportunidades","itens":[["01","<b>Sequência pronta.<\/b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."],["02","<b>Compartimentação pronta.<\/b> A malha de baias está na escala do atendimento em grupo pequeno."],["03","<b>Arvoredo maduro.<\/b> Estímulo natural é regulador, e não se planta em dois anos."],["04","<b>Endereço com história.<\/b> Um bem ocioso volta à vida pública."]]},{"bt":"desafios","t":"desafios","itens":[["01","<b>Geometria restritiva.<\/b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."],["02","<b>Arborização em posição de risco.<\/b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente.",[{"src":"img/arvore-01.jpg","t":"arborização em posição de risco","cap":"Exemplares crescidos dentro do pátio: tronco encostado no beiral e trepadeira sobre o telhado."},{"src":"img/arvore-02.jpg","t":"arborização em posição de risco","cap":"A mata avançou sobre a fileira — raízes levantando o piso e galhos apoiados na estrutura da cobertura."},{"src":"img/arvore-03.jpg","t":"arborização em posição de risco","cap":"Por dentro: a luz entra por onde a telha já cedeu."}]],["03","<b>Acústica.<\/b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."]]},{"bt":"leitura do tombamento","t":"a proteção como liberdade","itens":[["01","<b>A proteção recai sobre as fachadas.<\/b> As características arquitetônicas externas são o objeto do tombamento."],["02","<b>O interior está livre.<\/b> A reorganização interna é possível — e é ela que gera os salões amplos."],["03","<b>A área livre dispensa análise prévia.<\/b> O que exige vão grande encontra lugar fora do rito."],["04","<b>O que se altera deixa testemunho.<\/b> A resolução exige preservar o traço do original."]],"img":"img/conpresp-f1.jpg","imgAlt":"Mapa da Resolução 53/CONPRESP/2018, folha 1: perímetro do Parque Chácara do Jockey, área envoltória e as quatro edificações tombadas","imgCap":"Res. 53/CONPRESP/2018 · folha 1/2"}],"cap":"Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos.","fotos":[{"src":"img/visita-01.jpg","cap":"A alameda entre duas fileiras de cocheiras — a árvore cresceu no eixo e levantou o piso."},{"src":"img/visita-02.jpg","cap":"A mesma alameda em perfil: a trepadeira tomou os beirais dos dois lados."},{"src":"img/visita-03.jpg","cap":"Pátio entre fileiras, com o piso de grama seca e a árvore no centro."},{"src":"img/visita-04.jpg","cap":"O portão de um dos pátios, visto do parque — ao fundo, o galpão azul."},{"src":"img/visita-05.jpg","cap":"A empena cega da cocheira e o caminho do parque que corre ao lado."},{"src":"img/visita-06.jpg","cap":"Pátio interno: as baias de tijolo e a passarela que cruza ao fundo."},{"src":"img/visita-07.jpg","cap":"O conjunto visto do parque, com a cidade por cima do telhado."},{"src":"img/visita-08.jpg","cap":"A alvenaria de tijolo e o embasamento — a eflorescência marca a umidade ascendente."},{"src":"img/visita-09.jpg","cap":"O caminho de serviço entre o muro do conjunto e a mata do parque."},{"src":"img/visita-10.jpg","cap":"A rua coberta entre os galpões, com a passarela metálica sobre o eixo."},{"src":"img/visita-11.jpg","cap":"O pátio pavimentado diante do galpão de dois pavimentos."},{"src":"img/visita-12.jpg","cap":"A passarela metálica vista de baixo — estrutura independente da alvenaria."},{"src":"img/visita-13.jpg","cap":"A esquina da cocheira e o pátio de manobras, com a torre ao fundo."},{"src":"img/visita-14.jpg","cap":"O portal de entrada do conjunto, com o vão central passante."},{"src":"img/visita-15.jpg","cap":"Pátio interno com a estrutura metálica nova apoiada fora do tijolo."},{"src":"img/visita-16.jpg","cap":"As baias com as portas de madeira originais e a ferragem de época."},{"src":"img/visita-17.jpg","cap":"Detalhe da porta de baia: folha em duas partes, ferrolho e dobradiça originais."},{"src":"img/visita-18.jpg","cap":"O terraço sobre a cobertura, com o fechamento metálico perfurado."},{"src":"img/visita-19.jpg","cap":"Corredor interno já reformado — piso vinílico e luminárias de linha."},{"src":"img/visita-20.jpg","cap":"O mesmo corredor, com o mobiliário em uso hoje."},{"src":"img/visita-21.jpg","cap":"O pátio de chegada e o portão lateral de acesso às cocheiras."},{"src":"img/visita-22.jpg","cap":"Alameda de baias com as portas brancas, e a árvore que fechou o fundo."},{"src":"img/visita-23.jpg","cap":"A rampa acessível já executada, junto ao galpão de dois pavimentos."},{"src":"img/visita-24.jpg","cap":"A rua interna em toda a extensão: o muro de um lado, o galpão do outro."}],"fotosRot":"a visita ao lugar"},
 {"g":"frase","esc":1,"kick":"a pergunta central","t":"este programa cabe<br>neste lugar?"},
 {"g":"confronto","kick":"a resposta, em área","t":"o mesmo programa, dois lugares","lados":[{"nm":"TEA Oeste · Butantã","src":"img/implantacao-tea-oeste-2.jpg","alt":"Implantação do TEA Oeste, com as áreas úteis destacadas","linhas":[["ambientes","2.556,55 m²"],["circulação coberta","1.543,24 m²"]],"total":[["total","4.099,79 m²"],["total coberto","4.099,79 m²"]]},{"rot":"a nossa proposta","nm":"Chácara do Jockey","src":"img/implantacao-jockey.jpg","linhas":[["ambientes","3.311,07 m²"],["circulação descoberta","3.651,62 m²"]],"total":[["total","6.962,69 m²"],["total coberto","3.311,07 m²"]],"alt":"Implantação da proposta na Chácara do Jockey, com as áreas úteis e o segundo pavimento destacados em laranja"}],"etapas":1},
 {"g":"lista","largo":1,"kick":"a resposta","t":"como o programa se encaixa","itens":[["01","<b>Cabe em área.<\/b> O programa útil do modelo entra no conjunto existente."],["02","<b>Cumpre todos os papéis.<\/b> Atendimento, cultura, esporte, autonomia e acolhimento de famílias."],["03","<b>Com uma ressalva: o auditório.<\/b> Nenhum vão edificado do conjunto é largo o bastante para recebê-lo. Ou ele ganha edificação própria — e aí a conversa é outra — ou o programa se ajusta."]]},
@@ -5094,9 +5120,44 @@ function tpl(s){
                          + `<img src="${IMG[x.img]||x.img}" alt="${(x.imgAlt||'').replace(/"/g,'&quot;')}" loading="lazy">`
                          + (x.imgCap?`<figcaption>${x.imgCap}</figcaption>`:'')+`</figure>`:'')
                 + (x.t?`<h4>${RS(x.t)}</h4>`:'')
-                + `<ol>`+(x.itens||[]).map(([q,y])=>
-                    `<li><span class="q">${q}</span><span class="x">${y}</span></li>`).join('')
+                /* ⚑ O ITEM DO TEMA ACEITA UMA TIRA DE MINIATURAS como
+                   terceiro elemento: `[q, texto, [imgs]]`. Retrocompativel —
+                   item sem o terceiro continua igual. Pedido do Michel em
+                   06/11 para a arborizacao em risco: o texto afirma, as
+                   fotos provam, e abrem grandes no mesmo motor de lupa. */
+                + `<ol>`+(x.itens||[]).map(([q,y,gs],j)=>
+                    `<li><span class="q">${q}</span><span class="x">${y}`
+                    + ((gs&&gs.length)
+                        ? `<span class="tira">` + gs.map((g,m)=>
+                            `<button type="button" class="mini" data-pt="g${i}_${j}"`
+                            + ` data-ini="${m}" aria-label="Abrir a foto ${m+1}">`
+                            + `<img decoding="async" src="${IMG[g.src]||g.src}"`
+                            + ` alt="${(g.cap||'').replace(/"/g,'&quot;')}"></button>`).join('')
+                          + `</span>` : '')
+                    + `</span></li>`).join('')
                 + `</ol></div>`).join('')
+            + s.temas.map((x,i)=>(x.itens||[]).map(([q,y,gs],j)=> (gs&&gs.length)
+                ? `<div class="ptlupa" data-pt="g${i}_${j}"><div class="plh">`
+                  + gs.map(g=>`<img decoding="async" src="${IMG[g.src]||g.src}"`
+                      + ` data-t="${(g.t||x.bt||'').replace(/"/g,'&quot;')}"`
+                      + ` data-cap="${(g.cap||'').replace(/"/g,'&quot;')}"`
+                      + ` alt="${(g.cap||'').replace(/"/g,'&quot;')}">`).join('')
+                  + `</div><div class="plcap"></div>`
+                  + `<button type="button" class="plfecha" data-pl="fecha" aria-label="Fechar">&#10005;</button>`
+                  + `<div class="plbar">`
+                  +   `<button type="button" data-pl="ant" aria-label="Anterior">&#9664;</button>`
+                  +   `<button type="button" data-pl="pausa" aria-pressed="false" aria-label="Pausar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16"/></svg></button>`
+                  +   `<button type="button" data-pl="pro" aria-label="Pr&#243;xima">&#9654;</button>`
+                  +   `<b></b><hr>`
+                  +   `<button type="button" data-pl="menos" aria-label="Afastar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>`
+                  +   `<button type="button" data-pl="mais" aria-label="Aproximar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>`
+                  +   `<button type="button" data-pl="ajusta" aria-label="Ajustar">`
+                  +     `<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5"/></svg>`
+                  +   `</button></div></div>`
+                : '').join('')).join('')
             + s.temas.map((x,i)=> x.img
                 ? `<div class="ptlupa" data-pt="t${i}"><div class="plh">`
                   + `<img decoding="async" src="${IMG[x.img]||x.img}"`
@@ -7326,13 +7387,15 @@ window.MSModelo=(function(){
       bt.innerHTML=v?'<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>'
                     :'<svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16"/></svg>'; }
   }
-  function abre(bt){
+  function abre(bt,ini){
     var sl=bt.closest('.slide');
     var l=sl.querySelector('.ptlupa[data-pt="'+bt.dataset.pt+'"]');
     if(!l) return;
     if(aberto) fecha();
     aberto=l; l.classList.add('on'); document.body.classList.add('pt-lupa');
-    pausado=false; pausa(false); mostra(l,0); relogio();
+    /* ⚑ ABRE NA QUE FOI CLICADA. Numa tira de tres, abrir sempre na
+       primeira faria o apresentador clicar na terceira e ver a primeira. */
+    pausado=false; pausa(false); mostra(l,ini||0); relogio();
   }
   function fecha(){
     if(!aberto) return;
@@ -7365,7 +7428,7 @@ window.MSModelo=(function(){
        isso que ganhar lupa, carrossel, pausa e zoom num lugar novo custa
        uma linha de marcacao em vez de um componente novo. */
     var bt=e.target.closest && e.target.closest('[data-pt]:not(.ptlupa)');
-    if(bt){ e.preventDefault(); e.stopPropagation(); abre(bt); return; }
+    if(bt){ e.preventDefault(); e.stopPropagation(); abre(bt, +bt.dataset.ini||0); return; }
     if(!aberto) return;
     var b=e.target.closest('.ptlupa button');
     if(b){
