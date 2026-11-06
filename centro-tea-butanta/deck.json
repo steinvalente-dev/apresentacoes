@@ -215,13 +215,16 @@
     ],
     [
      "03",
-     "<b>O programa está escrito.</b> O termo de referência detalha cada ambiente, com quantidade, lotação e área."
+     "<b>O TEA Oeste já tem o programa escrito.</b> O termo de referência detalha cada ambiente — quantidade, lotação e área. É esse o programa que serve de base para o nosso projeto."
     ],
     [
      "04",
      "<b>Rede, não equipamento isolado.</b> Saúde, educação e assistência articuladas em torno do vínculo familiar."
     ]
-   ]
+   ],
+   "src": "implantacao-tea-oeste.png",
+   "alt": "Implantação do projeto do Centro TEA Zona Oeste",
+   "leg": "Implantação do projeto TEA Zona Oeste · SMPED"
   },
   {
    "g": "lista",
@@ -488,7 +491,7 @@
    "g": "lista",
    "largo": 1,
    "kick": "a resposta",
-   "t": "cabe, e cumpre",
+   "t": "como o programa se encaixa",
    "itens": [
     [
      "01",
@@ -500,7 +503,7 @@
     ],
     [
      "03",
-     "<b>E ganha o que terreno vazio não dá.</b> Arvoredo maduro, escala construída e história."
+     "<b>Com uma ressalva: o auditório.</b> Nenhum vão edificado do conjunto é largo o bastante para recebê-lo. Ou ele ganha edificação própria — e aí a conversa é outra — ou o programa se ajusta."
     ]
    ]
   },
@@ -666,72 +669,6 @@
    "sangra": 1
   },
   {
-   "g": "lista",
-   "largo": 1,
-   "kick": "as camadas",
-   "t": "as camadas · do conjunto ao partido",
-   "itens": [
-    [
-     "01",
-     "<b>O conjunto hoje.</b> A planta como ela é."
-    ],
-    [
-     "02",
-     "<b>Vocação dos espaços.</b> Que uso cada braço pede, pelo que já é."
-    ],
-    [
-     "03",
-     "<b>Circulação solicitada.</b> Os fluxos que o termo de referência determina."
-    ],
-    [
-     "04",
-     "<b>Circulação pretendida.</b> O que propomos — e é daqui que decorre o resto."
-    ],
-    [
-     "05",
-     "<b>Acessos separados.</b> Serviço, visitantes e usuários, com chegada de van pela frente."
-    ]
-   ]
-  },
-  {
-   "g": "lista",
-   "largo": 1,
-   "kick": "as camadas",
-   "t": "as camadas · do partido à intervenção",
-   "itens": [
-    [
-     "06",
-     "<b>A cobertura de ligação.</b> Decorre dos fluxos; não é gesto formal."
-    ],
-    [
-     "07",
-     "<b>Setorização dos braços.</b> O que cada edifício recebe."
-    ],
-    [
-     "08",
-     "<b>Demolição.</b> As paredes internas que caem para gerar salões amplos."
-    ],
-    [
-     "09",
-     "<b>Pontos de aproximação.</b> Croquis e imagens conceituais, abertos por clique."
-    ]
-   ]
-  },
-  {
-   "g": "cheia",
-   "src": "",
-   "h2": "a cobertura que liga os dois prédios",
-   "cap": "Imagem conceitual.",
-   "claro": 1
-  },
-  {
-   "g": "cheia",
-   "src": "",
-   "h2": "o corredor como orientação",
-   "cap": "Imagem conceitual — o eixo longitudinal do conjunto.",
-   "claro": 1
-  },
-  {
    "g": "divisor",
    "div": 4,
    "terra": 1,
@@ -744,66 +681,65 @@
   {
    "g": "tabela",
    "kick": "em números",
-   "t": "áreas e superfícies de intervenção",
+   "t": "o programa, lado a lado",
    "cols": [
-    "",
-    "medida",
-    "observação"
+    "ambiente",
+    "TEA Oeste",
+    "Chácara do Jockey",
+    ""
    ],
    "linhas": [
     [
-     "área construída existente",
+     "atendimento e terapias",
      "a confirmar",
-     "levantamento em curso"
+     "a confirmar",
+     ""
     ],
     [
-     "área de demolição interna",
+     "convivência e autonomia",
      "a confirmar",
-     "paredes internas, para salões amplos"
+     "a confirmar",
+     ""
     ],
     [
-     "área de edificação nova",
+     "esporte e piscina",
      "a confirmar",
-     "o que não cabe no existente"
+     "a confirmar",
+     ""
     ],
     [
-     "superfície de telhado",
+     "auditório",
      "a confirmar",
-     "restauro e recomposição"
+     "a confirmar",
+     "<b>em aberto</b>"
     ],
     [
-     "superfície de fachada",
+     "cultura, eventos e famílias",
      "a confirmar",
-     "objeto do tombamento"
+     "a confirmar",
+     ""
+    ],
+    [
+     "administração e apoio",
+     "a confirmar",
+     "a confirmar",
+     ""
+    ],
+    [
+     "total de ambientes",
+     "2.556,55 m²",
+     "3.311,07 m²",
+     ""
     ]
    ],
-   "nota": "Quadro a preencher com o estudo em andamento."
+   "nota": "<b>Esboço</b> — os totais são os medidos; o rateio por ambiente entra com a planilha."
   },
   {
    "g": "frase",
    "esc": 1,
    "trama": 1,
    "kick": "o fecho",
-   "t": "aqui, nenhuma árvore<br>precisa cair para<br>que o centro exista"
-  },
-  {
-   "g": "fim",
-   "kick": "encaminhamento",
-   "t": "próximos passos",
-   "itens": [
-    [
-     "primeiro",
-     "<b>Validar a leitura do conjunto</b> e o encaixe do programa."
-    ],
-    [
-     "em paralelo",
-     "<b>Laudo de risco da arborização</b>, por profissional habilitado."
-    ],
-    [
-     "depois",
-     "<b>Estudo preliminar</b>, com setorização e demolição desenhadas."
-    ]
-   ]
+   "t": "o projeto é a união<br>do acolhimento ao autista<br>e do patrimônio cultural vivo"
   }
  ]
 }

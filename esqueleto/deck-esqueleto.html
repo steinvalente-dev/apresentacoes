@@ -1092,13 +1092,33 @@ body.em-logo .chrome.topo .secao{display:inline}
   font-size:clamp(17px,1.6cqw,28px)}
 .g-earth-3d .painel ol{list-style:none;margin:0;padding:0;
   display:flex;flex-direction:column;gap:clamp(9px,1.3cqh,18px)}
+/* ⚑ O PAINEL FICA SOBRE CENA VIVA, e o veu translucido e' para manter.
+   06/11/2026, pedido do Michel: a caixa fica como esta e a leitura se
+   resolve DENTRO dela — disco no numero e grifo no termo-chave. Duas
+   ancoras solidas que o olho acha antes de comecar a ler, sem precisar
+   escurecer o fundo e matar o 3d que passa atras. */
 .g-earth-3d .painel li{display:grid;grid-template-columns:auto 1fr;
-  gap:0 clamp(8px,.85cqw,15px);align-items:baseline}
-.g-earth-3d .painel .q{font-family:var(--f-mono);font-size:calc(var(--fs-cap)*.95);
-  letter-spacing:.1em;color:var(--acento-claro)}
+  gap:0 clamp(9px,.95cqw,16px);align-items:start}
+/* o numero vira disco cheio no vinho da marca */
+.g-earth-3d .painel .q{font-family:var(--f-mono);
+  font-size:calc(var(--fs-cap)*.88);letter-spacing:.02em;font-weight:600;
+  color:var(--papel);background:var(--primaria);
+  width:clamp(21px,1.95cqw,33px);height:clamp(21px,1.95cqw,33px);
+  border-radius:50%;display:grid;place-items:center;
+  /* o disco alinha com a PRIMEIRA LINHA do texto, nao com a caixa toda:
+     `align-items:start` mais este empurrao otico de meia entrelinha */
+  margin-top:calc(clamp(12px,1cqw,17px) * .22);
+  box-shadow:0 1px 6px var(--tinta-45)}
 .g-earth-3d .painel .x{font-size:clamp(12px,1cqw,17px);line-height:1.5;
   color:var(--papel-90)}
-.g-earth-3d .painel .x b{color:var(--papel);font-weight:600}
+/* ⚑ O GRIFO E' SO' O TERMO, nao a frase. Ele mora no `b` que ja existia em
+   negrito, entao nenhum texto do deck precisou ser reescrito para ganhar
+   marcacao. Fundo no vinho e letra no papel: o par de maior contraste da
+   casa, que e' o que a cena viva atras exige. */
+.g-earth-3d .painel .x b{color:var(--papel);font-weight:600;
+  background:var(--primaria);padding:.08em .34em;margin:0 -.06em;
+  border-radius:2px;box-decoration-break:clone;
+  -webkit-box-decoration-break:clone}
 
 .g-earth-3d .rota{position:absolute;right:var(--gut);
   bottom:calc(var(--bot) + clamp(52px,7cqh,96px) + clamp(112px,17cqh,210px));
@@ -1703,6 +1723,30 @@ body.esc .kick.barra,body.com-fundo .kick.barra{background:var(--papel-10);color
 ol.lista.largo li{grid-template-columns:clamp(78px,7.6cqw,132px) 1fr}
 ol.lista.largo .t{font-size:clamp(15px,1.52cqw,25px);line-height:1.48}
 ol.lista.largo .q{font-size:clamp(10px,.86cqw,14px);letter-spacing:.16em}
+
+/* ══ `lista` com imagem na metade direita ════════════════════════════════
+   06/11/2026. A lista nasceu ocupando a prancha inteira. Com `src` ela
+   divide: texto a esquerda, desenho a direita.
+
+   ⚑ A FIGURA PEGA A ALTURA DA GRADE, nao a dela propria. `align-self:
+   stretch` mais `position:absolute` no img: sem isso a imagem obedece so
+   a largura e, numa implantacao mais alta que larga, empurra o rodape
+   para fora em projetor baixo. Mesma armadilha ja paga no `confronto`.
+
+   ⚑ `contain`, nunca `cover` — e desenho tecnico, e cortar planta para
+   encher caixa e exatamente o que nao se pode fazer aqui. */
+.g-lista .wrap.lfig{max-width:none;flex:1;min-height:0;display:grid;
+  grid-template-columns:1fr 1fr;gap:clamp(20px,3cqw,56px);align-items:center}
+.g-lista .wrap.lfig .lcol{min-width:0;min-height:0;display:flex;
+  flex-direction:column;justify-content:center}
+.g-lista .wrap.lfig .lim{margin:0;min-width:0;min-height:0;position:relative;
+  align-self:stretch;display:flex;flex-direction:column;justify-content:center}
+.g-lista .wrap.lfig .lim img{flex:1;min-height:0;width:100%;
+  object-fit:contain;object-position:center}
+.g-lista .wrap.lfig .lim figcaption{flex:0 0 auto;font-family:var(--f-mono);
+  font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--soft);margin-top:clamp(7px,1cqh,13px);line-height:1.35}
+.g-lista .wrap.lfig ol.lista{margin-top:clamp(14px,2.2cqh,32px)}
 
 /* a nota de número não precisa de fio próprio: as linhas da tabela bastam */
 .notaN{border-top:0;padding-top:0;margin-top:clamp(20px,3cqh,44px)}
@@ -4443,7 +4487,20 @@ function tpl(s){
     return `<div class="wrap">${k}${t}${sub}<ol class="cncs">${li}</ol></div>`;
   }
   if(s.g==='trio') return `<div class="wrap">${k}${t}${sub}<ol class="trio">`+s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')+`</ol></div>`;
-  if(s.g==='lista'||s.g==='fim') return `<div class="wrap${s.largo?' largo':''}">${k}${pre}${t}${sub}<ol class="lista${s.largo?' largo':''}">`+s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')+`</ol></div>`;
+  if(s.g==='lista'||s.g==='fim'){
+    const ol=`<ol class="lista${s.largo?' largo':''}">`
+      + s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')
+      + `</ol>`;
+    /* ⚑ `lista` COM `src`: a prancha parte em duas e a imagem fica com a
+       metade direita. 06/11/2026, pedido do Michel para o slide da SMPED —
+       a lista argumenta e o desenho mostra do que se esta falando. Sem
+       `src` nada muda, entao nenhuma lista existente se mexe. */
+    if(s.src) return `<div class="wrap largo lfig"><div class="lcol">${k}${pre}${t}${sub}${ol}</div>`
+      + `<figure class="lim"><img src="${IMG[s.src]||s.src}"`
+      + ` alt="${(s.alt||'').replace(/"/g,'&quot;')}" onerror="this.dataset.err=1">`
+      + (s.leg?`<figcaption>${s.leg}</figcaption>`:'') + `</figure></div>`;
+    return `<div class="wrap${s.largo?' largo':''}">${k}${pre}${t}${sub}${ol}</div>`;
+  }
   if(s.g==='escolha'){
     /* A BIFURCAÇÃO. Cada opção declara `para` com o NOME de um gabarito, e
        o motor procura o próximo slide daquele gabarito — nunca índice. */

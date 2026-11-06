@@ -1108,13 +1108,33 @@ body.em-logo .chrome.topo .secao{display:inline}
   font-size:clamp(17px,1.6cqw,28px)}
 .g-earth-3d .painel ol{list-style:none;margin:0;padding:0;
   display:flex;flex-direction:column;gap:clamp(9px,1.3cqh,18px)}
+/* ⚑ O PAINEL FICA SOBRE CENA VIVA, e o veu translucido e' para manter.
+   06/11/2026, pedido do Michel: a caixa fica como esta e a leitura se
+   resolve DENTRO dela — disco no numero e grifo no termo-chave. Duas
+   ancoras solidas que o olho acha antes de comecar a ler, sem precisar
+   escurecer o fundo e matar o 3d que passa atras. */
 .g-earth-3d .painel li{display:grid;grid-template-columns:auto 1fr;
-  gap:0 clamp(8px,.85cqw,15px);align-items:baseline}
-.g-earth-3d .painel .q{font-family:var(--f-mono);font-size:calc(var(--fs-cap)*.95);
-  letter-spacing:.1em;color:var(--acento-claro)}
+  gap:0 clamp(9px,.95cqw,16px);align-items:start}
+/* o numero vira disco cheio no vinho da marca */
+.g-earth-3d .painel .q{font-family:var(--f-mono);
+  font-size:calc(var(--fs-cap)*.88);letter-spacing:.02em;font-weight:600;
+  color:var(--papel);background:var(--primaria);
+  width:clamp(21px,1.95cqw,33px);height:clamp(21px,1.95cqw,33px);
+  border-radius:50%;display:grid;place-items:center;
+  /* o disco alinha com a PRIMEIRA LINHA do texto, nao com a caixa toda:
+     `align-items:start` mais este empurrao otico de meia entrelinha */
+  margin-top:calc(clamp(12px,1cqw,17px) * .22);
+  box-shadow:0 1px 6px var(--tinta-45)}
 .g-earth-3d .painel .x{font-size:clamp(12px,1cqw,17px);line-height:1.5;
   color:var(--papel-90)}
-.g-earth-3d .painel .x b{color:var(--papel);font-weight:600}
+/* ⚑ O GRIFO E' SO' O TERMO, nao a frase. Ele mora no `b` que ja existia em
+   negrito, entao nenhum texto do deck precisou ser reescrito para ganhar
+   marcacao. Fundo no vinho e letra no papel: o par de maior contraste da
+   casa, que e' o que a cena viva atras exige. */
+.g-earth-3d .painel .x b{color:var(--papel);font-weight:600;
+  background:var(--primaria);padding:.08em .34em;margin:0 -.06em;
+  border-radius:2px;box-decoration-break:clone;
+  -webkit-box-decoration-break:clone}
 
 .g-earth-3d .rota{position:absolute;right:var(--gut);
   bottom:calc(var(--bot) + clamp(52px,7cqh,96px) + clamp(112px,17cqh,210px));
@@ -1719,6 +1739,30 @@ body.esc .kick.barra,body.com-fundo .kick.barra{background:var(--papel-10);color
 ol.lista.largo li{grid-template-columns:clamp(78px,7.6cqw,132px) 1fr}
 ol.lista.largo .t{font-size:clamp(15px,1.52cqw,25px);line-height:1.48}
 ol.lista.largo .q{font-size:clamp(10px,.86cqw,14px);letter-spacing:.16em}
+
+/* ══ `lista` com imagem na metade direita ════════════════════════════════
+   06/11/2026. A lista nasceu ocupando a prancha inteira. Com `src` ela
+   divide: texto a esquerda, desenho a direita.
+
+   ⚑ A FIGURA PEGA A ALTURA DA GRADE, nao a dela propria. `align-self:
+   stretch` mais `position:absolute` no img: sem isso a imagem obedece so
+   a largura e, numa implantacao mais alta que larga, empurra o rodape
+   para fora em projetor baixo. Mesma armadilha ja paga no `confronto`.
+
+   ⚑ `contain`, nunca `cover` — e desenho tecnico, e cortar planta para
+   encher caixa e exatamente o que nao se pode fazer aqui. */
+.g-lista .wrap.lfig{max-width:none;flex:1;min-height:0;display:grid;
+  grid-template-columns:1fr 1fr;gap:clamp(20px,3cqw,56px);align-items:center}
+.g-lista .wrap.lfig .lcol{min-width:0;min-height:0;display:flex;
+  flex-direction:column;justify-content:center}
+.g-lista .wrap.lfig .lim{margin:0;min-width:0;min-height:0;position:relative;
+  align-self:stretch;display:flex;flex-direction:column;justify-content:center}
+.g-lista .wrap.lfig .lim img{flex:1;min-height:0;width:100%;
+  object-fit:contain;object-position:center}
+.g-lista .wrap.lfig .lim figcaption{flex:0 0 auto;font-family:var(--f-mono);
+  font-size:var(--fs-cap);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--soft);margin-top:clamp(7px,1cqh,13px);line-height:1.35}
+.g-lista .wrap.lfig ol.lista{margin-top:clamp(14px,2.2cqh,32px)}
 
 /* a nota de número não precisa de fio próprio: as linhas da tabela bastam */
 .notaN{border-top:0;padding-top:0;margin-top:clamp(20px,3cqh,44px)}
@@ -4194,24 +4238,19 @@ const DECK=[
 {"g":"sumario","t":"índice da apresentação","itens":[["01","introdução","Três círculos: o equipamento, o desejável e a história do lugar."],["02","o edifício existente","Localização, qualidades, desafios, tombamento — e a pergunta central."],["03","a proposta de intervenção","Vocação, fluxos, setorização e demolição, camada por camada."],["04","números","Áreas, superfícies de intervenção e ordem de grandeza."]]},
 {"g":"divisor","div":1,"terra":1,"fundo":1,"sec":"introdução","dn":"01","dt":"introdução","ds":"A proposta nasce no encontro de três coisas. Antes de mostrar o que está no meio, é preciso desenhar os três círculos."},
 {"g":"conceitos","kick":"o método do argumento","t":"três conceitos","itens":[{"q":"o equipamento","x":"O que a SMPED faz, o que já construiu e o que o termo de referência pede.","slot":"o Centro TEA já construído"},{"q":"o desejável","x":"O que a arquitetura sabe sobre espaço para pessoas no espectro.","slot":"referências projetuais"},{"q":"o patrimônio histórico","x":"O que este conjunto foi, e o papel que desempenhou na cidade.","slot":"imagem histórica do conjunto"}]},
-{"g":"lista","largo":1,"kick":"círculo 01","t":"o Centro TEA da SMPED","itens":[["01","<b>Política pública consolidada.<\/b> Lei federal, lei municipal e meta de programa de governo sustentam o equipamento."],["02","<b>Já existe unidade operando.<\/b> O primeiro centro municipal foi entregue e está em uso — é o modelo da casa."],["03","<b>O programa está escrito.<\/b> O termo de referência detalha cada ambiente, com quantidade, lotação e área."],["04","<b>Rede, não equipamento isolado.<\/b> Saúde, educação e assistência articuladas em torno do vínculo familiar."]]},
+{"g":"lista","largo":1,"kick":"círculo 01","t":"o Centro TEA da SMPED","itens":[["01","<b>Política pública consolidada.<\/b> Lei federal, lei municipal e meta de programa de governo sustentam o equipamento."],["02","<b>Já existe unidade operando.<\/b> O primeiro centro municipal foi entregue e está em uso — é o modelo da casa."],["03","<b>O TEA Oeste já tem o programa escrito.<\/b> O termo de referência detalha cada ambiente — quantidade, lotação e área. É esse o programa que serve de base para o nosso projeto."],["04","<b>Rede, não equipamento isolado.<\/b> Saúde, educação e assistência articuladas em torno do vínculo familiar."]],"src":"img/implantacao-tea-oeste.jpg","alt":"Implantação do projeto do Centro TEA Zona Oeste","leg":"Implantação do projeto TEA Zona Oeste · SMPED"},
 {"g":"lista","largo":1,"kick":"círculo 02","t":"o que o espaço faz por quem é atendido","itens":[["01","<b>Gradiente sensorial.<\/b> O edifício se organiza por nível de estímulo, não por função administrativa."],["02","<b>Transição.<\/b> Entre o alto e o baixo estímulo existe um espaço que recalibra — não se passa de um ao outro por uma porta."],["03","<b>Refúgio.<\/b> Lugares de retirada distribuídos, ajustáveis por quem os usa."],["04","<b>Percurso previsível.<\/b> Sequência legível, sem bifurcação e sem retorno."],["05","<b>Sem bolha.<\/b> A escala inteira de estímulo dentro do edifício, para que se transite por ela."]]},
 {"g":"tempo","kick":"o lugar no tempo","cobre":640,"de":1925,"ate":2026,"items":[{"ano":"1930","src":"img/tempo-1930.jpg","ficha":"Levantamento Sara Brasil · 1930 · carta","t":"Sara Brasil: o sítio antes de tudo","cap":"Chácara rural na divisa do município. O córrego Charco Grande corta o terreno e a mata ocupa o que hoje é o parque. Não há uma construção sequer no perímetro."},{"ano":"1940","x":1940,"ficha":"Foto aérea · 1940 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1940 · quadrícula FM5-019 · a baixar no GeoSampa"},{"ano":"1954","x":1954,"ficha":"Foto aérea · 1954 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1954 · quadrícula FX03-173 · a baixar no GeoSampa"},{"ano":"s/d","x":1962,"src":"img/tempo-vasp.jpg","ficha":"Carta Vasp-Cruzeiro · <span class=\"pend\">sem data no metadado — confirmar no DPH<\/span>","t":"Vasp-Cruzeiro: a era hípica desenhada","cap":"A pista oval de treino e as duas fileiras de cocheiras aparecem com todos os módulos. É a única peça que registra o conjunto em pleno funcionamento — e a borda esquerda está cortada no fim do mosaico."},{"ano":"1988","src":"img/tempo-1988.jpg","ficha":"Folhas do Livro da Vegetação · 1988 · carta","t":"Livro da Vegetação: o miolo limpo","cap":"A carta registra a massa verde apenas no perímetro do conjunto. Entre os dois agrupamentos de edificações não há arborização mapeada. É o ponto de partida do argumento."},{"ano":"1996","x":1996,"ficha":"Foto aérea · 1994/1996 · a baixar","t":"Levantamento a incorporar","vazio":"Foto aérea 1994/1996 · a baixar no GeoSampa"},{"ano":"2001","x":2001,"ficha":"Foto aérea · 2000/2001 · a baixar","t":"Levantamento a incorporar","vazio":"Fotos aéreas 2000 e 2001 · a baixar no GeoSampa"},{"ano":"2004","src":"img/tempo-2004.jpg","ficha":"Ortofoto MDC · 2004 · 1:1.000","t":"A alameda ainda aberta","cap":"Dezesseis anos depois, a alameda central entre os dois agrupamentos continua livre. Telhados íntegros, perímetro arborizado, miolo sem nada."},{"ano":"2017","src":"img/tempo-2017.jpg","ficha":"Ortofoto PMD · 2017","t":"As primeiras árvores no miolo","cap":"Aqui começam a aparecer, esparsas, as árvores entre as fileiras. Nenhuma plantada por projeto: são espontâneas, nascidas da ausência de manejo depois do fim da atividade hípica."},{"ano":"2020","src":"img/tempo-2020.jpg","ficha":"Ortofoto · 2020 · 10 cm/px","t":"O miolo tomado","cap":"Em três anos a alameda fecha. As copas encostam nos telhados e passam a representar risco direto sobre o bem tombado. É o estado que o projeto encontra."}]},
 {"g":"divisor","div":2,"terra":1,"fundo":1,"sec":"o edifício","dn":"02","dt":"o edifício existente","ds":"Qualidades e desafios de um conjunto que já existe."},
 {"g":"earth-3d","lat":-23.599136,"lng":-46.744936,"alt":760,"compacto":1,"kick":"o lugar","h2":"o Parque Chácara do Jockey","lead":"Rua Santa Crescência · Ferreira, Butantã · São Paulo","temas":[{"bt":"qualidades e oportunidades","t":"qualidades e oportunidades","itens":[["01","<b>Sequência pronta.<\/b> Os braços longilíneos são percurso linear e previsível, sem bifurcação."],["02","<b>Compartimentação pronta.<\/b> A malha de baias está na escala do atendimento em grupo pequeno."],["03","<b>Arvoredo maduro.<\/b> Estímulo natural é regulador, e não se planta em dois anos."],["04","<b>Endereço com história.<\/b> Um bem ocioso volta à vida pública."]]},{"bt":"desafios","t":"desafios","itens":[["01","<b>Geometria restritiva.<\/b> Espaços estreitos e alongados; na origem, longos corredores. Condiciona tudo que peça vão livre."],["02","<b>Arborização em posição de risco.<\/b> Exemplares encostados no beiral, com galhos sobre a estrutura do telhado. Risco de dano ao bem e de acidente."],["03","<b>Acústica.<\/b> Pé-direito alto, superfície dura e vão contínuo produzem reverberação longa — o risco sensorial mais sério do conjunto."]]},{"bt":"leitura do tombamento","t":"a proteção como liberdade","itens":[["01","<b>A proteção recai sobre as fachadas.<\/b> As características arquitetônicas externas são o objeto do tombamento."],["02","<b>O interior está livre.<\/b> A reorganização interna é possível — e é ela que gera os salões amplos."],["03","<b>A área livre dispensa análise prévia.<\/b> O que exige vão grande encontra lugar fora do rito."],["04","<b>O que se altera deixa testemunho.<\/b> A resolução exige preservar o traço do original."]],"img":"img/conpresp-f1.jpg","imgAlt":"Mapa da Resolução 53/CONPRESP/2018, folha 1: perímetro do Parque Chácara do Jockey, área envoltória e as quatro edificações tombadas","imgCap":"Res. 53/CONPRESP/2018 · folha 1/2"}],"cap":"Conjunto da antiga sede do Jockey Club, dentro do parque público. Tombado pela Resolução CONPRESP 53/2018 em três conjuntos."},
 {"g":"frase","esc":1,"kick":"a pergunta central","t":"este programa cabe<br>neste lugar?"},
-{"g":"confronto","kick":"a resposta, em área","t":"o mesmo programa, dois lugares","lados":[{"nm":"TEA Oeste · Butantã","src":"img/implantacao-tea-oeste.jpg","alt":"Implantação do TEA Oeste, com as áreas úteis destacadas","linhas":[["ambientes","2.556,55 m²"],["circulação coberta","1.543,24 m²"]],"total":[["total","4.099,79 m²"],["total coberto","4.099,79 m²"]]},{"rot":"a nossa proposta","nm":"Chácara do Jockey","src":"img/implantacao-jockey.jpg","linhas":[["ambientes","3.311,07 m²"],["circulação descoberta","3.651,62 m²"]],"total":[["total","6.962,69 m²"],["total coberto","3.311,07 m²"]],"alt":"Implantação da proposta na Chácara do Jockey, com as áreas úteis e o segundo pavimento destacados em laranja"}],"etapas":1},
-{"g":"lista","largo":1,"kick":"a resposta","t":"cabe, e cumpre","itens":[["01","<b>Cabe em área.<\/b> O programa útil do modelo entra no conjunto existente."],["02","<b>Cumpre todos os papéis.<\/b> Atendimento, cultura, esporte, autonomia e acolhimento de famílias."],["03","<b>E ganha o que terreno vazio não dá.<\/b> Arvoredo maduro, escala construída e história."]]},
+{"g":"confronto","kick":"a resposta, em área","t":"o mesmo programa, dois lugares","lados":[{"nm":"TEA Oeste · Butantã","src":"img/implantacao-tea-oeste-2.jpg","alt":"Implantação do TEA Oeste, com as áreas úteis destacadas","linhas":[["ambientes","2.556,55 m²"],["circulação coberta","1.543,24 m²"]],"total":[["total","4.099,79 m²"],["total coberto","4.099,79 m²"]]},{"rot":"a nossa proposta","nm":"Chácara do Jockey","src":"img/implantacao-jockey.jpg","linhas":[["ambientes","3.311,07 m²"],["circulação descoberta","3.651,62 m²"]],"total":[["total","6.962,69 m²"],["total coberto","3.311,07 m²"]],"alt":"Implantação da proposta na Chácara do Jockey, com as áreas úteis e o segundo pavimento destacados em laranja"}],"etapas":1},
+{"g":"lista","largo":1,"kick":"a resposta","t":"como o programa se encaixa","itens":[["01","<b>Cabe em área.<\/b> O programa útil do modelo entra no conjunto existente."],["02","<b>Cumpre todos os papéis.<\/b> Atendimento, cultura, esporte, autonomia e acolhimento de famílias."],["03","<b>Com uma ressalva: o auditório.<\/b> Nenhum vão edificado do conjunto é largo o bastante para recebê-lo. Ou ele ganha edificação própria — e aí a conversa é outra — ou o programa se ajusta."]]},
 {"g":"divisor","div":3,"terra":1,"fundo":1,"sec":"a proposta","dn":"03","dt":"a proposta de intervenção","ds":"A planta, camada por camada: do que o conjunto é hoje ao que ele passa a ser."},
 {"g":"sequencia","kick":"a proposta, passo a passo","items":[{"src":"img/evo-01.jpg","t":"situação atual","cap":""},{"src":"img/evo-02.jpg","t":"conflito de circulação dos vestiários","cap":""},{"src":"img/evo-03.jpg","t":"novo vestiário","cap":""},{"src":"img/evo-04.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-05.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-06.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-07.jpg","t":"análise da circulação","cap":""},{"src":"img/evo-08.jpg","t":"acessos","cap":""},{"src":"img/evo-09.jpg","t":"cobertura de ligação","cap":"Três funções numa peça só: <b>marquise<\/b> para embarque e desembarque, <b>receptivo<\/b>, e <b>circulação coberta<\/b> entre os volumes."},{"src":"img/evo-10.jpg","t":"paisagismo","cap":""},{"src":"img/evo-11.jpg","t":"demolições","cap":"Abrem as novas circulações e os salões amplos."},{"src":"img/evo-12.jpg","t":"planta proposta","cap":""},{"src":"img/evo-13.jpg","t":"setor de atendimento","cap":"","cores":[["#B080F0","atendimento e atividades TEA"]]},{"src":"img/evo-14.jpg","t":"setor administrativo e de apoio","cap":"","cores":[["#B080F0","atendimento e atividades TEA"],["#E08030","administrativo e funcionários"],["#905040","apoio e serviços"]]},{"src":"img/evo-15.jpg","t":"setor de eventos e acolhimento","cap":"","cores":[["#B080F0","atendimento e atividades TEA"],["#E08030","administrativo e funcionários"],["#905040","apoio e serviços"],["#90A0C8","eventos: convenções e exposições"],["#A0D050","acolhimento de familiares"]]},{"src":"img/evo-16.jpg","t":"planta proposta","cap":"","cores":[["#B080F0","atendimento e atividades TEA"],["#E08030","administrativo e funcionários"],["#905040","apoio e serviços"],["#90A0C8","eventos: convenções e exposições"],["#A0D050","acolhimento de familiares"]]}],"sangra":1},
-{"g":"lista","largo":1,"kick":"as camadas","t":"as camadas · do conjunto ao partido","itens":[["01","<b>O conjunto hoje.<\/b> A planta como ela é."],["02","<b>Vocação dos espaços.<\/b> Que uso cada braço pede, pelo que já é."],["03","<b>Circulação solicitada.<\/b> Os fluxos que o termo de referência determina."],["04","<b>Circulação pretendida.<\/b> O que propomos — e é daqui que decorre o resto."],["05","<b>Acessos separados.<\/b> Serviço, visitantes e usuários, com chegada de van pela frente."]]},
-{"g":"lista","largo":1,"kick":"as camadas","t":"as camadas · do partido à intervenção","itens":[["06","<b>A cobertura de ligação.<\/b> Decorre dos fluxos; não é gesto formal."],["07","<b>Setorização dos braços.<\/b> O que cada edifício recebe."],["08","<b>Demolição.<\/b> As paredes internas que caem para gerar salões amplos."],["09","<b>Pontos de aproximação.<\/b> Croquis e imagens conceituais, abertos por clique."]]},
-{"g":"cheia","src":"","h2":"a cobertura que liga os dois prédios","cap":"Imagem conceitual.","claro":1},
-{"g":"cheia","src":"","h2":"o corredor como orientação","cap":"Imagem conceitual — o eixo longitudinal do conjunto.","claro":1},
 {"g":"divisor","div":4,"terra":1,"fundo":1,"sec":"números","dn":"04","dt":"números","ds":"Áreas, superfícies de intervenção e ordem de grandeza."},
-{"g":"tabela","kick":"em números","t":"áreas e superfícies de intervenção","cols":["","medida","observação"],"linhas":[["área construída existente","a confirmar","levantamento em curso"],["área de demolição interna","a confirmar","paredes internas, para salões amplos"],["área de edificação nova","a confirmar","o que não cabe no existente"],["superfície de telhado","a confirmar","restauro e recomposição"],["superfície de fachada","a confirmar","objeto do tombamento"]],"nota":"Quadro a preencher com o estudo em andamento."},
-{"g":"frase","esc":1,"trama":1,"kick":"o fecho","t":"aqui, nenhuma árvore<br>precisa cair para<br>que o centro exista"},
-{"g":"fim","kick":"encaminhamento","t":"próximos passos","itens":[["primeiro","<b>Validar a leitura do conjunto<\/b> e o encaixe do programa."],["em paralelo","<b>Laudo de risco da arborização<\/b>, por profissional habilitado."],["depois","<b>Estudo preliminar<\/b>, com setorização e demolição desenhadas."]]},
+{"g":"tabela","kick":"em números","t":"o programa, lado a lado","cols":["ambiente","TEA Oeste","Chácara do Jockey",""],"linhas":[["atendimento e terapias","a confirmar","a confirmar",""],["convivência e autonomia","a confirmar","a confirmar",""],["esporte e piscina","a confirmar","a confirmar",""],["auditório","a confirmar","a confirmar","<b>em aberto<\/b>"],["cultura, eventos e famílias","a confirmar","a confirmar",""],["administração e apoio","a confirmar","a confirmar",""],["total de ambientes","2.556,55 m²","3.311,07 m²",""]],"nota":"<b>Esboço<\/b> — os totais são os medidos; o rateio por ambiente entra com a planilha."},
+{"g":"frase","esc":1,"trama":1,"kick":"o fecho","t":"o projeto é a união<br>do acolhimento ao autista<br>e do patrimônio cultural vivo"},
 /* ══ CONTRACAPA ══ do bloco marca/sarasa/bloco.html */
 {g:'marca',fim_:1,fundo:1,esc:1,
   lockup:1, graf:1, qr:1,
@@ -4430,7 +4469,20 @@ function tpl(s){
     return `<div class="wrap">${k}${t}${sub}<ol class="cncs">${li}</ol></div>`;
   }
   if(s.g==='trio') return `<div class="wrap">${k}${t}${sub}<ol class="trio">`+s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')+`</ol></div>`;
-  if(s.g==='lista'||s.g==='fim') return `<div class="wrap${s.largo?' largo':''}">${k}${pre}${t}${sub}<ol class="lista${s.largo?' largo':''}">`+s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')+`</ol></div>`;
+  if(s.g==='lista'||s.g==='fim'){
+    const ol=`<ol class="lista${s.largo?' largo':''}">`
+      + s.itens.map(([q,x])=>`<li class="passo"><span class="q">${q}</span><span class="t">${x}</span></li>`).join('')
+      + `</ol>`;
+    /* ⚑ `lista` COM `src`: a prancha parte em duas e a imagem fica com a
+       metade direita. 06/11/2026, pedido do Michel para o slide da SMPED —
+       a lista argumenta e o desenho mostra do que se esta falando. Sem
+       `src` nada muda, entao nenhuma lista existente se mexe. */
+    if(s.src) return `<div class="wrap largo lfig"><div class="lcol">${k}${pre}${t}${sub}${ol}</div>`
+      + `<figure class="lim"><img src="${IMG[s.src]||s.src}"`
+      + ` alt="${(s.alt||'').replace(/"/g,'&quot;')}" onerror="this.dataset.err=1">`
+      + (s.leg?`<figcaption>${s.leg}</figcaption>`:'') + `</figure></div>`;
+    return `<div class="wrap${s.largo?' largo':''}">${k}${pre}${t}${sub}${ol}</div>`;
+  }
   if(s.g==='escolha'){
     /* A BIFURCAÇÃO. Cada opção declara `para` com o NOME de um gabarito, e
        o motor procura o próximo slide daquele gabarito — nunca índice. */
