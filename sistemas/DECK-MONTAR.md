@@ -231,7 +231,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 
 ## De onde vêm as imagens
 
-Três caminhos, e **a pergunta se faz antes de montar**, não depois:
+Quatro caminhos, e **a pergunta se faz antes de montar**, não depois:
 
 1. **Michel manda pelo chat.** Chegam anexadas; ficam disponíveis na sessão.
 2. **Buscar no Drive dele.** Cada projeto tem a árvore padrão; as referências
@@ -239,6 +239,12 @@ Três caminhos, e **a pergunta se faz antes de montar**, não depois:
    `00 - Fotos referência`, `01 - Croquis` e `02 - Imagens`. Render de projeto
    costuma estar em `<projeto> › 04_Imagens`.
 3. **Michel cola o caminho.** Quando ele já sabe qual pasta.
+4. **Vêm de um pacote.** Caminho que começa por `pacotes/` resolve da **raiz do
+   clone**, não da pasta de fontes da peça — é a única exceção do `montar`
+   (função `acha()`). Serve a bloco pronto que várias peças compartilham, como
+   `pacotes/sarasa-sobre/`, os três slides institucionais da Sarasá. Vale
+   qualquer que seja o `--img`, e o arquivo em `img/` sai com o nome de sempre,
+   porque o nome gerado é só o stem.
 
 **Confirmar antes de embutir.** Uma pasta de referência costuma ter mais imagens
 do que entram na peça, e a seleção é dele. O certo é listar o que se achou,

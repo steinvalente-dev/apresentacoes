@@ -44,6 +44,20 @@ RESIZE = {'cheia': (2200, 80), 'duo': (1800, 82), 'prancha': (1800, 82), 'desenh
           'sequencia': (1400, 78), 'padrao': (1800, 82)}
 
 
+def acha(pasta, v):
+    """Caminho de uma midia declarada no deck.json.
+
+    Normalmente e relativo a pasta de fontes da peca (`--img`, ou a pasta do
+    deck.json). `pacotes/...` e a excecao deliberada: resolve da RAIZ do clone,
+    porque pacote e acervo compartilhado entre pecas — quem insere um pacote
+    nao deve ter de saber onde a propria peca guarda as fontes. O nome do
+    arquivo gerado continua sendo so o stem, entao img/ nao muda.
+    Ver pacotes/<nome>/LEIA-ME.md.
+    """
+    v = str(v)
+    return (RAIZ / v) if v.startswith('pacotes/') else (pasta / v)
+
+
 def falha(msg, cod=1):
     print(f'montar: ERRO — {msg}', file=sys.stderr)
     sys.exit(cod)
@@ -285,7 +299,7 @@ def pesa_videos(deck, pasta):
         for item in ([v] if isinstance(v, str) else list(v)):
             if not eh_arquivo(item):
                 continue
-            arq = pasta / item
+            arq = acha(pasta, item)
             if arq.is_file():
                 tot += (arq.stat().st_size + 2) // 3 * 4
     return tot
@@ -337,7 +351,7 @@ def coloca_videos(deck, pasta, modo, saida, avisos):
             if not eh_arquivo(item):
                 saiu.append(item)        # ja e data-URI ou URL: passa reto
                 continue
-            arq = pasta / item
+            arq = acha(pasta, item)
             if not arq.is_file():
                 avisos.append(f'video nao encontrado em {pasta}: {item} — conferir o nome ou passar --img')
                 continue
@@ -387,7 +401,7 @@ def inline_svg(deck, pasta, avisos):
         v = s.get('marca')
         if not isinstance(v, str) or not v.lower().endswith('.svg'):
             continue
-        arq = pasta / v
+        arq = acha(pasta, v)
         if not arq.is_file():
             avisos.append(f'svg de marca nao encontrado em {pasta}: {v}')
             s.pop('marca', None)
@@ -502,7 +516,7 @@ def copia_anexos(dj, pasta_img, saida, modo, avisos):
     (saida / 'img').mkdir(parents=True, exist_ok=True)
     n = bytes_tot = 0
     for nome in nomes:
-        arq = pasta_img / nome
+        arq = acha(pasta_img, nome)
         if not arq.is_file():
             avisos.append(f'anexo nao encontrado em {pasta_img}: {nome}')
             continue
@@ -539,7 +553,7 @@ def processa_imagens(jobs, pasta_img, saida, peso_vid=0):
         if v.startswith('data:image/'):
             arq = io.BytesIO(base64.b64decode(v.split(',', 1)[1]))
         else:
-            arq = pasta_img / v
+            arq = acha(pasta_img, v)
             if not arq.is_file():
                 faltam.append(v); cache[(v, perfil)] = None; continue
         # transparência sobrevive: WEBP. Sem ela, JPEG, que é mais leve.

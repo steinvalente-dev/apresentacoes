@@ -43,7 +43,7 @@
     {
      "nome": "centro de acolhimento ao autista",
      "pranchas": 22,
-     "peso": 94.03,
+     "peso": 80.03,
      "data": "08.11.2026",
      "href": "centro-tea-butanta/apresentacao.html",
      "frente": "sarasa",
@@ -528,9 +528,16 @@
    "aba": "deck",
    "grupo": "as peças de montar",
    "nome": "mapa de atuação ⚑ Sarasá",
-   "desc": "Três escalas na mesma projeção, sem corte entre elas: nove estados do Brasil com 13 obras do portfólio, a cidade de São Paulo com os 96 distritos, e o centro expandido com os 35 imóveis da carteira. O mouse sobre o ponto abre a miniatura do imóvel; o clique abre a ficha em campo Vinho, ligada ao mapa pela linha-guia. \"Ver as fotos\" troca os pontos pelas fotos e revela uma a uma, da esquerda para a direita — é a abertura de apresentação. Carrega sozinho em Brasil → São Paulo → centro → varredura, e qualquer gesto devolve o mapa interativo. Arquivo único, fotos e fontes embutidas: abre sem internet, ~268 KB servidos",
+   "desc": "Três escalas na mesma projeção, sem corte entre elas: nove estados do Brasil com 13 obras do portfólio, a cidade de São Paulo com os 96 distritos, e o centro expandido com os 35 imóveis da carteira. O mouse sobre o ponto abre a miniatura do imóvel; o clique abre a ficha em campo Vinho, ligada ao mapa pela linha-guia. \"Ver as fotos\" troca os pontos pelas fotos e revela uma a uma, da esquerda para a direita — é a abertura de apresentação. Carrega sozinho em Brasil → São Paulo → centro → varredura, e qualquer gesto devolve o mapa interativo. Arquivo único, fotos e fontes embutidas: abre sem internet, ~358 KB servidos",
    "arq": "sistemas/MAPA-ATUACAO.md",
    "ver": "modulos/mapa-atuacao-sarasa.html"
+  },
+  {
+   "aba": "deck",
+   "grupo": "as peças de montar",
+   "nome": "pacote · sobre a Sarasá",
+   "desc": "Três slides institucionais que entram em bloco no começo de qualquer peça da frente: setenta anos de ofício (linha do tempo 1939→2022 sobre um mosaico de 23 obras em movimento), serviços (as cinco frentes, com faixa de 10 obras legendadas) e onde atuamos (o mapa de atuação interativo, por iframe). Vem com as 33 imagens-fonte junto. Copiar o array do sobre.json para o começo do deck.json da peça e montar — caminho que começa por pacotes/ o montar resolve da raiz do clone, qualquer que seja o --img. Primeiro consumidor: centro-tea-butanta",
+   "arq": "pacotes/sarasa-sobre/LEIA-ME.md"
   },
   {
    "aba": "deck",
@@ -693,5 +700,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-11-08T13:15:03+00:00"
+ "gerado": "2026-11-08T19:02:02+00:00"
 }

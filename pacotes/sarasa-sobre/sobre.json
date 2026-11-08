@@ -1,0 +1,125 @@
+{
+ "_": "Pacote 'sobre a Sarasá' — 3 slides. Ver LEIA-ME.md ao lado. Colar o array `deck` no começo do deck.json da peça.",
+ "deck": [
+  {
+   "g": "meia",
+   "sangra": 1,
+   "mosaico": 1,
+   "inst": 1,
+   "imgs": [
+    "pacotes/sarasa-sobre/img/obra-11.jpg",
+    "pacotes/sarasa-sobre/img/obra-14.jpg",
+    "pacotes/sarasa-sobre/img/obra-16.jpg",
+    "pacotes/sarasa-sobre/img/obra-17.jpg",
+    "pacotes/sarasa-sobre/img/obra-18.jpg",
+    "pacotes/sarasa-sobre/img/obra-21.jpg",
+    "pacotes/sarasa-sobre/img/obra-23.jpg",
+    "pacotes/sarasa-sobre/img/obra-28.jpg",
+    "pacotes/sarasa-sobre/img/obra-30.jpg",
+    "pacotes/sarasa-sobre/img/obra-32.jpg",
+    "pacotes/sarasa-sobre/img/obra-34.jpg",
+    "pacotes/sarasa-sobre/img/obra-40.jpg",
+    "pacotes/sarasa-sobre/img/obra-47.jpg",
+    "pacotes/sarasa-sobre/img/obra-49.jpg",
+    "pacotes/sarasa-sobre/img/obra-50.jpg",
+    "pacotes/sarasa-sobre/img/obra-55.jpg",
+    "pacotes/sarasa-sobre/img/obra-56.jpg",
+    "pacotes/sarasa-sobre/img/obra-57.jpg",
+    "pacotes/sarasa-sobre/img/obra-58.jpg",
+    "pacotes/sarasa-sobre/img/obra-59.jpg",
+    "pacotes/sarasa-sobre/img/obra-66.jpg",
+    "pacotes/sarasa-sobre/img/obra-67.jpg",
+    "pacotes/sarasa-sobre/img/obra-82.jpg"
+   ],
+   "estados": [
+    {
+     "kick": "um pouco sobre o estúdio Sarasá",
+     "t": "setenta anos de ofício",
+     "serif": 1,
+     "lead": "Uma casa de ofício fundada em 1956, no Ipiranga, por um azulejista catalão — hoje na terceira geração.",
+     "manchete": 1,
+     "linha": [
+      [
+       "1939",
+       "Nasce <mark>Gerardo Martin Sarasá</mark> em Arbúcias, Girona, entre o fim da Guerra Civil Espanhola e o começo da Segunda Guerra."
+      ],
+      [
+       "1956",
+       "Chega ao Brasil e funda o <mark>Atelier Artístico Gerardo Sarasá</mark>, com especialidade em azulejaria e vitral."
+      ],
+      [
+       "1970",
+       "Passa aos projetos de <mark>conservação e restauro</mark> do patrimônio edificado."
+      ],
+      [
+       "1980",
+       "Antonio Luís e Marcelo Sarasá Martin assumem a casa, hoje na <mark>terceira geração</mark>."
+      ],
+      [
+       "2002",
+       "No Mosteiro da Luz, é concebida a <mark>Zeladoria do Patrimônio Cultural</mark> como disciplina autônoma — conceituada em 2012 e registrada na Biblioteca Nacional em 2017."
+      ],
+      [
+       "2022",
+       "É fundado o <mark>Instituto Sarasá de Arte, Cultura e Cidadania</mark>."
+      ]
+     ],
+     "lk": 1,
+     "botao": {
+      "t": "visite o nosso site",
+      "url": "https://estudiosarasa.com.br"
+     }
+    }
+   ],
+   "atalho": "sobre a Sarasá"
+  },
+  {
+   "g": "meia",
+   "sangra": 1,
+   "imgs": [
+    "pacotes/sarasa-sobre/img/sarasa-vitral.jpg",
+    "pacotes/sarasa-sobre/img/sarasa-ipiranga.jpg",
+    "pacotes/sarasa-sobre/img/sarasa-cine-sao-luiz.jpg",
+    "pacotes/sarasa-sobre/img/sarasa-mibio.jpg",
+    "pacotes/sarasa-sobre/img/sarasa-estacao-luz.jpg",
+    "pacotes/sarasa-sobre/img/sarasa-campos-novos.jpg",
+    "pacotes/sarasa-sobre/img/sarasa-olinda.jpg",
+    "pacotes/sarasa-sobre/img/sarasa-itu.jpg",
+    "pacotes/sarasa-sobre/img/sarasa-casa-artesao.jpg",
+    "pacotes/sarasa-sobre/img/sarasa-barra-grande.jpg"
+   ],
+   "legs": [
+    "Vitral · conservação e restauro",
+    "Museu do Ipiranga · São Paulo, SP",
+    "Cine São Luiz · Recife, PE",
+    "MiBIO, Museu Interativo da Biodiversidade · Campo Grande, MS",
+    "Estação da Luz · São Paulo, SP",
+    "Fazenda Campos Novos · Cabo Frio, RJ",
+    "Sociedade Beneficente de Artistas e Operários de Olinda · Olinda, PE",
+    "Museu de Energia de Itu · Itu, SP",
+    "Casa do Artesão · Campo Grande, MS",
+    "Fortaleza da Barra Grande · Guarujá, SP"
+   ],
+   "estados": [
+    {
+     "kick": "o que fazemos",
+     "t": "serviços",
+     "cap": "<p><b>Projetos</b>Conservação e restauro · adequação de uso · expografia.</p><p><b>Investigação</b>Prospecções · pesquisa técnico-científica · consultoria.</p><p><b>Ofícios</b>Vitral · azulejaria · argamassa e pintura tradicionais · modelação · marcenaria · cantaria.</p><p><b>Execução</b>Intervenções de conservação e restauro.</p><p><b>Transmissão</b>Oficinas · educação patrimonial · zeladoria.</p>",
+     "servicos": 1,
+     "serif": 1,
+     "lead": "Cinco frentes, da prospecção ao ofício executado na obra."
+    }
+   ],
+   "espelho": 1
+  },
+  {
+   "g": "viva",
+   "src": "../modulos/mapa-atuacao-sarasa.html",
+   "recarrega": 1,
+   "semtopo": 1,
+   "alt": "Mapa de atuação do Estúdio Sarasá: 35 imóveis em São Paulo e obras em nove estados",
+   "h2": "onde atuamos",
+   "cap": "abrindo o mapa de atuação"
+  }
+ ]
+}

@@ -42,6 +42,14 @@ Confundi-las é o que impedia trocar de marca.
 
 **Montar uma apresentação = motor + uma marca + um DECK.**
 
+**Pacote** é uma quarta coisa, e opcional: um bloco de slides pronto, com as
+imagens junto, que entra inteiro em qualquer peça da frente. Mora em
+`pacotes/<nome>/`, traz `sobre.json` e `LEIA-ME.md`, e o `montar` resolve
+caminho que comece por `pacotes/` a partir da raiz do clone. Hoje existe um:
+**`pacotes/sarasa-sobre/`** — os três slides de abertura do Estúdio Sarasá
+(setenta anos de ofício · serviços · o mapa de atuação interativo). Pedir "põe
+o sobre da Sarasá" é isto, e não se remonta nada.
+
 O que uma sessão lê para montar (corrigido 02.09.2026 — antes dizia "este
 arquivo e mais nada", e foi isso que fez a primeira peça sair errada):
 
