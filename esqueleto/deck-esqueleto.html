@@ -5656,6 +5656,8 @@ function rola(i){
 addEventListener('resize',()=>{if(cur>=0)rola(cur)});
 /* indice do primeiro divisor: antes dele a peca ainda nao fala do projeto */
 var PRIMEIRO_DIVISOR=(function(){var k=DECK.findIndex(function(x){return x.g==='divisor';});return k<0?0:k;})();
+/* quantos passos cada slide tinha ligado quando se saiu dele — ver `guarda` */
+const MEM_PASSO={};
 function go(i,tudo){
   /* trocar de slide fecha a lupa da galeria: voltar depois e encontra-la
      aberta, sobre a imagem de antes, e desnorteante. */
@@ -5673,7 +5675,19 @@ function go(i,tudo){
   sl.forEach((el,j)=>el.classList.toggle('ativo',j===i));
   if(ant>=0)sl[ant].classList.remove('revelado');
   void sl[i].offsetWidth;sl[i].classList.add('revelado');
-  passos(i).forEach(p=>p.classList.toggle('on',!!tudo));
+  /* ⚑ `guarda:1` — O SLIDE LEMBRA ONDE PAROU. 08/11/2026, pedido do
+     Michel depois da apresentacao: na planta viva ele esbarrava no
+     avancar, voltava, e reencontrava o quadro 1 — tendo de reconstruir os
+     dezesseis passos na frente de quem ouvia. Sem `guarda`, nada muda:
+     entrar zera os passos e entrar por `recua()` acende todos, que
+     continua sendo o certo para uma lista que se le de cima a baixo.
+     Aqui a sequencia e' percurso, nao lista: sair e voltar nao devia
+     desfazer caminho andado. */
+  if(ant>=0) MEM_PASSO[ant]=passos(ant).filter(p=>p.classList.contains('on')).length;
+  if(DECK[i].guarda && MEM_PASSO[i]!=null)
+    passos(i).forEach((p,k)=>p.classList.toggle('on', k<MEM_PASSO[i]));
+  else
+    passos(i).forEach(p=>p.classList.toggle('on',!!tudo));
   foto(i);caixa(i);rola(i);
   const s=DECK[i];
   document.body.classList.toggle('esc',!!s.esc);
@@ -5860,7 +5874,12 @@ addEventListener('keydown',e=>{
    Automático por gabarito (o autor não declara nada), e `trava:1` no slide
    força a mesma coisa em qualquer outro — a porta para a camada interativa
    sobre a ortofoto. */
-const G_TRAVA=['earth-3d','modelo-3d','mapa','galeria','viva'];
+/* ⚑ `tempo` ENTROU NA TRAVA em 08/11/2026, depois da apresentacao: a
+   linha do tempo tem pan e zoom no mapa, e cada arrasto para navegar a
+   imagem era lido pelo palco como "clique para avancar". O Michel passava
+   de slide sem querer no meio da fala. Com a trava, so o controle do
+   rodape e o teclado mudam de prancha — o mapa fica livre para navegar. */
+const G_TRAVA=['earth-3d','modelo-3d','mapa','galeria','viva','tempo'];
 const travado=i=>{const s=DECK[i]; return !!s&&(s.trava===1||s.trava===true||G_TRAVA.indexOf(s.g)>=0);};
 const INTERATIVO='a,button,.pin,.lote,.g-earth-3d .visor,.g-modelo-3d .visor,'
   +'.g-modelo-3d .cenas,.g-mapa-2d .visor,.g-galeria .lupa,.g-galeria .mosaico,'
@@ -6190,7 +6209,16 @@ window.MSTempo=(function(){
       document.querySelectorAll('#palco .slide.g-tempo').forEach(function(o){
         if(o!==atual()) para(o); });
       var sl=atual(); if(!sl) return;
-      liga(sl); ajusta(sl); rebobina(sl);
+      liga(sl);
+      /* ⚑ A REBOBINAGEM E' DE BOAS-VINDAS, NAO DE TODA VISITA. 08/11/2026,
+         depois da apresentacao: o Michel esbarrava no avancar, voltava, e
+         tinha de esperar a volta no tempo inteira de novo — com a plateia
+         olhando. Na primeira chegada ela conta a historia; da segunda em
+         diante o slide devolve o marco e o zoom onde estavam, e quem
+         quiser rever tem o botao `rever do inicio`, que ja existia. */
+      var e=est(sl);
+      if(e.javeio){ para(sl); return; }
+      e.javeio=true; ajusta(sl); rebobina(sl);
     }
   };
 })();
