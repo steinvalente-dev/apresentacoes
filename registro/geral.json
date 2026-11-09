@@ -200,6 +200,12 @@
    "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/operacao/ARQUIVAMENTO-ENTREGAS.md"
   },
   {
+   "grupo": "operação",
+   "nome": "registro no Radar",
+   "desc": "Vale para todo chat e rotina do assistente: o que vira linha no Diário de bordo do Radar, o que vira demanda no To-do, como se escreve a linha e a fase que decide a estação — To-do e Mail, depois NF, depois Financ, com a passagem feita pelos assistentes. Sem dado sensível no texto",
+   "arq": "sistemas/REGISTRO-NO-RADAR.md"
+  },
+  {
    "grupo": "montar",
    "nome": "tabela de gabaritos gerada do código",
    "desc": "A tabela de gabaritos e campos do deck — montar não é redigida: sai do tpl() do esqueleto por este script, com os campos obrigatórios em negrito e a aridade de cada item. Rodar depois de mexer no tpl()",

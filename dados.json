@@ -269,6 +269,12 @@
    "href": "https://github.com/steinvalente-dev/michel-stein-sistemas/blob/main/operacao/ARQUIVAMENTO-ENTREGAS.md"
   },
   {
+   "grupo": "operação",
+   "nome": "registro no Radar",
+   "desc": "Vale para todo chat e rotina do assistente: o que vira linha no Diário de bordo do Radar, o que vira demanda no To-do, como se escreve a linha e a fase que decide a estação — To-do e Mail, depois NF, depois Financ, com a passagem feita pelos assistentes. Sem dado sensível no texto",
+   "arq": "sistemas/REGISTRO-NO-RADAR.md"
+  },
+  {
    "aba": "marca",
    "grupo": "AMAZ",
    "nome": "marca · amaz",
@@ -700,5 +706,5 @@
   "sistemas",
   "superado"
  ],
- "gerado": "2026-11-09T20:22:10+00:00"
+ "gerado": "2026-11-09T23:50:35+00:00"
 }

@@ -173,7 +173,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 | `marca` | abertura e contracapa. Vêm do bloco da marca, não se inventam | `assinatura` · `credito` · `descritor` · `lockup` · `papel` · `pe` · `pisca` · `qr` · `sigla` · `site` · `slogan` |
 | `capa` | nome do projeto, endereço e três metas | `metas` |
 | `divisor` | abre seção e ganha um ponto no chrome | `_dn` · `dn` · `ds` · **`dt`** · `subdiv` |
-| `fim` | próximos passos. É o que o cliente leva embora | **`itens` (2)** |
+| `fim` | próximos passos. É o que o cliente leva embora | `alt` · **`itens` (2)** · `leg` · `src` |
 | `escolha` | a bifurcação: dois ou três botões que saltam para outro trecho. Cada opção declara `para` com o NOME de um gabarito e o motor procura o próximo slide daquele gabarito — nunca índice | `opcoes` |
 | `logo` | a entrada da marca: vídeo em sangria total, véu na cor da sub-marca e o lockup revelado por varredura. Portado da AMAZ — `marca`, `vsrc`, `ante`, `dep` | `alt` · `ante` · `dep` · `marca` · `marcasvg` · `vsrc` |
 | `sumario` | o argumento inteiro em blocos, logo depois da capa. 4o elemento de cada item, opcional: lista de subitens | `cols` · `grade` · **`itens` (4)** |
@@ -186,7 +186,7 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 | `jogadas` | duas ou três jogadas numeradas, com apoio longo | **`itens` (3)** |
 | `conceitos` | três círculos desenhados lado a lado, um por clique: o anel está na tela desde a chegada e o miolo acende. `itens:[{q,x,imgs,slot}]` — `imgs` vira uma pilha que roda DENTRO do disco; sem ela, slot hachurado | **`itens`** |
 | `trio` | três blocos curtos lado a lado | **`itens` (2)** |
-| `lista` | itens numerados, entram por clique | **`itens` (2)** |
+| `lista` | itens numerados, entram por clique | `alt` · **`itens` (2)** · `leg` · `src` |
 | `duasfrentes` | o pacote se fechando; caixa que cresce a cada item | **`dir`** · `dirfora` · **`esq`** · `esqfora` |
 
 **Dado**
@@ -216,8 +216,9 @@ Tabela gerada por `sistemas/gerar-gabaritos.py` a partir do `tpl()` do esqueleto
 | `prancha` | grade de 2 a 4 imagens sobre um tema. Retrato 3–4 colunas, deitada 2. `cols` aqui é NÚMERO — ver `gabaritos/prancha-referencia.md` | `ar` · `caber` · `cols` · `items` · `top` |
 | `viva` | a peça vizinha rodando DENTRO do slide, em quadro de sangria total. `src` relativo (mesma pasta, ou `../modulos/` no acervo); o slide fica travado e só as setas trocam. `recarrega` remonta o quadro a cada chegada, para peça que abre sozinha; `semtopo` tira o chrome do topo, para peça que já tem cabeçalho próprio — `gabaritos/viva.md` | `alt` · `cap` · `h2` · **`src`** |
 | `modelo-3d` | o que o projeto é: o modelo do SketchUp, vivo. Exige modelo PÚBLICO no 3D Warehouse — `gabaritos/modelo.md` | `cap` · `compacto` · `h2` · `lead` · **`modelo`** · `res` |
-| `earth-3d` | onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md` | `alt` · `anot` · `cafe` · `cap` · `compacto` · `fluxo` · `h2` · **`lat`** · `lead` · **`lng`** · `ruas` · `tulha` |
+| `earth-3d` | onde o projeto está: o globo do Google Earth, girando devagar. Só por link — `gabaritos/mapa-earth-3d.md` | `alt` · `anot` · `cafe` · `cap` · `compacto` · `fluxo` · `fotos` · `fotosRot` · `h2` · **`lat`** · `lead` · **`lng`** · `ruas` · `temas` · `tulha` |
 | `mapa` | o cadastro desenhado, com hover por lote. Exige o objeto `MAP` — `gabaritos/mapa-lotes.md` | `chave` · `hint` · `leg` (2) · `which` |
+| `confronto` | — | `etapas` · **`lados`** |
 <!-- GABARITOS:FIM -->
 
 **Campos de fecho e nota:** `sumario`, `tabela`, `players` e `porte` aceitam

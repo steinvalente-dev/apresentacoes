@@ -24,6 +24,26 @@ assistente — cuidam da minúcia e reportam pelo diário.
   onde fizer sentido (Mail, To-do, Financ). É o único caso em que a mesma coisa
   aparece em dois lugares.
 
+## A fase decide o lugar
+
+Cada assunto aparece numa estação só: a da fase em que está. A ordem das
+estações do Radar é a ordem da vida do trabalho:
+
+1. **To-do e Mail** — o trabalho e a comunicação.
+2. **NF** — a nota, até ser emitida e enviada.
+3. **Financ** — depois do envio, tudo é cobrança: vencimento, pagamento,
+   atraso, conferência no extrato. Só aparece ali.
+
+Quando o assunto muda de fase, sai da estação anterior. Quem faz a passagem
+são os assistentes, não o Michel: ele não deve precisar perguntar onde está
+uma coisa nem o que fazer com ela.
+
+Na prática: nota emitida e enviada vira recebível "a confirmar" no
+financeiro. O chat de NF não abre alerta de pagamento, vencimento ou cobrança;
+o que souber sobre isso registra com Frente = Financeiro e entrega ao
+financeiro. O chat Radar, assistente principal, confere e desfaz duplicidade
+sem perguntar.
+
 ## Quando registrar
 
 - Ação concluída com efeito fora do chat: e-mail enviado, nota emitida, arquivo
