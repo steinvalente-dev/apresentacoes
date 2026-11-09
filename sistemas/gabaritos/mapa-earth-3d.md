@@ -263,6 +263,32 @@ haste diferentes, declaradas em `h`, escalonadas para as caixas não pousarem
 na mesma faixa da tela. Escondar nome automaticamente no meio de uma
 apresentação é decisão do Michel, não do gabarito.
 
+## `tema` — a anotação que só aparece com um painel aberto
+
+09/11/2026, pedido do Michel no CAAB: o pino do metrô fica na tela desde o
+começo; os quatro do tombamento só acendem quando se abre **aquele** painel.
+
+Campo opcional de cada item de `anot`:
+
+```json
+{"lat":-23.599411,"lng":-46.744990,"tema":2,"h":52,"rot":"1 · cocheiras"}
+```
+
+`tema` é o **índice do tema** no array `temas` do slide, contando de zero.
+Com o campo, a anotação só é desenhada enquanto aquele painel está aberto;
+sem ele, aparece sempre. Fechar o painel apaga — o estado **não** é de
+sessão, ao contrário do botão `nomes`, porque o pedido é exatamente esse:
+o pino pertence ao assunto, não à tela.
+
+Mecânica: o handler dos temas mora fora do módulo do visor e avisa por
+`MSEarth.tema(i)`; `__msFechaTemas` chama `MSEarth.tema(null)`. O filtro
+está em `desenhaAnot`, uma linha, antes de qualquer desenho — anotação
+filtrada não paga haste nem pegada.
+
+⚑ **O botão `nomes` continua mandando em todas.** Desligou a camada,
+some tudo, inclusive o que está preso a um tema aberto. São dois
+interruptores em série, não dois caminhos.
+
 ## `compacto` — quando o endereço sai da tela
 
 Campo booleano do slide, 11/09/2026, pedido do Michel: *"elimine o endereço.

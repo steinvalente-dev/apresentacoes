@@ -621,7 +621,51 @@
      "cap": "A rua interna em toda a extensão: o muro de um lado, o galpão do outro."
     }
    ],
-   "fotosRot": "a visita ao lugar"
+   "fotosRot": "a visita ao lugar",
+   "anot": [
+    {
+     "lat": -23.60007,
+     "lng": -46.742661,
+     "tipo": "ctx",
+     "h": 104,
+     "rot": "futura estação Chácara do Jockey · Linha 4"
+    },
+    {
+     "lat": -23.599411,
+     "lng": -46.74499,
+     "tema": 2,
+     "h": 52,
+     "rot": "1 · cocheiras"
+    },
+    {
+     "lat": -23.598694,
+     "lng": -46.744539,
+     "tema": 2,
+     "h": 70,
+     "rot": "1 · cocheiras"
+    },
+    {
+     "lat": -23.599087,
+     "lng": -46.744882,
+     "tema": 2,
+     "h": 88,
+     "rot": "2 · alojamento para cavalariços"
+    },
+    {
+     "lat": -23.598299,
+     "lng": -46.744543,
+     "tema": 2,
+     "h": 56,
+     "rot": "3 · casa da administração"
+    },
+    {
+     "lat": -23.598353,
+     "lng": -46.744365,
+     "tema": 2,
+     "h": 96,
+     "rot": "4 · escritórios"
+    }
+   ]
   },
   {
    "g": "frase",

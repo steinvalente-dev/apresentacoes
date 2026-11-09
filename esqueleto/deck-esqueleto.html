@@ -6251,6 +6251,8 @@ addEventListener('click',function(e){
       if(f && !p.querySelector('figure')) p.insertBefore(f, p.firstChild);
     }
   }
+  /* anotação presa a este tema acende junto com o painel, e só com ele */
+  if(window.MSEarth&&MSEarth.tema) MSEarth.tema(abrir?k:null);
 },true);
 /* ⚑ fechar ao sair do slide: NAO ha evento de troca de prancha no motor —
    a primeira versao escutava um `ms-slide` que eu inventei e que nunca
@@ -6262,6 +6264,7 @@ window.__msFechaTemas=function(){
     b.setAttribute('aria-pressed','false'); });
   document.querySelectorAll('.g-earth-3d.com-painel').forEach(function(s){
     s.classList.remove('com-painel'); });
+  if(window.MSEarth&&MSEarth.tema) MSEarth.tema(null);
 };
 
 window.MSViva=(function(){
@@ -6570,6 +6573,12 @@ window.MSEarth=(function(){
   var anotLiga=true;      /* camada `edificações` */
   var cafeLiga=false;     /* camada `processo do café` — entra a pedido */
   var caminhoLiga=false;  /* camada `caminho do café` — as setas no chão */
+  /* ⚑ ANOTAÇÃO PRESA A UM TEMA. 09/11/2026, pedido do Michel: o pino do
+     metrô fica desde o início, os quatro do tombamento só aparecem quando
+     se abre aquele painel. Quem declara `tema: <i>` na anotação só é
+     desenhado com o painel `i` aberto; sem o campo, aparece sempre. O
+     estado NÃO é de sessão — fechou o painel, some, que é o pedido. */
+  var temaAberto=null;
 
   function limpaAnot(){
     posto.forEach(function(n){ if(n.parentNode) n.parentNode.removeChild(n); });
@@ -6742,6 +6751,8 @@ window.MSEarth=(function(){
     if(b) b.setAttribute('aria-pressed',liga?'true':'false');
   }
   function alternaAnot(liga){ anotLiga=!!liga; desenhaAnot(); }
+  /* chamado pelo handler dos temas, que mora fora deste módulo */
+  function abreTema(i){ temaAberto=(i==null?null:+i); desenhaAnot(); }
   function alternaCafe(liga){ cafeLiga=!!liga; desenhaAnot(); }
   function alternaCaminho(liga){ caminhoLiga=!!liga; desenhaAnot(); }
   function desenhaAnot(){
@@ -6753,6 +6764,8 @@ window.MSEarth=(function(){
     if(!m3d.PopoverElement) return;    /* preview sem popover: sai calado */
     var VINHO=tok('--primaria'), FERRO=tok('--tinta');
     (anotLiga?(s.anot||[]):[]).forEach(function(a){
+      /* presa a um tema: só entra com aquele painel aberto */
+      if(a.tema!=null && +a.tema!==temaAberto) return;
       var cor=a.tipo==='ctx'?FERRO:VINHO;
       if(a.anel&&a.anel.length){
         var anel=a.anel.map(function(q){ return {lat:q[0],lng:q[1]}; });
@@ -7007,6 +7020,9 @@ window.MSEarth=(function(){
   DECK.forEach(function(s,i){ if(s.g==='earth-3d') PROX.push(i); });
 
   return {
+    /* o handler dos temas mora fora deste módulo e avisa por aqui qual
+       painel abriu — ver `abreTema` e o campo `tema` da anotação */
+    tema:abreTema,
     chegou:function(){
       var s=DECK[cur];
       /* NIVEL 1 — aquece ao chegar no slide imediatamente anterior */
