@@ -69,7 +69,10 @@ Nenhuma foto é de terceiros ou da internet.
   **Só há duas saídas, e as duas custam:** upscale de IA, que inventa detalhe
   de fachada (medido numa prova: fidelidade estrutural 0,80 ao voltar a 62 px,
   erro médio 4 %), ou foto nova de cada bem, pedida ao estúdio. Nenhuma das
-  duas foi feita — decisão do Michel, em aberto.
+  duas foi feita. **Decidido em 09/11/2026:** o Michel vai pedir as fotos ao
+  estúdio. Upscale de IA está descartado — a invenção de detalhe de fachada não
+  cabe numa peça de casa de restauro. Enquanto as fotos não chegam, os 128 px
+  ficam como estão.
 - **As 13 nacionais** saíram do `PORTFOLIO_SARASA_2026.pdf`, uma por página
   legendada, **recortadas no centro** — conferido em 08/11/2026: as 13 são
   recorte quadrado centrado, sem exceção. Quatro delas mostram trabalho de
