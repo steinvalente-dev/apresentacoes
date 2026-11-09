@@ -1055,8 +1055,18 @@ body.em-logo .chrome.topo .secao{display:inline}
   background:linear-gradient(to top,var(--tinta-85),transparent);
   color:var(--papel);font-size:clamp(12px,1cqw,17px);line-height:1.45;
   text-align:center;pointer-events:none}
-.ptlupa .plcap b{display:block;font-family:var(--f-display);font-style:italic;
-  font-weight:500;font-size:clamp(16px,1.5cqw,27px);margin-bottom:.3em}
+/* 09/11/2026 — o TITULO SAIU DA LEGENDA e subiu para o topo da lupa. Em baixo
+   ele ficava atras da .plbar, que e' centrada no rodape: sumia em todos os
+   pontos, em qualquer ponto da peca. A legenda (.plcap) segue embaixo; so o
+   titulo mudou de lugar. O respiro lateral livra o botao de fechar. */
+.ptlupa .pltit{position:absolute;left:0;right:0;top:0;z-index:3;
+  padding:clamp(14px,2.2cqh,30px)
+          calc(var(--gut) + clamp(34px,3cqw,52px)) clamp(26px,4cqh,56px);
+  background:linear-gradient(to bottom,var(--tinta-85),transparent);
+  color:var(--papel);text-align:center;pointer-events:none}
+.ptlupa .pltit:empty{display:none}
+.ptlupa .pltit b{display:block;font-family:var(--f-display);font-style:italic;
+  font-weight:500;font-size:clamp(16px,1.5cqw,27px)}
 .ptlupa .plbar{position:absolute;left:50%;transform:translateX(-50%);z-index:4;
   bottom:calc(var(--bot) / 2);display:flex;align-items:center;
   gap:clamp(3px,.42cqw,7px);background:var(--tinta-80);border-radius:999px;
@@ -7563,7 +7573,11 @@ window.MSModelo=(function(){
     L.forEach(function(x,n){ x.classList.toggle('on',n===i); });
     zera();
     var c=l.querySelector('.plcap'), d=L[i].dataset;
-    if(c) c.innerHTML=(d.t?'<b>'+d.t+'</b>':'')+(d.cap||'');
+    /* 09/11/2026 — titulo no topo, legenda embaixo: a .plbar cobria o titulo. */
+    var t=l.querySelector('.pltit');
+    if(!t){ t=document.createElement('div'); t.className='pltit'; l.appendChild(t); }
+    t.innerHTML=(d.t?'<b>'+d.t+'</b>':'');
+    if(c) c.innerHTML=(d.cap||'');
     var b=l.querySelector('.plbar b');
     if(b) b.textContent=(i+1)+' / '+L.length;
   }
