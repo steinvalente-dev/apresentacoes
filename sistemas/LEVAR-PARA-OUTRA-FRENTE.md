@@ -142,3 +142,11 @@ subir. Toda peça leva a linha do `ms-voltar.js` antes do `</body>`. O link que 
 devolve é o da peça, nunca o do índice.
 
 Runbook completo: `sistemas/GITHUB-COMO-TRABALHAR.md`, ao lado.
+
+---
+
+## 8 · Registro no Radar
+
+Todo chat de qualquer frente reporta o que faz no Diário de bordo do Radar.
+Regras em `sistemas/REGISTRO-NO-RADAR.md`, ao lado. O endereço da base fica na
+instrução de cada Projeto, não aqui.
