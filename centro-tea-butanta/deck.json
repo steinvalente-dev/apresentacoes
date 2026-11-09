@@ -625,8 +625,8 @@
    "fotosRot": "a visita ao lugar",
    "anot": [
     {
-     "lat": -23.60007,
-     "lng": -46.742661,
+     "lat": -23.600356,
+     "lng": -46.742889,
      "tipo": "ctx",
      "h": 104,
      "rot": "futura estação Chácara do Jockey · Linha 4"
@@ -646,8 +646,8 @@
      "rot": "1 · cocheiras"
     },
     {
-     "lat": -23.599087,
-     "lng": -46.744882,
+     "lat": -23.599182,
+     "lng": -46.744914,
      "tema": 2,
      "h": 88,
      "rot": "2 · alojamento para cavalariços"

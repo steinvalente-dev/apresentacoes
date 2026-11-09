@@ -6820,6 +6820,30 @@ window.MSEarth=(function(){
     }
   }
 
+  /* ── O ENQUADRAMENTO CANONICO, UM SO ───────────────────────────────────
+     09/11/2026, pedido do Michel: *"quando o slide abre ele esta centralizado
+     na posicao errada, um pouco distante do conjunto real; ao clicar em
+     centralizar ela vai para o local certo"*.
+
+     A causa era haver DOIS caminhos para a mesma camera. A aproximacao
+     escrevia `center`, `range`, `tilt` e `heading` um a um — e cada escrita
+     reposiciona a camera por conta propria, entao o ultimo degrau nao pousava
+     onde o `recentrar` pousa. O `recentrar` manda os quatro de uma vez, por
+     `flyCameraTo`. Dois caminhos, dois quadros, e so o segundo estava certo.
+
+     Agora os dois passam por aqui. Nao ha mais dois quadros para divergir:
+     o slide ABRE no quadro a que o recentrar VOLTA, por construcao. */
+  function enquadra(anim){
+    if(!mapa||!ANCORA) return;
+    var alvo={center:{lat:ANCORA.lat,lng:ANCORA.lng,altitude:ANCORA.alt},
+              range:CAM.range,tilt:CAM.tilt,heading:CAM.heading};
+    if(mapa.flyCameraTo){
+      mapa.flyCameraTo({endCamera:alvo,durationMillis:anim?2200:600});
+      return;
+    }
+    mapa.center=alvo.center; mapa.range=alvo.range;
+    mapa.tilt=alvo.tilt;     mapa.heading=alvo.heading;
+  }
   function aproxima(p){
     ANCORA={lat:p.lat,lng:p.lng,alt:p.alt};
     /* ⚠ A APROXIMACAO NAO E ENFEITE. Criar o visor com o range final devolve
@@ -6829,10 +6853,17 @@ window.MSEarth=(function(){
     var passos=DEGRAUS.concat([CAM.range]), i=0;
     (function passo(){
       if(!mapa) return;
-      mapa.center={lat:p.lat,lng:p.lng,altitude:p.alt};
-      mapa.range=passos[i];
-      mapa.tilt=(i===0)?CAM.tiltEntrada:CAM.tilt;
-      mapa.heading=CAM.heading;
+      if(i===passos.length-1){
+        /* 09/11 — o POUSO FINAL e o mesmo quadro do recentrar, pelo mesmo
+           caminho. Os degraus acima continuam sendo escrita direta: ali o
+           que importa e dar tempo a malha, nao o enquadramento. */
+        enquadra(false);
+      } else {
+        mapa.center={lat:p.lat,lng:p.lng,altitude:p.alt};
+        mapa.range=passos[i];
+        mapa.tilt=(i===0)?CAM.tiltEntrada:CAM.tilt;
+        mapa.heading=CAM.heading;
+      }
       i++;
       progresso(1+i,'aproximando · '+i+' de '+passos.length);
       if(i<passos.length){ setTimeout(passo,PAUSA); return; }
@@ -6890,11 +6921,7 @@ window.MSEarth=(function(){
     if(!mapa||!ANCORA) return;
     var girava=orbitando;
     if(girava) orbita(false);
-    var alvo={center:{lat:ANCORA.lat,lng:ANCORA.lng,altitude:ANCORA.alt},
-              range:CAM.range,tilt:CAM.tilt,heading:CAM.heading};
-    if(mapa.flyCameraTo){ mapa.flyCameraTo({endCamera:alvo,durationMillis:2200}); }
-    else { mapa.center=alvo.center; mapa.range=alvo.range;
-           mapa.tilt=alvo.tilt; mapa.heading=alvo.heading; }
+    enquadra(true);          /* 09/11 — o mesmo quadro da abertura */
     var bt=slide&&slide.querySelector('.rec');
     if(bt){ bt.classList.add('feito'); setTimeout(function(){ bt.classList.remove('feito'); },900); }
     if(girava) setTimeout(function(){ orbita(true); },2400);
