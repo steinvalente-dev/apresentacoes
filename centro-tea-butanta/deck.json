@@ -735,7 +735,18 @@
     {
      "src": "evo-03.jpg",
      "t": "novo vestiário",
-     "cap": ""
+     "cap": "",
+     "pontos": [
+      {
+       "x": 0.075,
+       "y": 0.489,
+       "t": "a divisa oeste, hoje",
+       "cap": "O caminho sob a arborização existente, junto à sebe da divisa, com os pavilhões ao fundo.",
+       "imgs": [
+        "ref-divisa-01.jpg"
+       ]
+      }
+     ]
     },
     {
      "src": "evo-04.jpg",
