@@ -1064,12 +1064,17 @@ body.em-logo .chrome.topo .secao{display:inline}
    mesma caixa fica menor em area util. A redonda rima com a bolinha, mas a
    leitura perde. Ficou o retangulo 4:3 com canto de 10px.
 
-   ⚑ SO ONDE HA HOVER DE VERDADE. No iPad nao existe mirar: `hover:hover` e
-   `pointer:fine` mantem a previa fora do caminho do toque, que continua
-   abrindo a lupa direto.
+   ⚑ `any-hover`/`any-pointer`, NAO `hover`/`pointer` — corrigido em 10/11.
+   A primeira versao usava `(hover:hover) and (pointer:fine)` e a previa nao
+   aparecia no iPad do Michel, que e onde ele apresenta. O iPadOS reporta o
+   ponteiro PRIMARIO como `coarse` e `hover:none` mesmo com o trackpad
+   ligado — para a Apple o dedo continua sendo a entrada principal. Quem
+   reflete o trackpad e' o `any-`: com trackpad, `any-hover:hover` e
+   `any-pointer:fine` passam a valer. Em iPad so de dedo, nenhum dos dois
+   vale e a previa fica fora do caminho, como tem de ser.
 
    A previa NAO captura ponteiro: quem recebe o clique e sempre a bolinha. */
-@media (hover:hover) and (pointer:fine){
+@media (any-hover:hover) and (any-pointer:fine){
   .g-sequencia .ptprev{position:absolute;z-index:6;pointer-events:none;
     width:clamp(142px,12.5cqw,224px);background:var(--papel);
     border-radius:10px;overflow:hidden;box-shadow:0 12px 34px var(--tinta-45);
@@ -7698,10 +7703,17 @@ window.MSModelo=(function(){
      ponto. As fontes saem da propria lupa daquele ponto: uma lista so,
      nada duplicado no deck.json.
      A caixa vive dentro do `.seqpt`, que nao captura ponteiro, entao o
-     clique continua sendo da bolinha. Fora de hover de verdade (iPad), o
-     modulo nem se instala. */
+     clique continua sendo da bolinha.
+
+     ⚑ 10/11 — INSTALA ONDE EXISTE PONTEIRO FINO, nao onde ele e' o primario.
+     `any-hover`/`any-pointer` para pegar o iPad com trackpad, que e' onde o
+     Michel apresenta; com `hover`/`pointer` o iPadOS respondia `none`/`coarse`
+     e o modulo nao se instalava. Em iPad so de dedo continua fora.
+     ⚑ E so o ponteiro do MOUSE abre a previa: `pointerType` filtra o toque,
+     que no caminho para o clique tambem dispara `over` e faria a caixa
+     piscar antes da lupa. */
   (function(){
-    if(!window.matchMedia||!matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+    if(!window.matchMedia||!matchMedia('(any-hover:hover) and (any-pointer:fine)').matches) return;
     var cx=null, alvo=null, tmr=null, k=0;
     function caixa(seq){
       var el=seq.querySelector('.ptprev');
@@ -7742,17 +7754,23 @@ window.MSModelo=(function(){
         var c=f.querySelector('.pvn'); if(c) c.textContent=(k+1)+' / '+L.length;
       },1100);
     }
-    addEventListener('mouseover',function(e){
+    var ENTRA=window.PointerEvent?'pointerover':'mouseover';
+    var SAI  =window.PointerEvent?'pointerout' :'mouseout';
+    function doMouse(e){ return !e.pointerType || e.pointerType==='mouse'; }
+    addEventListener(ENTRA,function(e){
+      if(!doMouse(e)) return;
       var bt=e.target.closest && e.target.closest('.g-sequencia .pt');
       if(!bt||document.body.classList.contains('pt-lupa')) return;
       if(alvo===bt) return;
       esconde(); abrePrev(bt);
     });
-    addEventListener('mouseout',function(e){
+    addEventListener(SAI,function(e){
+      if(!doMouse(e)) return;
       var bt=e.target.closest && e.target.closest('.g-sequencia .pt');
       if(bt && bt===alvo) esconde();
     });
     addEventListener('click',esconde,true);
+    addEventListener('touchstart',esconde,{passive:true});
   })();
 
   /* ⚑ O CARROSSEL DA CAIXA SO RODA QUANDO ESTA A VISTA. `offsetParent`
