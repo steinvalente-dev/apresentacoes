@@ -67,9 +67,14 @@ sem perguntar.
 - **Detalhe**: uma frase em primeira pessoa — o que foi feito e o que falta.
 - **Link**: o e-mail, o arquivo ou a página. Vazio se não houver.
 
-Como o Radar distribui: linha com link de e-mail, ou que espera terceiro ou
-falhou, aparece na lista da estação Mail. As demais viram nota na caixinha de
-status, que o Michel marca como lida.
+Como o Radar distribui: a estação Mail é só comunicação. Aparece ali a linha com
+link de e-mail, a que espera terceiro e a que falhou — e mais nada. Trabalho feito
+noutra frente (ajuste do próprio app, publicação, arquivo) NÃO vira alerta no Mail:
+fica no Diário de bordo, que é onde se lê o que o assistente fez.
+
+Decisão do Michel em 09/11/2026, depois de encontrar no Mail os avisos de uma
+rodada de ajustes na interface do Radar. A regra já dizia isso; o aplicativo é que
+estava mostrando o diário inteiro na caixinha de status. Corrigido na v126.
 
 ## Fato que mexe no financeiro
 
