@@ -880,7 +880,51 @@
     {
      "src": "evo-12.jpg",
      "t": "planta proposta",
-     "cap": ""
+     "cap": "",
+     "pontos": [
+      {
+       "x": 0.342,
+       "y": 0.532,
+       "t": "o salão aberto",
+       "cap": "O que a demolição das paredes internas devolve: o vão corrido sob a estrutura de madeira original.",
+       "imgs": [
+        "ref-salao-01.jpg",
+        "ref-salao-02.jpg"
+       ],
+       "legs": [
+        "O vão inteiro, de ponta a ponta, com o telhado aparente.",
+        "A mesma nave em contraluz — a estrutura de madeira e as vergas das portas."
+       ]
+      },
+      {
+       "x": 0.804,
+       "y": 0.532,
+       "t": "o salão aberto",
+       "cap": "O que a demolição das paredes internas devolve: o vão corrido sob a estrutura de madeira original.",
+       "imgs": [
+        "ref-salao-01.jpg",
+        "ref-salao-02.jpg"
+       ],
+       "legs": [
+        "O vão inteiro, de ponta a ponta, com o telhado aparente.",
+        "A mesma nave em contraluz — a estrutura de madeira e as vergas das portas."
+       ]
+      },
+      {
+       "x": 0.858,
+       "y": 0.65,
+       "t": "o salão aberto",
+       "cap": "O que a demolição das paredes internas devolve: o vão corrido sob a estrutura de madeira original.",
+       "imgs": [
+        "ref-salao-01.jpg",
+        "ref-salao-02.jpg"
+       ],
+       "legs": [
+        "O vão inteiro, de ponta a ponta, com o telhado aparente.",
+        "A mesma nave em contraluz — a estrutura de madeira e as vergas das portas."
+       ]
+      }
+     ]
     },
     {
      "src": "evo-13.jpg",
@@ -964,6 +1008,35 @@
        "#A0D050",
        "acolhimento de familiares"
       ]
+     ],
+     "pontos": [
+      {
+       "x": 0.383,
+       "y": 0.714,
+       "t": "o jardim entre as fileiras",
+       "cap": "O pátio limpo: gramado corrido entre as duas alas, com as faixas de piso rente aos alpendres.",
+       "imgs": [
+        "ref-jardim-01.jpg"
+       ]
+      },
+      {
+       "x": 0.539,
+       "y": 0.303,
+       "t": "a quadra poliesportiva coberta",
+       "cap": "A quadra sob cobertura leve e translúcida, entre os blocos — estrutura independente, apoiada fora da alvenaria histórica.",
+       "imgs": [
+        "ref-quadra-01.jpg"
+       ]
+      },
+      {
+       "x": 0.655,
+       "y": 0.377,
+       "t": "o playground",
+       "cap": "O pátio infantil: piso emborrachado em relevo, brinquedos em madeira e arborização que já existe no lugar.",
+       "imgs": [
+        "ref-playground-01.jpg"
+       ]
+      }
      ]
     }
    ],
