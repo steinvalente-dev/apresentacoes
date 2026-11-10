@@ -90,6 +90,24 @@
     '  #msVoltar:hover .r{max-width:8em;opacity:1}}',
     '@media print{#msVoltar,#msTela,#msGiro{display:none!important}}',
 
+    /* ─── COM IMAGEM EM TELA CHEIA, O CHIP SOME ──────────────────────────
+       10/11/2026, pedido do Michel: ele saiu da apresentacao tres vezes
+       no mesmo dia clicando aqui sem querer com a lupa aberta. Dentro de
+       uma imagem em tela cheia o unico destino razoavel e FECHAR a imagem,
+       nunca abandonar a peca — e o chip fica justamente na quina para onde
+       a mao vai. Com a lupa fechada ele volta sozinho.
+       Vale tambem para o chip de tela cheia, pela mesma razao.
+       `body.pt-lupa` e a classe que a engine ja poe (lupa do ponto e
+       carrossel do earth-3d); o `:has` cobre a galeria, que marca o estado
+       no proprio slide, e qualquer <dialog> modal. Navegador sem `:has`
+       ignora essas duas linhas e continua coberto pela primeira. */
+    'body.pt-lupa #msVoltar,body.pt-lupa #msTela,',
+    'body:has(.ptlupa.on) #msVoltar,body:has(.ptlupa.on) #msTela,',
+    'body:has(.g-galeria.lupando) #msVoltar,body:has(.g-galeria.lupando) #msTela,',
+    'body:has(dialog[open]) #msVoltar,body:has(dialog[open]) #msTela',
+    '  {opacity:0!important;pointer-events:none!important;',
+    '   transform:scale(.92);transition:opacity .18s ease,transform .18s ease}',
+
     '#msTela{position:fixed;z-index:2147483000;',
     '  top:calc(env(safe-area-inset-top,0px) + 10px);',
     '  left:calc(env(safe-area-inset-left,0px) + 64px);',
