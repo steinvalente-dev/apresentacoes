@@ -915,9 +915,23 @@ body.em-logo .chrome.topo .secao{display:inline}
    encolhe e sobra branco em cima e embaixo — o Michel: *"eu prefiro mil
    vezes que nao tenha o branco, mas nesse caso a gente vai ter que abrir
    uma excecao"*. */
+/* ⚑ 10/11/2026 — `70cqw`, NAO `70%`, e a caixa PINTADA tem variavel propria.
+   Bug que o Michel pegou comparando prints de telas diferentes: o ponto da
+   planta descia conforme a tela ficava menos panoramica. Medido antes do
+   conserto, no mesmo ponto: erro de +0.011 em 16:9, +0.030 em 16:10, +0.050
+   em 1.44 e +0.066 em 4:3 — o x sempre certo, so o y.
+   A causa: com o teto de 70% a caixa da imagem fica MAIS ESTREITA que 4:3,
+   entao o `contain` ajusta pela largura e sobra tarja em cima e embaixo. A
+   planta pintada e mais baixa que a caixa, mas o ponto usava `100cqh`, a
+   altura do CONTAINER, e se espalhava pela tarja junto.
+   `--pl-h` e `--pl-t` descrevem a area pintada; o ponto passa a morar nela.
+   E `70%` virou `70cqw` porque porcentagem em `top` resolve contra a ALTURA:
+   a mesma variavel precisava servir aos dois eixos. */
 .g-sequencia.sangra{--pl-ar:1.333;
-  --pl-w:min(calc(100cqh * var(--pl-ar)), 70%);
-  --faixa:calc(100% - var(--pl-w))}
+  --pl-w:min(calc(100cqh * var(--pl-ar)), 70cqw);
+  --pl-h:min(100cqh, calc(var(--pl-w) / var(--pl-ar)));
+  --pl-t:calc((100cqh - var(--pl-h)) / 2);
+  --faixa:calc(100cqw - var(--pl-w))}
 .g-sequencia.sangra .wrap{position:static}
 .g-sequencia.sangra .seq{position:absolute;inset:0;margin:0;z-index:0}
 .g-sequencia.sangra .seq-etapa{grid-template-columns:1fr;gap:0}
@@ -1049,9 +1063,12 @@ body.em-logo .chrome.topo .secao{display:inline}
 @keyframes ptpulsa{0%{transform:scale(.78);opacity:.8}
   70%{transform:scale(1.5);opacity:0}100%{transform:scale(1.5);opacity:0}}
 @media (prefers-reduced-motion:reduce){.g-sequencia .pt::after{animation:none;opacity:.5}}
+/* o ponto e fracao da PLANTA PINTADA, nao do container: `--pl-t` desconta a
+   tarja de cima e `--pl-h` e a altura real do desenho. Ver a nota do
+   `--pl-w`, acima, com os erros medidos antes do conserto. */
 .g-sequencia.sangra .pt{
-  left:calc(100% - var(--pl-w) + var(--px) * var(--pl-w));
-  top:calc(var(--py) * 100cqh)}
+  left:calc(100cqw - var(--pl-w) + var(--px) * var(--pl-w));
+  top:calc(var(--pl-t) + var(--py) * var(--pl-h))}
 
 /* ── PREVIA NO HOVER ────────────────────────────────────────────────────
    10/11/2026, pedido do Michel: mirar o cursor numa bolinha e ver um
