@@ -6515,7 +6515,11 @@ window.MSEarth=(function(){
      deste script. Ler na carga devolvia string vazia. */
   function chave(){ return (window.MS_MAPS&&window.MS_MAPS.chave)||''; }
   function canal(){ return (window.MS_MAPS&&window.MS_MAPS.canal)||'beta'; }
-  var CAM={range:600,tilt:58,heading:30,tiltEntrada:45};
+  /* `range` e a distancia da camera ao ponto: quanto maior, mais entorno
+     entra. 10/11/2026 — subiu de 600 para 900 a pedido do Michel, para o
+     conjunto aparecer dentro do bairro e nao recortado. E UM numero: quem
+     quiser mais entorno sobe, quem quiser mais edificio desce. */
+  var CAM={range:900,tilt:58,heading:30,tiltEntrada:45};
   var DEGRAUS=[6000,2500,1200], PAUSA=3000;
   /* ⚑ DEGRAUS tem de estar declarado ANTES do TOTAL: `var` iça o nome mas
      nao o valor, e `undefined.length` derruba o modulo inteiro na carga. */
@@ -6911,16 +6915,39 @@ window.MSEarth=(function(){
 
      Agora os dois passam por aqui. Nao ha mais dois quadros para divergir:
      o slide ABRE no quadro a que o recentrar VOLTA, por construcao. */
+  /* ⚑ 10/11/2026 — A CORRECAO QUE FALTAVA, e o motivo de 09/11 nao ter
+     bastado. `flyCameraTo` MOVE a camera, mas NAO atualiza `center`,
+     `range` e `tilt` do elemento: essas propriedades continuam valendo o
+     que foi escrito por ultimo. E a orbita escreve `heading` quadro a
+     quadro — cada escrita faz o elemento reaplicar o quadro INTEIRO a
+     partir dessas propriedades velhas.
+
+     Na abertura, as propriedades velhas eram as do ULTIMO DEGRAU: centro
+     certo, `range 1200`, tilt 58. Entao o voo pousava no quadro canonico e,
+     quatro segundos depois, o primeiro quadro da orbita puxava a camera de
+     volta para 1200 — "centralizado e distante do conjunto". No recentrar
+     parecia certo porque o Michel via DURANTE o voo, antes de a orbita
+     voltar a girar e desfazer.
+
+     A cura e fixar as propriedades no fim do voo. Depois disso a orbita
+     escrever so `heading` e seguro: o quadro que ela reaplica ja e o
+     canonico. */
   function enquadra(anim){
     if(!mapa||!ANCORA) return;
     var alvo={center:{lat:ANCORA.lat,lng:ANCORA.lng,altitude:ANCORA.alt},
               range:CAM.range,tilt:CAM.tilt,heading:CAM.heading};
+    function fixa(){
+      if(!mapa) return;
+      mapa.center=alvo.center; mapa.range=alvo.range;
+      mapa.tilt=alvo.tilt;     mapa.heading=alvo.heading;
+    }
     if(mapa.flyCameraTo){
-      mapa.flyCameraTo({endCamera:alvo,durationMillis:anim?2200:600});
+      var ms=anim?2200:900;
+      mapa.flyCameraTo({endCamera:alvo,durationMillis:ms});
+      setTimeout(fixa,ms+120);   /* a margem cobre o ultimo quadro do voo */
       return;
     }
-    mapa.center=alvo.center; mapa.range=alvo.range;
-    mapa.tilt=alvo.tilt;     mapa.heading=alvo.heading;
+    fixa();
   }
   function aproxima(p){
     ANCORA={lat:p.lat,lng:p.lng,alt:p.alt};

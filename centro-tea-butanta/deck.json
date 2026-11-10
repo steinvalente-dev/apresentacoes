@@ -683,7 +683,7 @@
     {
      "nm": "TEA Oeste · Butantã",
      "src": "implantacao-tea-oeste.png",
-     "alt": "Implantação do TEA Oeste, com as áreas úteis destacadas",
+     "alt": "Implantação do projeto do TEA Oeste, prancha da Secretaria",
      "linhas": [
       [
        "ambientes",
@@ -692,16 +692,6 @@
       [
        "circulação coberta",
        "1.543,24 m²"
-      ]
-     ],
-     "total": [
-      [
-       "total",
-       "4.099,79 m²"
-      ],
-      [
-       "total coberto",
-       "4.099,79 m²"
       ]
      ]
     },
@@ -719,16 +709,6 @@
        "3.651,62 m²"
       ]
      ],
-     "total": [
-      [
-       "total",
-       "6.962,69 m²"
-      ],
-      [
-       "total coberto",
-       "3.311,07 m²"
-      ]
-     ],
      "alt": "Implantação da proposta na Chácara do Jockey, com as áreas úteis e o segundo pavimento destacados em laranja"
     }
    ],
@@ -742,15 +722,15 @@
    "itens": [
     [
      "01",
-     "<b>Cabe em área.</b> O programa útil do modelo entra no conjunto existente."
+     "Cabe em <b>área</b>. O programa útil do modelo entra no conjunto existente."
     ],
     [
      "02",
-     "<b>Cumpre todos os papéis.</b> Atendimento, cultura, esporte, autonomia e acolhimento de famílias."
+     "Cumpre todos os <b>papéis</b>. Atendimento, cultura, esporte, autonomia e acolhimento de famílias."
     ],
     [
      "03",
-     "<b>Com uma ressalva: o auditório.</b> Nenhum vão edificado do conjunto é largo o bastante para recebê-lo. Ou ele ganha edificação própria — e aí a conversa é outra — ou o programa se ajusta."
+     "Com uma ressalva: o <b>auditório</b>. Nenhum vão edificado do conjunto é largo o bastante para recebê-lo. Ou ele ganha edificação própria — e aí a conversa é outra — ou o programa se ajusta."
     ]
    ]
   },
