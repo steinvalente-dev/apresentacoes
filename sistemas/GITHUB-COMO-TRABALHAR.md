@@ -128,7 +128,7 @@ fine-grained, um por repositório, `Contents: read and write`. Push
 voltando 403 é token expirado — pedir novo ao Michel.
 
 **Um acervo só.** Todas as frentes — michel stein_, Lavrō, AMAZ, Sarasá —
-publicam em `apresentacoes`, como projetos do mesmo array `projetos`. Não há
+publicam em `apresentacoes`, no mesmo índice. Não há
 repositório por frente. Consequência: **o token dá escrita em todas as peças,
 de todos os projetos** — uma sessão da Lavrō pode sobrescrever a peça de
 outra frente. Daí a regra de versão (abaixo) e a de duas sessões. Peça de
@@ -165,9 +165,12 @@ Frentes diferentes trabalham em Projetos diferentes, e **escrevem no mesmo
 repositório**. O Git aceita um push que apaga o trabalho do outro, sem erro —
 já aconteceu mais de uma vez no mesmo dia (ver Histórico).
 
-**O arquivo em risco é sempre o mesmo: `index.html`.** É o único que toda frente
-edita. O resto — `marca/<nome>/`, `sistemas/gabaritos/`, a pasta da peça — cada
-uma mexe no seu canto e não colide.
+**O arquivo em risco era o `index.html`**, que toda frente editava. Por isso ele
+deixou de ser editado em 03/09/2026: o registro passou para `<slug>/meta.json` e
+`registro/<frente>.json`, e o índice é gerado. Hoje o que duas sessões ainda
+disputam é o `registro/geral.json` e o `dados.json` gerado. O resto —
+`marca/<nome>/`, `sistemas/gabaritos/`, a pasta da peça — cada uma mexe no seu
+canto e não colide.
 
 ### O procedimento, sem exceção
 
@@ -175,7 +178,7 @@ uma mexe no seu canto e não colide.
 git fetch origin
 git status -sb          # "behind N" = alguém publicou desde o seu clone
 git pull --ff-only origin main
-# ... só então editar o index.html ...
+# ... só então editar ...
 git fetch origin        # de novo, imediatamente antes de subir
 git push origin main
 ```
@@ -190,7 +193,7 @@ Puxar não é o bastante: o pull pode trazer uma versão em que a sua mudança
 anterior já foi desfeita. Antes de reescrever, procurar o que você espera achar:
 
 ```
-grep -c 'aba:"marca"' index.html      # as linhas que você acrescentou continuam?
+grep -c '"aba"' registro/<frente>.json      # as linhas que você acrescentou continuam?
 ```
 
 Se sumiu, **reaplicar por cima do trabalho do outro** — nunca restaurar a sua
@@ -213,8 +216,8 @@ diff <(curl -s <url da peça>) <build local>
 
 ### A regra de ouro
 
-Editar **sempre no clone fresco, no lugar**. Nunca reescrever o
-`index.html` a partir de cópia local ou de memória: a reescrita apaga o
+Editar **sempre no clone fresco, no lugar**. Nunca reescrever
+arquivo de registro (`registro/<frente>.json`) a partir de cópia local ou de memória: a reescrita apaga o
 registro que outra sessão acabou de acrescentar, e acontece entre um push
 e o seguinte na mesma tarde. Ler o arquivo vivo, alterar a linha, salvar.
 Clone fresco antes de cada rodada.
@@ -225,22 +228,21 @@ cache-busting: `?nc=$RANDOM` na URL raw ou do Pages.
 ---
 ## Subir sem registrar não conta como subir
 
-**Padrão, sem exceção: toda coisa que entra num repositório é registrada no
-`index.html` na mesma rodada.** Um commit que acrescenta arquivo e não acrescenta
-o registro é uma rodada pela metade — não esperar que o Michel peça.
-
-Arquivo no ar sem registro não dá sintoma nenhum: ele existe, funciona, e ninguém
-acha. O detector de peça órfã ajuda, mas só varre `.html` **deste** repositório —
-não vê `.md`, não vê binário, e não vê nada que esteja no privado. Ou seja: para
-tudo o que este documento manda guardar fora do público, **o detector não cobre e
-o registro é manual.** E o detector da página usa a API pública do GitHub, 60
-chamadas por hora por IP — estourou, silencia. Rede de segurança, não registro.
+**Padrão, sem exceção: toda coisa que entra num repositório é registrada na
+mesma rodada.** O registro NÃO é mais feito no `index.html` — desde 03/09/2026
+ninguém edita esse arquivo (ver "Registrar apresentação", abaixo). Editá-lo à
+mão apagou trabalho alheio três vezes.
 
 | o que entrou | onde registrar |
 |---|---|
-| apresentação, peça de projeto, entrega | array `projetos`, aba Arquivo |
-| documento de método, regra, ferramenta | array `docs`, aba Sistema |
-| proposta, protótipo, revisão de peça — qualquer `.html` que não seja nem uma coisa nem outra | array `docs`, com `ver:` apontando para ele. **Este é o caso que escapa**: a sessão pensa "não é peça nem documento" e não registra nada |
+| apresentação, peça de projeto, entrega | `<slug>/meta.json`, na pasta da peça |
+| documento de método, regra, ferramenta | `docs` do `registro/<frente>.json` (o que é do sistema: `registro/geral.json`) |
+| proposta, protótipo, revisão de peça — qualquer `.html` que não seja nem uma coisa nem outra | `docs` do `registro/<frente>.json`, com `ver:` apontando para ele. **Este é o caso que escapa**: a sessão pensa "não é peça nem documento" e não registra nada |
+
+O `sistemas/publicar.sh` para a rodada se houver peça órfã ou `.md`/`.html`
+rastreado sem registro (a cobertura do `montar-indice.py`, desde 04/09). O que
+mora fora deste repositório — o privado e a área de cliente — a máquina não vê:
+lá o registro continua manual.
 
 Grupo novo na aba Sistema é só escrever um `grupo` que ainda não existe.
 
@@ -348,10 +350,12 @@ git -c http.proxy= -c https.proxy= clone --depth 1 \
 cd repo
 ```
 
-Publicar é por `git push`. A API de conteúdos (`PUT .../contents/<caminho>`,
-com `sha`) funciona e vale para um arquivo avulso, mas não é o caminho
-principal: não dá `diff`, não dá `git status -sb`, e é onde o `index.html`
-já foi sobrescrito por cópia local.
+Publicar neste repositório é por `sistemas/publicar.sh` (ver "Validar e
+publicar"), que faz o push depois da guarda e do índice. A API de conteúdos
+(`PUT .../contents/<caminho>`, com `sha`) **não é caminho de publicação aqui**:
+não passa pela guarda nem regenera o `dados.json`, e foi por ela que o
+`index.html` já foi sobrescrito por cópia local. Serve para arquivo avulso no
+repositório privado.
 
 ## Ferramenta ou automação nova
 
@@ -365,9 +369,9 @@ Uma pasta por ferramenta, em `ferramentas/<slug>/`, com três coisas:
 
 Slug em minúsculas, com hífen, sem acento.
 
-`'ferramentas/'` já está na lista `IGNORA` do detector de peça órfã no
-`index.html` — a ferramenta não aparece como órfã. Em troca, ela também não
-aparece em lugar nenhum se você não registrar: registrar sempre no array `docs`.
+Ferramenta se registra em `docs` do `registro/<frente>.json`, com `arq` no
+`LEIA-ME.md` e `ver` no `index.html` dela (ver "Registrar documento ou
+ferramenta"). Sem registro, o build para na cobertura.
 
 ### Chave de API não vai para o repositório
 
@@ -451,10 +455,10 @@ Decisão do Michel, 02.09.2026. Substitui as duas regras que conviviam até
 aqui ("substitui" num arquivo, "nunca substitua, acrescente" no outro).
 
 - **Ideia em desenvolvimento → versão nova.** A peça nova **substitui** o
-  arquivo no mesmo caminho. No `index.html` mudam só `data` e `peso`. O Git
+  arquivo no mesmo caminho. No `meta.json` mudam só `data` e `peso`. O Git
   guarda o histórico; a interface mostra uma peça.
-- **Revisão nova (R2, R3…) só quando o Michel disser.** Aí sim é linha nova em
-  `pecas`. A versão anterior vai para `<slug>/anteriores/apresentacao-R<n>.html`
+- **Revisão nova (R2, R3…) só quando o Michel disser.** Aí sim é linha nova, à mão,
+  em `projetos` do `registro/<frente>.json`. A versão anterior vai para `<slug>/anteriores/apresentacao-R<n>.html`
   e entra no índice com `oculto:true` — estocada no GitHub, fora da interface.
   Registrada, o detector de órfã não a acusa.
 - **A sessão pergunta.** Peça publicada há um ou dois dias, antes de
@@ -571,3 +575,4 @@ apagar. Peça ou ferramenta sensível não vai para lá, e isso se avisa
 - **02/09/2026** — auditoria: `casa-ittb`, `tokyo-centro` e `casa-tavares` eram peças de cliente em repositório público; foram para `/cliente/` do site, histórico reescrito, guarda `guarda-publico.py` criada. `robots.txt` do site deixou de listar `/cliente/`. Peça fora do público deixou de ser registrada no `index.html`. Runbook `PUBLICAR-APRESENTACOES.md` fundido neste; regra de versão × revisão decidida.
 - **10/09/2026** — o Netlify parou de publicar duas vezes seguidas sem dar sintoma: `Exposed secrets detected` na chave da Maps embutida numa peça da área de cliente. Falso positivo; isenção `SECRETS_SCAN_OMIT_PATHS = "cliente/**"` no `netlify.toml`, com o porquê no comentário. Nasceu a seção "O Netlify barra o build por segredo exposto" e a ordem Deploys → Builds → Usage & billing. No mesmo dia descobriu-se que a máquina do Michel **não tem Node** (a ausência de Python já estava registrada): `npx` não roda lá, e o ensaio local de peça com slide 3D passou a ser `ferramentas/servir-local/servir.ps1`, PowerShell puro. Regra que fica: nada que se peça ao Michel rodar na máquina dele pode pressupor gerenciador de pacote.
 - **04/09/2026** — o detector da página acusou `esqueleto/deck-esqueleto.html` como órfã. A causa era outra e maior: `registro/geral.json` nunca chegou ao repositório — o `_*` do `.gitignore` o engoliu calado na fase 2, e as abas **deck** e **sistema** ficaram com 2 dos 33 documentos desde 03/09, sem dar sintoma. Restaurados os 31 do índice anterior e os 4 da fase 2 que a primeira restauração não tinha. O arquivo virou `registro/geral.json` (sem `_`, sem exceção no `.gitignore`); o `montar-indice.py` barra o build se qualquer arquivo que ele lê estiver ignorado pelo git e confere a cobertura de todo `.md`/`.html` rastreado; o `publicar.sh` mostra o que o `.gitignore` engole; a lista `ignora` sai no `dados.json` e o detector da página lê de lá. Regra: **nada que o sistema lê começa por `_`**.
+- **10/11/2026** — auditoria das regras. Saíram as instruções que ainda mandavam registrar editando o `index.html` (seção "Subir sem registrar", "Duas sessões", ferramenta, versão × revisão, clonar): o registro é `meta.json` e `registro/<frente>.json`, e publicar é `sistemas/publicar.sh`. O §7 do `LEVAR-PARA-OUTRA-FRENTE.md`, que repetia a regra velha, foi apagado.

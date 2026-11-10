@@ -104,4 +104,25 @@ da linha do diário. O Michel confirma no Radar (estação Financ, caixa
 - Antes de agir sobre lista ou demanda, ler o estado atual no Notion, para não
   refazer o que o Michel já resolveu.
 - Gravar a linha é o último passo da tarefa. **Sem a linha, a tarefa não está
-  entregue.**
+  entregue.** As exceções são as rotinas listadas abaixo, e só elas.
+
+## Exceções — rotinas que não gravam linha
+
+Escrito em 10/11/2026. A regra vale para chat e para rotina, com estas
+exceções, cada uma por instrução do próprio prompt. Fora desta lista, sem a
+linha a tarefa não está entregue.
+
+| rotina | por que não grava |
+|---|---|
+| Atualizar JSON de finanças — domingo | só regrava o arquivo de finanças com dados próprios (saldo, recorrentes); desde 10/11/2026 não lança fato |
+| Fatura real do cartão — dia 1º | troca um número no arquivo de finanças; não escreve no Notion |
+| Checagem de compras | silêncio é o esperado; o registro dela é o Mapa de compras |
+| Atualizar índices de mercado | o registro é a própria base de índices; relata no fim da rodada |
+| Radar do dia | só lê e monta a fila; o evento 📌 que cria é espelho de demanda que já existe |
+
+Também não grava, porque só lê e avisa: "Notas fiscais do mês". A "Checagem de
+e-mail" registra a rodada no log próprio (📨 Log — checagens de e-mail) e só
+grava no diário os casos que o prompt dela lista. A "Finanças — fila do dia,
+19h37" grava uma linha por rodada com lançamento.
+
+Rotina nova: ou grava a linha, ou entra nesta lista com o motivo.

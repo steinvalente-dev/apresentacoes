@@ -134,18 +134,7 @@ O checklist de sete itens para criar um `MARCA-<nome>.md` está no fim do
 
 ---
 
-## 7 · A regra que não muda
-
-Peça publicada vai para `apresentacoes/<slug>/apresentacao.html`, **mais o
-registro no `index.html` na mesma rodada** — subir sem registrar não conta como
-subir. Toda peça leva a linha do `ms-voltar.js` antes do `</body>`. O link que se
-devolve é o da peça, nunca o do índice.
-
-Runbook completo: `sistemas/GITHUB-COMO-TRABALHAR.md`, ao lado.
-
----
-
-## 8 · Registro no Radar
+## 7 · Registro no Radar
 
 Todo chat de qualquer frente reporta o que faz no Diário de bordo do Radar.
 Regras em `sistemas/REGISTRO-NO-RADAR.md`, ao lado. O endereço da base fica na
