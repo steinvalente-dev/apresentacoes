@@ -1037,14 +1037,70 @@ body.em-logo .chrome.topo .secao{display:inline}
   left:calc(100% - var(--pl-w) + var(--px) * var(--pl-w));
   top:calc(var(--py) * 100cqh)}
 
+/* ── PREVIA NO HOVER ────────────────────────────────────────────────────
+   10/11/2026, pedido do Michel: mirar o cursor numa bolinha e ver um
+   quadradinho com previa do que ha dentro — "um panorama do que a gente vai
+   apresentar", sem precisar abrir ponto por ponto.
+
+   ⚑ QUADRADA, NAO REDONDA. Testei as duas. O conteudo aqui e fotografia de
+   arquitetura, quase toda horizontal: o circulo corta as pontas justamente
+   onde esta a informacao (a nave inteira, a fileira que se estende) e a
+   mesma caixa fica menor em area util. A redonda rima com a bolinha, mas a
+   leitura perde. Ficou o retangulo 4:3 com canto de 10px.
+
+   ⚑ SO ONDE HA HOVER DE VERDADE. No iPad nao existe mirar: `hover:hover` e
+   `pointer:fine` mantem a previa fora do caminho do toque, que continua
+   abrindo a lupa direto.
+
+   A previa NAO captura ponteiro: quem recebe o clique e sempre a bolinha. */
+@media (hover:hover) and (pointer:fine){
+  .g-sequencia .ptprev{position:absolute;z-index:6;pointer-events:none;
+    width:clamp(142px,12.5cqw,224px);background:var(--papel);
+    border-radius:10px;overflow:hidden;box-shadow:0 12px 34px var(--tinta-45);
+    left:var(--prx);top:var(--pry);opacity:0;
+    transform:translateY(5px) scale(.97);
+    transition:opacity .16s ease,transform .16s ease}
+  .g-sequencia .ptprev.on{opacity:1;transform:translateY(0) scale(1)}
+  .g-sequencia .ptprev .pvf{position:relative;aspect-ratio:4 / 3;
+    background:var(--tinta-15)}
+  .g-sequencia .ptprev .pvf img{position:absolute;inset:0;width:100%;
+    height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
+  .g-sequencia .ptprev .pvf img.on{opacity:1}
+  .g-sequencia .ptprev .pvn{position:absolute;right:6px;bottom:6px;
+    font-family:var(--f-mono);font-size:clamp(9px,.62cqw,12px);
+    letter-spacing:.08em;color:var(--papel);background:var(--tinta-80);
+    border-radius:999px;padding:2px 7px;font-variant-numeric:tabular-nums}
+  .g-sequencia .ptprev b{display:block;font-family:var(--f-display);
+    font-style:italic;font-weight:500;color:var(--tinta);
+    font-size:clamp(11px,.82cqw,16px);line-height:1.25;
+    padding:7px 10px 9px}
+}
+
 /* ── a lupa do ponto: carrossel em tela cheia, com zoom ─────────────────
    ⚑ O ZOOM E' TRANSFORM, nao troca de arquivo. A imagem ja esta carregada
    em resolucao maior que a tela; escalar o elemento aproxima de verdade e
    custa zero rede no meio da fala. */
+/* 10/11/2026 — ENTRADA DA LUPA. Ela aparecia seca: `display:block` e pronto,
+   tela cheia de uma vez. Pedido do Michel: transição suave, mas RÁPIDA —
+   "bem responsiva". Então o véu esvanece em 150 ms e o quadro cresce de 0.94
+   a 1 em 220 ms, com saída desacelerada; abaixo de 250 ms o olho lê como
+   imediato e ainda assim há movimento.
+   ⚑ A ORIGEM E' A BOLINHA CLICADA, não o centro da tela: `--pox/--poy` vêm do
+   rect do botão, em %, então a lupa parece nascer de onde o dedo apontou.
+   `display` não transiciona — por isso `.on` (display) e `.vis` (animação)
+   são duas classes, e o `.vis` entra no quadro seguinte. */
 .ptlupa{position:absolute;inset:0;z-index:30;display:none;
-  background:var(--tinta-90);touch-action:none}
+  background:var(--tinta-90);touch-action:none;
+  opacity:0;transition:opacity .15s ease}
 .ptlupa.on{display:block}
-.ptlupa .plh{position:absolute;inset:0;overflow:hidden;cursor:grab}
+.ptlupa.vis{opacity:1}
+.ptlupa .plh{position:absolute;inset:0;overflow:hidden;cursor:grab;
+  transform:scale(.94);transform-origin:var(--pox,50%) var(--poy,50%);
+  transition:transform .22s cubic-bezier(.16,.84,.44,1)}
+.ptlupa.vis .plh{transform:scale(1)}
+@media (prefers-reduced-motion:reduce){
+  .ptlupa,.ptlupa .plh{transition:none}
+  .ptlupa .plh{transform:none}}
 .ptlupa .plh.arrastando{cursor:grabbing}
 .ptlupa .plh img{position:absolute;inset:0;width:100%;height:100%;
   object-fit:contain;opacity:0;transition:opacity .45s ease;
@@ -7623,17 +7679,99 @@ window.MSModelo=(function(){
     if(!l) return;
     if(aberto) fecha();
     aberto=l; l.classList.add('on'); document.body.classList.add('pt-lupa');
+    /* 10/11 — a lupa nasce de onde se clicou: origem do crescimento no
+       centro da bolinha, em % do proprio quadro da lupa. */
+    try{
+      var rb=bt.getBoundingClientRect(), rl=l.getBoundingClientRect();
+      if(rl.width && rl.height){
+        l.style.setProperty('--pox', (100*((rb.left+rb.width/2)-rl.left)/rl.width).toFixed(2)+'%');
+        l.style.setProperty('--poy', (100*((rb.top+rb.height/2)-rl.top)/rl.height).toFixed(2)+'%');
+      }
+    }catch(_){}
     /* ⚑ ABRE NA QUE FOI CLICADA. Numa tira de tres, abrir sempre na
        primeira faria o apresentador clicar na terceira e ver a primeira. */
     pausado=false; pausa(false); mostra(l,ini||0); relogio();
+    /* `.vis` no quadro seguinte: no mesmo quadro do `display:block` o
+       navegador funde os dois estados e nao ha transicao nenhuma. */
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      if(aberto===l) l.classList.add('vis'); }); });
   }
   function fecha(){
     if(!aberto) return;
     clearInterval(timer); zera();
-    aberto.classList.remove('on'); document.body.classList.remove('pt-lupa');
+    var l=aberto;
+    l.classList.remove('vis');
+    document.body.classList.remove('pt-lupa');
     aberto=null;
+    /* some depois do esvanecimento; se reabrir antes, `.on` ja voltou e o
+       timeout nao tira nada do lugar. */
+    setTimeout(function(){ if(!l.classList.contains('vis')) l.classList.remove('on'); },170);
   }
   window.__msFechaPt=fecha;
+
+  /* ── PREVIA NO HOVER DO PONTO ──────────────────────────────────────────
+     10/11/2026, pedido do Michel. Mirar o cursor na bolinha mostra um
+     quadradinho com o que ha dentro — e, com mais de uma imagem, elas
+     passam sozinhas a cada 1,1 s, para dar o panorama sem abrir ponto a
+     ponto. As fontes saem da propria lupa daquele ponto: uma lista so,
+     nada duplicado no deck.json.
+     A caixa vive dentro do `.seqpt`, que nao captura ponteiro, entao o
+     clique continua sendo da bolinha. Fora de hover de verdade (iPad), o
+     modulo nem se instala. */
+  (function(){
+    if(!window.matchMedia||!matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+    var cx=null, alvo=null, tmr=null, k=0;
+    function caixa(seq){
+      var el=seq.querySelector('.ptprev');
+      if(!el){ el=document.createElement('div'); el.className='ptprev';
+               el.innerHTML='<div class="pvf"></div><b></b>'; seq.appendChild(el); }
+      return el;
+    }
+    function esconde(){
+      if(tmr){ clearInterval(tmr); tmr=null; }
+      if(cx) cx.classList.remove('on');
+      cx=null; alvo=null;
+    }
+    function abrePrev(bt){
+      var seq=bt.closest('.seqpt'), sl=bt.closest('.slide');
+      if(!seq||!sl) return;
+      var lp=sl.querySelector('.ptlupa[data-pt="'+bt.dataset.pt+'"]'); if(!lp) return;
+      var srcs=[].slice.call(lp.querySelectorAll('.plh img')).map(function(x){
+        return x.getAttribute('src'); }).filter(Boolean);
+      if(!srcs.length) return;
+      var el=caixa(seq), f=el.querySelector('.pvf');
+      f.innerHTML=srcs.map(function(s,n){
+          return '<img src="'+s+'" alt=""'+(n===0?' class="on"':'')+'>'; }).join('')
+        + (srcs.length>1 ? '<span class="pvn">1 / '+srcs.length+'</span>' : '');
+      el.querySelector('b').textContent=bt.getAttribute('aria-label')||'';
+      el.classList.add('on');                 /* mede ja visivel */
+      var rs=seq.getBoundingClientRect(), rb=bt.getBoundingClientRect();
+      var w=el.offsetWidth, h=el.offsetHeight;
+      var x=(rb.left+rb.width/2-rs.left)-w/2;
+      var y=(rb.top-rs.top)-h-10;             /* acima da bolinha */
+      if(y<6) y=(rb.bottom-rs.top)+10;        /* nao coube: vai por baixo */
+      x=Math.max(6,Math.min(x,rs.width-w-6)); /* nunca sai do quadro */
+      el.style.setProperty('--prx',Math.round(x)+'px');
+      el.style.setProperty('--pry',Math.round(y)+'px');
+      cx=el; alvo=bt; k=0;
+      if(srcs.length>1) tmr=setInterval(function(){
+        var L=[].slice.call(f.querySelectorAll('img')); if(L.length<2) return;
+        L[k].classList.remove('on'); k=(k+1)%L.length; L[k].classList.add('on');
+        var c=f.querySelector('.pvn'); if(c) c.textContent=(k+1)+' / '+L.length;
+      },1100);
+    }
+    addEventListener('mouseover',function(e){
+      var bt=e.target.closest && e.target.closest('.g-sequencia .pt');
+      if(!bt||document.body.classList.contains('pt-lupa')) return;
+      if(alvo===bt) return;
+      esconde(); abrePrev(bt);
+    });
+    addEventListener('mouseout',function(e){
+      var bt=e.target.closest && e.target.closest('.g-sequencia .pt');
+      if(bt && bt===alvo) esconde();
+    });
+    addEventListener('click',esconde,true);
+  })();
 
   /* ⚑ O CARROSSEL DA CAIXA SO RODA QUANDO ESTA A VISTA. `offsetParent`
      nulo = caixa escondida (slide fora, tema do tombamento aberto, visor

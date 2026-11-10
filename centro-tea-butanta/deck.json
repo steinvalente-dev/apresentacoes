@@ -981,6 +981,40 @@
        "#A0D050",
        "acolhimento de familiares"
       ]
+     ],
+     "pontos": [
+      {
+       "x": 0.739,
+       "y": 0.529,
+       "t": "o espaço expositivo",
+       "cap": "A nave como sala de exposições: painéis soltos no vão, trilho de luz pendurado na estrutura e o piso marcando o percurso.",
+       "imgs": [
+        "ref-expo-01.jpg"
+       ]
+      },
+      {
+       "x": 0.739,
+       "y": 0.591,
+       "t": "o jardim entre os volumes",
+       "cap": "A praça descoberta entre as duas alas, à noite: gramado, arborização nova e as portas acesas dos dois lados.",
+       "imgs": [
+        "ref-jardim-noite-01.jpg"
+       ]
+      },
+      {
+       "x": 0.739,
+       "y": 0.655,
+       "t": "a sala de eventos",
+       "cap": "O mesmo salão em dois usos — convenção com auditório montado e concerto — sob o madeiramento original.",
+       "imgs": [
+        "ref-eventos-01.jpg",
+        "ref-eventos-02.jpg"
+       ],
+       "legs": [
+        "Convenção: auditório montado no vão corrido, com lugares para cadeirantes na primeira fila e nas laterais.",
+        "Concerto: a mesma nave com iluminação rasante na alvenaria e o piano no topo da plateia."
+       ]
+      }
      ]
     },
     {
