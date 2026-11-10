@@ -186,17 +186,26 @@
     {
      "q": "o equipamento",
      "x": "O que a SMPED faz, o que já construiu e o que o termo de referência pede.",
-     "slot": "o Centro TEA já construído"
+     "slot": "o Centro TEA já construído",
+     "imgs": [
+      "tea-construido-01.jpg"
+     ]
     },
     {
      "q": "o desejável",
      "x": "O que a arquitetura sabe sobre espaço para pessoas no espectro.",
-     "slot": "referências projetuais"
+     "slot": "referências projetuais",
+     "imgs": [
+      "ref-aspectss.jpg"
+     ]
     },
     {
      "q": "o patrimônio histórico",
      "x": "O que este conjunto foi, e o papel que desempenhou na cidade.",
-     "slot": "imagem histórica do conjunto"
+     "slot": "imagem histórica do conjunto",
+     "imgs": [
+      "conjunto-rua-interna.jpg"
+     ]
     }
    ]
   },

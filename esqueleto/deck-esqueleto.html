@@ -1661,7 +1661,7 @@ body.meia-sangra .chrome.topo .dots{left:50%}
 body.inst .chrome.topo .selo,
 body.inst .chrome.topo .marca,
 body.inst .chrome.topo .secao{display:none}
-.g-meia .mest .lk{display:block;width:clamp(150px,15cqw,290px);
+.g-meia .mest .lk{display:block;width:clamp(150px,min(15cqw,20.25cqh),290px);
   margin:0 0 clamp(18px,2.8cqh,40px)}
 .g-meia .mest .lk svg{display:block;width:100%;height:auto}
 /* ⚑ legenda e bolinhas SOBEM PARA CIMA DA FOTO. Fora da sangria elas moram
@@ -1800,13 +1800,13 @@ body.esc .g-meia .mest h1,body.terra .g-meia .mest h1{color:var(--papel)}
    vista — e o slogan e justamente onde ela deve aparecer. `none`.        */
 .g-meia .mest.serif h1{font-family:var(--f-serif);font-style:italic;
   font-weight:400;letter-spacing:0;text-transform:none;line-height:1.04;
-  font-size:clamp(25px,2.75cqw,47px);
+  font-size:clamp(25px,min(2.75cqw,3.71cqh),47px);
   margin:0 0 clamp(10px,1.5cqh,21px)}
 /* `manchete:1` — o slogan em corpo de capa de revista. Peso 700 e
    entrelinha fechada: numa didone, titulo grande pede MENOS entrelinha,
    porque a altura-x alta ja separa as linhas sozinha. */
 .g-meia .mest.serif.manchete h1{font-weight:700;line-height:.95;
-  font-size:clamp(44px,5.9cqw,104px);margin:0 0 clamp(16px,2.5cqh,36px);
+  font-size:clamp(44px,min(5.9cqw,7.95cqh),104px);margin:0 0 clamp(16px,2.5cqh,36px);
   /* ⚑ CINZA, NAO TINTA CHEIA. 06/11, pedido do Michel depois de ver no
      iPad: em corpo de capa de revista o preto fechado pesa demais e a
      prancha fica dura. A 72% da tinta o slogan continua sendo a voz mais
@@ -1837,7 +1837,7 @@ body.esc .g-meia .mest h1,body.terra .g-meia .mest h1{color:var(--papel)}
 .g-meia .mest .bt{display:inline-flex;align-items:center;gap:.55em;
   align-self:start;margin-top:clamp(18px,2.8cqh,40px);
   font-family:var(--f-corpo);font-weight:600;
-  font-size:clamp(11px,.92cqw,16px);letter-spacing:.06em;
+  font-size:clamp(11px,min(.92cqw,1.24cqh),16px);letter-spacing:.06em;
   color:var(--primaria);text-decoration:none;
   padding:.72em 1.35em;border:1.5px solid var(--primaria);border-radius:999px;
   pointer-events:auto;cursor:pointer;
@@ -1880,7 +1880,7 @@ body.esc .g-meia .mest .bt:hover{background:var(--papel);color:var(--primaria)}
    e metadado. Serifada aqui vira enfeite em cima de enfeite. */
 .g-meia .mest .tl .an{font-family:var(--f-corpo);font-style:normal;
   font-weight:600;color:var(--papel);background:var(--primaria);
-  font-size:clamp(11px,.92cqw,16px);letter-spacing:.04em;line-height:1;
+  font-size:clamp(11px,min(.92cqw,1.24cqh),16px);letter-spacing:.04em;line-height:1;
   justify-self:start;padding:.34em .72em .4em;border-radius:999px;
   white-space:nowrap}
 body.esc .g-meia .mest .tl .an{background:var(--papel);color:var(--primaria)}
@@ -1901,7 +1901,7 @@ body.esc .g-meia .mest .tl .an{background:var(--papel);color:var(--primaria)}
 @media(prefers-reduced-motion:reduce){
   .g-meia .mest .tl .an,.g-meia .mest .tl .mk{
     opacity:1!important;transform:none!important;transition:none!important}}
-.g-meia .mest .tl .mk{font-size:clamp(12px,1cqw,17px);line-height:1.35;
+.g-meia .mest .tl .mk{font-size:clamp(12px,min(1cqw,1.35cqh),17px);line-height:1.35;
   color:var(--soft)}
 body.esc .g-meia .mest .tl{border-left-color:var(--papel-40)}
 body.esc .g-meia .mest .tl .an{color:var(--acento-claro)}
@@ -1909,7 +1909,7 @@ body.esc .g-meia .mest .tl .an{color:var(--acento-claro)}
    a passada de olho — quem le so uma frase, le esta. */
 .g-meia .mest.serif .lead{display:block;font-family:var(--f-serif);
   font-style:normal;font-weight:400;color:var(--tinta);
-  font-size:clamp(13px,1.05cqw,18px);line-height:1.42;
+  font-size:clamp(13px,min(1.05cqw,1.41cqh),18px);line-height:1.42;
   margin:0 0 clamp(8px,1.2cqh,17px);max-width:44ch}
 body.esc .g-meia .mest.serif .lead{color:var(--papel)}
 /* filete entre o lead e os verbetes — a regra de revista */
