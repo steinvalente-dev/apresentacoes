@@ -5395,7 +5395,14 @@ function tpl(s){
           + `</aside>` : '');
   }
   const tab=s.cols?`<div class="rev"><table class="tb${s.cols.length===2?' duasc':''}"><thead><tr>${s.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>`+
-    s.linhas.map((r,i)=>`<tr class="${s.hi===i?'hi':''}${s.fora===i?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`).join('')+`</tbody></table></div>`:'';
+    /* ⚑ `hi` e `fora` aceitam UM indice ou uma LISTA. 10/11/2026: a tabela de
+       compatibilizacao do CAAB tem DUAS linhas fora da base de comparacao —
+       circulacao e area total —, e com um indice so a segunda voltava a ser
+       lida como parte da soma. Passar um numero continua funcionando. */
+    s.linhas.map((r,i)=>{
+      const dentro=(v)=>Array.isArray(v)?v.indexOf(i)>=0:v===i;
+      return `<tr class="${dentro(s.hi)?'hi':''}${dentro(s.fora)?' fora':''}">`+r.map((c,j)=>`<td class="${j>0&&r.length>2?'':(j===r.length-1?'d':'')}">${c}</td>`).join('')+`</tr>`;
+    }).join('')+`</tbody></table></div>`:'';
   if(s.g==='porte'){
     const f2=s.fecho?`<p class="sub rev" style="max-width:44ch">${s.fecho}</p>`:'';
     const nota=(n)=>notaHTML(n);

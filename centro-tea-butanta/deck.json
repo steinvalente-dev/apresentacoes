@@ -1125,59 +1125,74 @@
   },
   {
    "g": "tabela",
-   "kick": "em números",
+   "kick": "em números · compatibilização de áreas",
    "t": "o programa, lado a lado",
    "cols": [
     "ambiente",
-    "TEA Oeste",
-    "Chácara do Jockey",
-    ""
+    "TEA Oeste (m²)",
+    "Chácara do Jockey (m²)",
+    "diferença (m²)"
    ],
    "linhas": [
     [
-     "atendimento e terapias",
-     "a confirmar",
-     "a confirmar",
-     ""
+     "auditório, salas multiuso e foyer",
+     "831,07",
+     "553,04",
+     "−278,03"
     ],
     [
-     "convivência e autonomia",
-     "a confirmar",
-     "a confirmar",
-     ""
+     "sanitários e vestiários",
+     "227,41",
+     "311,07",
+     "+83,66"
     ],
     [
-     "esporte e piscina",
-     "a confirmar",
-     "a confirmar",
-     ""
+     "administração, enfermaria e materiais",
+     "301,38",
+     "374,81",
+     "+73,43"
     ],
     [
-     "auditório",
-     "a confirmar",
-     "a confirmar",
-     "<b>em aberto</b>"
+     "limpeza, cozinha e técnicos",
+     "128,25",
+     "351,43",
+     "+223,18"
     ],
     [
-     "cultura, eventos e famílias",
-     "a confirmar",
-     "a confirmar",
-     ""
+     "atendimento e acolhimento",
+     "671,89",
+     "948,21",
+     "+276,32"
     ],
     [
-     "administração e apoio",
-     "a confirmar",
-     "a confirmar",
-     ""
+     "acolhimento de familiares",
+     "123,49",
+     "118,38",
+     "−5,11"
     ],
     [
-     "total de ambientes",
-     "2.556,55 m²",
-     "3.311,07 m²",
-     ""
+     "quadra, piscinas, jardins e laje técnica",
+     "627,00",
+     "1.039,50",
+     "+412,50"
+    ],
+    [
+     "<b>total de ambientes</b>",
+     "<b>2.910,49</b>",
+     "<b>3.696,44</b>",
+     "<b>+785,95</b>"
+    ],
+    [
+     "área total <i>(referência)</i>",
+     "4.949,24",
+     "7.138,80",
+     "+2.189,56"
     ]
    ],
-   "nota": "<b>Esboço</b> — os totais são os medidos; o rateio por ambiente entra com a planilha."
+   "hi": 0,
+   "fora": [
+    8
+   ]
   },
   {
    "g": "frase",
