@@ -20,9 +20,19 @@ assistente — cuidam da minúcia e reportam pelo diário.
 - **O que os assistentes fizeram** → Diário de bordo do Radar. Lá ficam Feito,
   Aguardando (esperando terceiro) e Falhou. Tarefa futura do Michel não fica no
   diário: vai para o To-do, com prazo.
+- **Conta a pagar** — boleto, fatura, cobrança → direto para o diário com
+  Frente = Financeiro, e aparece na estação Financ. Não entra no Mail nem no
+  To-do: não é conversa nem tarefa, é dinheiro com data. **Remetente automático
+  não faz de um boleto ruído**: se traz valor e vencimento, é conta a pagar.
+  Decidido em 10/11/2026, depois que a primeira fatura do aluguel foi descartada
+  como ruído e o Michel só descobriu por conta própria. Exceção: cobrança de algo
+  já pago, ou valor que ele não reconhece — aí vira demanda, porque pede ação.
 - **Exceção: urgente.** O que é urgente e pede ação aparece na caixa laranja
   onde fizer sentido (Mail, To-do, Financ). É o único caso em que a mesma coisa
-  aparece em dois lugares.
+  aparece em dois lugares — e, desde 10/11/2026, **um check resolve nos dois**:
+  conferir no Mail fecha a demanda no To-do, e fechar a demanda limpa a linha do
+  Mail. O elo é a relação "Demanda" da triagem, que por isso tem de ser sempre
+  preenchida quando a linha gera demanda. Sem ela, volta a parecer duplicata.
 
 ## A fase decide o lugar
 
